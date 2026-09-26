@@ -11,10 +11,20 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const publicApiEndpoints = [
+      '/api/auth/token',
+      '/api/auth/logout',
+      '/api/auth/refresh'
+    ];
+
+    if (!publicApiEndpoints.includes(config.url)) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
+    
+    config.withCredentials = true;
     return config;
   },
   (error) => {
