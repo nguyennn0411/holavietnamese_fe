@@ -9,44 +9,39 @@ const axiosClient = axios.create({
   },
 });
 
+// Public API endpoints that don't need a Bearer token
+const PUBLIC_API_ENDPOINTS = [
+  '/api/auth/token',
+  '/api/auth/logout',
+  '/api/auth/refresh',
+  '/api/users/register',
+];
+
+// REQUEST interceptor: auto-attach Bearer token
 axiosClient.interceptors.request.use(
   (config) => {
-    const publicApiEndpoints = [
-      '/api/auth/token',
-      '/api/auth/logout',
-      '/api/auth/refresh'
-    ];
-
-    if (!publicApiEndpoints.includes(config.url)) {
+    if (!PUBLIC_API_ENDPOINTS.includes(config.url)) {
       const token = localStorage.getItem('token');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
-    
-    config.withCredentials = true;
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error),
 );
 
+// RESPONSE interceptor: unwrap response.data, handle 401
 axiosClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response.data,        // Unwrap: callers receive { code, message, result } directly
   (error) => {
     if (error.response && error.response.status === 401) {
-      // API returns code 1001 for Unauthenticated
-      if (error.response.data && error.response.data.code === 1001) {
-        localStorage.removeItem('token');
-        // Force redirect to login page
-        window.location.href = '/login';
-      }
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
     }
-    return Promise.reject(error);
-  }
+    return Promise.reject(error.response ? error.response.data : error);
+  },
 );
 
 export default axiosClient;

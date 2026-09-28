@@ -3,6 +3,7 @@ import { MainLayout } from '@/presentation/layouts/MainLayout'
 import { HomePage } from '@/presentation/pages/HomePage'
 import { NotFoundPage } from '@/presentation/pages/NotFoundPage'
 import { LoginPage } from '@/presentation/pages/LoginPage'
+import { RegisterPage } from '@/presentation/pages/RegisterPage'
 import { AuthProvider } from '@/application/context/AuthContext'
 
 export function AppRouter() {
@@ -10,7 +11,11 @@ export function AppRouter() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Protected routes */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="*" element={<NotFoundPage />} />
