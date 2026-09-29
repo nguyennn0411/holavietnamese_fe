@@ -1,0 +1,557 @@
+/* ==========================================================================
+   HolaVietnamese - Auth Styles (Đông Sơn Pop Theme)
+   ========================================================================== */
+
+/* Main Fullscreen Split Layout */
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  background-color: #ffffff;
+  color: #2b170f;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   LEFT PANEL (Login / Register Form)
+   ========================================================================== */
+.auth-left-panel {
+  flex: 0 0 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 60px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.auth-left-content {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand Row */
+.auth-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.auth-brand-logo {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: #982b1d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(152, 43, 29, 0.25);
+}
+
+.auth-logo-text {
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.auth-logo-star {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  color: #f7ce46;
+  font-size: 8px;
+  line-height: 1;
+}
+
+.auth-brand-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #2d1810;
+  letter-spacing: -0.2px;
+}
+
+.auth-brand-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #982b1d;
+  background-color: #fbf5f2;
+  border: 1px solid #dcb2a3;
+  padding: 2.5px 9px;
+  border-radius: 9999px;
+  margin-left: 2px;
+}
+
+/* Welcome Pill */
+.auth-welcome-pill {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f6e6c7;
+  border: 1px solid #dfc79b;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #382414;
+}
+
+.auth-welcome-code {
+  font-weight: 800;
+  font-size: 12px;
+  color: #2d1810;
+}
+
+.auth-welcome-text {
+  font-weight: 600;
+}
+
+/* Heading & Subtitle */
+.auth-heading {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+  color: #2d1810;
+  margin: 0 0 10px 0;
+}
+
+.auth-subtitle {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: #796b61;
+  margin: 0 0 28px 0;
+}
+
+/* Alert Messages */
+.auth-message {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+.auth-message-error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.auth-message-success {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* Form Structure */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.auth-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #2d1810;
+}
+
+.auth-input {
+  width: 100%;
+  height: 46px;
+  padding: 0 15px;
+  border: 1.5px solid #ded5cb;
+  border-radius: 10px;
+  font-size: 14.5px;
+  font-family: inherit;
+  color: #2d1810;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-input::placeholder {
+  color: #9d9187;
+  font-size: 14.5px;
+}
+
+.auth-input:focus {
+  border-color: #982b1d;
+  box-shadow: 0 0 0 3px rgba(152, 43, 29, 0.1);
+}
+
+/* Password Row with distinct Show Button */
+.auth-password-row,
+.auth-input-wrapper {
+  display: flex;
+  gap: 9px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.auth-password-input {
+  flex: 1;
+}
+
+.auth-show-btn,
+.auth-toggle-password {
+  height: 46px;
+  padding: 0 18px;
+  border: 1.5px solid #ded5cb;
+  border-radius: 10px;
+  background-color: #faf8f5;
+  color: #2d1810;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.auth-show-btn:hover,
+.auth-toggle-password:hover {
+  background-color: #f1ebd0;
+  border-color: #d0c5b7;
+}
+
+/* Options Row (Remember Me & Forgot Password) */
+.auth-options-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+
+.auth-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.auth-checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  accent-color: #982b1d;
+  cursor: pointer;
+  margin: 0;
+}
+
+.auth-checkbox-text {
+  font-size: 13.5px;
+  color: #423228;
+  font-weight: 500;
+}
+
+.auth-forgot-link {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #982b1d;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.auth-forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Buttons */
+.auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.18s ease, transform 0.08s ease, opacity 0.15s;
+  box-sizing: border-box;
+}
+
+.auth-btn:active {
+  transform: scale(0.99);
+}
+
+.auth-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Sign In Button */
+.auth-btn-primary {
+  background-color: #982b1d;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(152, 43, 29, 0.2);
+}
+
+.auth-btn-primary:hover:not(:disabled) {
+  background-color: #842317;
+}
+
+/* Try Demo Account Button */
+.auth-btn-demo {
+  background-color: #dca653;
+  color: #382414;
+}
+
+.auth-btn-demo:hover {
+  background-color: #d09943;
+}
+
+/* Secondary Button (for register wizard) */
+.auth-btn-secondary {
+  background-color: #faf7f4;
+  border: 1.5px solid #ded5cb;
+  color: #382414;
+}
+
+.auth-btn-secondary:hover {
+  background-color: #f0ebe2;
+}
+
+.auth-btn-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Footer Link */
+.auth-footer-text {
+  text-align: center;
+  font-size: 14px;
+  color: #796b61;
+  margin-top: 24px;
+  margin-bottom: 0;
+}
+
+.auth-footer-link {
+  color: #982b1d;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Register page extra elements */
+.auth-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23796b61' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.auth-step-indicator {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.auth-step-dot {
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #e5ded5;
+  transition: background-color 0.25s ease;
+}
+
+.auth-step-dot-active {
+  background-color: #982b1d;
+}
+
+/* ==========================================================================
+   RIGHT PANEL (Đông Sơn Drum Artwork + Floating Hero Card)
+   ========================================================================== */
+.auth-right-panel {
+  flex: 0 0 50%;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 48px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #ebdcc8;
+  /* Authentic parchment & canvas texture overlay */
+  background-image:
+    radial-gradient(circle at 85% 20%, rgba(255, 248, 235, 0.75) 0%, rgba(235, 220, 200, 0.4) 50%, rgba(215, 195, 170, 0.75) 100%),
+    repeating-linear-gradient(45deg, rgba(140, 83, 50, 0.015) 0px, rgba(140, 83, 50, 0.015) 2px, transparent 2px, transparent 4px);
+}
+
+/* Drum Background Container */
+.auth-drum-bg {
+  position: absolute;
+  top: -20%;
+  right: -32%;
+  width: 155%;
+  height: 155%;
+  pointer-events: none;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-drum-svg {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  transform: rotate(-15deg);
+  transform-origin: center center;
+  filter: contrast(108%) drop-shadow(0 4px 12px rgba(100, 60, 30, 0.06));
+}
+
+/* Floating Hero Card */
+.auth-hero-card {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 440px;
+  background: rgba(253, 249, 242, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(225, 206, 185, 0.75);
+  border-radius: 22px;
+  padding: 32px 36px;
+  box-shadow:
+    0 24px 48px -12px rgba(90, 55, 30, 0.14),
+    0 2px 6px rgba(90, 55, 30, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+  box-sizing: border-box;
+}
+
+.auth-hero-tag {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #982b1d;
+  margin-bottom: 12px;
+}
+
+.auth-hero-title {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: #2d1810;
+  margin: 0 0 14px 0;
+}
+
+.auth-hero-desc {
+  font-size: 14px;
+  line-height: 1.62;
+  color: #695a50;
+  margin: 0 0 24px 0;
+}
+
+/* Chips Row */
+.auth-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.auth-chip {
+  display: inline-flex;
+  align-items: center;
+  background-color: #fbf9f5;
+  border: 1px solid #dfcfbe;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #382414;
+  letter-spacing: 0.1px;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (Tablets & Mobile)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .auth-left-panel {
+    padding: 40px 32px;
+  }
+  .auth-right-panel {
+    padding: 32px;
+  }
+  .auth-heading {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 860px) {
+  .auth-container {
+    flex-direction: column-reverse;
+  }
+
+  .auth-left-panel {
+    flex: none;
+    width: 100%;
+    padding: 36px 24px 48px 24px;
+  }
+
+  .auth-right-panel {
+    flex: none;
+    width: 100%;
+    min-height: 380px;
+    padding: 28px 20px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .auth-drum-bg {
+    top: -50%;
+    right: -40%;
+    width: 180%;
+    height: 180%;
+  }
+
+  .auth-hero-card {
+    max-width: 100%;
+    padding: 24px;
+  }
+
+  .auth-hero-title {
+    font-size: 24px;
+  }
+
+  .auth-heading {
+    font-size: 32px;
+  }
+}

@@ -1,0 +1,476 @@
+/* =============================================
+   HOME PAGE STYLES – HolaVietnamese
+   ============================================= */
+
+/* ---- HERO SECTION ---- */
+.home-hero {
+  background-color: #f5f0e8;
+  padding: 3rem 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.home-hero-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.home-hero-right {
+  flex: 0 0 380px;
+  position: relative;
+}
+
+/* Welcome pill */
+.home-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #fef9c3;
+  color: #92400e;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  border: 1px solid #fde68a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Main heading */
+.home-heading {
+  font-size: 3.25rem;
+  font-weight: 800;
+  line-height: 1.05;
+  color: #2c1810;
+  margin: 0 0 1.25rem 0;
+  font-family: 'Georgia', serif;
+  font-style: italic;
+}
+
+.home-heading-highlight {
+  color: #8B1A1A;
+  text-decoration: underline;
+  text-decoration-color: #8B1A1A;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 3px;
+}
+
+.home-subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 1.75rem 0;
+  max-width: 440px;
+}
+
+/* CTA buttons */
+.home-cta-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.home-btn-start {
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px;
+  border: none;
+  background-color: #8B1A1A;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.home-btn-start:hover {
+  background-color: #7a1717;
+}
+
+.home-btn-demo {
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px;
+  border: 1.5px solid #374151;
+  background-color: transparent;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.home-btn-demo:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Chips row */
+.home-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.home-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #374151;
+  background-color: #fff;
+}
+
+/* Drum decoration */
+.home-drum-deco {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+  opacity: 0.4;
+}
+
+/* ---- MISSION CARD ---- */
+.home-mission-card {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.home-mission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.home-mission-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #8B1A1A;
+  text-transform: uppercase;
+}
+
+.home-mission-xp {
+  background-color: #f3f0ff;
+  color: #7c3aed;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.home-mission-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.75rem 0;
+}
+
+.home-mission-progress {
+  width: 100%;
+  height: 8px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.home-mission-progress-bar {
+  height: 100%;
+  background-color: #dc2626;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+/* Phrase row */
+.home-mission-phrase {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.home-phrase-text {
+  font-size: 0.9rem;
+}
+
+.home-phrase-vi {
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.home-phrase-en {
+  color: #6b7280;
+  font-style: italic;
+  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+}
+
+.home-play-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.home-play-btn:hover {
+  border-color: #8B1A1A;
+  background-color: #fef2f2;
+}
+
+/* Stats row */
+.home-stats-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.home-stat {
+  flex: 1;
+  text-align: center;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.home-stat-number {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  display: block;
+}
+
+.home-stat-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+/* ---- FEATURES SECTION ---- */
+.home-features {
+  background-color: #f5f0e8;
+  padding: 3rem 2rem;
+}
+
+.home-features-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-features-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+
+.home-section-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #8B1A1A;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0;
+}
+
+.home-section-heading {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #111827;
+  margin: 0;
+}
+
+.home-section-subtitle {
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-style: italic;
+  max-width: 350px;
+  text-align: right;
+}
+
+/* Feature cards grid */
+.home-feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+}
+
+.home-feature-card {
+  border-radius: 1rem;
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.home-feature-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.home-feature-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.home-feature-desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* Card variants */
+.home-feature-card--reallife {
+  background-color: #d4cfbb;
+  color: #1f2937;
+  grid-row: span 2;
+}
+
+.home-feature-card--micro {
+  background-color: #e8d9a0;
+  color: #1f2937;
+}
+
+.home-feature-card--ai {
+  background-color: #8B1A1A;
+  color: #ffffff;
+}
+
+.home-feature-card--remember {
+  background-color: #e8d9a0;
+  color: #1f2937;
+  grid-column: span 2;
+}
+
+/* ---- STEPS SECTION ---- */
+.home-steps {
+  background-color: #f5f0e8;
+  padding: 0 2rem 3rem;
+}
+
+.home-steps-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.home-step-card {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+}
+
+.home-step-number {
+  display: inline-block;
+  background-color: #8B1A1A;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.home-step-card:nth-child(2) .home-step-number {
+  background-color: #d4533b;
+}
+
+.home-step-card:nth-child(3) .home-step-number {
+  background-color: #e8d9a0;
+  color: #78571a;
+}
+
+.home-step-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.home-step-desc {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .home-hero-inner {
+    flex-direction: column;
+  }
+  .home-hero-right {
+    flex: none;
+    width: 100%;
+    max-width: 420px;
+  }
+  .home-heading {
+    font-size: 2.5rem;
+  }
+  .home-feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .home-feature-card--reallife {
+    grid-row: auto;
+  }
+  .home-feature-card--remember {
+    grid-column: auto;
+  }
+  .home-steps-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-hero {
+    padding: 2rem 1rem 1.5rem;
+  }
+  .home-heading {
+    font-size: 2rem;
+  }
+  .home-feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .home-features-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .home-section-subtitle {
+    text-align: left;
+  }
+  .home-cta-row {
+    flex-direction: column;
+  }
+}
