@@ -86,6 +86,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // LOGIN WITH GOOGLE: send Google credential to BE
+  const loginWithGoogle = async (credential) => {
+    try {
+      const data = await authApi.loginWithGoogle(credential);
+
+      if (data && data.code === 1000 && data.result?.authenticated) {
+        const { token, userId, username: uname, fullName, roles } = data.result;
+
+        localStorage.setItem('token', token);
+        setAccessToken(token);
+        setIsAuthenticated(true);
+
+        const userInfo = { userId, username: uname, fullName, roles };
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        setUser(userInfo);
+
+        fetchProfile();
+
+        return { success: true };
+      }
+      return { success: false, message: data?.message || 'Google login failed' };
+    } catch (error) {
+      return { success: false, message: error?.message || 'Google login failed. Please try again.' };
+    }
+  };
+
   // LOGOUT: call API, clear everything
   const logout = async () => {
     try {
@@ -120,6 +146,7 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     login,
+    loginWithGoogle,
     register,
     logout,
     hasRole,

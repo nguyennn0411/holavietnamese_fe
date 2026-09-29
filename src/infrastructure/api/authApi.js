@@ -22,6 +22,10 @@ const authApi = {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+
+  loginWithGoogle: async (credential) => {
+    return axiosClient.post('/api/auth/google', { credential });
+  },
 };
 
 export default authApi;
