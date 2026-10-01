@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { AdminRoute } from '@/components/common/AdminRoute';
 import { ROUTES } from '@/constants/routes';
@@ -47,54 +48,56 @@ import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          {/* Standalone Fullscreen Auth Routes (Người 1) */}
-          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
-          <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
-          <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
-          <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
-          <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
+      <ErrorBoundary>
+        <AuthProvider>
+          <Routes>
+            {/* Standalone Fullscreen Auth Routes (Người 1) */}
+            <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+            <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+            <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
+            <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
+            <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
+            <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
 
-          {/* Learner Main Layout */}
-          <Route element={<MainLayout />}>
-            <Route path={ROUTES.HOME} element={<HomePage />} />
-            <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
-            <Route path={ROUTES.COURSES} element={<CourseListPage />} />
-            <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
-            <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
-            <Route path={ROUTES.PROGRESS} element={<LearningProgressPage />} />
-            <Route path={ROUTES.ACHIEVEMENTS} element={<AchievementsPage />} />
-            <Route path={ROUTES.VOCABULARY} element={<VocabularyNotebookPage />} />
-            <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsPage />} />
+            {/* Learner Main Layout */}
+            <Route element={<MainLayout />}>
+              <Route path={ROUTES.HOME} element={<HomePage />} />
+              <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
+              <Route path={ROUTES.COURSES} element={<CourseListPage />} />
+              <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
+              <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
+              <Route path={ROUTES.PROGRESS} element={<LearningProgressPage />} />
+              <Route path={ROUTES.ACHIEVEMENTS} element={<AchievementsPage />} />
+              <Route path={ROUTES.VOCABULARY} element={<VocabularyNotebookPage />} />
+              <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsPage />} />
 
-            {/* Protected Learner Routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
-              <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
-              <Route path={ROUTES.LEARN_RESUME} element={<ResumeCoursePage />} />
-              <Route path={ROUTES.LEARN_LESSON} element={<LessonLearningPage />} />
+              {/* Protected Learner Routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+                <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
+                <Route path={ROUTES.LEARN_RESUME} element={<ResumeCoursePage />} />
+                <Route path={ROUTES.LEARN_LESSON} element={<LessonLearningPage />} />
+              </Route>
+
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
 
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-
-          {/* Admin Area (Người 1) */}
-          <Route element={<AdminRoute />}>
-            <Route element={<AdminLayout />}>
-              <Route path={ROUTES.ADMIN} element={<AdminDashboardPage />} />
-              <Route path={ROUTES.ADMIN_USERS} element={<AdminUsersPage />} />
-              <Route path={ROUTES.ADMIN_USER_DETAIL} element={<AdminUserDetailPage />} />
-              <Route path={ROUTES.ADMIN_ROLES} element={<AdminRolesPage />} />
-              <Route path={ROUTES.ADMIN_ACHIEVEMENTS} element={<AdminAchievementsPage />} />
-              <Route path={ROUTES.ADMIN_XP_RULES} element={<AdminXpRulesPage />} />
-              <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<AdminAuditLogsPage />} />
-              <Route path={ROUTES.ADMIN_SETTINGS} element={<AdminSettingsPage />} />
+            {/* Admin Area (Người 1) */}
+            <Route element={<AdminRoute />}>
+              <Route element={<AdminLayout />}>
+                <Route path={ROUTES.ADMIN} element={<AdminDashboardPage />} />
+                <Route path={ROUTES.ADMIN_USERS} element={<AdminUsersPage />} />
+                <Route path={ROUTES.ADMIN_USER_DETAIL} element={<AdminUserDetailPage />} />
+                <Route path={ROUTES.ADMIN_ROLES} element={<AdminRolesPage />} />
+                <Route path={ROUTES.ADMIN_ACHIEVEMENTS} element={<AdminAchievementsPage />} />
+                <Route path={ROUTES.ADMIN_XP_RULES} element={<AdminXpRulesPage />} />
+                <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<AdminAuditLogsPage />} />
+                <Route path={ROUTES.ADMIN_SETTINGS} element={<AdminSettingsPage />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-      </AuthProvider>
+          </Routes>
+        </AuthProvider>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }
