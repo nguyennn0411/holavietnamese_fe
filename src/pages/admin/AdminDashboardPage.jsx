@@ -21,30 +21,36 @@ export function AdminDashboardPage() {
         <p style={{ color: '#64748b', margin: 0, fontSize: '0.9rem' }}>Tổng quan số liệu người dùng, học tập và hoạt động hệ thống.</p>
       </div>
 
-      {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+      {/* KPI Cards: 5 cards exactly as specified */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
         <div className="admin-card">
-          <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>TỔNG NGƯỜI DÙNG</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>TỔNG NGƯỜI DÙNG</span>
           <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 0 0' }}>{stats.totalUsers}</h2>
           <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 600 }}>↑ +14% tháng này</span>
         </div>
 
         <div className="admin-card">
-          <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>HỌC VIÊN HOẠT ĐỘNG (MAU)</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>HỌC VIÊN HOẠT ĐỘNG</span>
           <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 0 0' }}>{stats.activeLearners}</h2>
           <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 600 }}>62.6% tỷ lệ kích hoạt</span>
         </div>
 
         <div className="admin-card">
-          <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>KHÓA HỌC / BÀI HỌC</span>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 0 0' }}>{stats.totalCourses} / {stats.totalLessons}</h2>
-          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Đang hoạt động trên app</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>TỔNG KHÓA HỌC</span>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 0 0' }}>{stats.totalCourses}</h2>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Đang mở đăng ký</span>
         </div>
 
         <div className="admin-card">
-          <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>LƯỢT HỘI THOẠI AI HÔM NAY</span>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#8B1A1A', margin: '8px 0 0 0' }}>{stats.aiSessionsToday}</h2>
-          <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 600 }}>AI Tutor hoạt động ổn định</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>TỔNG BÀI HỌC</span>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 0 0' }}>{stats.totalLessons}</h2>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Bài học tương tác</span>
+        </div>
+
+        <div className="admin-card">
+          <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>TỔNG XP ĐÃ CẤP</span>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0284c7', margin: '8px 0 0 0' }}>{stats.totalXpGranted?.toLocaleString() || '48,500'}</h2>
+          <span style={{ fontSize: '0.75rem', color: '#0284c7', fontWeight: 600 }}>Điểm thưởng học tập</span>
         </div>
       </div>
 

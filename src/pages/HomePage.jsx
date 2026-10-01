@@ -1,10 +1,19 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
+import { learnerService } from '@/services/learnerService';
 import { DongSonDrum } from '@/presentation/components/DongSonDrum';
 import '@/presentation/styles/home.css';
 
 export function HomePage() {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const [progress, setProgress] = useState(null);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      learnerService.getProgressData().then(setProgress);
+    }
+  }, [isAuthenticated]);
 
   return (
     <div>
@@ -14,7 +23,7 @@ export function HomePage() {
           {/* Left: Heading + CTA */}
           <div className="home-hero-left">
             <div className="home-pill">
-              <span>👋</span> YOUR VIETNAMESE ERA STARTS HERE
+              <span>👋</span> {isAuthenticated ? `CHÀO MỪNG TRỞ LẠI, ${user?.fullName || user?.username}!` : 'YOUR VIETNAMESE ERA STARTS HERE'}
             </div>
 
             <h1 className="home-heading">
@@ -35,8 +44,8 @@ export function HomePage() {
               <Link to="/courses" className="home-btn-start" style={{ textDecoration: 'none', display: 'inline-block' }}>
                 Start learning ↗
               </Link>
-              <Link to="/my-courses" className="home-btn-demo" style={{ textDecoration: 'none', display: 'inline-block' }}>
-                Jump into demo
+              <Link to="/my-learning" className="home-btn-demo" style={{ textDecoration: 'none', display: 'inline-block' }}>
+                {isAuthenticated ? 'Góc học tập của tôi' : 'Jump into demo'}
               </Link>
             </div>
 
@@ -81,15 +90,15 @@ export function HomePage() {
 
               <div className="home-stats-row">
                 <div className="home-stat">
-                  <span className="home-stat-number">24</span>
+                  <span className="home-stat-number">{progress?.masteredWords || 24}</span>
                   <span className="home-stat-label">WORDS</span>
                 </div>
                 <div className="home-stat">
-                  <span className="home-stat-number">3</span>
+                  <span className="home-stat-number">{progress?.completedLessons || 3}</span>
                   <span className="home-stat-label">LESSONS</span>
                 </div>
                 <div className="home-stat">
-                  <span className="home-stat-number">4 🔥</span>
+                  <span className="home-stat-number">{progress?.currentStreak || 4} 🔥</span>
                   <span className="home-stat-label">STREAK</span>
                 </div>
               </div>
@@ -97,6 +106,119 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ===== LOGGED-IN LEARNER DASHBOARD QUICK WIDGETS ===== */}
+      {isAuthenticated && (
+        <section style={{ background: '#f5f0e8', padding: '0 2rem 2.5rem' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+            {/* Continue Learning Card */}
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#8B1A1A', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+                  BÀI HỌC DỞ DANG
+                </span>
+                <span style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 600 }}>
+                  {progress?.currentLesson?.progressPercent || 65}%
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#111827', margin: '0 0 6px 0' }}>
+                {progress?.currentLesson?.title || 'Order your first cà phê sữa đá ☕'}
+              </h3>
+              <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: '0 0 16px 0' }}>
+                {progress?.currentLesson?.courseTitle || 'Tiếng Việt Giao Tiếp Đời Sống A1'}
+              </p>
+              <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', overflow: 'hidden', marginBottom: '16px' }}>
+                <div style={{ height: '100%', width: `${progress?.currentLesson?.progressPercent || 65}%`, background: '#8B1A1A' }} />
+              </div>
+              <Link
+                to="/courses"
+                style={{
+                  display: 'inline-block',
+                  padding: '8px 18px',
+                  borderRadius: '999px',
+                  background: '#8B1A1A',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                }}
+              >
+                Tiếp tục học ngay →
+              </Link>
+            </div>
+
+            {/* Daily Goal & Quick Shortcuts */}
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#b45309', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+                    MỤC TIÊU HÔM NAY
+                  </span>
+                  <span style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 600 }}>
+                    10 / 15 phút
+                  </span>
+                </div>
+                <div style={{ height: '8px', background: '#fef3c7', borderRadius: '4px', overflow: 'hidden', marginBottom: '16px' }}>
+                  <div style={{ height: '100%', width: '66%', background: '#d97706', borderRadius: '4px' }} />
+                </div>
+              </div>
+
+              <div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>
+                  Lối tắt nhanh
+                </span>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <Link
+                    to="/vocabulary"
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: '8px',
+                      background: '#fdfaf5',
+                      border: '1px solid #ded5cb',
+                      color: '#2d1810',
+                      textDecoration: 'none',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                    }}
+                  >
+                    📖 Ôn từ vựng
+                  </Link>
+                  <Link
+                    to="/achievements"
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: '8px',
+                      background: '#fdfaf5',
+                      border: '1px solid #ded5cb',
+                      color: '#2d1810',
+                      textDecoration: 'none',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                    }}
+                  >
+                    🏮 Điểm đến hành trình
+                  </Link>
+                  <Link
+                    to="/my-learning"
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: '8px',
+                      background: '#fdfaf5',
+                      border: '1px solid #ded5cb',
+                      color: '#2d1810',
+                      textDecoration: 'none',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                    }}
+                  >
+                    💬 AI Tutor
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ===== FEATURES SECTION ===== */}
       <section className="home-features">

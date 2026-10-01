@@ -1,20 +1,31 @@
 import axiosClient from '@/infrastructure/api/axiosClient';
 
-// Key for persisting demo/mock state in localStorage if BE endpoints aren't deployed yet
 const STORAGE_PREFIX = 'hola_learner_';
 
 export const learnerService = {
-  // 1. Email Verification
-  async verifyEmail(codeOrToken) {
+  // 1. Verify Email
+  async verifyEmailByToken(token) {
     try {
-      const res = await axiosClient.post('/api/auth/verify-email', { token: codeOrToken });
+      const res = await axiosClient.get(`/api/auth/verify-email?token=${encodeURIComponent(token)}`);
       return res;
     } catch {
-      // Mock success for testing if BE not ready
-      if (codeOrToken === '123456' || codeOrToken?.length >= 6) {
+      // Mock fallback if BE endpoint not deployed
+      if (token && token.length > 3) {
         return { code: 1000, message: 'Email đã được xác minh thành công!' };
       }
-      throw new Error('Mã xác minh không hợp lệ hoặc đã hết hạn.');
+      throw new Error('Liên kết xác minh không hợp lệ hoặc đã hết hạn.');
+    }
+  },
+
+  async verifyEmailByCode(code) {
+    try {
+      const res = await axiosClient.post('/api/auth/verify-email', { code });
+      return res;
+    } catch {
+      if (code === '123456' || code?.length >= 6) {
+        return { code: 1000, message: 'Email đã được xác minh thành công!' };
+      }
+      throw new Error('Mã xác minh 6 số không đúng hoặc đã hết hạn.');
     }
   },
 
@@ -26,24 +37,38 @@ export const learnerService = {
     }
   },
 
-  // 2. Forgot & Reset Password
-  async forgotPassword(email) {
+  // 2. Forgot Password 3-Step Flow
+  // Step 1: Initiate (Send OTP to email)
+  async forgotPasswordInitiate(email) {
     try {
-      return await axiosClient.post('/api/auth/forgot-password', { email });
+      return await axiosClient.post('/api/auth/forgot-password/initiate', { email });
     } catch {
-      return { code: 1000, message: 'Hướng dẫn đặt lại mật khẩu đã được gửi đến email của bạn.' };
+      return { code: 1000, message: 'Mã OTP đặt lại mật khẩu đã được gửi đến email.' };
     }
   },
 
-  async resetPassword(token, newPassword) {
+  // Step 2: Verify OTP
+  async forgotPasswordVerifyOtp(email, otp) {
     try {
-      return await axiosClient.post('/api/auth/reset-password', { token, newPassword });
+      return await axiosClient.post('/api/auth/forgot-password/verify-otp', { email, otp });
     } catch {
-      return { code: 1000, message: 'Mật khẩu đã được thay đổi thành công.' };
+      if (otp === '123456' || otp?.length === 6) {
+        return { code: 1000, result: { resetToken: 'mock-reset-token-' + Date.now() }, message: 'Xác thực OTP thành công!' };
+      }
+      throw new Error('Mã OTP không đúng hoặc đã hết hạn.');
     }
   },
 
-  // 3. Onboarding
+  // Step 3: Reset Password
+  async forgotPasswordReset(email, otp, newPassword) {
+    try {
+      return await axiosClient.post('/api/auth/forgot-password/reset-password', { email, otp, newPassword });
+    } catch {
+      return { code: 1000, message: 'Mật khẩu mới đã được cập nhật thành công!' };
+    }
+  },
+
+  // 3. Onboarding (POST /api/users/onboarding)
   async saveOnboarding(data) {
     try {
       return await axiosClient.post('/api/users/onboarding', data);
@@ -58,20 +83,20 @@ export const learnerService = {
     return saved ? JSON.parse(saved) : null;
   },
 
-  // 4. Profile Management
+  // 4. Profile Management (GET /api/users/me, PUT /api/users/me)
   async getProfile() {
     try {
       const res = await axiosClient.get('/api/users/me');
       if (res && res.result) return res.result;
     } catch {
-      // Fallback local storage
+      // Fallback
     }
     const localUser = localStorage.getItem('user');
     return localUser ? JSON.parse(localUser) : {
       fullName: 'Alex Miller',
       username: 'alexlearner',
       email: 'alex@example.com',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+      avatar: '',
       country: 'United States',
       nativeLanguage: 'en',
       targetLevel: 'A1',
@@ -94,8 +119,14 @@ export const learnerService = {
     }
   },
 
-  // 5. Learner Settings
+  // 5. Settings (PUT /api/users/settings)
   async getSettings() {
+    try {
+      const res = await axiosClient.get('/api/users/settings');
+      if (res?.result) return res.result;
+    } catch {
+      // Fallback
+    }
     const saved = localStorage.getItem(`${STORAGE_PREFIX}settings`);
     if (saved) return JSON.parse(saved);
     return {
@@ -111,16 +142,21 @@ export const learnerService = {
 
   async updateSettings(data) {
     try {
-      await axiosClient.put('/api/users/settings', data);
+      return await axiosClient.put('/api/users/settings', data);
     } catch {
-      // Local fallback
+      localStorage.setItem(`${STORAGE_PREFIX}settings`, JSON.stringify(data));
+      return { code: 1000, message: 'Cài đặt đã được lưu.' };
     }
-    localStorage.setItem(`${STORAGE_PREFIX}settings`, JSON.stringify(data));
-    return { code: 1000, message: 'Cài đặt đã được lưu.' };
   },
 
-  // 6. Learning Progress & XP
+  // 6. Learning Progress (GET /api/users/progress)
   async getProgressData() {
+    try {
+      const res = await axiosClient.get('/api/users/progress');
+      if (res?.result) return res.result;
+    } catch {
+      // Fallback
+    }
     return {
       totalTimeMinutes: 185,
       completedLessons: 12,
@@ -130,6 +166,16 @@ export const learnerService = {
       totalXp: 420,
       level: 'A1 - Khởi động',
       nextLevelXp: 600,
+      dailyGoalMinutes: 15,
+      todayMinutes: 10,
+      currentLesson: {
+        id: 'l1',
+        title: 'Order your first cà phê sữa đá ☕',
+        courseTitle: 'Tiếng Việt Giao Tiếp Đời Sống A1',
+        progressPercent: 65,
+        phraseVi: 'Cho tôi một cà phê sữa đá.',
+        phraseEn: 'One iced milk coffee, please.',
+      },
       weeklyActivity: [
         { day: 'T2', minutes: 20, xp: 45 },
         { day: 'T3', minutes: 15, xp: 30 },
@@ -145,58 +191,6 @@ export const learnerService = {
         { id: 3, title: 'Đạt chuỗi học 4 ngày liên tiếp 🔥', type: 'streak', xp: 30, time: 'Hôm qua' },
         { id: 4, title: 'Hội thoại AI với Chị Bán Phở', type: 'ai', xp: 40, time: '3 ngày trước' },
       ],
-    };
-  },
-
-  // 7. Achievements & Passports
-  async getAchievements() {
-    return {
-      badges: [
-        { id: 'b1', name: 'Chào Việt Nam', desc: 'Hoàn thành bài học xin chào đầu tiên', unlocked: true, icon: '👋', date: '26/09/2026' },
-        { id: 'b2', name: 'Mê Cà Phê', desc: 'Thuộc 10 từ vựng về đồ uống quán cóc', unlocked: true, icon: '☕', date: '28/09/2026' },
-        { id: 'b3', name: 'Chiến Binh Streak', desc: 'Học liên tục 7 ngày không ngắt quãng', unlocked: false, icon: '🔥', progress: '4/7 ngày' },
-        { id: 'b4', name: 'Bậc Thầy Thanh Điệu', desc: 'Phát âm chuẩn 6 thanh điệu tiếng Việt', unlocked: false, icon: '🎵', progress: '3/6 thanh' },
-        { id: 'b5', name: 'Tay Lái Lụa', desc: 'Hoàn thành chủ đề Giao thông & Xe ôm công nghệ', unlocked: false, icon: '🛵', progress: 'Chưa mở' },
-      ],
-      passportStamps: [
-        { id: 'p1', city: 'Hà Nội', stamp: '🏮 Phố Cổ & Hồ Gươm', unlocked: true, date: '27/09/2026' },
-        { id: 'p2', city: 'Hồ Chí Minh', stamp: '☕ Cà Phê Bệt & Chợ Bến Thành', unlocked: false },
-        { id: 'p3', city: 'Đà Nẵng', stamp: '🌉 Cầu Rồng & Biển Mỹ Khê', unlocked: false },
-        { id: 'p4', city: 'Hội An', stamp: '🏮 Đèn Lồng & Cao Lầu', unlocked: false },
-      ],
-    };
-  },
-
-  // 8. Notifications
-  async getNotifications() {
-    const saved = localStorage.getItem(`${STORAGE_PREFIX}notifications`);
-    if (saved) return JSON.parse(saved);
-    const initial = [
-      { id: 1, title: 'Giữ vững chuỗi Streak!', message: 'Hôm nay bạn chưa học bài nào. Hãy dành 5 phút để không mất chuỗi 4 ngày nhé!', time: '10 phút trước', read: false, link: '/my-learning' },
-      { id: 2, title: 'Huy hiệu mới đã mở khóa 🎉', message: 'Chúc mừng bạn đã đạt huy hiệu "Mê Cà Phê"!', time: '1 ngày trước', read: false, link: '/achievements' },
-      { id: 3, title: 'Gợi ý bài học hôm nay', message: 'Bài học "Hỏi giá và mặc cả chợ đêm" đang chờ bạn khám phá.', time: '2 ngày trước', read: true, link: '/courses' },
-    ];
-    localStorage.setItem(`${STORAGE_PREFIX}notifications`, JSON.stringify(initial));
-    return initial;
-  },
-
-  async markNotificationRead(id) {
-    const list = await this.getNotifications();
-    const updated = list.map(n => n.id === id ? { ...n, read: true } : n);
-    localStorage.setItem(`${STORAGE_PREFIX}notifications`, JSON.stringify(updated));
-    return updated;
-  },
-
-  async markAllNotificationsRead() {
-    const list = await this.getNotifications();
-    const updated = list.map(n => ({ ...n, read: true }));
-    localStorage.setItem(`${STORAGE_PREFIX}notifications`, JSON.stringify(updated));
-    return updated;
-  },
-
-  // 9. My Learning Hub (Tổng hợp các module)
-  async getMyLearningOverview() {
-    return {
       enrolledCourses: [
         { id: 'c1', title: 'Tiếng Việt Giao Tiếp Đời Sống A1', progress: 45, nextLesson: 'Bài 4: Mua sắm tại chợ truyền thống', image: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=400&q=80' },
         { id: 'c2', title: 'Cẩm Nang Phát Âm & 6 Thanh Điệu', progress: 80, nextLesson: 'Luyện dấu ngã vs dấu hỏi', image: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=400&q=80' },
@@ -214,5 +208,73 @@ export const learnerService = {
         { id: 'q2', quizName: 'Bài kiểm tra Ngữ pháp: Câu hỏi Ở đâu?', score: 85, date: '26/09/2026', passed: true },
       ],
     };
+  },
+
+  // 7. Achievements (GET /api/users/achievements)
+  async getAchievements() {
+    try {
+      const res = await axiosClient.get('/api/users/achievements');
+      if (res?.result) return res.result;
+    } catch {
+      // Fallback
+    }
+    return {
+      badges: [
+        { id: 'b1', name: 'Chào Việt Nam', desc: 'Hoàn thành bài học xin chào đầu tiên', unlocked: true, icon: '👋', unlockedAt: '26/09/2026', conditionValue: '1 bài học' },
+        { id: 'b2', name: 'Mê Cà Phê', desc: 'Thuộc 10 từ vựng về đồ uống quán cóc', unlocked: true, icon: '☕', unlockedAt: '28/09/2026', conditionValue: '10 từ vựng' },
+        { id: 'b3', name: 'Chiến Binh Streak', desc: 'Học liên tục 7 ngày không ngắt quãng', unlocked: false, icon: '🔥', conditionValue: 'Chuỗi 7 ngày' },
+        { id: 'b4', name: 'Bậc Thầy Thanh Điệu', desc: 'Phát âm chuẩn 6 thanh điệu tiếng Việt', unlocked: false, icon: '🎵', conditionValue: '6 thanh điệu' },
+        { id: 'b5', name: 'Tay Lái Lụa', desc: 'Hoàn thành chủ đề Giao thông & Xe ôm công nghệ', unlocked: false, icon: '🛵', conditionValue: 'Khóa A1 Chủ đề 3' },
+      ],
+      passportStamps: [
+        { id: 'p1', city: 'Hà Nội', stamp: '🏮 Phố Cổ & Hồ Gươm', unlocked: true, date: '27/09/2026' },
+        { id: 'p2', city: 'Hồ Chí Minh', stamp: '☕ Cà Phê Bệt & Chợ Bến Thành', unlocked: false },
+        { id: 'p3', city: 'Đà Nẵng', stamp: '🌉 Cầu Rồng & Biển Mỹ Khê', unlocked: false },
+        { id: 'p4', city: 'Hội An', stamp: '🏮 Đèn Lồng & Cao Lầu', unlocked: false },
+      ],
+    };
+  },
+
+  // 8. Notifications (GET /api/users/notifications, PUT /api/users/notifications/{id}/read)
+  async getNotifications() {
+    try {
+      const res = await axiosClient.get('/api/users/notifications');
+      if (res?.result) return res.result;
+    } catch {
+      // Fallback
+    }
+    const saved = localStorage.getItem(`${STORAGE_PREFIX}notifications`);
+    if (saved) return JSON.parse(saved);
+    const initial = [
+      { id: 1, title: 'Giữ vững chuỗi Streak!', message: 'Hôm nay bạn chưa học bài nào. Hãy dành 5 phút để không mất chuỗi 4 ngày nhé!', time: '10 phút trước', read: false, link: '/my-learning' },
+      { id: 2, title: 'Huy hiệu mới đã mở khóa 🎉', message: 'Chúc mừng bạn đã đạt huy hiệu "Mê Cà Phê"!', time: '1 ngày trước', read: false, link: '/achievements' },
+      { id: 3, title: 'Gợi ý bài học hôm nay', message: 'Bài học "Hỏi giá và mặc cả chợ đêm" đang chờ bạn khám phá.', time: '2 ngày trước', read: true, link: '/courses' },
+    ];
+    localStorage.setItem(`${STORAGE_PREFIX}notifications`, JSON.stringify(initial));
+    return initial;
+  },
+
+  async markNotificationRead(id) {
+    try {
+      await axiosClient.put(`/api/users/notifications/${id}/read`);
+    } catch {
+      // Fallback
+    }
+    const list = await this.getNotifications();
+    const updated = list.map(n => n.id === id ? { ...n, read: true } : n);
+    localStorage.setItem(`${STORAGE_PREFIX}notifications`, JSON.stringify(updated));
+    return updated;
+  },
+
+  async markAllNotificationsRead() {
+    try {
+      await axiosClient.put('/api/users/notifications/read-all');
+    } catch {
+      // Fallback
+    }
+    const list = await this.getNotifications();
+    const updated = list.map(n => ({ ...n, read: true }));
+    localStorage.setItem(`${STORAGE_PREFIX}notifications`, JSON.stringify(updated));
+    return updated;
   },
 };

@@ -2,15 +2,27 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { NotificationDropdown } from '@/components/common/NotificationDropdown';
-import { ROUTES } from '@/constants/routes';
+import { learnerService } from '@/services/learnerService';
 import '@/presentation/styles/layout.css';
 
 export function MainLayout() {
   const { isAuthenticated, user, logout, loading } = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [learnerStats, setLearnerStats] = useState({ streak: 4, xp: 420 });
   const userMenuRef = useRef(null);
 
   const isAdmin = user?.roles?.includes('ADMIN') || user?.username === 'admin';
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      learnerService.getProgressData().then(p => {
+        setLearnerStats({
+          streak: p.currentStreak || 4,
+          xp: p.totalXp || 420,
+        });
+      });
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -47,11 +59,49 @@ export function MainLayout() {
           {loading ? (
             <span style={{ color: '#fff', fontSize: '0.85rem' }}>…</span>
           ) : isAuthenticated ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {/* Streak Badge */}
+              <span
+                title="Chuỗi ngày học liên tục"
+                style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  padding: '3px 10px',
+                  borderRadius: '999px',
+                  color: '#fef08a',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                🔥 {learnerStats.streak}
+              </span>
+
+              {/* XP Badge */}
+              <span
+                title="Tổng điểm kinh nghiệm XP"
+                style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  padding: '3px 10px',
+                  borderRadius: '999px',
+                  color: '#bae6fd',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                ⚡ {learnerStats.xp} XP
+              </span>
+
               {/* Notifications */}
               <NotificationDropdown />
 
-              {/* User Menu Dropdown */}
+              {/* User Avatar Menu */}
               <div ref={userMenuRef} style={{ position: 'relative' }}>
                 <button
                   type="button"
@@ -93,7 +143,7 @@ export function MainLayout() {
                     position: 'absolute',
                     right: 0,
                     top: '115%',
-                    width: '210px',
+                    width: '220px',
                     backgroundColor: '#fff',
                     borderRadius: '12px',
                     boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
@@ -131,7 +181,7 @@ export function MainLayout() {
                       onClick={() => setUserMenuOpen(false)}
                       style={{ padding: '10px 16px', color: '#374151', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}
                     >
-                      📚 My Learning
+                      📚 Góc học tập (My Learning)
                     </Link>
 
                     {isAdmin && (

@@ -1,22 +1,39 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
 import { DongSonDrum } from '@/presentation/components/DongSonDrum';
 import '@/presentation/styles/auth.css';
 
 export function VerifyEmailPage() {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
   const [code, setCode] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState({ loading: false, success: false, message: '', error: '' });
   const navigate = useNavigate();
 
-  const handleVerify = async (e) => {
+  // Automatically verify if ?token=xxx is in URL
+  useEffect(() => {
+    if (token) {
+      setStatus({ loading: true, success: false, message: '', error: '' });
+      learnerService.verifyEmailByToken(token)
+        .then((res) => {
+          setStatus({ loading: false, success: true, message: res.message || 'Xác minh email thành công!', error: '' });
+          setTimeout(() => navigate('/onboarding'), 2000);
+        })
+        .catch((err) => {
+          setStatus({ loading: false, success: false, message: '', error: err.message || 'Liên kết xác minh không hợp lệ hoặc đã hết hạn.' });
+        });
+    }
+  }, [token, navigate]);
+
+  const handleVerifyCode = async (e) => {
     e.preventDefault();
     if (!code) return;
     setStatus({ loading: true, success: false, message: '', error: '' });
 
     try {
-      const res = await learnerService.verifyEmail(code);
+      const res = await learnerService.verifyEmailByCode(code);
       setStatus({ loading: false, success: true, message: res.message || 'Xác minh thành công!', error: '' });
       setTimeout(() => navigate('/onboarding'), 1500);
     } catch (err) {
@@ -57,35 +74,39 @@ export function VerifyEmailPage() {
 
           <h1 className="auth-heading">Kiểm tra<br />hộp thư của bạn</h1>
           <p className="auth-subtitle">
-            Chúng tôi đã gửi mã xác minh 6 số đến email đăng ký. Vui lòng nhập mã để kích hoạt tài khoản.
+            {token
+              ? 'Đang kiểm tra liên kết xác minh tài khoản của bạn…'
+              : 'Chúng tôi đã gửi mã xác minh 6 số đến email đăng ký. Vui lòng nhập mã để kích hoạt tài khoản.'}
           </p>
 
           {status.error && <div className="auth-message auth-message-error">{status.error}</div>}
           {status.message && <div className="auth-message auth-message-success">{status.message}</div>}
 
-          <form className="auth-form" onSubmit={handleVerify}>
-            <div className="auth-field">
-              <label className="auth-label">Mã xác minh (6 chữ số)</label>
-              <input
-                className="auth-input"
-                type="text"
-                maxLength={6}
-                placeholder="Ví dụ: 123456"
-                value={code}
-                onChange={(e) => setCode(e.target.value.trim())}
-                required
-                style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '1.4rem', fontWeight: 'bold' }}
-              />
-            </div>
+          {!token && (
+            <form className="auth-form" onSubmit={handleVerifyCode}>
+              <div className="auth-field">
+                <label className="auth-label">Mã xác minh (6 chữ số)</label>
+                <input
+                  className="auth-input"
+                  type="text"
+                  maxLength={6}
+                  placeholder="Ví dụ: 123456"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.trim())}
+                  required
+                  style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '1.4rem', fontWeight: 'bold' }}
+                />
+              </div>
 
-            <button
-              type="submit"
-              className="auth-btn auth-btn-primary"
-              disabled={status.loading || status.success}
-            >
-              {status.loading ? 'Đang kiểm tra…' : status.success ? '✓ Đã xác minh' : 'Xác minh ngay'}
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="auth-btn auth-btn-primary"
+                disabled={status.loading || status.success}
+              >
+                {status.loading ? 'Đang kiểm tra…' : status.success ? '✓ Đã xác minh' : 'Xác minh ngay'}
+              </button>
+            </form>
+          )}
 
           <div style={{ marginTop: '24px', padding: '16px', background: '#faf8f5', borderRadius: '12px', border: '1px solid #ded5cb' }}>
             <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', color: '#695a50', fontWeight: '600' }}>

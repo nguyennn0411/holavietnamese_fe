@@ -8,6 +8,10 @@ export function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState('ALL');
   const [statusMsg, setStatusMsg] = useState('');
 
+  // Role Assignment Modal state
+  const [roleModalUser, setRoleModalUser] = useState(null);
+  const [selectedRole, setSelectedRole] = useState('LEARNER');
+
   useEffect(() => {
     loadUsers();
   }, []);
@@ -19,6 +23,20 @@ export function AdminUsersPage() {
   const handleToggleStatus = async (id) => {
     const res = await adminService.toggleUserStatus(id);
     setStatusMsg(res.message);
+    loadUsers();
+    setTimeout(() => setStatusMsg(''), 3000);
+  };
+
+  const handleOpenRoleModal = (user) => {
+    setRoleModalUser(user);
+    setSelectedRole(user.role);
+  };
+
+  const handleSaveRole = async () => {
+    if (!roleModalUser) return;
+    const res = await adminService.updateUserRole(roleModalUser.id, selectedRole);
+    setStatusMsg(res.message);
+    setRoleModalUser(null);
     loadUsers();
     setTimeout(() => setStatusMsg(''), 3000);
   };
@@ -36,7 +54,7 @@ export function AdminUsersPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}>Quản lý người dùng</h1>
-          <p style={{ color: '#64748b', margin: 0, fontSize: '0.9rem' }}>Xem danh sách, tìm kiếm, phân quyền và khóa/mở tài khoản.</p>
+          <p style={{ color: '#64748b', margin: 0, fontSize: '0.9rem' }}>Xem danh sách, tìm kiếm, phân quyền vai trò và khóa/mở tài khoản.</p>
         </div>
       </div>
 
@@ -104,10 +122,27 @@ export function AdminUsersPage() {
                 </td>
                 <td>{user.joinDate}</td>
                 <td style={{ textAlign: 'right' }}>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenRoleModal(user)}
+                    style={{
+                      marginRight: '6px',
+                      padding: '4px 10px',
+                      borderRadius: '6px',
+                      border: '1px solid #cbd5e1',
+                      background: '#fff',
+                      color: '#475569',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Phân vai trò
+                  </button>
                   <Link
                     to={`/admin/users/${user.id}`}
                     style={{
-                      marginRight: '8px',
+                      marginRight: '6px',
                       padding: '4px 10px',
                       borderRadius: '6px',
                       background: '#f1f5f9',
@@ -141,6 +176,73 @@ export function AdminUsersPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Role Assignment Modal */}
+      {roleModalUser && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+        }}>
+          <div style={{ background: '#fff', padding: '28px', borderRadius: '16px', width: '100%', maxWidth: '420px', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '1.25rem', color: '#0f172a' }}>Phân quyền vai trò</h3>
+            <p style={{ margin: '0 0 20px 0', fontSize: '0.85rem', color: '#64748b' }}>
+              Thay đổi vai trò cho tài khoản <strong>{roleModalUser.fullName}</strong> (@{roleModalUser.username}).
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
+              {[
+                { role: 'LEARNER', title: 'Học viên (LEARNER)', desc: 'Quyền cơ bản: học bài, tra từ, làm quiz' },
+                { role: 'INSTRUCTOR', title: 'Giảng viên (INSTRUCTOR)', desc: 'Quyền soạn bài, tạo quiz, duyệt nội dung' },
+                { role: 'ADMIN', title: 'Quản trị viên (ADMIN)', desc: 'Toàn quyền kiểm soát hệ thống và người dùng' },
+              ].map(r => (
+                <label
+                  key={r.role}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: selectedRole === r.role ? '2px solid #8B1A1A' : '1px solid #cbd5e1',
+                    background: selectedRole === r.role ? '#fffaf8' : '#fff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="role"
+                    value={r.role}
+                    checked={selectedRole === r.role}
+                    onChange={() => setSelectedRole(r.role)}
+                    style={{ marginTop: '2px', accentColor: '#8B1A1A' }}
+                  />
+                  <div>
+                    <strong style={{ display: 'block', fontSize: '0.9rem', color: '#0f172a' }}>{r.title}</strong>
+                    <span style={{ fontSize: '0.78rem', color: '#64748b' }}>{r.desc}</span>
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={() => setRoleModalUser(null)}
+                style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveRole}
+                style={{ padding: '8px 20px', borderRadius: '8px', border: 'none', background: '#8B1A1A', color: '#fff', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Lưu vai trò
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
