@@ -1,5 +1,5 @@
 {
-  "name": "sep490-clean-architecture-fe",
+  "name": "hola-vietnamese-fe",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "react-router-dom": "^8.4.0"
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.1",
