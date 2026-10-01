@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Navigate, Link, useLocation } from 'react-router-dom';
+import { Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { DongSonDrum } from '@/presentation/components/DongSonDrum';
 import '@/presentation/styles/auth.css';
@@ -8,7 +8,8 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 export function LoginPage() {
   const location = useLocation();
-  const { login, loginWithGoogle, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const { login, loginWithGoogle, isAuthenticated, user } = useAuth();
   const googleBtnRef = useRef(null);
 
   const [email, setEmail] = useState('');
@@ -34,13 +35,21 @@ export function LoginPage() {
       const result = await loginWithGoogle(response.credential);
       if (!result.success) {
         setError(result.message || 'Google sign-in failed.');
+      } else {
+        const loggedUser = result.user;
+        const roles = loggedUser?.roles || [];
+        if (roles.includes('ADMIN') || loggedUser?.username === 'admin') {
+          navigate('/admin', { replace: true });
+        } else {
+          navigate('/', { replace: true });
+        }
       }
     } catch {
       setError('Google sign-in failed. Please try again.');
     } finally {
       setGoogleLoading(false);
     }
-  }, [loginWithGoogle]);
+  }, [loginWithGoogle, navigate]);
 
   // Initialize Google Identity Services
   useEffect(() => {
@@ -82,7 +91,12 @@ export function LoginPage() {
     }
   }, [GOOGLE_CLIENT_ID, isAuthenticated, handleGoogleCallback]);
 
+  // If already authenticated, redirect by role
   if (isAuthenticated) {
+    const roles = user?.roles || [];
+    if (roles.includes('ADMIN') || user?.username === 'admin') {
+      return <Navigate to="/admin" replace />;
+    }
     return <Navigate to="/" replace />;
   }
 
@@ -96,6 +110,15 @@ export function LoginPage() {
       const result = await login(email, password);
       if (!result.success) {
         setError(result.message || 'Login failed. Please try again.');
+      } else {
+        const loggedUser = result.user;
+        const roles = loggedUser?.roles || [];
+        if (roles.includes('ADMIN') || loggedUser?.username === 'admin') {
+          navigate('/admin', { replace: true });
+        } else {
+          const from = location.state?.from;
+          navigate(from || '/', { replace: true });
+        }
       }
     } catch {
       setError('An unexpected error occurred.');
@@ -104,9 +127,16 @@ export function LoginPage() {
     }
   };
 
-  const handleDemoAccount = () => {
+  const handleDemoLearner = () => {
     setEmail('learner');
     setPassword('learner123');
+    setError('');
+    setSuccessMessage('');
+  };
+
+  const handleDemoAdmin = () => {
+    setEmail('admin');
+    setPassword('admin123');
     setError('');
     setSuccessMessage('');
   };
@@ -123,72 +153,73 @@ export function LoginPage() {
               <span className="auth-logo-star">★</span>
             </div>
             <span className="auth-brand-name">HolaVietnamese</span>
-            <span className="auth-brand-badge">ĐỒNG SƠN POP</span>
+            <span className="auth-brand-badge">ĐỐNG SƠN POP</span>
           </div>
 
           {/* Welcome Pill */}
           <div className="auth-welcome-pill">
-            <span className="auth-welcome-code">VN</span>
+            <span className="auth-welcome-code">👋</span>
             <span className="auth-welcome-text">Welcome back</span>
           </div>
 
           {/* Heading */}
           <h1 className="auth-heading">
-            Continue your<br />
-            Vietnamese<br />
-            journey
+            Continue your<br />Vietnamese<br />journey
           </h1>
-
-          {/* Subtitle */}
           <p className="auth-subtitle">
-            Sign in to return to your saved demo progress.
+            Sign in to return to your saved learning progress.
           </p>
 
-          {/* Messages */}
+          {/* Error Message */}
+          {error && <div className="auth-message auth-message-error">{error}</div>}
+
+          {/* Success Message */}
           {successMessage && (
-            <div className="auth-message auth-message-success">{successMessage}</div>
-          )}
-          {error && (
-            <div className="auth-message auth-message-error">{error}</div>
+            <div className="auth-message auth-message-success">
+              {successMessage}
+            </div>
           )}
 
           {/* Form */}
           <form className="auth-form" onSubmit={handleSubmit}>
+            {/* Email Field */}
             <div className="auth-field">
-              <label className="auth-label" htmlFor="email">Email</label>
+              <label className="auth-label">Tài khoản hoặc Email</label>
               <input
-                id="email"
                 className="auth-input"
                 type="text"
-                placeholder="alex@example.com"
+                placeholder="learner hoặc admin"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="username"
               />
             </div>
 
+            {/* Password Field */}
             <div className="auth-field">
-              <label className="auth-label" htmlFor="password">Password</label>
-              <div className="auth-password-row">
+              <label className="auth-label">Mật khẩu</label>
+              <div className="auth-password-wrapper">
                 <input
-                  id="password"
                   className="auth-input auth-password-input"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"
                   className="auth-show-btn"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? 'Hide' : 'Show'}
+                  {showPassword ? 'Ẩn' : 'Hiện'}
                 </button>
               </div>
             </div>
 
+            {/* Options Row */}
             <div className="auth-options-row">
               <label className="auth-checkbox-label">
                 <input
@@ -197,26 +228,43 @@ export function LoginPage() {
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
                 />
-                <span className="auth-checkbox-text">Remember me</span>
+                <span>Remember me</span>
               </label>
-              <a href="#" className="auth-forgot-link">Forgot password?</a>
+              <Link to="/forgot-password" className="auth-forgot-link">
+                Forgot password?
+              </Link>
             </div>
 
+            {/* Primary Button */}
             <button
               type="submit"
               className="auth-btn auth-btn-primary"
               disabled={loading}
             >
-              {loading ? 'Signing in…' : 'Sign in'}
+              {loading ? 'Đang đăng nhập…' : 'Sign in'}
             </button>
 
-            <button
-              type="button"
-              className="auth-btn auth-btn-demo"
-              onClick={handleDemoAccount}
-            >
-              Try demo account
-            </button>
+            {/* Demo Accounts Row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
+              <button
+                type="button"
+                className="auth-btn auth-btn-demo"
+                onClick={handleDemoLearner}
+                title="Tài khoản học viên mẫu (learner/learner123)"
+                style={{ fontSize: '0.8rem', padding: '10px 4px' }}
+              >
+                🎒 Demo Learner
+              </button>
+              <button
+                type="button"
+                className="auth-btn auth-btn-demo"
+                onClick={handleDemoAdmin}
+                title="Tài khoản quản trị viên (admin/admin123)"
+                style={{ fontSize: '0.8rem', padding: '10px 4px', borderColor: '#8B1A1A', color: '#8B1A1A' }}
+              >
+                🛡️ Demo Admin
+              </button>
+            </div>
           </form>
 
           {/* Divider */}
@@ -268,12 +316,12 @@ export function LoginPage() {
         <div className="auth-drum-bg">
           <DongSonDrum className="auth-drum-svg" />
         </div>
-
         <div className="auth-hero-card">
-          <div className="auth-hero-tag">LEARN VIETNAMESE • LIVE VIETNAM</div>
+          <div className="auth-hero-tag">LEARN VIETNAMESE · LIVE VIETNAM</div>
           <h2 className="auth-hero-title">Vietnamese for real life.</h2>
           <p className="auth-hero-desc">
-            Short lessons, practical phrases and guided conversation practice for everyday moments in Vietnam.
+            Short, colorful lessons focused on food, travel, and day-to-day
+            conversations with locals.
           </p>
           <div className="auth-hero-chips">
             <span className="auth-chip">Structured lessons</span>

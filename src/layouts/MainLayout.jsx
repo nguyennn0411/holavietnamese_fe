@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { NotificationDropdown } from '@/components/common/NotificationDropdown';
 import { learnerService } from '@/services/learnerService';
@@ -7,11 +7,21 @@ import '@/presentation/styles/layout.css';
 
 export function MainLayout() {
   const { isAuthenticated, user, logout, loading } = useAuth();
+  const location = useLocation();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [learnerStats, setLearnerStats] = useState({ streak: 4, xp: 420 });
+  const [toastError, setToastError] = useState(location.state?.authError || null);
   const userMenuRef = useRef(null);
 
   const isAdmin = user?.roles?.includes('ADMIN') || user?.username === 'admin';
+
+  useEffect(() => {
+    if (location.state?.authError) {
+      setToastError(location.state.authError);
+      const timer = setTimeout(() => setToastError(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -36,6 +46,38 @@ export function MainLayout() {
 
   return (
     <div className="layout-shell">
+      {/* Toast Notification if redirected with error */}
+      {toastError && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          backgroundColor: '#fee2e2',
+          border: '1.5px solid #ef4444',
+          color: '#991b1b',
+          borderRadius: '12px',
+          padding: '14px 20px',
+          boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          fontWeight: 600,
+          fontSize: '0.9rem',
+          maxWidth: '420px',
+        }}>
+          <span style={{ fontSize: '1.3rem' }}>🚫</span>
+          <span style={{ flex: 1 }}>{toastError}</span>
+          <button
+            type="button"
+            onClick={() => setToastError(null)}
+            style={{ background: 'none', border: 'none', color: '#991b1b', fontSize: '1.1rem', cursor: 'pointer', fontWeight: 800 }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* ===== HEADER ===== */}
       <header className="layout-header">
         <div className="layout-brand">
@@ -158,7 +200,7 @@ export function MainLayout() {
                         {user?.fullName}
                       </strong>
                       <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>
-                        @{user?.username}
+                        @{user?.username} • <strong style={{ color: isAdmin ? '#8B1A1A' : '#0369a1' }}>{isAdmin ? 'ADMIN' : 'LEARNER'}</strong>
                       </span>
                     </div>
 

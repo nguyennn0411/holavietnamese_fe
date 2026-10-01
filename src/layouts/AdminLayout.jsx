@@ -7,12 +7,12 @@ export function AdminLayout() {
   const { user, logout } = useAuth();
 
   const navLinks = [
-    { to: ROUTES.ADMIN, label: 'Dashboard', icon: '📊' },
+    { to: ROUTES.ADMIN, label: 'Dashboard tổng quan', icon: '📊' },
     { to: ROUTES.ADMIN_USERS, label: 'Quản lý người dùng', icon: '👥' },
-    { to: ROUTES.ADMIN_ROLES, label: 'Vai trò & Phân quyền', icon: '🛡️' },
     { to: ROUTES.ADMIN_ACHIEVEMENTS, label: 'Quản lý thành tích', icon: '🏆' },
+    { to: ROUTES.ADMIN_AUDIT_LOGS, label: 'Nhật ký hệ thống', icon: '📜' },
+    { to: ROUTES.ADMIN_ROLES, label: 'Vai trò & Phân quyền', icon: '🛡️' },
     { to: ROUTES.ADMIN_XP_RULES, label: 'Quy tắc XP', icon: '⚡' },
-    { to: ROUTES.ADMIN_AUDIT_LOGS, label: 'Nhật ký quản trị', icon: '📜' },
     { to: ROUTES.ADMIN_SETTINGS, label: 'Cấu hình hệ thống', icon: '⚙️' },
   ];
 
@@ -78,7 +78,20 @@ export function AdminLayout() {
               <strong style={{ display: 'block', fontSize: '0.85rem', color: '#1e293b' }}>
                 {user?.fullName || 'Huy Nguyễn'}
               </strong>
-              <span style={{ fontSize: '0.75rem', color: '#8B1A1A', fontWeight: 700 }}>ADMINISTRATOR</span>
+              <span style={{
+                fontSize: '0.72rem',
+                backgroundColor: '#fee2e2',
+                color: '#991b1b',
+                border: '1px solid #fecaca',
+                padding: '2px 8px',
+                borderRadius: '999px',
+                fontWeight: 800,
+                letterSpacing: '0.5px',
+                display: 'inline-block',
+                marginTop: '2px',
+              }}>
+                ADMINISTRATOR
+              </span>
             </div>
             <button
               type="button"

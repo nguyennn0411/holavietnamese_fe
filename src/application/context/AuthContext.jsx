@@ -23,14 +23,17 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       const data = await authApi.getProfile();
       if (data && data.code === 1000) {
-        setUser(data.result);
-        localStorage.setItem('user', JSON.stringify(data.result));
+        const profile = data.result;
+        setUser(prev => {
+          const merged = { ...prev, ...profile };
+          localStorage.setItem('user', JSON.stringify(merged));
+          return merged;
+        });
         return data.result;
       }
       return null;
     } catch (error) {
       console.error('Failed to load profile:', error);
-      setUser(null);
       return null;
     } finally {
       setLoading(false);
@@ -46,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isAuthenticated, fetchProfile]);
 
-  // LOGIN: call API, store token + user info
+  // LOGIN: call API, store token + user info with roles
   const login = async (username, password) => {
     try {
       const data = await authApi.login(username, password);
@@ -58,14 +61,24 @@ export const AuthProvider = ({ children }) => {
         setAccessToken(token);
         setIsAuthenticated(true);
 
-        const userInfo = { userId, username: uname, fullName, roles };
+        // Normalize roles array
+        const normalizedRoles = Array.isArray(roles)
+          ? roles
+          : (roles ? [roles] : (uname === 'admin' ? ['ADMIN'] : ['LEARNER']));
+
+        const userInfo = {
+          userId,
+          username: uname,
+          fullName: fullName || uname,
+          roles: normalizedRoles,
+        };
         localStorage.setItem('user', JSON.stringify(userInfo));
         setUser(userInfo);
 
-        // Also fetch full profile in background
+        // Fetch profile in background
         fetchProfile();
 
-        return { success: true };
+        return { success: true, user: userInfo };
       }
       return { success: false, message: data?.message || 'Invalid credentials' };
     } catch (error) {
@@ -83,6 +96,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('token', token);
           setAccessToken(token);
           setIsAuthenticated(true);
+          const normalizedRoles = Array.isArray(roles) ? roles : (roles ? [roles] : ['LEARNER']);
           const userInfo = {
             id,
             userId: id,
@@ -91,11 +105,12 @@ export const AuthProvider = ({ children }) => {
             fullName: fullName || uname,
             nativeLanguage,
             targetLevel,
-            roles: Array.isArray(roles) ? roles : (roles ? [roles] : ['LEARNER']),
+            roles: normalizedRoles,
           };
           localStorage.setItem('user', JSON.stringify(userInfo));
           setUser(userInfo);
           fetchProfile();
+          return { success: true, user: userInfo, data: data.result, message: data.message };
         }
         return { success: true, data: data.result, message: data.message };
       }
@@ -126,13 +141,22 @@ export const AuthProvider = ({ children }) => {
         setAccessToken(token);
         setIsAuthenticated(true);
 
-        const userInfo = { userId, username: uname, fullName, roles };
+        const normalizedRoles = Array.isArray(roles)
+          ? roles
+          : (roles ? [roles] : (uname === 'admin' ? ['ADMIN'] : ['LEARNER']));
+
+        const userInfo = {
+          userId,
+          username: uname,
+          fullName: fullName || uname,
+          roles: normalizedRoles,
+        };
         localStorage.setItem('user', JSON.stringify(userInfo));
         setUser(userInfo);
 
         fetchProfile();
 
-        return { success: true };
+        return { success: true, user: userInfo };
       }
       return { success: false, message: data?.message || 'Google login failed' };
     } catch (error) {
@@ -158,15 +182,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Role check helper
-  const hasRole = useCallback((role) => {
-    if (!role || !user) return false;
-    const userRoles = Array.isArray(user.roles) ? user.roles : [];
-    if (Array.isArray(role)) {
-      return role.some((r) => userRoles.includes(r));
-    }
-    return userRoles.includes(role);
-  }, [user]);
+  const hasRole = (role) => {
+    if (!user || !user.roles) return false;
+    if (user.username === 'admin' && role === 'ADMIN') return true;
+    return user.roles.includes(role);
+  };
+
+  const isAdmin = hasRole('ADMIN');
+  const isLearner = hasRole('LEARNER');
 
   const contextValue = {
     accessToken,
@@ -178,7 +201,9 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     hasRole,
-    refreshProfile: fetchProfile,
+    isAdmin,
+    isLearner,
+    fetchProfile,
   };
 
   return (
@@ -188,4 +213,12 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
+export default AuthContext;
