@@ -1,177 +1,50 @@
-# SEP490 Frontend - Vite React Clean Architecture
+# Hola Vietnamese Frontend
 
-Frontend skeleton dùng Vite + React JavaScript theo hướng Clean Architecture.
+Ứng dụng React monolith: một entry point, router và bản build Vite cho toàn bộ chức năng học viên.
 
-Project này chỉ dựng khung:
-- Chưa có business logic
-- Chưa có authentication
-- Chưa có CRUD
-- Chưa có UI framework
-- Chưa có state management
-- Chưa có module nghiệp vụ cụ thể
-
-## Tech stack
-
-- React 19.3
-- Vite 8.3
-- React Router 8
-- JavaScript
-- Native Fetch API
-
-## Requirements
-
-Khuyến nghị dùng Node.js 22.22+.
-
-## Install
-
-```bash
-npm install
-```
-
-## Run
-
-```bash
-npm run dev
-```
-
-Frontend mặc định chạy:
+## Cấu trúc
 
 ```text
-http://localhost:5173
-```
-
-Backend mặc định:
-
-```text
-http://localhost:8080
-```
-
-Copy file:
-
-```text
-.env.example
-```
-
-thành:
-
-```text
-.env
-```
-
-## Structure
-
-```text
-src
-├── app
-│   ├── router
-│   │   └── AppRouter.jsx
-│   └── providers
-│       └── AppProviders.jsx
-│
-├── domain
-│   ├── entities
-│   └── repositories
-│
-├── application
-│   └── usecases
-│
-├── infrastructure
-│   ├── api
-│   │   └── httpClient.js
-│   └── repositories
-│
-├── presentation
-│   ├── pages
-│   ├── layouts
-│   ├── components
-│   │   └── common
-│   └── hooks
-│
-├── shared
-│   ├── constants
-│   └── utils
-│
-├── assets
-│   └── images
-│
-├── App.jsx
-├── main.jsx
+src/
+├── api/httpClient.js     # Fetch, session cookie, CSRF và xử lý lỗi
+├── services/            # Gọi REST API và kiểm tra dữ liệu đầu vào
+├── models/              # Model dữ liệu và thuộc tính tính toán
+├── hooks/               # State, tải dữ liệu và thao tác React
+├── components/          # Component dùng chung và theo chức năng
+├── pages/               # Các màn hình
+├── layouts/             # Layout ứng dụng
+├── constants/           # Đường dẫn router
+├── assets/
+├── App.jsx              # Router chung
+├── main.jsx             # Entry point
 └── styles.css
 ```
 
-## Layer responsibilities
+Luồng chính: page/component → hook hoặc service → HTTP client → backend.
+Service dùng model để giữ các thuộc tính tính toán hiện có. Không còn repository interface,
+repository implementation, use-case factory hoặc container khởi tạo dependency.
 
-### domain
+## Chạy
 
-Business model thuần JavaScript.
+Dùng Node.js 22.22+ và npm:
 
-Không import:
-- React
-- React Router
-- API client
-- UI library
-
-### application
-
-Chứa use case của application.
-
-Use case phụ thuộc vào abstraction/repository từ domain.
-
-### infrastructure
-
-Chứa implementation giao tiếp bên ngoài:
-- REST API
-- Backend Spring Boot
-- Local storage
-- Repository implementation
-
-### presentation
-
-Chứa phần React:
-- Pages
-- Layouts
-- Components
-- Hooks
-
-Presentation gọi application/use case, không nên gọi API trực tiếp khi project bắt đầu có nghiệp vụ thật.
-
-### app
-
-Bootstrap application:
-- Router
-- Global providers
-- Global configuration
-
-### shared
-
-Các thành phần dùng chung không chứa business logic:
-- constants
-- utils
-
-## Recommended dependency direction
-
-```text
-Presentation
-     ↓
-Application
-     ↓
-Domain
-     ↑
-Infrastructure
+```powershell
+npm ci
+npm run dev
 ```
 
-Ví dụ khi thêm module User:
+FE: http://localhost:5173. Vite chuyển `/api` sang `VITE_PROXY_TARGET` (mặc định http://localhost:8080).
+Trên máy hiện tại, `.env.local` dùng http://localhost:8088 vì cổng 8080 đã được dự án khác sử dụng.
+Khởi động BE và MySQL từ thư mục `../../BE` bằng `./start-mysql.ps1 -StartBackend`.
 
-```text
-domain/entities/User.js
-domain/repositories/UserRepository.js
-
-application/usecases/user/GetProfile.js
-
-infrastructure/repositories/UserRepositoryImpl.js
-
-presentation/pages/profile/ProfilePage.jsx
-presentation/components/profile/ProfileForm.jsx
+```powershell
+npm run build
+npm run preview
 ```
 
-Không đặt toàn bộ API, logic và JSX chung trong một page.
+Bản production nằm trong `dist/`. Khi triển khai cần proxy `/api` tới BE cùng origin.
+Nếu dùng origin riêng, cấu hình `VITE_API_BASE_URL`, `FRONTEND_ORIGIN` và session cookie phù hợp.
+
+Các route: `/login`, `/courses`, `/courses/:courseId`, `/my-courses`,
+`/learn/:courseId`, `/learn/:courseId/lesson/:lessonId`, `/progress`, `/vocabulary`.
+Các màn hình hiển thị trạng thái trống khi database chưa có dữ liệu; không dùng mock fallback.
