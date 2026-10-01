@@ -1,9 +1,21 @@
-import { Navigate, Outlet, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Navigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import '@/presentation/styles/layout.css';
+import '@/presentation/styles/auth.css';
 
 export function MainLayout() {
   const { isAuthenticated, user, logout, loading } = useAuth();
+  const location = useLocation();
+  const [toast, setToast] = useState(location.state?.welcomeToast || null);
+
+  useEffect(() => {
+    if (location.state?.welcomeToast) {
+      setToast(location.state.welcomeToast);
+      const timer = setTimeout(() => setToast(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
 
   if (loading) {
     return (
@@ -19,6 +31,18 @@ export function MainLayout() {
 
   return (
     <div className="layout-shell">
+      {/* Toast Notification */}
+      {toast && (
+        <div className="auth-toast-notification">
+          <span className="auth-toast-icon">🎉</span>
+          <div className="auth-toast-content">
+            <span className="auth-toast-title">Đăng ký thành công!</span>
+            <span className="auth-toast-desc">{toast}</span>
+          </div>
+          <button className="auth-toast-close" onClick={() => setToast(null)}>✕</button>
+        </div>
+      )}
+
       {/* ===== HEADER ===== */}
       <header className="layout-header">
         <div className="layout-brand">

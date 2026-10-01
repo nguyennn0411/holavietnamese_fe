@@ -73,16 +73,44 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // REGISTER: call API
+  // REGISTER: call API and auto-login if token is returned
   const register = async (payload) => {
     try {
       const data = await authApi.register(payload);
       if (data && data.code === 1000) {
-        return { success: true, data: data.result };
+        if (data.result?.token) {
+          const { token, id, username: uname, email, fullName, nativeLanguage, targetLevel, roles } = data.result;
+          localStorage.setItem('token', token);
+          setAccessToken(token);
+          setIsAuthenticated(true);
+          const userInfo = {
+            id,
+            userId: id,
+            username: uname,
+            email,
+            fullName: fullName || uname,
+            nativeLanguage,
+            targetLevel,
+            roles: Array.isArray(roles) ? roles : (roles ? [roles] : ['LEARNER']),
+          };
+          localStorage.setItem('user', JSON.stringify(userInfo));
+          setUser(userInfo);
+          fetchProfile();
+        }
+        return { success: true, data: data.result, message: data.message };
       }
-      return { success: false, message: data?.message || 'Registration failed' };
+      return {
+        success: false,
+        code: data?.code,
+        message: data?.message || 'Đăng ký không thành công.',
+      };
     } catch (error) {
-      return { success: false, message: error?.message || 'Registration failed. Please try again.' };
+      const errData = error?.response?.data || error;
+      return {
+        success: false,
+        code: errData?.code,
+        message: errData?.message || error?.message || 'Đăng ký thất bại. Vui lòng kiểm tra lại.',
+      };
     }
   };
 

@@ -15,6 +15,7 @@ const PUBLIC_API_ENDPOINTS = [
   '/api/auth/logout',
   '/api/auth/refresh',
   '/api/auth/google',
+  '/api/auth/register',
   '/api/users/register',
 ];
 

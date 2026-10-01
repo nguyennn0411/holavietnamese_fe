@@ -393,6 +393,116 @@
   background-color: #982b1d;
 }
 
+/* Field Validation & Inline Error States */
+.auth-input.auth-input-error {
+  border-color: #dc2626 !important;
+  background-color: #fffaf9 !important;
+}
+
+.auth-input.auth-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+}
+
+.auth-field-error {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #dc2626;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.auth-field-hint {
+  font-size: 12px;
+  color: #8c7e74;
+  margin-top: 2px;
+}
+
+.auth-btn-quick {
+  background: transparent;
+  border: 1.5px dashed #cbb6a3;
+  color: #7d5032;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px;
+  height: 44px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: -4px;
+}
+
+.auth-btn-quick:hover:not(:disabled) {
+  background-color: #fcf9f5;
+  border-color: #982b1d;
+  color: #982b1d;
+}
+
+/* Floating Toast Notification */
+.auth-toast-notification {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1.5px solid #86efac;
+  border-radius: 14px;
+  padding: 14px 22px;
+  box-shadow: 0 12px 32px rgba(22, 101, 52, 0.15), 0 2px 8px rgba(0, 0, 0, 0.05);
+  animation: slideDownToast 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDownToast {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -16px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.auth-toast-icon {
+  font-size: 20px;
+}
+
+.auth-toast-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-toast-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.auth-toast-desc {
+  font-size: 13px;
+  color: #374151;
+}
+
+.auth-toast-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0 4px;
+  margin-left: 8px;
+  line-height: 1;
+}
+
+.auth-toast-close:hover {
+  color: #374151;
+}
+
 /* ==========================================================================
    RIGHT PANEL (Đông Sơn Drum Artwork + Floating Hero Card)
    ========================================================================== */

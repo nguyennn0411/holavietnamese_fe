@@ -6,7 +6,7 @@ const authApi = {
   },
 
   register: async (payload) => {
-    return axiosClient.post('/api/users/register', payload);
+    return axiosClient.post('/api/auth/register', payload);
   },
 
   getProfile: async () => {
