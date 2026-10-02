@@ -1,0 +1,116 @@
+import { useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { learnerService } from '@/services/learnerService';
+import { DongSonDrum } from '@/presentation/components/DongSonDrum';
+import '@/presentation/styles/auth.css';
+
+export function ResetPasswordPage() {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token') || 'demo-token';
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [status, setStatus] = useState({ loading: false, message: '', error: '' });
+  const navigate = useNavigate();
+
+  const handleReset = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setStatus({ loading: false, message: '', error: 'Mật khẩu xác nhận không trùng khớp.' });
+      return;
+    }
+    if (password.length < 6) {
+      setStatus({ loading: false, message: '', error: 'Mật khẩu phải từ 6 ký tự trở lên.' });
+      return;
+    }
+
+    setStatus({ loading: true, message: '', error: '' });
+    try {
+      const res = await learnerService.resetPassword(token, password);
+      setStatus({ loading: false, message: res.message || 'Đặt lại mật khẩu thành công!', error: '' });
+      setTimeout(() => navigate('/login'), 1500);
+    } catch (err) {
+      setStatus({ loading: false, message: '', error: err.message || 'Mã xác thực không hợp lệ.' });
+    }
+  };
+
+  return (
+    <div className="auth-container">
+      <div className="auth-left-panel">
+        <div className="auth-left-content">
+          <div className="auth-brand-row">
+            <div className="auth-brand-logo">
+              <span className="auth-logo-text">H</span>
+              <span className="auth-logo-star">★</span>
+            </div>
+            <span className="auth-brand-name">HolaVietnamese</span>
+            <span className="auth-brand-badge">ĐỐNG SƠN POP</span>
+          </div>
+
+          <div className="auth-welcome-pill">
+            <span className="auth-welcome-code">🔒</span>
+            <span className="auth-welcome-text">Mật khẩu mới</span>
+          </div>
+
+          <h1 className="auth-heading">Tạo mật khẩu<br />mới</h1>
+          <p className="auth-subtitle">
+            Nhập mật khẩu mới cho tài khoản của bạn để hoàn tất đặt lại.
+          </p>
+
+          {status.error && <div className="auth-message auth-message-error">{status.error}</div>}
+          {status.message && <div className="auth-message auth-message-success">{status.message}</div>}
+
+          <form className="auth-form" onSubmit={handleReset}>
+            <div className="auth-field">
+              <label className="auth-label">Mật khẩu mới</label>
+              <input
+                className="auth-input"
+                type="password"
+                placeholder="Tối thiểu 6 ký tự"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="auth-field">
+              <label className="auth-label">Xác nhận mật khẩu</label>
+              <input
+                className="auth-input"
+                type="password"
+                placeholder="Nhập lại mật khẩu mới"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="auth-btn auth-btn-primary"
+              disabled={status.loading || !!status.message}
+            >
+              {status.loading ? 'Đang cập nhật…' : 'Lưu mật khẩu mới'}
+            </button>
+          </form>
+
+          <p className="auth-footer-text">
+            Quay lại <Link to="/login" className="auth-footer-link">Đăng nhập</Link>
+          </p>
+        </div>
+      </div>
+
+      <div className="auth-right-panel">
+        <div className="auth-drum-bg">
+          <DongSonDrum className="auth-drum-svg" />
+        </div>
+        <div className="auth-hero-card">
+          <div className="auth-hero-tag">BẢO MẬT TÀI KHOẢN</div>
+          <h2 className="auth-hero-title">Khởi động lại an toàn.</h2>
+          <p className="auth-hero-desc">
+            Sau khi đổi mật khẩu, bạn có thể đăng nhập ngay trên mọi thiết bị và đồng bộ tiến độ tức thì.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

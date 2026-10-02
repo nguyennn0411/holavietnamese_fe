@@ -1,0 +1,209 @@
+/* =============================================
+   LAYOUT STYLES – HolaVietnamese
+   ============================================= */
+
+/* Shell */
+.layout-shell {
+  min-height: 100vh;
+  background-color: #f5f0e8;
+}
+
+/* ---- HEADER ---- */
+.layout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 2rem;
+  background-color: #8B1A1A;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.layout-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.layout-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #8B1A1A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.layout-brand-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.layout-badge {
+  background-color: #fee2e2;
+  color: #8B1A1A;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Header nav */
+.layout-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.layout-nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.layout-nav-link:hover {
+  color: #ffffff;
+}
+
+.layout-user-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.layout-greeting {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.layout-greeting strong {
+  color: #fff;
+}
+
+.layout-pause-btn {
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: transparent;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.layout-pause-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.layout-cta-btn {
+  padding: 6px 18px;
+  border-radius: 999px;
+  border: none;
+  background-color: #d4533b;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.layout-cta-btn:hover {
+  background-color: #c0472f;
+}
+
+.layout-logout-btn {
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: transparent;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.layout-logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Main content */
+.layout-main {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.layout-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* ---- FOOTER ---- */
+.layout-footer {
+  background-color: #8B1A1A;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layout-footer-brand {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.layout-footer-tagline {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.layout-footer-links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.layout-footer-link {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.layout-footer-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout-header {
+    padding: 0.5rem 1rem;
+  }
+  .layout-nav {
+    display: none;
+  }
+  .layout-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}
