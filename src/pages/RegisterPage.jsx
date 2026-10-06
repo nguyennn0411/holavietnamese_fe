@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
-import { DongSonDrum } from '@/presentation/components/DongSonDrum';
+import dongSonBg from '@/assets/images/dongson_auth_bg.png';
 import '@/presentation/styles/auth.css';
 
 const LANGUAGE_OPTIONS = [
@@ -82,6 +82,10 @@ export function RegisterPage() {
       errors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
     }
 
+    if (!fullName.trim()) {
+      errors.fullName = 'Vui lòng nhập họ và tên';
+    }
+
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -127,10 +131,11 @@ export function RegisterPage() {
       if (result.success) {
         // Backend returned code 1000 + auto-generated token
         // AuthContext automatically stored token & user info in localStorage & state
-        navigate('/', {
+        navigate(result.user ? '/onboarding' : '/verify-email', {
           replace: true,
           state: {
-            welcomeToast: 'Đăng ký thành công! Chào mừng bạn đến với Hola Vietnamese 🎉',
+            email: email.trim(),
+            message: 'Đăng ký thành công! Hãy hoàn tất thiết lập tài khoản.',
           },
         });
       } else {
@@ -200,14 +205,14 @@ export function RegisterPage() {
               <span className="auth-logo-star">★</span>
             </div>
             <span className="auth-brand-name">HolaVietnamese</span>
-            <span className="auth-brand-badge">ĐỒNG SƠN POP</span>
+            <span className="auth-brand-badge">ĐÔNG SƠN POP</span>
           </div>
 
           {/* Welcome pill */}
           <div className="auth-welcome-pill">
             <span className="auth-welcome-code">VN</span>
             <span className="auth-welcome-text">
-              {step === 1 ? '✨ Đăng ký học viên' : '📝 Lộ trình học'}
+              {step === 1 ? 'Tài khoản mới' : 'Lộ trình học'}
             </span>
           </div>
 
@@ -215,15 +220,11 @@ export function RegisterPage() {
           <h1 className="auth-heading">
             {step === 1 ? (
               <>
-                Create your
-                <br />
-                account
+                Bắt đầu hành trình<br /><span>tiếng Việt</span>
               </>
             ) : (
               <>
-                Personalize
-                <br />
-                your learning
+                Cá nhân hóa<br /><span>lộ trình học</span>
               </>
             )}
           </h1>
@@ -237,8 +238,9 @@ export function RegisterPage() {
 
           {/* Step indicator */}
           <div className="auth-step-indicator">
-            <span className={`auth-step-dot ${step >= 1 ? 'auth-step-dot-active' : ''}`} />
-            <span className={`auth-step-dot ${step >= 2 ? 'auth-step-dot-active' : ''}`} />
+            <div className={`auth-step-item ${step >= 1 ? 'auth-step-item-active' : ''}`}><span>1</span><small>Tài khoản</small></div>
+            <i className={step >= 2 ? 'active' : ''} />
+            <div className={`auth-step-item ${step >= 2 ? 'auth-step-item-active' : ''}`}><span>2</span><small>Cá nhân hóa</small></div>
           </div>
 
           {/* General Error Banner */}
@@ -250,7 +252,7 @@ export function RegisterPage() {
               {/* Username */}
               <div className="auth-field">
                 <label className="auth-label" htmlFor="username">
-                  Tên đăng nhập (Username) *
+                  Tên đăng nhập <em>*</em>
                 </label>
                 <input
                   id="username"
@@ -272,7 +274,7 @@ export function RegisterPage() {
               {/* Email */}
               <div className="auth-field">
                 <label className="auth-label" htmlFor="email">
-                  Email *
+                  Email <em>*</em>
                 </label>
                 <input
                   id="email"
@@ -294,7 +296,7 @@ export function RegisterPage() {
               {/* Password */}
               <div className="auth-field">
                 <label className="auth-label" htmlFor="password">
-                  Mật khẩu (Password) *
+                  Mật khẩu <em>*</em>
                 </label>
                 <div className="auth-password-row">
                   <input
@@ -313,6 +315,7 @@ export function RegisterPage() {
                     type="button"
                     className="auth-show-btn"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                   >
                     {showPassword ? 'Ẩn' : 'Hiện'}
                   </button>
@@ -325,25 +328,27 @@ export function RegisterPage() {
               {/* Full Name */}
               <div className="auth-field">
                 <label className="auth-label" htmlFor="fullName">
-                  Họ và tên (Full Name)
+                  Họ và tên <em>*</em>
                 </label>
                 <input
                   id="fullName"
-                  className="auth-input"
+                  className={`auth-input ${fieldErrors.fullName ? 'auth-input-error' : ''}`}
                   type="text"
                   placeholder="David Miller"
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => {
+                    setFullName(e.target.value);
+                    if (fieldErrors.fullName) setFieldErrors((prev) => ({ ...prev, fullName: '' }));
+                  }}
+                  required
                 />
-                <span className="auth-field-hint">
-                  (Không bắt buộc - Hệ thống sẽ tự động dùng Username nếu để trống)
-                </span>
+                {fieldErrors.fullName && <span className="auth-field-error">⚠️ {fieldErrors.fullName}</span>}
               </div>
 
               {/* Phone Number */}
               <div className="auth-field">
                 <label className="auth-label" htmlFor="phoneNumber">
-                  Số điện thoại (Phone Number)
+                  Số điện thoại <span className="auth-optional">Không bắt buộc</span>
                 </label>
                 <input
                   id="phoneNumber"
@@ -361,7 +366,7 @@ export function RegisterPage() {
                 className="auth-btn auth-btn-primary"
                 disabled={loading}
               >
-                Tiếp tục cá nhân hóa lộ trình →
+                Tiếp tục <span aria-hidden="true">→</span>
               </button>
 
               {/* Quick Register Button (Cách 1: Rút gọn) */}
@@ -371,7 +376,7 @@ export function RegisterPage() {
                 onClick={handleQuickRegister}
                 disabled={loading}
               >
-                {loading ? 'Đang xử lý…' : '⚡ Hoặc đăng ký nhanh ngay (Bỏ qua bước 2)'}
+                {loading ? 'Đang xử lý…' : 'Đăng ký nhanh, bỏ qua cá nhân hóa'}
               </button>
             </form>
           )}
@@ -381,7 +386,7 @@ export function RegisterPage() {
             <form className="auth-form" onSubmit={handleStep2Submit}>
               <div className="auth-field">
                 <label className="auth-label" htmlFor="nativeLanguage">
-                  Ngôn ngữ mẹ đẻ (Native Language) *
+                  Ngôn ngữ mẹ đẻ <em>*</em>
                 </label>
                 <select
                   id="nativeLanguage"
@@ -400,7 +405,7 @@ export function RegisterPage() {
 
               <div className="auth-field">
                 <label className="auth-label" htmlFor="learningGoal">
-                  Mục tiêu học tiếng Việt (Learning Goal) *
+                  Mục tiêu học tiếng Việt <em>*</em>
                 </label>
                 <select
                   id="learningGoal"
@@ -419,7 +424,7 @@ export function RegisterPage() {
 
               <div className="auth-field">
                 <label className="auth-label" htmlFor="targetLevel">
-                  Trình độ muốn đạt (Target Level) *
+                  Trình độ muốn đạt <em>*</em>
                 </label>
                 <select
                   id="targetLevel"
@@ -469,20 +474,17 @@ export function RegisterPage() {
       {/* Right Panel */}
       <div className="auth-right-panel">
         <div className="auth-drum-bg">
-          <DongSonDrum className="auth-drum-svg" />
+          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
-
+        <div className="auth-visual-topline"><span /> Khám phá ngôn ngữ · Kết nối văn hóa</div>
         <div className="auth-hero-card">
-          <div className="auth-hero-tag">JOIN THOUSANDS OF LEARNERS</div>
-          <h2 className="auth-hero-title">Start speaking Vietnamese today.</h2>
-          <p className="auth-hero-desc">
-            Tham gia cộng đồng học viên làm chủ tiếng Việt thông qua các bài học trực quan,
-            tình huống giao tiếp thực tế và trợ lý AI thông minh — tất cả trong một nền tảng.
-          </p>
-          <div className="auth-hero-chips">
-            <span className="auth-chip">Structured lessons</span>
-            <span className="auth-chip">Real-life practice</span>
-            <span className="auth-chip">AI assistance</span>
+          <div className="auth-hero-tag">HOLA VIETNAMESE</div>
+          <h2 className="auth-hero-title">Một lộ trình được thiết kế riêng cho bạn.</h2>
+          <p className="auth-hero-desc">Cho chúng tôi biết mục tiêu của bạn. Hola sẽ biến mỗi buổi học thành một bước tiến vừa sức và đầy cảm hứng.</p>
+          <div className="auth-proof-row">
+            <div><strong>10+</strong><span>chủ đề thực tế</span></div>
+            <div><strong>A1–B2</strong><span>lộ trình rõ ràng</span></div>
+            <div><strong>24/7</strong><span>học mọi lúc</span></div>
           </div>
         </div>
       </div>

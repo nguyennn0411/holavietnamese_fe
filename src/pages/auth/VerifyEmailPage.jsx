@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import { DongSonDrum } from '@/presentation/components/DongSonDrum';
+import dongSonBg from '@/assets/images/dongson_auth_bg.png';
 import '@/presentation/styles/auth.css';
 
 export function VerifyEmailPage() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
-  const [code, setCode] = useState('');
-  const [email, setEmail] = useState('');
+  const location = useLocation();
+  const [email, setEmail] = useState(location.state?.email || '');
   const [status, setStatus] = useState({ loading: false, success: false, message: '', error: '' });
   const navigate = useNavigate();
 
@@ -26,20 +26,6 @@ export function VerifyEmailPage() {
         });
     }
   }, [token, navigate]);
-
-  const handleVerifyCode = async (e) => {
-    e.preventDefault();
-    if (!code) return;
-    setStatus({ loading: true, success: false, message: '', error: '' });
-
-    try {
-      const res = await learnerService.verifyEmailByCode(code);
-      setStatus({ loading: false, success: true, message: res.message || 'Xác minh thành công!', error: '' });
-      setTimeout(() => navigate('/onboarding'), 1500);
-    } catch (err) {
-      setStatus({ loading: false, success: false, message: '', error: err.message || 'Mã xác minh không chính xác.' });
-    }
-  };
 
   const handleResend = async () => {
     if (!email) {
@@ -76,37 +62,11 @@ export function VerifyEmailPage() {
           <p className="auth-subtitle">
             {token
               ? 'Đang kiểm tra liên kết xác minh tài khoản của bạn…'
-              : 'Chúng tôi đã gửi mã xác minh 6 số đến email đăng ký. Vui lòng nhập mã để kích hoạt tài khoản.'}
+              : 'Mở liên kết trong email để kích hoạt tài khoản. Bạn có thể gửi lại email xác minh bên dưới.'}
           </p>
 
           {status.error && <div className="auth-message auth-message-error">{status.error}</div>}
           {status.message && <div className="auth-message auth-message-success">{status.message}</div>}
-
-          {!token && (
-            <form className="auth-form" onSubmit={handleVerifyCode}>
-              <div className="auth-field">
-                <label className="auth-label">Mã xác minh (6 chữ số)</label>
-                <input
-                  className="auth-input"
-                  type="text"
-                  maxLength={6}
-                  placeholder="Ví dụ: 123456"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.trim())}
-                  required
-                  style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '1.4rem', fontWeight: 'bold' }}
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="auth-btn auth-btn-primary"
-                disabled={status.loading || status.success}
-              >
-                {status.loading ? 'Đang kiểm tra…' : status.success ? '✓ Đã xác minh' : 'Xác minh ngay'}
-              </button>
-            </form>
-          )}
 
           <div style={{ marginTop: '24px', padding: '16px', background: '#faf8f5', borderRadius: '12px', border: '1px solid #ded5cb' }}>
             <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', color: '#695a50', fontWeight: '600' }}>
@@ -125,6 +85,7 @@ export function VerifyEmailPage() {
                 type="button"
                 className="auth-show-btn"
                 onClick={handleResend}
+                disabled={status.loading}
                 style={{ height: '40px' }}
               >
                 Gửi lại
@@ -138,10 +99,11 @@ export function VerifyEmailPage() {
         </div>
       </div>
 
-      <div className="auth-right-panel">
+      <aside className="auth-right-panel" aria-label="Bảo mật & xác thực">
         <div className="auth-drum-bg">
-          <DongSonDrum className="auth-drum-svg" />
+          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
+        <div className="auth-visual-topline"><span /> Bảo mật & xác thực · HolaVietnamese</div>
         <div className="auth-hero-card">
           <div className="auth-hero-tag">BẢO MẬT & XÁC THỰC</div>
           <h2 className="auth-hero-title">Bảo vệ tiến trình học của bạn.</h2>
@@ -149,7 +111,7 @@ export function VerifyEmailPage() {
             Xác minh email giúp bạn không bao giờ mất chuỗi streak, huy hiệu thành tích và sổ tay từ vựng yêu thích.
           </p>
         </div>
-      </div>
+      </aside>
     </div>
   );
 }

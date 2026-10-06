@@ -1,140 +1,131 @@
 import { useState, useEffect } from 'react';
 import { learnerService } from '@/services/learnerService';
+import '@/presentation/styles/account.css';
 
 export function AchievementsPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    learnerService.getAchievements().then(res => {
-      setData(res);
-      setLoading(false);
-    });
+    learnerService
+      .getAchievements()
+      .then((res) => {
+        setData(
+          Array.isArray(res)
+            ? { badges: res, passportStamps: [] }
+            : { badges: res?.badges ?? [], passportStamps: res?.passportStamps ?? [] }
+        );
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || 'Không thể tải thành tích.');
+        setLoading(false);
+      });
   }, []);
 
-  if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Đang tải danh hiệu & thành tích…</div>;
+  if (loading) {
+    return <div className="account-empty">Đang tải danh hiệu & thành tích…</div>;
+  }
 
-  const unlockedCount = data?.badges?.filter(b => b.unlocked).length || 0;
+  if (error) {
+    return (
+      <div className="account-page">
+        <div className="auth-message auth-message-error" role="alert">
+          {error}
+        </div>
+      </div>
+    );
+  }
+
+  const unlockedCount = data?.badges?.filter((b) => b.unlocked).length || 0;
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '32px 16px' }}>
-      <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#2d1810', margin: '0 0 8px 0' }}>
-          Huy hiệu & Thành tích
-        </h1>
-        <p style={{ color: '#6b7280', margin: 0 }}>
+    <div className="account-page">
+      <div className="account-header">
+        <span className="account-pill">🏆 Bộ sưu tập danh hiệu</span>
+        <h1 className="account-title">Huy hiệu & Thành tích</h1>
+        <p className="account-desc">
           Ghi nhận từng cột mốc nỗ lực trên hành trình khám phá ngôn ngữ và văn hóa Việt Nam.
         </p>
       </div>
 
       {/* Overview Banner */}
-      <div style={{
-        background: 'linear-gradient(135deg, #8B1A1A 0%, #c2410c 100%)',
-        color: '#fff',
-        borderRadius: '16px',
-        padding: '24px 32px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '32px',
-        boxShadow: '0 10px 25px rgba(139,26,26,0.2)',
-      }}>
+      <div className="achieve-banner">
         <div>
-          <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.9 }}>Bộ sưu tập</span>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, margin: '4px 0 0 0' }}>
-            Đã mở {unlockedCount} / {data.badges.length} huy hiệu
+          <span className="achieve-banner-subtitle">BỘ SƯU TẬP DANH HIỆU</span>
+          <h2 className="achieve-banner-title">
+            Đã mở khóa {unlockedCount} / {data.badges.length} huy hiệu
           </h2>
         </div>
-        <span style={{ fontSize: '3.5rem' }}>🏆</span>
+        <span className="achieve-banner-icon">🏆</span>
       </div>
 
       {/* Badges Grid */}
-      <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#111827', marginBottom: '16px' }}>Huy hiệu học tập</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', marginBottom: '40px' }}>
-        {data.badges.map(badge => (
-          <div
-            key={badge.id}
-            style={{
-              background: badge.unlocked ? '#fff' : '#f9fafb',
-              border: badge.unlocked ? '1.5px solid #fde68a' : '1px dashed #d1d5db',
-              borderRadius: '16px',
-              padding: '20px',
-              display: 'flex',
-              gap: '16px',
-              alignItems: 'center',
-              boxShadow: badge.unlocked ? '0 4px 12px rgba(251,191,36,0.15)' : 'none',
-              opacity: badge.unlocked ? 1 : 0.65,
-            }}
-          >
-            <div style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '50%',
-              background: badge.unlocked ? '#fef3c7' : '#e5e7eb',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.8rem',
-              flexShrink: 0,
-            }}>
-              {badge.icon}
+      <h3 className="achieve-section-title">Huy hiệu học tập</h3>
+      <div className="achieve-badge-grid">
+        {data.badges.length === 0 ? (
+          <div className="account-empty">Chưa có huy hiệu nào trong hệ thống.</div>
+        ) : (
+          data.badges.map((badge) => (
+            <div
+              key={badge.id}
+              className={`achieve-badge-card ${badge.unlocked ? 'unlocked' : 'locked'}`}
+            >
+              <div className="achieve-badge-icon">
+                {badge.icon || (badge.unlocked ? '🏆' : '🔒')}
+              </div>
+              <div className="achieve-badge-info">
+                <strong>{badge.name || badge.title}</strong>
+                <p>{badge.description || badge.desc || badge.criteria}</p>
+                {badge.unlocked ? (
+                  <span className="achieve-badge-status">
+                    ✓ Đã mở khóa {badge.unlockedAt ? `· ${badge.unlockedAt}` : ''}
+                  </span>
+                ) : (
+                  <span className="achieve-badge-status locked">
+                    🔒 {badge.conditionValue || 'Chưa đạt điều kiện'}
+                  </span>
+                )}
+              </div>
             </div>
-            <div>
-              <strong style={{ display: 'block', fontSize: '1rem', color: '#111827' }}>{badge.name}</strong>
-              <p style={{ margin: '4px 0 6px 0', fontSize: '0.8rem', color: '#6b7280' }}>{badge.desc}</p>
-              {badge.unlocked ? (
-                <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 700 }}>
-                  ✓ Đạt ngày {badge.date}
-                </span>
-              ) : (
-                <span style={{ fontSize: '0.75rem', color: '#9ca3af', fontWeight: 600 }}>
-                  🔒 {badge.progress}
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Passport Stamps Section */}
-      <div style={{ background: '#fff', borderRadius: '16px', padding: '28px', border: '1px solid #e5e7eb' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-          <span style={{ fontSize: '2rem' }}>🛂</span>
+      <div className="achieve-passport-card">
+        <div className="achieve-passport-header">
+          <span className="achieve-passport-icon">🛂</span>
           <div>
-            <h3 style={{ margin: 0, fontSize: '1.3rem', color: '#111827' }}>Hộ chiếu khám phá Việt Nam</h3>
-            <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#6b7280' }}>
-              Mỗi khi hoàn thành bài học gắn liền với địa danh, bạn sẽ nhận được một con tem hộ chiếu đặc trưng!
+            <h3>Hộ chiếu khám phá Việt Nam</h3>
+            <p>
+              Mỗi khi hoàn thành các bài học gắn liền với địa danh, bạn sẽ nhận được một con tem hộ chiếu đặc trưng!
             </p>
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px', marginTop: '20px' }}>
-          {data.passportStamps.map(stamp => (
-            <div
-              key={stamp.id}
-              style={{
-                border: stamp.unlocked ? '2px solid #8B1A1A' : '1.5px dashed #ded5cb',
-                background: stamp.unlocked ? '#fffaf8' : '#faf8f5',
-                borderRadius: '12px',
-                padding: '16px',
-                textAlign: 'center',
-              }}
-            >
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B1A1A', textTransform: 'uppercase' }}>
-                {stamp.city}
-              </span>
-              <p style={{ margin: '8px 0', fontSize: '0.95rem', fontWeight: 600, color: '#2d1810' }}>
-                {stamp.stamp}
-              </p>
-              {stamp.unlocked ? (
-                <span style={{ fontSize: '0.75rem', background: '#dcfce7', color: '#166534', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
-                  Đã đóng dấu ({stamp.date})
-                </span>
-              ) : (
-                <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Chưa mở khóa</span>
-              )}
-            </div>
-          ))}
+        <div className="achieve-stamp-grid">
+          {data.passportStamps.length === 0 ? (
+            <p className="account-desc">Chưa có dữ liệu hành trình.</p>
+          ) : (
+            data.passportStamps.map((stamp) => (
+              <div
+                key={stamp.id}
+                className={`achieve-stamp-box ${stamp.unlocked ? 'unlocked' : ''}`}
+              >
+                <span className="achieve-stamp-city">{stamp.city}</span>
+                <p className="achieve-stamp-name">{stamp.stamp}</p>
+                {stamp.unlocked ? (
+                  <span className="achieve-stamp-tag">
+                    Đã đóng dấu ({stamp.date || 'Gần đây'})
+                  </span>
+                ) : (
+                  <span className="achieve-stamp-tag locked">Chưa mở khóa</span>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

@@ -1,77 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { adminService } from '@/services/adminService';
 
+const empty = { name: '', description: '', permissions: '' };
 export function AdminRolesPage() {
-  const [roles, setRoles] = useState([]);
-
-  useEffect(() => {
-    adminService.getRoles().then(setRoles);
-  }, []);
-
-  const permissionLabels = {
-    view_all: 'Xem tất cả dữ liệu hệ thống',
-    manage_users: 'Quản lý & khóa người dùng',
-    manage_roles: 'Phân quyền & vai trò',
-    publish_content: 'Duyệt & xuất bản bài học',
-    system_config: 'Cấu hình hệ thống & API',
-    view_courses: 'Xem danh sách khóa học',
-    edit_courses: 'Tạo & sửa nội dung khóa học',
-    create_quiz: 'Soạn ngân hàng câu hỏi & quiz',
-    view_reports: 'Xem báo cáo học tập',
-    learn: 'Tham gia học tập & luyện phát âm',
-    take_quiz: 'Làm bài thi trắc nghiệm',
-    view_profile: 'Quản lý hồ sơ cá nhân',
-    save_vocab: 'Lưu từ vựng vào sổ tay',
-  };
-
-  return (
-    <div>
-      <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}>Vai trò & Phân quyền</h1>
-        <p style={{ color: '#64748b', margin: 0, fontSize: '0.9rem' }}>
-          Quản lý quyền xem, tạo, sửa, duyệt, xuất bản và gán vai trò cho các nhóm thành viên.
-        </p>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {roles.map(role => (
-          <div key={role.id} className="admin-card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{role.name}</h3>
-                  <span className={`admin-badge ${role.id === 'ADMIN' ? 'admin-badge-danger' : role.id === 'INSTRUCTOR' ? 'admin-badge-info' : 'admin-badge-warning'}`}>
-                    {role.id}
-                  </span>
-                </div>
-                <p style={{ color: '#64748b', margin: '4px 0 0 0', fontSize: '0.85rem' }}>{role.desc}</p>
-              </div>
-            </div>
-
-            <div style={{ marginTop: '16px' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>Danh sách quyền hạn được cấp:</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
-                {role.permissions.map(perm => (
-                  <span
-                    key={perm}
-                    style={{
-                      background: '#f1f5f9',
-                      border: '1px solid #cbd5e1',
-                      color: '#334155',
-                      padding: '4px 10px',
-                      borderRadius: '6px',
-                      fontSize: '0.8rem',
-                      fontWeight: 600,
-                    }}
-                  >
-                    ✓ {permissionLabels[perm] || perm}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  const [items, setItems] = useState([]); const [draft, setDraft] = useState(empty); const [editing, setEditing] = useState(null);
+  const [state, setState] = useState({ loading: true, error: '', message: '' });
+  const load = useCallback(async () => { try { setItems(await adminService.getRoles()); setState(s => ({ ...s, loading: false, error: '' })); } catch (e) { setState(s => ({ ...s, loading: false, error: e.message })); } }, []);
+  useEffect(() => { load(); }, [load]);
+  const submit = async (e) => { e.preventDefault(); const payload = { ...draft, permissions: draft.permissions.split(',').map(v => v.trim()).filter(Boolean) }; try { const r = editing ? await adminService.updateRole(editing, payload) : await adminService.createRole(payload); setState(s => ({ ...s, message: r.message || 'Đã lưu vai trò.', error: '' })); setDraft(empty); setEditing(null); load(); } catch (err) { setState(s => ({ ...s, error: err.message })); } };
+  const edit = (item) => { setEditing(item.id); setDraft({ name: item.name || '', description: item.description || item.desc || '', permissions: (item.permissions || []).join(', ') }); };
+  const remove = async (id) => { if (!window.confirm('Xóa vai trò này?')) return; try { await adminService.deleteRole(id); load(); } catch (e) { setState(s => ({ ...s, error: e.message })); } };
+  return <div><h1>Vai trò & Phân quyền</h1><p className="lead">Tạo và quản lý các nhóm quyền truy cập hệ thống.</p>
+    {state.error && <div className="state" role="alert">{state.error}</div>}{state.message && <div className="success state">{state.message}</div>}
+    <form className="admin-card" onSubmit={submit} style={{ display: 'grid', gap: 12, marginBottom: 20 }}><h2>{editing ? 'Cập nhật vai trò' : 'Thêm vai trò'}</h2><input placeholder="Tên vai trò" value={draft.name} onChange={e => setDraft({ ...draft, name: e.target.value })} required /><input placeholder="Mô tả" value={draft.description} onChange={e => setDraft({ ...draft, description: e.target.value })} /><input placeholder="Quyền, cách nhau bằng dấu phẩy" value={draft.permissions} onChange={e => setDraft({ ...draft, permissions: e.target.value })} /><div className="actions"><button type="submit">{editing ? 'Lưu thay đổi' : 'Thêm vai trò'}</button>{editing && <button type="button" className="secondary" onClick={() => { setEditing(null); setDraft(empty); }}>Hủy</button>}</div></form>
+    {state.loading ? <div className="state">Đang tải…</div> : items.length === 0 ? <div className="state">Chưa có vai trò.</div> : <div style={{ display: 'grid', gap: 14 }}>{items.map(item => <div className="admin-card" key={item.id}><div className="row"><div><h2>{item.name}</h2><p className="muted">{item.description || item.desc}</p></div><div className="actions"><button className="secondary" onClick={() => edit(item)}>Sửa</button><button className="danger" onClick={() => remove(item.id)}>Xóa</button></div></div><div className="actions">{(item.permissions || []).map(p => <span className="admin-badge admin-badge-info" key={p}>{typeof p === 'string' ? p : p.name}</span>)}</div></div>)}</div>}
+  </div>;
 }

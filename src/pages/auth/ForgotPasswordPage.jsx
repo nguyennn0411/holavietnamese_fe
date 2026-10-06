@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import { DongSonDrum } from '@/presentation/components/DongSonDrum';
+import dongSonBg from '@/assets/images/dongson_auth_bg.png';
 import '@/presentation/styles/auth.css';
 
 export function ForgotPasswordPage() {
@@ -201,10 +201,11 @@ export function ForgotPasswordPage() {
         </div>
       </div>
 
-      <div className="auth-right-panel">
+      <aside className="auth-right-panel" aria-label="Bảo mật tài khoản">
         <div className="auth-drum-bg">
-          <DongSonDrum className="auth-drum-svg" />
+          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
+        <div className="auth-visual-topline"><span /> Bảo mật tài khoản · Đồng bộ tiến độ</div>
         <div className="auth-hero-card">
           <div className="auth-hero-tag">BẢO MẬT TÀI KHOẢN</div>
           <h2 className="auth-hero-title">Khôi phục mật khẩu 3 bước chuẩn an toàn.</h2>
@@ -212,7 +213,7 @@ export function ForgotPasswordPage() {
             Xác thực OTP 2 lớp qua email đảm bảo quyền sở hữu tài khoản và giữ nguyên mọi dữ liệu khóa học đã lưu.
           </p>
         </div>
-      </div>
+      </aside>
     </div>
   );
 }

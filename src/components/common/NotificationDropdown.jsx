@@ -5,12 +5,13 @@ import { learnerService } from '@/services/learnerService';
 export function NotificationDropdown() {
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [error, setError] = useState('');
   const dropdownRef = useRef(null);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
   useEffect(() => {
-    learnerService.getNotifications().then(setNotifications);
+    learnerService.getNotifications().then(setNotifications).catch((err) => setError(err.message));
   }, []);
 
   useEffect(() => {
@@ -117,6 +118,7 @@ export function NotificationDropdown() {
           </div>
 
           <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+            {error && <p role="alert" style={{ padding: 16, color: '#b91c1c' }}>{error}</p>}
             {notifications.length === 0 ? (
               <p style={{ textAlign: 'center', color: '#9ca3af', padding: '20px', fontSize: '0.85rem' }}>
                 Không có thông báo nào.

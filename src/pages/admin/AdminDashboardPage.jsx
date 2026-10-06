@@ -4,6 +4,7 @@ import { adminService } from '@/services/adminService';
 export function AdminDashboardPage() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     adminService.getDashboardStats()
@@ -11,8 +12,7 @@ export function AdminDashboardPage() {
         setStats(data || {});
       })
       .catch(err => {
-        console.error('Failed to load dashboard stats:', err);
-        setStats({});
+        setError(err.message);
       })
       .finally(() => {
         setLoading(false);
@@ -22,33 +22,18 @@ export function AdminDashboardPage() {
   if (loading) {
     return <div style={{ padding: '24px', color: '#64748b' }}>Đang tải bảng điều khiển quản trị…</div>;
   }
+  if (error) return <div className="state" role="alert">{error}</div>;
 
   // Safe fallback for arrays if BE doesn't return them yet
-  const userGrowth = Array.isArray(stats?.userGrowth) && stats.userGrowth.length > 0
-    ? stats.userGrowth
-    : [
-        { month: 'T5', users: 320 },
-        { month: 'T6', users: 480 },
-        { month: 'T7', users: 710 },
-        { month: 'T8', users: 950 },
-        { month: 'T9', users: 1220 },
-        { month: 'T10', users: stats?.totalUsers || 1420 },
-      ];
+  const userGrowth = Array.isArray(stats?.userGrowth) ? stats.userGrowth : [];
 
-  const recentActivities = Array.isArray(stats?.recentActivities) && stats.recentActivities.length > 0
-    ? stats.recentActivities
-    : [
-        { id: 1, user: 'david2026', action: 'Hoàn thành bài thi VSL A1', time: '5 phút trước', status: 'success' },
-        { id: 2, user: 'sarah_k', action: 'Đăng ký tài khoản mới từ Hàn Quốc', time: '18 phút trước', status: 'info' },
-        { id: 3, user: 'john_smith', action: 'Đạt chuỗi streak 14 ngày', time: '1 giờ trước', status: 'success' },
-        { id: 4, user: 'admin', action: 'Cập nhật quy tắc cộng điểm XP bài thi', time: '3 giờ trước', status: 'warning' },
-      ];
+  const recentActivities = Array.isArray(stats?.recentActivities) ? stats.recentActivities : [];
 
-  const totalUsers = stats?.totalUsers ?? 1420;
-  const activeLearners = stats?.activeLearners ?? 890;
+  const totalUsers = stats?.totalUsers ?? 0;
+  const activeLearners = stats?.activeLearners ?? 0;
   const totalCourses = stats?.totalCourses ?? 8;
   const totalLessons = stats?.totalLessons ?? 124;
-  const totalXp = stats?.totalXpGranted ?? 48500;
+  const totalXp = stats?.totalXpGranted ?? 0;
 
   return (
     <div>
@@ -62,13 +47,13 @@ export function AdminDashboardPage() {
         <div className="admin-card">
           <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>TỔNG NGƯỜI DÙNG</span>
           <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 0 0' }}>{totalUsers}</h2>
-          <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 600 }}>↑ +14% tháng này</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Tài khoản trong hệ thống</span>
         </div>
 
         <div className="admin-card">
           <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700 }}>HỌC VIÊN HOẠT ĐỘNG</span>
           <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 0 0' }}>{activeLearners}</h2>
-          <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 600 }}>62.6% tỷ lệ kích hoạt</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Đang hoạt động</span>
         </div>
 
         <div className="admin-card">
@@ -96,8 +81,10 @@ export function AdminDashboardPage() {
         <div className="admin-card">
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}>Tăng trưởng người dùng (6 tháng qua)</h3>
           <div style={{ display: 'flex', alignItems: 'flex-end', height: '180px', gap: '16px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+            {userGrowth.length === 0 && <div className="state" style={{ width: '100%' }}>Chưa có dữ liệu tăng trưởng.</div>}
             {userGrowth.map((g, idx) => {
-              const height = Math.min(Math.max(((g.users || 100) / 1500) * 100, 10), 100);
+              const maxUsers = Math.max(...userGrowth.map(item => Number(item.users) || 0), 1);
+              const height = Math.min(Math.max(((Number(g.users) || 0) / maxUsers) * 100, 4), 100);
               return (
                 <div key={idx} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                   <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>{g.users}</span>
@@ -113,6 +100,7 @@ export function AdminDashboardPage() {
         <div className="admin-card">
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}>Hoạt động thời gian thực</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {recentActivities.length === 0 && <div className="state">Chưa có hoạt động gần đây.</div>}
             {recentActivities.map(act => (
               <div key={act.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f1f5f9' }}>
                 <div>
