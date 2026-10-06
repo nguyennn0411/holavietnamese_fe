@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import { DongSonDrum } from '@/presentation/components/DongSonDrum';
+import dongSonBg from '@/assets/images/dongson_auth_bg.png';
 import '@/presentation/styles/auth.css';
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token') || 'demo-token';
+  const initialEmail = searchParams.get('email') || '';
+  const initialOtp = searchParams.get('otp') || '';
+  const [email, setEmail] = useState(initialEmail);
+  const [otp, setOtp] = useState(initialOtp);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [status, setStatus] = useState({ loading: false, message: '', error: '' });
@@ -25,7 +28,7 @@ export function ResetPasswordPage() {
 
     setStatus({ loading: true, message: '', error: '' });
     try {
-      const res = await learnerService.resetPassword(token, password);
+      const res = await learnerService.forgotPasswordReset(email, otp, password);
       setStatus({ loading: false, message: res.message || 'Đặt lại mật khẩu thành công!', error: '' });
       setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
@@ -60,6 +63,14 @@ export function ResetPasswordPage() {
           {status.message && <div className="auth-message auth-message-success">{status.message}</div>}
 
           <form className="auth-form" onSubmit={handleReset}>
+            <div className="auth-field">
+              <label className="auth-label">Email</label>
+              <input className="auth-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <div className="auth-field">
+              <label className="auth-label">Mã OTP</label>
+              <input className="auth-input" inputMode="numeric" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value)} required />
+            </div>
             <div className="auth-field">
               <label className="auth-label">Mật khẩu mới</label>
               <input
@@ -99,10 +110,11 @@ export function ResetPasswordPage() {
         </div>
       </div>
 
-      <div className="auth-right-panel">
+      <aside className="auth-right-panel" aria-label="Bảo mật tài khoản">
         <div className="auth-drum-bg">
-          <DongSonDrum className="auth-drum-svg" />
+          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
+        <div className="auth-visual-topline"><span /> Bảo mật tài khoản · Khôi phục nhanh</div>
         <div className="auth-hero-card">
           <div className="auth-hero-tag">BẢO MẬT TÀI KHOẢN</div>
           <h2 className="auth-hero-title">Khởi động lại an toàn.</h2>
@@ -110,7 +122,7 @@ export function ResetPasswordPage() {
             Sau khi đổi mật khẩu, bạn có thể đăng nhập ngay trên mọi thiết bị và đồng bộ tiến độ tức thì.
           </p>
         </div>
-      </div>
+      </aside>
     </div>
   );
 }

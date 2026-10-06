@@ -4,6 +4,7 @@ import { adminService } from '@/services/adminService';
 export function AdminAchievementsPage() {
   const [achievements, setAchievements] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [newAch, setNewAch] = useState({
     code: '',
     title: '',
@@ -26,9 +27,12 @@ export function AdminAchievementsPage() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    const res = await adminService.createAchievement(newAch);
+    const res = editingId
+      ? await adminService.updateAchievement(editingId, newAch)
+      : await adminService.createAchievement(newAch);
     setMsg(res.message);
     setShowModal(false);
+    setEditingId(null);
     setNewAch({
       code: '',
       title: '',
@@ -41,6 +45,18 @@ export function AdminAchievementsPage() {
     });
     loadData();
     setTimeout(() => setMsg(''), 3000);
+  };
+
+  const handleEdit = (achievement) => {
+    setEditingId(achievement.id);
+    setNewAch({ ...newAch, ...achievement });
+    setShowModal(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Bạn có chắc muốn xóa huy hiệu này?')) return;
+    try { const res = await adminService.deleteAchievement(id); setMsg(res.message || 'Đã xóa huy hiệu.'); loadData(); }
+    catch (error) { setMsg(error.message); }
   };
 
   return (
@@ -84,6 +100,7 @@ export function AdminAchievementsPage() {
               <th>Loại điều kiện</th>
               <th>Thưởng XP</th>
               <th>Trạng thái</th>
+              <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -93,6 +110,7 @@ export function AdminAchievementsPage() {
                   <span style={{ fontSize: '1.4rem', marginRight: '8px' }}>{ach.icon}</span>
                   <strong>{ach.code || ach.id}</strong>
                 </td>
+                <td><button className="secondary" onClick={() => handleEdit(ach)}>Sửa</button>{' '}<button className="danger" onClick={() => handleDelete(ach.id)}>Xóa</button></td>
                 <td><strong style={{ color: '#0f172a' }}>{ach.title}</strong></td>
                 <td>{ach.criteria}</td>
                 <td>
@@ -119,7 +137,7 @@ export function AdminAchievementsPage() {
           display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
         }}>
           <div style={{ background: '#fff', padding: '28px', borderRadius: '16px', width: '100%', maxWidth: '520px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 style={{ margin: '0 0 16px 0', fontSize: '1.25rem', color: '#0f172a' }}>Khởi tạo Huy hiệu mới</h3>
+            <h3 style={{ margin: '0 0 16px 0', fontSize: '1.25rem', color: '#0f172a' }}>{editingId ? 'Cập nhật huy hiệu' : 'Khởi tạo huy hiệu mới'}</h3>
             <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '12px' }}>
                 <div>
@@ -229,7 +247,7 @@ export function AdminAchievementsPage() {
                   type="submit"
                   style={{ padding: '8px 18px', borderRadius: '8px', border: 'none', background: '#8B1A1A', color: '#fff', fontWeight: 700, cursor: 'pointer' }}
                 >
-                  Khởi tạo huy hiệu
+                  {editingId ? 'Lưu thay đổi' : 'Khởi tạo huy hiệu'}
                 </button>
               </div>
             </form>

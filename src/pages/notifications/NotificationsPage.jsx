@@ -5,9 +5,10 @@ import { learnerService } from '@/services/learnerService';
 export function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState('all');
+  const [state, setState] = useState({ loading: true, error: '' });
 
   useEffect(() => {
-    learnerService.getNotifications().then(setNotifications);
+    learnerService.getNotifications().then(setNotifications).catch(error => setState({ loading: false, error: error.message })).finally(() => setState(s => ({ ...s, loading: false })));
   }, []);
 
   const handleMarkRead = async (id) => {
@@ -21,6 +22,9 @@ export function NotificationsPage() {
   };
 
   const filtered = filter === 'unread' ? notifications.filter(n => !n.read) : notifications;
+
+  if (state.loading) return <div className="state" role="status">Đang tải thông báo…</div>;
+  if (state.error) return <div className="state" role="alert">{state.error}</div>;
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '32px 16px' }}>

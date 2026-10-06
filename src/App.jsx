@@ -18,6 +18,7 @@ import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from '@/pages/auth/ResetPasswordPage';
 import { OnboardingPage } from '@/pages/auth/OnboardingPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
+import { ForbiddenPage } from '@/pages/ForbiddenPage';
 
 // Learner Pages (Người 1)
 import { MyLearningPage } from '@/pages/learning/MyLearningPage';
@@ -57,7 +58,10 @@ function App() {
             <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
             <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
             <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
-            <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
+            </Route>
+            <Route path="/forbidden" element={<ForbiddenPage />} />
 
             {/* Learner Main Layout */}
             <Route element={<MainLayout />}>
@@ -66,15 +70,15 @@ function App() {
               <Route path={ROUTES.COURSES} element={<CourseListPage />} />
               <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
               <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
-              <Route path={ROUTES.PROGRESS} element={<LearningProgressPage />} />
-              <Route path={ROUTES.ACHIEVEMENTS} element={<AchievementsPage />} />
               <Route path={ROUTES.VOCABULARY} element={<VocabularyNotebookPage />} />
-              <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsPage />} />
 
               {/* Protected Learner Routes */}
               <Route element={<ProtectedRoute />}>
                 <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
                 <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
+                <Route path={ROUTES.PROGRESS} element={<LearningProgressPage />} />
+                <Route path={ROUTES.ACHIEVEMENTS} element={<AchievementsPage />} />
+                <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsPage />} />
                 <Route path={ROUTES.LEARN_RESUME} element={<ResumeCoursePage />} />
                 <Route path={ROUTES.LEARN_LESSON} element={<LessonLearningPage />} />
               </Route>

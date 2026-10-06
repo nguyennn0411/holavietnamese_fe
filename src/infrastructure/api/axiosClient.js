@@ -36,20 +36,34 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// RESPONSE interceptor: unwrap response.data, handle 401
+const clearAuthStorage = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  ['userId', 'username', 'fullName', 'roles'].forEach((key) => localStorage.removeItem(key));
+};
+
+// RESPONSE interceptor: unwrap ApiResponse and centralize authentication failures
 axiosClient.interceptors.response.use(
-  (response) => response.data, // Unwrap: callers receive ApiResponse { code, message, result } directly
+  (response) => response.data,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      // Don't redirect if it's already on an auth page
+    const status = error.response?.status;
+    const responseBody = error.response?.data;
+    if (status === 401) {
       const path = window.location.pathname;
-      if (!path.startsWith('/login') && !path.startsWith('/register') && !path.startsWith('/forgot-password') && !path.startsWith('/verify-email')) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = '/login';
+      clearAuthStorage();
+      if (!PUBLIC_API_PREFIXES.some((prefix) => error.config?.url?.startsWith(prefix)) && path !== '/login') {
+        const returnTo = `${path}${window.location.search}`;
+        window.location.assign(`/login?from=${encodeURIComponent(returnTo)}`);
       }
+    } else if (status === 403 && window.location.pathname !== '/forbidden') {
+      window.location.assign('/forbidden');
     }
-    return Promise.reject(error.response ? error.response.data : error);
+
+    const normalizedError = new Error(responseBody?.message || error.message || 'Không thể kết nối đến máy chủ.');
+    normalizedError.status = status;
+    normalizedError.code = responseBody?.code;
+    normalizedError.details = responseBody?.error;
+    return Promise.reject(normalizedError);
   },
 );
 

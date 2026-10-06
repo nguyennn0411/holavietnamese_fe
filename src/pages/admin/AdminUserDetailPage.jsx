@@ -6,19 +6,29 @@ export function AdminUserDetailPage() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('ACTIVE');
   const [msg, setMsg] = useState('');
 
   useEffect(() => {
     adminService.getUserById(id).then(u => {
       setUser(u);
-      setSelectedRole(u.role);
-    });
+      setSelectedRole(String(u.roles?.[0] || u.role || 'LEARNER').replace('ROLE_', ''));
+      setSelectedStatus(u.status || 'ACTIVE');
+    }).catch(error => setMsg(error.message));
   }, [id]);
 
   const handleRoleChange = async () => {
     const res = await adminService.updateUserRole(id, selectedRole);
     setMsg(res.message);
     setTimeout(() => setMsg(''), 3000);
+  };
+
+  const handleStatusChange = async () => {
+    try {
+      const res = await adminService.updateUserStatus(id, selectedStatus);
+      setUser((value) => ({ ...value, status: selectedStatus }));
+      setMsg(res.message || 'Đã cập nhật trạng thái.');
+    } catch (error) { setMsg(error.message); }
   };
 
   if (!user) return <div>Đang tải chi tiết người dùng…</div>;
@@ -48,6 +58,16 @@ export function AdminUserDetailPage() {
           ✓ {msg}
         </div>
       )}
+
+      <div className="admin-card" style={{ marginBottom: 20 }}>
+        <h3>Trạng thái tài khoản</h3>
+        <div className="actions">
+          <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
+            {['ACTIVE', 'INACTIVE', 'LOCKED', 'DISABLED'].map((status) => <option key={status}>{status}</option>)}
+          </select>
+          <button type="button" onClick={handleStatusChange}>Cập nhật trạng thái</button>
+        </div>
+      </div>
 
       {/* Grid: Left user details, Right role changer */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '20px', marginBottom: '24px' }}>

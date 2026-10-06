@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import { DongSonDrum } from '@/presentation/components/DongSonDrum';
+import dongSonBg from '@/assets/images/dongson_auth_bg.png';
 import '@/presentation/styles/auth.css';
 
 export function OnboardingPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const [preferences, setPreferences] = useState({
     nativeLanguage: 'en',
     learningGoal: 'travel',
     targetLevel: 'A1',
     dailyMinutes: 15,
+    country: '',
   });
 
   const goals = [
@@ -36,10 +38,12 @@ export function OnboardingPage() {
   ];
 
   const handleFinish = async () => {
-    setLoading(true);
-    await learnerService.saveOnboarding(preferences);
-    setLoading(false);
-    navigate('/', { state: { welcomeToast: 'Chào mừng bạn! Lộ trình học cá nhân hóa đã sẵn sàng.' } });
+    setLoading(true); setError('');
+    try {
+      await learnerService.saveOnboarding(preferences);
+      navigate('/', { state: { welcomeToast: 'Chào mừng bạn! Lộ trình học cá nhân hóa đã sẵn sàng.' } });
+    } catch (err) { setError(err.message); }
+    finally { setLoading(false); }
   };
 
   return (
@@ -69,6 +73,7 @@ export function OnboardingPage() {
               />
             ))}
           </div>
+          {error && <div className="auth-message auth-message-error" role="alert">{error}</div>}
 
           {step === 1 && (
             <div>
@@ -197,6 +202,11 @@ export function OnboardingPage() {
                 Chỉ cần vài phút kiên trì mỗi ngày để tích lũy XP và duy trì chuỗi Streak rực cháy 🔥.
               </p>
 
+              <label className="auth-field" style={{ marginBottom: 18 }}>
+                <span className="auth-label">Quốc gia</span>
+                <input className="auth-input" value={preferences.country} onChange={(e) => setPreferences({ ...preferences, country: e.target.value })} placeholder="Ví dụ: United States" required />
+              </label>
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
                 {times.map(t => (
                   <div
@@ -232,10 +242,11 @@ export function OnboardingPage() {
         </div>
       </div>
 
-      <div className="auth-right-panel">
+      <aside className="auth-right-panel" aria-label="Lộ trình cá nhân hóa">
         <div className="auth-drum-bg">
-          <DongSonDrum className="auth-drum-svg" />
+          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
+        <div className="auth-visual-topline"><span /> Lộ trình cá nhân hóa · Khởi đầu tự tin</div>
         <div className="auth-hero-card">
           <div className="auth-hero-tag">LỘ TRÌNH CÁ NHÂN HÓA</div>
           <h2 className="auth-hero-title">Được thiết kế riêng cho mục tiêu của bạn.</h2>
@@ -248,7 +259,7 @@ export function OnboardingPage() {
             <span className="auth-chip">📊 Cấp độ {preferences.targetLevel}</span>
           </div>
         </div>
-      </div>
+      </aside>
     </div>
   );
 }

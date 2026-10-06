@@ -3,9 +3,10 @@ import { adminService } from '@/services/adminService';
 
 export function AdminAuditLogsPage() {
   const [logs, setLogs] = useState([]);
+  const [state, setState] = useState({ loading: true, error: '' });
 
   useEffect(() => {
-    adminService.getAuditLogs().then(setLogs);
+    adminService.getAuditLogs().then(setLogs).catch(error => setState({ loading: false, error: error.message })).finally(() => setState(s => ({ ...s, loading: false })));
   }, []);
 
   return (
@@ -18,6 +19,10 @@ export function AdminAuditLogsPage() {
       </div>
 
       <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
+        {state.loading && <div className="state">Đang tải nhật ký…</div>}
+        {state.error && <div className="state" role="alert">{state.error}</div>}
+        {!state.loading && !state.error && logs.length === 0 && <div className="state">Chưa có nhật ký hệ thống.</div>}
+        {!state.loading && !state.error && logs.length > 0 && (
         <table className="admin-table">
           <thead>
             <tr>
@@ -54,6 +59,7 @@ export function AdminAuditLogsPage() {
             ))}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   );
