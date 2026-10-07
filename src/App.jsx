@@ -35,6 +35,7 @@ import { MyCoursesPage } from '@/pages/my-courses/MyCoursesPage';
 import { LessonLearningPage } from '@/pages/learning/LessonLearningPage';
 import { ResumeCoursePage } from '@/pages/learning/ResumeCoursePage';
 import { VocabularyNotebookPage } from '@/pages/vocabulary/VocabularyNotebookPage';
+import { VocabularyNotebookDetailPage } from '@/pages/vocabulary/VocabularyNotebookDetailPage';
 
 // Văn hóa, AI Tutor & Roleplay Pages (Người 4)
 import { CultureExplorePage } from '@/pages/culture/CultureExplorePage';
@@ -54,6 +55,7 @@ import { AdminAchievementsPage } from '@/pages/admin/AdminAchievementsPage';
 import { AdminXpRulesPage } from '@/pages/admin/AdminXpRulesPage';
 import { AdminAuditLogsPage } from '@/pages/admin/AdminAuditLogsPage';
 import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
+import { AdminVocabularyPage } from '@/pages/admin/AdminVocabularyPage';
 
 // Admin Pages (Người 4: Văn hóa & AI)
 import { AdminCultureListPage } from '@/pages/admin/AdminCultureListPage';
@@ -90,6 +92,7 @@ function App() {
               <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
               <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
               <Route path={ROUTES.VOCABULARY} element={<VocabularyNotebookPage />} />
+              <Route path={ROUTES.VOCABULARY_NOTEBOOK_DETAIL} element={<VocabularyNotebookDetailPage />} />
 
               {/* Văn hóa & AI Tutor & Roleplay (Người 4) */}
               <Route path={ROUTES.CULTURE} element={<CultureExplorePage />} />
@@ -117,6 +120,7 @@ function App() {
             {/* Admin Area (Người 1) */}
             <Route element={<AdminRoute />}>
               <Route element={<AdminLayout />}>
+                <Route path={ROUTES.ADMIN_VOCABULARY} element={<AdminVocabularyPage />} />
                 <Route path={ROUTES.ADMIN} element={<AdminDashboardPage />} />
                 <Route path={ROUTES.ADMIN_USERS} element={<AdminUsersPage />} />
                 <Route path={ROUTES.ADMIN_USER_DETAIL} element={<AdminUserDetailPage />} />

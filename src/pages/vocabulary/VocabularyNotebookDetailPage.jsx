@@ -1,0 +1,37 @@
+import { useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { ROUTES } from '@/constants/routes'
+import { useVocabularyEntry, useVocabularyOptions } from '@/hooks/useVocabulary'
+import { ResourceState } from '@/components/common/ResourceState'
+import { VocabularyCard } from '@/components/vocabulary/VocabularyCard'
+import { VocabularyForm } from '@/components/vocabulary/VocabularyForm'
+import { VocabularyDeleteModal } from '@/components/vocabulary/VocabularyDeleteModal'
+
+export function VocabularyNotebookDetailPage() {
+  const { id } = useParams()
+  const resource = useVocabularyEntry(id)
+  const [savedId, setSavedId] = useState(null)
+
+  return <section>
+    <Link className="text-link" to={ROUTES.VOCABULARY}>← Back to notebook</Link>
+    <p className="eyebrow">Your saved words</p>
+    <h1>Vocabulary details</h1>
+    {savedId === id && <p className="success" role="status">Vocabulary saved.</p>}
+    <ResourceState resource={resource}>{entry => <NotebookEntryDetails key={entry.id} entry={entry} onSaved={() => { setSavedId(id); resource.reload() }} />}</ResourceState>
+  </section>
+}
+
+function NotebookEntryDetails({ entry, onSaved }) {
+  const navigate = useNavigate()
+  const options = useVocabularyOptions()
+  const [editing, setEditing] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const savedAt = entry.createdAt ? new Date(entry.createdAt) : null
+
+  return <>
+    <VocabularyCard entry={entry} showDetails={false} onEdit={() => setEditing(true)} onDelete={() => setDeleting(true)} />
+    {savedAt && !Number.isNaN(savedAt.getTime()) && <p className="muted">Saved <time dateTime={entry.createdAt}>{savedAt.toLocaleString()}</time></p>}
+    {editing && <VocabularyForm entry={entry} lessons={options.data?.lessons || []} lessonOptions={options} onClose={() => setEditing(false)} onSaved={() => { setEditing(false); onSaved() }} />}
+    {deleting && <VocabularyDeleteModal entry={entry} onClose={() => setDeleting(false)} onDeleted={() => navigate(ROUTES.VOCABULARY, { replace: true, state: { vocabularyMessage: 'Vocabulary deleted.' } })} />}
+  </>
+}

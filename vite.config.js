@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
   server: {
     port: 5173,
     proxy: {
+      '/media/foundation': { target: env.VITE_PROXY_TARGET || 'http://localhost:8080', changeOrigin: true },
       '/api': { target: env.VITE_PROXY_TARGET || 'http://localhost:8080', changeOrigin: true },
     },
   },
