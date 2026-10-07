@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Navigate, Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
-import { AuthFooter } from '@/components/auth/AuthFooter';
-import { AuthHeader } from '@/components/auth/AuthHeader';
-import dongSonBg from '@/assets/images/dongson_auth_bg.png';
+import { DongSonDrum } from '@/presentation/components/DongSonDrum';
 import '@/presentation/styles/auth.css';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -11,9 +9,10 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 export function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { login, loginWithGoogle, isAuthenticated, user } = useAuth();
   const googleBtnRef = useRef(null);
+  const requestedPath = location.state?.from;
+  const returnTo = typeof requestedPath === 'string' && requestedPath.startsWith('/') && !requestedPath.startsWith('//') && !requestedPath.startsWith('/login') ? requestedPath : '/';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,10 +40,10 @@ export function LoginPage() {
       } else {
         const loggedUser = result.user;
         const roles = loggedUser?.roles || [];
-        if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
+        if (roles.includes('ADMIN')) {
           navigate('/admin', { replace: true });
         } else {
-          navigate('/', { replace: true });
+          navigate(returnTo, { replace: true });
         }
       }
     } catch {
@@ -52,65 +51,55 @@ export function LoginPage() {
     } finally {
       setGoogleLoading(false);
     }
-  }, [loginWithGoogle, navigate]);
+  }, [loginWithGoogle, navigate, returnTo]);
 
-  const gsiInitializedRef = useRef(false);
-
-  // Initialize Google Identity Services safely (only once)
+  // Initialize Google Identity Services
   useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || isAuthenticated || gsiInitializedRef.current) return;
-
-    let intervalId = null;
+    if (!GOOGLE_CLIENT_ID || isAuthenticated) return;
 
     const initGoogle = () => {
-      if (window.google?.accounts?.id && !gsiInitializedRef.current) {
-        gsiInitializedRef.current = true;
-        try {
-          window.google.accounts.id.initialize({
-            client_id: GOOGLE_CLIENT_ID,
-            callback: handleGoogleCallback,
-            auto_select: false,
-            ux_mode: 'popup',
+      if (window.google?.accounts?.id) {
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleCallback,
+          auto_select: false,
+          ux_mode: 'popup',
+        });
+        if (googleBtnRef.current) {
+          window.google.accounts.id.renderButton(googleBtnRef.current, {
+            type: 'standard',
+            theme: 'outline',
+            size: 'large',
+            text: 'signin_with',
+            shape: 'pill',
+            width: 380,
           });
-          if (googleBtnRef.current) {
-            window.google.accounts.id.renderButton(googleBtnRef.current, {
-              type: 'standard',
-              theme: 'outline',
-              size: 'large',
-              text: 'signin_with',
-              shape: 'pill',
-              width: 380,
-            });
-          }
-        } catch (err) {
-          console.warn('GSI Initialization warning:', err);
         }
       }
     };
 
+    // Google script may not be loaded yet
     if (window.google?.accounts?.id) {
       initGoogle();
     } else {
-      intervalId = setInterval(() => {
+      const interval = setInterval(() => {
         if (window.google?.accounts?.id) {
-          if (intervalId) clearInterval(intervalId);
+          clearInterval(interval);
           initGoogle();
         }
       }, 100);
+      // Cleanup after 10 seconds
+      setTimeout(() => clearInterval(interval), 10000);
     }
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
   }, [GOOGLE_CLIENT_ID, isAuthenticated, handleGoogleCallback]);
 
   // If already authenticated, redirect by role
   if (isAuthenticated) {
     const roles = user?.roles || [];
-    if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
+    if (roles.includes('ADMIN')) {
       return <Navigate to="/admin" replace />;
     }
-    return <Navigate to="/" replace />;
+    return <Navigate to={returnTo} replace />;
   }
 
   const handleSubmit = async (e) => {
@@ -126,11 +115,10 @@ export function LoginPage() {
       } else {
         const loggedUser = result.user;
         const roles = loggedUser?.roles || [];
-        if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
+        if (roles.includes('ADMIN')) {
           navigate('/admin', { replace: true });
         } else {
-          const from = location.state?.from || searchParams.get('from');
-          navigate(from || '/', { replace: true });
+          navigate(returnTo, { replace: true });
         }
       }
     } catch {
@@ -140,25 +128,47 @@ export function LoginPage() {
     }
   };
 
+  const handleDemoLearner = () => {
+    setEmail('learner');
+    setPassword('learner123');
+    setError('');
+    setSuccessMessage('');
+  };
+
+  const handleDemoAdmin = () => {
+    setEmail('admin');
+    setPassword('admin123');
+    setError('');
+    setSuccessMessage('');
+  };
+
   return (
-    <div className="auth-container auth-login-page">
+    <div className="auth-container">
       {/* Left Panel */}
       <div className="auth-left-panel">
-        <AuthHeader />
-        <main className="auth-left-content">
+        <div className="auth-left-content">
+          {/* Brand Row */}
+          <div className="auth-brand-row">
+            <div className="auth-brand-logo">
+              <span className="auth-logo-text">H</span>
+              <span className="auth-logo-star">★</span>
+            </div>
+            <span className="auth-brand-name">HolaVietnamese</span>
+            <span className="auth-brand-badge">ĐỐNG SƠN POP</span>
+          </div>
 
           {/* Welcome Pill */}
           <div className="auth-welcome-pill">
-            <span className="auth-welcome-code">Xin chào</span>
-            <span className="auth-welcome-text">Chào mừng bạn trở lại</span>
+            <span className="auth-welcome-code">👋</span>
+            <span className="auth-welcome-text">Welcome back</span>
           </div>
 
           {/* Heading */}
           <h1 className="auth-heading">
-            Tiếp tục hành trình<br /><span>tiếng Việt</span> của bạn
+            Continue your<br />Vietnamese<br />journey
           </h1>
           <p className="auth-subtitle">
-            Đăng nhập để tiếp tục bài học và giữ vững chuỗi ngày tiến bộ.
+            Sign in to return to your saved learning progress.
           </p>
 
           {/* Error Message */}
@@ -175,12 +185,11 @@ export function LoginPage() {
           <form className="auth-form" onSubmit={handleSubmit}>
             {/* Email Field */}
             <div className="auth-field">
-              <label className="auth-label" htmlFor="login-identity">Tài khoản hoặc email</label>
+              <label className="auth-label">Tài khoản hoặc Email</label>
               <input
-                id="login-identity"
                 className="auth-input"
                 type="text"
-                placeholder="Nhập tên tài khoản hoặc email"
+                placeholder="learner hoặc admin"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -190,10 +199,9 @@ export function LoginPage() {
 
             {/* Password Field */}
             <div className="auth-field">
-              <label className="auth-label" htmlFor="login-password">Mật khẩu</label>
+              <label className="auth-label">Mật khẩu</label>
               <div className="auth-password-wrapper">
                 <input
-                  id="login-password"
                   className="auth-input auth-password-input"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
@@ -206,7 +214,6 @@ export function LoginPage() {
                   type="button"
                   className="auth-show-btn"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                 >
                   {showPassword ? 'Ẩn' : 'Hiện'}
                 </button>
@@ -222,10 +229,10 @@ export function LoginPage() {
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
                 />
-                <span>Ghi nhớ đăng nhập</span>
+                <span>Remember me</span>
               </label>
               <Link to="/forgot-password" className="auth-forgot-link">
-                Quên mật khẩu?
+                Forgot password?
               </Link>
             </div>
 
@@ -235,15 +242,36 @@ export function LoginPage() {
               className="auth-btn auth-btn-primary"
               disabled={loading}
             >
-              {loading ? 'Đang đăng nhập…' : 'Đăng nhập'}
+              {loading ? 'Đang đăng nhập…' : 'Sign in'}
             </button>
 
+            {/* Demo Accounts Row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
+              <button
+                type="button"
+                className="auth-btn auth-btn-demo"
+                onClick={handleDemoLearner}
+                title="Tài khoản học viên mẫu (learner/learner123)"
+                style={{ fontSize: '0.8rem', padding: '10px 4px' }}
+              >
+                🎒 Demo Learner
+              </button>
+              <button
+                type="button"
+                className="auth-btn auth-btn-demo"
+                onClick={handleDemoAdmin}
+                title="Tài khoản quản trị viên (admin/admin123)"
+                style={{ fontSize: '0.8rem', padding: '10px 4px', borderColor: '#8B1A1A', color: '#8B1A1A' }}
+              >
+                🛡️ Demo Admin
+              </button>
+            </div>
           </form>
 
           {/* Divider */}
           <div className="auth-divider">
             <span className="auth-divider-line" />
-            <span className="auth-divider-text">hoặc tiếp tục với</span>
+            <span className="auth-divider-text">or continue with</span>
             <span className="auth-divider-line" />
           </div>
 
@@ -269,39 +297,40 @@ export function LoginPage() {
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                 </svg>
-                Đăng nhập với Google
+                Sign in with Google
               </button>
             )}
           </div>
 
           {/* Footer Link */}
           <p className="auth-footer-text">
-            Chưa có tài khoản?{' '}
+            New here?{' '}
             <Link to="/register" className="auth-footer-link">
-              Đăng ký miễn phí
+              Create an account
             </Link>
           </p>
-        </main>
-        <AuthFooter />
+        </div>
       </div>
 
       {/* Right Panel */}
-      <aside className="auth-right-panel" aria-label="Giới thiệu HolaVietnamese">
+      <div className="auth-right-panel">
         <div className="auth-drum-bg">
-          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
+          <DongSonDrum className="auth-drum-svg" />
         </div>
-        <div className="auth-visual-topline"><span /> Học tiếng Việt theo cách của bạn</div>
         <div className="auth-hero-card">
-          <div className="auth-quote-mark">“</div>
-          <h2 className="auth-hero-title">Mỗi ngày một chút,<br />tiếng Việt gần hơn.</h2>
-          <p className="auth-hero-desc">Bài học thực tế, lộ trình cá nhân hóa và tiến độ luôn được lưu lại cho riêng bạn.</p>
+          <div className="auth-hero-tag">LEARN VIETNAMESE · LIVE VIETNAM</div>
+          <h2 className="auth-hero-title">Vietnamese for real life.</h2>
+          <p className="auth-hero-desc">
+            Short, colorful lessons focused on food, travel, and day-to-day
+            conversations with locals.
+          </p>
           <div className="auth-hero-chips">
-            <span className="auth-chip">✓ Học theo lộ trình</span>
-            <span className="auth-chip">✓ Theo dõi tiến độ</span>
-            <span className="auth-chip">✓ Văn hóa bản địa</span>
+            <span className="auth-chip">Structured lessons</span>
+            <span className="auth-chip">Real-life practice</span>
+            <span className="auth-chip">AI assistance</span>
           </div>
         </div>
-      </aside>
+      </div>
     </div>
   );
 }

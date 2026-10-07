@@ -3,19 +3,6 @@ import authApi from '@/infrastructure/api/authApi';
 
 const AuthContext = createContext(null);
 
-const normalizeRoles = (roles, fallback = ['LEARNER']) => {
-  if (!roles) return fallback;
-  const list = Array.isArray(roles) ? roles : [roles];
-  return list.map((role) => typeof role === 'string' ? role : (role.name || role.authority)).filter(Boolean);
-};
-
-const persistUser = (userInfo) => {
-  localStorage.setItem('user', JSON.stringify(userInfo));
-  ['userId', 'username', 'fullName', 'roles'].forEach((key) => {
-    if (userInfo[key] !== undefined) localStorage.setItem(key, key === 'roles' ? JSON.stringify(userInfo[key]) : String(userInfo[key]));
-  });
-};
-
 export const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(() => localStorage.getItem('token'));
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('token'));
@@ -67,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await authApi.login(username, password);
 
-      if (data && data.code === 1000 && data.result?.token) {
+      if (data && data.code === 1000 && data.result?.authenticated) {
         const { token, userId, username: uname, fullName, roles } = data.result;
 
         localStorage.setItem('token', token);
@@ -75,7 +62,9 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
 
         // Normalize roles array
-        const normalizedRoles = normalizeRoles(roles);
+        const normalizedRoles = Array.isArray(roles)
+          ? roles
+          : (roles ? [roles] : ['LEARNER']);
 
         const userInfo = {
           userId,
@@ -83,7 +72,7 @@ export const AuthProvider = ({ children }) => {
           fullName: fullName || uname,
           roles: normalizedRoles,
         };
-        persistUser(userInfo);
+        localStorage.setItem('user', JSON.stringify(userInfo));
         setUser(userInfo);
 
         // Fetch profile in background
@@ -103,14 +92,14 @@ export const AuthProvider = ({ children }) => {
       const data = await authApi.register(payload);
       if (data && data.code === 1000) {
         if (data.result?.token) {
-          const { token, id, userId, username: uname, email, fullName, nativeLanguage, targetLevel, roles } = data.result;
+          const { token, id, username: uname, email, fullName, nativeLanguage, targetLevel, roles } = data.result;
           localStorage.setItem('token', token);
           setAccessToken(token);
           setIsAuthenticated(true);
-          const normalizedRoles = normalizeRoles(roles);
+          const normalizedRoles = Array.isArray(roles) ? roles : (roles ? [roles] : ['LEARNER']);
           const userInfo = {
-            id: id ?? userId,
-            userId: userId ?? id,
+            id,
+            userId: id,
             username: uname,
             email,
             fullName: fullName || uname,
@@ -118,7 +107,7 @@ export const AuthProvider = ({ children }) => {
             targetLevel,
             roles: normalizedRoles,
           };
-          persistUser(userInfo);
+          localStorage.setItem('user', JSON.stringify(userInfo));
           setUser(userInfo);
           fetchProfile();
           return { success: true, user: userInfo, data: data.result, message: data.message };
@@ -131,7 +120,7 @@ export const AuthProvider = ({ children }) => {
         message: data?.message || 'Đăng ký không thành công.',
       };
     } catch (error) {
-      const errData = error;
+      const errData = error?.response?.data || error;
       return {
         success: false,
         code: errData?.code,
@@ -145,14 +134,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await authApi.loginWithGoogle(credential);
 
-      if (data && data.code === 1000 && data.result?.token) {
+      if (data && data.code === 1000 && data.result?.authenticated) {
         const { token, userId, username: uname, fullName, roles } = data.result;
 
         localStorage.setItem('token', token);
         setAccessToken(token);
         setIsAuthenticated(true);
 
-        const normalizedRoles = normalizeRoles(roles);
+        const normalizedRoles = Array.isArray(roles)
+          ? roles
+          : (roles ? [roles] : ['LEARNER']);
 
         const userInfo = {
           userId,
@@ -160,7 +151,7 @@ export const AuthProvider = ({ children }) => {
           fullName: fullName || uname,
           roles: normalizedRoles,
         };
-        persistUser(userInfo);
+        localStorage.setItem('user', JSON.stringify(userInfo));
         setUser(userInfo);
 
         fetchProfile();
@@ -185,7 +176,6 @@ export const AuthProvider = ({ children }) => {
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      ['userId', 'username', 'fullName', 'roles'].forEach((key) => localStorage.removeItem(key));
       setAccessToken(null);
       setIsAuthenticated(false);
       setUser(null);
@@ -194,7 +184,7 @@ export const AuthProvider = ({ children }) => {
 
   const hasRole = (role) => {
     if (!user || !user.roles) return false;
-    return user.roles.includes(role) || user.roles.includes(`ROLE_${role}`);
+    return user.roles.includes(role);
   };
 
   const isAdmin = hasRole('ADMIN');
