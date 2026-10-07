@@ -1,7 +1,7 @@
+import { ContentImage } from '@/components/common/ContentImage';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
-import '@/presentation/styles/admin.css';
 
 export function AdminCultureEditPage() {
   const { id } = useParams();
@@ -104,7 +104,7 @@ export function AdminCultureEditPage() {
   return (
     <div className="admin-content">
       {toast && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', background: '#245c48', color: '#fff', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
+        <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           {toast}
         </div>
       )}
@@ -112,8 +112,8 @@ export function AdminCultureEditPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '14px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: '#7a6458', marginBottom: '6px' }}>
-            <Link to="/admin/culture" style={{ color: '#a62a24', textDecoration: 'none' }}>← Quay lại danh sách bài viết</Link>
+          <nav style={{ fontSize: '13px', color: 'var(--color-sage)', marginBottom: '6px' }}>
+            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Quay lại danh sách bài viết</Link>
           </nav>
           <h1 style={{ margin: 0, fontSize: '30px' }}>
             {isNew ? 'Soạn thảo bài viết văn hóa mới' : `Biên tập: ${formData.title}`}
@@ -141,7 +141,7 @@ export function AdminCultureEditPage() {
             type="button"
             className="button"
             onClick={handleSubmit}
-            style={{ background: '#245c48', borderColor: '#245c48', fontSize: '13px' }}
+            style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
           >
             💾 Lưu bài viết
           </button>
@@ -159,7 +159,7 @@ export function AdminCultureEditPage() {
                   <input
                     type="text"
                     required
-                    value={formData.title}
+                    value={formData.title ?? ''}
                     onChange={e => setFormData({ ...formData, title: e.target.value })}
                     placeholder="Ví dụ: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng..."
                   />
@@ -169,7 +169,7 @@ export function AdminCultureEditPage() {
                   Tiêu đề phụ / Mô tả ngắn:
                   <input
                     type="text"
-                    value={formData.subtitle}
+                    value={formData.subtitle ?? ''}
                     onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
                     placeholder="Mô tả tóm lược nét hấp dẫn của bài viết..."
                   />
@@ -179,7 +179,7 @@ export function AdminCultureEditPage() {
                   Tóm tắt mở đầu (Summary):
                   <textarea
                     rows={3}
-                    value={formData.summary}
+                    value={formData.summary ?? ''}
                     onChange={e => setFormData({ ...formData, summary: e.target.value })}
                     placeholder="Đoạn văn ngắn làm nổi bật ý nghĩa văn hóa..."
                   />
@@ -193,7 +193,7 @@ export function AdminCultureEditPage() {
                   <textarea
                     rows={16}
                     required
-                    value={formData.content}
+                    value={formData.content ?? ''}
                     onChange={e => setFormData({ ...formData, content: e.target.value })}
                     placeholder="Soạn nội dung bài viết với các đề mục ###, đoạn văn, và hình ảnh..."
                     style={{ fontFamily: 'monospace', fontSize: '13.5px', lineHeight: 1.6 }}
@@ -205,10 +205,10 @@ export function AdminCultureEditPage() {
               <div className="admin-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <div>
-                    <h3 style={{ margin: 0, fontSize: '16px', color: '#381e18' }}>
+                    <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}>
                       Từ vựng & Cụm từ liên quan (Useful Phrases)
                     </h3>
-                    <p style={{ margin: 0, fontSize: '12px', color: '#7a6458' }}>
+                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-sage)' }}>
                       Học viên có thể nghe phát âm và lưu trực tiếp vào Sổ từ vựng khi đọc bài viết này.
                     </p>
                   </div>
@@ -219,32 +219,32 @@ export function AdminCultureEditPage() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {formData.usefulPhrases.map((phrase, idx) => (
-                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1.5fr auto', gap: '10px', alignItems: 'center', background: '#faf3e8', padding: '10px', borderRadius: '10px' }}>
+                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1.5fr auto', gap: '10px', alignItems: 'center', background: 'var(--color-cream)', padding: '10px', borderRadius: '10px' }}>
                       <input
                         type="text"
                         placeholder="Từ tiếng Việt (vd: Cà phê phin)"
-                        value={phrase.word}
+                        value={phrase.word ?? ''}
                         onChange={e => handlePhraseChange(idx, 'word', e.target.value)}
                         style={{ fontSize: '13px' }}
                       />
                       <input
                         type="text"
                         placeholder="Phiên âm (vd: kà-phê-phin)"
-                        value={phrase.pronunciation}
+                        value={phrase.pronunciation ?? ''}
                         onChange={e => handlePhraseChange(idx, 'pronunciation', e.target.value)}
                         style={{ fontSize: '13px' }}
                       />
                       <input
                         type="text"
                         placeholder="Nghĩa tiếng Anh / Diễn giải"
-                        value={phrase.meaning}
+                        value={phrase.meaning ?? ''}
                         onChange={e => handlePhraseChange(idx, 'meaning', e.target.value)}
                         style={{ fontSize: '13px' }}
                       />
                       <button
                         type="button"
                         onClick={() => handleRemovePhrase(idx)}
-                        style={{ background: 'transparent', border: 'none', color: '#c62828', cursor: 'pointer', fontSize: '16px' }}
+                        style={{ background: 'transparent', border: 'none', color: 'var(--color-red)', cursor: 'pointer', fontSize: '16px' }}
                         title="Xóa cụm từ này"
                       >
                         ✕
@@ -258,12 +258,12 @@ export function AdminCultureEditPage() {
             {/* Right Column: Settings & Metadata */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: '#381e18' }}>Phân loại & Trạng thái</h3>
+                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}>Phân loại & Trạng thái</h3>
 
                 <label>
                   Trạng thái xuất bản:
                   <select
-                    value={formData.status}
+                    value={formData.status ?? ''}
                     onChange={e => setFormData({ ...formData, status: e.target.value })}
                   >
                     <option value="PUBLISHED">Đã xuất bản (Published)</option>
@@ -276,7 +276,7 @@ export function AdminCultureEditPage() {
                 <label style={{ marginTop: '12px' }}>
                   Danh mục văn hóa:
                   <select
-                    value={formData.category}
+                    value={formData.category ?? ''}
                     onChange={e => handleCategoryChange(e.target.value)}
                   >
                     {categories.map(c => (
@@ -290,7 +290,7 @@ export function AdminCultureEditPage() {
                 <label style={{ marginTop: '12px' }}>
                   Vùng miền:
                   <select
-                    value={formData.region}
+                    value={formData.region ?? ''}
                     onChange={e => setFormData({ ...formData, region: e.target.value })}
                   >
                     <option value="Toàn quốc">Toàn quốc (National)</option>
@@ -304,7 +304,7 @@ export function AdminCultureEditPage() {
                   Điểm đến cụ thể:
                   <input
                     type="text"
-                    value={formData.destination}
+                    value={formData.destination ?? ''}
                     onChange={e => setFormData({ ...formData, destination: e.target.value })}
                     placeholder="Ví dụ: Hà Nội, Hội An, Huế..."
                   />
@@ -312,22 +312,22 @@ export function AdminCultureEditPage() {
               </div>
 
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: '#381e18' }}>Ảnh bìa bài viết</h3>
+                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}>Ảnh bìa bài viết</h3>
 
                 <label>
                   URL hình ảnh:
                   <input
                     type="text"
-                    value={formData.coverImage}
+                    value={formData.coverImage ?? ''}
                     onChange={e => setFormData({ ...formData, coverImage: e.target.value })}
                   />
                 </label>
 
                 {formData.coverImage && (
-                  <div style={{ marginTop: '12px', borderRadius: '12px', overflow: 'hidden', height: '160px', border: '1px solid #ebd9c8' }}>
-                    <img
+                  <div style={{ marginTop: '12px', borderRadius: '12px', overflow: 'hidden', height: '160px', border: '1px solid var(--color-border)' }}>
+                    <ContentImage
                       src={formData.coverImage}
-                      alt="Preview"
+                      alt={formData.title || 'Ảnh bìa bài viết'}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
@@ -335,13 +335,13 @@ export function AdminCultureEditPage() {
               </div>
 
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: '#381e18' }}>Thông tin tác giả</h3>
+                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}>Thông tin tác giả</h3>
 
                 <label>
                   Tên tác giả:
                   <input
                     type="text"
-                    value={formData.author}
+                    value={formData.author ?? ''}
                     onChange={e => setFormData({ ...formData, author: e.target.value })}
                   />
                 </label>
@@ -350,7 +350,7 @@ export function AdminCultureEditPage() {
                   Chức danh tác giả:
                   <input
                     type="text"
-                    value={formData.authorRole}
+                    value={formData.authorRole ?? ''}
                     onChange={e => setFormData({ ...formData, authorRole: e.target.value })}
                   />
                 </label>
@@ -359,7 +359,7 @@ export function AdminCultureEditPage() {
                   Thời lượng ước tính:
                   <input
                     type="text"
-                    value={formData.readTime}
+                    value={formData.readTime ?? ''}
                     onChange={e => setFormData({ ...formData, readTime: e.target.value })}
                   />
                 </label>
@@ -369,36 +369,36 @@ export function AdminCultureEditPage() {
         </form>
       ) : (
         /* Live Preview Mode */
-        <div className="admin-card" style={{ padding: '36px', background: '#ffffff' }}>
-          <div style={{ borderBottom: '1px solid #ebd9c8', paddingBottom: '18px', marginBottom: '24px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 800, color: '#a62a24', textTransform: 'uppercase' }}>
+        <div className="admin-card" style={{ padding: '36px', background: 'var(--color-surface)' }}>
+          <div style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '18px', marginBottom: '24px' }}>
+            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase' }}>
               PREVIEW TRÊN GIAO DIỆN HỌC VIÊN
             </span>
-            <h1 style={{ fontSize: '32px', margin: '8px 0', color: '#2d1813' }}>{formData.title || 'Chưa có tiêu đề'}</h1>
-            <p style={{ fontSize: '16px', color: '#685044' }}>{formData.subtitle}</p>
-            <div style={{ fontSize: '13px', color: '#887063' }}>
+            <h1 style={{ fontSize: '32px', margin: '8px 0', color: 'var(--color-ink)' }}>{formData.title || 'Chưa có tiêu đề'}</h1>
+            <p style={{ fontSize: '16px', color: 'var(--color-red-hover)' }}>{formData.subtitle}</p>
+            <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
               Tác giả: <strong>{formData.author}</strong> • Điểm đến: 📍 {formData.destination}
             </div>
           </div>
 
           {formData.coverImage && (
             <div style={{ borderRadius: '16px', overflow: 'hidden', height: '320px', marginBottom: '28px' }}>
-              <img src={formData.coverImage} alt="Cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <ContentImage src={formData.coverImage} alt={formData.title || 'Ảnh bìa bài viết'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           )}
 
-          <div style={{ whiteSpace: 'pre-line', fontSize: '16px', lineHeight: 1.8, color: '#321d17' }}>
+          <div style={{ whiteSpace: 'pre-line', fontSize: '16px', lineHeight: 1.8, color: 'var(--color-ink)' }}>
             {formData.content || '(Nội dung bài viết chưa được nhập)'}
           </div>
 
           {formData.usefulPhrases?.length > 0 && (
-            <div style={{ marginTop: '36px', padding: '24px', background: '#faf3e8', borderRadius: '16px' }}>
-              <h3 style={{ margin: '0 0 14px 0', color: '#a62a24' }}>📖 Cụm từ hữu ích kèm theo bài viết:</h3>
+            <div style={{ marginTop: '36px', padding: '24px', background: 'var(--color-cream)', borderRadius: '16px' }}>
+              <h3 style={{ margin: '0 0 14px 0', color: 'var(--color-red-hover)' }}>📖 Cụm từ hữu ích kèm theo bài viết:</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
                 {formData.usefulPhrases.filter(p => p.word).map((p, idx) => (
-                  <div key={idx} style={{ background: '#fff', padding: '10px 14px', borderRadius: '10px', border: '1px solid #ebd9c8' }}>
-                    <strong style={{ color: '#a62a24' }}>{p.word}</strong>
-                    <div style={{ fontSize: '12px', color: '#7a6053' }}>{p.meaning}</div>
+                  <div key={idx} style={{ background: 'var(--color-surface)', padding: '10px 14px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+                    <strong style={{ color: 'var(--color-red-hover)' }}>{p.word}</strong>
+                    <div style={{ fontSize: '12px', color: 'var(--color-sage)' }}>{p.meaning}</div>
                   </div>
                 ))}
               </div>

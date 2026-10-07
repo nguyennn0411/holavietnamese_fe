@@ -1,7 +1,7 @@
+import { Modal } from '@/components/common/Modal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
-import '@/presentation/styles/admin.css';
 
 export function AdminCultureCategoriesPage() {
   const [categories, setCategories] = useState(() => adminCultureAiService.getCategories());
@@ -48,7 +48,7 @@ export function AdminCultureCategoriesPage() {
   return (
     <div className="admin-content">
       {toast && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', background: '#245c48', color: '#fff', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
+        <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           {toast}
         </div>
       )}
@@ -56,11 +56,11 @@ export function AdminCultureCategoriesPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: '#7a6458', marginBottom: '6px' }}>
-            <Link to="/admin/culture" style={{ color: '#a62a24', textDecoration: 'none' }}>← Quản lý bài viết văn hóa</Link>
+          <nav style={{ fontSize: '13px', color: 'var(--color-sage)', marginBottom: '6px' }}>
+            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Quản lý bài viết văn hóa</Link>
           </nav>
           <h1 style={{ margin: 0, fontSize: '32px' }}>Danh mục văn hóa</h1>
-          <p style={{ margin: '4px 0 0', color: '#665349', fontSize: '14px' }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-sage)', fontSize: '14px' }}>
             Quản lý các chủ đề lớn: Food, Festivals, History, Etiquette, Family, Lifestyle và sắp xếp thứ tự hiển thị cho học viên.
           </p>
         </div>
@@ -96,17 +96,17 @@ export function AdminCultureCategoriesPage() {
                       type="button"
                       disabled={idx === 0}
                       onClick={() => handleMove(idx, -1)}
-                      style={{ padding: '2px 6px', fontSize: '11px', background: 'transparent', border: 'none', cursor: idx === 0 ? 'default' : 'pointer', color: '#4a3227' }}
+                      style={{ padding: '2px 6px', fontSize: '11px', background: 'transparent', border: 'none', cursor: idx === 0 ? 'default' : 'pointer', color: 'var(--color-ink)' }}
                       title="Chuyển lên trên"
                     >
                       ▲
                     </button>
-                    <strong style={{ fontSize: '13px', color: '#a62a24' }}>#{cat.order || idx + 1}</strong>
+                    <strong style={{ fontSize: '13px', color: 'var(--color-red-hover)' }}>#{cat.order || idx + 1}</strong>
                     <button
                       type="button"
                       disabled={idx === categories.length - 1}
                       onClick={() => handleMove(idx, 1)}
-                      style={{ padding: '2px 6px', fontSize: '11px', background: 'transparent', border: 'none', cursor: idx === categories.length - 1 ? 'default' : 'pointer', color: '#4a3227' }}
+                      style={{ padding: '2px 6px', fontSize: '11px', background: 'transparent', border: 'none', cursor: idx === categories.length - 1 ? 'default' : 'pointer', color: 'var(--color-ink)' }}
                       title="Chuyển xuống dưới"
                     >
                       ▼
@@ -117,13 +117,13 @@ export function AdminCultureCategoriesPage() {
                 <td style={{ fontSize: '26px' }}>{cat.icon}</td>
 
                 <td>
-                  <strong style={{ fontSize: '14px', color: '#381e18', display: 'block' }}>{cat.name}</strong>
-                  <code style={{ fontSize: '11px', color: '#7a6053', background: '#f5ebde', padding: '2px 6px', borderRadius: '4px' }}>
+                  <strong style={{ fontSize: '14px', color: 'var(--color-ink)', display: 'block' }}>{cat.name}</strong>
+                  <code style={{ fontSize: '11px', color: 'var(--color-sage)', background: 'var(--color-red-soft)', padding: '2px 6px', borderRadius: '4px' }}>
                     /{cat.slug}
                   </code>
                 </td>
 
-                <td style={{ fontSize: '13px', color: '#5e483e' }}>{cat.description}</td>
+                <td style={{ fontSize: '13px', color: 'var(--color-ink)' }}>{cat.description}</td>
 
                 <td>
                   <span className="admin-badge admin-badge-info">
@@ -143,7 +143,7 @@ export function AdminCultureCategoriesPage() {
                     {categories.length > 2 && (
                       <button
                         className="button secondary"
-                        style={{ fontSize: '12px', padding: '6px 10px', color: '#c62828' }}
+                        style={{ fontSize: '12px', padding: '6px 10px', color: 'var(--color-red)' }}
                         onClick={() => handleDelete(cat.id, cat.name)}
                       >
                         🗑️
@@ -159,22 +159,8 @@ export function AdminCultureCategoriesPage() {
 
       {/* Edit / Create Modal */}
       {editingCategory && (
-        <div className="admin-modal-overlay">
-          <div className="admin-card" style={{ width: 'min(520px, 92vw)', background: '#fff' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h2 style={{ margin: 0, fontSize: '18px', color: '#381e18' }}>
-                {editingCategory.id ? 'Chỉnh sửa danh mục' : 'Thêm danh mục văn hóa mới'}
-              </h2>
-              <button
-                type="button"
-                onClick={() => setEditingCategory(null)}
-                style={{ background: 'transparent', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#685044' }}
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleSave}>
+        <Modal title={editingCategory.id ? "Chỉnh sửa danh mục" : "Thêm danh mục văn hóa"} onClose={()=>setEditingCategory(null)}>
+<form onSubmit={handleSave}>
               <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr', gap: '12px' }}>
                 <label>
                   Icon:
@@ -229,8 +215,7 @@ export function AdminCultureCategoriesPage() {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

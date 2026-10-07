@@ -11,8 +11,8 @@ export function EnrollButton({ courseId, enrollment, onEnrolled }) {
     catch (e) { setError(e) }
     finally { setPending(false) }
   }
-  if (enrollment?.isEnrolled) return <Link className="button" to={`/learn/${courseId}`}>Continue Learning →</Link>
-  return <div><button disabled={pending} onClick={enroll}>{pending ? 'Enrolling…' : 'Enroll Now'}</button>
+  if (enrollment?.isEnrolled) return <Link className="button" to={`/learn/${courseId}`}>Tiếp tục học →</Link>
+  return <div><button disabled={pending} onClick={enroll}>{pending ? 'Đang đăng ký…' : 'Đăng ký học'}</button>
     {error && <p role="alert">{error.message} {error.status === 401 && <Link to="/login" state={{ from: location.pathname }}>Sign in</Link>}</p>}
   </div>
 }

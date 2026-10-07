@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
-import '@/presentation/styles/admin.css';
 
 export function AdminAiReviewsPage() {
   const [reviews, setReviews] = useState(() => adminCultureAiService.getReviews());
@@ -51,26 +50,26 @@ export function AdminAiReviewsPage() {
   return (
     <div className="admin-content">
       {toast && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', background: '#245c48', color: '#fff', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
+        <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           {toast}
         </div>
       )}
 
       {/* Header */}
       <div style={{ marginBottom: '28px' }}>
-        <span style={{ fontSize: '12px', fontWeight: 800, color: '#a62a24', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           AI QUALITY ASSURANCE & AUDITING • NGƯỜI 4
         </span>
         <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}>Kiểm tra chất lượng AI & Đánh giá phản hồi</h1>
-        <p style={{ margin: 0, color: '#665349', fontSize: '14px' }}>
+        <p style={{ margin: 0, color: 'var(--color-sage)', fontSize: '14px' }}>
           Xem các phiên hội thoại được phép truy cập theo chính sách riêng tư, kiểm tra phản hồi học viên, đánh dấu lỗi và kiểm thử prompt kịch bản.
         </p>
       </div>
 
       {/* Privacy Notice */}
-      <div style={{ background: '#f5ebe0', border: '1px solid #ebd9c8', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ background: 'var(--color-red-soft)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
         <span style={{ fontSize: '20px' }}>🔒</span>
-        <div style={{ fontSize: '13px', color: '#553c30' }}>
+        <div style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
           <strong>Chính sách quyền riêng tư lịch sử hội thoại:</strong> Chỉ hiển thị các phiên được người học cấp quyền gửi đánh giá, phản hồi báo lỗi, hoặc các phiên thuộc tập kiểm thử (Test Bench). Dữ liệu cá nhân nhạy cảm đã được ẩn danh hóa.
         </div>
       </div>
@@ -78,8 +77,8 @@ export function AdminAiReviewsPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '24px', alignItems: 'start' }}>
         {/* Left Column: User Feedback & Sessions Review Table */}
         <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '18px 24px', borderBottom: '1px solid #ebd9c8', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 style={{ margin: 0, fontSize: '17px', color: '#381e18' }}>
+          <div style={{ padding: '18px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2 style={{ margin: 0, fontSize: '17px', color: 'var(--color-ink)' }}>
               Danh sách phản hồi & Phiên cần kiểm tra ({reviews.length})
             </h2>
           </div>
@@ -99,24 +98,24 @@ export function AdminAiReviewsPage() {
                 <tr
                   key={r.id}
                   onClick={() => setSelectedReview(r)}
-                  style={{ cursor: 'pointer', background: selectedReview?.id === r.id ? '#fbf4ea' : 'transparent' }}
+                  style={{ cursor: 'pointer', background: selectedReview?.id === r.id ? 'var(--color-cream)' : 'transparent' }}
                 >
                   <td>
-                    <strong style={{ fontSize: '13.5px', color: '#381e18', display: 'block' }}>
+                    <strong style={{ fontSize: '13.5px', color: 'var(--color-ink)', display: 'block' }}>
                       {r.scenarioTitle}
                     </strong>
-                    <span style={{ fontSize: '11px', color: '#7a6053' }}>
+                    <span style={{ fontSize: '11px', color: 'var(--color-sage)' }}>
                       {r.userIdentifier} • {r.createdAt}
                     </span>
                   </td>
 
                   <td>
-                    <span style={{ color: '#d97706', fontWeight: 750 }}>
+                    <span style={{ color: 'var(--color-red)', fontWeight: 750 }}>
                       {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
                     </span>
                   </td>
 
-                  <td style={{ fontSize: '12.5px', color: '#4a3227', maxWidth: '240px' }}>
+                  <td style={{ fontSize: '12.5px', color: 'var(--color-ink)', maxWidth: '240px' }}>
                     "{r.userFeedback}"
                   </td>
 
@@ -151,16 +150,16 @@ export function AdminAiReviewsPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {/* Detail Card if selected */}
           {selectedReview ? (
-            <div className="admin-card" style={{ background: '#fff' }}>
-              <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', color: '#381e18' }}>
+            <div className="admin-card" style={{ background: 'var(--color-surface)' }}>
+              <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', color: 'var(--color-ink)' }}>
                 Chi tiết đánh giá phiên: {selectedReview.id}
               </h3>
 
-              <div style={{ fontSize: '13px', lineHeight: 1.6, color: '#4d362b' }}>
+              <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--color-ink)' }}>
                 <div><strong>Kịch bản:</strong> {selectedReview.scenarioTitle}</div>
                 <div><strong>Mã phiên:</strong> <code>{selectedReview.sessionId}</code></div>
                 <div><strong>Đánh giá:</strong> {selectedReview.rating}/5 sao</div>
-                <div style={{ marginTop: '8px', padding: '10px 12px', background: '#faf3e8', borderRadius: '8px' }}>
+                <div style={{ marginTop: '8px', padding: '10px 12px', background: 'var(--color-cream)', borderRadius: '8px' }}>
                   💬 <em>"{selectedReview.userFeedback}"</em>
                 </div>
 
@@ -170,7 +169,7 @@ export function AdminAiReviewsPage() {
                     <button
                       type="button"
                       className="button secondary"
-                      style={{ fontSize: '12px', padding: '6px 12px', color: '#1b5e20' }}
+                      style={{ fontSize: '12px', padding: '6px 12px', color: 'var(--color-ink)' }}
                       onClick={() => handleUpdateStatus(selectedReview.id, 'APPROVED')}
                     >
                       ✓ Duyệt đạt chuẩn
@@ -178,7 +177,7 @@ export function AdminAiReviewsPage() {
                     <button
                       type="button"
                       className="button secondary"
-                      style={{ fontSize: '12px', padding: '6px 12px', color: '#b45309' }}
+                      style={{ fontSize: '12px', padding: '6px 12px', color: 'var(--color-red)' }}
                       onClick={() => handleUpdateStatus(selectedReview.id, 'NEEDS_PROMPT_TUNING')}
                     >
                       ⚠️ Cần chỉnh Prompt
@@ -188,20 +187,20 @@ export function AdminAiReviewsPage() {
               </div>
             </div>
           ) : (
-            <div className="admin-card" style={{ textAlign: 'center', padding: '24px', color: '#8c7367' }}>
+            <div className="admin-card" style={{ textAlign: 'center', padding: '24px', color: 'var(--color-muted)' }}>
               Bấm vào một phiên trong bảng bên trái để xem chi tiết và thực hiện kiểm toán chất lượng.
             </div>
           )}
 
           {/* Test Sandbox (Kiểm thử kịch bản) */}
-          <div className="admin-card" style={{ background: '#fff' }}>
+          <div className="admin-card" style={{ background: 'var(--color-surface)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <span style={{ fontSize: '20px' }}>🧪</span>
-              <h3 style={{ margin: 0, fontSize: '16px', color: '#381e18' }}>
+              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}>
                 Kiểm thử kịch bản AI (Prompt Sandbox)
               </h3>
             </div>
-            <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: '#7a6054' }}>
+            <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: 'var(--color-sage)' }}>
               Kiểm tra trực tiếp phản hồi của mô hình với phiên bản System Prompt hiện hành trước khi xuất bản rộng rãi.
             </p>
 
@@ -234,7 +233,7 @@ export function AdminAiReviewsPage() {
             </button>
 
             {testOutput && (
-              <div style={{ marginTop: '14px', padding: '12px', background: '#24382b', color: '#e8f5e9', borderRadius: '10px', fontSize: '12px', fontFamily: 'monospace', whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>
+              <div style={{ marginTop: '14px', padding: '12px', background: 'var(--color-ink)', color: 'var(--color-sage-soft)', borderRadius: '10px', fontSize: '12px', fontFamily: 'monospace', whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>
                 {testOutput}
               </div>
             )}

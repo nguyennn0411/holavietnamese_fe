@@ -59,7 +59,7 @@ export function AdminVocabularyPage() {
 
   return <div>
     <div className="row" style={{ flexWrap: 'wrap', marginBottom: 24 }}>
-      <div><h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px' }}>Quản lý từ vựng</h1><p style={{ color: '#64748b', margin: 0 }}>Quản lý từ vựng, chủ đề, nghĩa và ví dụ tiếng Việt.</p></div>
+      <div><h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px' }}>Quản lý từ vựng</h1><p style={{ color: 'var(--color-muted)', margin: 0 }}>Quản lý từ vựng, chủ đề, nghĩa và ví dụ tiếng Việt.</p></div>
       <button type="button" onClick={() => setModal({ mode: 'create' })}>+ Thêm từ vựng</button>
     </div>
     {message && <div className="success state" role="status">{message}</div>}

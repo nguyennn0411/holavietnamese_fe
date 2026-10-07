@@ -25,7 +25,19 @@ export const ROUTES = {
 
   // Vocabulary (Người 3)
   VOCABULARY: '/vocabulary',
+  VOCABULARY_CATALOG_DETAIL: '/vocabulary/:id',
+  ADMIN_VOCABULARY_TOPICS: '/admin/vocabulary-topics',
+  VOCABULARY_NOTEBOOK: '/vocabulary/notebook',
   VOCABULARY_NOTEBOOK_DETAIL: '/vocabulary/notebook/:id',
+  VOCABULARY_REVIEW: '/vocabulary/review',
+
+  EXPLORE: '/explore',
+  DESTINATION_DETAIL: '/explore/:id',
+  BLOG: '/blog',
+  BLOG_DETAIL: '/blog/:id',
+  QUIZ: '/quizzes/:quizId',
+  QUIZ_ATTEMPT: '/quiz-attempts/:attemptId',
+  QUIZ_RESULT: '/quiz-attempts/:attemptId/result',
 
   // Văn hóa & AI Tutor & Roleplay (Người 4)
   CULTURE: '/culture',
@@ -38,6 +50,16 @@ export const ROUTES = {
 
   // Admin (Người 1)
   ADMIN: '/admin',
+  ADMIN_COURSES: '/admin/courses',
+  ADMIN_COURSE_BUILDER: '/admin/courses/:courseId',
+  ADMIN_COURSE_PREVIEW: '/admin/courses/:courseId/preview',
+  ADMIN_LESSONS: '/admin/lessons',
+  ADMIN_LESSON_BUILDER: '/admin/lessons/:lessonId',
+  ADMIN_LESSON_PREVIEW: '/admin/lessons/:lessonId/preview',
+  ADMIN_QUESTIONS: '/admin/questions',
+  ADMIN_QUIZZES: '/admin/quizzes',
+  ADMIN_QUIZ_BUILDER: '/admin/quizzes/:quizId',
+  ADMIN_QUIZ_PREVIEW: '/admin/quizzes/:quizId/preview',
   ADMIN_VOCABULARY: '/admin/vocabulary',
   ADMIN_USERS: '/admin/users',
   ADMIN_USER_DETAIL: '/admin/users/:id',

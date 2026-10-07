@@ -1,3 +1,4 @@
+import { Modal } from '@/components/common/Modal';
 import { useState, useEffect } from 'react';
 import { adminService } from '@/services/adminService';
 
@@ -16,18 +17,20 @@ export function AdminAchievementsPage() {
     xpReward: 50,
   });
   const [msg, setMsg] = useState('');
+  const [error,setError]=useState('');
 
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = () => {
-    adminService.getAchievements().then(setAchievements);
+    adminService.getAchievements().then(setAchievements).catch(err=>setError(err.message));
   };
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    const res = editingId
+    setError('');
+    try {const res = editingId
       ? await adminService.updateAchievement(editingId, newAch)
       : await adminService.createAchievement(newAch);
     setMsg(res.message);
@@ -45,6 +48,7 @@ export function AdminAchievementsPage() {
     });
     loadData();
     setTimeout(() => setMsg(''), 3000);
+    }catch(err){setError(err.message);}
   };
 
   const handleEdit = (achievement) => {
@@ -64,7 +68,7 @@ export function AdminAchievementsPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}>Quản lý Thành tích & Huy hiệu</h1>
-          <p style={{ color: '#64748b', margin: 0, fontSize: '0.9rem' }}>Tạo huy hiệu, cấu hình điều kiện mở khóa và điểm thưởng XP cho người học.</p>
+          <p style={{ color: 'var(--color-muted)', margin: 0, fontSize: '0.9rem' }}>Tạo huy hiệu, cấu hình điều kiện mở khóa và điểm thưởng XP cho người học.</p>
         </div>
         <button
           type="button"
@@ -73,8 +77,8 @@ export function AdminAchievementsPage() {
             padding: '10px 18px',
             borderRadius: '8px',
             border: 'none',
-            background: '#8B1A1A',
-            color: '#fff',
+            background: 'var(--color-red-hover)',
+            color: 'var(--color-surface)',
             fontWeight: 700,
             cursor: 'pointer',
           }}
@@ -83,8 +87,9 @@ export function AdminAchievementsPage() {
         </button>
       </div>
 
+      {error&&<div className="ui-notice ui-notice--error" role="alert">{error}</div>}
       {msg && (
-        <div style={{ padding: '10px 16px', background: '#dcfce7', color: '#166534', borderRadius: '8px', marginBottom: '16px' }}>
+        <div style={{ padding: '10px 16px', background: 'var(--color-sage-soft)', color: 'var(--color-ink)', borderRadius: '8px', marginBottom: '16px' }}>
           ✓ {msg}
         </div>
       )}
@@ -111,14 +116,14 @@ export function AdminAchievementsPage() {
                   <strong>{ach.code || ach.id}</strong>
                 </td>
                 <td><button className="secondary" onClick={() => handleEdit(ach)}>Sửa</button>{' '}<button className="danger" onClick={() => handleDelete(ach.id)}>Xóa</button></td>
-                <td><strong style={{ color: '#0f172a' }}>{ach.title}</strong></td>
+                <td><strong style={{ color: 'var(--color-ink)' }}>{ach.title}</strong></td>
                 <td>{ach.criteria}</td>
                 <td>
-                  <span style={{ background: '#f1f5f9', padding: '3px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  <span style={{ background: 'var(--color-cream)', padding: '3px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
                     {ach.conditionType || 'GENERAL'}
                   </span>
                 </td>
-                <td><span style={{ color: '#0284c7', fontWeight: 700 }}>+{ach.xpReward} XP</span></td>
+                <td><span style={{ color: 'var(--color-sage)', fontWeight: 700 }}>+{ach.xpReward} XP</span></td>
                 <td>
                   <span className={`admin-badge ${ach.active ? 'admin-badge-success' : 'admin-badge-danger'}`}>
                     {ach.active ? 'Hoạt động' : 'Tạm ẩn'}
@@ -132,13 +137,8 @@ export function AdminAchievementsPage() {
 
       {/* Modal Add Achievement */}
       {showModal && (
-        <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
-        }}>
-          <div style={{ background: '#fff', padding: '28px', borderRadius: '16px', width: '100%', maxWidth: '520px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 style={{ margin: '0 0 16px 0', fontSize: '1.25rem', color: '#0f172a' }}>{editingId ? 'Cập nhật huy hiệu' : 'Khởi tạo huy hiệu mới'}</h3>
-            <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <Modal title={editingId ? "Cập nhật huy hiệu" : "Khởi tạo huy hiệu mới"} onClose={()=>setShowModal(false)}>
+<form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '12px' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Icon (Emoji)</label>
@@ -146,7 +146,7 @@ export function AdminAchievementsPage() {
                     type="text"
                     value={newAch.icon}
                     onChange={e => setNewAch({ ...newAch, icon: e.target.value })}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                     required
                   />
                 </div>
@@ -157,7 +157,7 @@ export function AdminAchievementsPage() {
                     placeholder="VD: PHO_MASTER_01"
                     value={newAch.code}
                     onChange={e => setNewAch({ ...newAch, code: e.target.value.toUpperCase() })}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                     required
                   />
                 </div>
@@ -170,7 +170,7 @@ export function AdminAchievementsPage() {
                   placeholder="Ví dụ: Bậc Thầy Phở Bò"
                   value={newAch.title}
                   onChange={e => setNewAch({ ...newAch, title: e.target.value })}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                   required
                 />
               </div>
@@ -182,7 +182,7 @@ export function AdminAchievementsPage() {
                   placeholder="Ví dụ: Hoàn thành chủ đề Gọi món Phở Hà Nội"
                   value={newAch.desc}
                   onChange={e => setNewAch({ ...newAch, desc: e.target.value })}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                 />
               </div>
 
@@ -192,7 +192,7 @@ export function AdminAchievementsPage() {
                   <select
                     value={newAch.conditionType}
                     onChange={e => setNewAch({ ...newAch, conditionType: e.target.value })}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                   >
                     <option value="LESSON_COUNT">Số bài học hoàn thành</option>
                     <option value="VOCAB_COUNT">Số từ vựng ghi nhớ</option>
@@ -207,7 +207,7 @@ export function AdminAchievementsPage() {
                     type="number"
                     value={newAch.xpReward}
                     onChange={e => setNewAch({ ...newAch, xpReward: parseInt(e.target.value) })}
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                     required
                   />
                 </div>
@@ -219,7 +219,7 @@ export function AdminAchievementsPage() {
                   placeholder="Mô tả hành động cần đạt để mở khóa huy hiệu…"
                   value={newAch.criteria}
                   onChange={e => setNewAch({ ...newAch, criteria: e.target.value })}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', height: '60px' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)', height: '60px' }}
                   required
                 />
               </div>
@@ -231,7 +231,7 @@ export function AdminAchievementsPage() {
                   placeholder="https://... (để trống nếu dùng Emoji)"
                   value={newAch.iconUrl}
                   onChange={e => setNewAch({ ...newAch, iconUrl: e.target.value })}
-                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                 />
               </div>
 
@@ -239,20 +239,19 @@ export function AdminAchievementsPage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
+                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', cursor: 'pointer' }}
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  style={{ padding: '8px 18px', borderRadius: '8px', border: 'none', background: '#8B1A1A', color: '#fff', fontWeight: 700, cursor: 'pointer' }}
+                  style={{ padding: '8px 18px', borderRadius: '8px', border: 'none', background: 'var(--color-red-hover)', color: 'var(--color-surface)', fontWeight: 700, cursor: 'pointer' }}
                 >
                   {editingId ? 'Lưu thay đổi' : 'Khởi tạo huy hiệu'}
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

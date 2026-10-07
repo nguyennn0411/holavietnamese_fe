@@ -1,0 +1,43 @@
+import { ContentImage } from '@/components/common/ContentImage';
+import { MediaPlayer } from '@/components/learning/MediaPlayer';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useAsyncResource } from '@/hooks/useAsyncResource';
+import { contentService } from '@/services/contentService';
+import { ResourceState } from '@/components/common/ResourceState';
+import { PageHeader, Notice, EmptyState } from '@/components/common/Ui';
+import { ProgressBar } from '@/components/common/ProgressBar';
+import { QuestionInput } from '@/components/learning/QuestionInput';
+import { answerLabel, answerPresent } from '@/components/learning/answerUtils';
+import { Modal } from '@/components/common/Modal';
+
+export function QuizPage() {
+  const { quizId } = useParams(); const navigate = useNavigate(); const [busy, setBusy] = useState(false), [error, setError] = useState('');
+  const resource = useAsyncResource(useCallback(signal => contentService.quiz(quizId, signal), [quizId]));
+  async function start() { setBusy(true); setError(''); try { const attempt = await contentService.startQuiz(quizId); navigate(`/quiz-attempts/${attempt.id}`); } catch (err) { setError(err.message); } finally { setBusy(false); } }
+  return <ResourceState resource={resource}>{quiz => <section><PageHeader eyebrow="Một chút kiểm tra kiến thức" title={quiz.titleVi || quiz.title} description={quiz.descriptionVi || quiz.description || 'Một cơ hội để nhìn lại những điều bạn đã học.'} /><div className="quiz-gate card"><span className="state-symbol">✧</span><h2>Xem bạn đã tiến xa đến đâu.</h2><p>{quiz.questionCount} câu hỏi · Điểm đạt {quiz.passingScore}%</p><p className="muted">{quiz.timeLimitMinutes ? `${quiz.timeLimitMinutes} phút` : 'Không giới hạn thời gian'} · {quiz.maxAttempts ? `Tối đa ${quiz.maxAttempts} lần` : 'Không giới hạn số lần'}</p>{error && <Notice kind="error">{error}</Notice>}<button onClick={start} disabled={busy}>{busy ? 'Đang chuẩn bị…' : 'Bắt đầu quiz →'}</button>{quiz.courseId && <Link className="text-link" to={`/courses/${quiz.courseId}`}>← Về khóa học</Link>}</div></section>}</ResourceState>;
+}
+export function QuizAttemptPage() {
+  const { attemptId } = useParams(); const resource = useAsyncResource(useCallback(signal => contentService.attempt(attemptId, signal), [attemptId]));
+  return <ResourceState resource={resource}>{attempt => attempt.status === 'SUBMITTED' ? <Navigate to={`/quiz-attempts/${attempt.id}/result`} replace /> : <Attempt key={attempt.id} attempt={attempt} />}</ResourceState>;
+}
+function Attempt({ attempt }) {
+  const navigate = useNavigate(); const questions = attempt.questions || []; const [index, setIndex] = useState(0), [answers, setAnswers] = useState(Object.fromEntries(questions.map(question => [question.questionId, question.answer]))), [busy, setBusy] = useState(false), [error, setError] = useState(''), [confirm, setConfirm] = useState(false), [remaining, setRemaining] = useState(null);
+  useEffect(() => { if (!attempt.expiresAt) return; const offset = new Date(attempt.serverTime).getTime() - Date.now(); const update = () => setRemaining(Math.max(0, Math.ceil((new Date(attempt.expiresAt).getTime() - Date.now() - offset) / 1000))); update(); const timer = setInterval(update, 1000); return () => clearInterval(timer); }, [attempt.expiresAt, attempt.serverTime]);
+  if (!questions.length) return <EmptyState title="Quiz chưa có câu hỏi"><Link className="button secondary" to="/my-learning">Về góc học tập</Link></EmptyState>;
+  const question = questions[index], expired = remaining === 0;
+  async function saveCurrent() { const answer = answers[question.questionId]; if (answer !== question.answer) await contentService.answer(attempt.id, question.questionId, answerPresent(answer) ? answer : {}); }
+  async function changeQuestion(next) { setBusy(true); setError(''); try { if (!expired) await saveCurrent(); setIndex(next); } catch (err) { setError(err.message); } finally { setBusy(false); } }
+  async function finish() { setBusy(true); setError(''); try { if (!expired) await saveCurrent(); const result = await contentService.submit(attempt.id); navigate(`/quiz-attempts/${result.id}/result`); } catch (err) { setError(err.message); setConfirm(false); } finally { setBusy(false); } }
+  return <section><PageHeader eyebrow="Kiểm tra kiến thức" title={attempt.quizTitleVi || attempt.quizTitle} description={`${questions.length} câu hỏi. Từng chút tiến bộ của bạn.`} actions={remaining !== null && <span className="badge">{Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, '0')}</span>} /><div className="quiz-workspace"><ProgressBar value={index / questions.length * 100} label={`Câu ${index + 1} / ${questions.length}`} />{error && <Notice kind="error">{error}</Notice>}{expired && <Notice>Đã hết thời gian. Nộp các câu trả lời đã được lưu để xem kết quả.</Notice>}<article className="quiz-question card"><p className="eyebrow">{question.questionType?.replaceAll('_',' ')} · {question.points} điểm</p><h2>{question.promptVi || question.prompt}</h2>{question.imageUrl && <ContentImage className="question-media" src={question.imageUrl} alt="Hình minh họa câu hỏi" />}<MediaPlayer audioUrl={question.audioUrl} /><QuestionInput question={question} answer={answers[question.questionId]} disabled={busy || expired} onChange={answer => setAnswers(previous => ({ ...previous, [question.questionId]: answer }))} /></article><div className="lesson-navigation"><button className="secondary" disabled={busy || index === 0} onClick={() => changeQuestion(index - 1)}>← Trước</button><span className="muted">Câu trả lời được lưu khi chuyển câu.</span>{index + 1 < questions.length && !expired ? <button disabled={busy} onClick={() => changeQuestion(index + 1)}>Câu tiếp theo →</button> : <button disabled={busy} onClick={() => setConfirm(true)}>Nộp bài →</button>}</div></div>{confirm && <Modal title="Nộp bài kiểm tra?" busy={busy} onClose={() => setConfirm(false)}><p>Bạn đã trả lời {Object.values(answers).filter(answerPresent).length} / {questions.length} câu. Sau khi nộp, các câu trả lời sẽ được chấm bởi hệ thống.</p><div className="actions"><button className="secondary" disabled={busy} onClick={() => setConfirm(false)}>Tiếp tục làm bài</button><button disabled={busy} onClick={finish}>{busy ? 'Đang nộp…' : 'Nộp bài'}</button></div></Modal>}</section>;
+}
+export function QuizResultPage() {
+  const { attemptId } = useParams(); const resource = useAsyncResource(useCallback(signal => contentService.result(attemptId, signal), [attemptId]));
+  return <ResourceState resource={resource}>{result => <Result result={result} />}</ResourceState>;
+}
+function Result({ result }) {
+  const navigate = useNavigate(); const [busy, setBusy] = useState(false), [error, setError] = useState('');
+  async function retry() { setBusy(true); try { const attempt = await contentService.startQuiz(result.quizId); navigate(`/quiz-attempts/${attempt.id}`); } catch (err) { setError(err.message); } finally { setBusy(false); } }
+  const back = result.lessonId && result.courseId ? `/learn/${result.courseId}/lesson/${result.lessonId}` : result.courseId ? `/courses/${result.courseId}` : '/my-learning';
+  return <section><PageHeader eyebrow="Kết quả của bạn" title={result.quizTitleVi || result.quizTitle} description="Từng bước nhỏ đều có ý nghĩa. Đây là những điều bạn đã hiểu hôm nay." /><div className="quiz-result card"><div className="quiz-score">{Number(result.percentage).toFixed(0)}%</div><span className="badge">{result.passed ? 'Đạt' : 'Cần ôn tập thêm'}</span><p className="muted">{result.correctCount} đúng · {result.incorrectCount} sai · {result.unansweredCount} chưa trả lời</p></div>{error && <Notice kind="error">{error}</Notice>}<div className="quiz-result-actions actions"><Link className="button" to={back}>Tiếp tục học</Link><a className="button secondary" href="#review-answers">Xem đáp án</a><button className="secondary" disabled={busy || !result.canRetry} onClick={retry}>{busy ? 'Đang chuẩn bị…' : 'Làm lại quiz'}</button></div><section className="quiz-workspace" id="review-answers"><h2>Xem lại câu trả lời</h2>{result.questions?.map(question => <details className="answer-review card" key={question.questionId}><summary><span className={`answer-mark ${question.isCorrect ? 'correct' : ''}`}>{question.isCorrect ? '✓' : '•'}</span>{question.promptVi || question.prompt}</summary><p><strong>Bạn trả lời:</strong> {answerLabel(question.answer,question.options)}</p><p><strong>Đáp án:</strong> {answerLabel(question.correctAnswer,question.options)}</p><p className="muted">{question.explanationVi || question.explanation}</p></details>)}</section></section>;
+}

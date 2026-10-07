@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { learnerService } from '@/services/learnerService';
-import '@/presentation/styles/account.css';
 
 const defaultSettings = {
   audioSpeed: 1,
@@ -72,7 +71,7 @@ export function SettingsPage() {
         <label>
           <div>
             <b>Tốc độ phát âm (Audio Speed)</b>
-            <small style={{ display: 'block', color: '#796b61', marginTop: '2px' }}>
+            <small style={{ display: 'block', color: 'var(--color-sage)', marginTop: '2px' }}>
               Điều chỉnh tốc độ đọc các đoạn hội thoại mẫu
             </small>
           </div>
@@ -90,7 +89,7 @@ export function SettingsPage() {
         <label>
           <div>
             <b>Mục tiêu thời gian mỗi ngày</b>
-            <small style={{ display: 'block', color: '#796b61', marginTop: '2px' }}>
+            <small style={{ display: 'block', color: 'var(--color-sage)', marginTop: '2px' }}>
               Thời lượng học kỳ vọng để hệ thống thông báo nhắc nhở
             </small>
           </div>
@@ -109,7 +108,7 @@ export function SettingsPage() {
         <label>
           <div>
             <b>Gợi ý phát âm & khẩu hình</b>
-            <small style={{ display: 'block', color: '#796b61', marginTop: '2px' }}>
+            <small style={{ display: 'block', color: 'var(--color-sage)', marginTop: '2px' }}>
               Hiển thị mẹo đặt lưỡi và lấy hơi cho 6 thanh điệu tiếng Việt
             </small>
           </div>
@@ -123,7 +122,7 @@ export function SettingsPage() {
         <label>
           <div>
             <b>Tự động dịch nghĩa song ngữ</b>
-            <small style={{ display: 'block', color: '#796b61', marginTop: '2px' }}>
+            <small style={{ display: 'block', color: 'var(--color-sage)', marginTop: '2px' }}>
               Hiển thị nghĩa tiếng Anh bên dưới các cụm từ mới
             </small>
           </div>
@@ -137,7 +136,7 @@ export function SettingsPage() {
         <label>
           <div>
             <b>Thông báo nhắc nhở chuỗi Streak</b>
-            <small style={{ display: 'block', color: '#796b61', marginTop: '2px' }}>
+            <small style={{ display: 'block', color: 'var(--color-sage)', marginTop: '2px' }}>
               Nhắc bạn học bài trước 21h hàng ngày để không bị đứt chuỗi
             </small>
           </div>

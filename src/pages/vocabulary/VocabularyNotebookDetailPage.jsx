@@ -12,11 +12,11 @@ export function VocabularyNotebookDetailPage() {
   const resource = useVocabularyEntry(id)
   const [savedId, setSavedId] = useState(null)
 
-  return <section>
-    <Link className="text-link" to={ROUTES.VOCABULARY}>← Back to notebook</Link>
-    <p className="eyebrow">Your saved words</p>
-    <h1>Vocabulary details</h1>
-    {savedId === id && <p className="success" role="status">Vocabulary saved.</p>}
+  return <section className="vocabulary-detail-page">
+    <Link className="text-link" to={ROUTES.VOCABULARY_NOTEBOOK}>← Về sổ tay</Link>
+    <p className="eyebrow">Những từ bạn đã lưu</p>
+    <h1>Chi tiết từ vựng</h1>
+    {savedId === id && <p className="success" role="status">Đã lưu từ vựng.</p>}
     <ResourceState resource={resource}>{entry => <NotebookEntryDetails key={entry.id} entry={entry} onSaved={() => { setSavedId(id); resource.reload() }} />}</ResourceState>
   </section>
 }
@@ -30,8 +30,8 @@ function NotebookEntryDetails({ entry, onSaved }) {
 
   return <>
     <VocabularyCard entry={entry} showDetails={false} onEdit={() => setEditing(true)} onDelete={() => setDeleting(true)} />
-    {savedAt && !Number.isNaN(savedAt.getTime()) && <p className="muted">Saved <time dateTime={entry.createdAt}>{savedAt.toLocaleString()}</time></p>}
+    {savedAt && !Number.isNaN(savedAt.getTime()) && <p className="muted">Đã lưu <time dateTime={entry.createdAt}>{savedAt.toLocaleString()}</time></p>}
     {editing && <VocabularyForm entry={entry} lessons={options.data?.lessons || []} lessonOptions={options} onClose={() => setEditing(false)} onSaved={() => { setEditing(false); onSaved() }} />}
-    {deleting && <VocabularyDeleteModal entry={entry} onClose={() => setDeleting(false)} onDeleted={() => navigate(ROUTES.VOCABULARY, { replace: true, state: { vocabularyMessage: 'Vocabulary deleted.' } })} />}
+    {deleting && <VocabularyDeleteModal entry={entry} onClose={() => setDeleting(false)} onDeleted={() => navigate(ROUTES.VOCABULARY_NOTEBOOK, { replace: true, state: { vocabularyMessage: 'Đã xóa từ vựng.' } })} />}
   </>
 }

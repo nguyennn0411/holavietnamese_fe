@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { AppFooter, AppHeader, LayoutToast } from '@/components/layout';
 import { learnerService } from '@/services/learnerService';
-import '@/presentation/styles/layout.css';
 
 export function MainLayout() {
   const { isAuthenticated, user, logout, loading } = useAuth();

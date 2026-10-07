@@ -4,8 +4,8 @@ import { MyCourseCard } from '@/components/my-courses/MyCourseCard'
 import { ResourceState } from '@/components/common/ResourceState'
 export function MyCoursesPage() {
   const resource = useMyCourses()
-  return <section><p className="eyebrow">Keep your momentum</p><h1>My Courses</h1><p className="lead">Pick up where you left off.</p>
+  return <section><p className="eyebrow">Tiếp nối hành trình</p><h1>Khóa học của tôi</h1><p className="lead">Tiếp tục từ nơi bạn đã dừng lại.</p>
     <ResourceState resource={resource}>{courses => courses.length
       ? <div className="card-grid">{courses.map(course => <MyCourseCard key={course.enrollmentId} course={course} />)}</div>
-      : <div className="state"><p>You haven't enrolled in any courses yet.</p><Link className="button" to="/courses">Explore Courses</Link></div>}</ResourceState></section>
+      : <div className="state"><p>Bạn chưa đăng ký khóa học nào.</p><Link className="button" to="/courses">Khám phá khóa học</Link></div>}</ResourceState></section>
 }

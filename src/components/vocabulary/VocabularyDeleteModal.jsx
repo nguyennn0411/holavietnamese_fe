@@ -17,12 +17,12 @@ export function VocabularyDeleteModal({ entry, onClose, onDeleted }) {
     finally { submitting.current = false; setPending(false) }
   }
 
-  return <Modal title="Delete vocabulary?" busy={pending} onClose={onClose}>
-    <p>Delete “{entry.word}” from your notebook?</p>
+  return <Modal title="Xóa từ vựng?" busy={pending} onClose={onClose}>
+    <p>Xóa “{entry.word}” khỏi sổ tay của bạn?</p>
     {error && <p role="alert">{error}</p>}
     <div className="actions">
-      <button type="button" className="secondary" disabled={pending} onClick={onClose}>Cancel</button>
-      <button type="button" className="danger" disabled={pending} onClick={remove}>{pending ? 'Deleting…' : 'Delete'}</button>
+      <button type="button" className="secondary" disabled={pending} onClick={onClose}>Hủy</button>
+      <button type="button" className="danger" disabled={pending} onClick={remove}>{pending ? 'Đang xóa…' : 'Xóa'}</button>
     </div>
   </Modal>
 }

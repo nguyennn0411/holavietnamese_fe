@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test qa/*.test.mjs",
+    "dev:qa": "vite --config qa/vite.config.js"
   },
   "dependencies": {
     "axios": "^1.20.0",

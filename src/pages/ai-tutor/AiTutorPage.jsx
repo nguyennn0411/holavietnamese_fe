@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { aiTutorService } from '@/services/aiTutorService';
 import { vocabularyService } from '@/services/vocabularyService';
-import '@/presentation/styles/ai-tutor.css';
 
 export function AiTutorPage() {
   const modes = aiTutorService.getModes();
@@ -216,7 +215,7 @@ export function AiTutorPage() {
       {/* Header section */}
       <div>
         <span className="p4-header-badge">AI Assistant • 7 Modes</span>
-        <h1 className="p4-title">Hola AI Tutor</h1>
+        <h1 className="p4-title">Một cuộc trò chuyện nhỏ, một bước tiến xa.</h1>
         <p className="p4-subtitle">
           Gia sư AI thông minh chuyên sâu tiếng Việt. Chọn chế độ phù hợp từ ngữ pháp, dịch thuật, hội thoại đời thường cho đến văn hóa và tiếng Việt 3 miền.
         </p>
@@ -230,7 +229,7 @@ export function AiTutorPage() {
             <span className="tutor-sidebar__title">
               💬 Lịch sử trò chuyện
             </span>
-            <span style={{ fontSize: '11px', color: '#887063' }}>{sessions.length} phiên</span>
+            <span style={{ fontSize: '11px', color: 'var(--color-muted)' }}>{sessions.length} phiên</span>
           </div>
 
           <button
@@ -240,6 +239,27 @@ export function AiTutorPage() {
             <span>+</span> Cuộc trò chuyện mới
           </button>
 
+          {/* 7 Modes Switcher Bar */}
+          <div className="tutor-modes-bar" role="tablist" aria-label="Các chế độ AI Tutor">
+            {modes.map(mode => {
+              const isSelected = mode.id === currentMode;
+              return (
+                <button
+                  key={mode.id}
+                  role="tab"
+                  aria-selected={isSelected}
+                  className={`mode-pill ${isSelected ? 'active' : ''}`}
+                  onClick={() => handleSwitchMode(mode.id)}
+                  title={mode.description}
+                >
+                  <span className="mode-icon">{mode.icon}</span>
+                  <span>{mode.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="eyebrow">Cuộc trò chuyện gần đây</p>
           <div className="tutor-history-list">
             {sessions.map(s => {
               const sessionMode = aiTutorService.getMode(s.mode);
@@ -300,26 +320,6 @@ export function AiTutorPage() {
 
         {/* Chat area with 7 Modes Switcher */}
         <main className="tutor-chat-box">
-          {/* 7 Modes Switcher Bar */}
-          <div className="tutor-modes-bar" role="tablist" aria-label="Các chế độ AI Tutor">
-            {modes.map(mode => {
-              const isSelected = mode.id === currentMode;
-              return (
-                <button
-                  key={mode.id}
-                  role="tab"
-                  aria-selected={isSelected}
-                  className={`mode-pill ${isSelected ? 'active' : ''}`}
-                  onClick={() => handleSwitchMode(mode.id)}
-                  title={mode.description}
-                >
-                  <span className="mode-icon">{mode.icon}</span>
-                  <span>{mode.name}</span>
-                </button>
-              );
-            })}
-          </div>
-
           {/* Current Mode Banner */}
           <div className="tutor-current-mode-banner">
             <div className="current-mode-info">
@@ -353,8 +353,8 @@ export function AiTutorPage() {
 
                     {/* Word tags saved */}
                     {msg.savedWords && msg.savedWords.length > 0 && (
-                      <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px dashed #ebd8c7' }}>
-                        <div style={{ fontSize: '12px', fontWeight: 700, color: '#9f2d20', marginBottom: '6px' }}>
+                      <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px dashed var(--color-border)' }}>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-red-hover)', marginBottom: '6px' }}>
                           📚 Từ vựng hữu ích gợi ý trong tin nhắn này:
                         </div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -364,7 +364,7 @@ export function AiTutorPage() {
                               onClick={() => handleSaveWordToVocabulary(item.word, item.meaning)}
                               className="message-action-btn"
                               title="Bấm để lưu nhanh vào Sổ từ vựng"
-                              style={{ background: '#fff', border: '1px solid #d8aa54', color: '#684513' }}
+                              style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-red-hover)' }}
                             >
                               <span>⭐</span>
                               <strong>{item.word}</strong>: {item.meaning} (Lưu từ)
@@ -402,7 +402,7 @@ export function AiTutorPage() {
               <div className="message-row ai">
                 <div className="message-avatar">{activeModeConfig.icon}</div>
                 <div className="message-bubble">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#7a5a4a' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-sage)' }}>
                     <span>✨ Hola AI đang suy nghĩ và phản hồi...</span>
                   </div>
                 </div>

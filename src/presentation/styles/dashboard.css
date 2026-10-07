@@ -1,39 +1,39 @@
 .dashboard-welcome {
-  background: linear-gradient(135deg, #8B1A1A 0%, #b8845f 100%);
-  color: #fff; border-radius: 1rem; padding: 2rem;
+  background: linear-gradient(135deg, var(--color-red-hover) 0%, var(--color-gold) 100%);
+  color: var(--color-surface); border-radius: 1rem; padding: 2rem;
   margin-bottom: 1.5rem;
 }
 .dashboard-welcome h1 { margin: 0 0 0.5rem 0; font-size: 1.5rem; }
 .dashboard-welcome p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
 .dashboard-user-info {
-  background-color: #fff; border: 1px solid #e5e7eb;
+  background-color: var(--color-surface); border: 1px solid var(--color-sage-soft);
   border-radius: 0.75rem; padding: 1.25rem;
   margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;
 }
 .dashboard-avatar {
   width: 48px; height: 48px; border-radius: 50%;
-  background-color: #8B1A1A; color: #fff;
+  background-color: var(--color-red-hover); color: var(--color-surface);
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 1.2rem; flex-shrink: 0;
 }
 .dashboard-user-details { flex: 1; }
-.dashboard-user-name { font-weight: 700; color: #111827; font-size: 1rem; margin: 0; }
-.dashboard-user-meta { color: #6b7280; font-size: 0.85rem; margin: 4px 0 0 0; }
+.dashboard-user-name { font-weight: 700; color: var(--color-ink); font-size: 1rem; margin: 0; }
+.dashboard-user-meta { color: var(--color-muted); font-size: 0.85rem; margin: 4px 0 0 0; }
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
 }
 .dashboard-card {
-  padding: 1.5rem; border: 1px solid #e5e7eb;
-  border-radius: 0.75rem; background-color: #ffffff;
+  padding: 1.5rem; border: 1px solid var(--color-sage-soft);
+  border-radius: 0.75rem; background-color: var(--color-surface);
   cursor: pointer; transition: all 0.2s;
 }
 .dashboard-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
 .dashboard-card-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-.dashboard-card h3 { margin: 0 0 0.25rem 0; font-size: 1rem; color: #111827; }
-.dashboard-card p { margin: 0; font-size: 0.8rem; color: #6b7280; }
+.dashboard-card h3 { margin: 0 0 0.25rem 0; font-size: 1rem; color: var(--color-ink); }
+.dashboard-card p { margin: 0; font-size: 0.8rem; color: var(--color-muted); }
 .dashboard-section-title {
-  font-size: 1.1rem; font-weight: 700; color: #111827;
+  font-size: 1.1rem; font-weight: 700; color: var(--color-ink);
   margin: 0 0 1rem 0;
 }

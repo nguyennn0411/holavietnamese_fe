@@ -1,119 +1,32 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import '@/presentation/styles/account.css';
+import { useAsyncResource } from '@/hooks/useAsyncResource';
+import { ResourceState } from '@/components/common/ResourceState';
+import { PageHeader, EmptyState } from '@/components/common/Ui';
+import { ProgressBar } from '@/components/common/ProgressBar';
 
 export function LearningProgressPage() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  const load = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const res = await learnerService.getProgressData();
-      setData(res);
-    } catch (e) {
-      setError(e.message || 'Không thể tải dữ liệu tiến độ.');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
-  if (loading) {
-    return <div className="account-empty">Đang tải số liệu tiến độ học tập…</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="account-page">
-        <div className="auth-message auth-message-error" role="alert">
-          <p>{error}</p>
-          <button type="button" className="home-btn-primary" onClick={load} style={{ marginTop: '10px' }}>
-            Thử lại
-          </button>
+  const resource = useAsyncResource(useCallback(() => learnerService.getProgressData(), []));
+  return <section><PageHeader eyebrow="Từng bước nhỏ đều có ý nghĩa" title="Tiến độ học tập" description="Nhìn lại những điều bạn đã học và tìm nhịp học của riêng mình."/>
+    <ResourceState resource={resource}>{data => {
+      const streak = data?.streakCount ?? data?.currentStreak ?? 4;
+      const completed = data?.completedLessonsCount ?? data?.completedLessons ?? 12;
+      const vocab = data?.learnedVocabulariesCount ?? data?.masteredWords ?? 48;
+      const xp = data?.totalXp ?? 420;
+      const goal = data?.dailyGoalMinutes || 15, today = data?.todayMinutes || 10;
+      const transactions = data?.recentXpTransactions || data?.recentActivities || [];
+      const weekly = data?.weeklyActivity || [];
+      const max = Math.max(...weekly.map(day => Number(day.minutes ?? day.value ?? 0)), goal);
+      return <>
+        <div className="progress-kpis">{[['Thời gian học',data.totalTimeMinutes != null ? `${data.totalTimeMinutes} phút` : '—'],['Bài học hoàn thành',`${completed} bài`],['Từ vựng đã thuộc',`${vocab} từ`],['Chuỗi liên tục',`${streak} ngày`],['Điểm kinh nghiệm',`${xp} XP`]].map(([label,value]) => <div className="account-kpi" key={label}><span>{label}</span><strong>{value}</strong></div>)}</div>
+        <div className="progress-panels">
+          <section className="card"><h2>Nhịp học trong tuần</h2><p className="muted">Một chút mỗi ngày, một chặng đường dài.</p>{weekly.length ? <div className="weekly-chart">{weekly.map((day,index) => <div key={index}><span>{day.minutes ?? day.value ?? 0} phút</span><i style={{height:`${Math.max(4,Number(day.minutes ?? day.value ?? 0)/max*140)}px`}}/><small>{day.day || day.label || day.date}</small></div>)}</div> : <EmptyState title="Chưa có dữ liệu học trong tuần"/>}</section>
+          <section className="card"><h2>Mục tiêu hôm nay</h2><strong className="daily-minutes">{today}<small> / {goal} phút</small></strong><ProgressBar value={Math.min(100,Math.round(today/goal*100))} label="Mục tiêu mỗi ngày"/><p className="muted">{today >= goal ? 'Bạn đã hoàn thành mục tiêu hôm nay.' : `Thêm ${Math.max(0,goal-today)} phút cho hành trình của bạn.`}</p><Link className="text-link" to="/courses">Tiếp tục học →</Link></section>
+          <section className="card"><h2>Tiến độ khóa học</h2>{data.enrolledCourses?.length ? data.enrolledCourses.map(course => <div className="progress-course" key={course.id}><Link to={`/courses/${course.id}`}>{course.title}</Link><ProgressBar value={course.progress} label="Hoàn thành"/></div>) : <EmptyState title="Bắt đầu khóa học đầu tiên"><Link className="text-link" to="/courses">Khám phá khóa học →</Link></EmptyState>}</section>
+          <section className="card"><h2>Hoạt động gần đây</h2>{transactions.length ? transactions.map((item,index) => <div className="account-list-row" key={item.id ?? index}><div><strong>{item.title || item.description || item.reason || 'Hoạt động học tập'}</strong><small>{item.time || item.createdAt || item.transactionDate || 'Gần đây'}</small></div><b>+{item.amount ?? item.xp ?? 20} XP</b></div>) : <EmptyState title="Chưa có giao dịch XP gần đây"/>}</section>
         </div>
-      </div>
-    );
-  }
-
-  const tx = data?.recentXpTransactions || data?.recentActivities || [];
-  const streak = data?.streakCount ?? data?.currentStreak ?? 4;
-  const completedLessons = data?.completedLessonsCount ?? data?.completedLessons ?? 12;
-  const learnedVocab = data?.learnedVocabulariesCount ?? data?.masteredWords ?? 48;
-  const totalXp = data?.totalXp ?? 420;
-  const dailyGoal = data?.dailyGoalMinutes || 15;
-  const todayMinutes = data?.todayMinutes || 10;
-  const goalPercent = Math.min(100, Math.round((todayMinutes / dailyGoal) * 100));
-
-  return (
-    <div className="account-page">
-      <div className="account-header">
-        <span className="account-pill">📊 Thống kê & Chuỗi ngày</span>
-        <h1 className="account-title">Tiến độ học tập</h1>
-        <p className="account-desc">
-          Theo dõi tổng thời gian, số bài học đã hoàn thành và điểm kinh nghiệm XP bạn đã tích lũy.
-        </p>
-      </div>
-
-      {/* 4 Core KPIs */}
-      <div className="progress-kpis">
-        <div className="account-kpi gold">
-          <span>Chuỗi liên tục 🔥</span>
-          <strong>{streak} ngày</strong>
-        </div>
-        <div className="account-kpi sage">
-          <span>Bài học đã xong 📚</span>
-          <strong>{completedLessons} bài</strong>
-        </div>
-        <div className="account-kpi clay">
-          <span>Từ vựng đã thuộc 📖</span>
-          <strong>{learnedVocab} từ</strong>
-        </div>
-        <div className="account-kpi paper">
-          <span>Tổng điểm XP ⚡</span>
-          <strong>{totalXp} XP</strong>
-        </div>
-      </div>
-
-      {/* Detail Grid: Transactions and Daily Goal */}
-      <div className="progress-detail-grid">
-        <section className="account-panel">
-          <h2>Nhật ký hoạt động & Điểm thưởng XP</h2>
-          {tx.length === 0 ? (
-            <div className="account-empty">Chưa có giao dịch XP gần đây.</div>
-          ) : (
-            tx.map((item, i) => (
-              <div className="account-list-row" key={item.id ?? i}>
-                <div>
-                  <strong>{item.title || item.description || item.reason || 'Hoạt động học tập'}</strong>
-                  <small>{item.time || item.createdAt || item.transactionDate || 'Gần đây'}</small>
-                </div>
-                <b>+{item.amount ?? item.xp ?? 20} XP</b>
-              </div>
-            ))
-          )}
-        </section>
-
-        <aside className="account-panel path-panel">
-          <h2>Mục tiêu mỗi ngày</h2>
-          <strong>
-            {todayMinutes} / {dailyGoal} phút
-          </strong>
-          <div className="account-progress">
-            <i style={{ width: `${goalPercent}%` }} />
-          </div>
-          <small>
-            {goalPercent >= 100
-              ? '🎉 Bạn đã hoàn thành xuất sắc mục tiêu hôm nay!'
-              : `Tiếp tục luyện tập thêm ${Math.max(0, dailyGoal - todayMinutes)} phút nữa để duy trì đà học tập nhé.`}
-          </small>
-        </aside>
-      </div>
-    </div>
-  );
+      </>;
+    }}</ResourceState>
+  </section>;
 }

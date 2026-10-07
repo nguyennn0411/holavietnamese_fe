@@ -1,0 +1,715 @@
+[
+  {
+    "name": "LOGIN",
+    "path": "/login",
+    "alerts": [],
+    "heading": "Tiếp tục hành trình\ntiếng Việt của bạn",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:02.456Z"
+  },
+  {
+    "name": "REGISTER",
+    "path": "/register",
+    "alerts": [],
+    "heading": "Bắt đầu hành trình\ntiếng Việt",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:04.240Z"
+  },
+  {
+    "name": "VERIFY_EMAIL",
+    "path": "/verify-email",
+    "alerts": [],
+    "heading": "Kiểm tra\nhộp thư của bạn",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:04.930Z"
+  },
+  {
+    "name": "COURSE_DETAIL",
+    "path": "/courses/1",
+    "alerts": [],
+    "heading": "Ẩm thực Việt Nam",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:06.667Z"
+  },
+  {
+    "name": "VOCABULARY",
+    "path": "/vocabulary",
+    "alerts": [],
+    "heading": "Từ vựng tiếng Việt",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:20.026Z"
+  },
+  {
+    "name": "AI_ROLEPLAY",
+    "path": "/ai-roleplay/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "heading": "Phiên Roleplay: Gọi món tại quán Phở gia truyền Hà Nội",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:10.177Z"
+  },
+  {
+    "name": "ADMIN",
+    "path": "/admin",
+    "alerts": [],
+    "heading": "Bảng điều khiển Quản trị",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:10.758Z"
+  },
+  {
+    "name": "ADMIN_COURSES",
+    "path": "/admin/courses",
+    "alerts": [],
+    "heading": "Khóa học",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:11.370Z"
+  },
+  {
+    "name": "ADMIN_QUIZ_BUILDER",
+    "path": "/admin/quizzes/1",
+    "alerts": [],
+    "heading": "Quiz Builder",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:13.058Z"
+  },
+  {
+    "name": "ADMIN_CULTURE_EDIT",
+    "path": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "heading": "Biên tập: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:09:14.755Z"
+  },
+  {
+    "name": "HOME",
+    "path": "/",
+    "alerts": [],
+    "heading": "Xin chào, Alex Nguyen!",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:14.562Z"
+  },
+  {
+    "name": "FORGOT_PASSWORD",
+    "path": "/forgot-password",
+    "alerts": [],
+    "heading": "Quên mật khẩu?",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:37.533Z"
+  },
+  {
+    "name": "RESET_PASSWORD",
+    "path": "/reset-password",
+    "alerts": [],
+    "heading": "Tạo mật khẩu\nmới",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:38.126Z"
+  },
+  {
+    "name": "ONBOARDING",
+    "path": "/onboarding",
+    "alerts": [],
+    "heading": "Ngôn ngữ mẹ đẻ của bạn là gì?",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:38.747Z"
+  },
+  {
+    "name": "MY_LEARNING",
+    "path": "/my-learning",
+    "alerts": [],
+    "heading": "Góc học tập của tôi",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:40.426Z"
+  },
+  {
+    "name": "PROFILE",
+    "path": "/profile",
+    "alerts": [],
+    "heading": "Hồ sơ người học",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:42.126Z"
+  },
+  {
+    "name": "SETTINGS",
+    "path": "/settings",
+    "alerts": [],
+    "heading": "Cài đặt ứng dụng",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:43.795Z"
+  },
+  {
+    "name": "PROGRESS",
+    "path": "/progress",
+    "alerts": [],
+    "heading": "Tiến độ học tập",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:45.522Z"
+  },
+  {
+    "name": "ACHIEVEMENTS",
+    "path": "/achievements",
+    "alerts": [],
+    "heading": "Huy hiệu & Thành tích",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:47.282Z"
+  },
+  {
+    "name": "NOTIFICATIONS",
+    "path": "/notifications",
+    "alerts": [],
+    "heading": "Thông báo của bạn",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:47.891Z"
+  },
+  {
+    "name": "COURSES",
+    "path": "/courses",
+    "alerts": [],
+    "heading": "Học tiếng Việt",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:49.591Z"
+  },
+  {
+    "name": "MY_COURSES",
+    "path": "/my-courses",
+    "alerts": [],
+    "heading": "Khóa học của tôi",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:50.186Z"
+  },
+  {
+    "name": "LEARN_RESUME",
+    "path": "/learn/1",
+    "alerts": [],
+    "heading": "Các bài học của bạn",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:16.550Z"
+  },
+  {
+    "name": "LEARN_LESSON",
+    "path": "/learn/1/lesson/101",
+    "alerts": [],
+    "heading": "Các bài học của bạn",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:18.382Z"
+  },
+  {
+    "name": "VOCABULARY_NOTEBOOK_DETAIL",
+    "path": "/vocabulary/notebook/1",
+    "alerts": [],
+    "heading": "Chi tiết từ vựng",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:10:54.373Z"
+  },
+  {
+    "name": "VOCABULARY_REVIEW",
+    "path": "/vocabulary/review",
+    "alerts": [],
+    "heading": "Ôn tập từ vựng",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:21.749Z"
+  },
+  {
+    "name": "EXPLORE",
+    "path": "/explore",
+    "alerts": [],
+    "heading": "Khám phá Việt Nam",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:23.536Z"
+  },
+  {
+    "name": "DESTINATION_DETAIL",
+    "path": "/explore/danang",
+    "alerts": [],
+    "heading": "Đà Nẵng",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:19.424Z"
+  },
+  {
+    "name": "BLOG",
+    "path": "/blog",
+    "alerts": [],
+    "heading": "Câu chuyện đáng mang theo.",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:25.340Z"
+  },
+  {
+    "name": "BLOG_DETAIL",
+    "path": "/blog/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:27.092Z"
+  },
+  {
+    "name": "QUIZ",
+    "path": "/quizzes/1",
+    "alerts": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:24.715Z"
+  },
+  {
+    "name": "QUIZ_ATTEMPT",
+    "path": "/quiz-attempts/501",
+    "alerts": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:26.438Z"
+  },
+  {
+    "name": "QUIZ_RESULT",
+    "path": "/quiz-attempts/501/result",
+    "alerts": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:28.280Z"
+  },
+  {
+    "name": "CULTURE",
+    "path": "/culture",
+    "alerts": [],
+    "heading": "Hòa nhịp vào tâm hồn & bản sắc Việt",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:29.070Z"
+  },
+  {
+    "name": "CULTURE_DETAIL",
+    "path": "/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:32.105Z"
+  },
+  {
+    "name": "AI_TUTOR",
+    "path": "/ai-tutor",
+    "alerts": [],
+    "heading": "Một cuộc trò chuyện nhỏ, một bước tiến xa.",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:31.028Z"
+  },
+  {
+    "name": "AI_SCENARIOS",
+    "path": "/ai-scenarios",
+    "alerts": [],
+    "heading": "Kịch bản nhập vai thực tế",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:36.064Z"
+  },
+  {
+    "name": "AI_SCENARIO_DETAIL",
+    "path": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "heading": "Gọi món tại quán Phở gia truyền Hà Nội",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:38.004Z"
+  },
+  {
+    "name": "AI_SESSION_RESULT",
+    "path": "/ai-sessions/goi-mon-pho-ha-noi/result",
+    "alerts": [],
+    "heading": "Kết quả phiên Roleplay",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:39.841Z"
+  },
+  {
+    "name": "ADMIN_COURSE_BUILDER",
+    "path": "/admin/courses/1",
+    "alerts": [],
+    "heading": "Course Builder",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:40.587Z"
+  },
+  {
+    "name": "ADMIN_COURSE_PREVIEW",
+    "path": "/admin/courses/1/preview",
+    "alerts": [],
+    "heading": "Ẩm thực Việt Nam",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:41.258Z"
+  },
+  {
+    "name": "ADMIN_LESSONS",
+    "path": "/admin/lessons",
+    "alerts": [],
+    "heading": "Bài học",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:41.896Z"
+  },
+  {
+    "name": "ADMIN_LESSON_BUILDER",
+    "path": "/admin/lessons/101",
+    "alerts": [],
+    "heading": "Lesson Builder",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:43.637Z"
+  },
+  {
+    "name": "ADMIN_LESSON_PREVIEW",
+    "path": "/admin/lessons/101/preview",
+    "alerts": [],
+    "heading": "Gọi một bát phở",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:32.778Z"
+  },
+  {
+    "name": "ADMIN_QUESTIONS",
+    "path": "/admin/questions",
+    "alerts": [],
+    "heading": "Question Bank",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:46.072Z"
+  },
+  {
+    "name": "ADMIN_QUIZZES",
+    "path": "/admin/quizzes",
+    "alerts": [],
+    "heading": "Quiz",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:11:46.776Z"
+  },
+  {
+    "name": "ADMIN_QUIZ_PREVIEW",
+    "path": "/admin/quizzes/1/preview",
+    "alerts": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:20.042Z"
+  },
+  {
+    "name": "ADMIN_VOCABULARY",
+    "path": "/admin/vocabulary",
+    "alerts": [],
+    "heading": "Quản lý từ vựng",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:35.229Z"
+  },
+  {
+    "name": "ADMIN_USERS",
+    "path": "/admin/users",
+    "alerts": [],
+    "heading": "Quản lý người dùng",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:21.365Z"
+  },
+  {
+    "name": "ADMIN_USER_DETAIL",
+    "path": "/admin/users/1",
+    "alerts": [],
+    "heading": "Alex Nguyen",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:22.043Z"
+  },
+  {
+    "name": "ADMIN_ROLES",
+    "path": "/admin/roles",
+    "alerts": [],
+    "heading": "Vai trò & Phân quyền",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:22.709Z"
+  },
+  {
+    "name": "ADMIN_SETTINGS",
+    "path": "/admin/settings",
+    "alerts": [],
+    "heading": "Cấu hình Hệ thống",
+    "scroll": 1440,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:23.348Z"
+  },
+  {
+    "name": "ADMIN_ACHIEVEMENTS",
+    "path": "/admin/achievements",
+    "alerts": [],
+    "heading": "Quản lý Thành tích & Huy hiệu",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:24.000Z"
+  },
+  {
+    "name": "ADMIN_XP_RULES",
+    "path": "/admin/xp-rules",
+    "alerts": [],
+    "heading": "Quy tắc cộng điểm XP",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:24.623Z"
+  },
+  {
+    "name": "ADMIN_AUDIT_LOGS",
+    "path": "/admin/audit-logs",
+    "alerts": [],
+    "heading": "Nhật ký Quản trị (Audit Logs)",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:25.308Z"
+  },
+  {
+    "name": "ADMIN_CULTURE",
+    "path": "/admin/culture",
+    "alerts": [],
+    "heading": "Quản lý bài viết văn hóa",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:26.035Z"
+  },
+  {
+    "name": "ADMIN_CULTURE_NEW",
+    "path": "/admin/culture/new",
+    "alerts": [],
+    "heading": "Soạn thảo bài viết văn hóa mới",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:27.811Z"
+  },
+  {
+    "name": "ADMIN_CULTURE_CATEGORIES",
+    "path": "/admin/culture-categories",
+    "alerts": [],
+    "heading": "Danh mục văn hóa",
+    "scroll": 1425,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:37.016Z"
+  },
+  {
+    "name": "ADMIN_AI_SCENARIOS",
+    "path": "/admin/ai-scenarios",
+    "alerts": [],
+    "heading": "Quản lý kịch bản AI",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 1118,
+        "overflow": "auto",
+        "scroll": 1118
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:30.311Z"
+  },
+  {
+    "name": "ADMIN_AI_SCENARIO_BUILDER",
+    "path": "/admin/ai-scenarios/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "heading": "Scenario Builder: Gọi món tại quán Phở gia truyền Hà Nội",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:32.081Z"
+  },
+  {
+    "name": "ADMIN_AI_SCENARIO_NEW",
+    "path": "/admin/ai-scenarios/new",
+    "alerts": [],
+    "heading": "Scenario Builder: Kịch bản mới",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:33.832Z"
+  },
+  {
+    "name": "ADMIN_AI_SETTINGS",
+    "path": "/admin/ai-settings",
+    "alerts": [],
+    "heading": "Cấu hình hệ thống AI",
+    "scroll": 1425,
+    "tables": [],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:35.610Z"
+  },
+  {
+    "name": "ADMIN_AI_USAGE",
+    "path": "/admin/ai-usage",
+    "alerts": [],
+    "heading": "Theo dõi sử dụng AI & Chi phí",
+    "scroll": 1425,
+    "tables": [
+      {
+        "client": 629,
+        "overflow": "auto",
+        "scroll": 629
+      },
+      {
+        "client": 1103,
+        "overflow": "auto",
+        "scroll": 1103
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:37.463Z"
+  },
+  {
+    "name": "ADMIN_AI_REVIEWS",
+    "path": "/admin/ai-reviews",
+    "alerts": [],
+    "heading": "Kiểm tra chất lượng AI & Đánh giá phản hồi",
+    "scroll": 1440,
+    "tables": [
+      {
+        "client": 638,
+        "overflow": "auto",
+        "scroll": 638
+      }
+    ],
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:12:38.212Z"
+  },
+  {
+    "name": "ADMIN_VOCABULARY_TOPICS",
+    "path": "/admin/vocabulary-topics",
+    "alerts": [],
+    "heading": "Chủ đề từ vựng",
+    "scroll": 1440,
+    "width": 1440,
+    "checkedAt": "2026-10-07T20:41:33.569Z"
+  }
+]

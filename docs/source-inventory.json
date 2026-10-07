@@ -1,0 +1,3673 @@
+[
+  {
+    "file": "src\\api\\httpClient.js",
+    "bytes": 1171,
+    "imports": [],
+    "functions": [
+      "resetCsrf",
+      "csrf",
+      "httpClient",
+      "method"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\App.jsx",
+    "bytes": 16435,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/application/context/AuthContext",
+      "@/components/common/ErrorBoundary",
+      "@/components/common/ProtectedRoute",
+      "@/components/common/AdminRoute",
+      "@/constants/routes",
+      "@/layouts/MainLayout",
+      "@/layouts/AdminLayout"
+    ],
+    "functions": [
+      "App"
+    ],
+    "services": [],
+    "classNames": [
+      "state loading-state",
+      "loading-spinner"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\application\\context\\AuthContext.jsx",
+    "bytes": 7211,
+    "imports": [
+      "react",
+      "@/infrastructure/api/authApi"
+    ],
+    "functions": [
+      "normalizeRoles",
+      "persistUser",
+      "AuthProvider",
+      "login",
+      "register",
+      "loginWithGoogle",
+      "logout",
+      "hasRole",
+      "useAuth"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\admin\\ActivityEditor.jsx",
+    "bytes": 6652,
+    "imports": [
+      "react",
+      "@/services/contentService",
+      "@/components/common/Ui"
+    ],
+    "functions": [
+      "ActivityEditor",
+      "field",
+      "rows",
+      "save"
+    ],
+    "services": [
+      "contentService.updateActivity",
+      "contentService.addActivity"
+    ],
+    "classNames": [
+      "activity-editor-rows",
+      "activity-editor-row",
+      "builder-heading",
+      "secondary",
+      "muted",
+      "activity-editor-advanced",
+      "json-editor",
+      "text-link",
+      "checkbox-row"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\admin\\ContentForm.jsx",
+    "bytes": 4421,
+    "imports": [
+      "react",
+      "@/components/common/Ui"
+    ],
+    "functions": [
+      "ContentForm",
+      "submit"
+    ],
+    "services": [],
+    "classNames": [
+      "form-grid",
+      "checkbox-row",
+      "form-actions actions",
+      "secondary"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\admin\\QuestionForm.jsx",
+    "bytes": 9402,
+    "imports": [
+      "react",
+      "@/components/common/Ui",
+      "@/components/learning/answerUtils",
+      "@/components/common/ContentImage"
+    ],
+    "functions": [
+      "QuestionForm",
+      "changeType",
+      "remove",
+      "submit"
+    ],
+    "services": [],
+    "classNames": [
+      "form-grid",
+      "full-width",
+      "question-media",
+      "question-editor-option",
+      "checkbox-row",
+      "secondary",
+      "option-media-editor",
+      "option-image",
+      "actions",
+      "builder-status",
+      "list-row",
+      "form-actions actions"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\auth\\AuthFooter.jsx",
+    "bytes": 401,
+    "imports": [
+      "react-router-dom"
+    ],
+    "functions": [
+      "AuthFooter"
+    ],
+    "services": [],
+    "classNames": [
+      "auth-page-footer"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\auth\\AuthHeader.jsx",
+    "bytes": 216,
+    "imports": [
+      "react-router-dom",
+      "@/components/layout/Brand"
+    ],
+    "functions": [
+      "AuthHeader"
+    ],
+    "services": [],
+    "classNames": [
+      "auth-header"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\AdminRoute.jsx",
+    "bytes": 1080,
+    "imports": [
+      "react-router-dom",
+      "@/application/context/AuthContext"
+    ],
+    "functions": [
+      "AdminRoute"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\ContentImage.jsx",
+    "bytes": 1144,
+    "imports": [
+      "react",
+      "./mediaSource"
+    ],
+    "functions": [
+      "ContentImage",
+      "ImageAttempt"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\ErrorBoundary.jsx",
+    "bytes": 2532,
+    "imports": [
+      "react",
+      "react-router-dom"
+    ],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": [
+      "#cbd5e1"
+    ]
+  },
+  {
+    "file": "src\\components\\common\\mediaSource.js",
+    "bytes": 727,
+    "imports": [],
+    "functions": [
+      "mediaSource"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\Modal.jsx",
+    "bytes": 780,
+    "imports": [
+      "react"
+    ],
+    "functions": [
+      "Modal"
+    ],
+    "services": [],
+    "classNames": [
+      "modal",
+      "row",
+      "icon-button"
+    ],
+    "dialogs": 2,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\NotificationDropdown.jsx",
+    "bytes": 6279,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/learnerService"
+    ],
+    "functions": [
+      "NotificationDropdown",
+      "handleClickOutside",
+      "handleMarkRead",
+      "handleMarkAllRead"
+    ],
+    "services": [
+      "learnerService.getNotifications",
+      "learnerService.markNotificationRead",
+      "learnerService.markAllNotificationsRead"
+    ],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": [
+      "#e5e7eb",
+      "#f3f4f6"
+    ]
+  },
+  {
+    "file": "src\\components\\common\\ProgressBar.jsx",
+    "bytes": 470,
+    "imports": [],
+    "functions": [
+      "ProgressBar"
+    ],
+    "services": [],
+    "classNames": [
+      "progress-wrap",
+      "progress-label",
+      "progress-track"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\ProtectedRoute.jsx",
+    "bytes": 670,
+    "imports": [
+      "react-router-dom",
+      "@/application/context/AuthContext"
+    ],
+    "functions": [
+      "ProtectedRoute"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\ResourceState.jsx",
+    "bytes": 695,
+    "imports": [
+      "react-router-dom"
+    ],
+    "functions": [
+      "ResourceState"
+    ],
+    "services": [],
+    "classNames": [
+      "state loading-state",
+      "loading-spinner",
+      "state",
+      "button"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\RichText.jsx",
+    "bytes": 706,
+    "imports": [
+      "react"
+    ],
+    "functions": [
+      "inline",
+      "RichText"
+    ],
+    "services": [],
+    "classNames": [
+      "rich-text",
+      "preserve-lines"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\SessionNavigation.jsx",
+    "bytes": 1297,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/sessionService",
+      "@/hooks/useAsyncResource"
+    ],
+    "functions": [
+      "SessionNavigation",
+      "logout"
+    ],
+    "services": [
+      "sessionService.current",
+      "sessionService.logout"
+    ],
+    "classNames": [
+      "sign-in-link muted",
+      "session-navigation",
+      "secondary",
+      "sign-in-link"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\common\\Ui.jsx",
+    "bytes": 3911,
+    "imports": [
+      "react-router-dom",
+      "react",
+      "./mediaSource"
+    ],
+    "functions": [
+      "PageHeader",
+      "Tabs",
+      "Breadcrumb",
+      "EmptyState",
+      "Notice",
+      "Pagination",
+      "Artwork",
+      "SpeakButton",
+      "SpeechAttempt",
+      "speak"
+    ],
+    "services": [],
+    "classNames": [
+      "page-header",
+      "eyebrow",
+      "lead",
+      "actions",
+      "ui-tabs",
+      "breadcrumb",
+      "state",
+      "state-symbol",
+      "pagination",
+      "secondary",
+      "media-error speak-error"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\course\\CourseCard.jsx",
+    "bytes": 644,
+    "imports": [
+      "react-router-dom",
+      "./CourseInfo"
+    ],
+    "functions": [
+      "CourseCard"
+    ],
+    "services": [],
+    "classNames": [
+      "card course-card",
+      "card-body",
+      "badge",
+      "text-link"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\course\\CourseCurriculum.jsx",
+    "bytes": 618,
+    "imports": [
+      "react-router-dom",
+      "@/hooks/useLearning",
+      "@/components/common/ResourceState"
+    ],
+    "functions": [
+      "CourseCurriculum"
+    ],
+    "services": [],
+    "classNames": [
+      "card curriculum"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\course\\CourseInfo.jsx",
+    "bytes": 838,
+    "imports": [
+      "@/components/common/Ui",
+      "@/components/common/ContentImage"
+    ],
+    "functions": [
+      "CourseInfo",
+      "CourseThumbnail"
+    ],
+    "services": [],
+    "classNames": [
+      "course-meta",
+      "badge",
+      "course-thumbnail",
+      "figma-art"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\course\\CourseProgress.jsx",
+    "bytes": 507,
+    "imports": [
+      "@/hooks/useCourseProgress",
+      "@/components/common/ProgressBar",
+      "@/components/common/ResourceState"
+    ],
+    "functions": [
+      "CourseProgress"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\course\\EnrollButton.jsx",
+    "bytes": 928,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/courseService"
+    ],
+    "functions": [
+      "EnrollButton",
+      "enroll"
+    ],
+    "services": [
+      "courseService.enroll"
+    ],
+    "classNames": [
+      "button"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\layout\\AppFooter.jsx",
+    "bytes": 1056,
+    "imports": [
+      "react-router-dom",
+      "./Brand"
+    ],
+    "functions": [
+      "AppFooter"
+    ],
+    "services": [],
+    "classNames": [
+      "site-footer",
+      "site-footer__inner",
+      "site-footer__about",
+      "site-footer__column",
+      "site-footer__bottom"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\layout\\AppHeader.jsx",
+    "bytes": 1874,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/components/common/NotificationDropdown",
+      "./Brand",
+      "./MainNavigation",
+      "./UserMenu"
+    ],
+    "functions": [
+      "AppHeader"
+    ],
+    "services": [],
+    "classNames": [
+      "site-header",
+      "site-header__inner",
+      "mobile-menu-button secondary",
+      "site-header__actions",
+      "site-header__loading",
+      "learner-stats",
+      "site-header__guest-actions",
+      "site-header__login",
+      "site-header__cta"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\layout\\Brand.jsx",
+    "bytes": 439,
+    "imports": [
+      "react-router-dom"
+    ],
+    "functions": [
+      "Brand"
+    ],
+    "services": [],
+    "classNames": [
+      "site-brand__mark",
+      "site-brand__copy"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\layout\\index.js",
+    "bytes": 256,
+    "imports": [
+      "./AppFooter",
+      "./AppHeader",
+      "./Brand",
+      "./LayoutToast",
+      "./MainNavigation",
+      "./UserMenu"
+    ],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\layout\\LayoutToast.jsx",
+    "bytes": 293,
+    "imports": [],
+    "functions": [
+      "LayoutToast"
+    ],
+    "services": [],
+    "classNames": [
+      "layout-toast"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\layout\\MainNavigation.jsx",
+    "bytes": 871,
+    "imports": [
+      "react-router-dom"
+    ],
+    "functions": [
+      "MainNavigation"
+    ],
+    "services": [],
+    "classNames": [
+      "site-nav",
+      "site-nav__link",
+      "site-nav__icon"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\layout\\UserMenu.jsx",
+    "bytes": 2193,
+    "imports": [
+      "react",
+      "react-router-dom"
+    ],
+    "functions": [
+      "UserMenu",
+      "closeOnOutsideClick",
+      "closeOnEscape",
+      "closeMenu"
+    ],
+    "services": [],
+    "classNames": [
+      "user-menu",
+      "user-menu__trigger",
+      "user-menu__avatar",
+      "user-menu__name",
+      "user-menu__chevron",
+      "user-menu__panel",
+      "user-menu__identity",
+      "user-menu__admin",
+      "user-menu__logout"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\learning\\answerUtils.js",
+    "bytes": 1326,
+    "imports": [],
+    "functions": [
+      "answerPresent",
+      "answerLabel",
+      "moveItem"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\learning\\LessonActivities.jsx",
+    "bytes": 10177,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/contentService",
+      "@/hooks/useAsyncResource",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui",
+      "@/components/common/RichText",
+      "@/components/common/ProgressBar",
+      "./QuestionInput",
+      "./answerUtils",
+      "@/services/vocabularyService",
+      "@/components/common/ContentImage",
+      "./MediaPlayer"
+    ],
+    "functions": [
+      "LessonActivities",
+      "ActivityWorkspace",
+      "complete",
+      "ActivityBody",
+      "saveWord"
+    ],
+    "services": [
+      "contentService.lesson",
+      "contentService.completeActivity",
+      "vocabularyService.add"
+    ],
+    "classNames": [
+      "activity-workspace",
+      "activity-steps",
+      "eyebrow",
+      "lead",
+      "lesson-navigation",
+      "secondary",
+      "muted",
+      "quiz-gate",
+      "state-symbol",
+      "button",
+      "activity-vocabulary-grid",
+      "card activity-word",
+      "row",
+      "badge",
+      "activity-word-image",
+      "button secondary",
+      "actions dialogue-actions",
+      "dialogue-lines",
+      "dialogue-avatar",
+      "ui-notice",
+      "editorial-phrase",
+      "activity-content-image"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\learning\\LessonContent.jsx",
+    "bytes": 453,
+    "imports": [
+      "./MediaPlayer"
+    ],
+    "functions": [
+      "LessonContent"
+    ],
+    "services": [],
+    "classNames": [
+      "lesson-content",
+      "eyebrow",
+      "lead",
+      "lesson-text preserve-lines"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\learning\\LessonNavigation.jsx",
+    "bytes": 656,
+    "imports": [
+      "react-router-dom"
+    ],
+    "functions": [
+      "LessonNavigation"
+    ],
+    "services": [],
+    "classNames": [
+      "lesson-navigation",
+      "button secondary"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\learning\\LessonSidebar.jsx",
+    "bytes": 607,
+    "imports": [
+      "react-router-dom",
+      "./LessonStatus"
+    ],
+    "functions": [
+      "LessonSidebar"
+    ],
+    "services": [],
+    "classNames": [
+      "lesson-sidebar"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\learning\\LessonStatus.jsx",
+    "bytes": 344,
+    "imports": [],
+    "functions": [
+      "LessonStatus"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\learning\\MediaPlayer.jsx",
+    "bytes": 951,
+    "imports": [
+      "react",
+      "@/components/common/mediaSource"
+    ],
+    "functions": [
+      "MediaPlayer",
+      "MediaAttempt"
+    ],
+    "services": [],
+    "classNames": [
+      "media-error"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\learning\\QuestionInput.jsx",
+    "bytes": 4770,
+    "imports": [
+      "./answerUtils",
+      "@/components/common/ContentImage",
+      "./MediaPlayer"
+    ],
+    "functions": [
+      "QuestionInput",
+      "selected",
+      "OptionMedia"
+    ],
+    "services": [],
+    "classNames": [
+      "question-options",
+      "option-letter",
+      "question-option-content",
+      "option-image",
+      "reorder-question",
+      "reorder-answer",
+      "secondary",
+      "muted",
+      "actions",
+      "reorder-controls",
+      "matching-question",
+      "matching-media-options",
+      "card",
+      "text-answer"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\my-courses\\CourseProgressBar.jsx",
+    "bytes": 259,
+    "imports": [
+      "@/components/common/ProgressBar"
+    ],
+    "functions": [
+      "CourseProgressBar"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\my-courses\\MyCourseCard.jsx",
+    "bytes": 627,
+    "imports": [
+      "react-router-dom",
+      "@/components/course/CourseInfo",
+      "./CourseProgressBar"
+    ],
+    "functions": [
+      "MyCourseCard"
+    ],
+    "services": [],
+    "classNames": [
+      "card course-card",
+      "card-body",
+      "badge",
+      "success",
+      "button"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\vocabulary\\admin\\AdminVocabularyModal.jsx",
+    "bytes": 9855,
+    "imports": [
+      "react",
+      "@/components/common/Modal",
+      "@/services/adminVocabularyService",
+      "@/models/AdminVocabulary"
+    ],
+    "functions": [
+      "dateText",
+      "VocabularyDetail",
+      "AdminVocabularyModal",
+      "change",
+      "changeMeaning",
+      "changeExample",
+      "submit"
+    ],
+    "services": [
+      "adminVocabularyService.get",
+      "adminVocabularyService.update",
+      "adminVocabularyService.create"
+    ],
+    "classNames": [
+      "admin-card",
+      "actions",
+      "state",
+      "secondary",
+      "row"
+    ],
+    "dialogs": 5,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\vocabulary\\VocabularyCard.jsx",
+    "bytes": 1237,
+    "imports": [
+      "react-router-dom",
+      "@/constants/routes",
+      "@/components/common/Ui"
+    ],
+    "functions": [
+      "VocabularyCard"
+    ],
+    "services": [],
+    "classNames": [
+      "card vocabulary-card",
+      "eyebrow",
+      "row",
+      "meaning preserve-lines",
+      "muted",
+      "preserve-lines",
+      "actions",
+      "button secondary",
+      "secondary",
+      "danger secondary"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\vocabulary\\VocabularyDeleteModal.jsx",
+    "bytes": 1103,
+    "imports": [
+      "react",
+      "@/services/vocabularyService",
+      "@/components/common/Modal"
+    ],
+    "functions": [
+      "VocabularyDeleteModal",
+      "remove"
+    ],
+    "services": [
+      "vocabularyService.delete"
+    ],
+    "classNames": [
+      "actions",
+      "secondary",
+      "danger"
+    ],
+    "dialogs": 5,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\vocabulary\\VocabularyFilter.jsx",
+    "bytes": 633,
+    "imports": [],
+    "functions": [
+      "VocabularyFilter"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\vocabulary\\VocabularyForm.jsx",
+    "bytes": 2964,
+    "imports": [
+      "react",
+      "@/services/vocabularyService",
+      "@/components/common/Modal"
+    ],
+    "functions": [
+      "VocabularyForm",
+      "submit"
+    ],
+    "services": [
+      "vocabularyService.update",
+      "vocabularyService.add"
+    ],
+    "classNames": [
+      "muted",
+      "secondary",
+      "actions"
+    ],
+    "dialogs": 4,
+    "colors": []
+  },
+  {
+    "file": "src\\components\\vocabulary\\VocabularySearch.jsx",
+    "bytes": 249,
+    "imports": [],
+    "functions": [
+      "VocabularySearch"
+    ],
+    "services": [],
+    "classNames": [
+      "search-label"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\constants\\routes.js",
+    "bytes": 2825,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\hooks\\useAsyncResource.js",
+    "bytes": 973,
+    "imports": [
+      "react"
+    ],
+    "functions": [
+      "useAsyncResource"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\hooks\\useCourseProgress.js",
+    "bytes": 294,
+    "imports": [
+      "react",
+      "@/services/learningService",
+      "./useAsyncResource"
+    ],
+    "functions": [
+      "useCourseProgress"
+    ],
+    "services": [
+      "learningService.progress"
+    ],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\hooks\\useCourses.js",
+    "bytes": 897,
+    "imports": [
+      "react",
+      "@/services/courseService",
+      "./useAsyncResource"
+    ],
+    "functions": [
+      "useCourses",
+      "useCourse"
+    ],
+    "services": [
+      "courseService.list",
+      "courseService.enrollmentStatus",
+      "courseService.detail"
+    ],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\hooks\\useLearning.js",
+    "bytes": 1448,
+    "imports": [
+      "react",
+      "@/services/courseService",
+      "@/services/learningService",
+      "./useAsyncResource"
+    ],
+    "functions": [
+      "useLessons",
+      "useLearning",
+      "useResumeCourse"
+    ],
+    "services": [
+      "learningService.lessons",
+      "courseService.detail",
+      "learningService.start",
+      "learningService.progress",
+      "courseService.myCourses"
+    ],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\hooks\\useMyCourses.js",
+    "bytes": 260,
+    "imports": [
+      "react",
+      "@/services/courseService",
+      "./useAsyncResource"
+    ],
+    "functions": [
+      "useMyCourses"
+    ],
+    "services": [
+      "courseService.myCourses"
+    ],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\hooks\\useVocabulary.js",
+    "bytes": 1297,
+    "imports": [
+      "react",
+      "@/services/vocabularyService",
+      "@/services/courseService",
+      "@/services/learningService",
+      "./useAsyncResource"
+    ],
+    "functions": [
+      "useVocabulary",
+      "useVocabularyEntry",
+      "useVocabularyOptions"
+    ],
+    "services": [
+      "vocabularyService.list",
+      "vocabularyService.get",
+      "courseService.myCourses",
+      "learningService.lessons"
+    ],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\infrastructure\\api\\authApi.js",
+    "bytes": 807,
+    "imports": [
+      "@/infrastructure/api/axiosClient"
+    ],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\infrastructure\\api\\axiosClient.js",
+    "bytes": 2285,
+    "imports": [
+      "axios"
+    ],
+    "functions": [
+      "clearAuthStorage"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\layouts\\AdminLayout.jsx",
+    "bytes": 3852,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/application/context/AuthContext",
+      "@/constants/routes"
+    ],
+    "functions": [
+      "AdminLayout",
+      "controls"
+    ],
+    "services": [],
+    "classNames": [
+      "skip-link",
+      "admin-sidebar",
+      "admin-sidebar-header",
+      "admin-nav",
+      "admin-nav-group",
+      "admin-sidebar-footer",
+      "admin-logout",
+      "admin-menu-backdrop",
+      "admin-main-area",
+      "admin-topbar",
+      "mobile-menu-button secondary",
+      "admin-identity",
+      "badge",
+      "admin-content"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\layouts\\MainLayout.jsx",
+    "bytes": 1653,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/application/context/AuthContext",
+      "@/components/layout",
+      "@/services/learnerService"
+    ],
+    "functions": [
+      "MainLayout"
+    ],
+    "services": [
+      "learnerService.getProgressData"
+    ],
+    "classNames": [
+      "layout-shell",
+      "skip-link",
+      "layout-main"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\main.jsx",
+    "bytes": 579,
+    "imports": [
+      "react",
+      "react-dom/client",
+      "./App"
+    ],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\models\\AdminVocabulary.js",
+    "bytes": 2878,
+    "imports": [],
+    "functions": [
+      "newExample",
+      "newMeaning",
+      "vocabularyDraft",
+      "vocabularyPayload",
+      "required",
+      "optional",
+      "order"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\models\\Course.js",
+    "bytes": 143,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\models\\Enrollment.js",
+    "bytes": 168,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\models\\LearningProgress.js",
+    "bytes": 150,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\models\\Lesson.js",
+    "bytes": 145,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\models\\VocabularyEntry.js",
+    "bytes": 82,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\achievements\\AchievementsPage.jsx",
+    "bytes": 4616,
+    "imports": [
+      "react",
+      "@/services/learnerService"
+    ],
+    "functions": [
+      "AchievementsPage"
+    ],
+    "services": [],
+    "classNames": [
+      "account-empty",
+      "account-page",
+      "auth-message auth-message-error",
+      "account-header",
+      "account-pill",
+      "account-title",
+      "account-desc",
+      "achieve-banner",
+      "achieve-banner-subtitle",
+      "achieve-banner-title",
+      "achieve-banner-icon",
+      "achieve-section-title",
+      "achieve-badge-grid",
+      "achieve-badge-icon",
+      "achieve-badge-info",
+      "achieve-badge-status",
+      "achieve-badge-status locked",
+      "achieve-passport-card",
+      "achieve-passport-header",
+      "achieve-passport-icon",
+      "achieve-stamp-grid",
+      "achieve-stamp-city",
+      "achieve-stamp-name",
+      "achieve-stamp-tag",
+      "achieve-stamp-tag locked"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminAchievementsPage.jsx",
+    "bytes": 11408,
+    "imports": [
+      "@/components/common/Modal",
+      "react",
+      "@/services/adminService"
+    ],
+    "functions": [
+      "AdminAchievementsPage",
+      "loadData",
+      "handleCreate",
+      "handleEdit",
+      "handleDelete"
+    ],
+    "services": [
+      "adminService.getAchievements",
+      "adminService.updateAchievement",
+      "adminService.createAchievement",
+      "adminService.deleteAchievement"
+    ],
+    "classNames": [
+      "ui-notice ui-notice--error",
+      "admin-card",
+      "admin-table",
+      "secondary",
+      "danger"
+    ],
+    "dialogs": 13,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminAiReviewsPage.jsx",
+    "bytes": 11575,
+    "imports": [
+      "react",
+      "@/services/adminCultureAiService"
+    ],
+    "functions": [
+      "AdminAiReviewsPage",
+      "showToast",
+      "handleUpdateStatus",
+      "handleRunTest"
+    ],
+    "services": [
+      "adminCultureAiService.getReviews",
+      "adminCultureAiService.updateReviewStatus"
+    ],
+    "classNames": [
+      "admin-content",
+      "admin-card",
+      "admin-table",
+      "admin-badge admin-badge-success",
+      "admin-badge admin-badge-danger",
+      "admin-badge admin-badge-warning",
+      "button secondary",
+      "button"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminAiScenariosPage.jsx",
+    "bytes": 10879,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/adminCultureAiService"
+    ],
+    "functions": [
+      "AdminAiScenariosPage",
+      "showToast",
+      "handleStatusChange",
+      "handleDelete",
+      "getStatusBadge"
+    ],
+    "services": [
+      "adminCultureAiService.getScenarios",
+      "adminCultureAiService.updateScenarioStatus",
+      "adminCultureAiService.deleteScenario"
+    ],
+    "classNames": [
+      "admin-badge admin-badge-success",
+      "admin-badge admin-badge-warning",
+      "admin-badge admin-badge-danger",
+      "admin-badge",
+      "admin-content",
+      "button secondary",
+      "button",
+      "admin-card",
+      "admin-table"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminAiSettingsPage.jsx",
+    "bytes": 12344,
+    "imports": [
+      "react",
+      "@/services/adminCultureAiService"
+    ],
+    "functions": [
+      "AdminAiSettingsPage",
+      "showToast",
+      "handleSave"
+    ],
+    "services": [
+      "adminCultureAiService.getAiSettings",
+      "adminCultureAiService.saveAiSettings"
+    ],
+    "classNames": [
+      "admin-content",
+      "button",
+      "admin-card"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminAiUsagePage.jsx",
+    "bytes": 10462,
+    "imports": [
+      "react",
+      "@/services/adminCultureAiService"
+    ],
+    "functions": [
+      "AdminAiUsagePage"
+    ],
+    "services": [
+      "adminCultureAiService.getUsageStats"
+    ],
+    "classNames": [
+      "admin-content",
+      "admin-card",
+      "admin-table",
+      "admin-badge admin-badge-info",
+      "admin-badge admin-badge-success"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminAuditLogsPage.jsx",
+    "bytes": 2832,
+    "imports": [
+      "react",
+      "@/services/adminService"
+    ],
+    "functions": [
+      "AdminAuditLogsPage"
+    ],
+    "services": [
+      "adminService.getAuditLogs"
+    ],
+    "classNames": [
+      "admin-card",
+      "state",
+      "admin-table"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminContentPages.jsx",
+    "bytes": 13147,
+    "imports": [
+      "@/components/course/CourseInfo",
+      "@/components/admin/ActivityEditor",
+      "react",
+      "react-router-dom",
+      "@/services/contentService",
+      "@/hooks/useAsyncResource",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui",
+      "@/components/common/Modal",
+      "@/components/admin/ContentForm",
+      "@/components/learning/answerUtils",
+      "@/components/learning/LessonActivities"
+    ],
+    "functions": [
+      "AdminContentListPage",
+      "AdminCourseBuilderPage",
+      "CourseBuilder",
+      "mutate",
+      "AdminLessonBuilderPage",
+      "LessonBuilder",
+      "reorder",
+      "AdminCoursePreviewPage",
+      "AdminLessonPreviewPage"
+    ],
+    "services": [
+      "contentService.list",
+      "contentService.create",
+      "contentService.get",
+      "contentService.status",
+      "contentService.reorder",
+      "contentService.update",
+      "contentService.updateModule",
+      "contentService.addModule",
+      "contentService.addLesson",
+      "contentService.preview"
+    ],
+    "classNames": [
+      "button",
+      "library-toolbar",
+      "status-filter",
+      "secondary",
+      "admin-card table-scroll",
+      "admin-table",
+      "muted",
+      "text-link",
+      "button secondary",
+      "admin-card builder-summary",
+      "actions",
+      "builder-heading",
+      "builder-module",
+      "list-row",
+      "builder-lessons",
+      "lesson-builder-grid",
+      "admin-card",
+      "builder-status",
+      "activity-select",
+      "badge",
+      "course-detail-hero card"
+    ],
+    "dialogs": 16,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminCultureCategoriesPage.jsx",
+    "bytes": 9302,
+    "imports": [
+      "@/components/common/Modal",
+      "react",
+      "react-router-dom",
+      "@/services/adminCultureAiService"
+    ],
+    "functions": [
+      "AdminCultureCategoriesPage",
+      "showToast",
+      "handleMove",
+      "handleSave",
+      "handleDelete"
+    ],
+    "services": [
+      "adminCultureAiService.getCategories",
+      "adminCultureAiService.reorderCategories",
+      "adminCultureAiService.saveCategory",
+      "adminCultureAiService.deleteCategory"
+    ],
+    "classNames": [
+      "admin-content",
+      "button",
+      "admin-card",
+      "admin-table",
+      "admin-badge admin-badge-info",
+      "button secondary"
+    ],
+    "dialogs": 5,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminCultureEditPage.jsx",
+    "bytes": 17329,
+    "imports": [
+      "@/components/common/ContentImage",
+      "react",
+      "react-router-dom",
+      "@/services/adminCultureAiService"
+    ],
+    "functions": [
+      "AdminCultureEditPage",
+      "showToast",
+      "handleCategoryChange",
+      "handlePhraseChange",
+      "handleAddPhrase",
+      "handleRemovePhrase",
+      "handleSubmit"
+    ],
+    "services": [
+      "adminCultureAiService.getCategories",
+      "adminCultureAiService.getArticle",
+      "adminCultureAiService.saveArticle"
+    ],
+    "classNames": [
+      "admin-content",
+      "button",
+      "admin-card",
+      "button secondary"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminCultureListPage.jsx",
+    "bytes": 10259,
+    "imports": [
+      "@/components/common/ContentImage",
+      "react",
+      "react-router-dom",
+      "@/services/adminCultureAiService"
+    ],
+    "functions": [
+      "AdminCultureListPage",
+      "showToast",
+      "handleStatusChange",
+      "handleDelete",
+      "getStatusBadge"
+    ],
+    "services": [
+      "adminCultureAiService.getCategories",
+      "adminCultureAiService.getArticles",
+      "adminCultureAiService.updateArticleStatus",
+      "adminCultureAiService.deleteArticle"
+    ],
+    "classNames": [
+      "admin-badge admin-badge-success",
+      "admin-badge admin-badge-warning",
+      "admin-badge admin-badge-info",
+      "admin-badge admin-badge-danger",
+      "admin-badge",
+      "admin-content",
+      "button secondary",
+      "button",
+      "admin-card",
+      "admin-table"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminDashboardPage.jsx",
+    "bytes": 6479,
+    "imports": [
+      "react",
+      "@/services/adminService"
+    ],
+    "functions": [
+      "AdminDashboardPage"
+    ],
+    "services": [
+      "adminService.getDashboardStats"
+    ],
+    "classNames": [
+      "state",
+      "admin-card"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminQuizPages.jsx",
+    "bytes": 11188,
+    "imports": [
+      "@/components/common/ContentImage",
+      "@/components/learning/MediaPlayer",
+      "react",
+      "react-router-dom",
+      "@/services/contentService",
+      "@/hooks/useAsyncResource",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui",
+      "@/components/common/Modal",
+      "@/components/admin/QuestionForm",
+      "@/components/admin/ContentForm",
+      "@/components/learning/QuestionInput",
+      "@/components/learning/answerUtils"
+    ],
+    "functions": [
+      "AdminQuestionBankPage",
+      "QuestionEdit",
+      "AdminQuizBuilderPage",
+      "QuizBuilder",
+      "mutate",
+      "QuestionPicker",
+      "AdminQuizPreviewPage",
+      "QuizPreview"
+    ],
+    "services": [
+      "contentService.list",
+      "contentService.create",
+      "contentService.get",
+      "contentService.update",
+      "contentService.addQuestion",
+      "contentService.reorder",
+      "contentService.removeQuestion",
+      "contentService.status",
+      "contentService.preview"
+    ],
+    "classNames": [
+      "library-toolbar",
+      "status-filter",
+      "secondary",
+      "admin-card table-scroll",
+      "admin-table",
+      "admin-badge admin-badge-success",
+      "admin-card question-version-note",
+      "muted",
+      "badge",
+      "button secondary",
+      "admin-card",
+      "builder-heading",
+      "quiz-config-grid",
+      "list-row",
+      "actions",
+      "quiz-points",
+      "admin-card publication-checks",
+      "text-link",
+      "quiz-workspace",
+      "quiz-question card",
+      "eyebrow",
+      "question-media",
+      "lesson-navigation"
+    ],
+    "dialogs": 16,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminRolesPage.jsx",
+    "bytes": 3329,
+    "imports": [
+      "react",
+      "@/services/adminService"
+    ],
+    "functions": [
+      "AdminRolesPage",
+      "submit",
+      "edit",
+      "remove"
+    ],
+    "services": [
+      "adminService.getRoles",
+      "adminService.updateRole",
+      "adminService.createRole",
+      "adminService.deleteRole"
+    ],
+    "classNames": [
+      "lead",
+      "state",
+      "success state",
+      "admin-card",
+      "actions",
+      "secondary",
+      "row",
+      "muted",
+      "danger",
+      "admin-badge admin-badge-info"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminScenarioBuilderPage.jsx",
+    "bytes": 22357,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/adminCultureAiService"
+    ],
+    "functions": [
+      "AdminScenarioBuilderPage",
+      "showToast",
+      "handleAddObjective",
+      "handleObjectiveChange",
+      "handleRemoveObjective",
+      "handleAddHint",
+      "handleHintChange",
+      "handleRemoveHint",
+      "handleSubmit",
+      "handleSimulateSend"
+    ],
+    "services": [
+      "adminCultureAiService.getScenario",
+      "adminCultureAiService.saveScenario"
+    ],
+    "classNames": [
+      "admin-content",
+      "button",
+      "admin-card",
+      "button secondary"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminSettingsPage.jsx",
+    "bytes": 6336,
+    "imports": [
+      "react",
+      "@/services/adminService"
+    ],
+    "functions": [
+      "AdminSettingsPage",
+      "handleSave"
+    ],
+    "services": [
+      "adminService.getSystemSettings",
+      "adminService.updateSystemSettings"
+    ],
+    "classNames": [
+      "state",
+      "ui-notice ui-notice--error",
+      "admin-card"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminUserDetailPage.jsx",
+    "bytes": 7952,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/adminService"
+    ],
+    "functions": [
+      "AdminUserDetailPage",
+      "handleRoleChange",
+      "handleStatusChange"
+    ],
+    "services": [
+      "adminService.getUserById",
+      "adminService.updateUserRole",
+      "adminService.updateUserStatus"
+    ],
+    "classNames": [
+      "state",
+      "admin-card",
+      "actions"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminUsersPage.jsx",
+    "bytes": 7140,
+    "imports": [
+      "@/components/common/Modal",
+      "react",
+      "react-router-dom",
+      "@/services/adminService"
+    ],
+    "functions": [
+      "AdminUsersPage",
+      "notify",
+      "changeStatus",
+      "saveRoles"
+    ],
+    "services": [
+      "adminService.getUsers",
+      "adminService.updateUserStatus",
+      "adminService.updateUserRole"
+    ],
+    "classNames": [
+      "success state",
+      "state",
+      "admin-card",
+      "admin-table",
+      "admin-badge admin-badge-info",
+      "secondary",
+      "button secondary",
+      "actions",
+      "muted"
+    ],
+    "dialogs": 4,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminVocabularyPage.jsx",
+    "bytes": 6488,
+    "imports": [
+      "react",
+      "@/services/adminVocabularyService",
+      "@/components/common/ResourceState",
+      "@/components/vocabulary/admin/AdminVocabularyModal",
+      "@/models/AdminVocabulary"
+    ],
+    "functions": [
+      "AdminVocabularyPage",
+      "reload",
+      "reloadTopics",
+      "filter",
+      "saved"
+    ],
+    "services": [
+      "adminVocabularyService.list",
+      "adminVocabularyService.getTopics"
+    ],
+    "classNames": [
+      "row",
+      "success state",
+      "admin-card",
+      "actions",
+      "secondary",
+      "state",
+      "admin-table",
+      "muted"
+    ],
+    "dialogs": 10,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminVocabularyTopicsPage.jsx",
+    "bytes": 11925,
+    "imports": [
+      "react",
+      "@/components/common/Modal",
+      "@/components/common/ResourceState",
+      "@/models/AdminVocabulary",
+      "@/services/adminVocabularyService"
+    ],
+    "functions": [
+      "topicDraft",
+      "topicPayload",
+      "AdminVocabularyTopicModal",
+      "change",
+      "submit",
+      "AdminVocabularyTopicsPage",
+      "reload",
+      "saved"
+    ],
+    "services": [
+      "adminVocabularyService.updateTopic",
+      "adminVocabularyService.createTopic"
+    ],
+    "classNames": [
+      "state loading-state",
+      "loading-spinner",
+      "ui-notice ui-notice--error",
+      "actions",
+      "secondary",
+      "muted",
+      "ui-notice ui-notice--success",
+      "state",
+      "admin-card",
+      "admin-table"
+    ],
+    "dialogs": 11,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\admin\\AdminXpRulesPage.jsx",
+    "bytes": 3134,
+    "imports": [
+      "react",
+      "@/services/adminService"
+    ],
+    "functions": [
+      "AdminXpRulesPage",
+      "submit"
+    ],
+    "services": [
+      "adminService.getXpRules",
+      "adminService.updateXpRule",
+      "adminService.createXpRule",
+      "adminService.deleteXpRule"
+    ],
+    "classNames": [
+      "lead",
+      "state",
+      "admin-card",
+      "actions",
+      "secondary",
+      "admin-table",
+      "danger"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\ai-tutor\\AiTutorPage.jsx",
+    "bytes": 17497,
+    "imports": [
+      "react",
+      "@/services/aiTutorService",
+      "@/services/vocabularyService"
+    ],
+    "functions": [
+      "AiTutorPage",
+      "showToast",
+      "handleSelectSession",
+      "handleCreateNewChat",
+      "handleSwitchMode",
+      "handleDeleteSession",
+      "handleStartRename",
+      "handleSaveRename",
+      "handleSendMessage",
+      "text",
+      "handleKeyDown",
+      "handleSpeak",
+      "handleCopy",
+      "handleToggleVoiceInput",
+      "handleSaveWordToVocabulary"
+    ],
+    "services": [
+      "aiTutorService.getModes",
+      "aiTutorService.getAllSessions",
+      "aiTutorService.getActiveSessionId",
+      "aiTutorService.setActiveSessionId",
+      "aiTutorService.getSession",
+      "aiTutorService.createSession",
+      "aiTutorService.getMode",
+      "aiTutorService.updateSessionMode",
+      "aiTutorService.deleteSession",
+      "aiTutorService.renameSession",
+      "aiTutorService.sendMessage",
+      "vocabularyService.add"
+    ],
+    "classNames": [
+      "p4-container",
+      "p4-toast",
+      "p4-header-badge",
+      "p4-title",
+      "p4-subtitle",
+      "tutor-layout",
+      "tutor-sidebar",
+      "tutor-sidebar__header",
+      "tutor-sidebar__title",
+      "btn-new-chat",
+      "tutor-modes-bar",
+      "mode-icon",
+      "eyebrow",
+      "tutor-history-list",
+      "tutor-history-item__info",
+      "tutor-history-item__title",
+      "tutor-history-item__meta",
+      "tutor-history-item__actions",
+      "btn-icon-subtle",
+      "btn-icon-subtle danger",
+      "tutor-chat-box",
+      "tutor-current-mode-banner",
+      "current-mode-info",
+      "current-mode-icon",
+      "current-mode-title",
+      "current-mode-desc",
+      "tutor-messages",
+      "message-avatar",
+      "message-bubble",
+      "message-action-btn",
+      "message-actions",
+      "message-row ai",
+      "tutor-quick-prompts",
+      "quick-prompt-label",
+      "prompt-chip",
+      "tutor-input-area",
+      "tutor-textarea",
+      "btn-send"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\auth\\ForgotPasswordPage.jsx",
+    "bytes": 8323,
+    "imports": [
+      "@/components/auth/AuthHeader",
+      "react",
+      "react-router-dom",
+      "@/services/learnerService",
+      "@/assets/images/dongson_auth_bg.png"
+    ],
+    "functions": [
+      "ForgotPasswordPage",
+      "handleInitiate",
+      "handleVerifyOtp",
+      "handleResetPassword"
+    ],
+    "services": [
+      "learnerService.forgotPasswordInitiate",
+      "learnerService.forgotPasswordVerifyOtp",
+      "learnerService.forgotPasswordReset"
+    ],
+    "classNames": [
+      "auth-container",
+      "auth-left-panel",
+      "auth-left-content",
+      "auth-welcome-pill",
+      "auth-welcome-code",
+      "auth-welcome-text",
+      "auth-heading",
+      "auth-subtitle",
+      "auth-message auth-message-error",
+      "auth-message auth-message-success",
+      "auth-form",
+      "auth-field",
+      "auth-label",
+      "auth-input",
+      "auth-btn auth-btn-primary",
+      "auth-show-btn",
+      "auth-footer-text",
+      "auth-footer-link",
+      "auth-right-panel",
+      "auth-drum-bg",
+      "auth-drum-img",
+      "auth-visual-topline",
+      "auth-hero-card",
+      "auth-hero-tag",
+      "auth-hero-title",
+      "auth-hero-desc"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\auth\\LoginPage.jsx",
+    "bytes": 48,
+    "imports": [
+      "@/pages/LoginPage"
+    ],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\auth\\OnboardingPage.jsx",
+    "bytes": 12104,
+    "imports": [
+      "@/components/auth/AuthHeader",
+      "react",
+      "react-router-dom",
+      "@/services/learnerService",
+      "@/assets/images/dongson_auth_bg.png"
+    ],
+    "functions": [
+      "OnboardingPage",
+      "handleFinish"
+    ],
+    "services": [
+      "learnerService.saveOnboarding"
+    ],
+    "classNames": [
+      "auth-container",
+      "auth-left-panel",
+      "auth-left-content",
+      "auth-message auth-message-error",
+      "auth-btn auth-btn-primary",
+      "auth-show-btn",
+      "auth-field",
+      "auth-label",
+      "auth-input",
+      "auth-right-panel",
+      "auth-drum-bg",
+      "auth-drum-img",
+      "auth-visual-topline",
+      "auth-hero-card",
+      "auth-hero-tag",
+      "auth-hero-title",
+      "auth-hero-desc",
+      "auth-hero-chips",
+      "auth-chip"
+    ],
+    "dialogs": 0,
+    "colors": [
+      "#8B1A1A",
+      "#ded5cb"
+    ]
+  },
+  {
+    "file": "src\\pages\\auth\\ResetPasswordPage.jsx",
+    "bytes": 5028,
+    "imports": [
+      "@/components/auth/AuthHeader",
+      "react",
+      "react-router-dom",
+      "@/services/learnerService",
+      "@/assets/images/dongson_auth_bg.png"
+    ],
+    "functions": [
+      "ResetPasswordPage",
+      "handleReset"
+    ],
+    "services": [
+      "learnerService.forgotPasswordReset"
+    ],
+    "classNames": [
+      "auth-container",
+      "auth-left-panel",
+      "auth-left-content",
+      "auth-welcome-pill",
+      "auth-welcome-code",
+      "auth-welcome-text",
+      "auth-heading",
+      "auth-subtitle",
+      "auth-message auth-message-error",
+      "auth-message auth-message-success",
+      "auth-form",
+      "auth-field",
+      "auth-label",
+      "auth-input",
+      "auth-btn auth-btn-primary",
+      "auth-footer-text",
+      "auth-footer-link",
+      "auth-right-panel",
+      "auth-drum-bg",
+      "auth-drum-img",
+      "auth-visual-topline",
+      "auth-hero-card",
+      "auth-hero-tag",
+      "auth-hero-title",
+      "auth-hero-desc"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\auth\\VerifyEmailPage.jsx",
+    "bytes": 4705,
+    "imports": [
+      "@/components/auth/AuthHeader",
+      "react",
+      "react-router-dom",
+      "@/services/learnerService",
+      "@/assets/images/dongson_auth_bg.png"
+    ],
+    "functions": [
+      "VerifyEmailPage",
+      "handleResend"
+    ],
+    "services": [
+      "learnerService.verifyEmailByToken",
+      "learnerService.resendVerificationEmail"
+    ],
+    "classNames": [
+      "auth-container",
+      "auth-left-panel",
+      "auth-left-content",
+      "auth-welcome-pill",
+      "auth-welcome-code",
+      "auth-welcome-text",
+      "auth-heading",
+      "auth-subtitle",
+      "auth-message auth-message-error",
+      "auth-message auth-message-success",
+      "auth-input",
+      "secondary",
+      "auth-footer-text",
+      "auth-footer-link",
+      "auth-right-panel",
+      "auth-drum-bg",
+      "auth-drum-img",
+      "auth-visual-topline",
+      "auth-hero-card",
+      "auth-hero-tag",
+      "auth-hero-title",
+      "auth-hero-desc"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\blog\\BlogPages.jsx",
+    "bytes": 3263,
+    "imports": [
+      "@/components/common/ContentImage",
+      "react",
+      "react-router-dom",
+      "@/services/cultureService",
+      "@/components/common/Ui",
+      "@/components/common/RichText"
+    ],
+    "functions": [
+      "BlogHomePage",
+      "BlogDetailPage"
+    ],
+    "services": [
+      "cultureService.listArticles",
+      "cultureService.getArticle",
+      "cultureService.getRelatedArticles"
+    ],
+    "classNames": [
+      "library-toolbar",
+      "blog-feature card",
+      "blog-feature-media",
+      "figma-art",
+      "badge",
+      "text-link",
+      "card-grid blog-grid",
+      "card blog-card",
+      "eyebrow",
+      "button",
+      "blog-detail",
+      "lead",
+      "muted",
+      "blog-cover",
+      "split-grid",
+      "ui-notice",
+      "card",
+      "story-callout",
+      "button secondary"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\courses\\CourseDetailPage.jsx",
+    "bytes": 2084,
+    "imports": [
+      "react-router-dom",
+      "@/hooks/useCourses",
+      "@/components/course/CourseInfo",
+      "@/components/course/EnrollButton",
+      "@/components/common/ResourceState",
+      "@/components/course/CourseCurriculum",
+      "@/components/course/CourseProgress"
+    ],
+    "functions": [
+      "CourseDetailPage"
+    ],
+    "services": [],
+    "classNames": [
+      "text-link",
+      "course-detail-hero card",
+      "badge",
+      "lead preserve-lines",
+      "course-outcomes",
+      "card",
+      "split-grid course-curriculum-grid",
+      "button",
+      "curriculum",
+      "curriculum-module",
+      "curriculum-lesson"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\courses\\CourseListPage.jsx",
+    "bytes": 2013,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/hooks/useCourses",
+      "@/components/course/CourseCard",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui"
+    ],
+    "functions": [
+      "CourseListPage"
+    ],
+    "services": [],
+    "classNames": [
+      "button secondary",
+      "library-toolbar",
+      "course-resume-strip",
+      "button",
+      "card-grid"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\culture\\CultureDetailPage.jsx",
+    "bytes": 3558,
+    "imports": [
+      "@/components/common/ContentImage",
+      "react",
+      "react-router-dom",
+      "@/services/cultureService",
+      "@/services/vocabularyService",
+      "@/services/aiTutorService",
+      "@/components/common/Ui",
+      "@/components/common/RichText"
+    ],
+    "functions": [
+      "CultureDetailPage",
+      "save",
+      "ask"
+    ],
+    "services": [
+      "cultureService.getArticle",
+      "cultureService.getRelatedArticles",
+      "vocabularyService.add",
+      "aiTutorService.createSession"
+    ],
+    "classNames": [
+      "button",
+      "culture-detail-page",
+      "eyebrow",
+      "lead",
+      "muted",
+      "culture-cover",
+      "figma-art",
+      "culture-detail-layout",
+      "culture-phrases",
+      "list-row",
+      "actions",
+      "secondary",
+      "story-callout",
+      "card culture-note",
+      "card",
+      "text-link"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\culture\\CultureExplorePage.jsx",
+    "bytes": 2875,
+    "imports": [
+      "@/components/common/ContentImage",
+      "react",
+      "react-router-dom",
+      "@/services/cultureService",
+      "@/components/common/Ui"
+    ],
+    "functions": [
+      "CultureExplorePage"
+    ],
+    "services": [
+      "cultureService.getCategories",
+      "cultureService.getDestinations",
+      "cultureService.listArticles",
+      "cultureService.getFeaturedArticles"
+    ],
+    "classNames": [
+      "p4-container culture-page",
+      "culture-feature",
+      "figma-art",
+      "badge",
+      "library-toolbar",
+      "culture-destination-filter",
+      "muted",
+      "secondary",
+      "culture-grid",
+      "card culture-story-card",
+      "eyebrow",
+      "text-link"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\explore\\ExplorePages.jsx",
+    "bytes": 6025,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/components/common/Ui",
+      "@/services/cultureService",
+      "@/components/common/Ui"
+    ],
+    "functions": [
+      "ExploreVietnamPage",
+      "DestinationDetailPage"
+    ],
+    "services": [
+      "cultureService.listArticles"
+    ],
+    "classNames": [
+      "button secondary",
+      "journey-board card",
+      "journey-map",
+      "eyebrow",
+      "muted",
+      "journey-stops",
+      "journey-stop",
+      "journey-dot",
+      "journey-thumbnail",
+      "journey-number",
+      "button",
+      "text-link",
+      "destination-hero card",
+      "lead",
+      "split-grid",
+      "list-row",
+      "badge",
+      "card",
+      "actions"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\ForbiddenPage.jsx",
+    "bytes": 443,
+    "imports": [
+      "react-router-dom"
+    ],
+    "functions": [
+      "ForbiddenPage"
+    ],
+    "services": [],
+    "classNames": [
+      "state",
+      "button"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\HomePage.jsx",
+    "bytes": 5083,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/application/context/AuthContext",
+      "@/services/learnerService",
+      "@/components/common/Ui",
+      "@/components/common/ProgressBar"
+    ],
+    "functions": [
+      "HomePage"
+    ],
+    "services": [
+      "learnerService.getProgressData"
+    ],
+    "classNames": [
+      "welcome-page",
+      "welcome-hero",
+      "eyebrow",
+      "lead",
+      "actions",
+      "button",
+      "button secondary",
+      "welcome-mission card",
+      "muted",
+      "welcome-links",
+      "card",
+      "dashboard-page",
+      "badge",
+      "ui-notice ui-notice--error",
+      "dashboard-grid",
+      "dashboard-continue",
+      "text-link",
+      "dashboard-destination",
+      "card dashboard-goal",
+      "goal-ring",
+      "card dashboard-refresher",
+      "card dashboard-ai",
+      "ai-orb",
+      "dashboard-recent",
+      "list-row"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\learning\\LessonLearningPage.jsx",
+    "bytes": 2658,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/learningService",
+      "@/hooks/useLearning",
+      "@/components/common/ResourceState",
+      "@/components/learning/LessonSidebar",
+      "@/components/learning/LessonContent",
+      "@/components/learning/LessonNavigation",
+      "@/components/common/ProgressBar",
+      "@/components/vocabulary/VocabularyForm",
+      "@/components/learning/LessonActivities"
+    ],
+    "functions": [
+      "LessonLearningPage",
+      "LessonScreen",
+      "complete"
+    ],
+    "services": [
+      "learningService.complete"
+    ],
+    "classNames": [
+      "text-link",
+      "learning-grid",
+      "lesson-panel",
+      "card",
+      "vocabulary-prompt",
+      "secondary",
+      "success"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\learning\\MyLearningPage.jsx",
+    "bytes": 4294,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/learnerService",
+      "@/hooks/useAsyncResource",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui",
+      "@/components/common/ProgressBar",
+      "@/components/common/ContentImage"
+    ],
+    "functions": [
+      "MyLearningPage"
+    ],
+    "services": [
+      "learnerService.getMyLearningOverview"
+    ],
+    "classNames": [
+      "course-grid",
+      "card learning-course",
+      "learning-course-image",
+      "learning-course-body",
+      "badge",
+      "muted",
+      "button",
+      "card learning-course-add",
+      "state-symbol",
+      "button secondary",
+      "card",
+      "builder-heading",
+      "actions",
+      "mylearning-vocab-grid",
+      "mylearning-word-chip",
+      "journey-learning card",
+      "eyebrow",
+      "list-row",
+      "text-link"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\learning\\ResumeCoursePage.jsx",
+    "bytes": 611,
+    "imports": [
+      "react-router-dom",
+      "@/hooks/useLearning",
+      "@/components/common/ResourceState"
+    ],
+    "functions": [
+      "ResumeCoursePage"
+    ],
+    "services": [],
+    "classNames": [
+      "state"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\LoginPage.jsx",
+    "bytes": 11362,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/application/context/AuthContext",
+      "@/components/auth/AuthFooter",
+      "@/components/auth/AuthHeader",
+      "@/assets/images/dongson_auth_bg.png"
+    ],
+    "functions": [
+      "LoginPage",
+      "initGoogle",
+      "handleSubmit"
+    ],
+    "services": [],
+    "classNames": [
+      "auth-container auth-login-page",
+      "auth-left-panel",
+      "auth-left-content",
+      "auth-welcome-pill",
+      "auth-welcome-code",
+      "auth-welcome-text",
+      "auth-heading",
+      "auth-subtitle",
+      "auth-message auth-message-error",
+      "auth-message auth-message-success",
+      "auth-form",
+      "auth-field",
+      "auth-label",
+      "auth-input",
+      "auth-password-wrapper",
+      "auth-input auth-password-input",
+      "auth-show-btn",
+      "auth-options-row",
+      "auth-checkbox-label",
+      "auth-checkbox",
+      "auth-forgot-link",
+      "auth-btn auth-btn-primary",
+      "auth-divider",
+      "auth-divider-line",
+      "auth-divider-text",
+      "auth-google-section",
+      "auth-google-btn-container",
+      "auth-google-loading",
+      "auth-btn auth-btn-google",
+      "auth-footer-text",
+      "auth-footer-link",
+      "auth-right-panel",
+      "auth-drum-bg",
+      "auth-drum-img",
+      "auth-visual-topline",
+      "auth-hero-card",
+      "auth-quote-mark",
+      "auth-hero-title",
+      "auth-hero-desc",
+      "auth-hero-chips",
+      "auth-chip"
+    ],
+    "dialogs": 0,
+    "colors": [
+      "#4285F4",
+      "#34A853",
+      "#FBBC05",
+      "#EA4335"
+    ]
+  },
+  {
+    "file": "src\\pages\\my-courses\\MyCoursesPage.jsx",
+    "bytes": 809,
+    "imports": [
+      "react-router-dom",
+      "@/hooks/useMyCourses",
+      "@/components/my-courses/MyCourseCard",
+      "@/components/common/ResourceState"
+    ],
+    "functions": [
+      "MyCoursesPage"
+    ],
+    "services": [],
+    "classNames": [
+      "eyebrow",
+      "lead",
+      "card-grid",
+      "state",
+      "button"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\NotFoundPage.jsx",
+    "bytes": 274,
+    "imports": [
+      "react-router-dom"
+    ],
+    "functions": [
+      "NotFoundPage"
+    ],
+    "services": [],
+    "classNames": [
+      "state",
+      "button"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\notifications\\NotificationsPage.jsx",
+    "bytes": 2261,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/learnerService",
+      "@/hooks/useAsyncResource",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui"
+    ],
+    "functions": [
+      "NotificationsPage",
+      "mark"
+    ],
+    "services": [
+      "learnerService.getNotifications",
+      "learnerService.markNotificationRead",
+      "learnerService.markAllNotificationsRead"
+    ],
+    "classNames": [
+      "notification-page",
+      "secondary",
+      "card notification-list",
+      "notification-icon",
+      "notification-title",
+      "muted",
+      "actions",
+      "text-link"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\profile\\ProfilePage.jsx",
+    "bytes": 7452,
+    "imports": [
+      "react",
+      "@/services/learnerService",
+      "@/application/context/AuthContext",
+      "@/components/common/ContentImage"
+    ],
+    "functions": [
+      "ProfilePage",
+      "save"
+    ],
+    "services": [
+      "learnerService.updateProfile"
+    ],
+    "classNames": [
+      "account-empty",
+      "account-page",
+      "account-header",
+      "account-pill",
+      "account-title",
+      "account-desc",
+      "auth-message auth-message-error",
+      "auth-message auth-message-success",
+      "profile-hero",
+      "profile-avatar",
+      "account-outline-btn",
+      "account-panel account-form",
+      "profile-rows"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\progress\\LearningProgressPage.jsx",
+    "bytes": 3698,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/learnerService",
+      "@/hooks/useAsyncResource",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui",
+      "@/components/common/ProgressBar"
+    ],
+    "functions": [
+      "LearningProgressPage"
+    ],
+    "services": [
+      "learnerService.getProgressData"
+    ],
+    "classNames": [
+      "progress-kpis",
+      "account-kpi",
+      "progress-panels",
+      "card",
+      "muted",
+      "weekly-chart",
+      "daily-minutes",
+      "text-link",
+      "progress-course",
+      "account-list-row"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\quiz\\QuizPages.jsx",
+    "bytes": 8718,
+    "imports": [
+      "@/components/common/ContentImage",
+      "@/components/learning/MediaPlayer",
+      "react",
+      "react-router-dom",
+      "@/hooks/useAsyncResource",
+      "@/services/contentService",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui",
+      "@/components/common/ProgressBar",
+      "@/components/learning/QuestionInput",
+      "@/components/learning/answerUtils",
+      "@/components/common/Modal"
+    ],
+    "functions": [
+      "QuizPage",
+      "start",
+      "QuizAttemptPage",
+      "Attempt",
+      "update",
+      "saveCurrent",
+      "changeQuestion",
+      "finish",
+      "QuizResultPage",
+      "Result",
+      "retry"
+    ],
+    "services": [
+      "contentService.quiz",
+      "contentService.startQuiz",
+      "contentService.attempt",
+      "contentService.answer",
+      "contentService.submit",
+      "contentService.result"
+    ],
+    "classNames": [
+      "quiz-gate card",
+      "state-symbol",
+      "muted",
+      "text-link",
+      "button secondary",
+      "badge",
+      "quiz-workspace",
+      "quiz-question card",
+      "eyebrow",
+      "question-media",
+      "lesson-navigation",
+      "secondary",
+      "actions",
+      "quiz-result card",
+      "quiz-score",
+      "quiz-result-actions actions",
+      "button",
+      "answer-review card"
+    ],
+    "dialogs": 4,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\RegisterPage.jsx",
+    "bytes": 18056,
+    "imports": [
+      "@/components/auth/AuthHeader",
+      "react",
+      "react-router-dom",
+      "@/application/context/AuthContext",
+      "@/assets/images/dongson_auth_bg.png"
+    ],
+    "functions": [
+      "RegisterPage",
+      "validateStep1",
+      "handleNext",
+      "handleBack",
+      "executeRegistration",
+      "handleStep2Submit",
+      "handleQuickRegister"
+    ],
+    "services": [],
+    "classNames": [
+      "auth-container",
+      "auth-left-panel",
+      "auth-left-content",
+      "auth-welcome-pill",
+      "auth-welcome-code",
+      "auth-welcome-text",
+      "auth-heading",
+      "auth-subtitle",
+      "auth-step-indicator",
+      "auth-message auth-message-error",
+      "auth-form",
+      "auth-field",
+      "auth-label",
+      "auth-field-error",
+      "auth-password-row",
+      "auth-show-btn",
+      "auth-optional",
+      "auth-input",
+      "auth-btn auth-btn-primary",
+      "auth-btn auth-btn-quick",
+      "auth-input auth-select",
+      "auth-btn-group",
+      "auth-btn auth-btn-secondary",
+      "auth-footer-text",
+      "auth-footer-link",
+      "auth-right-panel",
+      "auth-drum-bg",
+      "auth-drum-img",
+      "auth-visual-topline",
+      "auth-hero-card",
+      "auth-hero-tag",
+      "auth-hero-title",
+      "auth-hero-desc",
+      "auth-proof-row"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\roleplay\\RoleplayResultPage.jsx",
+    "bytes": 9016,
+    "imports": [
+      "@/components/common/Ui",
+      "react",
+      "react-router-dom",
+      "@/services/aiRoleplayService",
+      "@/services/vocabularyService"
+    ],
+    "functions": [
+      "RoleplayResultPage",
+      "showToast",
+      "handleSaveExpression",
+      "handleRetry"
+    ],
+    "services": [
+      "aiRoleplayService.getResult",
+      "vocabularyService.add",
+      "aiRoleplayService.resetRoleplaySession"
+    ],
+    "classNames": [
+      "button",
+      "p4-container",
+      "p4-toast",
+      "p4-header-badge",
+      "p4-title",
+      "p4-subtitle",
+      "result-card-hero",
+      "score-circle-box",
+      "score-number",
+      "score-rating",
+      "score-breakdown-grid",
+      "score-bar-item",
+      "score-bar-header",
+      "score-progress-track",
+      "score-progress-fill",
+      "correction-card",
+      "correction-original",
+      "correction-native",
+      "correction-reason",
+      "message-action-btn",
+      "button secondary"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\roleplay\\RoleplaySessionPage.jsx",
+    "bytes": 14898,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/services/aiRoleplayService"
+    ],
+    "functions": [
+      "RoleplaySessionPage",
+      "showToast",
+      "handleSpeak",
+      "handleToggleVoiceInput",
+      "handleSendMessage",
+      "text",
+      "handleFinishSession",
+      "handleResetSession",
+      "toggleTranslation",
+      "toggleExplanation"
+    ],
+    "services": [
+      "aiRoleplayService.getScenario",
+      "aiRoleplayService.getRoleplaySession",
+      "aiRoleplayService.sendRoleplayMessage",
+      "aiRoleplayService.finishRoleplayAndGetResult",
+      "aiRoleplayService.resetRoleplaySession",
+      "aiRoleplayService.getSuggestions"
+    ],
+    "classNames": [
+      "p4-container",
+      "p4-toast",
+      "button secondary",
+      "button",
+      "roleplay-screen",
+      "roleplay-chat",
+      "roleplay-chat__header",
+      "message-action-btn",
+      "tutor-messages",
+      "message-avatar",
+      "message-bubble",
+      "message-actions",
+      "message-row ai",
+      "roleplay-hints",
+      "hint-chip-btn",
+      "hint-meaning",
+      "tutor-input-area",
+      "tutor-textarea",
+      "btn-send",
+      "roleplay-mission-panel",
+      "objective-checkbox"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\roleplay\\ScenarioDetailPage.jsx",
+    "bytes": 9074,
+    "imports": [
+      "@/components/common/ContentImage",
+      "react-router-dom",
+      "@/services/aiRoleplayService"
+    ],
+    "functions": [
+      "ScenarioDetailPage"
+    ],
+    "services": [
+      "aiRoleplayService.getScenario"
+    ],
+    "classNames": [
+      "p4-container",
+      "button",
+      "badge-level",
+      "badge-topic",
+      "p4-title",
+      "p4-subtitle"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\roleplay\\ScenarioListPage.jsx",
+    "bytes": 7166,
+    "imports": [
+      "@/components/common/ContentImage",
+      "react",
+      "react-router-dom",
+      "@/services/aiRoleplayService"
+    ],
+    "functions": [
+      "ScenarioListPage"
+    ],
+    "services": [
+      "aiRoleplayService.getLevels",
+      "aiRoleplayService.getTopics",
+      "aiRoleplayService.listScenarios"
+    ],
+    "classNames": [
+      "p4-container",
+      "p4-header-badge",
+      "p4-title",
+      "p4-subtitle",
+      "scenario-grid",
+      "scenario-card",
+      "scenario-card__media",
+      "culture-card__destination",
+      "scenario-card__body",
+      "role-badge-row",
+      "badge-level",
+      "badge-topic",
+      "scenario-role-box",
+      "button secondary",
+      "button"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\settings\\SettingsPage.jsx",
+    "bytes": 5343,
+    "imports": [
+      "react",
+      "@/services/learnerService"
+    ],
+    "functions": [
+      "SettingsPage",
+      "save",
+      "toggle"
+    ],
+    "services": [
+      "learnerService.getSettings",
+      "learnerService.updateSettings"
+    ],
+    "classNames": [
+      "account-empty",
+      "account-page",
+      "account-header",
+      "account-pill",
+      "account-title",
+      "account-desc",
+      "auth-message auth-message-error",
+      "auth-message auth-message-success",
+      "settings-list"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\vocabulary\\VocabularyCatalogPage.jsx",
+    "bytes": 6059,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/components/common/Ui",
+      "@/components/common/ResourceState",
+      "@/services/vocabularyCatalogService"
+    ],
+    "functions": [
+      "VocabularyCatalogPage",
+      "reload",
+      "filter"
+    ],
+    "services": [],
+    "classNames": [
+      "vocabulary-page",
+      "button secondary",
+      "button",
+      "filters",
+      "actions",
+      "secondary",
+      "state",
+      "card-grid",
+      "card",
+      "row",
+      "badge",
+      "muted"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\vocabulary\\VocabularyNotebookDetailPage.jsx",
+    "bytes": 2159,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/constants/routes",
+      "@/hooks/useVocabulary",
+      "@/components/common/ResourceState",
+      "@/components/vocabulary/VocabularyCard",
+      "@/components/vocabulary/VocabularyForm",
+      "@/components/vocabulary/VocabularyDeleteModal"
+    ],
+    "functions": [
+      "VocabularyNotebookDetailPage",
+      "NotebookEntryDetails"
+    ],
+    "services": [],
+    "classNames": [
+      "vocabulary-detail-page",
+      "text-link",
+      "eyebrow",
+      "success",
+      "muted"
+    ],
+    "dialogs": 3,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\vocabulary\\VocabularyNotebookPage.jsx",
+    "bytes": 3200,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/components/common/Ui",
+      "@/hooks/useVocabulary",
+      "@/components/common/ResourceState",
+      "@/components/vocabulary/VocabularyDeleteModal",
+      "@/components/vocabulary/VocabularyCard",
+      "@/components/vocabulary/VocabularyForm",
+      "@/components/vocabulary/VocabularySearch",
+      "@/components/vocabulary/VocabularyFilter"
+    ],
+    "functions": [
+      "VocabularyNotebookPage"
+    ],
+    "services": [],
+    "classNames": [
+      "vocabulary-page",
+      "button",
+      "secondary",
+      "notebook-banner",
+      "button secondary",
+      "filters",
+      "success",
+      "card-grid",
+      "state"
+    ],
+    "dialogs": 3,
+    "colors": []
+  },
+  {
+    "file": "src\\pages\\vocabulary\\VocabularyReviewPage.jsx",
+    "bytes": 2906,
+    "imports": [
+      "react",
+      "react-router-dom",
+      "@/hooks/useVocabulary",
+      "@/components/common/ResourceState",
+      "@/components/common/Ui",
+      "@/components/common/ProgressBar"
+    ],
+    "functions": [
+      "VocabularyReviewPage",
+      "ReviewDeck",
+      "reset"
+    ],
+    "services": [],
+    "classNames": [
+      "button secondary",
+      "button",
+      "review-summary card",
+      "state-symbol",
+      "muted",
+      "actions",
+      "review-workspace",
+      "review-flashcard card",
+      "eyebrow",
+      "review-answer",
+      "review-question",
+      "review-ratings",
+      "secondary"
+    ],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\presentation\\components\\DongSonDrum.jsx",
+    "bytes": 13018,
+    "imports": [
+      "react"
+    ],
+    "functions": [
+      "DongSonDrum",
+      "angle",
+      "a1",
+      "a2",
+      "aMid",
+      "angle",
+      "a1",
+      "aMid",
+      "a2",
+      "a",
+      "nextA",
+      "deg",
+      "a",
+      "nextA",
+      "a1",
+      "aMid",
+      "a2",
+      "a"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": [
+      "#B57C6E"
+    ]
+  },
+  {
+    "file": "src\\presentation\\styles\\account.css",
+    "bytes": 21709,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\presentation\\styles\\admin.css",
+    "bytes": 3762,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\presentation\\styles\\ai-tutor.css",
+    "bytes": 24473,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\presentation\\styles\\auth.css",
+    "bytes": 16846,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\presentation\\styles\\dashboard.css",
+    "bytes": 1837,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\presentation\\styles\\design-system.css",
+    "bytes": 51380,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": [
+      "#B43B32",
+      "#963027",
+      "#F8F6F1",
+      "#FFFDF8",
+      "#24362F",
+      "#71866D",
+      "#C9A04F",
+      "#EFE8DB",
+      "#E3DED4",
+      "#7F817A",
+      "#F7E7E1",
+      "#EDF2E8",
+      "#F6EDD3",
+      "#24362f80",
+      "#E7D8B8",
+      "#F3ECDF",
+      "#F4F6F3",
+      "#C5D0C5",
+      "#A7B5A7",
+      "#D5DDD4",
+      "#334D42",
+      "#486052",
+      "#24362f10",
+      "#24362fa6"
+    ]
+  },
+  {
+    "file": "src\\presentation\\styles\\home.css",
+    "bytes": 22838,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\presentation\\styles\\layout.css",
+    "bytes": 9735,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\adminCultureAiService.js",
+    "bytes": 21344,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\adminService.js",
+    "bytes": 2373,
+    "imports": [
+      "@/infrastructure/api/axiosClient"
+    ],
+    "functions": [
+      "resultOf",
+      "listOf",
+      "crud"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\adminVocabularyService.js",
+    "bytes": 1616,
+    "imports": [
+      "@/infrastructure/api/axiosClient"
+    ],
+    "functions": [
+      "resultOf"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\aiRoleplayService.js",
+    "bytes": 27290,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\aiTutorService.js",
+    "bytes": 21368,
+    "imports": [],
+    "functions": [
+      "createDefaultSessions"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": [
+      "#245c48",
+      "#edf4ef",
+      "#8b4513",
+      "#fcf3eb",
+      "#1a5f7a",
+      "#e8f4f8",
+      "#2e7d32",
+      "#edf7ed",
+      "#9f2d20",
+      "#fcedeb",
+      "#d97706",
+      "#fef3c7",
+      "#7c3aed",
+      "#f3e8ff"
+    ]
+  },
+  {
+    "file": "src\\services\\contentService.js",
+    "bytes": 2782,
+    "imports": [
+      "@/api/httpClient",
+      "@/infrastructure/api/axiosClient"
+    ],
+    "functions": [
+      "request"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\courseService.js",
+    "bytes": 654,
+    "imports": [
+      "@/models/Course",
+      "@/models/Enrollment",
+      "@/api/httpClient"
+    ],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\cultureService.js",
+    "bytes": 17749,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\learnerService.js",
+    "bytes": 2982,
+    "imports": [
+      "@/infrastructure/api/axiosClient"
+    ],
+    "functions": [
+      "resultOf"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\learningService.js",
+    "bytes": 685,
+    "imports": [
+      "@/models/Lesson",
+      "@/models/LearningProgress",
+      "@/api/httpClient"
+    ],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\sessionService.js",
+    "bytes": 456,
+    "imports": [
+      "@/api/httpClient"
+    ],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\vocabularyCatalogService.js",
+    "bytes": 654,
+    "imports": [
+      "@/infrastructure/api/axiosClient"
+    ],
+    "functions": [
+      "resultOf"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\services\\vocabularyService.js",
+    "bytes": 1121,
+    "imports": [
+      "@/models/VocabularyEntry",
+      "@/api/httpClient"
+    ],
+    "functions": [
+      "validate"
+    ],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": []
+  },
+  {
+    "file": "src\\styles.css",
+    "bytes": 12318,
+    "imports": [],
+    "functions": [],
+    "services": [],
+    "classNames": [],
+    "dialogs": 0,
+    "colors": [
+      "#203a3010",
+      "#10241e33",
+      "#17392b66"
+    ]
+  }
+]

@@ -1,23 +1,74 @@
-import { httpClient } from '@/api/httpClient';
+import axiosClient from '@/infrastructure/api/axiosClient';
 
 const resultOf = (response) => response?.result ?? response;
 
 export const adminVocabularyService = {
   async list(filters = {}, options = {}) {
-    const query = new URLSearchParams(Object.entries(filters)
-      .filter(([, value]) => value !== '' && value != null));
-    return resultOf(await httpClient(`/admin/vocabulary?${query}`, options));
+    return resultOf(
+      await axiosClient.get('/api/admin/vocabulary', {
+        ...options,
+        params: Object.fromEntries(
+          Object.entries(filters).filter(
+            ([, value]) => value !== '' && value != null
+          )
+        ),
+      })
+    );
   },
+
   async get(id, options = {}) {
-    return resultOf(await httpClient(`/admin/vocabulary/${id}`, options));
+    return resultOf(
+      await axiosClient.get(`/api/admin/vocabulary/${id}`, {
+        ...options,
+      })
+    );
   },
-  create(data) {
-    return httpClient('/admin/vocabulary', { method: 'POST', body: JSON.stringify(data) });
+
+  async create(data, options = {}) {
+    return resultOf(
+      await axiosClient.post('/api/admin/vocabulary', data, {
+        ...options,
+      })
+    );
   },
-  update(id, data) {
-    return httpClient(`/admin/vocabulary/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+
+  async update(id, data, options = {}) {
+    return resultOf(
+      await axiosClient.put(`/api/admin/vocabulary/${id}`, data, {
+        ...options,
+      })
+    );
   },
+
   async getTopics(options = {}) {
-    return resultOf(await httpClient('/admin/vocabulary-topics', options));
+    return resultOf(
+      await axiosClient.get('/api/admin/vocabulary-topics', {
+        ...options,
+      })
+    );
   },
+
+  async getTopic(id, options = {}) {
+  return resultOf(
+    await axiosClient.get(`/api/admin/vocabulary-topics/${id}`, {
+      ...options,
+    })
+  );
+},
+
+async createTopic(data, options = {}) {
+  return resultOf(
+    await axiosClient.post('/api/admin/vocabulary-topics', data, {
+      ...options,
+    })
+  );
+},
+
+async updateTopic(id, data, options = {}) {
+  return resultOf(
+    await axiosClient.put(`/api/admin/vocabulary-topics/${id}`, data, {
+      ...options,
+    })
+  );
+},
 };

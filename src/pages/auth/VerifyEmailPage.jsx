@@ -1,8 +1,8 @@
+import { AuthHeader } from '@/components/auth/AuthHeader';
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
 import dongSonBg from '@/assets/images/dongson_auth_bg.png';
-import '@/presentation/styles/auth.css';
 
 export function VerifyEmailPage() {
   const [searchParams] = useSearchParams();
@@ -44,14 +44,7 @@ export function VerifyEmailPage() {
     <div className="auth-container">
       <div className="auth-left-panel">
         <div className="auth-left-content">
-          <div className="auth-brand-row">
-            <div className="auth-brand-logo">
-              <span className="auth-logo-text">H</span>
-              <span className="auth-logo-star">★</span>
-            </div>
-            <span className="auth-brand-name">HolaVietnamese</span>
-            <span className="auth-brand-badge">ĐỐNG SƠN POP</span>
-          </div>
+          <AuthHeader />
 
           <div className="auth-welcome-pill">
             <span className="auth-welcome-code">✉️</span>
@@ -68,8 +61,8 @@ export function VerifyEmailPage() {
           {status.error && <div className="auth-message auth-message-error">{status.error}</div>}
           {status.message && <div className="auth-message auth-message-success">{status.message}</div>}
 
-          <div style={{ marginTop: '24px', padding: '16px', background: '#faf8f5', borderRadius: '12px', border: '1px solid #ded5cb' }}>
-            <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', color: '#695a50', fontWeight: '600' }}>
+          <div style={{ marginTop: '24px', padding: '16px', background: 'var(--color-cream)', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
+            <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', color: 'var(--color-sage)', fontWeight: '600' }}>
               Chưa nhận được mã hoặc mã đã hết hạn?
             </p>
             <div style={{ display: 'flex', gap: '8px' }}>
@@ -79,14 +72,14 @@ export function VerifyEmailPage() {
                 placeholder="Nhập email của bạn"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{ height: '40px', fontSize: '0.85rem' }}
+                style={{ height: '40px', fontSize: '0.85rem', flex: 1, minWidth: 0 }}
               />
               <button
                 type="button"
-                className="auth-show-btn"
+                className="secondary"
                 onClick={handleResend}
                 disabled={status.loading}
-                style={{ height: '40px' }}
+                style={{ height: '40px', minHeight: '40px', padding: '8px 12px', flexShrink: 0 }}
               >
                 Gửi lại
               </button>

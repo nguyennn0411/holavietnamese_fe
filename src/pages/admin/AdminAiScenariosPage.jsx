@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
-import '@/presentation/styles/admin.css';
 
 export function AdminAiScenariosPage() {
   const [search, setSearch] = useState('');
@@ -50,7 +49,7 @@ export function AdminAiScenariosPage() {
   return (
     <div className="admin-content">
       {toast && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', background: '#245c48', color: '#fff', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
+        <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           {toast}
         </div>
       )}
@@ -58,11 +57,11 @@ export function AdminAiScenariosPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <span style={{ fontSize: '12px', fontWeight: 800, color: '#a62a24', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             ROLEPLAY & AI PROMPT DESIGN • NGƯỜI 4
           </span>
           <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}>Quản lý kịch bản AI</h1>
-          <p style={{ margin: 0, color: '#665349', fontSize: '14px' }}>
+          <p style={{ margin: 0, color: 'var(--color-sage)', fontSize: '14px' }}>
             Thiết lập danh mục kịch bản nhập vai giao tiếp thực tế, gán nhân vật AI, kiểm soát độ khó và tiêu chí đánh giá phản xạ.
           </p>
         </div>
@@ -142,7 +141,7 @@ export function AdminAiScenariosPage() {
           <tbody>
             {scenarios.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: '#887266' }}>
+                <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: 'var(--color-muted)' }}>
                   Không tìm thấy kịch bản AI nào phù hợp.
                 </td>
               </tr>
@@ -151,10 +150,10 @@ export function AdminAiScenariosPage() {
                 <tr key={sc.id}>
                   <td>
                     <div>
-                      <strong style={{ fontSize: '14.5px', color: '#321c17', display: 'block' }}>
+                      <strong style={{ fontSize: '14.5px', color: 'var(--color-ink)', display: 'block' }}>
                         {sc.title}
                       </strong>
-                      <span style={{ fontSize: '12px', color: '#7a6053' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--color-sage)' }}>
                         {sc.topicName || sc.topic} • {sc.difficulty}
                       </span>
                     </div>
@@ -164,10 +163,10 @@ export function AdminAiScenariosPage() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{ fontSize: '20px' }}>{sc.aiRole?.avatar || '🤖'}</span>
                       <div>
-                        <strong style={{ fontSize: '13px', color: '#2d1813', display: 'block' }}>
+                        <strong style={{ fontSize: '13px', color: 'var(--color-ink)', display: 'block' }}>
                           {sc.aiRole?.name}
                         </strong>
-                        <span style={{ fontSize: '11px', color: '#7a6255' }}>
+                        <span style={{ fontSize: '11px', color: 'var(--color-sage)' }}>
                           {sc.aiRole?.role}
                         </span>
                       </div>
@@ -175,22 +174,22 @@ export function AdminAiScenariosPage() {
                   </td>
 
                   <td>
-                    <span style={{ padding: '3px 8px', borderRadius: '6px', background: '#9f2d20', color: '#fff', fontSize: '11px', fontWeight: 800 }}>
+                    <span style={{ padding: '3px 8px', borderRadius: '6px', background: 'var(--color-red-hover)', color: 'var(--color-surface)', fontSize: '11px', fontWeight: 800 }}>
                       {sc.level}
                     </span>
                   </td>
 
                   <td>
-                    <span style={{ fontSize: '13px', color: '#4a3227' }}>
+                    <span style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
                       📍 {sc.destination}
                     </span>
                   </td>
 
                   <td>
                     <div style={{ fontSize: '13px' }}>
-                      <strong style={{ color: '#245c48' }}>{sc.completionsCount || 0} lượt</strong>
+                      <strong style={{ color: 'var(--color-ink)' }}>{sc.completionsCount || 0} lượt</strong>
                       {sc.avgScore > 0 && (
-                        <div style={{ fontSize: '11px', color: '#887063' }}>Điểm TB: {sc.avgScore}/100</div>
+                        <div style={{ fontSize: '11px', color: 'var(--color-muted)' }}>Điểm TB: {sc.avgScore}/100</div>
                       )}
                     </div>
                   </td>
@@ -202,7 +201,7 @@ export function AdminAiScenariosPage() {
                       {sc.status !== 'ACTIVE' ? (
                         <button
                           className="button secondary"
-                          style={{ fontSize: '11px', padding: '5px 8px', color: '#1b5e20' }}
+                          style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-ink)' }}
                           title="Kích hoạt kịch bản"
                           onClick={() => handleStatusChange(sc.id, 'ACTIVE')}
                         >
@@ -211,7 +210,7 @@ export function AdminAiScenariosPage() {
                       ) : (
                         <button
                           className="button secondary"
-                          style={{ fontSize: '11px', padding: '5px 8px', color: '#b72b25' }}
+                          style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-red)' }}
                           title="Tạm khóa kịch bản"
                           onClick={() => handleStatusChange(sc.id, 'DRAFT')}
                         >
@@ -240,7 +239,7 @@ export function AdminAiScenariosPage() {
 
                       <button
                         className="button secondary"
-                        style={{ fontSize: '11px', padding: '5px 8px', color: '#c62828' }}
+                        style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-red)' }}
                         title="Xóa kịch bản"
                         onClick={() => handleDelete(sc.id, sc.title)}
                       >

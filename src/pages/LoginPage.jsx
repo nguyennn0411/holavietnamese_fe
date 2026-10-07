@@ -4,7 +4,6 @@ import { useAuth } from '@/application/context/AuthContext';
 import { AuthFooter } from '@/components/auth/AuthFooter';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import dongSonBg from '@/assets/images/dongson_auth_bg.png';
-import '@/presentation/styles/auth.css';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 

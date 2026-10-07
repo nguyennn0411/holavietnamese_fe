@@ -8,6 +8,7 @@ import { LessonContent } from '@/components/learning/LessonContent'
 import { LessonNavigation } from '@/components/learning/LessonNavigation'
 import { ProgressBar } from '@/components/common/ProgressBar'
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm'
+import { LessonActivities } from '@/components/learning/LessonActivities'
 export function LessonLearningPage() {
   const { courseId, lessonId } = useParams()
   return <LessonScreen key={`${courseId}:${lessonId}`} courseId={courseId} lessonId={lessonId} />
@@ -25,10 +26,10 @@ function LessonScreen({ courseId, lessonId }) {
   }
   return <ResourceState resource={resource}>{({ course, lesson, lessons, progress }) => <section>
     <Link className="text-link" to={`/courses/${courseId}`}>← {course.title}</Link>
-    <ProgressBar value={progress.progressPercentage} label={`${progress.completedLessons} / ${progress.totalLessons} lessons completed`} />
+    <ProgressBar value={progress.progressPercentage} label={`${progress.completedLessons} / ${progress.totalLessons} bài học đã hoàn thành`} />
     <div className="learning-grid"><LessonSidebar lessons={lessons} courseId={courseId} currentId={lesson.id} />
-    <div className="card lesson-panel"><LessonContent lesson={lesson} />
-    <section className="vocabulary-prompt"><h2>Build your vocabulary</h2><p>Found a useful word? Keep it in your notebook.</p><button className="secondary" onClick={() => setSavingWord(true)}>Save Vocabulary</button>{message && <p className="success" role="status">{message}</p>}</section>
-    {savingWord && <VocabularyForm lessonId={lesson.id} onClose={() => setSavingWord(false)} onSaved={() => { setSavingWord(false); setMessage('Saved to your vocabulary notebook.'); }} />}
+    <div className="lesson-panel"><LessonActivities onProgress={result=>{if(result.completed)resource.reload();}} lessonId={lesson.id} fallback={<div className="card"><LessonContent lesson={lesson} /></div>} />
+    <section className="vocabulary-prompt"><h2>Thêm một từ mới</h2><p>Gặp một từ hữu ích? Lưu lại để ôn tập sau.</p><button className="secondary" onClick={() => setSavingWord(true)}>Lưu từ vựng</button>{message && <p className="success" role="status">{message}</p>}</section>
+    {savingWord && <VocabularyForm lessonId={lesson.id} onClose={() => setSavingWord(false)} onSaved={() => { setSavingWord(false); setMessage('Đã lưu vào sổ tay từ vựng.'); }} />}
     {error && <p role="alert">{error}</p>}<LessonNavigation lesson={lesson} pending={pending} onComplete={complete} /></div></div></section>}</ResourceState>
 }

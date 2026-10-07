@@ -1,7 +1,7 @@
+import { ContentImage } from '@/components/common/ContentImage';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
-import '@/presentation/styles/ai-tutor.css';
 
 export function ScenarioListPage() {
   const [search, setSearch] = useState('');
@@ -28,7 +28,7 @@ export function ScenarioListPage() {
       </div>
 
       {/* Filter Bar */}
-      <div style={{ background: '#fffdfa', border: '1px solid #ebd9c8', borderRadius: '18px', padding: '20px', marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '20px', marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {/* Search */}
         <div>
           <input
@@ -36,14 +36,14 @@ export function ScenarioListPage() {
             placeholder="Tìm kiếm kịch bản theo tên, địa điểm hoặc bối cảnh..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #dccbb8' }}
+            style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--color-border)' }}
           />
         </div>
 
         {/* Level & Topic Filters */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: '#685145' }}>Trình độ:</span>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-red-hover)' }}>Trình độ:</span>
             {levels.map(lvl => (
               <button
                 key={lvl.id}
@@ -56,7 +56,7 @@ export function ScenarioListPage() {
           </div>
 
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: '#685145' }}>Chủ đề:</span>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-red-hover)' }}>Chủ đề:</span>
             {topics.map(t => (
               <button
                 key={t.id}
@@ -72,13 +72,13 @@ export function ScenarioListPage() {
 
       {/* Scenarios Grid */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-        <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#381e18', margin: 0 }}>
+        <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-ink)', margin: 0 }}>
           Danh sách kịch bản ({scenarios.length})
         </h2>
         {(search || selectedLevel !== 'all' || selectedTopic !== 'all') && (
           <button
             onClick={() => { setSearch(''); setSelectedLevel('all'); setSelectedTopic('all'); }}
-            style={{ background: 'transparent', border: 'none', color: '#9f2d20', fontSize: '13px', fontWeight: 650, cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 'none', color: 'var(--color-red-hover)', fontSize: '13px', fontWeight: 650, cursor: 'pointer' }}
           >
             ✕ Xóa bộ lọc
           </button>
@@ -86,17 +86,17 @@ export function ScenarioListPage() {
       </div>
 
       {scenarios.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px 20px', background: '#fffdf9', borderRadius: '18px', border: '1px solid #ebd9c8' }}>
+        <div style={{ textAlign: 'center', padding: '60px 20px', background: 'var(--color-surface)', borderRadius: '18px', border: '1px solid var(--color-border)' }}>
           <p style={{ fontSize: '40px', margin: 0 }}>🎭</p>
-          <h3 style={{ fontSize: '18px', color: '#4a2c22', margin: '10px 0' }}>Chưa tìm thấy kịch bản phù hợp</h3>
-          <p style={{ color: '#8c7367', fontSize: '14px' }}>Hãy thử điều chỉnh cấp độ hoặc chủ đề để khám phá thêm nhiều kịch bản thú vị nhé!</p>
+          <h3 style={{ fontSize: '18px', color: 'var(--color-ink)', margin: '10px 0' }}>Chưa tìm thấy kịch bản phù hợp</h3>
+          <p style={{ color: 'var(--color-muted)', fontSize: '14px' }}>Hãy thử điều chỉnh cấp độ hoặc chủ đề để khám phá thêm nhiều kịch bản thú vị nhé!</p>
         </div>
       ) : (
         <div className="scenario-grid">
           {scenarios.map(sc => (
             <div key={sc.id} className="scenario-card">
               <div className="scenario-card__media">
-                <img src={sc.thumbnail} alt={sc.title} />
+                <ContentImage src={sc.thumbnail} alt={sc.title} />
                 <span className="culture-card__destination">📍 {sc.destination}</span>
               </div>
 
@@ -104,31 +104,31 @@ export function ScenarioListPage() {
                 <div className="role-badge-row">
                   <span className="badge-level">{sc.level}</span>
                   <span className="badge-topic">{sc.topicLabel}</span>
-                  <span style={{ fontSize: '11px', color: '#7a6054', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--color-sage)', display: 'flex', alignItems: 'center' }}>
                     ⏱️ {sc.duration}
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: '18px', fontWeight: 750, color: '#2d1813', margin: '0 0 8px', lineHeight: 1.35 }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 750, color: 'var(--color-ink)', margin: '0 0 8px', lineHeight: 1.35 }}>
                   {sc.title}
                 </h3>
 
-                <p style={{ fontSize: '13.5px', color: '#6b574d', margin: '0 0 14px', lineHeight: 1.5 }}>
+                <p style={{ fontSize: '13.5px', color: 'var(--color-sage)', margin: '0 0 14px', lineHeight: 1.5 }}>
                   {sc.overview}
                 </p>
 
                 {/* Role snapshot */}
                 <div className="scenario-role-box">
                   <div>
-                    <span style={{ fontWeight: 700, color: '#9f2d20' }}>AI đóng vai:</span> {sc.aiRole.name}
+                    <span style={{ fontWeight: 700, color: 'var(--color-red-hover)' }}>AI đóng vai:</span> {sc.aiRole.name}
                   </div>
                   <div>
-                    <span style={{ fontWeight: 700, color: '#245c48' }}>Bạn đóng vai:</span> {sc.learnerRole.role}
+                    <span style={{ fontWeight: 700, color: 'var(--color-ink)' }}>Bạn đóng vai:</span> {sc.learnerRole.role}
                   </div>
                 </div>
 
                 {/* Objectives snapshot */}
-                <div style={{ fontSize: '12px', color: '#836a5e', margin: '6px 0 16px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--color-muted)', margin: '6px 0 16px' }}>
                   🎯 <strong>{sc.objectives.length} nhiệm vụ</strong> cần hoàn thành trong phiên
                 </div>
 
@@ -143,7 +143,7 @@ export function ScenarioListPage() {
                   <Link
                     to={`/ai-roleplay/${sc.id}`}
                     className="button"
-                    style={{ flex: 1, fontSize: '13px', padding: '10px', background: '#9f2d20', borderColor: '#9f2d20' }}
+                    style={{ flex: 1, fontSize: '13px', padding: '10px', background: 'var(--color-red-hover)', borderColor: 'var(--color-red-hover)' }}
                   >
                     Bắt đầu ➔
                   </Link>

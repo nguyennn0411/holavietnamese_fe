@@ -1,8 +1,8 @@
+import { AuthHeader } from '@/components/auth/AuthHeader';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
 import dongSonBg from '@/assets/images/dongson_auth_bg.png';
-import '@/presentation/styles/auth.css';
 
 export function OnboardingPage() {
   const navigate = useNavigate();
@@ -50,14 +50,7 @@ export function OnboardingPage() {
     <div className="auth-container">
       <div className="auth-left-panel" style={{ padding: '36px 48px' }}>
         <div className="auth-left-content" style={{ maxWidth: '520px' }}>
-          <div className="auth-brand-row">
-            <div className="auth-brand-logo">
-              <span className="auth-logo-text">H</span>
-              <span className="auth-logo-star">★</span>
-            </div>
-            <span className="auth-brand-name">HolaVietnamese</span>
-            <span className="auth-brand-badge">BƯỚC KHỞI ĐỘNG</span>
-          </div>
+          <AuthHeader />
 
           <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
             {[1, 2, 3, 4].map(s => (
@@ -67,7 +60,7 @@ export function OnboardingPage() {
                   flex: 1,
                   height: '4px',
                   borderRadius: '2px',
-                  background: s <= step ? '#8B1A1A' : '#e5e7eb',
+                  background: s <= step ? 'var(--color-red-hover)' : 'var(--color-sage-soft)',
                   transition: 'background 0.3s',
                 }}
               />
@@ -77,10 +70,10 @@ export function OnboardingPage() {
 
           {step === 1 && (
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#2d1810', margin: '0 0 8px 0' }}>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
                 Ngôn ngữ mẹ đẻ của bạn là gì?
               </h2>
-              <p style={{ color: '#796b61', marginBottom: '24px' }}>
+              <p style={{ color: 'var(--color-sage)', marginBottom: '24px' }}>
                 Chúng tôi sẽ dùng ngôn ngữ này để giải thích từ vựng và ngữ pháp.
               </p>
 
@@ -101,7 +94,7 @@ export function OnboardingPage() {
                       padding: '16px',
                       borderRadius: '12px',
                       border: preferences.nativeLanguage === lang.code ? '2px solid #8B1A1A' : '1.5px solid #ded5cb',
-                      background: preferences.nativeLanguage === lang.code ? '#fbf2ef' : '#fff',
+                      background: preferences.nativeLanguage === lang.code ? 'var(--color-cream)' : 'var(--color-surface)',
                       fontSize: '1rem',
                       fontWeight: 600,
                       cursor: 'pointer',
@@ -125,10 +118,10 @@ export function OnboardingPage() {
 
           {step === 2 && (
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#2d1810', margin: '0 0 8px 0' }}>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
                 Mục tiêu học của bạn?
               </h2>
-              <p style={{ color: '#796b61', marginBottom: '20px' }}>
+              <p style={{ color: 'var(--color-sage)', marginBottom: '20px' }}>
                 Chọn định hướng để AI và hệ thống đề xuất bài học thực tế nhất.
               </p>
 
@@ -141,12 +134,12 @@ export function OnboardingPage() {
                       padding: '14px 18px',
                       borderRadius: '12px',
                       border: preferences.learningGoal === g.id ? '2px solid #8B1A1A' : '1.5px solid #ded5cb',
-                      background: preferences.learningGoal === g.id ? '#fbf2ef' : '#fff',
+                      background: preferences.learningGoal === g.id ? 'var(--color-cream)' : 'var(--color-surface)',
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: '#2d1810' }}>{g.title}</strong>
-                    <span style={{ fontSize: '0.85rem', color: '#796b61' }}>{g.desc}</span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>{g.title}</strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-sage)' }}>{g.desc}</span>
                   </div>
                 ))}
               </div>
@@ -160,10 +153,10 @@ export function OnboardingPage() {
 
           {step === 3 && (
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#2d1810', margin: '0 0 8px 0' }}>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
                 Trình độ tiếng Việt hiện tại?
               </h2>
-              <p style={{ color: '#796b61', marginBottom: '20px' }}>
+              <p style={{ color: 'var(--color-sage)', marginBottom: '20px' }}>
                 Đừng ngại nếu bạn chưa biết gì, Hola Vietnamese được tạo ra để bắt đầu từ số 0!
               </p>
 
@@ -176,12 +169,12 @@ export function OnboardingPage() {
                       padding: '14px 18px',
                       borderRadius: '12px',
                       border: preferences.targetLevel === l.id ? '2px solid #8B1A1A' : '1.5px solid #ded5cb',
-                      background: preferences.targetLevel === l.id ? '#fbf2ef' : '#fff',
+                      background: preferences.targetLevel === l.id ? 'var(--color-cream)' : 'var(--color-surface)',
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: '#2d1810' }}>{l.title}</strong>
-                    <span style={{ fontSize: '0.85rem', color: '#796b61' }}>{l.desc}</span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>{l.title}</strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-sage)' }}>{l.desc}</span>
                   </div>
                 ))}
               </div>
@@ -195,10 +188,10 @@ export function OnboardingPage() {
 
           {step === 4 && (
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#2d1810', margin: '0 0 8px 0' }}>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
                 Mục tiêu thời gian mỗi ngày?
               </h2>
-              <p style={{ color: '#796b61', marginBottom: '20px' }}>
+              <p style={{ color: 'var(--color-sage)', marginBottom: '20px' }}>
                 Chỉ cần vài phút kiên trì mỗi ngày để tích lũy XP và duy trì chuỗi Streak rực cháy 🔥.
               </p>
 
@@ -216,12 +209,12 @@ export function OnboardingPage() {
                       padding: '14px 18px',
                       borderRadius: '12px',
                       border: preferences.dailyMinutes === t.minutes ? '2px solid #8B1A1A' : '1.5px solid #ded5cb',
-                      background: preferences.dailyMinutes === t.minutes ? '#fbf2ef' : '#fff',
+                      background: preferences.dailyMinutes === t.minutes ? 'var(--color-cream)' : 'var(--color-surface)',
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: '#2d1810' }}>{t.label}</strong>
-                    <span style={{ fontSize: '0.85rem', color: '#796b61' }}>{t.sub}</span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>{t.label}</strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-sage)' }}>{t.sub}</span>
                   </div>
                 ))}
               </div>
