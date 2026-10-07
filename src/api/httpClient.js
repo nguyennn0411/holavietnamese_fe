@@ -1,7 +1,8 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || '/api'
+import axios from 'axios'
+import { API_BASE_URL } from './apiConfig'
 
 let csrfPromise
+export const api = axios.create({ baseURL: API_BASE_URL, withCredentials: true })
 export function resetCsrf() { csrfPromise = undefined }
 
 async function csrf() {
@@ -11,21 +12,27 @@ async function csrf() {
 
 export async function httpClient(path, options = {}) {
   const method = (options.method || 'GET').toUpperCase()
-  const token = ['GET', 'HEAD', 'OPTIONS'].includes(method) ? null : await csrf()
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    credentials: 'include',
+  const bearer = localStorage.getItem('token')
+  const token = bearer || ['GET', 'HEAD', 'OPTIONS'].includes(method) ? null : await csrf()
+  const response = await api.request({
+    url: path,
+    method,
+    data: options.body,
+    signal: options.signal,
+    validateStatus: () => true,
     headers: {
       'Content-Type': 'application/json',
+      ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}),
       ...(token ? { [token.headerName]: token.token } : {}),
       ...options.headers,
     },
   })
 
-  if (!response.ok) {
-    const body = await response.json().catch(() => null)
+  if (response.status < 200 || response.status >= 300) {
+    const body = response.data
     const error = new Error(body?.message || `Request failed (${response.status}). Please try again.`)
     error.status = response.status
+    error.code = body?.code
     if (response.status === 401 || response.status === 403) resetCsrf()
     throw error
   }
@@ -34,5 +41,5 @@ export async function httpClient(path, options = {}) {
     return null
   }
 
-  return response.json()
+  return response.data || null
 }

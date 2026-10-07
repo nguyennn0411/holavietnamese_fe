@@ -19,13 +19,14 @@ export function AdminRoute() {
   }
 
   const roles = user?.roles || [];
-  const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
+  const isAdmin = roles.includes('ADMIN');
 
   // If user is a LEARNER attempting to access /admin -> redirect to home with flash message
   if (!isAdmin) {
     return (
       <Navigate
-        to="/forbidden"
+        to="/"
+        state={{ authError: 'Bạn không có quyền truy cập trang quản trị.' }}
         replace
       />
     );

@@ -1,12 +1,19 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuth } from '@/application/context/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import '@/presentation/styles/admin.css';
 
 export function AdminLayout() {
   const { user, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navLinks = [
+    { to: '/admin/courses', label: 'Khóa học & Bài học', icon: '📚' },
+    { to: '/admin/grammar', label: 'Ngữ pháp', icon: '📝' },
+    { to: '/admin/questions', label: 'Ngân hàng câu hỏi', icon: '❓' },
+    { to: '/admin/quizzes', label: 'Bài kiểm tra', icon: '✅' },
+    { to: '/admin/quiz-attempts', label: 'Lượt làm bài', icon: '📈' },
     { to: ROUTES.ADMIN, label: 'Dashboard tổng quan', icon: '📊' },
     { to: ROUTES.ADMIN_USERS, label: 'Quản lý người dùng', icon: '👥' },
     { to: ROUTES.ADMIN_ACHIEVEMENTS, label: 'Quản lý thành tích', icon: '🏆' },
@@ -19,7 +26,7 @@ export function AdminLayout() {
   return (
     <div className="admin-wrapper">
       {/* Sidebar */}
-      <aside className="admin-sidebar">
+      <aside id="admin-sidebar" className={`admin-sidebar ${menuOpen ? 'is-open' : ''}`}>
         <div className="admin-sidebar-header">
           <div className="admin-logo-circle">H</div>
           <div>
@@ -36,6 +43,7 @@ export function AdminLayout() {
             <NavLink
               key={link.to}
               to={link.to}
+              onClick={() => setMenuOpen(false)}
               end={link.to === ROUTES.ADMIN}
               className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}
             >
@@ -67,6 +75,7 @@ export function AdminLayout() {
       <div className="admin-main-area">
         {/* Topbar */}
         <header className="admin-topbar">
+          <button type="button" className="admin-menu-toggle" aria-controls="admin-sidebar" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? 'Đóng menu' : '☰ Menu'}</button>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#64748b' }}>
             <span>Quản trị hệ thống</span>
             <span>/</span>
