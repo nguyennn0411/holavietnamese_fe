@@ -9,6 +9,6 @@ export function Modal({ title, children, onClose, busy = false }) {
     return () => { element.close(); previous?.focus() }
   }, [])
   return <dialog ref={dialog} className="modal" aria-labelledby="modal-title" onCancel={event => { event.preventDefault(); if (!busy) onClose() }}>
-    <div className="row"><h2 id="modal-title">{title}</h2><button type="button" className="icon-button" aria-label="Đóng hộp thoại / Close dialog" disabled={busy} onClick={onClose}>×</button></div>{children}
+    <div className="row"><h2 id="modal-title">{title}</h2><button type="button" className="icon-button" aria-label="Close dialog" disabled={busy} onClick={onClose}>×</button></div>{children}
   </dialog>
 }
