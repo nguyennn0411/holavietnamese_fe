@@ -5,7 +5,10 @@ import { useAsyncResource } from './useAsyncResource'
 export function useVocabulary({ search, courseId, lessonId }) {
   const [debounced, setDebounced] = useState(search)
   useEffect(() => { const timer = setTimeout(() => setDebounced(search), 250); return () => clearTimeout(timer) }, [search])
-  return useAsyncResource(useCallback(() => vocabularyService.list({ search: debounced, courseId, lessonId }), [debounced, courseId, lessonId]))
+  return useAsyncResource(useCallback(signal => vocabularyService.list({ search: debounced, courseId, lessonId }, { signal }), [debounced, courseId, lessonId]))
+}
+export function useVocabularyEntry(id) {
+  return useAsyncResource(useCallback(signal => vocabularyService.get(id, { signal }), [id]))
 }
 export function useVocabularyOptions() {
   return useAsyncResource(useCallback(async () => {

@@ -25,9 +25,11 @@ export const ROUTES = {
 
   // Vocabulary (Người 3)
   VOCABULARY: '/vocabulary',
+  VOCABULARY_NOTEBOOK_DETAIL: '/vocabulary/notebook/:id',
 
   // Admin (Người 1)
   ADMIN: '/admin',
+  ADMIN_VOCABULARY: '/admin/vocabulary',
   ADMIN_USERS: '/admin/users',
   ADMIN_USER_DETAIL: '/admin/users/:id',
   ADMIN_ROLES: '/admin/roles',

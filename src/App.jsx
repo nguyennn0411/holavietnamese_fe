@@ -32,6 +32,7 @@ import { CourseDetailPage } from "@/features/course/CourseDetailPage";
 import { MyCoursesPage } from "@/pages/my-courses/MyCoursesPage";
 import { ResumeCoursePage } from "@/pages/learning/ResumeCoursePage";
 import { VocabularyNotebookPage } from "@/pages/vocabulary/VocabularyNotebookPage";
+import { VocabularyNotebookDetailPage } from "@/pages/vocabulary/VocabularyNotebookDetailPage";
 
 // Admin Pages (Người 1)
 import { AdminDashboardPage } from "@/pages/admin/AdminDashboardPage";
@@ -42,6 +43,7 @@ import { AdminAchievementsPage } from "@/pages/admin/AdminAchievementsPage";
 import { AdminXpRulesPage } from "@/pages/admin/AdminXpRulesPage";
 import { AdminAuditLogsPage } from "@/pages/admin/AdminAuditLogsPage";
 import { AdminSettingsPage } from "@/pages/admin/AdminSettingsPage";
+import { AdminVocabularyPage } from "@/pages/admin/AdminVocabularyPage";
 
 import { LearnPage } from "@/features/course/LearnPage";
 import { LessonLearningPage as ActivityLessonPage } from "@/features/lesson/LessonLearningPage";
@@ -101,6 +103,10 @@ function App() {
                 element={<VocabularyNotebookPage />}
               />
               <Route
+                path={ROUTES.VOCABULARY_NOTEBOOK_DETAIL}
+                element={<VocabularyNotebookDetailPage />}
+              />
+              <Route
                 path={ROUTES.NOTIFICATIONS}
                 element={<NotificationsPage />}
               />
@@ -134,6 +140,7 @@ function App() {
             {/* Admin Area (Người 1) */}
             <Route element={<AdminRoute />}>
               <Route element={<AdminLayout />}>
+                <Route path={ROUTES.ADMIN_VOCABULARY} element={<AdminVocabularyPage />} />
                 <Route
                   path="/admin/courses/new"
                   element={<AdminContentFormPage type="courses" />}
