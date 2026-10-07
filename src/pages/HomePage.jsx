@@ -182,20 +182,29 @@ export function HomePage() {
               <span className="home-quick-arrow">→</span>
             </Link>
 
-            <Link to="/achievements" className="home-quick-card">
+            <Link to="/culture" className="home-quick-card">
               <div className="home-quick-icon home-quick-icon--culture">🏮</div>
               <div className="home-quick-info">
-                <strong>Hành trình Việt Nam</strong>
-                <p>Khám phá văn hóa & tem du lịch</p>
+                <strong>Khám phá văn hóa</strong>
+                <p>Ẩm thực, phong tục & điểm đến Việt Nam</p>
               </div>
               <span className="home-quick-arrow">→</span>
             </Link>
 
-            <Link to="/my-learning" className="home-quick-card">
-              <div className="home-quick-icon home-quick-icon--ai">✦</div>
+            <Link to="/ai-tutor" className="home-quick-card">
+              <div className="home-quick-icon home-quick-icon--ai">🤖</div>
               <div className="home-quick-info">
-                <strong>Hội thoại AI Tutor</strong>
-                <p>Thực hành phản xạ với tình huống giả lập</p>
+                <strong>Hola AI Tutor (7 Chế độ)</strong>
+                <p>Ngữ pháp, dịch thuật, giao tiếp & 3 miền</p>
+              </div>
+              <span className="home-quick-arrow">→</span>
+            </Link>
+
+            <Link to="/ai-scenarios" className="home-quick-card">
+              <div className="home-quick-icon home-quick-icon--culture">🎭</div>
+              <div className="home-quick-info">
+                <strong>Kịch bản Roleplay</strong>
+                <p>Nhập vai tương tác & đánh giá phản xạ</p>
               </div>
               <span className="home-quick-arrow">→</span>
             </Link>

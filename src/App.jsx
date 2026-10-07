@@ -36,6 +36,15 @@ import { LessonLearningPage } from '@/pages/learning/LessonLearningPage';
 import { ResumeCoursePage } from '@/pages/learning/ResumeCoursePage';
 import { VocabularyNotebookPage } from '@/pages/vocabulary/VocabularyNotebookPage';
 
+// Văn hóa, AI Tutor & Roleplay Pages (Người 4)
+import { CultureExplorePage } from '@/pages/culture/CultureExplorePage';
+import { CultureDetailPage } from '@/pages/culture/CultureDetailPage';
+import { AiTutorPage } from '@/pages/ai-tutor/AiTutorPage';
+import { ScenarioListPage } from '@/pages/roleplay/ScenarioListPage';
+import { ScenarioDetailPage } from '@/pages/roleplay/ScenarioDetailPage';
+import { RoleplaySessionPage } from '@/pages/roleplay/RoleplaySessionPage';
+import { RoleplayResultPage } from '@/pages/roleplay/RoleplayResultPage';
+
 // Admin Pages (Người 1)
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { AdminUsersPage } from '@/pages/admin/AdminUsersPage';
@@ -45,6 +54,16 @@ import { AdminAchievementsPage } from '@/pages/admin/AdminAchievementsPage';
 import { AdminXpRulesPage } from '@/pages/admin/AdminXpRulesPage';
 import { AdminAuditLogsPage } from '@/pages/admin/AdminAuditLogsPage';
 import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
+
+// Admin Pages (Người 4: Văn hóa & AI)
+import { AdminCultureListPage } from '@/pages/admin/AdminCultureListPage';
+import { AdminCultureEditPage } from '@/pages/admin/AdminCultureEditPage';
+import { AdminCultureCategoriesPage } from '@/pages/admin/AdminCultureCategoriesPage';
+import { AdminAiScenariosPage } from '@/pages/admin/AdminAiScenariosPage';
+import { AdminScenarioBuilderPage } from '@/pages/admin/AdminScenarioBuilderPage';
+import { AdminAiSettingsPage } from '@/pages/admin/AdminAiSettingsPage';
+import { AdminAiUsagePage } from '@/pages/admin/AdminAiUsagePage';
+import { AdminAiReviewsPage } from '@/pages/admin/AdminAiReviewsPage';
 
 function App() {
   return (
@@ -72,6 +91,15 @@ function App() {
               <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
               <Route path={ROUTES.VOCABULARY} element={<VocabularyNotebookPage />} />
 
+              {/* Văn hóa & AI Tutor & Roleplay (Người 4) */}
+              <Route path={ROUTES.CULTURE} element={<CultureExplorePage />} />
+              <Route path={ROUTES.CULTURE_DETAIL} element={<CultureDetailPage />} />
+              <Route path={ROUTES.AI_TUTOR} element={<AiTutorPage />} />
+              <Route path={ROUTES.AI_SCENARIOS} element={<ScenarioListPage />} />
+              <Route path={ROUTES.AI_SCENARIO_DETAIL} element={<ScenarioDetailPage />} />
+              <Route path={ROUTES.AI_ROLEPLAY} element={<RoleplaySessionPage />} />
+              <Route path={ROUTES.AI_SESSION_RESULT} element={<RoleplayResultPage />} />
+
               {/* Protected Learner Routes */}
               <Route element={<ProtectedRoute />}>
                 <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
@@ -97,6 +125,18 @@ function App() {
                 <Route path={ROUTES.ADMIN_XP_RULES} element={<AdminXpRulesPage />} />
                 <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<AdminAuditLogsPage />} />
                 <Route path={ROUTES.ADMIN_SETTINGS} element={<AdminSettingsPage />} />
+
+                {/* Admin Văn hóa & AI (Người 4) */}
+                <Route path={ROUTES.ADMIN_CULTURE} element={<AdminCultureListPage />} />
+                <Route path={ROUTES.ADMIN_CULTURE_NEW} element={<AdminCultureEditPage />} />
+                <Route path={ROUTES.ADMIN_CULTURE_EDIT} element={<AdminCultureEditPage />} />
+                <Route path={ROUTES.ADMIN_CULTURE_CATEGORIES} element={<AdminCultureCategoriesPage />} />
+                <Route path={ROUTES.ADMIN_AI_SCENARIOS} element={<AdminAiScenariosPage />} />
+                <Route path={ROUTES.ADMIN_AI_SCENARIO_NEW} element={<AdminScenarioBuilderPage />} />
+                <Route path={ROUTES.ADMIN_AI_SCENARIO_BUILDER} element={<AdminScenarioBuilderPage />} />
+                <Route path={ROUTES.ADMIN_AI_SETTINGS} element={<AdminAiSettingsPage />} />
+                <Route path={ROUTES.ADMIN_AI_USAGE} element={<AdminAiUsagePage />} />
+                <Route path={ROUTES.ADMIN_AI_REVIEWS} element={<AdminAiReviewsPage />} />
               </Route>
             </Route>
           </Routes>

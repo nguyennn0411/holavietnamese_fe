@@ -9,6 +9,12 @@ export function AdminLayout() {
   const navLinks = [
     { to: ROUTES.ADMIN, label: 'Dashboard tổng quan', icon: '📊' },
     { to: ROUTES.ADMIN_USERS, label: 'Quản lý người dùng', icon: '👥' },
+    { to: ROUTES.ADMIN_CULTURE, label: 'Quản lý văn hóa', icon: '🏮' },
+    { to: ROUTES.ADMIN_CULTURE_CATEGORIES, label: 'Danh mục văn hóa', icon: '📑' },
+    { to: ROUTES.ADMIN_AI_SCENARIOS, label: 'Kịch bản AI', icon: '🎭' },
+    { to: ROUTES.ADMIN_AI_SETTINGS, label: 'Cấu hình AI', icon: '🤖' },
+    { to: ROUTES.ADMIN_AI_USAGE, label: 'Sử dụng AI & Chi phí', icon: '📈' },
+    { to: ROUTES.ADMIN_AI_REVIEWS, label: 'Kiểm tra chất lượng AI', icon: '🛡️' },
     { to: ROUTES.ADMIN_ACHIEVEMENTS, label: 'Quản lý thành tích', icon: '🏆' },
     { to: ROUTES.ADMIN_AUDIT_LOGS, label: 'Nhật ký hệ thống', icon: '📜' },
     { to: ROUTES.ADMIN_ROLES, label: 'Vai trò & Phân quyền', icon: '🛡️' },
