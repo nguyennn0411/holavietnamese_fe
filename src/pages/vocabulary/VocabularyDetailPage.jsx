@@ -1,55 +1,57 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { SaveVocabularyButton } from '@/components/vocabulary/SaveVocabularyButton';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
-import { PageHeader, SpeakButton, EmptyState } from '@/components/common/Ui';
+import { SpeakButton, EmptyState } from '@/components/common/Ui';
+import { Modal } from '@/components/common/Modal';
+import { VocabularyCatalogPage } from './VocabularyCatalogPage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { vocabularyCatalogService } from '@/services/vocabularyCatalogService';
+import '@/components/vocabulary/vocabulary.css';
 
 export function VocabularyDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [notebookRevision, setNotebookRevision] = useState(0);
   const resource = useAsyncResource(useCallback(
     (signal) => vocabularyCatalogService.get(id, { signal }),
     [id],
   ));
 
   return (
-    <section className="vocabulary-detail-page">
-      <Link className="text-link" to={ROUTES.VOCABULARY}>← Từ vựng</Link>
-      <PageHeader
-        eyebrow="Khám phá từng từ một"
-        title="Chi tiết từ vựng"
-        actions={<Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}>Sổ từ vựng</Link>}
-      />
+    <>
+    <VocabularyCatalogPage key={notebookRevision} />
+    <section className="vocabulary-detail-page vocabulary-ui vocabulary-catalog-detail">
+      <Modal title="Chi tiết từ vựng" onClose={() => navigate(ROUTES.VOCABULARY)}>
       <ResourceState resource={resource}>
         {(entry) => entry?.id ? (
           <>
-            <article className="card">
-              <div className="row">
-                <div className="actions">
-                  {entry.partOfSpeech && <span className="badge">{entry.partOfSpeech}</span>}
-                  {entry.cefrLevel && <span className="badge">{entry.cefrLevel}</span>}
-                </div>
-                <SpeakButton text={entry.word} audioUrl={entry.audioUrl} />
+            <article className="card vocabulary-detail-hero">
+              <p className="eyebrow">Khám phá từng từ một</p>
+              <div className="actions vocabulary-detail-badges">
+                {entry.topics?.length > 0 && <p className="muted vocabulary-topics">{entry.topics.map((topic) => topic.name).join(', ')}</p>}
+                {entry.cefrLevel && <span className="badge">{entry.cefrLevel}</span>}
               </div>
               <h2 lang="vi">{entry.word}</h2>
-              {entry.pronunciation && <p className="muted">{entry.pronunciation}</p>}
-              {entry.topics?.length > 0 && <p className="muted">{entry.topics.map((topic) => topic.name).join(', ')}</p>}
-              <SaveVocabularyButton key={entry.id} entry={entry} />
+              <div className="vocabulary-detail-pronunciation">
+                {entry.pronunciation && <p className="muted vocabulary-pronunciation">{entry.pronunciation}</p>}
+                {entry.partOfSpeech && <span className="muted">{entry.partOfSpeech}</span>}
+              </div>
+              <div className="vocabulary-detail-word-actions"><SpeakButton text={entry.word} audioUrl={entry.audioUrl} fallbackToSpeech /><SaveVocabularyButton key={entry.id} entry={entry} onSaved={() => setNotebookRevision(value => value + 1)} onDeleted={() => setNotebookRevision(value => value + 1)} /></div>
             </article>
             {entry.meanings?.length ? entry.meanings.map((meaning, index) => (
-              <section className="card" key={meaning.id ?? index}>
-                <h2>Nghĩa {index + 1}: <span lang="en">{meaning.translationEn}</span></h2>
+              <section className="card vocabulary-meaning-detail" key={meaning.id ?? index}>
+                <h2><span className="vocabulary-meaning-number">Nghĩa {index + 1}:</span> <span lang="en">{meaning.translationEn}</span></h2>
                 {meaning.definitionEn && <p lang="en">{meaning.definitionEn}</p>}
-                {meaning.usageNote && <p className="muted">{meaning.usageNote}</p>}
+                {meaning.usageNote && <p className="muted vocabulary-usage-note"><span>Lưu ý sử dụng</span>{meaning.usageNote}</p>}
                 {meaning.examples?.length > 0 && <>
                   <h3>Ví dụ</h3>
                   {meaning.examples.map((example, exampleIndex) => (
-                    <div key={example.id ?? exampleIndex}>
+                    <div className="vocabulary-example" key={example.id ?? exampleIndex}>
                       <div className="row">
                         <p lang="vi">{example.exampleVi}</p>
-                        <SpeakButton text={example.exampleVi} audioUrl={example.audioUrl} />
+                        <SpeakButton text={example.exampleVi} audioUrl={example.audioUrl} fallbackToSpeech />
                       </div>
                       {example.translationEn && <p className="muted" lang="en">{example.translationEn}</p>}
                     </div>
@@ -62,6 +64,9 @@ export function VocabularyDetailPage() {
           <Link className="button secondary" to={ROUTES.VOCABULARY}>Từ vựng</Link>
         </EmptyState>}
       </ResourceState>
+      <div className="vocabulary-detail-footer"><Link className="text-link" to={ROUTES.VOCABULARY}>← Từ vựng</Link><Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}>Sổ từ vựng</Link></div>
+      </Modal>
     </section>
+    </>
   );
 }

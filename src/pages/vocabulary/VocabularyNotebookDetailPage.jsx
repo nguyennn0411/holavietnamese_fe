@@ -6,19 +6,24 @@ import { ResourceState } from '@/components/common/ResourceState'
 import { VocabularyCard } from '@/components/vocabulary/VocabularyCard'
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm'
 import { VocabularyDeleteModal } from '@/components/vocabulary/VocabularyDeleteModal'
+import { Modal } from '@/components/common/Modal'
+import { VocabularyNotebookPage } from './VocabularyNotebookPage'
+import '@/components/vocabulary/vocabulary.css'
 
 export function VocabularyNotebookDetailPage() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const resource = useVocabularyEntry(id)
   const [savedId, setSavedId] = useState(null)
 
-  return <section className="vocabulary-detail-page">
-    <Link className="text-link" to={ROUTES.VOCABULARY_NOTEBOOK}>← Về sổ tay</Link>
+  return <><VocabularyNotebookPage /><section className="vocabulary-detail-page vocabulary-ui vocabulary-notebook-detail">
+    <Modal title="Chi tiết từ vựng" onClose={() => navigate(ROUTES.VOCABULARY_NOTEBOOK)}>
     <p className="eyebrow">Những từ bạn đã lưu</p>
-    <h1>Chi tiết từ vựng</h1>
     {savedId === id && <p className="success" role="status">Đã lưu từ vựng.</p>}
     <ResourceState resource={resource}>{entry => <NotebookEntryDetails key={entry.id} entry={entry} onSaved={() => { setSavedId(id); resource.reload() }} />}</ResourceState>
-  </section>
+    <div className="vocabulary-detail-footer"><Link className="text-link" to={ROUTES.VOCABULARY_NOTEBOOK}>← Về sổ tay</Link></div>
+    </Modal>
+  </section></>
 }
 
 function NotebookEntryDetails({ entry, onSaved }) {

@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
-import { PageHeader } from '@/components/common/Ui';
+import { PageHeader, SpeakButton } from '@/components/common/Ui';
+import { VocabularyOverview } from '@/components/vocabulary/VocabularyNavigation';
+import { SaveVocabularyButton } from '@/components/vocabulary/SaveVocabularyButton';
 import { ResourceState } from '@/components/common/ResourceState';
 import { vocabularyCatalogService } from '@/services/vocabularyCatalogService';
+import '@/components/vocabulary/vocabulary.css';
 
 const emptyFilters = {
   keyword: '',
@@ -16,6 +19,8 @@ export function VocabularyCatalogPage() {
   const [query, setQuery] = useState({ ...emptyFilters });
   const [keyword, setKeyword] = useState('');
   const [revision, setRevision] = useState(0);
+  const [overviewRevision, setOverviewRevision] = useState(0);
+  const [filterOptions, setFilterOptions] = useState([]);
   const [resource, setResource] = useState({
     data: [],
     loading: true,
@@ -39,6 +44,7 @@ export function VocabularyCatalogPage() {
       .list(query, { signal: controller.signal })
       .then((data) => {
         if (!controller.signal.aborted) {
+          if (Object.values(query).every(value => !value)) setFilterOptions(data);
           setResource({
             data,
             loading: false,
@@ -65,42 +71,41 @@ export function VocabularyCatalogPage() {
       [field]: value,
     }));
   };
+  const levels = [...new Set(filterOptions.map(item => item.cefrLevel).filter(Boolean))].sort();
+  const partsOfSpeech = [...new Set(filterOptions.map(item => item.partOfSpeech).filter(Boolean))].sort();
+  const topics = [...new Map(filterOptions.flatMap(item => item.topics || []).map(topic => [String(topic.id), topic])).values()];
 
   return (
-    <section className="vocabulary-page">
+    <section className="vocabulary-page vocabulary-ui vocabulary-catalog-page">
       <PageHeader
         eyebrow="Khám phá từng từ một"
         title="Từ vựng tiếng Việt"
         description="Khám phá những từ vựng đã được xuất bản và lưu những từ bạn muốn ôn lại."
         actions={
-          <>
-            <Link
-              to={ROUTES.VOCABULARY_NOTEBOOK}
-              className="button secondary"
-            >
-              Sổ từ vựng
-            </Link>
-
             <Link
               to={ROUTES.VOCABULARY_REVIEW}
               className="button"
             >
               Ôn từ vựng →
             </Link>
-          </>
         }
       />
 
+      <VocabularyOverview key={overviewRevision} active="catalog">
+        <Link to={ROUTES.VOCABULARY_NOTEBOOK} className="button secondary">Mở sổ tay</Link>
+      </VocabularyOverview>
+
       <form
-        className="filters"
+        className="filters vocabulary-catalog-filters"
         onSubmit={(event) => {
           event.preventDefault();
           filter('keyword', keyword.trim());
         }}
       >
-        <label style={{ flex: '1 1 240px' }}>
-          Tìm kiếm
+        <label className="vocabulary-search-field">
+          <span className="vocabulary-field-label">Tìm kiếm</span>
           <input
+            type="search"
             value={keyword}
             onChange={(event) =>
               setKeyword(event.target.value)
@@ -109,26 +114,24 @@ export function VocabularyCatalogPage() {
           />
         </label>
 
-        <label style={{ flex: '1 1 160px' }}>
-          CEFR
-          <input
+        <label>
+          <span className="vocabulary-field-label">CEFR</span>
+          <select
             value={query.cefrLevel}
             onChange={(event) =>
               filter('cefrLevel', event.target.value)
             }
-            placeholder="Ví dụ: A1"
-          />
+          ><option value="">Tất cả CEFR</option>{levels.map(level => <option key={level} value={level}>{level}</option>)}</select>
         </label>
 
-        <label style={{ flex: '1 1 180px' }}>
-          Từ loại
-          <input
+        <label>
+          <span className="vocabulary-field-label">Từ loại</span>
+          <select
             value={query.partOfSpeech}
             onChange={(event) =>
               filter('partOfSpeech', event.target.value)
             }
-            placeholder="Ví dụ: phrase"
-          />
+          ><option value="">Tất cả từ loại</option>{partsOfSpeech.map(part => <option key={part} value={part}>{part}</option>)}</select>
         </label>
 
         <div className="actions">
@@ -148,6 +151,11 @@ export function VocabularyCatalogPage() {
           </button>
         </div>
       </form>
+      <div className="vocabulary-topic-filters" role="group" aria-label="Lọc theo chủ đề">
+        <button type="button" className={!query.topicId ? 'active' : ''} aria-pressed={!query.topicId} onClick={() => filter('topicId', '')}>Tất cả</button>
+        {topics.map(topic => <button type="button" key={topic.id} className={String(query.topicId) === String(topic.id) ? 'active' : ''}
+          aria-pressed={String(query.topicId) === String(topic.id)} onClick={() => filter('topicId', String(topic.id))}>{topic.name}</button>)}
+      </div>
 
       <ResourceState
         resource={{
@@ -164,13 +172,16 @@ export function VocabularyCatalogPage() {
               </p>
             </div>
           ) : (
+            <>
+            <div className="vocabulary-results-heading"><strong>Khám phá từ vựng</strong><span>{items.length} từ</span></div>
             <div className="card-grid">
               {items.map((item) => (
                 <article
-                  className="card"
+                  className="card catalog-word-card"
                   key={item.id}
                 >
-                  <div className="row">
+                  <SaveVocabularyButton key={item.id} entry={item} compact onSaved={() => setOverviewRevision(value => value + 1)} onDeleted={() => setOverviewRevision(value => value + 1)} />
+                  <div className="row catalog-word-meta">
                     <span className="badge">
                       {item.partOfSpeech}
                     </span>
@@ -178,26 +189,27 @@ export function VocabularyCatalogPage() {
                     <span className="badge">
                       {item.cefrLevel}
                     </span>
+                    <SpeakButton text={item.word} audioUrl={item.audioUrl} fallbackToSpeech />
                   </div>
 
-                  <h2>{item.word}</h2>
+                  <h2><Link className="vocabulary-word-link" to={generatePath(ROUTES.VOCABULARY_CATALOG_DETAIL, { id: String(item.id) })}>{item.word}</Link></h2>
 
                   {item.pronunciation && (
-                    <p className="muted">
+                    <p className="muted catalog-word-pronunciation">
                       {item.pronunciation}
                     </p>
                   )}
 
                   {item.meanings?.[0] && (
                     <>
-                      <p>
+                      <p className="catalog-word-meaning">
                         <strong>
                           {item.meanings[0].translationEn}
                         </strong>
                       </p>
 
                       {item.meanings[0].definitionEn && (
-                        <p className="muted">
+                        <p className="muted catalog-word-definition">
                           {item.meanings[0].definitionEn}
                         </p>
                       )}
@@ -205,7 +217,7 @@ export function VocabularyCatalogPage() {
                   )}
 
                   {item.topics?.length > 0 && (
-                    <p className="muted">
+                    <p className="muted catalog-word-topics">
                       {item.topics
                         .map((topic) => topic.name)
                         .join(', ')}
@@ -223,6 +235,7 @@ export function VocabularyCatalogPage() {
                 </article>
               ))}
             </div>
+            </>
           )
         }
       </ResourceState>

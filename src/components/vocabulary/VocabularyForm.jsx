@@ -18,7 +18,7 @@ export function VocabularyForm({ entry, lessonId = null, lessons = [], lessonOpt
       onSaved(saved)
     } catch (e) { setError(e.message) } finally { submitting.current = false; setPending(false) }
   }
-  return <Modal title={entry ? 'Chỉnh sửa từ vựng' : 'Lưu từ vựng'} onClose={onClose} busy={pending}><form onSubmit={submit}>
+  return <Modal title={entry ? 'Chỉnh sửa từ vựng' : 'Lưu từ vựng'} onClose={onClose} busy={pending}><form className="vocabulary-notebook-form" onSubmit={submit}>
     <label>Từ tiếng Việt<input name="word" defaultValue={entry?.word || ''} required maxLength={200} autoFocus lang="vi" disabled={pending} /></label>
     <label>Nghĩa<textarea name="meaning" defaultValue={entry?.meaning || ''} required maxLength={1000} rows={2} disabled={pending} /></label>
     <label>Phát âm<input name="pronunciation" defaultValue={entry?.pronunciation || ''} maxLength={200} disabled={pending} /></label>

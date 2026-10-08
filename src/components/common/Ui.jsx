@@ -31,27 +31,34 @@ export function Artwork({ kind = 'food', className = '', alt = '' }) {
   return <img className={`figma-art ${className}`} src={`${import.meta.env.BASE_URL}design/${kind}.svg`} alt={alt} loading="lazy" decoding="async" />;
 }
 
-export function SpeakButton({ text, audioUrl, className = '' }) {
-  return <SpeechAttempt key={`${audioUrl || ''}-${text || ''}`} text={text} audioUrl={audioUrl} className={className} />;
+export function SpeakButton({ text, audioUrl, className = '', fallbackToSpeech = false }) {
+  return <SpeechAttempt key={`${audioUrl || ''}-${text || ''}`} text={text} audioUrl={audioUrl} className={className} fallbackToSpeech={fallbackToSpeech} />;
 }
 
-function SpeechAttempt({ text, audioUrl, className }) {
-  const [error, setError] = useState(''), player = useRef(null), errorId = useId();
-  useEffect(() => () => { if (player.current) { player.current.pause(); player.current.src = ''; } }, []);
+function SpeechAttempt({ text, audioUrl, className, fallbackToSpeech }) {
+  const [error, setError] = useState(''), player = useRef(null), attempt = useRef(0), errorId = useId();
+  useEffect(() => () => { attempt.current += 1; if (player.current) { player.current.pause(); player.current.src = ''; } }, []);
   async function speak() {
+    const currentAttempt = ++attempt.current;
     setError('');
     if (player.current) player.current.pause();
     if (audioUrl) {
       const source = mediaSource(audioUrl, 'audio');
-      if (!source) { setError('Đường dẫn âm thanh không hợp lệ.'); return; }
-      player.current = new Audio(source);
-      try { await player.current.play(); } catch (error) { if (error.name !== 'AbortError') setError('Không phát được âm thanh. Vui lòng thử lại sau.'); }
-      return;
+      // YouTube pages cannot be played by HTMLAudioElement.
+      const youtubePage = source && /^(?:https?:)?\/\/(?:[\w-]+\.)*(?:youtube\.com|youtu\.be|youtube-nocookie\.com)(?:[/:?#]|$)/i.test(source);
+      if (source && !(fallbackToSpeech && youtubePage)) {
+        player.current = new Audio(source);
+        try { await player.current.play(); return; } catch (failure) {
+          if (failure.name === 'AbortError' || currentAttempt !== attempt.current) return;
+          if (!fallbackToSpeech || !text) { setError('Không phát được âm thanh. Vui lòng thử lại sau.'); return; }
+        }
+      } else if (!fallbackToSpeech || !text) { setError('Đường dẫn âm thanh không hợp lệ.'); return; }
     }
+    if (currentAttempt !== attempt.current) return;
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'vi-VN';
-      utterance.onerror = event => { if (!['canceled', 'interrupted'].includes(event.error)) setError('Không phát được giọng đọc trên trình duyệt này.'); };
+      utterance.onerror = event => { if (currentAttempt === attempt.current && !['canceled', 'interrupted'].includes(event.error)) setError('Không phát được giọng đọc trên trình duyệt này.'); };
       window.speechSynthesis.speak(utterance);
     } else setError('Trình duyệt chưa hỗ trợ giọng đọc.');
   }
