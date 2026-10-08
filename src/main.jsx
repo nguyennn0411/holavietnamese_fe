@@ -10,6 +10,7 @@ import './presentation/styles/dashboard.css'
 import './presentation/styles/account.css'
 import './presentation/styles/ai-tutor.css'
 import './presentation/styles/design-system.css'
+import './presentation/styles/heritage.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

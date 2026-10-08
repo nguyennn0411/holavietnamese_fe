@@ -1,8 +1,9 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import dongSonBg from '@/assets/images/dongson_auth_bg.png';
+import dongSonBg from '@/assets/images/dongson_heritage.png';
 
 export function OnboardingPage() {
   const navigate = useNavigate();
@@ -66,16 +67,12 @@ export function OnboardingPage() {
               />
             ))}
           </div>
-          {error && <div className="auth-message auth-message-error" role="alert">{error}</div>}
+          {error && <div className="auth-message auth-message-error" role="alert"><BilingualText>{error}</BilingualText></div>}
 
           {step === 1 && (
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
-                Ngôn ngữ mẹ đẻ của bạn là gì?
-              </h2>
-              <p style={{ color: 'var(--color-sage)', marginBottom: '24px' }}>
-                Chúng tôi sẽ dùng ngôn ngữ này để giải thích từ vựng và ngữ pháp.
-              </p>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}><BilingualText>{"Ngôn ngữ mẹ đẻ của bạn là gì?"}</BilingualText></h2>
+              <p style={{ color: 'var(--color-forest)', marginBottom: '24px' }}><BilingualText>{"Chúng tôi sẽ dùng ngôn ngữ này để giải thích từ vựng và ngữ pháp."}</BilingualText></p>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '28px' }}>
                 {[
@@ -93,7 +90,7 @@ export function OnboardingPage() {
                     style={{
                       padding: '16px',
                       borderRadius: '12px',
-                      border: preferences.nativeLanguage === lang.code ? '2px solid #8B1A1A' : '1.5px solid #ded5cb',
+                      border: preferences.nativeLanguage === lang.code ? '2px solid var(--color-red)' : '1.5px solid var(--color-border)',
                       background: preferences.nativeLanguage === lang.code ? 'var(--color-cream)' : 'var(--color-surface)',
                       fontSize: '1rem',
                       fontWeight: 600,
@@ -101,7 +98,7 @@ export function OnboardingPage() {
                       textAlign: 'left',
                     }}
                   >
-                    {lang.name}
+                    <BilingualText>{lang.name}</BilingualText>
                   </button>
                 ))}
               </div>
@@ -110,20 +107,14 @@ export function OnboardingPage() {
                 type="button"
                 className="auth-btn auth-btn-primary"
                 onClick={() => setStep(2)}
-              >
-                Tiếp tục →
-              </button>
+              ><BilingualText>{"Tiếp tục →"}</BilingualText></button>
             </div>
           )}
 
           {step === 2 && (
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
-                Mục tiêu học của bạn?
-              </h2>
-              <p style={{ color: 'var(--color-sage)', marginBottom: '20px' }}>
-                Chọn định hướng để AI và hệ thống đề xuất bài học thực tế nhất.
-              </p>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}><BilingualText>{"Mục tiêu học của bạn?"}</BilingualText></h2>
+              <p style={{ color: 'var(--color-forest)', marginBottom: '20px' }}><BilingualText>{"Chọn định hướng để AI và hệ thống đề xuất bài học thực tế nhất."}</BilingualText></p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
                 {goals.map(g => (
@@ -133,32 +124,28 @@ export function OnboardingPage() {
                     style={{
                       padding: '14px 18px',
                       borderRadius: '12px',
-                      border: preferences.learningGoal === g.id ? '2px solid #8B1A1A' : '1.5px solid #ded5cb',
+                      border: preferences.learningGoal === g.id ? '2px solid var(--color-red)' : '1.5px solid var(--color-border)',
                       background: preferences.learningGoal === g.id ? 'var(--color-cream)' : 'var(--color-surface)',
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>{g.title}</strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--color-sage)' }}>{g.desc}</span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}><BilingualText>{g.title}</BilingualText></strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}><BilingualText>{g.desc}</BilingualText></span>
                   </div>
                 ))}
               </div>
 
               <div style={{ display: 'flex', gap: '12px' }}>
-                <button type="button" className="auth-show-btn" onClick={() => setStep(1)}>← Quay lại</button>
-                <button type="button" className="auth-btn auth-btn-primary" onClick={() => setStep(3)}>Tiếp tục →</button>
+                <button type="button" className="auth-show-btn" onClick={() => setStep(1)}><BilingualText>{"← Quay lại"}</BilingualText></button>
+                <button type="button" className="auth-btn auth-btn-primary" onClick={() => setStep(3)}><BilingualText>{"Tiếp tục →"}</BilingualText></button>
               </div>
             </div>
           )}
 
           {step === 3 && (
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
-                Trình độ tiếng Việt hiện tại?
-              </h2>
-              <p style={{ color: 'var(--color-sage)', marginBottom: '20px' }}>
-                Đừng ngại nếu bạn chưa biết gì, Hola Vietnamese được tạo ra để bắt đầu từ số 0!
-              </p>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}><BilingualText>{"Trình độ tiếng Việt hiện tại?"}</BilingualText></h2>
+              <p style={{ color: 'var(--color-forest)', marginBottom: '20px' }}><BilingualText>{"Đừng ngại nếu bạn chưa biết gì, Hola Vietnamese được tạo ra để bắt đầu từ số 0!"}</BilingualText></p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
                 {levels.map(l => (
@@ -168,36 +155,32 @@ export function OnboardingPage() {
                     style={{
                       padding: '14px 18px',
                       borderRadius: '12px',
-                      border: preferences.targetLevel === l.id ? '2px solid #8B1A1A' : '1.5px solid #ded5cb',
+                      border: preferences.targetLevel === l.id ? '2px solid var(--color-red)' : '1.5px solid var(--color-border)',
                       background: preferences.targetLevel === l.id ? 'var(--color-cream)' : 'var(--color-surface)',
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>{l.title}</strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--color-sage)' }}>{l.desc}</span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}><BilingualText>{l.title}</BilingualText></strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}><BilingualText>{l.desc}</BilingualText></span>
                   </div>
                 ))}
               </div>
 
               <div style={{ display: 'flex', gap: '12px' }}>
-                <button type="button" className="auth-show-btn" onClick={() => setStep(2)}>← Quay lại</button>
-                <button type="button" className="auth-btn auth-btn-primary" onClick={() => setStep(4)}>Tiếp tục →</button>
+                <button type="button" className="auth-show-btn" onClick={() => setStep(2)}><BilingualText>{"← Quay lại"}</BilingualText></button>
+                <button type="button" className="auth-btn auth-btn-primary" onClick={() => setStep(4)}><BilingualText>{"Tiếp tục →"}</BilingualText></button>
               </div>
             </div>
           )}
 
           {step === 4 && (
             <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
-                Mục tiêu thời gian mỗi ngày?
-              </h2>
-              <p style={{ color: 'var(--color-sage)', marginBottom: '20px' }}>
-                Chỉ cần vài phút kiên trì mỗi ngày để tích lũy XP và duy trì chuỗi Streak rực cháy 🔥.
-              </p>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}><BilingualText>{"Mục tiêu thời gian mỗi ngày?"}</BilingualText></h2>
+              <p style={{ color: 'var(--color-forest)', marginBottom: '20px' }}><BilingualText>{"Chỉ cần vài phút kiên trì mỗi ngày để tích lũy XP và duy trì chuỗi Streak rực cháy 🔥."}</BilingualText></p>
 
               <label className="auth-field" style={{ marginBottom: 18 }}>
-                <span className="auth-label">Quốc gia</span>
-                <input className="auth-input" value={preferences.country} onChange={(e) => setPreferences({ ...preferences, country: e.target.value })} placeholder="Ví dụ: United States" required />
+                <span className="auth-label"><BilingualText>{"Quốc gia"}</BilingualText></span>
+                <input className="auth-input" value={preferences.country} onChange={(e) => setPreferences({ ...preferences, country: e.target.value })} placeholder={bilingualLabel("Ví dụ: United States")} required />
               </label>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
@@ -208,26 +191,26 @@ export function OnboardingPage() {
                     style={{
                       padding: '14px 18px',
                       borderRadius: '12px',
-                      border: preferences.dailyMinutes === t.minutes ? '2px solid #8B1A1A' : '1.5px solid #ded5cb',
+                      border: preferences.dailyMinutes === t.minutes ? '2px solid var(--color-red)' : '1.5px solid var(--color-border)',
                       background: preferences.dailyMinutes === t.minutes ? 'var(--color-cream)' : 'var(--color-surface)',
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>{t.label}</strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--color-sage)' }}>{t.sub}</span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}><BilingualText>{t.label}</BilingualText></strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}><BilingualText>{t.sub}</BilingualText></span>
                   </div>
                 ))}
               </div>
 
               <div style={{ display: 'flex', gap: '12px' }}>
-                <button type="button" className="auth-show-btn" onClick={() => setStep(3)}>← Quay lại</button>
+                <button type="button" className="auth-show-btn" onClick={() => setStep(3)}><BilingualText>{"← Quay lại"}</BilingualText></button>
                 <button
                   type="button"
                   className="auth-btn auth-btn-primary"
                   onClick={handleFinish}
                   disabled={loading}
                 >
-                  {loading ? 'Đang tạo lộ trình…' : 'Bắt đầu học ngay 🚀'}
+                  <BilingualText>{loading ? 'Đang tạo lộ trình…' : 'Bắt đầu học ngay 🚀'}</BilingualText>
                 </button>
               </div>
             </div>
@@ -239,17 +222,15 @@ export function OnboardingPage() {
         <div className="auth-drum-bg">
           <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
-        <div className="auth-visual-topline"><span /> Lộ trình cá nhân hóa · Khởi đầu tự tin</div>
+        <div className="auth-visual-topline"><span /><BilingualText>{"Lộ trình cá nhân hóa · Khởi đầu tự tin"}</BilingualText></div>
         <div className="auth-hero-card">
-          <div className="auth-hero-tag">LỘ TRÌNH CÁ NHÂN HÓA</div>
-          <h2 className="auth-hero-title">Được thiết kế riêng cho mục tiêu của bạn.</h2>
-          <p className="auth-hero-desc">
-            Không học vẹt ngữ pháp khô khan. Hola Vietnamese đưa bạn vào các tình huống thực tế: gọi món ở quán cóc, hỏi đường phố cổ và giao tiếp tự nhiên.
-          </p>
+          <div className="auth-hero-tag"><BilingualText>{"LỘ TRÌNH CÁ NHÂN HÓA"}</BilingualText></div>
+          <h2 className="auth-hero-title"><BilingualText>{"Được thiết kế riêng cho mục tiêu của bạn."}</BilingualText></h2>
+          <p className="auth-hero-desc"><BilingualText>{"Không học vẹt ngữ pháp khô khan. Hola Vietnamese đưa bạn vào các tình huống thực tế: gọi món ở quán cóc, hỏi đường phố cổ và giao tiếp tự nhiên."}</BilingualText></p>
           <div className="auth-hero-chips">
             <span className="auth-chip">🎯 {preferences.learningGoal}</span>
-            <span className="auth-chip">⏱ {preferences.dailyMinutes} phút/ngày</span>
-            <span className="auth-chip">📊 Cấp độ {preferences.targetLevel}</span>
+            <span className="auth-chip">⏱ {preferences.dailyMinutes}<BilingualText>{"phút/ngày"}</BilingualText></span>
+            <span className="auth-chip"><BilingualText>{"📊 Cấp độ"}</BilingualText>{preferences.targetLevel}</span>
           </div>
         </div>
       </aside>

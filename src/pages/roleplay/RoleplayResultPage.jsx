@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { EmptyState } from '@/components/common/Ui';
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
@@ -33,7 +34,7 @@ export function RoleplayResultPage() {
     navigate(`/ai-roleplay/${id}`);
   };
 
-  if (!result) return <EmptyState title="Chưa có kết quả phiên hội thoại" description="Hoàn thành một cuộc trò chuyện để xem đánh giá."><Link className="button" to="/ai-scenarios">Chọn kịch bản →</Link></EmptyState>;
+  if (!result) return <EmptyState title="Chưa có kết quả phiên hội thoại" description="Hoàn thành một cuộc trò chuyện để xem đánh giá."><Link className="button" to="/ai-scenarios"><BilingualText>{"Chọn kịch bản →"}</BilingualText></Link></EmptyState>;
 
   return (
     <div className="p4-container">
@@ -45,20 +46,19 @@ export function RoleplayResultPage() {
       )}
 
       {/* Breadcrumb */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-sage)', marginBottom: '16px' }}>
-        <Link to="/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Danh sách kịch bản</Link>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-forest)', marginBottom: '16px' }}>
+        <Link to="/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Danh sách kịch bản"}</BilingualText></Link>
         <span>/</span>
         <span>{result.scenarioTitle}</span>
         <span>/</span>
-        <span style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Kết quả đánh giá</span>
+        <span style={{ color: 'var(--color-ink)', fontWeight: 600 }}><BilingualText>{"Kết quả đánh giá"}</BilingualText></span>
       </nav>
 
       {/* Screen Title */}
       <div style={{ marginBottom: '24px' }}>
-        <span className="p4-header-badge">Đánh giá phiên hội thoại</span>
-        <h1 className="p4-title">Kết quả phiên Roleplay</h1>
-        <p className="p4-subtitle">
-          Kịch bản: <strong>{result.scenarioTitle}</strong> • Hoàn thành ngày {result.completedDate}
+        <span className="p4-header-badge"><BilingualText>{"Đánh giá phiên hội thoại"}</BilingualText></span>
+        <h1 className="p4-title"><BilingualText>{"Kết quả phiên Roleplay"}</BilingualText></h1>
+        <p className="p4-subtitle"><BilingualText>{"Kịch bản:"}</BilingualText><strong>{result.scenarioTitle}</strong><BilingualText>{"• Hoàn thành ngày"}</BilingualText>{result.completedDate}
         </p>
       </div>
 
@@ -66,21 +66,18 @@ export function RoleplayResultPage() {
       <div className="result-card-hero">
         <div className="score-circle-box">
           <div className="score-number">{result.totalScore}</div>
-          <div className="score-rating">Xếp loại: {result.rating}</div>
-          <div style={{ fontSize: '12px', color: 'var(--color-sage)', marginTop: '6px' }}>
-            Nhiệm vụ: {result.completedTasksRatio}
+          <div className="score-rating"><BilingualText>{"Xếp loại:"}</BilingualText>{result.rating}</div>
+          <div style={{ fontSize: '12px', color: 'var(--color-forest)', marginTop: '6px' }}><BilingualText>{"Nhiệm vụ:"}</BilingualText>{result.completedTasksRatio}
           </div>
         </div>
 
         <div>
-          <h2 style={{ margin: '0 0 12px', fontSize: '20px', color: 'var(--color-ink)' }}>
-            Chi tiết các chỉ số năng lực:
-          </h2>
+          <h2 style={{ margin: '0 0 12px', fontSize: '20px', color: 'var(--color-ink)' }}><BilingualText>{"Chi tiết các chỉ số năng lực:"}</BilingualText></h2>
 
           <div className="score-breakdown-grid">
             <div className="score-bar-item">
               <div className="score-bar-header">
-                <span>🗣️ Độ lưu loát (Fluency)</span>
+                <span><BilingualText>{"🗣️ Độ lưu loát (Fluency)"}</BilingualText></span>
                 <span>{result.stats.fluency}%</span>
               </div>
               <div className="score-progress-track">
@@ -90,7 +87,7 @@ export function RoleplayResultPage() {
 
             <div className="score-bar-item">
               <div className="score-bar-header">
-                <span>📚 Vốn từ vựng (Vocabulary)</span>
+                <span><BilingualText>{"📚 Vốn từ vựng (Vocabulary)"}</BilingualText></span>
                 <span>{result.stats.vocabulary}%</span>
               </div>
               <div className="score-progress-track">
@@ -100,7 +97,7 @@ export function RoleplayResultPage() {
 
             <div className="score-bar-item">
               <div className="score-bar-header">
-                <span>📝 Ngữ pháp (Grammar)</span>
+                <span><BilingualText>{"📝 Ngữ pháp (Grammar)"}</BilingualText></span>
                 <span>{result.stats.grammar}%</span>
               </div>
               <div className="score-progress-track">
@@ -110,7 +107,7 @@ export function RoleplayResultPage() {
 
             <div className="score-bar-item">
               <div className="score-bar-header">
-                <span>🏮 Phù hợp văn hóa (Culture)</span>
+                <span><BilingualText>{"🏮 Phù hợp văn hóa (Culture)"}</BilingualText></span>
                 <span>{result.stats.culture}%</span>
               </div>
               <div className="score-progress-track">
@@ -120,7 +117,7 @@ export function RoleplayResultPage() {
           </div>
 
           <div style={{ marginTop: '16px', padding: '14px 18px', background: 'var(--color-surface)', borderRadius: '14px', border: '1px solid var(--color-border)', fontSize: '13.5px', color: 'var(--color-ink)', lineHeight: 1.6 }}>
-            <strong>🤖 Nhận xét từ AI Tutor:</strong> {result.aiFeedback}
+            <strong><BilingualText>{"🤖 Nhận xét từ AI Tutor:"}</BilingualText></strong> {result.aiFeedback}
           </div>
         </div>
       </div>
@@ -130,15 +127,14 @@ export function RoleplayResultPage() {
         {/* Errors & Native Suggestions */}
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '20px', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-red-hover)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>🔍</span> Lỗi cần sửa & Cách nói tự nhiên hơn
-          </h2>
+            <span>🔍</span><BilingualText>{"Lỗi cần sửa & Cách nói tự nhiên hơn"}</BilingualText></h2>
 
           <div>
             {result.corrections?.map((cor, idx) => (
               <div key={idx} className="correction-card">
-                <div className="correction-original">✕ Bạn đã nói: "{cor.original}"</div>
-                <div className="correction-native">✓ Người bản xứ nói: "{cor.nativeSuggestion}"</div>
-                <div className="correction-reason">💡 <em>Lý do:</em> {cor.reason}</div>
+                <div className="correction-original"><BilingualText>{"✕ Bạn đã nói: \""}</BilingualText>{cor.original}"</div>
+                <div className="correction-native"><BilingualText>{"✓ Người bản xứ nói: \""}</BilingualText>{cor.nativeSuggestion}"</div>
+                <div className="correction-reason">💡 <em><BilingualText>{"Lý do:"}</BilingualText></em> {cor.reason}</div>
               </div>
             ))}
           </div>
@@ -147,8 +143,7 @@ export function RoleplayResultPage() {
         {/* Practiced Key Expressions */}
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '20px', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>📖</span> Biểu thức & Cấu trúc đã luyện tập
-          </h2>
+            <span>📖</span><BilingualText>{"Biểu thức & Cấu trúc đã luyện tập"}</BilingualText></h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {result.practicedExpressions?.map((expr, idx) => (
@@ -166,8 +161,7 @@ export function RoleplayResultPage() {
                   onClick={() => handleSaveExpression(expr)}
                   style={{ background: 'var(--color-surface)', borderColor: 'var(--color-gold)', color: 'var(--color-red-hover)' }}
                 >
-                  <span>⭐</span> Lưu từ
-                </button>
+                  <span>⭐</span><BilingualText>{"Lưu từ"}</BilingualText></button>
               </div>
             ))}
           </div>
@@ -176,22 +170,17 @@ export function RoleplayResultPage() {
 
       {/* Action Footer: Retry & Next Scenario */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '20px 24px', flexWrap: 'wrap', gap: '16px' }}>
-        <button className="button secondary" onClick={handleRetry} style={{ fontSize: '14px', padding: '12px 20px' }}>
-          🔄 Thử lại kịch bản này
-        </button>
+        <button className="button secondary" onClick={handleRetry} style={{ fontSize: '14px', padding: '12px 20px' }}><BilingualText>{"🔄 Thử lại kịch bản này"}</BilingualText></button>
 
         {result.nextScenario && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <span style={{ fontSize: '13px', color: 'var(--color-sage)' }}>
-              Kịch bản đề xuất tiếp theo: <strong>{result.nextScenario.title}</strong>
+            <span style={{ fontSize: '13px', color: 'var(--color-forest)' }}><BilingualText>{"Kịch bản đề xuất tiếp theo:"}</BilingualText><strong>{result.nextScenario.title}</strong>
             </span>
             <Link
               to={`/ai-roleplay/${result.nextScenario.id}`}
               className="button"
               style={{ background: 'var(--color-red-hover)', borderColor: 'var(--color-red-hover)', fontSize: '14px', padding: '12px 22px' }}
-            >
-              Tiếp tục kịch bản mới ➔
-            </Link>
+            ><BilingualText>{"Tiếp tục kịch bản mới ➔"}</BilingualText></Link>
           </div>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -85,14 +86,12 @@ export function VocabularyCatalogPage() {
             <Link
               to={ROUTES.VOCABULARY_REVIEW}
               className="button"
-            >
-              Ôn từ vựng →
-            </Link>
+            ><BilingualText>{"Ôn từ vựng →"}</BilingualText></Link>
         }
       />
 
       <VocabularyOverview key={overviewRevision} active="catalog">
-        <Link to={ROUTES.VOCABULARY_NOTEBOOK} className="button secondary">Mở sổ tay</Link>
+        <Link to={ROUTES.VOCABULARY_NOTEBOOK} className="button secondary"><BilingualText>{"Mở sổ tay"}</BilingualText></Link>
       </VocabularyOverview>
 
       <form
@@ -103,14 +102,14 @@ export function VocabularyCatalogPage() {
         }}
       >
         <label className="vocabulary-search-field">
-          <span className="vocabulary-field-label">Tìm kiếm</span>
+          <span className="vocabulary-field-label"><BilingualText>{"Tìm kiếm"}</BilingualText></span>
           <input
             type="search"
             value={keyword}
             onChange={(event) =>
               setKeyword(event.target.value)
             }
-            placeholder="Tìm từ vựng…"
+            placeholder={bilingualLabel("Tìm từ vựng…")}
           />
         </label>
 
@@ -121,23 +120,21 @@ export function VocabularyCatalogPage() {
             onChange={(event) =>
               filter('cefrLevel', event.target.value)
             }
-          ><option value="">Tất cả CEFR</option>{levels.map(level => <option key={level} value={level}>{level}</option>)}</select>
+          ><option value="">{bilingualLabel("Tất cả CEFR")}</option>{levels.map(level => <option key={level} value={level}>{bilingualLabel(level)}</option>)}</select>
         </label>
 
         <label>
-          <span className="vocabulary-field-label">Từ loại</span>
+          <span className="vocabulary-field-label"><BilingualText>{"Từ loại"}</BilingualText></span>
           <select
             value={query.partOfSpeech}
             onChange={(event) =>
               filter('partOfSpeech', event.target.value)
             }
-          ><option value="">Tất cả từ loại</option>{partsOfSpeech.map(part => <option key={part} value={part}>{part}</option>)}</select>
+          ><option value="">{bilingualLabel("Tất cả từ loại")}</option>{partsOfSpeech.map(part => <option key={part} value={part}>{bilingualLabel(part)}</option>)}</select>
         </label>
 
         <div className="actions">
-          <button type="submit">
-            Tìm kiếm
-          </button>
+          <button type="submit"><BilingualText>{"Tìm kiếm"}</BilingualText></button>
 
           <button
             type="button"
@@ -146,13 +143,11 @@ export function VocabularyCatalogPage() {
               setKeyword('');
               setQuery({ ...emptyFilters });
             }}
-          >
-            Đặt lại
-          </button>
+          ><BilingualText>{"Đặt lại"}</BilingualText></button>
         </div>
       </form>
       <div className="vocabulary-topic-filters" role="group" aria-label="Lọc theo chủ đề">
-        <button type="button" className={!query.topicId ? 'active' : ''} aria-pressed={!query.topicId} onClick={() => filter('topicId', '')}>Tất cả</button>
+        <button type="button" className={!query.topicId ? 'active' : ''} aria-pressed={!query.topicId} onClick={() => filter('topicId', '')}><BilingualText>{"Tất cả"}</BilingualText></button>
         {topics.map(topic => <button type="button" key={topic.id} className={String(query.topicId) === String(topic.id) ? 'active' : ''}
           aria-pressed={String(query.topicId) === String(topic.id)} onClick={() => filter('topicId', String(topic.id))}>{topic.name}</button>)}
       </div>
@@ -166,14 +161,12 @@ export function VocabularyCatalogPage() {
         {(items) =>
           items.length === 0 ? (
             <div className="state">
-              <h2>Chưa có từ vựng phù hợp</h2>
-              <p>
-                Thử tìm từ khác hoặc thay đổi bộ lọc.
-              </p>
+              <h2><BilingualText>{"Chưa có từ vựng phù hợp"}</BilingualText></h2>
+              <p><BilingualText>{"Thử tìm từ khác hoặc thay đổi bộ lọc."}</BilingualText></p>
             </div>
           ) : (
             <>
-            <div className="vocabulary-results-heading"><strong>Khám phá từ vựng</strong><span>{items.length} từ</span></div>
+            <div className="vocabulary-results-heading"><strong><BilingualText>{"Khám phá từ vựng"}</BilingualText></strong><span>{items.length}<BilingualText>{"từ"}</BilingualText></span></div>
             <div className="card-grid">
               {items.map((item) => (
                 <article
@@ -228,9 +221,7 @@ export function VocabularyCatalogPage() {
                     <Link
                       className="button secondary"
                       to={generatePath(ROUTES.VOCABULARY_CATALOG_DETAIL, { id: String(item.id) })}
-                    >
-                      Xem chi tiết
-                    </Link>
+                    ><BilingualText>{"Xem chi tiết"}</BilingualText></Link>
                   </div>
                 </article>
               ))}

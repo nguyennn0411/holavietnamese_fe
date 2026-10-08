@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
@@ -8,22 +9,22 @@ const dateText = (value) => value ? new Date(value).toLocaleString('vi-VN') : '�
 function VocabularyDetail({ entry, onEdit }) {
   return <div>
     <dl>
-      <dt>ID</dt><dd>{entry.id}</dd><dt>Từ vựng</dt><dd>{entry.word}</dd>
-      <dt>Phiên âm</dt><dd>{entry.pronunciation || '—'}</dd><dt>Từ loại</dt><dd>{entry.partOfSpeech}</dd>
-      <dt>CEFR</dt><dd>{entry.cefrLevel}</dd><dt>Audio URL</dt><dd style={{ overflowWrap: 'anywhere' }}>{entry.audioUrl || '—'}</dd>
-      <dt>Trạng thái</dt><dd>{entry.status}</dd><dt>Chủ đề</dt><dd>{(entry.topics ?? []).map((topic) => topic.name).join(', ') || '—'}</dd>
-      <dt>Ngày xuất bản</dt><dd>{dateText(entry.publishedAt)}</dd><dt>Ngày lưu trữ</dt><dd>{dateText(entry.archivedAt)}</dd>
-      <dt>Ngày tạo</dt><dd>{dateText(entry.createdAt)}</dd><dt>Cập nhật lần cuối</dt><dd>{dateText(entry.updatedAt)}</dd>
+      <dt>ID</dt><dd>{entry.id}</dd><dt><BilingualText>{"Từ vựng"}</BilingualText></dt><dd>{entry.word}</dd>
+      <dt><BilingualText>{"Phiên âm"}</BilingualText></dt><dd>{entry.pronunciation || '—'}</dd><dt><BilingualText>{"Từ loại"}</BilingualText></dt><dd>{entry.partOfSpeech}</dd>
+      <dt>CEFR</dt><dd>{entry.cefrLevel}</dd><dt><BilingualText>{"Audio URL"}</BilingualText></dt><dd style={{ overflowWrap: 'anywhere' }}>{entry.audioUrl || '—'}</dd>
+      <dt><BilingualText>{"Trạng thái"}</BilingualText></dt><dd><BilingualText>{entry.status}</BilingualText></dd><dt><BilingualText>{"Chủ đề"}</BilingualText></dt><dd>{(entry.topics ?? []).map((topic) => topic.name).join(', ') || '—'}</dd>
+      <dt><BilingualText>{"Ngày xuất bản"}</BilingualText></dt><dd>{dateText(entry.publishedAt)}</dd><dt><BilingualText>{"Ngày lưu trữ"}</BilingualText></dt><dd>{dateText(entry.archivedAt)}</dd>
+      <dt><BilingualText>{"Ngày tạo"}</BilingualText></dt><dd>{dateText(entry.createdAt)}</dd><dt><BilingualText>{"Cập nhật lần cuối"}</BilingualText></dt><dd>{dateText(entry.updatedAt)}</dd>
     </dl>
     {(entry.meanings ?? []).map((meaning, index) => <section className="admin-card" key={meaning.id ?? index} style={{ marginBottom: 14 }}>
-      <h3>Nghĩa {index + 1}: {meaning.translationEn}</h3>
-      <p>Định nghĩa: {meaning.definitionEn || '—'}</p><p>Ghi chú sử dụng: {meaning.usageNote || '—'}</p><p>Thứ tự: {meaning.displayOrder ?? 0}</p>
+      <h3><BilingualText>{"Nghĩa"}</BilingualText>{index + 1}: {meaning.translationEn}</h3>
+      <p><BilingualText>{"Định nghĩa:"}</BilingualText>{meaning.definitionEn || '—'}</p><p><BilingualText>{"Ghi chú sử dụng:"}</BilingualText>{meaning.usageNote || '—'}</p><p><BilingualText>{"Thứ tự:"}</BilingualText>{meaning.displayOrder ?? 0}</p>
       {(meaning.examples ?? []).map((example, exampleIndex) => <div key={example.id ?? exampleIndex}>
-        <h4>Ví dụ {exampleIndex + 1}</h4><p lang="vi">{example.exampleVi}</p><p>{example.translationEn}</p>
-        <p style={{ overflowWrap: 'anywhere' }}>Audio URL: {example.audioUrl || '—'}</p><p>Thứ tự: {example.displayOrder ?? 0}</p>
+        <h4><BilingualText>{"Ví dụ"}</BilingualText>{exampleIndex + 1}</h4><p lang="vi">{example.exampleVi}</p><p>{example.translationEn}</p>
+        <p style={{ overflowWrap: 'anywhere' }}><BilingualText>{"Audio URL:"}</BilingualText>{example.audioUrl || '—'}</p><p><BilingualText>{"Thứ tự:"}</BilingualText>{example.displayOrder ?? 0}</p>
       </div>)}
     </section>)}
-    <div className="actions"><button type="button" onClick={onEdit}>Sửa từ vựng</button></div>
+    <div className="actions"><button type="button" onClick={onEdit}><BilingualText>{"Sửa từ vựng"}</BilingualText></button></div>
   </div>;
 }
 
@@ -65,41 +66,41 @@ export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, 
 
   const title = mode === 'view' ? 'Chi tiết từ vựng' : mode === 'edit' ? 'Cập nhật từ vựng' : 'Thêm từ vựng';
   return <Modal title={title} onClose={onClose} busy={pending}>
-    {loading ? <div className="state" role="status">Đang tải từ vựng…</div> : loadError
-      ? <div className="state" role="alert"><p>{loadError}</p><button type="button" onClick={() => setRevision((value) => value + 1)}>Thử lại</button></div>
+    {loading ? <div className="state" role="status"><BilingualText>{"Đang tải từ vựng…"}</BilingualText></div> : loadError
+      ? <div className="state" role="alert"><p>{loadError}</p><button type="button" onClick={() => setRevision((value) => value + 1)}><BilingualText>{"Thử lại"}</BilingualText></button></div>
       : mode === 'view' ? <VocabularyDetail entry={entry} onEdit={onEdit} />
       : <form onSubmit={submit}>
         <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
-          <label>Từ vựng<input value={draft.word} onChange={(event) => change('word', event.target.value)} required maxLength={200} lang="vi" /></label>
-          <label>Phiên âm<input value={draft.pronunciation} onChange={(event) => change('pronunciation', event.target.value)} maxLength={200} /></label>
-          <label>Từ loại<input value={draft.partOfSpeech} onChange={(event) => change('partOfSpeech', event.target.value)} required maxLength={40} placeholder="Ví dụ: phrase, noun, verb" /></label>
-          <label>Trình độ CEFR<input list="vocabulary-cefr-form" value={draft.cefrLevel} onChange={(event) => change('cefrLevel', event.target.value)} required maxLength={10} /></label>
+          <label><BilingualText>{"Từ vựng"}</BilingualText><input value={draft.word} onChange={(event) => change('word', event.target.value)} required maxLength={200} lang="vi" /></label>
+          <label><BilingualText>{"Phiên âm"}</BilingualText><input value={draft.pronunciation} onChange={(event) => change('pronunciation', event.target.value)} maxLength={200} /></label>
+          <label><BilingualText>{"Từ loại"}</BilingualText><input value={draft.partOfSpeech} onChange={(event) => change('partOfSpeech', event.target.value)} required maxLength={40} placeholder={bilingualLabel("Ví dụ: phrase, noun, verb")} /></label>
+          <label><BilingualText>{"Trình độ CEFR"}</BilingualText><input list="vocabulary-cefr-form" value={draft.cefrLevel} onChange={(event) => change('cefrLevel', event.target.value)} required maxLength={10} /></label>
           <datalist id="vocabulary-cefr-form">{CEFR_LEVELS.map((level) => <option key={level} value={level} />)}</datalist>
-          <label>Audio URL<input value={draft.audioUrl} onChange={(event) => change('audioUrl', event.target.value)} maxLength={2048} /></label>
-          <label>Trạng thái<select value={draft.status} onChange={(event) => change('status', event.target.value)}>{VOCABULARY_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label>
-          <fieldset style={{ margin: '0 0 14px', minWidth: 0 }}><legend>Chủ đề</legend>
-            {topics.loading ? <p role="status">Đang tải chủ đề…</p> : topics.error ? <div role="alert"><p>{topics.error.message}</p><button type="button" className="secondary" onClick={reloadTopics}>Thử lại chủ đề</button></div> : availableTopics.length === 0 ? <p>Chưa có chủ đề.</p> : availableTopics.map((topic) => <label key={topic.id} style={{ flexDirection: 'row', alignItems: 'center' }}><input type="checkbox" style={{ width: 'auto' }} checked={draft.topicIds.includes(topic.id)} onChange={(event) => change('topicIds', event.target.checked ? [...draft.topicIds, topic.id] : draft.topicIds.filter((value) => value !== topic.id))} />{topic.name}</label>)}
+          <label><BilingualText>{"Audio URL"}</BilingualText><input value={draft.audioUrl} onChange={(event) => change('audioUrl', event.target.value)} maxLength={2048} /></label>
+          <label><BilingualText>{"Trạng thái"}</BilingualText><select value={draft.status} onChange={(event) => change('status', event.target.value)}>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{bilingualLabel(status)}</option>)}</select></label>
+          <fieldset style={{ margin: '0 0 14px', minWidth: 0 }}><legend><BilingualText>{"Chủ đề"}</BilingualText></legend>
+            {topics.loading ? <p role="status"><BilingualText>{"Đang tải chủ đề…"}</BilingualText></p> : topics.error ? <div role="alert"><p><BilingualText>{topics.error.message}</BilingualText></p><button type="button" className="secondary" onClick={reloadTopics}><BilingualText>{"Thử lại chủ đề"}</BilingualText></button></div> : availableTopics.length === 0 ? <p><BilingualText>{"Chưa có chủ đề."}</BilingualText></p> : availableTopics.map((topic) => <label key={topic.id} style={{ flexDirection: 'row', alignItems: 'center' }}><input type="checkbox" style={{ width: 'auto' }} checked={draft.topicIds.includes(topic.id)} onChange={(event) => change('topicIds', event.target.checked ? [...draft.topicIds, topic.id] : draft.topicIds.filter((value) => value !== topic.id))} />{topic.name}</label>)}
           </fieldset>
           {draft.meanings.map((meaning, meaningIndex) => <section className="admin-card" key={meaningIndex} style={{ marginBottom: 14 }}>
-            <div className="row"><h3>Nghĩa {meaningIndex + 1}</h3><button type="button" className="secondary" disabled={draft.meanings.length === 1} onClick={() => change('meanings', draft.meanings.filter((_, index) => index !== meaningIndex))}>Xóa nghĩa {meaningIndex + 1}</button></div>
-            <label>Bản dịch tiếng Anh<input value={meaning.translationEn} onChange={(event) => changeMeaning(meaningIndex, 'translationEn', event.target.value)} required maxLength={500} /></label>
-            <label>Định nghĩa tiếng Anh<textarea value={meaning.definitionEn} onChange={(event) => changeMeaning(meaningIndex, 'definitionEn', event.target.value)} rows={2} /></label>
-            <label>Ghi chú sử dụng<textarea value={meaning.usageNote} onChange={(event) => changeMeaning(meaningIndex, 'usageNote', event.target.value)} rows={2} /></label>
-            <label>Thứ tự nghĩa<input type="number" min={0} step={1} value={meaning.displayOrder} onChange={(event) => changeMeaning(meaningIndex, 'displayOrder', event.target.value)} /></label>
+            <div className="row"><h3><BilingualText>{"Nghĩa"}</BilingualText>{meaningIndex + 1}</h3><button type="button" className="secondary" disabled={draft.meanings.length === 1} onClick={() => change('meanings', draft.meanings.filter((_, index) => index !== meaningIndex))}><BilingualText>{"Xóa nghĩa"}</BilingualText>{meaningIndex + 1}</button></div>
+            <label><BilingualText>{"Bản dịch tiếng Anh"}</BilingualText><input value={meaning.translationEn} onChange={(event) => changeMeaning(meaningIndex, 'translationEn', event.target.value)} required maxLength={500} /></label>
+            <label><BilingualText>{"Định nghĩa tiếng Anh"}</BilingualText><textarea value={meaning.definitionEn} onChange={(event) => changeMeaning(meaningIndex, 'definitionEn', event.target.value)} rows={2} /></label>
+            <label><BilingualText>{"Ghi chú sử dụng"}</BilingualText><textarea value={meaning.usageNote} onChange={(event) => changeMeaning(meaningIndex, 'usageNote', event.target.value)} rows={2} /></label>
+            <label><BilingualText>{"Thứ tự nghĩa"}</BilingualText><input type="number" min={0} step={1} value={meaning.displayOrder} onChange={(event) => changeMeaning(meaningIndex, 'displayOrder', event.target.value)} /></label>
             {meaning.examples.map((example, exampleIndex) => <fieldset key={exampleIndex} style={{ margin: '0 0 14px', minWidth: 0 }}>
-              <legend>Ví dụ {exampleIndex + 1}</legend>
-              <label>Ví dụ tiếng Việt<textarea lang="vi" value={example.exampleVi} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'exampleVi', event.target.value)} required rows={2} /></label>
-              <label>Bản dịch ví dụ<textarea value={example.translationEn} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'translationEn', event.target.value)} required rows={2} /></label>
-              <label>Audio URL của ví dụ<input value={example.audioUrl} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'audioUrl', event.target.value)} maxLength={2048} /></label>
-              <label>Thứ tự ví dụ<input type="number" min={0} step={1} value={example.displayOrder} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'displayOrder', event.target.value)} /></label>
-              <button type="button" className="secondary" onClick={() => changeMeaning(meaningIndex, 'examples', meaning.examples.filter((_, index) => index !== exampleIndex))}>Xóa ví dụ {exampleIndex + 1}</button>
+              <legend><BilingualText>{"Ví dụ"}</BilingualText>{exampleIndex + 1}</legend>
+              <label><BilingualText>{"Ví dụ tiếng Việt"}</BilingualText><textarea lang="vi" value={example.exampleVi} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'exampleVi', event.target.value)} required rows={2} /></label>
+              <label><BilingualText>{"Bản dịch ví dụ"}</BilingualText><textarea value={example.translationEn} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'translationEn', event.target.value)} required rows={2} /></label>
+              <label><BilingualText>{"Audio URL của ví dụ"}</BilingualText><input value={example.audioUrl} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'audioUrl', event.target.value)} maxLength={2048} /></label>
+              <label><BilingualText>{"Thứ tự ví dụ"}</BilingualText><input type="number" min={0} step={1} value={example.displayOrder} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'displayOrder', event.target.value)} /></label>
+              <button type="button" className="secondary" onClick={() => changeMeaning(meaningIndex, 'examples', meaning.examples.filter((_, index) => index !== exampleIndex))}><BilingualText>{"Xóa ví dụ"}</BilingualText>{exampleIndex + 1}</button>
             </fieldset>)}
-            <button type="button" className="secondary" onClick={() => changeMeaning(meaningIndex, 'examples', [...meaning.examples, newExample()])}>+ Thêm ví dụ</button>
+            <button type="button" className="secondary" onClick={() => changeMeaning(meaningIndex, 'examples', [...meaning.examples, newExample()])}><BilingualText>{"+ Thêm ví dụ"}</BilingualText></button>
           </section>)}
-          <button type="button" className="secondary" onClick={() => change('meanings', [...draft.meanings, newMeaning()])}>+ Thêm nghĩa</button>
+          <button type="button" className="secondary" onClick={() => change('meanings', [...draft.meanings, newMeaning()])}><BilingualText>{"+ Thêm nghĩa"}</BilingualText></button>
         </fieldset>
-        {error && <p role="alert">{error}</p>}
-        <div className="actions" style={{ marginTop: 20 }}><button type="button" className="secondary" disabled={pending} onClick={onClose}>Hủy</button><button type="submit" disabled={pending || topics.loading || Boolean(topics.error)}>{pending ? 'Đang lưu…' : 'Lưu từ vựng'}</button></div>
+        {error && <p role="alert"><BilingualText>{error}</BilingualText></p>}
+        <div className="actions" style={{ marginTop: 20 }}><button type="button" className="secondary" disabled={pending} onClick={onClose}><BilingualText>{"Hủy"}</BilingualText></button><button type="submit" disabled={pending || topics.loading || Boolean(topics.error)}><BilingualText>{pending ? 'Đang lưu…' : 'Lưu từ vựng'}</BilingualText></button></div>
       </form>}
   </Modal>;
 }

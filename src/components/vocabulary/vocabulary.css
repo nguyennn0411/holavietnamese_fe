@@ -587,7 +587,7 @@ body:has(.vocabulary-ui dialog[open]) {
 
 .vocabulary-review-page .review-ratings button:nth-child(3) {
   background: var(--color-sage-soft);
-  color: var(--color-sage);
+  color: var(--color-forest);
 }
 
 .vocabulary-review-page .review-ratings button:nth-child(4) {
@@ -612,7 +612,7 @@ body:has(.vocabulary-ui dialog[open]) {
   height: 60px;
   margin: 0 auto 20px;
   background: var(--color-sage-soft);
-  color: var(--color-sage);
+  color: var(--color-forest);
   border-radius: 50%;
 }
 
@@ -981,7 +981,7 @@ body:has(.vocabulary-ui dialog[open]) {
   padding: 0;
   border: 0;
   border-radius: 6px;
-  color: var(--color-sage);
+  color: var(--color-forest);
   background: transparent;
   font-size: 0;
 }
@@ -1010,7 +1010,7 @@ body:has(.vocabulary-ui dialog[open]) {
 .vocabulary-catalog-detail .vocabulary-detail-word-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 20px; }
 .vocabulary-catalog-detail .vocabulary-detail-word-actions > .speak-button { width: 44px; height: 44px; border-radius: 8px; }
 .vocabulary-catalog-detail .vocabulary-detail-save { margin: 0; }
-.vocabulary-catalog-detail .vocabulary-detail-save button { background: var(--color-sage-soft); color: var(--color-sage); border: 1px solid var(--color-border); }
+.vocabulary-catalog-detail .vocabulary-detail-save button { background: var(--color-sage-soft); color: var(--color-forest); border: 1px solid var(--color-border); }
 .vocabulary-catalog-detail .vocabulary-detail-word-actions > .ui-notice { flex-basis: 100%; }
 .vocabulary-catalog-detail .vocabulary-meaning-detail { border: 0; border-bottom: 1px solid var(--color-border); }
 .vocabulary-catalog-detail .vocabulary-meaning-detail h2 { display: flex; gap: 12px; align-items: baseline; font-weight: 500; }
@@ -1020,9 +1020,9 @@ body:has(.vocabulary-ui dialog[open]) {
 .vocabulary-notebook-detail .vocabulary-detail-footer { padding-inline: 0; }
 .vocabulary-notebook-detail .modal > .vocabulary-card { border: 0; padding: 14px 0; margin-top: 14px; }
 
-.vocabulary-review-page .review-summary > p.eyebrow { padding: 0; background: transparent; margin: 0 0 14px; color: var(--color-sage); font-size: 10px; letter-spacing: .18em; }
+.vocabulary-review-page .review-summary > p.eyebrow { padding: 0; background: transparent; margin: 0 0 14px; color: var(--color-forest); font-size: 10px; letter-spacing: .18em; }
 .vocabulary-review-page .review-summary > p:not(.eyebrow):not(.muted) { padding: 0; background: transparent; font-size: 13px; color: var(--color-muted); margin: 12px 0; }
-.vocabulary-review-page .vocabulary-review-completion { display: grid; gap: 4px; margin: 28px 0 12px; color: var(--color-sage); }
+.vocabulary-review-page .vocabulary-review-completion { display: grid; gap: 4px; margin: 28px 0 12px; color: var(--color-forest); }
 .vocabulary-review-page .vocabulary-review-completion > strong { font-size: 64px; font-weight: 700; line-height: 1.1; }
 .vocabulary-review-page .vocabulary-review-completion > span { font-size: 13px; color: var(--color-muted); }
 .vocabulary-review-page .vocabulary-review-statistics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: var(--color-cream); border-radius: 10px; padding: 20px 0; margin: 24px 0; }
@@ -1034,7 +1034,7 @@ body:has(.vocabulary-ui dialog[open]) {
 .vocabulary-review-page .vocabulary-review-results > li { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--color-border); padding: 13px 4px; text-align: left; overflow-wrap: anywhere; }
 .vocabulary-review-page .vocabulary-rating { font-size: 11px; font-weight: 600; padding: 5px 8px; border-radius: 5px; flex-shrink: 0; }
 .vocabulary-review-page .vocabulary-rating--good,
-.vocabulary-review-page .vocabulary-rating--easy { background: var(--color-sage-soft); color: var(--color-sage); }
+.vocabulary-review-page .vocabulary-rating--easy { background: var(--color-sage-soft); color: var(--color-forest); }
 .vocabulary-review-page .vocabulary-rating--hard { background: var(--color-gold-soft); color: #967326; }
 .vocabulary-review-page .vocabulary-rating--again { background: var(--color-red-soft); color: var(--color-red); }
 

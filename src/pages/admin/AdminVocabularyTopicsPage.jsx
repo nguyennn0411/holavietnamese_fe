@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { ResourceState } from '@/components/common/ResourceState';
@@ -148,7 +149,7 @@ function AdminVocabularyTopicModal({
             className="loading-spinner"
             aria-hidden="true"
           />
-          <p>Đang tải chủ đề…</p>
+          <p><BilingualText>{"Đang tải chủ đề…"}</BilingualText></p>
         </div>
       ) : (
         <form onSubmit={submit}>
@@ -157,14 +158,12 @@ function AdminVocabularyTopicModal({
               className="ui-notice ui-notice--error"
               role="alert"
             >
-              {error}
+              <BilingualText>{error}</BilingualText>
             </div>
           )}
 
           <div className="actions">
-            <label style={{ flex: '1 1 220px' }}>
-              Tên chủ đề
-              <input
+            <label style={{ flex: '1 1 220px' }}><BilingualText>{"Tên chủ đề"}</BilingualText><input
                 value={draft.name}
                 maxLength={100}
                 required
@@ -180,7 +179,7 @@ function AdminVocabularyTopicModal({
                 value={draft.slug}
                 maxLength={120}
                 required
-                placeholder="Ví dụ: greetings"
+                placeholder={bilingualLabel("Ví dụ: greetings")}
                 onChange={(event) =>
                   change('slug', event.target.value)
                 }
@@ -188,9 +187,7 @@ function AdminVocabularyTopicModal({
             </label>
           </div>
 
-          <label>
-            Mô tả
-            <textarea
+          <label><BilingualText>{"Mô tả"}</BilingualText><textarea
               value={draft.description}
               maxLength={500}
               rows={3}
@@ -201,9 +198,7 @@ function AdminVocabularyTopicModal({
           </label>
 
           <div className="actions">
-            <label style={{ flex: '1 1 160px' }}>
-              Thứ tự hiển thị
-              <input
+            <label style={{ flex: '1 1 160px' }}><BilingualText>{"Thứ tự hiển thị"}</BilingualText><input
                 type="number"
                 min="0"
                 step="1"
@@ -215,9 +210,7 @@ function AdminVocabularyTopicModal({
               />
             </label>
 
-            <label style={{ flex: '1 1 180px' }}>
-              Trạng thái
-              <select
+            <label style={{ flex: '1 1 180px' }}><BilingualText>{"Trạng thái"}</BilingualText><select
                 value={draft.status}
                 onChange={(event) =>
                   change('status', event.target.value)
@@ -228,7 +221,7 @@ function AdminVocabularyTopicModal({
                     key={status}
                     value={status}
                   >
-                    {status}
+                    {bilingualLabel(status)}
                   </option>
                 ))}
               </select>
@@ -247,19 +240,17 @@ function AdminVocabularyTopicModal({
               className="secondary"
               disabled={busy}
               onClick={onClose}
-            >
-              Hủy
-            </button>
+            ><BilingualText>{"Hủy"}</BilingualText></button>
 
             <button
               type="submit"
               disabled={busy}
             >
-              {busy
+              <BilingualText>{busy
                 ? 'Đang lưu…'
                 : mode === 'edit'
                   ? 'Lưu thay đổi'
-                  : 'Thêm chủ đề'}
+                  : 'Thêm chủ đề'}</BilingualText>
             </button>
           </div>
         </form>
@@ -345,10 +336,8 @@ export function AdminVocabularyTopicsPage() {
         }}
       >
         <div>
-          <h1>Chủ đề từ vựng</h1>
-          <p className="muted">
-            Quản lý các chủ đề dùng để phân loại từ vựng.
-          </p>
+          <h1><BilingualText>{"Chủ đề từ vựng"}</BilingualText></h1>
+          <p className="muted"><BilingualText>{"Quản lý các chủ đề dùng để phân loại từ vựng."}</BilingualText></p>
         </div>
 
         <button
@@ -359,9 +348,7 @@ export function AdminVocabularyTopicsPage() {
               id: null,
             })
           }
-        >
-          + Thêm chủ đề
-        </button>
+        ><BilingualText>{"+ Thêm chủ đề"}</BilingualText></button>
       </div>
 
       {message && (
@@ -370,7 +357,7 @@ export function AdminVocabularyTopicsPage() {
           role="status"
           style={{ marginBottom: 20 }}
         >
-          {message}
+          <BilingualText>{message}</BilingualText>
         </div>
       )}
 
@@ -382,9 +369,7 @@ export function AdminVocabularyTopicsPage() {
       >
         {(items) =>
           items.length === 0 ? (
-            <div className="state">
-              Chưa có chủ đề từ vựng.
-            </div>
+            <div className="state"><BilingualText>{"Chưa có chủ đề từ vựng."}</BilingualText></div>
           ) : (
             <div
               className="admin-card"
@@ -396,12 +381,12 @@ export function AdminVocabularyTopicsPage() {
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>Tên chủ đề</th>
+                    <th><BilingualText>{"Tên chủ đề"}</BilingualText></th>
                     <th>Slug</th>
-                    <th>Mô tả</th>
-                    <th>Thứ tự</th>
-                    <th>Trạng thái</th>
-                    <th>Thao tác</th>
+                    <th><BilingualText>{"Mô tả"}</BilingualText></th>
+                    <th><BilingualText>{"Thứ tự"}</BilingualText></th>
+                    <th><BilingualText>{"Trạng thái"}</BilingualText></th>
+                    <th><BilingualText>{"Thao tác"}</BilingualText></th>
                   </tr>
                 </thead>
 
@@ -432,7 +417,7 @@ export function AdminVocabularyTopicsPage() {
                                 : 'admin-badge-warning'
                           }`}
                         >
-                          {topic.status}
+                          <BilingualText>{topic.status}</BilingualText>
                         </span>
                       </td>
 
@@ -447,9 +432,7 @@ export function AdminVocabularyTopicsPage() {
                                 id: topic.id,
                               })
                             }
-                          >
-                            Sửa
-                          </button>
+                          ><BilingualText>{"Sửa"}</BilingualText></button>
                         </div>
                       </td>
                     </tr>

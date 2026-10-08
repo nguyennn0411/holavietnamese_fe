@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { courseService } from '@/services/courseService'
@@ -11,8 +12,8 @@ export function EnrollButton({ courseId, enrollment, onEnrolled }) {
     catch (e) { setError(e) }
     finally { setPending(false) }
   }
-  if (enrollment?.isEnrolled) return <Link className="button" to={`/learn/${courseId}`}>Tiếp tục học →</Link>
-  return <div><button disabled={pending} onClick={enroll}>{pending ? 'Đang đăng ký…' : 'Đăng ký học'}</button>
-    {error && <p role="alert">{error.message} {error.status === 401 && <Link to="/login" state={{ from: location.pathname }}>Sign in</Link>}</p>}
+  if (enrollment?.isEnrolled) return <Link className="button" to={`/learn/${courseId}`}><BilingualText>{"Tiếp tục học →"}</BilingualText></Link>
+  return <div><button disabled={pending} onClick={enroll}><BilingualText>{pending ? 'Đang đăng ký…' : 'Đăng ký học'}</BilingualText></button>
+    {error && <p role="alert"><BilingualText>{error.message}</BilingualText> {error.status === 401 && <Link to="/login" state={{ from: location.pathname }}><BilingualText>{"Sign in"}</BilingualText></Link>}</p>}
   </div>
 }

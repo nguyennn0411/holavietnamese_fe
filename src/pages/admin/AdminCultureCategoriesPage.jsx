@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -49,29 +50,25 @@ export function AdminCultureCategoriesPage() {
     <div className="admin-content">
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
-          {toast}
+          <BilingualText>{toast}</BilingualText>
         </div>
       )}
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: 'var(--color-sage)', marginBottom: '6px' }}>
-            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Quản lý bài viết văn hóa</Link>
+          <nav style={{ fontSize: '13px', color: 'var(--color-forest)', marginBottom: '6px' }}>
+            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Quản lý bài viết văn hóa"}</BilingualText></Link>
           </nav>
-          <h1 style={{ margin: 0, fontSize: '32px' }}>Danh mục văn hóa</h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-sage)', fontSize: '14px' }}>
-            Quản lý các chủ đề lớn: Food, Festivals, History, Etiquette, Family, Lifestyle và sắp xếp thứ tự hiển thị cho học viên.
-          </p>
+          <h1 style={{ margin: 0, fontSize: '32px' }}><BilingualText>{"Danh mục văn hóa"}</BilingualText></h1>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-forest)', fontSize: '14px' }}><BilingualText>{"Quản lý các chủ đề lớn: Food, Festivals, History, Etiquette, Family, Lifestyle và sắp xếp thứ tự hiển thị cho học viên."}</BilingualText></p>
         </div>
 
         <button
           className="button"
           onClick={() => setEditingCategory({ id: '', name: '', slug: '', icon: '🏮', description: '', order: categories.length + 1 })}
           style={{ fontSize: '13px' }}
-        >
-          + Thêm danh mục mới
-        </button>
+        ><BilingualText>{"+ Thêm danh mục mới"}</BilingualText></button>
       </div>
 
       {/* Categories List */}
@@ -79,12 +76,12 @@ export function AdminCultureCategoriesPage() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th style={{ width: '80px', textAlign: 'center' }}>Thứ tự</th>
-              <th style={{ width: '60px' }}>Icon</th>
-              <th>Tên danh mục & Slug</th>
-              <th>Mô tả chuyên mục</th>
-              <th>Số bài viết</th>
-              <th style={{ textAlign: 'right' }}>Thao tác</th>
+              <th style={{ width: '80px', textAlign: 'center' }}><BilingualText>{"Thứ tự"}</BilingualText></th>
+              <th style={{ width: '60px' }}><BilingualText>{"Icon"}</BilingualText></th>
+              <th><BilingualText>{"Tên danh mục & Slug"}</BilingualText></th>
+              <th><BilingualText>{"Mô tả chuyên mục"}</BilingualText></th>
+              <th><BilingualText>{"Số bài viết"}</BilingualText></th>
+              <th style={{ textAlign: 'right' }}><BilingualText>{"Thao tác"}</BilingualText></th>
             </tr>
           </thead>
           <tbody>
@@ -118,17 +115,16 @@ export function AdminCultureCategoriesPage() {
 
                 <td>
                   <strong style={{ fontSize: '14px', color: 'var(--color-ink)', display: 'block' }}>{cat.name}</strong>
-                  <code style={{ fontSize: '11px', color: 'var(--color-sage)', background: 'var(--color-red-soft)', padding: '2px 6px', borderRadius: '4px' }}>
+                  <code style={{ fontSize: '11px', color: 'var(--color-forest)', background: 'var(--color-red-soft)', padding: '2px 6px', borderRadius: '4px' }}>
                     /{cat.slug}
                   </code>
                 </td>
 
-                <td style={{ fontSize: '13px', color: 'var(--color-ink)' }}>{cat.description}</td>
+                <td style={{ fontSize: '13px', color: 'var(--color-ink)' }}><BilingualText vi={cat.descriptionVi || cat.description} en={cat.description} /></td>
 
                 <td>
                   <span className="admin-badge admin-badge-info">
-                    {cat.articleCount || 0} bài viết
-                  </span>
+                    {cat.articleCount || 0}<BilingualText>{"bài viết"}</BilingualText></span>
                 </td>
 
                 <td style={{ textAlign: 'right' }}>
@@ -137,9 +133,7 @@ export function AdminCultureCategoriesPage() {
                       className="button secondary"
                       style={{ fontSize: '12px', padding: '6px 12px' }}
                       onClick={() => setEditingCategory(cat)}
-                    >
-                      ✏️ Sửa
-                    </button>
+                    ><BilingualText>{"✏️ Sửa"}</BilingualText></button>
                     {categories.length > 2 && (
                       <button
                         className="button secondary"
@@ -162,9 +156,7 @@ export function AdminCultureCategoriesPage() {
         <Modal title={editingCategory.id ? "Chỉnh sửa danh mục" : "Thêm danh mục văn hóa"} onClose={()=>setEditingCategory(null)}>
 <form onSubmit={handleSave}>
               <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr', gap: '12px' }}>
-                <label>
-                  Icon:
-                  <input
+                <label><BilingualText>{"Icon:"}</BilingualText><input
                     type="text"
                     value={editingCategory.icon}
                     onChange={e => setEditingCategory({ ...editingCategory, icon: e.target.value })}
@@ -173,21 +165,17 @@ export function AdminCultureCategoriesPage() {
                   />
                 </label>
 
-                <label>
-                  Tên danh mục:
-                  <input
+                <label><BilingualText>{"Tên danh mục:"}</BilingualText><input
                     type="text"
                     value={editingCategory.name}
                     onChange={e => setEditingCategory({ ...editingCategory, name: e.target.value })}
-                    placeholder="Food (Ẩm thực)..."
+                    placeholder={bilingualLabel("Food (Ẩm thực)...")}
                     required
                   />
                 </label>
               </div>
 
-              <label style={{ marginTop: '12px' }}>
-                Slug (Đường dẫn):
-                <input
+              <label style={{ marginTop: '12px' }}><BilingualText>{"Slug (Đường dẫn):"}</BilingualText><input
                   type="text"
                   value={editingCategory.slug}
                   onChange={e => setEditingCategory({ ...editingCategory, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
@@ -196,23 +184,17 @@ export function AdminCultureCategoriesPage() {
                 />
               </label>
 
-              <label style={{ marginTop: '12px' }}>
-                Mô tả ngắn:
-                <textarea
+              <label style={{ marginTop: '12px' }}><BilingualText>{"Mô tả ngắn:"}</BilingualText><textarea
                   rows={3}
                   value={editingCategory.description}
                   onChange={e => setEditingCategory({ ...editingCategory, description: e.target.value })}
-                  placeholder="Mô tả nội dung học viên sẽ khám phá trong danh mục này..."
+                  placeholder={bilingualLabel("Mô tả nội dung học viên sẽ khám phá trong danh mục này...")}
                 />
               </label>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
-                <button type="button" className="button secondary" onClick={() => setEditingCategory(null)}>
-                  Hủy
-                </button>
-                <button type="submit" className="button">
-                  Lưu danh mục
-                </button>
+                <button type="button" className="button secondary" onClick={() => setEditingCategory(null)}><BilingualText>{"Hủy"}</BilingualText></button>
+                <button type="submit" className="button"><BilingualText>{"Lưu danh mục"}</BilingualText></button>
               </div>
             </form>
         </Modal>

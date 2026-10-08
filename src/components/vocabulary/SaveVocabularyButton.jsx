@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
@@ -53,10 +54,10 @@ export function SaveVocabularyButton({ entry, compact = false, onSaved, onDelete
         aria-pressed={!!savedEntry} aria-busy={pending}
         title={savedEntry ? 'Xóa khỏi sổ tay' : 'Lưu vào sổ tay'}
         disabled={loading || pending} onClick={save}>
-        {pending ? (savedEntry ? 'Đang xóa…' : 'Đang lưu…') : savedEntry ? 'Đã lưu vào sổ tay' : 'Lưu vào sổ tay'}
+        <BilingualText>{pending ? (savedEntry ? 'Đang xóa…' : 'Đang lưu…') : savedEntry ? 'Đã lưu vào sổ tay' : 'Lưu vào sổ tay'}</BilingualText>
       </button>
     </div>
-    {message && <Notice kind="success">{message} {savedEntry && <Link to={ROUTES.VOCABULARY_NOTEBOOK}>Mở sổ tay</Link>}</Notice>}
-    {error && <Notice kind="error">{error}</Notice>}
+    {message && <Notice kind="success"><BilingualText>{message}</BilingualText> {savedEntry && <Link to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{"Mở sổ tay"}</BilingualText></Link>}</Notice>}
+    {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
   </>;
 }

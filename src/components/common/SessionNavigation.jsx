@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { sessionService } from '@/services/sessionService'
@@ -16,7 +17,7 @@ export function SessionNavigation() {
   }
   if (resource.loading) return <span className="sign-in-link muted">…</span>
   return <div className="session-navigation">{resource.data
-    ? <button className="secondary" disabled={pending} onClick={logout}>{pending ? 'Signing out…' : 'Sign out'}</button>
-    : <Link className="sign-in-link" to="/login" state={{ from: location.pathname === '/login' ? '/my-courses' : location.pathname }}>Sign in</Link>}
-    {error && <p role="alert">{error}</p>}</div>
+    ? <button className="secondary" disabled={pending} onClick={logout}><BilingualText>{pending ? 'Signing out…' : 'Sign out'}</BilingualText></button>
+    : <Link className="sign-in-link" to="/login" state={{ from: location.pathname === '/login' ? '/my-courses' : location.pathname }}><BilingualText>{"Sign in"}</BilingualText></Link>}
+    {error && <p role="alert"><BilingualText>{error}</BilingualText></p>}</div>
 }

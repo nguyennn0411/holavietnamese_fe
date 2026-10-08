@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ContentImage } from '@/components/common/ContentImage';
@@ -37,12 +38,12 @@ export function UserMenu({ user, isAdmin, onLogout }) {
       </button>
       {open && (
         <div className="user-menu__panel" role="menu">
-          <div className="user-menu__identity"><strong>{displayName}</strong><span>@{user?.username || 'learner'} · {isAdmin ? 'Quản trị viên' : 'Học viên'}</span></div>
-          <Link to="/profile" onClick={closeMenu} role="menuitem">Hồ sơ cá nhân</Link>
-          <Link to="/settings" onClick={closeMenu} role="menuitem">Cài đặt học tập</Link>
-          <Link to="/achievements" onClick={closeMenu} role="menuitem">Thành tích</Link>
-          {isAdmin && <Link to="/admin" onClick={closeMenu} role="menuitem" className="user-menu__admin">Trang quản trị</Link>}
-          <button type="button" className="user-menu__logout" onClick={() => { closeMenu(); onLogout(); }} role="menuitem">Đăng xuất</button>
+          <div className="user-menu__identity"><strong>{displayName}</strong><span>@{user?.username || 'learner'} · <BilingualText>{isAdmin ? 'Quản trị viên' : 'Học viên'}</BilingualText></span></div>
+          <Link to="/profile" onClick={closeMenu} role="menuitem"><BilingualText>{"Hồ sơ cá nhân"}</BilingualText></Link>
+          <Link to="/settings" onClick={closeMenu} role="menuitem"><BilingualText>{"Cài đặt học tập"}</BilingualText></Link>
+          <Link to="/achievements" onClick={closeMenu} role="menuitem"><BilingualText>{"Thành tích"}</BilingualText></Link>
+          {isAdmin && <Link to="/admin" onClick={closeMenu} role="menuitem" className="user-menu__admin"><BilingualText>{"Trang quản trị"}</BilingualText></Link>}
+          <button type="button" className="user-menu__logout" onClick={() => { closeMenu(); onLogout(); }} role="menuitem"><BilingualText>{"Đăng xuất"}</BilingualText></button>
         </div>
       )}
     </div>

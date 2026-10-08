@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useState, useEffect } from 'react';
 import { adminService } from '@/services/adminService';
@@ -67,8 +68,8 @@ export function AdminAchievementsPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}>Quản lý Thành tích & Huy hiệu</h1>
-          <p style={{ color: 'var(--color-muted)', margin: 0, fontSize: '0.9rem' }}>Tạo huy hiệu, cấu hình điều kiện mở khóa và điểm thưởng XP cho người học.</p>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}><BilingualText>{"Quản lý Thành tích & Huy hiệu"}</BilingualText></h1>
+          <p style={{ color: 'var(--color-muted)', margin: 0, fontSize: '0.9rem' }}><BilingualText>{"Tạo huy hiệu, cấu hình điều kiện mở khóa và điểm thưởng XP cho người học."}</BilingualText></p>
         </div>
         <button
           type="button"
@@ -82,12 +83,10 @@ export function AdminAchievementsPage() {
             fontWeight: 700,
             cursor: 'pointer',
           }}
-        >
-          + Thêm huy hiệu mới
-        </button>
+        ><BilingualText>{"+ Thêm huy hiệu mới"}</BilingualText></button>
       </div>
 
-      {error&&<div className="ui-notice ui-notice--error" role="alert">{error}</div>}
+      {error&&<div className="ui-notice ui-notice--error" role="alert"><BilingualText>{error}</BilingualText></div>}
       {msg && (
         <div style={{ padding: '10px 16px', background: 'var(--color-sage-soft)', color: 'var(--color-ink)', borderRadius: '8px', marginBottom: '16px' }}>
           ✓ {msg}
@@ -99,13 +98,13 @@ export function AdminAchievementsPage() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Mã Code / Icon</th>
-              <th>Tên huy hiệu</th>
-              <th>Điều kiện mở khóa</th>
-              <th>Loại điều kiện</th>
-              <th>Thưởng XP</th>
-              <th>Trạng thái</th>
-              <th>Thao tác</th>
+              <th><BilingualText>{"Mã Code / Icon"}</BilingualText></th>
+              <th><BilingualText>{"Tên huy hiệu"}</BilingualText></th>
+              <th><BilingualText>{"Điều kiện mở khóa"}</BilingualText></th>
+              <th><BilingualText>{"Loại điều kiện"}</BilingualText></th>
+              <th><BilingualText>{"Thưởng XP"}</BilingualText></th>
+              <th><BilingualText>{"Trạng thái"}</BilingualText></th>
+              <th><BilingualText>{"Thao tác"}</BilingualText></th>
             </tr>
           </thead>
           <tbody>
@@ -115,18 +114,18 @@ export function AdminAchievementsPage() {
                   <span style={{ fontSize: '1.4rem', marginRight: '8px' }}>{ach.icon}</span>
                   <strong>{ach.code || ach.id}</strong>
                 </td>
-                <td><button className="secondary" onClick={() => handleEdit(ach)}>Sửa</button>{' '}<button className="danger" onClick={() => handleDelete(ach.id)}>Xóa</button></td>
-                <td><strong style={{ color: 'var(--color-ink)' }}>{ach.title}</strong></td>
+                <td><button className="secondary" onClick={() => handleEdit(ach)}><BilingualText>{"Sửa"}</BilingualText></button>{' '}<button className="danger" onClick={() => handleDelete(ach.id)}><BilingualText>{"Xóa"}</BilingualText></button></td>
+                <td><strong style={{ color: 'var(--color-ink)' }}><BilingualText vi={ach.titleVi || ach.title} en={ach.title} /></strong></td>
                 <td>{ach.criteria}</td>
                 <td>
                   <span style={{ background: 'var(--color-cream)', padding: '3px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
                     {ach.conditionType || 'GENERAL'}
                   </span>
                 </td>
-                <td><span style={{ color: 'var(--color-sage)', fontWeight: 700 }}>+{ach.xpReward} XP</span></td>
+                <td><span style={{ color: 'var(--color-forest)', fontWeight: 700 }}>+{ach.xpReward} XP</span></td>
                 <td>
                   <span className={`admin-badge ${ach.active ? 'admin-badge-success' : 'admin-badge-danger'}`}>
-                    {ach.active ? 'Hoạt động' : 'Tạm ẩn'}
+                    <BilingualText>{ach.active ? 'Hoạt động' : 'Tạm ẩn'}</BilingualText>
                   </span>
                 </td>
               </tr>
@@ -141,7 +140,7 @@ export function AdminAchievementsPage() {
 <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '12px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Icon (Emoji)</label>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Icon (Emoji)"}</BilingualText></label>
                   <input
                     type="text"
                     value={newAch.icon}
@@ -151,7 +150,7 @@ export function AdminAchievementsPage() {
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Mã Code duy nhất</label>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Mã Code duy nhất"}</BilingualText></label>
                   <input
                     type="text"
                     placeholder="VD: PHO_MASTER_01"
@@ -164,10 +163,10 @@ export function AdminAchievementsPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Tên huy hiệu</label>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Tên huy hiệu"}</BilingualText></label>
                 <input
                   type="text"
-                  placeholder="Ví dụ: Bậc Thầy Phở Bò"
+                  placeholder={bilingualLabel("Ví dụ: Bậc Thầy Phở Bò")}
                   value={newAch.title}
                   onChange={e => setNewAch({ ...newAch, title: e.target.value })}
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
@@ -176,10 +175,10 @@ export function AdminAchievementsPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Mô tả huy hiệu</label>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Mô tả huy hiệu"}</BilingualText></label>
                 <input
                   type="text"
-                  placeholder="Ví dụ: Hoàn thành chủ đề Gọi món Phở Hà Nội"
+                  placeholder={bilingualLabel("Ví dụ: Hoàn thành chủ đề Gọi món Phở Hà Nội")}
                   value={newAch.desc}
                   onChange={e => setNewAch({ ...newAch, desc: e.target.value })}
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
@@ -188,21 +187,21 @@ export function AdminAchievementsPage() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Loại điều kiện</label>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Loại điều kiện"}</BilingualText></label>
                   <select
                     value={newAch.conditionType}
                     onChange={e => setNewAch({ ...newAch, conditionType: e.target.value })}
                     style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                   >
-                    <option value="LESSON_COUNT">Số bài học hoàn thành</option>
-                    <option value="VOCAB_COUNT">Số từ vựng ghi nhớ</option>
-                    <option value="STREAK_DAYS">Chuỗi ngày liên tiếp (Streak)</option>
-                    <option value="JOURNEY_CITY">Hoàn thành chặng Hành trình</option>
-                    <option value="QUIZ_SCORE">Điểm số bài kiểm tra</option>
+                    <option value="LESSON_COUNT">{bilingualLabel("Số bài học hoàn thành")}</option>
+                    <option value="VOCAB_COUNT">{bilingualLabel("Số từ vựng ghi nhớ")}</option>
+                    <option value="STREAK_DAYS">{bilingualLabel("Chuỗi ngày liên tiếp (Streak)")}</option>
+                    <option value="JOURNEY_CITY">{bilingualLabel("Hoàn thành chặng Hành trình")}</option>
+                    <option value="QUIZ_SCORE">{bilingualLabel("Điểm số bài kiểm tra")}</option>
                   </select>
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Điểm XP thưởng</label>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Điểm XP thưởng"}</BilingualText></label>
                   <input
                     type="number"
                     value={newAch.xpReward}
@@ -214,9 +213,9 @@ export function AdminAchievementsPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Chi tiết điều kiện mở khóa</label>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Chi tiết điều kiện mở khóa"}</BilingualText></label>
                 <textarea
-                  placeholder="Mô tả hành động cần đạt để mở khóa huy hiệu…"
+                  placeholder={bilingualLabel("Mô tả hành động cần đạt để mở khóa huy hiệu…")}
                   value={newAch.criteria}
                   onChange={e => setNewAch({ ...newAch, criteria: e.target.value })}
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)', height: '60px' }}
@@ -225,7 +224,7 @@ export function AdminAchievementsPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Link Icon SVG/PNG (Tùy chọn)</label>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Link Icon SVG/PNG (Tùy chọn)"}</BilingualText></label>
                 <input
                   type="text"
                   placeholder="https://... (để trống nếu dùng Emoji)"
@@ -240,14 +239,12 @@ export function AdminAchievementsPage() {
                   type="button"
                   onClick={() => setShowModal(false)}
                   style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', cursor: 'pointer' }}
-                >
-                  Hủy
-                </button>
+                ><BilingualText>{"Hủy"}</BilingualText></button>
                 <button
                   type="submit"
                   style={{ padding: '8px 18px', borderRadius: '8px', border: 'none', background: 'var(--color-red-hover)', color: 'var(--color-surface)', fontWeight: 700, cursor: 'pointer' }}
                 >
-                  {editingId ? 'Lưu thay đổi' : 'Khởi tạo huy hiệu'}
+                  <BilingualText>{editingId ? 'Lưu thay đổi' : 'Khởi tạo huy hiệu'}</BilingualText>
                 </button>
               </div>
             </form>

@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useState } from 'react';
 import { SaveVocabularyButton } from '@/components/vocabulary/SaveVocabularyButton';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -28,7 +29,7 @@ export function VocabularyDetailPage() {
         {(entry) => entry?.id ? (
           <>
             <article className="card vocabulary-detail-hero">
-              <p className="eyebrow">Khám phá từng từ một</p>
+              <p className="eyebrow"><BilingualText>{"Khám phá từng từ một"}</BilingualText></p>
               <div className="actions vocabulary-detail-badges">
                 {entry.topics?.length > 0 && <p className="muted vocabulary-topics">{entry.topics.map((topic) => topic.name).join(', ')}</p>}
                 {entry.cefrLevel && <span className="badge">{entry.cefrLevel}</span>}
@@ -42,11 +43,11 @@ export function VocabularyDetailPage() {
             </article>
             {entry.meanings?.length ? entry.meanings.map((meaning, index) => (
               <section className="card vocabulary-meaning-detail" key={meaning.id ?? index}>
-                <h2><span className="vocabulary-meaning-number">Nghĩa {index + 1}:</span> <span lang="en">{meaning.translationEn}</span></h2>
+                <h2><span className="vocabulary-meaning-number"><BilingualText>{"Nghĩa"}</BilingualText>{index + 1}:</span> <span lang="en">{meaning.translationEn}</span></h2>
                 {meaning.definitionEn && <p lang="en">{meaning.definitionEn}</p>}
-                {meaning.usageNote && <p className="muted vocabulary-usage-note"><span>Lưu ý sử dụng</span>{meaning.usageNote}</p>}
+                {meaning.usageNote && <p className="muted vocabulary-usage-note"><span><BilingualText>{"Lưu ý sử dụng"}</BilingualText></span>{meaning.usageNote}</p>}
                 {meaning.examples?.length > 0 && <>
-                  <h3>Ví dụ</h3>
+                  <h3><BilingualText>{"Ví dụ"}</BilingualText></h3>
                   {meaning.examples.map((example, exampleIndex) => (
                     <div className="vocabulary-example" key={example.id ?? exampleIndex}>
                       <div className="row">
@@ -61,10 +62,10 @@ export function VocabularyDetailPage() {
             )) : <EmptyState title="Chưa có nghĩa của từ vựng" />}
           </>
         ) : <EmptyState title="Không tìm thấy từ vựng">
-          <Link className="button secondary" to={ROUTES.VOCABULARY}>Từ vựng</Link>
+          <Link className="button secondary" to={ROUTES.VOCABULARY}><BilingualText>{"Từ vựng"}</BilingualText></Link>
         </EmptyState>}
       </ResourceState>
-      <div className="vocabulary-detail-footer"><Link className="text-link" to={ROUTES.VOCABULARY}>← Từ vựng</Link><Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}>Sổ từ vựng</Link></div>
+      <div className="vocabulary-detail-footer"><Link className="text-link" to={ROUTES.VOCABULARY}><BilingualText>{"← Từ vựng"}</BilingualText></Link><Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{"Sổ từ vựng"}</BilingualText></Link></div>
       </Modal>
     </section>
     </>

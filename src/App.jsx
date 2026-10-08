@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
@@ -93,7 +94,7 @@ function App() {
     <BrowserRouter>
       <ErrorBoundary>
         <AuthProvider>
-          <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/>Đang tải trang…</div>}><Routes>
+          <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><BilingualText>{"Đang tải trang…"}</BilingualText></div>}><Routes>
             {/* Standalone Fullscreen Auth Routes (Người 1) */}
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />

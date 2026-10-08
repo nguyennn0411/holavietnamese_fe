@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -56,38 +57,38 @@ export function AdminUsersPage() {
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px' }}>Quản lý người dùng</h1>
-        <p style={{ color: 'var(--color-muted)', margin: 0 }}>Tìm kiếm, lọc, phân quyền và quản lý trạng thái tài khoản.</p>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px' }}><BilingualText>{"Quản lý người dùng"}</BilingualText></h1>
+        <p style={{ color: 'var(--color-muted)', margin: 0 }}><BilingualText>{"Tìm kiếm, lọc, phân quyền và quản lý trạng thái tài khoản."}</BilingualText></p>
       </div>
 
-      {state.message && <div className="success state" style={{ padding: 12 }}>✓ {state.message}</div>}
-      {state.error && <div className="state" role="alert"><p>{state.error}</p><button onClick={load}>Thử lại</button></div>}
+      {state.message && <div className="success state" style={{ padding: 12 }}>✓ <BilingualText>{state.message}</BilingualText></div>}
+      {state.error && <div className="state" role="alert"><p><BilingualText>{state.error}</BilingualText></p><button onClick={load}><BilingualText>{"Thử lại"}</BilingualText></button></div>}
 
       <form className="admin-card" onSubmit={(e) => { e.preventDefault(); setQuery((q) => ({ ...q, search: input.trim(), page: 0 })); }} style={{ padding: 16, marginBottom: 20, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <input aria-label="Tìm người dùng" placeholder="Tìm tên, username hoặc email…" value={input} onChange={(e) => setInput(e.target.value)} style={{ flex: '1 1 260px' }} />
+        <input aria-label="Tìm người dùng" placeholder={bilingualLabel("Tìm tên, username hoặc email…")} value={input} onChange={(e) => setInput(e.target.value)} style={{ flex: '1 1 260px' }} />
         <select aria-label="Trạng thái" value={query.status} onChange={(e) => setQuery((q) => ({ ...q, status: e.target.value, page: 0 }))}>
-          <option value="">Tất cả trạng thái</option><option value="ACTIVE">ACTIVE</option><option value="INACTIVE">INACTIVE</option><option value="LOCKED">LOCKED</option><option value="DISABLED">DISABLED</option>
+          <option value="">{bilingualLabel("Tất cả trạng thái")}</option><option value="ACTIVE">{bilingualLabel("ACTIVE")}</option><option value="INACTIVE">{bilingualLabel("INACTIVE")}</option><option value="LOCKED">{bilingualLabel("LOCKED")}</option><option value="DISABLED">{bilingualLabel("DISABLED")}</option>
         </select>
         <select aria-label="Vai trò" value={query.role} onChange={(e) => setQuery((q) => ({ ...q, role: e.target.value, page: 0 }))}>
-          <option value="">Tất cả vai trò</option><option value="LEARNER">LEARNER</option><option value="INSTRUCTOR">INSTRUCTOR</option><option value="ADMIN">ADMIN</option>
+          <option value="">{bilingualLabel("Tất cả vai trò")}</option><option value="LEARNER">{bilingualLabel("LEARNER")}</option><option value="INSTRUCTOR">{bilingualLabel("INSTRUCTOR")}</option><option value="ADMIN">{bilingualLabel("ADMIN")}</option>
         </select>
-        <button type="submit">Tìm kiếm</button>
+        <button type="submit"><BilingualText>{"Tìm kiếm"}</BilingualText></button>
       </form>
 
       <div className="admin-card" style={{ padding: 0, overflowX: 'auto' }}>
-        {state.loading ? <div className="state">Đang tải người dùng…</div> : users.length === 0 ? <div className="state">Không tìm thấy người dùng phù hợp.</div> : (
-          <table className="admin-table"><thead><tr><th>Người dùng</th><th>Email</th><th>Vai trò</th><th>Trạng thái</th><th style={{ textAlign: 'right' }}>Thao tác</th></tr></thead>
+        {state.loading ? <div className="state"><BilingualText>{"Đang tải người dùng…"}</BilingualText></div> : users.length === 0 ? <div className="state"><BilingualText>{"Không tìm thấy người dùng phù hợp."}</BilingualText></div> : (
+          <table className="admin-table"><thead><tr><th><BilingualText>{"Người dùng"}</BilingualText></th><th><BilingualText>{"Email"}</BilingualText></th><th><BilingualText>{"Vai trò"}</BilingualText></th><th><BilingualText>{"Trạng thái"}</BilingualText></th><th style={{ textAlign: 'right' }}><BilingualText>{"Thao tác"}</BilingualText></th></tr></thead>
             <tbody>{users.map((user) => {
               const userRoles = user.roles ?? (user.role ? [user.role] : []);
               return <tr key={user.id ?? user.userId}>
                 <td><strong>{user.fullName || user.username}</strong><small style={{ display: 'block', color: 'var(--color-muted)' }}>@{user.username}</small></td>
                 <td>{user.email || '—'}</td>
                 <td>{userRoles.map((role) => <span key={role} className="admin-badge admin-badge-info" style={{ marginRight: 4 }}>{String(role).replace('ROLE_', '')}</span>)}</td>
-                <td><span className={`admin-badge ${user.status === 'ACTIVE' ? 'admin-badge-success' : 'admin-badge-danger'}`}>{user.status}</span></td>
+                <td><span className={`admin-badge ${user.status === 'ACTIVE' ? 'admin-badge-success' : 'admin-badge-danger'}`}><BilingualText>{user.status}</BilingualText></span></td>
                 <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                  <button className="secondary" onClick={() => { setRoleUser(user); setSelectedRoles(userRoles.map((r) => String(r).replace('ROLE_', ''))); }}>Vai trò</button>{' '}
-                  <Link className="button secondary" to={`/admin/users/${user.id ?? user.userId}`}>Chi tiết</Link>{' '}
-                  <button className={user.status === 'ACTIVE' ? 'danger' : ''} onClick={() => changeStatus(user)}>{user.status === 'ACTIVE' ? 'Khóa' : 'Kích hoạt'}</button>
+                  <button className="secondary" onClick={() => { setRoleUser(user); setSelectedRoles(userRoles.map((r) => String(r).replace('ROLE_', ''))); }}><BilingualText>{"Vai trò"}</BilingualText></button>{' '}
+                  <Link className="button secondary" to={`/admin/users/${user.id ?? user.userId}`}><BilingualText>{"Chi tiết"}</BilingualText></Link>{' '}
+                  <button className={user.status === 'ACTIVE' ? 'danger' : ''} onClick={() => changeStatus(user)}><BilingualText>{user.status === 'ACTIVE' ? 'Khóa' : 'Kích hoạt'}</BilingualText></button>
                 </td>
               </tr>;
             })}</tbody>
@@ -96,14 +97,14 @@ export function AdminUsersPage() {
       </div>
 
       <div className="actions" style={{ justifyContent: 'space-between', marginTop: 16 }}>
-        <span className="muted">Tổng cộng {data.totalElements} người dùng</span>
-        <div className="actions"><button className="secondary" disabled={query.page === 0 || state.loading} onClick={() => setQuery((q) => ({ ...q, page: q.page - 1 }))}>← Trước</button><span>Trang {query.page + 1}/{Math.max(data.totalPages, 1)}</span><button className="secondary" disabled={query.page + 1 >= data.totalPages || state.loading} onClick={() => setQuery((q) => ({ ...q, page: q.page + 1 }))}>Sau →</button></div>
+        <span className="muted"><BilingualText>{"Tổng cộng"}</BilingualText>{data.totalElements}<BilingualText>{"người dùng"}</BilingualText></span>
+        <div className="actions"><button className="secondary" disabled={query.page === 0 || state.loading} onClick={() => setQuery((q) => ({ ...q, page: q.page - 1 }))}><BilingualText>{"← Trước"}</BilingualText></button><span><BilingualText>{"Trang"}</BilingualText>{query.page + 1}/{Math.max(data.totalPages, 1)}</span><button className="secondary" disabled={query.page + 1 >= data.totalPages || state.loading} onClick={() => setQuery((q) => ({ ...q, page: q.page + 1 }))}><BilingualText>{"Sau →"}</BilingualText></button></div>
       </div>
 
       {roleUser && <Modal title="Cập nhật vai trò" onClose={()=>setRoleUser(null)}>
         <p className="muted">{roleUser.fullName || roleUser.username}</p>
         {['LEARNER', 'INSTRUCTOR', 'ADMIN'].map((role) => <label key={role} style={{ flexDirection: 'row' }}><input type="checkbox" style={{ width: 'auto' }} checked={selectedRoles.includes(role)} onChange={(e) => setSelectedRoles((values) => e.target.checked ? [...values, role] : values.filter((item) => item !== role))} />{role}</label>)}
-        <div className="actions" style={{ justifyContent: 'flex-end' }}><button className="secondary" onClick={() => setRoleUser(null)}>Hủy</button><button disabled={!selectedRoles.length} onClick={saveRoles}>Lưu vai trò</button></div>
+        <div className="actions" style={{ justifyContent: 'flex-end' }}><button className="secondary" onClick={() => setRoleUser(null)}><BilingualText>{"Hủy"}</BilingualText></button><button disabled={!selectedRoles.length} onClick={saveRoles}><BilingualText>{"Lưu vai trò"}</BilingualText></button></div>
       </Modal>}
     </div>
   );

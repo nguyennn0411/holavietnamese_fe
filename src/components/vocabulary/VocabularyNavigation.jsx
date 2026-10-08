@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useAuth } from '@/application/context/AuthContext';
@@ -11,7 +12,7 @@ export function VocabularyNavigation({ active, count }) {
       { id: 'review', to: ROUTES.VOCABULARY_REVIEW, label: 'Ôn tập', icon: 'review' },
     ].map(item => <Link key={item.id} to={item.to} aria-current={active === item.id ? 'page' : undefined}>
       <span className={`vocabulary-icon vocabulary-icon--${item.icon}`} aria-hidden="true" />
-      {item.label}
+      <BilingualText>{item.label}</BilingualText>
       {item.id === 'notebook' && count != null && <span className="vocabulary-navigation-count">{count}</span>}
     </Link>)}
   </nav>;
@@ -32,8 +33,8 @@ function NotebookOverview({ active, children }) {
 function NotebookBanner({ count, children }) {
   return <div className="notebook-banner vocabulary-overview">
     <span className="vocabulary-icon vocabulary-icon--bookmark" aria-hidden="true" />
-    <div><strong>Sổ tay tiếng Việt của bạn</strong>
-      <small>{count != null ? <>{count} từ trong sổ tay <span aria-hidden="true">·</span> {count} từ sẵn sàng ôn tập</> : 'Lưu lại từ hay, ôn lại mỗi ngày.'}</small>
+    <div><strong><BilingualText>{"Sổ tay tiếng Việt của bạn"}</BilingualText></strong>
+      <small>{count != null ? <BilingualText vi={<>{count} từ trong sổ tay <span aria-hidden="true">·</span> {count} từ sẵn sàng ôn tập</>} en={<>{count} words in your notebook · {count} ready to review</>} /> : <BilingualText>{'Lưu lại từ hay, ôn lại mỗi ngày.'}</BilingualText>}</small>
     </div>{children}
   </div>;
 }
