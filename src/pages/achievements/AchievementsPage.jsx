@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { learnerService } from '@/services/learnerService';
-import '@/presentation/styles/account.css';
 
 export function AchievementsPage() {
   const [data, setData] = useState(null);

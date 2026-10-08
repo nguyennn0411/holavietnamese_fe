@@ -1,0 +1,124 @@
+{
+  "checkedAt": "2026-10-07T21:29:20.493Z",
+  "routes": 65,
+  "existingRoutes": 46,
+  "newRoutes": 19,
+  "viewports": [
+    1440,
+    1280,
+    768,
+    375
+  ],
+  "routeScreenshots": 260,
+  "layoutChecks": 260,
+  "missingArtifacts": [],
+  "horizontalOverflow": [],
+  "source": "Browser DOM measurements and screenshots from isolated visual QA on localhost:5174",
+  "build": {
+    "command": "npm run build",
+    "result": "passed"
+  },
+  "tests": {
+    "command": "npm test",
+    "passed": 12,
+    "failed": 0
+  },
+  "mediaAudit": {
+    "checkedAt": "2026-10-07T21:26:52.797Z",
+    "routeCount": 65,
+    "routeSizeChecks": 122,
+    "viewports": [
+      1440,
+      1280,
+      768,
+      375
+    ],
+    "imageInstances": 188,
+    "uniqueImageUrls": 23,
+    "pendingImages": [],
+    "brokenImages": [],
+    "invalidAttributes": [],
+    "layoutErrors": [],
+    "tests": {
+      "passed": 12,
+      "failed": 0
+    },
+    "build": "passed",
+    "publicDetails": 12,
+    "editorChecks": 4,
+    "assets": [
+      {
+        "path": "public/design/coast.svg",
+        "format": "svg"
+      },
+      {
+        "path": "public/design/coffee.svg",
+        "format": "svg"
+      },
+      {
+        "path": "public/design/dong-son.svg",
+        "format": "svg"
+      },
+      {
+        "path": "public/design/food-hero.svg",
+        "format": "svg"
+      },
+      {
+        "path": "public/design/food.svg",
+        "format": "svg"
+      },
+      {
+        "path": "public/design/lanterns.svg",
+        "format": "svg"
+      },
+      {
+        "path": "public/design/vietnam-map.svg",
+        "format": "svg"
+      },
+      {
+        "path": "public/design/village.svg",
+        "format": "svg"
+      },
+      {
+        "path": "src/assets/images/dongson_auth_bg.png",
+        "format": "png"
+      }
+    ]
+  },
+  "flowScreenshots": [
+    "flow-admin-drawer-375.jpg",
+    "flow-admin-vocabulary-modal-375.jpg",
+    "flow-ai-tutor-1440.jpg",
+    "flow-course-form-1440.jpg",
+    "flow-lesson-builder-1440.jpg",
+    "flow-lesson-dialogue-1440.jpg",
+    "flow-lesson-listening-1440.jpg",
+    "flow-lesson-quiz-gate-1440.jpg",
+    "flow-lesson-vocabulary-1440.jpg",
+    "flow-notifications-1440.jpg",
+    "flow-profile-1440.jpg",
+    "flow-question-matching-375.jpg",
+    "flow-question-modal-1440.jpg",
+    "flow-quiz-confirm-1440.jpg",
+    "flow-quiz-picker-1440.jpg",
+    "flow-quiz-result-1440.jpg",
+    "flow-review-complete-375.jpg",
+    "flow-roleplay-375.jpg",
+    "flow-roleplay-result-375.jpg",
+    "flow-settings-1440.jpg",
+    "flow-topic-modal-375.jpg",
+    "flow-vocabulary-modal-375.jpg",
+    "state-admin-error-1440.jpg",
+    "state-forbidden-1440.jpg",
+    "state-review-empty-1440.jpg"
+  ],
+  "productionDemo": "http://localhost:5173",
+  "qaDemo": "http://localhost:5174/qa/index.html?screen=/",
+  "limitations": [
+    "No real backend/database end-to-end run",
+    "Google OAuth and email OTP/reset not tested",
+    "Microphone and actual audio quality not tested",
+    "Live AI provider not tested",
+    "QA quiz grading is illustrative fixture data"
+  ]
+}

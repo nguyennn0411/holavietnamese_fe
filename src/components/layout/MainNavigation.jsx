@@ -1,13 +1,15 @@
 import { NavLink } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ', icon: '⌂', end: true },
-  { to: '/my-learning', label: 'Góc học tập', icon: '◫' },
-  { to: '/courses', label: 'Khóa học', icon: '▤' },
-  { to: '/ai-tutor', label: 'AI Tutor', icon: '🤖' },
-  { to: '/ai-scenarios', label: 'Kịch bản Roleplay', icon: '🎭' },
-  { to: '/culture', label: 'Văn hóa', icon: '🏮' },
-  { to: '/vocabulary', label: 'Từ đã lưu', icon: '◇' },
+  { to: '/courses', label: 'Học tiếng Việt' },
+  { to: '/explore', label: 'Khám phá Việt Nam' },
+  { to: ROUTES.VOCABULARY, label: 'Từ vựng' },
+  { to: '/culture', label: 'Văn hóa' },
+  { to: '/blog', label: 'Blog' },
+  { to: '/ai-tutor', label: 'AI Tutor ✣' },
+  { to: '/my-learning', label: 'Góc học tập' },
 ];
 
 export function MainNavigation({ onNavigate }) {

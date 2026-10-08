@@ -1,3 +1,4 @@
+import { Modal } from '@/components/common/Modal';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminService } from '@/services/adminService';
@@ -56,7 +57,7 @@ export function AdminUsersPage() {
     <div>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px' }}>Quản lý người dùng</h1>
-        <p style={{ color: '#64748b', margin: 0 }}>Tìm kiếm, lọc, phân quyền và quản lý trạng thái tài khoản.</p>
+        <p style={{ color: 'var(--color-muted)', margin: 0 }}>Tìm kiếm, lọc, phân quyền và quản lý trạng thái tài khoản.</p>
       </div>
 
       {state.message && <div className="success state" style={{ padding: 12 }}>✓ {state.message}</div>}
@@ -79,7 +80,7 @@ export function AdminUsersPage() {
             <tbody>{users.map((user) => {
               const userRoles = user.roles ?? (user.role ? [user.role] : []);
               return <tr key={user.id ?? user.userId}>
-                <td><strong>{user.fullName || user.username}</strong><small style={{ display: 'block', color: '#64748b' }}>@{user.username}</small></td>
+                <td><strong>{user.fullName || user.username}</strong><small style={{ display: 'block', color: 'var(--color-muted)' }}>@{user.username}</small></td>
                 <td>{user.email || '—'}</td>
                 <td>{userRoles.map((role) => <span key={role} className="admin-badge admin-badge-info" style={{ marginRight: 4 }}>{String(role).replace('ROLE_', '')}</span>)}</td>
                 <td><span className={`admin-badge ${user.status === 'ACTIVE' ? 'admin-badge-success' : 'admin-badge-danger'}`}>{user.status}</span></td>
@@ -99,11 +100,11 @@ export function AdminUsersPage() {
         <div className="actions"><button className="secondary" disabled={query.page === 0 || state.loading} onClick={() => setQuery((q) => ({ ...q, page: q.page - 1 }))}>← Trước</button><span>Trang {query.page + 1}/{Math.max(data.totalPages, 1)}</span><button className="secondary" disabled={query.page + 1 >= data.totalPages || state.loading} onClick={() => setQuery((q) => ({ ...q, page: q.page + 1 }))}>Sau →</button></div>
       </div>
 
-      {roleUser && <div className="admin-modal-overlay"><div className="admin-card" style={{ width: 'min(420px, calc(100% - 32px))', padding: 28 }}>
-        <h2>Cập nhật vai trò</h2><p className="muted">{roleUser.fullName || roleUser.username}</p>
+      {roleUser && <Modal title="Cập nhật vai trò" onClose={()=>setRoleUser(null)}>
+        <p className="muted">{roleUser.fullName || roleUser.username}</p>
         {['LEARNER', 'INSTRUCTOR', 'ADMIN'].map((role) => <label key={role} style={{ flexDirection: 'row' }}><input type="checkbox" style={{ width: 'auto' }} checked={selectedRoles.includes(role)} onChange={(e) => setSelectedRoles((values) => e.target.checked ? [...values, role] : values.filter((item) => item !== role))} />{role}</label>)}
         <div className="actions" style={{ justifyContent: 'flex-end' }}><button className="secondary" onClick={() => setRoleUser(null)}>Hủy</button><button disabled={!selectedRoles.length} onClick={saveRoles}>Lưu vai trò</button></div>
-      </div></div>}
+      </Modal>}
     </div>
   );
 }

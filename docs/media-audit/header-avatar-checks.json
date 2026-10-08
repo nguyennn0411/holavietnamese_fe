@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "avatarHeight": 48,
+      "avatarWidth": 48,
+      "fit": "cover",
+      "imageLoaded": true,
+      "insideViewport": true,
+      "overflow": false,
+      "viewport": 1440
+    },
+    {
+      "avatarHeight": 48,
+      "avatarWidth": 48,
+      "fit": "cover",
+      "imageLoaded": true,
+      "insideViewport": true,
+      "overflow": false,
+      "viewport": 1280
+    },
+    {
+      "avatarHeight": 48,
+      "avatarWidth": 48,
+      "fit": "cover",
+      "imageLoaded": true,
+      "insideViewport": true,
+      "overflow": false,
+      "viewport": 768
+    },
+    {
+      "avatarHeight": 40,
+      "avatarWidth": 40,
+      "fit": "cover",
+      "imageLoaded": true,
+      "insideViewport": true,
+      "overflow": false,
+      "viewport": 375
+    }
+  ],
+  "escapeClosed": true,
+  "missingFallback": "A",
+  "brokenFallback": "A",
+  "profileLink": "http://localhost:5174/profile",
+  "productionSource": "user.avatarUrl",
+  "qaPhotoOnly": true,
+  "tests": {
+    "passed": 12,
+    "failed": 0
+  },
+  "build": "passed"
+}

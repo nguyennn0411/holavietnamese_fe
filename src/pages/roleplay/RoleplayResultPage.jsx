@@ -1,8 +1,8 @@
+import { EmptyState } from '@/components/common/Ui';
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
 import { vocabularyService } from '@/services/vocabularyService';
-import '@/presentation/styles/ai-tutor.css';
 
 export function RoleplayResultPage() {
   const { id } = useParams();
@@ -24,7 +24,7 @@ export function RoleplayResultPage() {
       });
       showToast(`Đã lưu "${item.phrase}" vào Sổ từ vựng!`);
     } catch (e) {
-      showToast(`Lưu từ vựng: ${e.message || 'Thành công'}`);
+      showToast(`Lưu từ vựng: ${e.message || 'Không thể lưu từ vựng.'}`);
     }
   };
 
@@ -33,7 +33,7 @@ export function RoleplayResultPage() {
     navigate(`/ai-roleplay/${id}`);
   };
 
-  if (!result) return null;
+  if (!result) return <EmptyState title="Chưa có kết quả phiên hội thoại" description="Hoàn thành một cuộc trò chuyện để xem đánh giá."><Link className="button" to="/ai-scenarios">Chọn kịch bản →</Link></EmptyState>;
 
   return (
     <div className="p4-container">
@@ -45,12 +45,12 @@ export function RoleplayResultPage() {
       )}
 
       {/* Breadcrumb */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#7a6458', marginBottom: '16px' }}>
-        <Link to="/ai-scenarios" style={{ color: '#9f2d20', textDecoration: 'none' }}>← Danh sách kịch bản</Link>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-sage)', marginBottom: '16px' }}>
+        <Link to="/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Danh sách kịch bản</Link>
         <span>/</span>
         <span>{result.scenarioTitle}</span>
         <span>/</span>
-        <span style={{ color: '#381e18', fontWeight: 600 }}>Kết quả đánh giá</span>
+        <span style={{ color: 'var(--color-ink)', fontWeight: 600 }}>Kết quả đánh giá</span>
       </nav>
 
       {/* Screen Title */}
@@ -67,13 +67,13 @@ export function RoleplayResultPage() {
         <div className="score-circle-box">
           <div className="score-number">{result.totalScore}</div>
           <div className="score-rating">Xếp loại: {result.rating}</div>
-          <div style={{ fontSize: '12px', color: '#7a5a4a', marginTop: '6px' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-sage)', marginTop: '6px' }}>
             Nhiệm vụ: {result.completedTasksRatio}
           </div>
         </div>
 
         <div>
-          <h2 style={{ margin: '0 0 12px', fontSize: '20px', color: '#321b17' }}>
+          <h2 style={{ margin: '0 0 12px', fontSize: '20px', color: 'var(--color-ink)' }}>
             Chi tiết các chỉ số năng lực:
           </h2>
 
@@ -119,7 +119,7 @@ export function RoleplayResultPage() {
             </div>
           </div>
 
-          <div style={{ marginTop: '16px', padding: '14px 18px', background: '#ffffff', borderRadius: '14px', border: '1px solid #ebd9c8', fontSize: '13.5px', color: '#4a2f24', lineHeight: 1.6 }}>
+          <div style={{ marginTop: '16px', padding: '14px 18px', background: 'var(--color-surface)', borderRadius: '14px', border: '1px solid var(--color-border)', fontSize: '13.5px', color: 'var(--color-ink)', lineHeight: 1.6 }}>
             <strong>🤖 Nhận xét từ AI Tutor:</strong> {result.aiFeedback}
           </div>
         </div>
@@ -128,8 +128,8 @@ export function RoleplayResultPage() {
       {/* 2-Column Section: Corrections & Practiced Expressions */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', marginBottom: '36px' }}>
         {/* Errors & Native Suggestions */}
-        <div style={{ background: '#ffffff', border: '1px solid #ebd9c8', borderRadius: '20px', padding: '24px' }}>
-          <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: '#9f2d20', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '20px', padding: '24px' }}>
+          <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-red-hover)', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>🔍</span> Lỗi cần sửa & Cách nói tự nhiên hơn
           </h2>
 
@@ -145,8 +145,8 @@ export function RoleplayResultPage() {
         </div>
 
         {/* Practiced Key Expressions */}
-        <div style={{ background: '#ffffff', border: '1px solid #ebd9c8', borderRadius: '20px', padding: '24px' }}>
-          <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: '#245c48', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '20px', padding: '24px' }}>
+          <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>📖</span> Biểu thức & Cấu trúc đã luyện tập
           </h2>
 
@@ -154,17 +154,17 @@ export function RoleplayResultPage() {
             {result.practicedExpressions?.map((expr, idx) => (
               <div
                 key={idx}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: '#fcf8f2', border: '1px solid #eddcca', borderRadius: '12px' }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '12px' }}
               >
                 <div>
-                  <strong style={{ fontSize: '14px', color: '#2e1913' }}>"{expr.phrase}"</strong>
-                  <div style={{ fontSize: '12px', color: '#685044' }}>{expr.meaning}</div>
+                  <strong style={{ fontSize: '14px', color: 'var(--color-ink)' }}>"{expr.phrase}"</strong>
+                  <div style={{ fontSize: '12px', color: 'var(--color-red-hover)' }}>{expr.meaning}</div>
                 </div>
 
                 <button
                   className="message-action-btn"
                   onClick={() => handleSaveExpression(expr)}
-                  style={{ background: '#fff', borderColor: '#d8aa54', color: '#7a4e1d' }}
+                  style={{ background: 'var(--color-surface)', borderColor: 'var(--color-gold)', color: 'var(--color-red-hover)' }}
                 >
                   <span>⭐</span> Lưu từ
                 </button>
@@ -175,20 +175,20 @@ export function RoleplayResultPage() {
       </div>
 
       {/* Action Footer: Retry & Next Scenario */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#faf3e8', border: '1px solid #eddcca', borderRadius: '18px', padding: '20px 24px', flexWrap: 'wrap', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '20px 24px', flexWrap: 'wrap', gap: '16px' }}>
         <button className="button secondary" onClick={handleRetry} style={{ fontSize: '14px', padding: '12px 20px' }}>
           🔄 Thử lại kịch bản này
         </button>
 
         {result.nextScenario && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <span style={{ fontSize: '13px', color: '#7a5a4a' }}>
+            <span style={{ fontSize: '13px', color: 'var(--color-sage)' }}>
               Kịch bản đề xuất tiếp theo: <strong>{result.nextScenario.title}</strong>
             </span>
             <Link
               to={`/ai-roleplay/${result.nextScenario.id}`}
               className="button"
-              style={{ background: '#9f2d20', borderColor: '#9f2d20', fontSize: '14px', padding: '12px 22px' }}
+              style={{ background: 'var(--color-red-hover)', borderColor: 'var(--color-red-hover)', fontSize: '14px', padding: '12px 22px' }}
             >
               Tiếp tục kịch bản mới ➔
             </Link>

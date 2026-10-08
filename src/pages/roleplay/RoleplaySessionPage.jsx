@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
-import '@/presentation/styles/ai-tutor.css';
 
 export function RoleplaySessionPage() {
   const { id } = useParams();
@@ -140,12 +139,12 @@ export function RoleplaySessionPage() {
       {/* Screen Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#7a6458', marginBottom: '4px' }}>
-            <Link to="/ai-scenarios" style={{ color: '#9f2d20', textDecoration: 'none' }}>← Thoát kịch bản</Link>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-sage)', marginBottom: '4px' }}>
+            <Link to="/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Thoát kịch bản</Link>
             <span>/</span>
             <span>{scenario.title}</span>
           </nav>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#321b17', margin: 0 }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-ink)', margin: 0 }}>
             Phiên Roleplay: {scenario.title}
           </h1>
         </div>
@@ -154,7 +153,7 @@ export function RoleplaySessionPage() {
           <button className="button secondary" onClick={handleResetSession} style={{ fontSize: '13px', padding: '8px 14px' }}>
             🔄 Bắt đầu lại
           </button>
-          <button className="button" onClick={handleFinishSession} style={{ background: '#245c48', borderColor: '#245c48', fontSize: '13px', padding: '8px 16px' }}>
+          <button className="button" onClick={handleFinishSession} style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px', padding: '8px 16px' }}>
             🏁 Kết thúc & Xem kết quả
           </button>
         </div>
@@ -168,15 +167,15 @@ export function RoleplaySessionPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '24px' }}>{scenario.aiRole.avatar}</span>
               <div>
-                <strong style={{ fontSize: '14px', color: '#381e18' }}>{scenario.aiRole.name}</strong>
-                <div style={{ fontSize: '11.5px', color: '#7a6256' }}>{scenario.aiRole.role}</div>
+                <strong style={{ fontSize: '14px', color: 'var(--color-ink)' }}>{scenario.aiRole.name}</strong>
+                <div style={{ fontSize: '11.5px', color: 'var(--color-sage)' }}>{scenario.aiRole.role}</div>
               </div>
             </div>
 
             <button
               className="message-action-btn"
               onClick={() => setShowHints(!showHints)}
-              style={{ background: showHints ? '#fcedeb' : '#fff', color: showHints ? '#9f2d20' : '#684d40' }}
+              style={{ background: showHints ? 'var(--color-cream)' : 'var(--color-surface)', color: showHints ? 'var(--color-red-hover)' : 'var(--color-red-hover)' }}
             >
               💡 {showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'}
             </button>
@@ -196,7 +195,7 @@ export function RoleplaySessionPage() {
                   </div>
 
                   <div className="message-bubble">
-                    <div style={{ fontWeight: 700, fontSize: '11px', color: isAi ? '#9f2d20' : '#d2eed2', marginBottom: '4px' }}>
+                    <div style={{ fontWeight: 700, fontSize: '11px', color: isAi ? 'var(--color-red-hover)' : 'var(--color-border)', marginBottom: '4px' }}>
                       {isAi ? scenario.aiRole.name : 'Bạn'}
                     </div>
 
@@ -204,14 +203,14 @@ export function RoleplaySessionPage() {
 
                     {/* Translation foldout */}
                     {isTranslating && msg.translation && (
-                      <div style={{ marginTop: '8px', padding: '8px 12px', background: '#f5ebe0', borderRadius: '8px', fontSize: '13px', color: '#4a2f24' }}>
+                      <div style={{ marginTop: '8px', padding: '8px 12px', background: 'var(--color-red-soft)', borderRadius: '8px', fontSize: '13px', color: 'var(--color-ink)' }}>
                         🌐 <em>{msg.translation}</em>
                       </div>
                     )}
 
                     {/* Explanation foldout */}
                     {isExplaining && msg.explanation && (
-                      <div style={{ marginTop: '8px', padding: '8px 12px', background: '#edf4ef', borderRadius: '8px', fontSize: '12.5px', color: '#245c48' }}>
+                      <div style={{ marginTop: '8px', padding: '8px 12px', background: 'var(--color-sage-soft)', borderRadius: '8px', fontSize: '12.5px', color: 'var(--color-ink)' }}>
                         💡 <strong>Giải thích ngữ cảnh:</strong> {msg.explanation}
                       </div>
                     )}
@@ -255,7 +254,7 @@ export function RoleplaySessionPage() {
               <div className="message-row ai">
                 <div className="message-avatar">{scenario.aiRole.avatar}</div>
                 <div className="message-bubble">
-                  <div style={{ color: '#7a5a4a' }}>✨ {scenario.aiRole.name} đang trả lời...</div>
+                  <div style={{ color: 'var(--color-sage)' }}>✨ {scenario.aiRole.name} đang trả lời...</div>
                 </div>
               </div>
             )}
@@ -266,7 +265,7 @@ export function RoleplaySessionPage() {
           {/* Suggested Hints for user */}
           {showHints && (
             <div className="roleplay-hints">
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#8c7367', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 💡 Gợi ý câu trả lời tự nhiên (Bấm vào để gửi ngay):
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '8px' }}>
@@ -325,10 +324,10 @@ export function RoleplaySessionPage() {
         {/* Right Mission Sidebar */}
         <aside className="roleplay-mission-panel">
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 800, color: '#9f2d20', textTransform: 'uppercase', marginBottom: '4px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase', marginBottom: '4px' }}>
               Tiến độ kịch bản
             </div>
-            <h3 style={{ margin: 0, fontSize: '16px', color: '#2d1813' }}>
+            <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}>
               Mục tiêu đối thoại
             </h3>
           </div>
@@ -344,7 +343,7 @@ export function RoleplaySessionPage() {
                   </span>
                   <div>
                     <div>{task.label}</div>
-                    {isDone && <span style={{ fontSize: '11px', fontWeight: 700, color: '#2e7d32' }}>Đã hoàn thành!</span>}
+                    {isDone && <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-ink)' }}>Đã hoàn thành!</span>}
                   </div>
                 </div>
               );
@@ -352,11 +351,11 @@ export function RoleplaySessionPage() {
           </div>
 
           {/* Roles reminder */}
-          <div style={{ background: '#fcf6ee', border: '1px solid #eedecf', borderRadius: '12px', padding: '14px', fontSize: '12.5px' }}>
-            <div style={{ fontWeight: 700, color: '#4a281e', marginBottom: '4px' }}>
+          <div style={{ background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '14px', fontSize: '12.5px' }}>
+            <div style={{ fontWeight: 700, color: 'var(--color-ink)', marginBottom: '4px' }}>
               🎭 Nhắc nhở vai diễn:
             </div>
-            <div style={{ color: '#685044', lineHeight: 1.5 }}>
+            <div style={{ color: 'var(--color-red-hover)', lineHeight: 1.5 }}>
               Bạn đang đóng vai: <strong>{scenario.learnerRole.role}</strong>. Hãy giao tiếp tự nhiên và nhớ dùng kính ngữ phù hợp nhé!
             </div>
           </div>
@@ -365,7 +364,7 @@ export function RoleplaySessionPage() {
           <button
             className="button"
             onClick={handleFinishSession}
-            style={{ width: '100%', background: '#9f2d20', borderColor: '#9f2d20', marginTop: 'auto' }}
+            style={{ width: '100%', background: 'var(--color-red-hover)', borderColor: 'var(--color-red-hover)', marginTop: 'auto' }}
           >
             Hoàn tất & Nhận đánh giá ➔
           </button>

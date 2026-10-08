@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
-import '@/presentation/styles/admin.css';
 
 export function AdminScenarioBuilderPage() {
   const { id } = useParams();
@@ -148,7 +147,7 @@ export function AdminScenarioBuilderPage() {
   return (
     <div className="admin-content">
       {toast && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', background: '#245c48', color: '#fff', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
+        <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           {toast}
         </div>
       )}
@@ -156,8 +155,8 @@ export function AdminScenarioBuilderPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '14px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: '#7a6458', marginBottom: '6px' }}>
-            <Link to="/admin/ai-scenarios" style={{ color: '#a62a24', textDecoration: 'none' }}>← Danh sách kịch bản AI</Link>
+          <nav style={{ fontSize: '13px', color: 'var(--color-sage)', marginBottom: '6px' }}>
+            <Link to="/admin/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Danh sách kịch bản AI</Link>
           </nav>
           <h1 style={{ margin: 0, fontSize: '30px' }}>
             Scenario Builder: {formData.title || 'Kịch bản mới'}
@@ -185,7 +184,7 @@ export function AdminScenarioBuilderPage() {
             type="button"
             className="button"
             onClick={handleSubmit}
-            style={{ background: '#245c48', borderColor: '#245c48', fontSize: '13px' }}
+            style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
           >
             💾 Lưu kịch bản
           </button>
@@ -199,7 +198,7 @@ export function AdminScenarioBuilderPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {/* General Overview */}
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: '#381e18' }}>1. Thông tin chung & Bối cảnh</h3>
+                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}>1. Thông tin chung & Bối cảnh</h3>
 
                 <label>
                   Tên kịch bản nhập vai:
@@ -225,7 +224,7 @@ export function AdminScenarioBuilderPage() {
 
               {/* Roles Definition */}
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: '#381e18' }}>2. Thiết lập vai trò (Roles)</h3>
+                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}>2. Thiết lập vai trò (Roles)</h3>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr', gap: '12px' }}>
                   <label>
@@ -269,7 +268,7 @@ export function AdminScenarioBuilderPage() {
                   />
                 </label>
 
-                <label style={{ marginTop: '14px', borderTop: '1px dashed #ebd8c7', paddingTop: '14px' }}>
+                <label style={{ marginTop: '14px', borderTop: '1px dashed var(--color-border)', paddingTop: '14px' }}>
                   Vai trò của Học viên (Learner Role):
                   <input
                     type="text"
@@ -282,7 +281,7 @@ export function AdminScenarioBuilderPage() {
 
               {/* Initial Greeting & Sample Hints */}
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: '#381e18' }}>3. Lời thoại mở đầu & Gợi ý trả lời</h3>
+                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}>3. Lời thoại mở đầu & Gợi ý trả lời</h3>
 
                 <label>
                   Câu chào mở đầu của AI (Initial Greeting):
@@ -297,7 +296,7 @@ export function AdminScenarioBuilderPage() {
 
                 <div style={{ marginTop: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#381e18' }}>Gợi ý câu trả lời mẫu cho học viên:</span>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-ink)' }}>Gợi ý câu trả lời mẫu cho học viên:</span>
                     <button type="button" className="button secondary" onClick={handleAddHint} style={{ fontSize: '11px', padding: '4px 8px' }}>
                       + Thêm gợi ý
                     </button>
@@ -311,7 +310,7 @@ export function AdminScenarioBuilderPage() {
                         placeholder="Mẫu câu gợi ý..."
                         style={{ fontSize: '13px' }}
                       />
-                      <button type="button" onClick={() => handleRemoveHint(idx)} style={{ background: 'transparent', border: 'none', color: '#c62828', cursor: 'pointer' }}>
+                      <button type="button" onClick={() => handleRemoveHint(idx)} style={{ background: 'transparent', border: 'none', color: 'var(--color-red)', cursor: 'pointer' }}>
                         ✕
                       </button>
                     </div>
@@ -322,7 +321,7 @@ export function AdminScenarioBuilderPage() {
               {/* Objectives Builder */}
               <div className="admin-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <h3 style={{ margin: 0, fontSize: '16px', color: '#381e18' }}>4. Danh sách nhiệm vụ (Objectives Checklist)</h3>
+                  <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}>4. Danh sách nhiệm vụ (Objectives Checklist)</h3>
                   <button type="button" className="button secondary" onClick={handleAddObjective} style={{ fontSize: '11px', padding: '4px 10px' }}>
                     + Thêm nhiệm vụ
                   </button>
@@ -331,7 +330,7 @@ export function AdminScenarioBuilderPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {formData.objectives.map((task, idx) => (
                     <div key={idx} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      <span style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#9f2d20', color: '#fff', display: 'grid', placeItems: 'center', fontSize: '11px', fontWeight: 800 }}>
+                      <span style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'var(--color-red-hover)', color: 'var(--color-surface)', display: 'grid', placeItems: 'center', fontSize: '11px', fontWeight: 800 }}>
                         {idx + 1}
                       </span>
                       <input
@@ -344,7 +343,7 @@ export function AdminScenarioBuilderPage() {
                       <button
                         type="button"
                         onClick={() => handleRemoveObjective(idx)}
-                        style={{ background: 'transparent', border: 'none', color: '#c62828', cursor: 'pointer', fontSize: '16px' }}
+                        style={{ background: 'transparent', border: 'none', color: 'var(--color-red)', cursor: 'pointer', fontSize: '16px' }}
                       >
                         ✕
                       </button>
@@ -357,7 +356,7 @@ export function AdminScenarioBuilderPage() {
             {/* Right Column: Settings, End conditions, Criteria */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: '#381e18' }}>Phân loại kịch bản</h3>
+                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}>Phân loại kịch bản</h3>
 
                 <label>
                   Trạng thái:
@@ -404,7 +403,7 @@ export function AdminScenarioBuilderPage() {
 
               {/* End Conditions & Criteria */}
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: '#381e18' }}>Điều kiện kết thúc phiên</h3>
+                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}>Điều kiện kết thúc phiên</h3>
 
                 <label>
                   Số lượt trao đổi tối đa (Max Turns):
@@ -430,21 +429,21 @@ export function AdminScenarioBuilderPage() {
 
               {/* Feedback criteria */}
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: '#381e18' }}>Tiêu chí phản hồi & Đánh giá</h3>
-                <p style={{ fontSize: '12.5px', color: '#685044', margin: '0 0 12px' }}>
+                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}>Tiêu chí phản hồi & Đánh giá</h3>
+                <p style={{ fontSize: '12.5px', color: 'var(--color-red-hover)', margin: '0 0 12px' }}>
                   Hệ thống phân tích 4 thang điểm cốt lõi dựa trên tương tác thực tế:
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ background: '#faf3e8', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
+                  <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
                     ✓ <strong>Độ lưu loát (Fluency)</strong>: Khả năng phản xạ và nhịp đối thoại.
                   </div>
-                  <div style={{ background: '#faf3e8', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
+                  <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
                     ✓ <strong>Vốn từ vựng (Vocabulary)</strong>: Từ ngữ chính xác theo chủ đề.
                   </div>
-                  <div style={{ background: '#faf3e8', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
+                  <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
                     ✓ <strong>Ngữ pháp (Grammar)</strong>: Trật tự từ và hư từ biểu cảm.
                   </div>
-                  <div style={{ background: '#faf3e8', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
+                  <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
                     ✓ <strong>Văn hóa & Ngữ cảnh (Culture)</strong>: Kính ngữ, thái độ lịch thiệp.
                   </div>
                 </div>
@@ -454,9 +453,9 @@ export function AdminScenarioBuilderPage() {
         </form>
       ) : (
         /* Interactive Simulation Mode */
-        <div className="admin-card" style={{ maxWidth: '800px', margin: '0 auto', background: '#fff' }}>
-          <div style={{ borderBottom: '1px solid #ebd9c8', paddingBottom: '14px', marginBottom: '18px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 800, color: '#a62a24', textTransform: 'uppercase' }}>
+        <div className="admin-card" style={{ maxWidth: '800px', margin: '0 auto', background: 'var(--color-surface)' }}>
+          <div style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '14px', marginBottom: '18px' }}>
+            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase' }}>
               SIMULATION TEST SANDBOX
             </span>
             <h2 style={{ margin: '4px 0', fontSize: '20px' }}>
@@ -470,8 +469,8 @@ export function AdminScenarioBuilderPage() {
                 key={idx}
                 style={{
                   alignSelf: m.sender === 'user' ? 'flex-end' : 'flex-start',
-                  background: m.sender === 'user' ? '#245c48' : '#faf3e8',
-                  color: m.sender === 'user' ? '#fff' : '#331d17',
+                  background: m.sender === 'user' ? 'var(--color-ink)' : 'var(--color-cream)',
+                  color: m.sender === 'user' ? 'var(--color-surface)' : 'var(--color-ink)',
                   padding: '10px 14px',
                   borderRadius: '12px',
                   maxWidth: '80%',
@@ -484,7 +483,7 @@ export function AdminScenarioBuilderPage() {
             ))}
           </div>
 
-          <div style={{ display: 'flex', gap: '8px', marginTop: '16px', borderTop: '1px solid #f0e2d3', paddingTop: '14px' }}>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '16px', borderTop: '1px solid var(--color-border)', paddingTop: '14px' }}>
             <input
               type="text"
               placeholder="Nhập thử phản hồi của học viên..."

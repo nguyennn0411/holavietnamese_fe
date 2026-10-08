@@ -7,8 +7,8 @@ export function AdminRoute() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f8fafc' }}>
-        <p style={{ color: '#8B1A1A', fontWeight: 'bold' }}>Đang xác thực quyền Quản trị…</p>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: 'var(--color-surface)' }}>
+        <p style={{ color: 'var(--color-red-hover)', fontWeight: 'bold' }}>Đang xác thực quyền Quản trị…</p>
       </div>
     );
   }

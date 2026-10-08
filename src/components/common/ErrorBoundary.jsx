@@ -23,7 +23,7 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{
+        <div role="alert" style={{
           minHeight: '80vh',
           display: 'flex',
           flexDirection: 'column',
@@ -34,10 +34,10 @@ export class ErrorBoundary extends React.Component {
           fontFamily: 'system-ui, sans-serif',
         }}>
           <span style={{ fontSize: '3rem', marginBottom: '16px' }}>⚠️</span>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1e293b', margin: '0 0 8px 0' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
             Đã xảy ra lỗi giao diện
           </h2>
-          <p style={{ color: '#64748b', maxWidth: '460px', margin: '0 0 24px 0', fontSize: '0.9rem' }}>
+          <p style={{ color: 'var(--color-muted)', maxWidth: '460px', margin: '0 0 24px 0', fontSize: '0.9rem' }}>
             {this.state.error?.message || 'Có sự cố phát sinh khi tải thành phần này. Vui lòng thử tải lại trang.'}
           </p>
           <div style={{ display: 'flex', gap: '12px' }}>
@@ -48,7 +48,7 @@ export class ErrorBoundary extends React.Component {
                 padding: '10px 20px',
                 borderRadius: '8px',
                 border: '1px solid #cbd5e1',
-                background: '#fff',
+                background: 'var(--color-surface)',
                 fontWeight: 600,
                 cursor: 'pointer',
               }}
@@ -62,8 +62,8 @@ export class ErrorBoundary extends React.Component {
                 padding: '10px 20px',
                 borderRadius: '8px',
                 border: 'none',
-                background: '#8B1A1A',
-                color: '#fff',
+                background: 'var(--color-red-hover)',
+                color: 'var(--color-surface)',
                 fontWeight: 700,
                 cursor: 'pointer',
               }}

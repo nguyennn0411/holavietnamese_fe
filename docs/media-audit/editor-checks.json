@@ -1,0 +1,90 @@
+[
+  {
+    "dialog": true,
+    "dialogWidth": 680,
+    "images": [
+      {
+        "loaded": true,
+        "src": "http://localhost:5174/design/food.svg"
+      },
+      {
+        "loaded": true,
+        "src": "http://localhost:5174/design/coffee.svg"
+      }
+    ],
+    "optionIDs": [
+      "11",
+      "12",
+      "13",
+      "14"
+    ],
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "dialog": true,
+    "dialogWidth": 680,
+    "images": [
+      {
+        "loaded": true,
+        "src": "http://localhost:5174/design/food.svg"
+      },
+      {
+        "loaded": true,
+        "src": "http://localhost:5174/design/coffee.svg"
+      }
+    ],
+    "optionIDs": [
+      "11",
+      "12",
+      "13",
+      "14"
+    ],
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "dialog": true,
+    "dialogWidth": 680,
+    "images": [
+      {
+        "loaded": true,
+        "src": "http://localhost:5174/design/food.svg"
+      },
+      {
+        "loaded": true,
+        "src": "http://localhost:5174/design/coffee.svg"
+      }
+    ],
+    "optionIDs": [
+      "11",
+      "12",
+      "13",
+      "14"
+    ],
+    "overflow": false,
+    "width": 768
+  },
+  {
+    "dialog": true,
+    "dialogWidth": 341.20001220703125,
+    "images": [
+      {
+        "loaded": true,
+        "src": "http://localhost:5174/design/food.svg"
+      },
+      {
+        "loaded": true,
+        "src": "http://localhost:5174/design/coffee.svg"
+      }
+    ],
+    "optionIDs": [
+      "11",
+      "12",
+      "13",
+      "14"
+    ],
+    "overflow": false,
+    "width": 375
+  }
+]

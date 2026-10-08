@@ -1,8 +1,8 @@
+import { AuthHeader } from '@/components/auth/AuthHeader';
 import { useState } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import dongSonBg from '@/assets/images/dongson_auth_bg.png';
-import '@/presentation/styles/auth.css';
 
 const LANGUAGE_OPTIONS = [
   { value: 'en', label: '🇬🇧 English' },
@@ -199,14 +199,7 @@ export function RegisterPage() {
       <div className="auth-left-panel">
         <div className="auth-left-content">
           {/* Brand */}
-          <div className="auth-brand-row">
-            <div className="auth-brand-logo">
-              <span className="auth-logo-text">H</span>
-              <span className="auth-logo-star">★</span>
-            </div>
-            <span className="auth-brand-name">HolaVietnamese</span>
-            <span className="auth-brand-badge">ĐÔNG SƠN POP</span>
-          </div>
+          <AuthHeader />
 
           {/* Welcome pill */}
           <div className="auth-welcome-pill">

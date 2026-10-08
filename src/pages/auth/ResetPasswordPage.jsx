@@ -1,8 +1,8 @@
+import { AuthHeader } from '@/components/auth/AuthHeader';
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
 import dongSonBg from '@/assets/images/dongson_auth_bg.png';
-import '@/presentation/styles/auth.css';
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -40,14 +40,7 @@ export function ResetPasswordPage() {
     <div className="auth-container">
       <div className="auth-left-panel">
         <div className="auth-left-content">
-          <div className="auth-brand-row">
-            <div className="auth-brand-logo">
-              <span className="auth-logo-text">H</span>
-              <span className="auth-logo-star">★</span>
-            </div>
-            <span className="auth-brand-name">HolaVietnamese</span>
-            <span className="auth-brand-badge">ĐỐNG SƠN POP</span>
-          </div>
+          <AuthHeader />
 
           <div className="auth-welcome-pill">
             <span className="auth-welcome-code">🔒</span>

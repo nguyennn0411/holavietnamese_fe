@@ -1,7 +1,7 @@
+import { ContentImage } from '@/components/common/ContentImage';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
-import '@/presentation/styles/admin.css';
 
 export function AdminCultureListPage() {
   const [search, setSearch] = useState('');
@@ -51,7 +51,7 @@ export function AdminCultureListPage() {
   return (
     <div className="admin-content">
       {toast && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', background: '#245c48', color: '#fff', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
+        <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           {toast}
         </div>
       )}
@@ -59,11 +59,11 @@ export function AdminCultureListPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <span style={{ fontSize: '12px', fontWeight: 800, color: '#a62a24', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             VĂN HÓA & NỘI DUNG • NGƯỜI 4
           </span>
           <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}>Quản lý bài viết văn hóa</h1>
-          <p style={{ margin: 0, color: '#665349', fontSize: '14px' }}>
+          <p style={{ margin: 0, color: 'var(--color-sage)', fontSize: '14px' }}>
             Tìm kiếm, kiểm duyệt, xuất bản và biên tập các bài viết khám phá văn hóa, ẩm thực và đời sống Việt Nam.
           </p>
         </div>
@@ -134,7 +134,7 @@ export function AdminCultureListPage() {
             <tbody>
               {articles.length === 0 ? (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: '#887266' }}>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: 'var(--color-muted)' }}>
                     Không tìm thấy bài viết văn hóa nào phù hợp với bộ lọc.
                   </td>
                 </tr>
@@ -143,16 +143,16 @@ export function AdminCultureListPage() {
                   <tr key={article.id}>
                     <td>
                       <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                        <img
+                        <ContentImage
                           src={article.coverImage}
                           alt={article.title}
                           style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'cover' }}
                         />
                         <div>
-                          <strong style={{ display: 'block', color: '#381e18', fontSize: '14px', lineHeight: 1.3 }}>
+                          <strong style={{ display: 'block', color: 'var(--color-ink)', fontSize: '14px', lineHeight: 1.3 }}>
                             {article.title}
                           </strong>
-                          <span style={{ fontSize: '12px', color: '#7a6458' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--color-sage)' }}>
                             Bởi: <strong>{article.author}</strong> • Ngày đăng: {article.publishedAt}
                           </span>
                         </div>
@@ -160,19 +160,19 @@ export function AdminCultureListPage() {
                     </td>
 
                     <td>
-                      <span style={{ fontSize: '13px', fontWeight: 650, color: '#4a3227' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 650, color: 'var(--color-ink)' }}>
                         {article.categoryName}
                       </span>
                     </td>
 
                     <td>
-                      <span style={{ fontSize: '13px', color: '#553b30' }}>
+                      <span style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
                         📍 {article.destination || article.region}
                       </span>
                     </td>
 
                     <td>
-                      <span style={{ fontSize: '13px', fontWeight: 700, color: '#245c48' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-ink)' }}>
                         {article.views.toLocaleString()}
                       </span>
                     </td>
@@ -184,7 +184,7 @@ export function AdminCultureListPage() {
                         {article.status !== 'PUBLISHED' ? (
                           <button
                             className="button secondary"
-                            style={{ fontSize: '11px', padding: '5px 9px', color: '#1b5e20', borderColor: '#a5d6a7' }}
+                            style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-ink)', borderColor: 'var(--color-border)' }}
                             title="Duyệt & Xuất bản"
                             onClick={() => handleStatusChange(article.id, 'PUBLISHED')}
                           >
@@ -193,7 +193,7 @@ export function AdminCultureListPage() {
                         ) : (
                           <button
                             className="button secondary"
-                            style={{ fontSize: '11px', padding: '5px 9px', color: '#b72b25', borderColor: '#ffcdd2' }}
+                            style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-red)', borderColor: 'var(--color-red-soft)' }}
                             title="Gỡ bài về bản nháp"
                             onClick={() => handleStatusChange(article.id, 'DRAFT')}
                           >
@@ -222,7 +222,7 @@ export function AdminCultureListPage() {
 
                         <button
                           className="button secondary"
-                          style={{ fontSize: '11px', padding: '5px 9px', color: '#c62828' }}
+                          style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-red)' }}
                           title="Xóa bài viết"
                           onClick={() => handleDelete(article.id, article.title)}
                         >

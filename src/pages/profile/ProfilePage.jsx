@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { learnerService } from '@/services/learnerService';
 import { useAuth } from '@/application/context/AuthContext';
-import '@/presentation/styles/account.css';
+import { ContentImage } from '@/components/common/ContentImage';
 
 export function ProfilePage() {
   const { fetchProfile } = useAuth();
@@ -75,15 +75,12 @@ export function ProfilePage() {
       {/* Hero Avatar & Identity Card */}
       <section className="profile-hero">
         <div className="profile-avatar">
-          {profile.avatarUrl ? (
-            <img
+            <ContentImage
               src={profile.avatarUrl}
-              alt={profile.fullName}
+              alt={`Ảnh đại diện của ${profile.fullName || profile.username || 'học viên'}`}
+              fallback={profile.fullName?.[0]?.toUpperCase() || 'H'}
               style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
             />
-          ) : (
-            profile.fullName?.[0]?.toUpperCase() || 'H'
-          )}
         </div>
         <div>
           <h2>{profile.fullName || profile.username}</h2>

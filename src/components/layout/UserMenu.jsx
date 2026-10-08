@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ContentImage } from '@/components/common/ContentImage';
 
 export function UserMenu({ user, isAdmin, onLogout }) {
   const [open, setOpen] = useState(false);
@@ -25,8 +26,12 @@ export function UserMenu({ user, isAdmin, onLogout }) {
 
   return (
     <div className="user-menu" ref={menuRef}>
-      <button type="button" className="user-menu__trigger" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-haspopup="menu">
-        <span className="user-menu__avatar">{displayName.charAt(0).toUpperCase()}</span>
+      <button type="button" className="user-menu__trigger" onClick={() => setOpen((value) => !value)} aria-label={`Menu tài khoản của ${displayName}`} aria-expanded={open} aria-haspopup="menu">
+        <span className="user-menu__avatar">
+          <ContentImage src={user?.avatarUrl} alt={`Ảnh đại diện của ${displayName}`} className="user-menu__avatar-image"
+            width={30} height={30} loading="eager" referrerPolicy="no-referrer"
+            fallback={<span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>} />
+        </span>
         <span className="user-menu__name">{displayName}</span>
         <span className="user-menu__chevron" aria-hidden="true">⌄</span>
       </button>
