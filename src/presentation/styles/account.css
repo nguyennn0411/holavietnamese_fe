@@ -9,7 +9,7 @@
   --acc-paper: var(--color-cream);
   --acc-surface: var(--color-surface);
   --acc-ink: var(--color-ink);
-  --acc-muted: var(--color-sage);
+  --acc-muted: var(--color-muted);
   --acc-gold: var(--color-gold);
   --acc-border: var(--color-border);
   --acc-border-subtle: var(--color-sand);
@@ -112,7 +112,7 @@
   font-size: 11px;
   font-weight: 700;
   background: var(--color-sand);
-  color: var(--color-sage);
+  color: var(--color-forest);
 }
 
 .mylearning-tab-btn.active .mylearning-tab-badge {
@@ -202,7 +202,7 @@
 .mylearning-progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--color-gold), var(--color-red-hover));
+  background: var(--color-gold);
 }
 
 .mylearning-course-next {
@@ -456,10 +456,10 @@
   background: var(--acc-surface);
 }
 
-.account-kpi.gold { background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-gold-soft) 100%); border-color: var(--color-gold-soft); }
-.account-kpi.sage { background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-sage-soft) 100%); border-color: var(--color-sage-soft); }
-.account-kpi.clay { background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-red-soft) 100%); border-color: var(--color-border); }
-.account-kpi.paper { background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface) 100%); border-color: var(--color-sage-soft); }
+.account-kpi.gold { background: var(--color-surface); border-color: var(--color-gold-soft); }
+.account-kpi.sage { background: var(--color-surface); border-color: var(--color-sage-soft); }
+.account-kpi.clay { background: var(--color-surface); border-color: var(--color-border); }
+.account-kpi.paper { background: var(--color-surface); border-color: var(--color-sage-soft); }
 
 .account-kpi strong {
   font-size: 36px;
@@ -555,7 +555,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--color-gold), var(--color-red-hover));
+  background: var(--color-gold);
 }
 
 /* ==========================================================================
@@ -579,7 +579,7 @@
   width: 84px;
   height: 84px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-gold-soft) 0%, var(--color-gold) 100%);
+  background: var(--color-gold-soft);
   color: var(--color-red-hover);
   font-size: 32px;
   font-weight: 850;
@@ -805,7 +805,7 @@
    ACHIEVEMENTS PAGE
    ========================================================================== */
 .achieve-banner {
-  background: linear-gradient(135deg, var(--color-red-hover) 0%, var(--color-red-hover) 50%, var(--color-red) 100%);
+  background: var(--color-red-hover);
   color: var(--color-surface);
   border-radius: 20px;
   padding: 32px 36px;
@@ -865,7 +865,7 @@
 
 .achieve-badge-card.unlocked {
   border-color: var(--color-gold-soft);
-  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface) 100%);
+  background: var(--color-surface);
   box-shadow: 0 6px 20px rgba(216, 170, 84, 0.15);
 }
 
@@ -886,7 +886,7 @@
 }
 
 .achieve-badge-card.unlocked .achieve-badge-icon {
-  background: linear-gradient(135deg, var(--color-gold-soft) 0%, var(--color-gold-soft) 100%);
+  background: var(--color-gold-soft);
   box-shadow: 0 4px 12px rgba(251, 191, 36, 0.25);
 }
 

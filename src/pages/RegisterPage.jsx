@@ -1,8 +1,9 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { useState } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
-import dongSonBg from '@/assets/images/dongson_auth_bg.png';
+import dongSonBg from '@/assets/images/dongson_heritage.png';
 
 const LANGUAGE_OPTIONS = [
   { value: 'en', label: '🇬🇧 English' },
@@ -205,47 +206,42 @@ export function RegisterPage() {
           <div className="auth-welcome-pill">
             <span className="auth-welcome-code">VN</span>
             <span className="auth-welcome-text">
-              {step === 1 ? 'Tài khoản mới' : 'Lộ trình học'}
+              <BilingualText>{step === 1 ? 'Tài khoản mới' : 'Lộ trình học'}</BilingualText>
             </span>
           </div>
 
           {/* Heading */}
           <h1 className="auth-heading">
             {step === 1 ? (
-              <>
-                Bắt đầu hành trình<br /><span>tiếng Việt</span>
-              </>
+              <BilingualText vi={<>Bắt đầu hành trình<br /><span>tiếng Việt</span></>} en="Begin your Vietnamese journey" />
             ) : (
-              <>
-                Cá nhân hóa<br /><span>lộ trình học</span>
-              </>
+              <BilingualText vi={<>Cá nhân hóa<br /><span>lộ trình học</span></>} en="Personalize your learning path" />
             )}
           </h1>
 
           {/* Subtitle */}
           <p className="auth-subtitle">
-            {step === 1
+            <BilingualText>{step === 1
               ? 'Điền thông tin tài khoản để bắt đầu hành trình học tiếng Việt.'
-              : 'Chọn ngôn ngữ và mục tiêu để Hola cá nhân hóa bài học cho bạn.'}
+              : 'Chọn ngôn ngữ và mục tiêu để Hola cá nhân hóa bài học cho bạn.'}</BilingualText>
           </p>
 
           {/* Step indicator */}
           <div className="auth-step-indicator">
-            <div className={`auth-step-item ${step >= 1 ? 'auth-step-item-active' : ''}`}><span>1</span><small>Tài khoản</small></div>
+            <div className={`auth-step-item ${step >= 1 ? 'auth-step-item-active' : ''}`}><span>1</span><small><BilingualText>{"Tài khoản"}</BilingualText></small></div>
             <i className={step >= 2 ? 'active' : ''} />
-            <div className={`auth-step-item ${step >= 2 ? 'auth-step-item-active' : ''}`}><span>2</span><small>Cá nhân hóa</small></div>
+            <div className={`auth-step-item ${step >= 2 ? 'auth-step-item-active' : ''}`}><span>2</span><small><BilingualText>{"Cá nhân hóa"}</BilingualText></small></div>
           </div>
 
           {/* General Error Banner */}
-          {error && <div className="auth-message auth-message-error">{error}</div>}
+          {error && <div className="auth-message auth-message-error"><BilingualText>{error}</BilingualText></div>}
 
           {/* Step 1 Form */}
           {step === 1 && (
             <form className="auth-form" onSubmit={handleNext} noValidate>
               {/* Username */}
               <div className="auth-field">
-                <label className="auth-label" htmlFor="username">
-                  Tên đăng nhập <em>*</em>
+                <label className="auth-label" htmlFor="username"><BilingualText>{"Tên đăng nhập"}</BilingualText><em>*</em>
                 </label>
                 <input
                   id="username"
@@ -260,14 +256,13 @@ export function RegisterPage() {
                   required
                 />
                 {fieldErrors.username && (
-                  <span className="auth-field-error">⚠️ {fieldErrors.username}</span>
+                  <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.username}</BilingualText></span>
                 )}
               </div>
 
               {/* Email */}
               <div className="auth-field">
-                <label className="auth-label" htmlFor="email">
-                  Email <em>*</em>
+                <label className="auth-label" htmlFor="email"><BilingualText>{"Email"}</BilingualText><em>*</em>
                 </label>
                 <input
                   id="email"
@@ -282,21 +277,20 @@ export function RegisterPage() {
                   required
                 />
                 {fieldErrors.email && (
-                  <span className="auth-field-error">⚠️ {fieldErrors.email}</span>
+                  <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.email}</BilingualText></span>
                 )}
               </div>
 
               {/* Password */}
               <div className="auth-field">
-                <label className="auth-label" htmlFor="password">
-                  Mật khẩu <em>*</em>
+                <label className="auth-label" htmlFor="password"><BilingualText>{"Mật khẩu"}</BilingualText><em>*</em>
                 </label>
                 <div className="auth-password-row">
                   <input
                     id="password"
                     className={`auth-input auth-password-input ${fieldErrors.password ? 'auth-input-error' : ''}`}
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Tối thiểu 6 ký tự"
+                    placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
@@ -310,18 +304,17 @@ export function RegisterPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                   >
-                    {showPassword ? 'Ẩn' : 'Hiện'}
+                    <BilingualText>{showPassword ? 'Ẩn' : 'Hiện'}</BilingualText>
                   </button>
                 </div>
                 {fieldErrors.password && (
-                  <span className="auth-field-error">⚠️ {fieldErrors.password}</span>
+                  <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.password}</BilingualText></span>
                 )}
               </div>
 
               {/* Full Name */}
               <div className="auth-field">
-                <label className="auth-label" htmlFor="fullName">
-                  Họ và tên <em>*</em>
+                <label className="auth-label" htmlFor="fullName"><BilingualText>{"Họ và tên"}</BilingualText><em>*</em>
                 </label>
                 <input
                   id="fullName"
@@ -335,13 +328,12 @@ export function RegisterPage() {
                   }}
                   required
                 />
-                {fieldErrors.fullName && <span className="auth-field-error">⚠️ {fieldErrors.fullName}</span>}
+                {fieldErrors.fullName && <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.fullName}</BilingualText></span>}
               </div>
 
               {/* Phone Number */}
               <div className="auth-field">
-                <label className="auth-label" htmlFor="phoneNumber">
-                  Số điện thoại <span className="auth-optional">Không bắt buộc</span>
+                <label className="auth-label" htmlFor="phoneNumber"><BilingualText>{"Số điện thoại"}</BilingualText><span className="auth-optional"><BilingualText>{"Không bắt buộc"}</BilingualText></span>
                 </label>
                 <input
                   id="phoneNumber"
@@ -358,8 +350,7 @@ export function RegisterPage() {
                 type="submit"
                 className="auth-btn auth-btn-primary"
                 disabled={loading}
-              >
-                Tiếp tục <span aria-hidden="true">→</span>
+              ><BilingualText>{"Tiếp tục"}</BilingualText><span aria-hidden="true">→</span>
               </button>
 
               {/* Quick Register Button (Cách 1: Rút gọn) */}
@@ -369,7 +360,7 @@ export function RegisterPage() {
                 onClick={handleQuickRegister}
                 disabled={loading}
               >
-                {loading ? 'Đang xử lý…' : 'Đăng ký nhanh, bỏ qua cá nhân hóa'}
+                <BilingualText>{loading ? 'Đang xử lý…' : 'Đăng ký nhanh, bỏ qua cá nhân hóa'}</BilingualText>
               </button>
             </form>
           )}
@@ -378,8 +369,7 @@ export function RegisterPage() {
           {step === 2 && (
             <form className="auth-form" onSubmit={handleStep2Submit}>
               <div className="auth-field">
-                <label className="auth-label" htmlFor="nativeLanguage">
-                  Ngôn ngữ mẹ đẻ <em>*</em>
+                <label className="auth-label" htmlFor="nativeLanguage"><BilingualText>{"Ngôn ngữ mẹ đẻ"}</BilingualText><em>*</em>
                 </label>
                 <select
                   id="nativeLanguage"
@@ -390,15 +380,14 @@ export function RegisterPage() {
                 >
                   {LANGUAGE_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
-                      {opt.label}
+                      {bilingualLabel(opt.label)}
                     </option>
                   ))}
                 </select>
               </div>
 
               <div className="auth-field">
-                <label className="auth-label" htmlFor="learningGoal">
-                  Mục tiêu học tiếng Việt <em>*</em>
+                <label className="auth-label" htmlFor="learningGoal"><BilingualText>{"Mục tiêu học tiếng Việt"}</BilingualText><em>*</em>
                 </label>
                 <select
                   id="learningGoal"
@@ -409,15 +398,14 @@ export function RegisterPage() {
                 >
                   {GOAL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
-                      {opt.label}
+                      {bilingualLabel(opt.label)}
                     </option>
                   ))}
                 </select>
               </div>
 
               <div className="auth-field">
-                <label className="auth-label" htmlFor="targetLevel">
-                  Trình độ muốn đạt <em>*</em>
+                <label className="auth-label" htmlFor="targetLevel"><BilingualText>{"Trình độ muốn đạt"}</BilingualText><em>*</em>
                 </label>
                 <select
                   id="targetLevel"
@@ -428,7 +416,7 @@ export function RegisterPage() {
                 >
                   {LEVEL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
-                      {opt.label}
+                      {bilingualLabel(opt.label)}
                     </option>
                   ))}
                 </select>
@@ -440,26 +428,21 @@ export function RegisterPage() {
                   className="auth-btn auth-btn-secondary"
                   onClick={handleBack}
                   disabled={loading}
-                >
-                  ← Quay lại
-                </button>
+                ><BilingualText>{"← Quay lại"}</BilingualText></button>
                 <button
                   type="submit"
                   className="auth-btn auth-btn-primary"
                   disabled={loading}
                 >
-                  {loading ? 'Đang tạo tài khoản…' : 'Hoàn tất đăng ký'}
+                  <BilingualText>{loading ? 'Đang tạo tài khoản…' : 'Hoàn tất đăng ký'}</BilingualText>
                 </button>
               </div>
             </form>
           )}
 
           {/* Footer link */}
-          <p className="auth-footer-text">
-            Đã có tài khoản?{' '}
-            <Link to="/login" className="auth-footer-link">
-              Đăng nhập ngay
-            </Link>
+          <p className="auth-footer-text"><BilingualText>{"Đã có tài khoản?"}</BilingualText>{' '}
+            <Link to="/login" className="auth-footer-link"><BilingualText>{"Đăng nhập ngay"}</BilingualText></Link>
           </p>
         </div>
       </div>
@@ -469,15 +452,15 @@ export function RegisterPage() {
         <div className="auth-drum-bg">
           <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
-        <div className="auth-visual-topline"><span /> Khám phá ngôn ngữ · Kết nối văn hóa</div>
+        <div className="auth-visual-topline"><span /><BilingualText>{"Khám phá ngôn ngữ · Kết nối văn hóa"}</BilingualText></div>
         <div className="auth-hero-card">
           <div className="auth-hero-tag">HOLA VIETNAMESE</div>
-          <h2 className="auth-hero-title">Một lộ trình được thiết kế riêng cho bạn.</h2>
-          <p className="auth-hero-desc">Cho chúng tôi biết mục tiêu của bạn. Hola sẽ biến mỗi buổi học thành một bước tiến vừa sức và đầy cảm hứng.</p>
+          <h2 className="auth-hero-title"><BilingualText>{"Một lộ trình được thiết kế riêng cho bạn."}</BilingualText></h2>
+          <p className="auth-hero-desc"><BilingualText>{"Cho chúng tôi biết mục tiêu của bạn. Hola sẽ biến mỗi buổi học thành một bước tiến vừa sức và đầy cảm hứng."}</BilingualText></p>
           <div className="auth-proof-row">
-            <div><strong>10+</strong><span>chủ đề thực tế</span></div>
-            <div><strong>A1–B2</strong><span>lộ trình rõ ràng</span></div>
-            <div><strong>24/7</strong><span>học mọi lúc</span></div>
+            <div><strong>10+</strong><span><BilingualText>{"chủ đề thực tế"}</BilingualText></span></div>
+            <div><strong>A1–B2</strong><span><BilingualText>{"lộ trình rõ ràng"}</BilingualText></span></div>
+            <div><strong>24/7</strong><span><BilingualText>{"học mọi lúc"}</BilingualText></span></div>
           </div>
         </div>
       </div>

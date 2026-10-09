@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
 
@@ -51,46 +52,40 @@ export function AdminAiReviewsPage() {
     <div className="admin-content">
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
-          {toast}
+          <BilingualText>{toast}</BilingualText>
         </div>
       )}
 
       {/* Header */}
       <div style={{ marginBottom: '28px' }}>
-        <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          AI QUALITY ASSURANCE & AUDITING • NGƯỜI 4
-        </span>
-        <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}>Kiểm tra chất lượng AI & Đánh giá phản hồi</h1>
-        <p style={{ margin: 0, color: 'var(--color-sage)', fontSize: '14px' }}>
-          Xem các phiên hội thoại được phép truy cập theo chính sách riêng tư, kiểm tra phản hồi học viên, đánh dấu lỗi và kiểm thử prompt kịch bản.
-        </p>
+        <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}><BilingualText>{"AI QUALITY ASSURANCE & AUDITING • NGƯỜI 4"}</BilingualText></span>
+        <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}><BilingualText>{"Kiểm tra chất lượng AI & Đánh giá phản hồi"}</BilingualText></h1>
+        <p style={{ margin: 0, color: 'var(--color-forest)', fontSize: '14px' }}><BilingualText>{"Xem các phiên hội thoại được phép truy cập theo chính sách riêng tư, kiểm tra phản hồi học viên, đánh dấu lỗi và kiểm thử prompt kịch bản."}</BilingualText></p>
       </div>
 
       {/* Privacy Notice */}
       <div style={{ background: 'var(--color-red-soft)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
         <span style={{ fontSize: '20px' }}>🔒</span>
         <div style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
-          <strong>Chính sách quyền riêng tư lịch sử hội thoại:</strong> Chỉ hiển thị các phiên được người học cấp quyền gửi đánh giá, phản hồi báo lỗi, hoặc các phiên thuộc tập kiểm thử (Test Bench). Dữ liệu cá nhân nhạy cảm đã được ẩn danh hóa.
-        </div>
+          <strong><BilingualText>{"Chính sách quyền riêng tư lịch sử hội thoại:"}</BilingualText></strong><BilingualText>{"Chỉ hiển thị các phiên được người học cấp quyền gửi đánh giá, phản hồi báo lỗi, hoặc các phiên thuộc tập kiểm thử (Test Bench). Dữ liệu cá nhân nhạy cảm đã được ẩn danh hóa."}</BilingualText></div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '24px', alignItems: 'start' }}>
         {/* Left Column: User Feedback & Sessions Review Table */}
         <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '18px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 style={{ margin: 0, fontSize: '17px', color: 'var(--color-ink)' }}>
-              Danh sách phản hồi & Phiên cần kiểm tra ({reviews.length})
+            <h2 style={{ margin: 0, fontSize: '17px', color: 'var(--color-ink)' }}><BilingualText>{"Danh sách phản hồi & Phiên cần kiểm tra ("}</BilingualText>{reviews.length})
             </h2>
           </div>
 
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Học viên & Kịch bản</th>
-                <th>Đánh giá</th>
-                <th>Phản hồi học viên</th>
-                <th>Vấn đề ghi nhận</th>
-                <th>Trạng thái</th>
+                <th><BilingualText>{"Học viên & Kịch bản"}</BilingualText></th>
+                <th><BilingualText>{"Đánh giá"}</BilingualText></th>
+                <th><BilingualText>{"Phản hồi học viên"}</BilingualText></th>
+                <th><BilingualText>{"Vấn đề ghi nhận"}</BilingualText></th>
+                <th><BilingualText>{"Trạng thái"}</BilingualText></th>
               </tr>
             </thead>
             <tbody>
@@ -104,7 +99,7 @@ export function AdminAiReviewsPage() {
                     <strong style={{ fontSize: '13.5px', color: 'var(--color-ink)', display: 'block' }}>
                       {r.scenarioTitle}
                     </strong>
-                    <span style={{ fontSize: '11px', color: 'var(--color-sage)' }}>
+                    <span style={{ fontSize: '11px', color: 'var(--color-forest)' }}>
                       {r.userIdentifier} • {r.createdAt}
                     </span>
                   </td>
@@ -121,7 +116,7 @@ export function AdminAiReviewsPage() {
 
                   <td>
                     {r.taggedIssues.length === 0 ? (
-                      <span className="admin-badge admin-badge-success">Không có lỗi</span>
+                      <span className="admin-badge admin-badge-success"><BilingualText>{"Không có lỗi"}</BilingualText></span>
                     ) : (
                       r.taggedIssues.map((issue, idx) => (
                         <span key={idx} className="admin-badge admin-badge-danger" style={{ display: 'inline-block', margin: '2px 0' }}>
@@ -133,11 +128,11 @@ export function AdminAiReviewsPage() {
 
                   <td>
                     {r.status === 'APPROVED' ? (
-                      <span className="admin-badge admin-badge-success">Đã duyệt</span>
+                      <span className="admin-badge admin-badge-success"><BilingualText>{"Đã duyệt"}</BilingualText></span>
                     ) : r.status === 'NEEDS_PROMPT_TUNING' ? (
-                      <span className="admin-badge admin-badge-warning">Cần sửa Prompt</span>
+                      <span className="admin-badge admin-badge-warning"><BilingualText>{"Cần sửa Prompt"}</BilingualText></span>
                     ) : (
-                      <span className="admin-badge admin-badge-danger">Cần xử lý</span>
+                      <span className="admin-badge admin-badge-danger"><BilingualText>{"Cần xử lý"}</BilingualText></span>
                     )}
                   </td>
                 </tr>
@@ -151,71 +146,56 @@ export function AdminAiReviewsPage() {
           {/* Detail Card if selected */}
           {selectedReview ? (
             <div className="admin-card" style={{ background: 'var(--color-surface)' }}>
-              <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', color: 'var(--color-ink)' }}>
-                Chi tiết đánh giá phiên: {selectedReview.id}
+              <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Chi tiết đánh giá phiên:"}</BilingualText>{selectedReview.id}
               </h3>
 
               <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--color-ink)' }}>
-                <div><strong>Kịch bản:</strong> {selectedReview.scenarioTitle}</div>
-                <div><strong>Mã phiên:</strong> <code>{selectedReview.sessionId}</code></div>
-                <div><strong>Đánh giá:</strong> {selectedReview.rating}/5 sao</div>
+                <div><strong><BilingualText>{"Kịch bản:"}</BilingualText></strong> {selectedReview.scenarioTitle}</div>
+                <div><strong><BilingualText>{"Mã phiên:"}</BilingualText></strong> <code>{selectedReview.sessionId}</code></div>
+                <div><strong><BilingualText>{"Đánh giá:"}</BilingualText></strong> {selectedReview.rating}<BilingualText>{"/5 sao"}</BilingualText></div>
                 <div style={{ marginTop: '8px', padding: '10px 12px', background: 'var(--color-cream)', borderRadius: '8px' }}>
                   💬 <em>"{selectedReview.userFeedback}"</em>
                 </div>
 
                 <div style={{ marginTop: '14px' }}>
-                  <strong>Thao tác kiểm toán chất lượng:</strong>
+                  <strong><BilingualText>{"Thao tác kiểm toán chất lượng:"}</BilingualText></strong>
                   <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                     <button
                       type="button"
                       className="button secondary"
                       style={{ fontSize: '12px', padding: '6px 12px', color: 'var(--color-ink)' }}
                       onClick={() => handleUpdateStatus(selectedReview.id, 'APPROVED')}
-                    >
-                      ✓ Duyệt đạt chuẩn
-                    </button>
+                    ><BilingualText>{"✓ Duyệt đạt chuẩn"}</BilingualText></button>
                     <button
                       type="button"
                       className="button secondary"
                       style={{ fontSize: '12px', padding: '6px 12px', color: 'var(--color-red)' }}
                       onClick={() => handleUpdateStatus(selectedReview.id, 'NEEDS_PROMPT_TUNING')}
-                    >
-                      ⚠️ Cần chỉnh Prompt
-                    </button>
+                    ><BilingualText>{"⚠️ Cần chỉnh Prompt"}</BilingualText></button>
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="admin-card" style={{ textAlign: 'center', padding: '24px', color: 'var(--color-muted)' }}>
-              Bấm vào một phiên trong bảng bên trái để xem chi tiết và thực hiện kiểm toán chất lượng.
-            </div>
+            <div className="admin-card" style={{ textAlign: 'center', padding: '24px', color: 'var(--color-muted)' }}><BilingualText>{"Bấm vào một phiên trong bảng bên trái để xem chi tiết và thực hiện kiểm toán chất lượng."}</BilingualText></div>
           )}
 
           {/* Test Sandbox (Kiểm thử kịch bản) */}
           <div className="admin-card" style={{ background: 'var(--color-surface)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <span style={{ fontSize: '20px' }}>🧪</span>
-              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}>
-                Kiểm thử kịch bản AI (Prompt Sandbox)
-              </h3>
+              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Kiểm thử kịch bản AI (Prompt Sandbox)"}</BilingualText></h3>
             </div>
-            <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: 'var(--color-sage)' }}>
-              Kiểm tra trực tiếp phản hồi của mô hình với phiên bản System Prompt hiện hành trước khi xuất bản rộng rãi.
-            </p>
+            <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: 'var(--color-forest)' }}><BilingualText>{"Kiểm tra trực tiếp phản hồi của mô hình với phiên bản System Prompt hiện hành trước khi xuất bản rộng rãi."}</BilingualText></p>
 
-            <label>
-              Chọn kịch bản kiểm thử:
-              <select value={testScenarioId} onChange={e => setTestScenarioId(e.target.value)}>
-                <option value="goi-mon-pho-ha-noi">Gọi món tại quán Phở gia truyền Hà Nội</option>
-                <option value="tra-gia-cho-ben-thanh">Trả giá quà lưu niệm tại Chợ Bến Thành</option>
-                <option value="bat-xe-om-cong-nghe">Đón xe ôm công nghệ & Chỉ đường</option>
+            <label><BilingualText>{"Chọn kịch bản kiểm thử:"}</BilingualText><select value={testScenarioId} onChange={e => setTestScenarioId(e.target.value)}>
+                <option value="goi-mon-pho-ha-noi">{bilingualLabel("Gọi món tại quán Phở gia truyền Hà Nội")}</option>
+                <option value="tra-gia-cho-ben-thanh">{bilingualLabel("Trả giá quà lưu niệm tại Chợ Bến Thành")}</option>
+                <option value="bat-xe-om-cong-nghe">{bilingualLabel("Đón xe ôm công nghệ & Chỉ đường")}</option>
               </select>
             </label>
 
-            <label style={{ marginTop: '12px' }}>
-              Prompt câu nói thử nghiệm của học viên:
-              <textarea
+            <label style={{ marginTop: '12px' }}><BilingualText>{"Prompt câu nói thử nghiệm của học viên:"}</BilingualText><textarea
                 rows={2}
                 value={testPrompt}
                 onChange={e => setTestPrompt(e.target.value)}
@@ -229,7 +209,7 @@ export function AdminAiReviewsPage() {
               disabled={isTesting}
               style={{ width: '100%', marginTop: '12px', fontSize: '13px' }}
             >
-              {isTesting ? 'Đang kiểm thử...' : '▶ Chạy kiểm thử phản hồi'}
+              <BilingualText>{isTesting ? 'Đang kiểm thử...' : '▶ Chạy kiểm thử phản hồi'}</BilingualText>
             </button>
 
             {testOutput && (

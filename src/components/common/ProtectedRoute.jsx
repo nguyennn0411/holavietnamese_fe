@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 
@@ -8,7 +9,7 @@ export function ProtectedRoute() {
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <p style={{ color: 'var(--color-red-hover)', fontWeight: '600' }}>Đang tải Hola Vietnamese…</p>
+        <p style={{ color: 'var(--color-red-hover)', fontWeight: '600' }}><BilingualText>{"Đang tải Hola Vietnamese…"}</BilingualText></p>
       </div>
     );
   }

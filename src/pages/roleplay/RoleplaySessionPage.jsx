@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
@@ -139,23 +140,18 @@ export function RoleplaySessionPage() {
       {/* Screen Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-sage)', marginBottom: '4px' }}>
-            <Link to="/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Thoát kịch bản</Link>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-forest)', marginBottom: '4px' }}>
+            <Link to="/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Thoát kịch bản"}</BilingualText></Link>
             <span>/</span>
-            <span>{scenario.title}</span>
+            <span><BilingualText vi={scenario.titleVi || scenario.title} en={scenario.title} /></span>
           </nav>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-ink)', margin: 0 }}>
-            Phiên Roleplay: {scenario.title}
+          <h1 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-ink)', margin: 0 }}><BilingualText vi={<>Phiên Roleplay: {scenario.titleVi || scenario.title}</>} en={<>Roleplay session: {scenario.title}</>} />
           </h1>
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button className="button secondary" onClick={handleResetSession} style={{ fontSize: '13px', padding: '8px 14px' }}>
-            🔄 Bắt đầu lại
-          </button>
-          <button className="button" onClick={handleFinishSession} style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px', padding: '8px 16px' }}>
-            🏁 Kết thúc & Xem kết quả
-          </button>
+          <button className="button secondary" onClick={handleResetSession} style={{ fontSize: '13px', padding: '8px 14px' }}><BilingualText>{"🔄 Bắt đầu lại"}</BilingualText></button>
+          <button className="button" onClick={handleFinishSession} style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px', padding: '8px 16px' }}><BilingualText>{"🏁 Kết thúc & Xem kết quả"}</BilingualText></button>
         </div>
       </div>
 
@@ -168,7 +164,7 @@ export function RoleplaySessionPage() {
               <span style={{ fontSize: '24px' }}>{scenario.aiRole.avatar}</span>
               <div>
                 <strong style={{ fontSize: '14px', color: 'var(--color-ink)' }}>{scenario.aiRole.name}</strong>
-                <div style={{ fontSize: '11.5px', color: 'var(--color-sage)' }}>{scenario.aiRole.role}</div>
+                <div style={{ fontSize: '11.5px', color: 'var(--color-forest)' }}>{scenario.aiRole.role}</div>
               </div>
             </div>
 
@@ -177,7 +173,7 @@ export function RoleplaySessionPage() {
               onClick={() => setShowHints(!showHints)}
               style={{ background: showHints ? 'var(--color-cream)' : 'var(--color-surface)', color: showHints ? 'var(--color-red-hover)' : 'var(--color-red-hover)' }}
             >
-              💡 {showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'}
+              💡 <BilingualText>{showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'}</BilingualText>
             </button>
           </div>
 
@@ -196,7 +192,7 @@ export function RoleplaySessionPage() {
 
                   <div className="message-bubble">
                     <div style={{ fontWeight: 700, fontSize: '11px', color: isAi ? 'var(--color-red-hover)' : 'var(--color-border)', marginBottom: '4px' }}>
-                      {isAi ? scenario.aiRole.name : 'Bạn'}
+                      <BilingualText>{isAi ? scenario.aiRole.name : 'Bạn'}</BilingualText>
                     </div>
 
                     <div style={{ fontSize: '15px', lineHeight: 1.6 }}>{msg.text}</div>
@@ -211,7 +207,7 @@ export function RoleplaySessionPage() {
                     {/* Explanation foldout */}
                     {isExplaining && msg.explanation && (
                       <div style={{ marginTop: '8px', padding: '8px 12px', background: 'var(--color-sage-soft)', borderRadius: '8px', fontSize: '12.5px', color: 'var(--color-ink)' }}>
-                        💡 <strong>Giải thích ngữ cảnh:</strong> {msg.explanation}
+                        💡 <strong><BilingualText>{"Giải thích ngữ cảnh:"}</BilingualText></strong> {msg.explanation}
                       </div>
                     )}
 
@@ -222,8 +218,7 @@ export function RoleplaySessionPage() {
                         onClick={() => handleSpeak(msg.text)}
                         title="Nghe phát âm"
                       >
-                        <span>🔊</span> Nghe
-                      </button>
+                        <span>🔊</span><BilingualText>{"Nghe"}</BilingualText></button>
 
                       {msg.translation && (
                         <button
@@ -231,7 +226,7 @@ export function RoleplaySessionPage() {
                           onClick={() => toggleTranslation(msg.id)}
                           title="Dịch câu nói"
                         >
-                          <span>🌐</span> {isTranslating ? 'Đóng dịch' : 'Dịch'}
+                          <span>🌐</span> <BilingualText>{isTranslating ? 'Đóng dịch' : 'Dịch'}</BilingualText>
                         </button>
                       )}
 
@@ -241,7 +236,7 @@ export function RoleplaySessionPage() {
                           onClick={() => toggleExplanation(msg.id)}
                           title="Giải thích từ vựng & sắc thái"
                         >
-                          <span>ℹ️</span> {isExplaining ? 'Đóng giải thích' : 'Giải thích'}
+                          <span>ℹ️</span> <BilingualText>{isExplaining ? 'Đóng giải thích' : 'Giải thích'}</BilingualText>
                         </button>
                       )}
                     </div>
@@ -254,7 +249,7 @@ export function RoleplaySessionPage() {
               <div className="message-row ai">
                 <div className="message-avatar">{scenario.aiRole.avatar}</div>
                 <div className="message-bubble">
-                  <div style={{ color: 'var(--color-sage)' }}>✨ {scenario.aiRole.name} đang trả lời...</div>
+                  <div style={{ color: 'var(--color-forest)' }}>✨ {scenario.aiRole.name}<BilingualText>{"đang trả lời..."}</BilingualText></div>
                 </div>
               </div>
             )}
@@ -265,9 +260,7 @@ export function RoleplaySessionPage() {
           {/* Suggested Hints for user */}
           {showHints && (
             <div className="roleplay-hints">
-              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                💡 Gợi ý câu trả lời tự nhiên (Bấm vào để gửi ngay):
-              </div>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}><BilingualText>{"💡 Gợi ý câu trả lời tự nhiên (Bấm vào để gửi ngay):"}</BilingualText></div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '8px' }}>
                 {suggestions.map((sug, idx) => (
                   <button
@@ -315,7 +308,7 @@ export function RoleplaySessionPage() {
               onClick={() => handleSendMessage()}
               disabled={!inputText.trim() || isSending}
             >
-              <span>Nói</span>
+              <span><BilingualText>{"Nói"}</BilingualText></span>
               <span>➔</span>
             </button>
           </div>
@@ -324,12 +317,8 @@ export function RoleplaySessionPage() {
         {/* Right Mission Sidebar */}
         <aside className="roleplay-mission-panel">
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase', marginBottom: '4px' }}>
-              Tiến độ kịch bản
-            </div>
-            <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}>
-              Mục tiêu đối thoại
-            </h3>
+            <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase', marginBottom: '4px' }}><BilingualText>{"Tiến độ kịch bản"}</BilingualText></div>
+            <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Mục tiêu đối thoại"}</BilingualText></h3>
           </div>
 
           {/* Checklist */}
@@ -342,8 +331,8 @@ export function RoleplaySessionPage() {
                     {isDone ? '✓' : idx + 1}
                   </span>
                   <div>
-                    <div>{task.label}</div>
-                    {isDone && <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-ink)' }}>Đã hoàn thành!</span>}
+                    <div><BilingualText>{task.label}</BilingualText></div>
+                    {isDone && <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-ink)' }}><BilingualText>{"Đã hoàn thành!"}</BilingualText></span>}
                   </div>
                 </div>
               );
@@ -352,12 +341,8 @@ export function RoleplaySessionPage() {
 
           {/* Roles reminder */}
           <div style={{ background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '14px', fontSize: '12.5px' }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-ink)', marginBottom: '4px' }}>
-              🎭 Nhắc nhở vai diễn:
-            </div>
-            <div style={{ color: 'var(--color-red-hover)', lineHeight: 1.5 }}>
-              Bạn đang đóng vai: <strong>{scenario.learnerRole.role}</strong>. Hãy giao tiếp tự nhiên và nhớ dùng kính ngữ phù hợp nhé!
-            </div>
+            <div style={{ fontWeight: 700, color: 'var(--color-ink)', marginBottom: '4px' }}><BilingualText>{"🎭 Nhắc nhở vai diễn:"}</BilingualText></div>
+            <div style={{ color: 'var(--color-red-hover)', lineHeight: 1.5 }}><BilingualText>{"Bạn đang đóng vai:"}</BilingualText><strong>{scenario.learnerRole.role}</strong><BilingualText>{". Hãy giao tiếp tự nhiên và nhớ dùng kính ngữ phù hợp nhé!"}</BilingualText></div>
           </div>
 
           {/* Finish Button */}
@@ -365,9 +350,7 @@ export function RoleplaySessionPage() {
             className="button"
             onClick={handleFinishSession}
             style={{ width: '100%', background: 'var(--color-red-hover)', borderColor: 'var(--color-red-hover)', marginTop: 'auto' }}
-          >
-            Hoàn tất & Nhận đánh giá ➔
-          </button>
+          ><BilingualText>{"Hoàn tất & Nhận đánh giá ➔"}</BilingualText></button>
         </aside>
       </div>
     </div>

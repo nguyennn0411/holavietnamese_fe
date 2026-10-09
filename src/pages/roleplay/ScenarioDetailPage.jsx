@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { useParams, Link } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
@@ -9,11 +10,9 @@ export function ScenarioDetailPage() {
   if (!scenario) {
     return (
       <div className="p4-container" style={{ textAlign: 'center', padding: '80px 20px' }}>
-        <h2>Không tìm thấy kịch bản này</h2>
-        <p style={{ color: 'var(--color-sage)', margin: '14px 0 24px' }}>Kịch bản này không tồn tại hoặc đã được cập nhật.</p>
-        <Link to="/ai-scenarios" className="button">
-          Quay lại Danh sách kịch bản
-        </Link>
+        <h2><BilingualText>{"Không tìm thấy kịch bản này"}</BilingualText></h2>
+        <p style={{ color: 'var(--color-forest)', margin: '14px 0 24px' }}><BilingualText>{"Kịch bản này không tồn tại hoặc đã được cập nhật."}</BilingualText></p>
+        <Link to="/ai-scenarios" className="button"><BilingualText>{"Quay lại Danh sách kịch bản"}</BilingualText></Link>
       </div>
     );
   }
@@ -21,14 +20,12 @@ export function ScenarioDetailPage() {
   return (
     <div className="p4-container">
       {/* Breadcrumb */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-sage)', marginBottom: '20px' }}>
-        <Link to="/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>
-          ← Danh sách kịch bản
-        </Link>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-forest)', marginBottom: '20px' }}>
+        <Link to="/ai-scenarios" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Danh sách kịch bản"}</BilingualText></Link>
         <span>/</span>
         <span>{scenario.topicLabel}</span>
         <span>/</span>
-        <span style={{ color: 'var(--color-ink)', fontWeight: 600 }}>{scenario.title}</span>
+        <span style={{ color: 'var(--color-ink)', fontWeight: 600 }}><BilingualText vi={scenario.titleVi || scenario.title} en={scenario.title} /></span>
       </nav>
 
       {/* Hero Header */}
@@ -40,13 +37,12 @@ export function ScenarioDetailPage() {
             <span style={{ padding: '4px 10px', background: 'var(--color-red-soft)', borderRadius: '6px', fontSize: '11px', fontWeight: 700, color: 'var(--color-ink)' }}>
               📍 {scenario.destination}
             </span>
-            <span style={{ padding: '4px 10px', background: 'var(--color-red-soft)', borderRadius: '6px', fontSize: '11px', fontWeight: 700, color: 'var(--color-ink)' }}>
-              ⚡ Độ khó: {scenario.difficulty}
+            <span style={{ padding: '4px 10px', background: 'var(--color-red-soft)', borderRadius: '6px', fontSize: '11px', fontWeight: 700, color: 'var(--color-ink)' }}><BilingualText>{"⚡ Độ khó:"}</BilingualText>{scenario.difficulty}
             </span>
           </div>
 
           <h1 className="p4-title" style={{ fontSize: 'clamp(2rem, 3.2vw, 2.8rem)' }}>
-            {scenario.title}
+            <BilingualText vi={scenario.titleVi || scenario.title} en={scenario.title} />
           </h1>
 
           <p className="p4-subtitle" style={{ fontSize: '16.5px' }}>
@@ -58,9 +54,7 @@ export function ScenarioDetailPage() {
               to={`/ai-roleplay/${scenario.id}`}
               className="button"
               style={{ background: 'var(--color-red-hover)', borderColor: 'var(--color-red-hover)', fontSize: '15px', padding: '12px 28px' }}
-            >
-              🎭 Bắt đầu phiên Roleplay ngay
-            </Link>
+            ><BilingualText>{"🎭 Bắt đầu phiên Roleplay ngay"}</BilingualText></Link>
           </div>
         </div>
 
@@ -76,9 +70,7 @@ export function ScenarioDetailPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {/* Roles */}
           <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '24px' }}>
-            <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)' }}>
-              👥 Phân vai trong kịch bản
-            </h2>
+            <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)' }}><BilingualText>{"👥 Phân vai trong kịch bản"}</BilingualText></h2>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {/* AI Role */}
@@ -86,7 +78,7 @@ export function ScenarioDetailPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                   <span style={{ fontSize: '28px' }}>{scenario.aiRole.avatar}</span>
                   <div>
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase' }}>Nhân vật AI</span>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase' }}><BilingualText>{"Nhân vật AI"}</BilingualText></span>
                     <h3 style={{ margin: 0, fontSize: '15px', color: 'var(--color-ink)' }}>{scenario.aiRole.name}</h3>
                   </div>
                 </div>
@@ -100,7 +92,7 @@ export function ScenarioDetailPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                   <span style={{ fontSize: '28px' }}>🎓</span>
                   <div>
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-ink)', textTransform: 'uppercase' }}>Bạn đóng vai</span>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--color-ink)', textTransform: 'uppercase' }}><BilingualText>{"Bạn đóng vai"}</BilingualText></span>
                     <h3 style={{ margin: 0, fontSize: '15px', color: 'var(--color-ink)' }}>{scenario.learnerRole.role}</h3>
                   </div>
                 </div>
@@ -113,9 +105,7 @@ export function ScenarioDetailPage() {
 
           {/* Mission Objectives */}
           <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '24px' }}>
-            <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)' }}>
-              🎯 Mục tiêu cần hoàn thành
-            </h2>
+            <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)' }}><BilingualText>{"🎯 Mục tiêu cần hoàn thành"}</BilingualText></h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {scenario.objectives.map((task, i) => (
                 <div key={task.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--color-cream)', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
@@ -123,7 +113,7 @@ export function ScenarioDetailPage() {
                     {i + 1}
                   </span>
                   <span style={{ fontSize: '14px', color: 'var(--color-ink)', fontWeight: 600 }}>
-                    {task.label}
+                    <BilingualText>{task.label}</BilingualText>
                   </span>
                 </div>
               ))}
@@ -135,9 +125,7 @@ export function ScenarioDetailPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {/* Vocabulary hints */}
           <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '24px' }}>
-            <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)' }}>
-              💡 Mẫu câu & Từ vựng gợi ý
-            </h2>
+            <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)' }}><BilingualText>{"💡 Mẫu câu & Từ vựng gợi ý"}</BilingualText></h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {scenario.vocabularyHints.map((item, idx) => (
                 <div key={idx} style={{ padding: '10px 12px', background: 'var(--color-cream)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
@@ -156,8 +144,7 @@ export function ScenarioDetailPage() {
           {scenario.culturalTip && (
             <div style={{ background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '22px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', color: 'var(--color-red-hover)', fontWeight: 750, fontSize: '14px' }}>
-                <span>🏮</span> Mẹo văn hóa thực tế:
-              </div>
+                <span>🏮</span><BilingualText>{"Mẹo văn hóa thực tế:"}</BilingualText></div>
               <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.6, color: 'var(--color-ink)' }}>
                 {scenario.culturalTip}
               </p>

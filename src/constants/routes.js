@@ -33,6 +33,8 @@ export const ROUTES = {
 
   EXPLORE: '/explore',
   DESTINATION_DETAIL: '/explore/:id',
+  EXPLORE_VIETNAM: '/explore-vietnam',
+  LEARNER_DESTINATION_DETAIL: '/destinations/:id',
   BLOG: '/blog',
   BLOG_DETAIL: '/blog/:id',
   QUIZ: '/quizzes/:quizId',
@@ -61,6 +63,8 @@ export const ROUTES = {
   ADMIN_QUIZ_BUILDER: '/admin/quizzes/:quizId',
   ADMIN_QUIZ_PREVIEW: '/admin/quizzes/:quizId/preview',
   ADMIN_VOCABULARY: '/admin/vocabulary',
+  ADMIN_DESTINATIONS: '/admin/destinations',
+  ADMIN_DESTINATION_DETAIL: '/admin/destinations/:id',
   ADMIN_USERS: '/admin/users',
   ADMIN_USER_DETAIL: '/admin/users/:id',
   ADMIN_ROLES: '/admin/roles',

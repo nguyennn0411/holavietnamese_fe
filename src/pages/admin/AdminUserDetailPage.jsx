@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { adminService } from '@/services/adminService';
@@ -31,14 +32,12 @@ export function AdminUserDetailPage() {
     } catch (error) { setMsg(error.message); }
   };
 
-  if (!user) return <div className="state" role={msg?"alert":"status"}>{msg || "Đang tải chi tiết người dùng…"}</div>;
+  if (!user) return <div className="state" role={msg?"alert":"status"}><BilingualText>{msg || "Đang tải chi tiết người dùng…"}</BilingualText></div>;
 
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-        <Link to="/admin/users" style={{ color: 'var(--color-muted)', textDecoration: 'none', fontSize: '0.85rem' }}>
-          ← Danh sách người dùng
-        </Link>
+        <Link to="/admin/users" style={{ color: 'var(--color-muted)', textDecoration: 'none', fontSize: '0.85rem' }}><BilingualText>{"← Danh sách người dùng"}</BilingualText></Link>
         <span style={{ color: 'var(--color-border)' }}>/</span>
         <strong style={{ fontSize: '0.9rem' }}>{user.fullName}</strong>
       </div>
@@ -49,7 +48,7 @@ export function AdminUserDetailPage() {
           <p style={{ color: 'var(--color-muted)', margin: 0, fontSize: '0.9rem' }}>@{user.username} • ID: #{user.id}</p>
         </div>
         <span className={`admin-badge ${user.status === 'ACTIVE' ? 'admin-badge-success' : 'admin-badge-danger'}`} style={{ fontSize: '0.85rem', padding: '6px 14px' }}>
-          {user.status === 'ACTIVE' ? 'Tài khoản Hoạt động' : 'Tài khoản Đã khóa'}
+          <BilingualText>{user.status === 'ACTIVE' ? 'Tài khoản Hoạt động' : 'Tài khoản Đã khóa'}</BilingualText>
         </span>
       </div>
 
@@ -60,51 +59,51 @@ export function AdminUserDetailPage() {
       )}
 
       <div className="admin-card" style={{ marginBottom: 20 }}>
-        <h3>Trạng thái tài khoản</h3>
+        <h3><BilingualText>{"Trạng thái tài khoản"}</BilingualText></h3>
         <div className="actions">
           <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-            {['ACTIVE', 'INACTIVE', 'LOCKED', 'DISABLED'].map((status) => <option key={status}>{status}</option>)}
+            {['ACTIVE', 'INACTIVE', 'LOCKED', 'DISABLED'].map((status) => <option key={status} value={status}>{bilingualLabel(status)}</option>)}
           </select>
-          <button type="button" onClick={handleStatusChange}>Cập nhật trạng thái</button>
+          <button type="button" onClick={handleStatusChange}><BilingualText>{"Cập nhật trạng thái"}</BilingualText></button>
         </div>
       </div>
 
       {/* Grid: Left user details, Right role changer */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '20px', marginBottom: '24px' }}>
         <div className="admin-card">
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}>Thông tin hồ sơ học viên</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}><BilingualText>{"Thông tin hồ sơ học viên"}</BilingualText></h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}>EMAIL</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}><BilingualText>{"EMAIL"}</BilingualText></span>
               <p style={{ margin: '4px 0 0 0', fontWeight: 600 }}>{user.email}</p>
             </div>
             <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}>QUỐC GIA</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}><BilingualText>{"QUỐC GIA"}</BilingualText></span>
               <p style={{ margin: '4px 0 0 0', fontWeight: 600 }}>{user.country || 'N/A'}</p>
             </div>
             <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}>TRÌNH ĐỘ MỤC TIÊU</span>
-              <p style={{ margin: '4px 0 0 0', fontWeight: 600 }}>Cấp độ {user.targetLevel || 'A1'}</p>
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}><BilingualText>{"TRÌNH ĐỘ MỤC TIÊU"}</BilingualText></span>
+              <p style={{ margin: '4px 0 0 0', fontWeight: 600 }}><BilingualText>{"Cấp độ"}</BilingualText>{user.targetLevel || 'A1'}</p>
             </div>
             <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}>MỤC TIÊU HỌC</span>
-              <p style={{ margin: '4px 0 0 0', fontWeight: 600 }}>{user.learningGoal || 'Giao tiếp'}</p>
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}><BilingualText>{"MỤC TIÊU HỌC"}</BilingualText></span>
+              <p style={{ margin: '4px 0 0 0', fontWeight: 600 }}><BilingualText>{user.learningGoal || 'Giao tiếp'}</BilingualText></p>
             </div>
           </div>
         </div>
 
         <div className="admin-card">
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}>Phân vai trò (Role)</h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--color-muted)', marginBottom: '16px' }}>Thay đổi quyền hạn truy cập của người dùng này.</p>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}><BilingualText>{"Phân vai trò (Role)"}</BilingualText></h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--color-muted)', marginBottom: '16px' }}><BilingualText>{"Thay đổi quyền hạn truy cập của người dùng này."}</BilingualText></p>
           <div style={{ display: 'flex', gap: '10px' }}>
             <select
               value={selectedRole}
               onChange={e => setSelectedRole(e.target.value)}
               style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
             >
-              <option value="LEARNER">LEARNER (Học viên)</option>
-              <option value="INSTRUCTOR">INSTRUCTOR (Giảng viên)</option>
-              <option value="ADMIN">ADMIN (Quản trị viên)</option>
+              <option value="LEARNER">{bilingualLabel("LEARNER (Học viên)")}</option>
+              <option value="INSTRUCTOR">{bilingualLabel("INSTRUCTOR (Giảng viên)")}</option>
+              <option value="ADMIN">{bilingualLabel("ADMIN (Quản trị viên)")}</option>
             </select>
             <button
               type="button"
@@ -118,9 +117,7 @@ export function AdminUserDetailPage() {
                 fontWeight: 600,
                 cursor: 'pointer',
               }}
-            >
-              Cập nhật
-            </button>
+            ><BilingualText>{"Cập nhật"}</BilingualText></button>
           </div>
         </div>
       </div>
@@ -128,12 +125,12 @@ export function AdminUserDetailPage() {
       {/* Enrolled Courses & History */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         <div className="admin-card">
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}>Khóa học đã đăng ký</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}><BilingualText>{"Khóa học đã đăng ký"}</BilingualText></h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {user.enrolledCourses?.map(c => (
               <div key={c.id} style={{ padding: '12px', borderRadius: '8px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
                 <strong style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-ink)' }}>{c.name}</strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)' }}>Đăng ký ngày {c.enrolledAt} • Tiến độ: {c.progress}%</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)' }}><BilingualText>{"Đăng ký ngày"}</BilingualText>{c.enrolledAt}<BilingualText>{"• Tiến độ:"}</BilingualText>{c.progress}%</span>
                 <div style={{ height: '6px', background: 'var(--color-sage-soft)', borderRadius: '3px', marginTop: '6px' }}>
                   <div style={{ height: '100%', width: `${c.progress}%`, background: 'var(--color-sage)', borderRadius: '3px' }} />
                 </div>
@@ -143,7 +140,7 @@ export function AdminUserDetailPage() {
         </div>
 
         <div className="admin-card">
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}>Nhật ký hoạt động tài khoản</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}><BilingualText>{"Nhật ký hoạt động tài khoản"}</BilingualText></h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {user.auditHistory?.map((h, i) => (
               <div key={i} style={{ padding: '8px 0', borderBottom: '1px solid var(--color-border)', fontSize: '0.85rem' }}>

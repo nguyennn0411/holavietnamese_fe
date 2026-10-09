@@ -1,6 +1,6 @@
 /* HolaVietnamese authentication — contemporary Đông Sơn visual language */
 .auth-container {
-  --auth-red: var(--color-red-hover); --auth-red-dark: var(--color-red-hover); --auth-ink: var(--color-ink); --auth-muted: var(--color-sage); --auth-gold: var(--color-gold);
+  --auth-red: var(--color-red-hover); --auth-red-dark: var(--color-red-hover); --auth-ink: var(--color-ink); --auth-muted: var(--color-muted); --auth-gold: var(--color-gold);
   display: grid; grid-template-columns: minmax(520px, 46%) 1fr; min-height: 100vh; width: 100%;
   color: var(--auth-ink); background: var(--color-cream); font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', Inter, system-ui, sans-serif;
 }
@@ -11,7 +11,7 @@
 }
 .auth-left-content { align-self: center; width: min(100%, 440px); }
 .auth-brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: clamp(28px, 5vh, 54px); }
-.auth-brand-logo { position: relative; display: grid; place-items: center; width: 40px; height: 40px; flex: 0 0 40px; border-radius: 12px 12px 12px 4px; color: white; background: linear-gradient(145deg, var(--color-red), var(--color-red-hover)); box-shadow: 0 8px 22px rgba(126, 31, 23, .2); }
+.auth-brand-logo { position: relative; display: grid; place-items: center; width: 40px; height: 40px; flex: 0 0 40px; border-radius: 12px 12px 12px 4px; color: white; background: var(--color-red); box-shadow: 0 8px 22px rgba(126, 31, 23, .2); }
 .auth-logo-text { font: 800 21px/1 Georgia, serif; }
 .auth-logo-star { position: absolute; top: 5px; right: 5px; color: var(--color-gold); font-size: 7px; }
 .auth-brand-name { color: var(--color-ink); font-size: 18px; font-weight: 800; letter-spacing: -.035em; }
@@ -36,10 +36,10 @@
 .auth-input:focus { border-color: var(--auth-red); box-shadow: 0 0 0 4px rgba(159, 45, 32, .09); }
 .auth-password-row, .auth-password-wrapper, .auth-input-wrapper { position: relative; display: flex; width: 100%; }
 .auth-password-input { padding-right: 70px; }
-.auth-show-btn, .auth-toggle-password { position: absolute; top: 50%; right: 7px; width: auto; height: 36px; padding: 0 10px; transform: translateY(-50%); border: 0; border-radius: 8px; color: var(--color-sage); background: transparent; font-size: 12px; font-weight: 700; }
+.auth-show-btn, .auth-toggle-password { position: absolute; top: 50%; right: 7px; width: auto; height: 36px; padding: 0 10px; transform: translateY(-50%); border: 0; border-radius: 8px; color: var(--color-forest); background: transparent; font-size: 12px; font-weight: 700; }
 .auth-show-btn:hover, .auth-toggle-password:hover { color: var(--auth-red); background: var(--color-cream); }
 .auth-options-row { display: flex; align-items: center; justify-content: space-between; margin: -2px 0 2px; }
-.auth-checkbox-label { display: inline-flex; flex-direction: row; align-items: center; gap: 8px; margin: 0; color: var(--color-sage); cursor: pointer; font-size: 12.5px; font-weight: 500; }
+.auth-checkbox-label { display: inline-flex; flex-direction: row; align-items: center; gap: 8px; margin: 0; color: var(--color-forest); cursor: pointer; font-size: 12.5px; font-weight: 500; }
 .auth-checkbox { width: 16px; height: 16px; margin: 0; accent-color: var(--auth-red); cursor: pointer; }
 .auth-forgot-link, .auth-footer-link { color: var(--auth-red); font-size: 12.5px; font-weight: 750; text-decoration: none; }
 .auth-forgot-link:hover, .auth-footer-link:hover { color: var(--auth-red-dark); text-decoration: underline; }
@@ -47,11 +47,11 @@
 .auth-btn:hover:not(:disabled) { transform: translateY(-1px); }
 .auth-btn:active:not(:disabled) { transform: translateY(0); }
 .auth-btn:disabled { opacity: .62; cursor: not-allowed; }
-.auth-btn-primary { color: white; background: linear-gradient(135deg, var(--color-red), var(--color-red-hover)); box-shadow: 0 8px 20px rgba(139, 36, 26, .2); }
-.auth-btn-primary:hover:not(:disabled) { background: linear-gradient(135deg, var(--color-red-hover), var(--color-red-hover)); box-shadow: 0 10px 24px rgba(139, 36, 26, .25); }
+.auth-btn-primary { color: white; background: var(--color-red); box-shadow: 0 8px 20px rgba(139, 36, 26, .2); }
+.auth-btn-primary:hover:not(:disabled) { background: var(--color-red-hover); box-shadow: 0 10px 24px rgba(139, 36, 26, .25); }
 .auth-btn-secondary { border: 1px solid var(--color-border); color: var(--color-ink); background: var(--color-surface); }
 .auth-btn-secondary:hover:not(:disabled) { background: var(--color-cream); }
-.auth-btn-quick { height: 44px; border: 0; color: var(--color-sage); background: transparent; font-size: 12.5px; font-weight: 650; box-shadow: none; }
+.auth-btn-quick { height: 44px; border: 0; color: var(--color-forest); background: transparent; font-size: 12.5px; font-weight: 650; box-shadow: none; }
 .auth-btn-quick:hover:not(:disabled) { color: var(--auth-red); background: var(--color-cream); }
 .auth-btn-group { display: grid; grid-template-columns: .8fr 1.2fr; gap: 11px; margin-top: 4px; }
 .auth-divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; }
@@ -71,14 +71,14 @@
 .auth-field-error { display: flex; gap: 4px; color: var(--color-red); font-size: 11px; font-weight: 650; }
 .auth-step-indicator { display: flex; align-items: center; width: 100%; margin: 0 0 24px; }
 .auth-step-item { display: flex; align-items: center; gap: 7px; color: var(--color-muted); }
-.auth-step-item span { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--color-border); border-radius: 50%; background: var(--color-surface); font-size: 10px; font-weight: 800; }
+.auth-step-item > span { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--color-border); border-radius: 50%; background: var(--color-surface); font-size: 10px; font-weight: 800; }
 .auth-step-item small { font-size: 10.5px; font-weight: 700; white-space: nowrap; }
 .auth-step-item-active { color: var(--auth-red); }
-.auth-step-item-active span { border-color: var(--auth-red); color: white; background: var(--auth-red); }
+.auth-step-item-active > span { border-color: var(--auth-red); color: white; background: var(--auth-red); }
 .auth-step-indicator > i { flex: 1; height: 1px; margin: 0 10px; background: var(--color-border); }
 .auth-step-indicator > i.active { background: var(--auth-red); }
 .auth-right-panel { position: sticky; top: 0; display: flex; align-items: flex-end; min-width: 0; height: 100vh; overflow: hidden; padding: clamp(32px, 5vw, 70px); background: var(--color-red-hover); }
-.auth-right-panel::before { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(180deg, rgba(44, 15, 8, .05) 20%, rgba(43, 13, 7, .72) 100%); pointer-events: none; }
+.auth-right-panel::before { content: ''; position: absolute; inset: 0; z-index: 2; background: var(--color-surface); pointer-events: none; }
 .auth-right-panel::after { content: ''; position: absolute; inset: 18px; z-index: 3; border: 1px solid rgba(255, 240, 216, .28); pointer-events: none; }
 .auth-drum-bg { position: absolute; inset: 0; z-index: 1; }
 .auth-drum-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; filter: saturate(.88) contrast(1.04); transform: scale(1.015); }
@@ -88,7 +88,7 @@
 .auth-hero-card { position: relative; z-index: 4; width: min(100%, 530px); color: white; }
 .auth-quote-mark { height: 38px; color: var(--color-gold); font: 80px/.7 Georgia, serif; }
 .auth-hero-tag { margin-bottom: 13px; color: var(--color-gold); font-size: 10px; font-weight: 850; letter-spacing: .18em; }
-.auth-hero-title { margin: 0 0 16px; color: var(--color-cream); font: 700 clamp(30px, 3.2vw, 48px)/1.14 Georgia, 'Times New Roman', serif; letter-spacing: -.035em; }
+.auth-hero-title { margin: 0 0 16px; color: var(--color-cream); font: 700 clamp(30px, 3.2vw, 48px)/1.14 'Noto Serif', 'Times New Roman', serif; letter-spacing: -.035em; }
 .auth-hero-desc { max-width: 480px; margin: 0 0 26px; color: rgba(255, 247, 235, .78); font-size: 13.5px; line-height: 1.75; }
 .auth-hero-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .auth-chip { padding: 7px 11px; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; color: rgba(255,255,255,.86); background: rgba(35, 11, 7, .18); backdrop-filter: blur(8px); font-size: 10.5px; font-weight: 650; }

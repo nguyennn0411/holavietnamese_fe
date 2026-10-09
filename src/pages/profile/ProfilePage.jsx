@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { learnerService } from '@/services/learnerService';
 import { useAuth } from '@/application/context/AuthContext';
@@ -37,11 +38,11 @@ export function ProfilePage() {
   };
 
   if (state.loading && !profile) {
-    return <div className="account-empty">Đang tải hồ sơ…</div>;
+    return <div className="account-empty"><BilingualText>{"Đang tải hồ sơ…"}</BilingualText></div>;
   }
 
   if (!profile) {
-    return <div className="account-empty" role="alert">{state.error}</div>;
+    return <div className="account-empty" role="alert"><BilingualText>{state.error}</BilingualText></div>;
   }
 
   const goalLabels = {
@@ -62,15 +63,13 @@ export function ProfilePage() {
   return (
     <div className="account-page">
       <div className="account-header">
-        <span className="account-pill">👤 Thông tin cá nhân</span>
-        <h1 className="account-title">Hồ sơ người học</h1>
-        <p className="account-desc">
-          Quản lý thông tin tài khoản, mục tiêu học tập và cấp độ tiếng Việt của bạn.
-        </p>
+        <span className="account-pill"><BilingualText>{"👤 Thông tin cá nhân"}</BilingualText></span>
+        <h1 className="account-title"><BilingualText>{"Hồ sơ người học"}</BilingualText></h1>
+        <p className="account-desc"><BilingualText>{"Quản lý thông tin tài khoản, mục tiêu học tập và cấp độ tiếng Việt của bạn."}</BilingualText></p>
       </div>
 
-      {state.error && <div className="auth-message auth-message-error">{state.error}</div>}
-      {state.message && <div className="auth-message auth-message-success">{state.message}</div>}
+      {state.error && <div className="auth-message auth-message-error"><BilingualText>{state.error}</BilingualText></div>}
+      {state.message && <div className="auth-message auth-message-success"><BilingualText>{state.message}</BilingualText></div>}
 
       {/* Hero Avatar & Identity Card */}
       <section className="profile-hero">
@@ -91,7 +90,7 @@ export function ProfilePage() {
           className="account-outline-btn"
           onClick={() => setEditing((v) => !v)}
         >
-          {editing ? 'Hủy bỏ' : '✏️ Chỉnh sửa'}
+          <BilingualText>{editing ? 'Hủy bỏ' : '✏️ Chỉnh sửa'}</BilingualText>
         </button>
       </section>
 
@@ -99,7 +98,7 @@ export function ProfilePage() {
       {editing ? (
         <form className="account-panel account-form" onSubmit={save}>
           <label>
-            <span>Họ và tên</span>
+            <span><BilingualText>{"Họ và tên"}</BilingualText></span>
             <input
               type="text"
               value={form.fullName || ''}
@@ -109,7 +108,7 @@ export function ProfilePage() {
           </label>
 
           <label>
-            <span>Số điện thoại</span>
+            <span><BilingualText>{"Số điện thoại"}</BilingualText></span>
             <input
               type="tel"
               value={form.phoneNumber || ''}
@@ -119,7 +118,7 @@ export function ProfilePage() {
           </label>
 
           <label>
-            <span>Ảnh đại diện (URL)</span>
+            <span><BilingualText>{"Ảnh đại diện (URL)"}</BilingualText></span>
             <input
               type="url"
               value={form.avatarUrl || ''}
@@ -129,7 +128,7 @@ export function ProfilePage() {
           </label>
 
           <label>
-            <span>Quốc gia</span>
+            <span><BilingualText>{"Quốc gia"}</BilingualText></span>
             <input
               type="text"
               value={form.country || ''}
@@ -139,74 +138,74 @@ export function ProfilePage() {
           </label>
 
           <label>
-            <span>Ngôn ngữ mẹ đẻ</span>
+            <span><BilingualText>{"Ngôn ngữ mẹ đẻ"}</BilingualText></span>
             <select
               value={form.nativeLanguage || 'en'}
               onChange={(e) => setForm({ ...form, nativeLanguage: e.target.value })}
             >
-              <option value="en">English</option>
-              <option value="ko">한국어 (Korean)</option>
-              <option value="ja">日本語 (Japanese)</option>
-              <option value="zh">中文 (Chinese)</option>
-              <option value="fr">Français (French)</option>
+              <option value="en">{bilingualLabel("English")}</option>
+              <option value="ko">{bilingualLabel("한국어 (Korean)")}</option>
+              <option value="ja">{bilingualLabel("日本語 (Japanese)")}</option>
+              <option value="zh">{bilingualLabel("中文 (Chinese)")}</option>
+              <option value="fr">{bilingualLabel("Français (French)")}</option>
             </select>
           </label>
 
           <label>
-            <span>Mục tiêu học tập</span>
+            <span><BilingualText>{"Mục tiêu học tập"}</BilingualText></span>
             <select
               value={form.learningGoal || 'travel'}
               onChange={(e) => setForm({ ...form, learningGoal: e.target.value })}
             >
-              <option value="travel">✈️ Du lịch & Khám phá</option>
-              <option value="work">💼 Công việc & Định cư</option>
-              <option value="exam_vsl">🎓 Thi chứng chỉ VSL</option>
-              <option value="culture">🏮 Văn hóa & Đời sống</option>
+              <option value="travel">{bilingualLabel("✈️ Du lịch & Khám phá")}</option>
+              <option value="work">{bilingualLabel("💼 Công việc & Định cư")}</option>
+              <option value="exam_vsl">{bilingualLabel("🎓 Thi chứng chỉ VSL")}</option>
+              <option value="culture">{bilingualLabel("🏮 Văn hóa & Đời sống")}</option>
             </select>
           </label>
 
           <label>
-            <span>Cấp độ mong muốn</span>
+            <span><BilingualText>{"Cấp độ mong muốn"}</BilingualText></span>
             <select
               value={form.targetLevel || 'A1'}
               onChange={(e) => setForm({ ...form, targetLevel: e.target.value })}
             >
-              <option value="A1">🌱 A1 – Mới bắt đầu</option>
-              <option value="A2">🌿 A2 – Sơ cấp</option>
-              <option value="B1">🌳 B1 – Trung cấp</option>
-              <option value="B2">🚀 B2 – Trung cấp nâng cao</option>
+              <option value="A1">{bilingualLabel("🌱 A1 – Mới bắt đầu")}</option>
+              <option value="A2">{bilingualLabel("🌿 A2 – Sơ cấp")}</option>
+              <option value="B1">{bilingualLabel("🌳 B1 – Trung cấp")}</option>
+              <option value="B2">{bilingualLabel("🚀 B2 – Trung cấp nâng cao")}</option>
             </select>
           </label>
 
           <button type="submit" disabled={state.loading}>
-            {state.loading ? 'Đang lưu…' : 'Lưu thay đổi hồ sơ'}
+            <BilingualText>{state.loading ? 'Đang lưu…' : 'Lưu thay đổi hồ sơ'}</BilingualText>
           </button>
         </form>
       ) : (
         <div className="profile-rows">
           <div>
-            <b>Mục tiêu học tiếng Việt</b>
-            <span>{goalLabels[profile.learningGoal] || profile.learningGoal || 'Du lịch & Khám phá'}</span>
+            <b><BilingualText>{"Mục tiêu học tiếng Việt"}</BilingualText></b>
+            <span><BilingualText>{goalLabels[profile.learningGoal] || profile.learningGoal || 'Du lịch & Khám phá'}</BilingualText></span>
             <i>✓</i>
           </div>
           <div>
-            <b>Trình độ hiện tại</b>
-            <span>{profile.targetLevel ? `Cấp độ ${profile.targetLevel}` : 'A1 - Mới bắt đầu'}</span>
+            <b><BilingualText>{"Trình độ hiện tại"}</BilingualText></b>
+            <span><BilingualText>{profile.targetLevel ? `Cấp độ ${profile.targetLevel}` : 'A1 - Mới bắt đầu'}</BilingualText></span>
             <i>✓</i>
           </div>
           <div>
-            <b>Ngôn ngữ mẹ đẻ</b>
-            <span>{languageLabels[profile.nativeLanguage] || profile.nativeLanguage || 'English'}</span>
+            <b><BilingualText>{"Ngôn ngữ mẹ đẻ"}</BilingualText></b>
+            <span><BilingualText>{languageLabels[profile.nativeLanguage] || profile.nativeLanguage || 'English'}</BilingualText></span>
             <i>✓</i>
           </div>
           <div>
-            <b>Quốc gia</b>
-            <span>{profile.country || 'Chưa cập nhật'}</span>
+            <b><BilingualText>{"Quốc gia"}</BilingualText></b>
+            <span><BilingualText>{profile.country || 'Chưa cập nhật'}</BilingualText></span>
             <i>✓</i>
           </div>
           <div>
-            <b>Số điện thoại</b>
-            <span>{profile.phoneNumber || 'Chưa cập nhật'}</span>
+            <b><BilingualText>{"Số điện thoại"}</BilingualText></b>
+            <span><BilingualText>{profile.phoneNumber || 'Chưa cập nhật'}</BilingualText></span>
             <i>✓</i>
           </div>
         </div>

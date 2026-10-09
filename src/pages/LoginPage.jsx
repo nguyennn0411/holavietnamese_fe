@@ -1,9 +1,10 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Navigate, Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { AuthFooter } from '@/components/auth/AuthFooter';
 import { AuthHeader } from '@/components/auth/AuthHeader';
-import dongSonBg from '@/assets/images/dongson_auth_bg.png';
+import dongSonBg from '@/assets/images/dongson_heritage.png';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -148,25 +149,21 @@ export function LoginPage() {
 
           {/* Welcome Pill */}
           <div className="auth-welcome-pill">
-            <span className="auth-welcome-code">Xin chào</span>
-            <span className="auth-welcome-text">Chào mừng bạn trở lại</span>
+            <span className="auth-welcome-code"><BilingualText>{"Xin chào"}</BilingualText></span>
+            <span className="auth-welcome-text"><BilingualText>{"Chào mừng bạn trở lại"}</BilingualText></span>
           </div>
 
           {/* Heading */}
-          <h1 className="auth-heading">
-            Tiếp tục hành trình<br /><span>tiếng Việt</span> của bạn
-          </h1>
-          <p className="auth-subtitle">
-            Đăng nhập để tiếp tục bài học và giữ vững chuỗi ngày tiến bộ.
-          </p>
+          <h1 className="auth-heading"><BilingualText vi={<>Tiếp tục hành trình<br /><span>tiếng Việt</span> của bạn</>} en="Continue your Vietnamese journey" /></h1>
+          <p className="auth-subtitle"><BilingualText>{"Đăng nhập để tiếp tục bài học và giữ vững chuỗi ngày tiến bộ."}</BilingualText></p>
 
           {/* Error Message */}
-          {error && <div className="auth-message auth-message-error">{error}</div>}
+          {error && <div className="auth-message auth-message-error"><BilingualText>{error}</BilingualText></div>}
 
           {/* Success Message */}
           {successMessage && (
             <div className="auth-message auth-message-success">
-              {successMessage}
+              <BilingualText>{successMessage}</BilingualText>
             </div>
           )}
 
@@ -174,12 +171,12 @@ export function LoginPage() {
           <form className="auth-form" onSubmit={handleSubmit}>
             {/* Email Field */}
             <div className="auth-field">
-              <label className="auth-label" htmlFor="login-identity">Tài khoản hoặc email</label>
+              <label className="auth-label" htmlFor="login-identity"><BilingualText>{"Tài khoản hoặc email"}</BilingualText></label>
               <input
                 id="login-identity"
                 className="auth-input"
                 type="text"
-                placeholder="Nhập tên tài khoản hoặc email"
+                placeholder={bilingualLabel("Nhập tên tài khoản hoặc email")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -189,7 +186,7 @@ export function LoginPage() {
 
             {/* Password Field */}
             <div className="auth-field">
-              <label className="auth-label" htmlFor="login-password">Mật khẩu</label>
+              <label className="auth-label" htmlFor="login-password"><BilingualText>{"Mật khẩu"}</BilingualText></label>
               <div className="auth-password-wrapper">
                 <input
                   id="login-password"
@@ -207,7 +204,7 @@ export function LoginPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                 >
-                  {showPassword ? 'Ẩn' : 'Hiện'}
+                  <BilingualText>{showPassword ? 'Ẩn' : 'Hiện'}</BilingualText>
                 </button>
               </div>
             </div>
@@ -221,11 +218,9 @@ export function LoginPage() {
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
                 />
-                <span>Ghi nhớ đăng nhập</span>
+                <span><BilingualText>{"Ghi nhớ đăng nhập"}</BilingualText></span>
               </label>
-              <Link to="/forgot-password" className="auth-forgot-link">
-                Quên mật khẩu?
-              </Link>
+              <Link to="/forgot-password" className="auth-forgot-link"><BilingualText>{"Quên mật khẩu?"}</BilingualText></Link>
             </div>
 
             {/* Primary Button */}
@@ -234,7 +229,7 @@ export function LoginPage() {
               className="auth-btn auth-btn-primary"
               disabled={loading}
             >
-              {loading ? 'Đang đăng nhập…' : 'Đăng nhập'}
+              <BilingualText>{loading ? 'Đang đăng nhập…' : 'Đăng nhập'}</BilingualText>
             </button>
 
           </form>
@@ -242,7 +237,7 @@ export function LoginPage() {
           {/* Divider */}
           <div className="auth-divider">
             <span className="auth-divider-line" />
-            <span className="auth-divider-text">hoặc tiếp tục với</span>
+            <span className="auth-divider-text"><BilingualText>{"hoặc tiếp tục với"}</BilingualText></span>
             <span className="auth-divider-line" />
           </div>
 
@@ -252,7 +247,7 @@ export function LoginPage() {
               <>
                 <div ref={googleBtnRef} className="auth-google-btn-container" />
                 {googleLoading && (
-                  <p className="auth-google-loading">Signing in with Google…</p>
+                  <p className="auth-google-loading"><BilingualText>{"Signing in with Google…"}</BilingualText></p>
                 )}
               </>
             ) : (
@@ -267,18 +262,13 @@ export function LoginPage() {
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-                Đăng nhập với Google
-              </button>
+                </svg><BilingualText>{"Đăng nhập với Google"}</BilingualText></button>
             )}
           </div>
 
           {/* Footer Link */}
-          <p className="auth-footer-text">
-            Chưa có tài khoản?{' '}
-            <Link to="/register" className="auth-footer-link">
-              Đăng ký miễn phí
-            </Link>
+          <p className="auth-footer-text"><BilingualText>{"Chưa có tài khoản?"}</BilingualText>{' '}
+            <Link to="/register" className="auth-footer-link"><BilingualText>{"Đăng ký miễn phí"}</BilingualText></Link>
           </p>
         </main>
         <AuthFooter />
@@ -289,15 +279,15 @@ export function LoginPage() {
         <div className="auth-drum-bg">
           <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
-        <div className="auth-visual-topline"><span /> Học tiếng Việt theo cách của bạn</div>
+        <div className="auth-visual-topline"><span /><BilingualText>{"Học tiếng Việt theo cách của bạn"}</BilingualText></div>
         <div className="auth-hero-card">
           <div className="auth-quote-mark">“</div>
-          <h2 className="auth-hero-title">Mỗi ngày một chút,<br />tiếng Việt gần hơn.</h2>
-          <p className="auth-hero-desc">Bài học thực tế, lộ trình cá nhân hóa và tiến độ luôn được lưu lại cho riêng bạn.</p>
+          <h2 className="auth-hero-title"><BilingualText vi={<>Mỗi ngày một chút,<br />tiếng Việt gần hơn.</>} en="A little each day. Vietnamese feels closer." /></h2>
+          <p className="auth-hero-desc"><BilingualText>{"Bài học thực tế, lộ trình cá nhân hóa và tiến độ luôn được lưu lại cho riêng bạn."}</BilingualText></p>
           <div className="auth-hero-chips">
-            <span className="auth-chip">✓ Học theo lộ trình</span>
-            <span className="auth-chip">✓ Theo dõi tiến độ</span>
-            <span className="auth-chip">✓ Văn hóa bản địa</span>
+            <span className="auth-chip"><BilingualText>{"✓ Học theo lộ trình"}</BilingualText></span>
+            <span className="auth-chip"><BilingualText>{"✓ Theo dõi tiến độ"}</BilingualText></span>
+            <span className="auth-chip"><BilingualText>{"✓ Văn hóa bản địa"}</BilingualText></span>
           </div>
         </div>
       </aside>

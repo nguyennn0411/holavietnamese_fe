@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -36,15 +37,15 @@ export function AdminCultureListPage() {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'PUBLISHED':
-        return <span className="admin-badge admin-badge-success">Đã xuất bản</span>;
+        return <span className="admin-badge admin-badge-success"><BilingualText>{"Đã xuất bản"}</BilingualText></span>;
       case 'IN_REVIEW':
-        return <span className="admin-badge admin-badge-warning">Chờ duyệt</span>;
+        return <span className="admin-badge admin-badge-warning"><BilingualText>{"Chờ duyệt"}</BilingualText></span>;
       case 'DRAFT':
-        return <span className="admin-badge admin-badge-info">Bản nháp</span>;
+        return <span className="admin-badge admin-badge-info"><BilingualText>{"Bản nháp"}</BilingualText></span>;
       case 'ARCHIVED':
-        return <span className="admin-badge admin-badge-danger">Đã lưu trữ</span>;
+        return <span className="admin-badge admin-badge-danger"><BilingualText>{"Đã lưu trữ"}</BilingualText></span>;
       default:
-        return <span className="admin-badge">{status}</span>;
+        return <span className="admin-badge"><BilingualText>{status}</BilingualText></span>;
     }
   };
 
@@ -52,29 +53,21 @@ export function AdminCultureListPage() {
     <div className="admin-content">
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
-          {toast}
+          <BilingualText>{toast}</BilingualText>
         </div>
       )}
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-            VĂN HÓA & NỘI DUNG • NGƯỜI 4
-          </span>
-          <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}>Quản lý bài viết văn hóa</h1>
-          <p style={{ margin: 0, color: 'var(--color-sage)', fontSize: '14px' }}>
-            Tìm kiếm, kiểm duyệt, xuất bản và biên tập các bài viết khám phá văn hóa, ẩm thực và đời sống Việt Nam.
-          </p>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}><BilingualText>{"VĂN HÓA & NỘI DUNG • NGƯỜI 4"}</BilingualText></span>
+          <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}><BilingualText>{"Quản lý bài viết văn hóa"}</BilingualText></h1>
+          <p style={{ margin: 0, color: 'var(--color-forest)', fontSize: '14px' }}><BilingualText>{"Tìm kiếm, kiểm duyệt, xuất bản và biên tập các bài viết khám phá văn hóa, ẩm thực và đời sống Việt Nam."}</BilingualText></p>
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-          <Link to="/admin/culture-categories" className="button secondary" style={{ fontSize: '13px' }}>
-            📑 Quản lý danh mục
-          </Link>
-          <Link to="/admin/culture/new" className="button" style={{ fontSize: '13px' }}>
-            + Thêm bài viết mới
-          </Link>
+          <Link to="/admin/culture-categories" className="button secondary" style={{ fontSize: '13px' }}><BilingualText>{"📑 Quản lý danh mục"}</BilingualText></Link>
+          <Link to="/admin/culture/new" className="button" style={{ fontSize: '13px' }}><BilingualText>{"+ Thêm bài viết mới"}</BilingualText></Link>
         </div>
       </div>
 
@@ -83,13 +76,13 @@ export function AdminCultureListPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1fr auto', gap: '14px', alignItems: 'center' }}>
           <input
             type="text"
-            placeholder="Tìm theo tiêu đề bài viết hoặc tên tác giả..."
+            placeholder={bilingualLabel("Tìm theo tiêu đề bài viết hoặc tên tác giả...")}
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
 
           <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}>
-            <option value="all">Tất cả danh mục</option>
+            <option value="all">{bilingualLabel("Tất cả danh mục")}</option>
             {categories.map(c => (
               <option key={c.id} value={c.id}>
                 {c.icon} {c.name}
@@ -98,11 +91,11 @@ export function AdminCultureListPage() {
           </select>
 
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
-            <option value="all">Tất cả trạng thái</option>
-            <option value="PUBLISHED">Đã xuất bản (Published)</option>
-            <option value="IN_REVIEW">Chờ duyệt (In Review)</option>
-            <option value="DRAFT">Bản nháp (Draft)</option>
-            <option value="ARCHIVED">Lưu trữ (Archived)</option>
+            <option value="all">{bilingualLabel("Tất cả trạng thái")}</option>
+            <option value="PUBLISHED">{bilingualLabel("Đã xuất bản (Published)")}</option>
+            <option value="IN_REVIEW">{bilingualLabel("Chờ duyệt (In Review)")}</option>
+            <option value="DRAFT">{bilingualLabel("Bản nháp (Draft)")}</option>
+            <option value="ARCHIVED">{bilingualLabel("Lưu trữ (Archived)")}</option>
           </select>
 
           {(search || categoryFilter !== 'all' || statusFilter !== 'all') && (
@@ -110,9 +103,7 @@ export function AdminCultureListPage() {
               className="button secondary"
               style={{ fontSize: '12px', padding: '10px 14px' }}
               onClick={() => { setSearch(''); setCategoryFilter('all'); setStatusFilter('all'); }}
-            >
-              Đặt lại
-            </button>
+            ><BilingualText>{"Đặt lại"}</BilingualText></button>
           )}
         </div>
       </div>
@@ -123,20 +114,18 @@ export function AdminCultureListPage() {
           <table className="admin-table">
             <thead>
               <tr>
-                <th style={{ width: '38%' }}>Bài viết & Tác giả</th>
-                <th>Danh mục</th>
-                <th>Vùng miền / Điểm đến</th>
-                <th>Lượt xem</th>
-                <th>Trạng thái</th>
-                <th style={{ textAlign: 'right' }}>Thao tác</th>
+                <th style={{ width: '38%' }}><BilingualText>{"Bài viết & Tác giả"}</BilingualText></th>
+                <th><BilingualText>{"Danh mục"}</BilingualText></th>
+                <th><BilingualText>{"Vùng miền / Điểm đến"}</BilingualText></th>
+                <th><BilingualText>{"Lượt xem"}</BilingualText></th>
+                <th><BilingualText>{"Trạng thái"}</BilingualText></th>
+                <th style={{ textAlign: 'right' }}><BilingualText>{"Thao tác"}</BilingualText></th>
               </tr>
             </thead>
             <tbody>
               {articles.length === 0 ? (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: 'var(--color-muted)' }}>
-                    Không tìm thấy bài viết văn hóa nào phù hợp với bộ lọc.
-                  </td>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: 'var(--color-muted)' }}><BilingualText>{"Không tìm thấy bài viết văn hóa nào phù hợp với bộ lọc."}</BilingualText></td>
                 </tr>
               ) : (
                 articles.map(article => (
@@ -150,10 +139,9 @@ export function AdminCultureListPage() {
                         />
                         <div>
                           <strong style={{ display: 'block', color: 'var(--color-ink)', fontSize: '14px', lineHeight: 1.3 }}>
-                            {article.title}
+                            <BilingualText vi={article.titleVi || article.title} en={article.title} />
                           </strong>
-                          <span style={{ fontSize: '12px', color: 'var(--color-sage)' }}>
-                            Bởi: <strong>{article.author}</strong> • Ngày đăng: {article.publishedAt}
+                          <span style={{ fontSize: '12px', color: 'var(--color-forest)' }}><BilingualText>{"Bởi:"}</BilingualText><strong>{article.author}</strong><BilingualText>{"• Ngày đăng:"}</BilingualText>{article.publishedAt}
                           </span>
                         </div>
                       </div>
@@ -187,18 +175,14 @@ export function AdminCultureListPage() {
                             style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-ink)', borderColor: 'var(--color-border)' }}
                             title="Duyệt & Xuất bản"
                             onClick={() => handleStatusChange(article.id, 'PUBLISHED')}
-                          >
-                            ✓ Duyệt
-                          </button>
+                          ><BilingualText>{"✓ Duyệt"}</BilingualText></button>
                         ) : (
                           <button
                             className="button secondary"
                             style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-red)', borderColor: 'var(--color-red-soft)' }}
                             title="Gỡ bài về bản nháp"
                             onClick={() => handleStatusChange(article.id, 'DRAFT')}
-                          >
-                            Gỡ bài
-                          </button>
+                          ><BilingualText>{"Gỡ bài"}</BilingualText></button>
                         )}
 
                         <Link
@@ -206,9 +190,7 @@ export function AdminCultureListPage() {
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 9px' }}
                           title="Chỉnh sửa nội dung"
-                        >
-                          ✏️ Sửa
-                        </Link>
+                        ><BilingualText>{"✏️ Sửa"}</BilingualText></Link>
 
                         <Link
                           to={`/culture/${article.id}`}
@@ -216,9 +198,7 @@ export function AdminCultureListPage() {
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 9px' }}
                           title="Xem trên trang học viên"
-                        >
-                          👁️ Xem
-                        </Link>
+                        ><BilingualText>{"👁️ Xem"}</BilingualText></Link>
 
                         <button
                           className="button secondary"

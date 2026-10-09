@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 
@@ -18,7 +19,7 @@ export function MainNavigation({ onNavigate }) {
       {NAV_ITEMS.map(({ to, label, icon, end }) => (
         <NavLink key={to} to={to} end={end} className="site-nav__link" onClick={onNavigate}>
           <span className="site-nav__icon" aria-hidden="true">{icon}</span>
-          <span>{label}</span>
+          <span><BilingualText>{label}</BilingualText></span>
         </NavLink>
       ))}
     </nav>

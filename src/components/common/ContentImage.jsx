@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { mediaSource } from './mediaSource';
 
@@ -16,7 +17,7 @@ function ImageAttempt({ src, invalid, alt = '', fallback, className = '', loadin
     role="img"
     aria-label={alt ? `${alt} — ảnh không khả dụng` : 'Ảnh không khả dụng'}
     data-media-state={failed ? 'error' : invalid ? 'invalid' : 'missing'}
-  ><span aria-hidden="true">▧</span><small>{failed ? 'Không tải được ảnh' : invalid ? 'Đường dẫn ảnh không hợp lệ' : 'Chưa có ảnh'}</small></span>;
+  ><span aria-hidden="true">▧</span><small><BilingualText>{failed ? 'Không tải được ảnh' : invalid ? 'Đường dẫn ảnh không hợp lệ' : 'Chưa có ảnh'}</BilingualText></small></span>;
   return <img {...props} src={src} alt={alt} className={className} loading={loading}
     decoding="async" onError={() => setFailed(true)} />;
 }
