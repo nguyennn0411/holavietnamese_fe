@@ -1,28 +1,77 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { PageHeader, Artwork, Tabs, Notice, EmptyState } from '@/components/common/Ui';
-import { cultureService } from '@/services/cultureService';
-import { SpeakButton } from '@/components/common/Ui';
+import { useCallback, useState } from 'react';
+import { generatePath, Link, useLocation, useParams } from 'react-router-dom';
+import { Breadcrumb, PageHeader, EmptyState } from '@/components/common/Ui';
+import { ContentImage } from '@/components/common/ContentImage';
+import { ResourceState } from '@/components/common/ResourceState';
+import { DestinationRegion } from '@/components/destinations/DestinationMetadata';
+import { useAsyncResource } from '@/hooks/useAsyncResource';
+import { DESTINATION_REGIONS } from '@/models/Destination';
+import { destinationService } from '@/services/destinationService';
+import { ROUTES } from '@/constants/routes';
 
-const destinations = [
-  { id: 'hcmc', name: 'TP. Hồ Chí Minh', region: 'Miền Nam', art: 'village', description: 'Một thành phố không ngừng gửi lời chào.' },
-  { id: 'mientay', name: 'Đồng bằng sông Cửu Long', region: 'Miền Nam', art: 'coast', description: 'Nhịp sống theo những dòng sông.' },
-  { id: 'dalat', name: 'Đà Lạt', region: 'Tây Nguyên', art: 'village', description: 'Rừng thông, sương sớm và những cuộc trò chuyện ấm áp.' },
-  { id: 'nhatrang', name: 'Nha Trang', region: 'Duyên hải Nam Trung Bộ', art: 'coast', description: 'Một chút nắng trong từng câu nói.' },
-  { id: 'danang', name: 'Đà Nẵng', region: 'Miền Trung', art: 'coast', description: 'Nơi núi gặp biển.' },
-  { id: 'hoian', name: 'Hội An', region: 'Miền Trung', art: 'lanterns', description: 'Những câu chuyện nhỏ dưới ánh đèn lồng.' },
-  { id: 'hue', name: 'Huế', region: 'Miền Trung', art: 'village', description: 'Ngôn ngữ dịu dàng bên dòng Hương.' },
-  { id: 'hanoi', name: 'Hà Nội', region: 'Miền Bắc', art: 'coffee', description: 'Một tách cà phê và những câu chuyện phố phường.' },
-  { id: 'halong', name: 'Hạ Long', region: 'Miền Bắc', art: 'coast', description: 'Một chân trời để khám phá.' },
-  { id: 'sapa', name: 'Sa Pa', region: 'Miền Bắc', art: 'village', description: 'Gặp gỡ những sắc màu trên miền núi.' },
-];
+const emptyFilters = { keyword: '', region: '' };
+
 export function ExploreVietnamPage() {
-  return <section><PageHeader eyebrow="Ngôn ngữ chỉ là điểm bắt đầu" title="Khám phá Việt Nam" description="Học ngôn ngữ. Gặp gỡ văn hóa. Cảm thấy gần gũi hơn mỗi ngày." actions={<Link className="button secondary" to="/achievements"><BilingualText>{"Hộ chiếu của bạn →"}</BilingualText></Link>} /><Notice><BilingualText>{"Hành trình minh họa theo thiết kế. Xem thành tích để theo dõi những dấu mốc đã được hệ thống ghi nhận."}</BilingualText></Notice><div className="journey-board card"><aside className="journey-map"><p className="eyebrow"><BilingualText>{"VIỆT NAM · VIET NAM"}</BilingualText></p><img src="/design/vietnam-map.svg" alt="Bản đồ hành trình Việt Nam" /><div><p className="eyebrow"><BilingualText>{"Chặng đường tiếp theo"}</BilingualText></p><h2><BilingualText>{"Một đất nước để khám phá."}</BilingualText><br/><BilingualText>{"Một ngôn ngữ để sống cùng."}</BilingualText></h2><p className="muted"><BilingualText>{"Mỗi điểm đến mang một từ mới, một hương vị mới và một góc nhìn mới."}</BilingualText></p></div></aside><div className="journey-stops">{destinations.map((destination, index) => <Link className="journey-stop" key={destination.id} to={`/explore/${destination.id}`}><span className="journey-dot" /><div className="journey-thumbnail"><Artwork kind={destination.art} /></div><div><p className="eyebrow">{destination.region}</p><h2>{destination.name}</h2><p><BilingualText vi={destination.descriptionVi || destination.description} en={destination.description} /></p><small><BilingualText>{"Ngôn ngữ · Văn hóa · Luyện tập"}</BilingualText></small></div><span className="journey-number">{String(index + 1).padStart(2, '0')} →</span></Link>)}</div></div></section>;
+  const [query, setQuery] = useState(emptyFilters);
+  const [keyword, setKeyword] = useState('');
+  const location = useLocation();
+  const detailRoute = location.pathname === ROUTES.EXPLORE ? ROUTES.DESTINATION_DETAIL : ROUTES.LEARNER_DESTINATION_DETAIL;
+  const resource = useAsyncResource(useCallback(signal => destinationService.list(query, { signal }), [query]));
+
+  return <section>
+    <PageHeader eyebrow="Ngôn ngữ chỉ là điểm bắt đầu" title="Khám phá Việt Nam" description="Học ngôn ngữ. Gặp gỡ văn hóa. Cảm thấy gần gũi hơn mỗi ngày." />
+    <form className="library-toolbar" style={{ flexWrap: 'wrap', alignItems: 'end' }} onSubmit={event => { event.preventDefault(); setQuery(current => ({ ...current, keyword: keyword.trim() })); }}>
+      <label style={{ flex: '1 1 260px' }}><BilingualText>Tìm kiếm</BilingualText><input value={keyword} onChange={event => setKeyword(event.target.value)} placeholder="Tên tiếng Việt hoặc tiếng Anh · Vietnamese or English name" /></label>
+      <label style={{ flex: '1 1 180px' }}><BilingualText vi="Vùng miền" en="Region" /><select value={query.region} onChange={event => setQuery(current => ({ ...current, region: event.target.value }))}>
+        <option value="">Tất cả vùng miền · All regions</option>{DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi} · {region.en}</option>)}
+      </select></label>
+      <div className="actions"><button type="submit"><BilingualText>Tìm kiếm</BilingualText></button><button type="button" className="secondary" onClick={() => { setKeyword(''); setQuery({ ...emptyFilters }); }}><BilingualText>Đặt lại bộ lọc</BilingualText></button></div>
+    </form>
+    <ResourceState resource={resource}>{items => {
+      const destinations = items.filter(item => item.status === 'PUBLISHED');
+      return destinations.length === 0
+        ? <EmptyState title={<BilingualText vi="Chưa có điểm đến phù hợp" en="No matching destinations" />} description={<BilingualText vi="Thử từ khóa hoặc vùng miền khác. Các điểm đến sẽ xuất hiện khi được xuất bản." en="Try another keyword or region. Destinations appear once published." />} />
+        : <div className="journey-board card">
+          <aside className="journey-map"><p className="eyebrow"><BilingualText>VIỆT NAM · VIET NAM</BilingualText></p><img src="/design/vietnam-map.svg" alt="Bản đồ Việt Nam" /><div><h2><BilingualText>Một đất nước để khám phá.</BilingualText><br /><BilingualText>Một ngôn ngữ để sống cùng.</BilingualText></h2><p className="muted"><BilingualText>Mỗi điểm đến mang một từ mới, một hương vị mới và một góc nhìn mới.</BilingualText></p></div></aside>
+          <div className="journey-stops">{destinations.map(destination => <Link className="journey-stop" key={destination.id} to={generatePath(detailRoute, { id: String(destination.id) })}>
+            <span className="journey-dot" aria-hidden="true" />
+            <div className="journey-thumbnail"><ContentImage src={destination.imageUrl} alt={destination.nameVi} className="figma-art" /></div>
+            <div><p className="eyebrow"><DestinationRegion value={destination.region} /></p><h2><BilingualText vi={destination.nameVi} en={destination.nameEn} /></h2>
+              {(destination.shortDescriptionVi || destination.shortDescriptionEn) && <p><BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn} /></p>}
+              <small><BilingualText>Chi tiết</BilingualText> →</small>
+            </div><span className="journey-number" aria-hidden="true">→</span>
+          </Link>)}</div>
+        </div>;
+    }}</ResourceState>
+  </section>;
 }
+
 export function DestinationDetailPage() {
-  const { id } = useParams(); const destination = destinations.find(item => item.id === id); const [tab, setTab] = useState('learn');
-  if (!destination) return <EmptyState title="Không tìm thấy điểm đến"><Link className="button" to="/explore"><BilingualText>{"Về hành trình"}</BilingualText></Link></EmptyState>;
-  const articles = cultureService.listArticles({ destination: id });
-  return <section><Link className="text-link" to="/explore"><BilingualText>{"← Hành trình Việt Nam"}</BilingualText></Link><div className="destination-hero card"><div><p className="eyebrow">{destination.region}</p><h1>{destination.name}</h1><p className="lead"><BilingualText vi={destination.descriptionVi || destination.description} en={destination.description} /></p><p className="muted"><BilingualText>{"Khám phá ngôn ngữ, câu chuyện văn hóa và những tình huống đời thường."}</BilingualText></p><Link className="button" to="/courses"><BilingualText>{"Tiếp tục học →"}</BilingualText></Link></div><Artwork kind={destination.art} /></div><Tabs label="Nội dung điểm đến" value={tab} onChange={setTab} items={[{id:'learn',label:'Học tiếng Việt'},{id:'local',label:'Ngôn ngữ địa phương'},{id:'culture',label:'Văn hóa'},{id:'practice',label:'Luyện tập'}]} /><div className="split-grid"><div>{tab==='learn'&&<><h2><BilingualText>{"Tiếng Việt cho chuyến đi"}</BilingualText></h2>{['Gọi món ăn','Hỏi đường','Nhận phòng khách sạn'].map((title,index)=><Link className="list-row" key={title} to="/courses"><div><span className="badge">{index+1}</span> <strong><BilingualText>{title}</BilingualText></strong><small><BilingualText>{"Khám phá các bài học giao tiếp liên quan"}</BilingualText></small></div><span>→</span></Link>)}</>}{tab==='local'&&<div className="card"><h2><BilingualText>{"Những từ mang theo"}</BilingualText></h2><p className="muted"><BilingualText>{"Nội dung minh họa từ thiết kế."}</BilingualText></p>{destination.region==='Miền Trung'?[{word:'răng',meaning:'sao / why'},{word:'mô',meaning:'đâu / where'}].map(word=><div className="list-row" key={word.word}><div><h2>{word.word}</h2><small>{word.meaning}<BilingualText>{"· Tiếng Việt miền Trung"}</BilingualText></small></div><SpeakButton text={word.word}/></div>):<EmptyState title="Chưa có bộ từ địa phương cho điểm đến này"><Link className="text-link" to="/ai-tutor"><BilingualText>{"Luyện tiếng Việt với AI Tutor →"}</BilingualText></Link></EmptyState>}</div>}{tab==='culture'&&<><h2><BilingualText>{"Câu chuyện từ"}</BilingualText>{destination.name}</h2>{articles.length?articles.map(article=><Link className="list-row" key={article.id} to={`/culture/${article.id}`}><div><strong><BilingualText vi={article.titleVi || article.title} en={article.title} /></strong><small>{article.readTime}</small></div><span>→</span></Link>):<EmptyState title="Khám phá những câu chuyện Việt Nam"><Link className="button secondary" to="/culture"><BilingualText>{"Thư viện văn hóa"}</BilingualText></Link></EmptyState>}</>}{tab==='practice'&&<div className="card"><h2><BilingualText>{"Một cuộc trò chuyện để bắt đầu"}</BilingualText></h2><p className="lead"><BilingualText>{"Luyện các tình huống đời thường, gọi món và trò chuyện với người bản địa."}</BilingualText></p><div className="actions"><Link className="button" to="/ai-scenarios"><BilingualText>{"Chọn kịch bản Roleplay →"}</BilingualText></Link><Link className="button secondary" to="/ai-tutor"><BilingualText>{"Hỏi AI Tutor"}</BilingualText></Link></div></div>}</div><aside className="card"><p className="eyebrow"><BilingualText>{"Một chút văn hóa"}</BilingualText></p><h2><BilingualText>{"Chậm lại, gặp gỡ nhiều hơn."}</BilingualText></h2><p className="muted"><BilingualText>{"Khám phá đời sống địa phương qua từng bài học và câu chuyện."}</BilingualText></p><Link className="text-link" to="/achievements"><BilingualText>{"Xem hộ chiếu của bạn →"}</BilingualText></Link></aside></div></section>;
+  const { id } = useParams();
+  const location = useLocation();
+  const backRoute = location.pathname.startsWith(ROUTES.EXPLORE + '/') ? ROUTES.EXPLORE : ROUTES.EXPLORE_VIETNAM;
+  const legacySlug = backRoute === ROUTES.EXPLORE && !/^\d+$/.test(id);
+  const resource = useAsyncResource(useCallback(signal => legacySlug
+    ? destinationService.getBySlug(id, { signal })
+    : destinationService.get(id, { signal }), [id, legacySlug]));
+  const missing = <EmptyState title="Không tìm thấy điểm đến"><Link className="button secondary" to={backRoute}><BilingualText vi="Về Khám phá Việt Nam" en="Back to Explore Vietnam" /></Link></EmptyState>;
+
+  if (resource.error?.status === 404) return missing;
+  return <ResourceState resource={resource}>{destination => {
+    if (!destination || destination.status !== 'PUBLISHED') return missing;
+    return <section>
+      <Breadcrumb items={[{ label: 'Khám phá Việt Nam', to: backRoute }, { label: destination.nameVi }]} />
+      <div className="destination-hero card">
+        <div><p className="eyebrow"><DestinationRegion value={destination.region} /></p><h1><BilingualText vi={destination.nameVi} en={destination.nameEn} /></h1>
+          {(destination.shortDescriptionVi || destination.shortDescriptionEn) && <p className="lead" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}><BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn} /></p>}
+        </div><ContentImage src={destination.imageUrl} alt={destination.nameVi} className="figma-art" loading="eager" />
+      </div>
+      {(destination.descriptionVi || destination.descriptionEn) && <div className="split-grid">
+        {destination.descriptionVi && <section className="card"><h2><BilingualText vi="Khám phá điểm đến" en="Explore the destination" /></h2><div className="rich-text" lang="vi" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{destination.descriptionVi}</div></section>}
+        {destination.descriptionEn && <section className="card"><h2><BilingualText vi="Mô tả tiếng Anh" en="English description" /></h2><div className="rich-text" lang="en" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{destination.descriptionEn}</div></section>}
+      </div>}
+      <div className="actions" style={{ marginTop: 20 }}><Link className="button secondary" to={backRoute}><BilingualText vi="← Khám phá Việt Nam" en="← Explore Vietnam" /></Link></div>
+    </section>;
+  }}</ResourceState>;
 }

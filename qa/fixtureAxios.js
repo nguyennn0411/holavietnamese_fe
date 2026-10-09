@@ -1,4 +1,5 @@
 import {profile,progress,badges,notifications,systemSettings,courses,lessons,words} from './fixtures';
+import {requestDestination} from './destinationFixtures';
 const response=result=>({code:1000,result,message:'Đã lưu trong dữ liệu kiểm thử.'});
 const vocabularyTopics=[{id:1,name:'Ẩm thực',slug:'food',description:'Món ăn và những cuộc trò chuyện ở quán.',displayOrder:0,status:'PUBLISHED'},{id:2,name:'Chào hỏi',slug:'greetings',description:'Bắt đầu với một lời chào.',displayOrder:1,status:'PUBLISHED'},{id:3,name:'Mua sắm',slug:'shopping',description:'Hỏi giá và chọn món đồ phù hợp.',displayOrder:2,status:'DRAFT'}];
 const adminWords=words.map(word=>({...word,status:'PUBLISHED',topics:vocabularyTopics.filter(topic=>topic.name===word.topic),meanings:[{id:1,translationEn:word.meaning,definitionEn:'',usageNote:'',displayOrder:0,examples:[{id:1,exampleVi:word.example,translationEn:'An illustrative Vietnamese phrase.',displayOrder:0}]}]}));
@@ -8,6 +9,7 @@ const fixtureMode=new URLSearchParams(location.search).get('fixture');
 async function request(path,body,options={}){
  options.signal?.throwIfAborted();
  if(fixtureMode==='error')throw new Error('Không thể tải dữ liệu kiểm thử. Vui lòng thử lại.');
+ if(/^\/api\/(?:admin\/)?destinations(?:\/|$)/.test(path))return requestDestination(path,body,options,fixtureMode);
  if(path==='/api/me/courses')return fixtureMode==='empty'?[]:courses.slice(0,2).map(course=>({...course,courseId:course.id,courseTitle:course.title,enrollmentId:course.id,completedLessons:2,totalLessons:course.totalLessons,progressPercentage:45,lastAccessedLessonId:101,enrolledAt:'2026-10-08',status:'ACTIVE'}));
  if(/^\/api\/me\/courses\/\d+\/progress$/.test(path))return {progressPercentage:45,completedLessons:2,totalLessons:6,nextLessonId:101};
  if(/^\/api\/courses\/\d+\/lessons$/.test(path))return path.split('/')[3]==='1'?lessons:[];
