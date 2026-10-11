@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { API_BASE_URL } from '@/api/apiConfig';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
 const axiosClient = axios.create({
   baseURL: API_BASE_URL,
@@ -30,8 +31,6 @@ axiosClient.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
-    // Huy's callers use /api/...; the shared base already includes /api.
-    config.url = config.url?.replace(/^\/api(?=\/|$)/, '');
     return config;
   },
   (error) => Promise.reject(error),

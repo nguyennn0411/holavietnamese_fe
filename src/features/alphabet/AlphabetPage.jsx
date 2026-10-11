@@ -240,7 +240,7 @@ export function AlphabetPage() {
           </p>
         )}
         <footer className="alphabet-footer">
-          <Link to="/learn">
+          <Link to="/courses">
             <ArrowLeft size={16} aria-hidden="true" />
             Về khóa học
           </Link>

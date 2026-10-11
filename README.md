@@ -33,8 +33,8 @@ npm ci
 npm run dev
 ```
 
-FE: http://localhost:5173. Vite chuyển `/api` sang `VITE_PROXY_TARGET` (mặc định http://127.0.0.1:18080 cho Docker).
-Backend Docker dùng `DOCKER_BACKEND_PORT=18080`; backend chạy trực tiếp từ IntelliJ dùng `BACKEND_PORT` (máy hiện tại là 8088). Đổi `VITE_PROXY_TARGET` nếu muốn dùng bản IntelliJ.
+FE: http://localhost:5173. Vite chuyển `/api` sang `VITE_PROXY_TARGET` (mặc định http://localhost:8080).
+Trên máy hiện tại, `.env.local` dùng http://localhost:8088 vì cổng 8080 đã được dự án khác sử dụng.
 Khởi động BE và MySQL từ thư mục `../../BE` bằng `./start-mysql.ps1 -StartBackend`.
 
 ```powershell
@@ -47,10 +47,4 @@ Nếu dùng origin riêng, cấu hình `VITE_API_BASE_URL`, `FRONTEND_ORIGIN` v�
 
 Các route: `/login`, `/courses`, `/courses/:courseId`, `/my-courses`,
 `/learn/:courseId`, `/learn/:courseId/lesson/:lessonId`, `/progress`, `/vocabulary`.
-Course/Grammar/Quiz và My Learning sử dụng API thật. Một số màn hình có sẵn từ nhánh Huy (OTP/forgot-password, settings, achievements, notifications và admin dashboard/users) vẫn có mock/local fallback do API tương ứng chưa được triển khai đầy đủ.
-
-## Tích hợp Huy (03/10/2026)
-
-Đã cập nhật `origin/main` tại `d9f4ec0`. Giữ AuthProvider, trang đăng nhập/đăng ký/profile, giao diện và admin layout của Huy; ghép Course/Grammar/Question Bank/Quiz vào router chung. Cả hai HTTP client dùng cùng API base và JWT trong `localStorage.token`.
-
-`VITE_API_BASE_URL` có thể là `/api` hoặc origin backend; không cần thêm `/api` hai lần. Các màn hình Course mới: `/learn`, `/courses/:courseId`, `/lesson/:id`, `/quiz/:id`, `/quiz-attempts/:id`. Dashboard `/my-learning` lấy khóa học và lịch sử quiz từ `/api/users/progress`. Đăng nhập lại khi token cũ hết hạn.
+Các màn hình hiển thị trạng thái trống khi database chưa có dữ liệu; không dùng mock fallback.

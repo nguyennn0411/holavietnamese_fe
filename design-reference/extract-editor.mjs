@@ -1,0 +1,2 @@
+import fs from 'node:fs/promises';
+const file='src/pages/admin/AdminContentPages.jsx';let text=await fs.readFile(file,'utf8');const start=text.indexOf('const activityTypes='),end=text.indexOf('export function AdminCoursePreviewPage');if(start<0||end<start)throw new Error('Activity editor boundaries missing');text=text.slice(0,start)+text.slice(end);await fs.writeFile(file,"import { ActivityEditor } from '@/components/admin/ActivityEditor';\n"+text);

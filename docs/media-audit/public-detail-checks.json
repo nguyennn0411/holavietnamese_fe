@@ -1,0 +1,200 @@
+[
+  {
+    "explore": [
+      "/explore",
+      "/explore/hanoi",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/culture/van-hoa-ca-phe-viet-nam"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore/hanoi",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/culture/bi-quyet-pho-ha-noi"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/culture/nghe-thuat-xung-ho-viet-nam"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/culture/phong-tuc-tet-nguyen-dan"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore/hoian",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/culture/kham-pha-hoi-an"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore/mientay",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/culture/cho-noi-mientay"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Gọi món tại quán Phở gia truyền Hà Nội",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/ai-scenarios/goi-mon-pho-ha-noi"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Trả giá quà lưu niệm tại Chợ Bến Thành",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/ai-scenarios/tra-gia-cho-ben-thanh"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/ai-scenarios/bat-xe-om-cong-nghe"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/ai-scenarios/checkin-khach-san-da-nang"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Gặp gỡ và chào hỏi gia đình bạn người Việt",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/ai-scenarios/ra-mat-gia-dinh-ban"
+  },
+  {
+    "explore": [
+      "/explore",
+      "/explore"
+    ],
+    "fallbacks": 0,
+    "heading": "Phỏng vấn xin việc tại doanh nghiệp Việt Nam",
+    "images": [
+      {
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "path": "/ai-scenarios/phong-van-xin-viec-cong-so"
+  }
+]

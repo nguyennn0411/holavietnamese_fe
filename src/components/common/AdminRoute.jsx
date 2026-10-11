@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 
@@ -7,8 +8,8 @@ export function AdminRoute() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f8fafc' }}>
-        <p style={{ color: '#8B1A1A', fontWeight: 'bold' }}>Đang xác thực quyền Quản trị…</p>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: 'var(--color-surface)' }}>
+        <p style={{ color: 'var(--color-red-hover)', fontWeight: 'bold' }}><BilingualText>{"Đang xác thực quyền Quản trị…"}</BilingualText></p>
       </div>
     );
   }
@@ -19,14 +20,13 @@ export function AdminRoute() {
   }
 
   const roles = user?.roles || [];
-  const isAdmin = roles.includes('ADMIN');
+  const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
 
   // If user is a LEARNER attempting to access /admin -> redirect to home with flash message
   if (!isAdmin) {
     return (
       <Navigate
-        to="/"
-        state={{ authError: 'Bạn không có quyền truy cập trang quản trị.' }}
+        to="/forbidden"
         replace
       />
     );

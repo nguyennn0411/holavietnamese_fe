@@ -1,0 +1,62 @@
+{
+  "checkedAt": "2026-10-07T21:26:52.797Z",
+  "routeCount": 65,
+  "routeSizeChecks": 122,
+  "viewports": [
+    1440,
+    1280,
+    768,
+    375
+  ],
+  "imageInstances": 188,
+  "uniqueImageUrls": 23,
+  "pendingImages": [],
+  "brokenImages": [],
+  "invalidAttributes": [],
+  "layoutErrors": [],
+  "tests": {
+    "passed": 12,
+    "failed": 0
+  },
+  "build": "passed",
+  "publicDetails": 12,
+  "editorChecks": 4,
+  "assets": [
+    {
+      "path": "public/design/coast.svg",
+      "format": "svg"
+    },
+    {
+      "path": "public/design/coffee.svg",
+      "format": "svg"
+    },
+    {
+      "path": "public/design/dong-son.svg",
+      "format": "svg"
+    },
+    {
+      "path": "public/design/food-hero.svg",
+      "format": "svg"
+    },
+    {
+      "path": "public/design/food.svg",
+      "format": "svg"
+    },
+    {
+      "path": "public/design/lanterns.svg",
+      "format": "svg"
+    },
+    {
+      "path": "public/design/vietnam-map.svg",
+      "format": "svg"
+    },
+    {
+      "path": "public/design/village.svg",
+      "format": "svg"
+    },
+    {
+      "path": "src/assets/images/dongson_auth_bg.png",
+      "format": "png"
+    }
+  ]
+}

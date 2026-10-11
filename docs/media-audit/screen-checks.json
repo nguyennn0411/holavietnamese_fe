@@ -1,0 +1,2860 @@
+[
+  {
+    "key": "HOME",
+    "screen": "/",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Xin chào, Alex Nguyen!",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/",
+    "width": 1440
+  },
+  {
+    "key": "LOGIN",
+    "screen": "/login",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Bảng điều khiển Quản trị",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin",
+    "width": 1440
+  },
+  {
+    "key": "REGISTER",
+    "screen": "/register",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Xin chào, Alex Nguyen!",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/",
+    "width": 1440
+  },
+  {
+    "key": "VERIFY_EMAIL",
+    "screen": "/verify-email",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Kiểm trahộp thư của bạn",
+    "images": [
+      {
+        "alt": "Hoa văn trống đồng Đông Sơn",
+        "complete": true,
+        "naturalWidth": 880,
+        "src": "http://localhost:5174/src/assets/images/dongson_auth_bg.png",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/verify-email",
+    "width": 1440
+  },
+  {
+    "key": "FORGOT_PASSWORD",
+    "screen": "/forgot-password",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quên mật khẩu?",
+    "images": [
+      {
+        "alt": "Hoa văn trống đồng Đông Sơn",
+        "complete": true,
+        "naturalWidth": 880,
+        "src": "http://localhost:5174/src/assets/images/dongson_auth_bg.png",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/forgot-password",
+    "width": 1440
+  },
+  {
+    "key": "RESET_PASSWORD",
+    "screen": "/reset-password",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Tạo mật khẩumới",
+    "images": [
+      {
+        "alt": "Hoa văn trống đồng Đông Sơn",
+        "complete": true,
+        "naturalWidth": 880,
+        "src": "http://localhost:5174/src/assets/images/dongson_auth_bg.png",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/reset-password",
+    "width": 1440
+  },
+  {
+    "key": "ONBOARDING",
+    "screen": "/onboarding",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ngôn ngữ mẹ đẻ của bạn là gì?",
+    "images": [
+      {
+        "alt": "Hoa văn trống đồng Đông Sơn",
+        "complete": true,
+        "naturalWidth": 880,
+        "src": "http://localhost:5174/src/assets/images/dongson_auth_bg.png",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/onboarding",
+    "width": 1440
+  },
+  {
+    "key": "MY_LEARNING",
+    "screen": "/my-learning",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Góc học tập của tôi",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/village.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/my-learning",
+    "width": 1440
+  },
+  {
+    "key": "PROFILE",
+    "screen": "/profile",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Hồ sơ người học",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/profile",
+    "width": 1440
+  },
+  {
+    "key": "SETTINGS",
+    "screen": "/settings",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Cài đặt ứng dụng",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/settings",
+    "width": 1440
+  },
+  {
+    "key": "PROGRESS",
+    "screen": "/progress",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Tiến độ học tập",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/progress",
+    "width": 1440
+  },
+  {
+    "key": "ACHIEVEMENTS",
+    "screen": "/achievements",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Huy hiệu & Thành tích",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/achievements",
+    "width": 1440
+  },
+  {
+    "key": "NOTIFICATIONS",
+    "screen": "/notifications",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Thông báo của bạn",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/notifications",
+    "width": 1440
+  },
+  {
+    "key": "COURSES",
+    "screen": "/courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Học tiếng Việt",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Chuyện ở làng quê",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/courses",
+    "width": 1440
+  },
+  {
+    "key": "COURSE_DETAIL",
+    "screen": "/courses/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ẩm thực Việt Nam",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/courses/1",
+    "width": 1440
+  },
+  {
+    "key": "MY_COURSES",
+    "screen": "/my-courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khóa học của tôi",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/my-courses",
+    "width": 1440
+  },
+  {
+    "key": "LEARN_RESUME",
+    "screen": "/learn/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Các bài học của bạn",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/learn/1/lesson/101",
+    "width": 1440
+  },
+  {
+    "key": "LEARN_LESSON",
+    "screen": "/learn/1/lesson/101",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Các bài học của bạn",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/learn/1/lesson/101",
+    "width": 1440
+  },
+  {
+    "key": "VOCABULARY",
+    "screen": "/vocabulary",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Từ vựng tiếng Việt",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/vocabulary",
+    "width": 1440
+  },
+  {
+    "key": "VOCABULARY_NOTEBOOK_DETAIL",
+    "screen": "/vocabulary/notebook/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Chi tiết từ vựng",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/vocabulary/notebook/1",
+    "width": 1440
+  },
+  {
+    "key": "VOCABULARY_REVIEW",
+    "screen": "/vocabulary/review",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ôn tập từ vựng",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/vocabulary/review",
+    "width": 1440
+  },
+  {
+    "key": "EXPLORE",
+    "screen": "/explore",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khám phá Việt Nam",
+    "images": [
+      {
+        "alt": "Bản đồ hành trình Việt Nam",
+        "complete": true,
+        "naturalWidth": 500,
+        "src": "http://localhost:5174/design/vietnam-map.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/village.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/village.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": false
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/lanterns.svg",
+        "visible": false
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/village.svg",
+        "visible": false
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coffee.svg",
+        "visible": false
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": false
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/village.svg",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/explore",
+    "width": 1440
+  },
+  {
+    "key": "DESTINATION_DETAIL",
+    "screen": "/explore/danang",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Đà Nẵng",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/explore/danang",
+    "width": 1440
+  },
+  {
+    "key": "BLOG",
+    "screen": "/blog",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Câu chuyện đáng mang theo.",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/blog",
+    "width": 1440
+  },
+  {
+    "key": "BLOG_DETAIL",
+    "screen": "/blog/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/blog/van-hoa-ca-phe-viet-nam",
+    "width": 1440
+  },
+  {
+    "key": "QUIZ",
+    "screen": "/quizzes/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/quizzes/1",
+    "width": 1440
+  },
+  {
+    "key": "QUIZ_ATTEMPT",
+    "screen": "/quiz-attempts/501",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/quiz-attempts/501",
+    "width": 1440
+  },
+  {
+    "key": "QUIZ_RESULT",
+    "screen": "/quiz-attempts/501/result",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/quiz-attempts/501/result",
+    "width": 1440
+  },
+  {
+    "key": "CULTURE",
+    "screen": "/culture",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khám phá văn hóa Việt Nam",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/culture",
+    "width": 1440
+  },
+  {
+    "key": "CULTURE_DETAIL",
+    "screen": "/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/culture/van-hoa-ca-phe-viet-nam",
+    "width": 1440
+  },
+  {
+    "key": "AI_TUTOR",
+    "screen": "/ai-tutor",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một cuộc trò chuyện nhỏ, một bước tiến xa.",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/ai-tutor",
+    "width": 1440
+  },
+  {
+    "key": "AI_SCENARIOS",
+    "screen": "/ai-scenarios",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Kịch bản nhập vai thực tế",
+    "images": [
+      {
+        "alt": "Gọi món tại quán Phở gia truyền Hà Nội",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Trả giá quà lưu niệm tại Chợ Bến Thành",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Gặp gỡ và chào hỏi gia đình bạn người Việt",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Phỏng vấn xin việc tại doanh nghiệp Việt Nam",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/ai-scenarios",
+    "width": 1440
+  },
+  {
+    "key": "AI_SCENARIO_DETAIL",
+    "screen": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Gọi món tại quán Phở gia truyền Hà Nội",
+    "images": [
+      {
+        "alt": "Gọi món tại quán Phở gia truyền Hà Nội",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "width": 1440
+  },
+  {
+    "key": "AI_ROLEPLAY",
+    "screen": "/ai-roleplay/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Phiên Roleplay: Gọi món tại quán Phở gia truyền Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/ai-roleplay/goi-mon-pho-ha-noi",
+    "width": 1440
+  },
+  {
+    "key": "AI_SESSION_RESULT",
+    "screen": "/ai-sessions/goi-mon-pho-ha-noi/result",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Kết quả phiên Roleplay",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/ai-sessions/goi-mon-pho-ha-noi/result",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN",
+    "screen": "/admin",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Bảng điều khiển Quản trị",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_COURSES",
+    "screen": "/admin/courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khóa học",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/courses",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_COURSE_BUILDER",
+    "screen": "/admin/courses/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Course Builder",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/courses/1",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_COURSE_PREVIEW",
+    "screen": "/admin/courses/1/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ẩm thực Việt Nam",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/courses/1/preview",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_LESSONS",
+    "screen": "/admin/lessons",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Bài học",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/lessons",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_LESSON_BUILDER",
+    "screen": "/admin/lessons/101",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Lesson Builder",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/lessons/101",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_LESSON_PREVIEW",
+    "screen": "/admin/lessons/101/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Gọi một bát phở",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/lessons/101/preview",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_QUESTIONS",
+    "screen": "/admin/questions",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Question Bank",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/questions",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_QUIZZES",
+    "screen": "/admin/quizzes",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quiz",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/quizzes",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_QUIZ_BUILDER",
+    "screen": "/admin/quizzes/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quiz Builder",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/quizzes/1",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_QUIZ_PREVIEW",
+    "screen": "/admin/quizzes/1/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/quizzes/1/preview",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_VOCABULARY",
+    "screen": "/admin/vocabulary",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quản lý từ vựng",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/vocabulary",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_VOCABULARY_TOPICS",
+    "screen": "/admin/vocabulary-topics",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Chủ đề từ vựng",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/vocabulary-topics",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_USERS",
+    "screen": "/admin/users",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quản lý người dùng",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/users",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_USER_DETAIL",
+    "screen": "/admin/users/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Alex Nguyen",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/users/1",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_ROLES",
+    "screen": "/admin/roles",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Vai trò & Phân quyền",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/roles",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_SETTINGS",
+    "screen": "/admin/settings",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Cấu hình Hệ thống",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/settings",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_ACHIEVEMENTS",
+    "screen": "/admin/achievements",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quản lý Thành tích & Huy hiệu",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/achievements",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_XP_RULES",
+    "screen": "/admin/xp-rules",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quy tắc cộng điểm XP",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/xp-rules",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_AUDIT_LOGS",
+    "screen": "/admin/audit-logs",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Nhật ký Quản trị (Audit Logs)",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/audit-logs",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_CULTURE",
+    "screen": "/admin/culture",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quản lý bài viết văn hóa",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật bài trí và triết lý ẩm thực cung đình Huế",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/culture",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_CULTURE_EDIT",
+    "screen": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Biên tập: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_CULTURE_NEW",
+    "screen": "/admin/culture/new",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Soạn thảo bài viết văn hóa mới",
+    "images": [
+      {
+        "alt": "Ảnh bìa bài viết",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/culture/new",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_CULTURE_CATEGORIES",
+    "screen": "/admin/culture-categories",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Danh mục văn hóa",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/culture-categories",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_AI_SCENARIOS",
+    "screen": "/admin/ai-scenarios",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quản lý kịch bản AI",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/ai-scenarios",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_AI_SCENARIO_BUILDER",
+    "screen": "/admin/ai-scenarios/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Scenario Builder: Gọi món tại quán Phở gia truyền Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/ai-scenarios/goi-mon-pho-ha-noi",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_AI_SCENARIO_NEW",
+    "screen": "/admin/ai-scenarios/new",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Scenario Builder: Kịch bản mới",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/ai-scenarios/new",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_AI_SETTINGS",
+    "screen": "/admin/ai-settings",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Cấu hình hệ thống AI",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/ai-settings",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_AI_USAGE",
+    "screen": "/admin/ai-usage",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Theo dõi sử dụng AI & Chi phí",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/ai-usage",
+    "width": 1440
+  },
+  {
+    "key": "ADMIN_AI_REVIEWS",
+    "screen": "/admin/ai-reviews",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Kiểm tra chất lượng AI & Đánh giá phản hồi",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1440,
+    "url": "/admin/ai-reviews",
+    "width": 1440
+  },
+  {
+    "key": "HOME",
+    "screen": "/",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Xin chào, Alex Nguyen!",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/",
+    "width": 1280
+  },
+  {
+    "key": "MY_LEARNING",
+    "screen": "/my-learning",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Góc học tập của tôi",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/village.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/my-learning",
+    "width": 1280
+  },
+  {
+    "key": "PROFILE",
+    "screen": "/profile",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Hồ sơ người học",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/profile",
+    "width": 1280
+  },
+  {
+    "key": "COURSES",
+    "screen": "/courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Học tiếng Việt",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Chuyện ở làng quê",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/courses",
+    "width": 1280
+  },
+  {
+    "key": "COURSE_DETAIL",
+    "screen": "/courses/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ẩm thực Việt Nam",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/courses/1",
+    "width": 1280
+  },
+  {
+    "key": "MY_COURSES",
+    "screen": "/my-courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khóa học của tôi",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/my-courses",
+    "width": 1280
+  },
+  {
+    "key": "LEARN_LESSON",
+    "screen": "/learn/1/lesson/101",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Các bài học của bạn",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/learn/1/lesson/101",
+    "width": 1280
+  },
+  {
+    "key": "BLOG",
+    "screen": "/blog",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Câu chuyện đáng mang theo.",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/blog",
+    "width": 1280
+  },
+  {
+    "key": "BLOG_DETAIL",
+    "screen": "/blog/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/blog/van-hoa-ca-phe-viet-nam",
+    "width": 1280
+  },
+  {
+    "key": "QUIZ_ATTEMPT",
+    "screen": "/quiz-attempts/501",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/quiz-attempts/501",
+    "width": 1280
+  },
+  {
+    "key": "CULTURE",
+    "screen": "/culture",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khám phá văn hóa Việt Nam",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/culture",
+    "width": 1280
+  },
+  {
+    "key": "CULTURE_DETAIL",
+    "screen": "/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/culture/van-hoa-ca-phe-viet-nam",
+    "width": 1280
+  },
+  {
+    "key": "AI_SCENARIOS",
+    "screen": "/ai-scenarios",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Kịch bản nhập vai thực tế",
+    "images": [
+      {
+        "alt": "Gọi món tại quán Phở gia truyền Hà Nội",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Trả giá quà lưu niệm tại Chợ Bến Thành",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Gặp gỡ và chào hỏi gia đình bạn người Việt",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Phỏng vấn xin việc tại doanh nghiệp Việt Nam",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/ai-scenarios",
+    "width": 1280
+  },
+  {
+    "key": "AI_SCENARIO_DETAIL",
+    "screen": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Gọi món tại quán Phở gia truyền Hà Nội",
+    "images": [
+      {
+        "alt": "Gọi món tại quán Phở gia truyền Hà Nội",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "width": 1280
+  },
+  {
+    "key": "ADMIN_COURSE_PREVIEW",
+    "screen": "/admin/courses/1/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ẩm thực Việt Nam",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/admin/courses/1/preview",
+    "width": 1280
+  },
+  {
+    "key": "ADMIN_LESSON_PREVIEW",
+    "screen": "/admin/lessons/101/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Gọi một bát phở",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/admin/lessons/101/preview",
+    "width": 1280
+  },
+  {
+    "key": "ADMIN_QUIZ_PREVIEW",
+    "screen": "/admin/quizzes/1/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/admin/quizzes/1/preview",
+    "width": 1280
+  },
+  {
+    "key": "ADMIN_CULTURE",
+    "screen": "/admin/culture",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quản lý bài viết văn hóa",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật bài trí và triết lý ẩm thực cung đình Huế",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/admin/culture",
+    "width": 1280
+  },
+  {
+    "key": "ADMIN_CULTURE_EDIT",
+    "screen": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Biên tập: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 1280,
+    "url": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "width": 1280
+  },
+  {
+    "key": "HOME",
+    "screen": "/",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Xin chào, Alex Nguyen!",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/",
+    "width": 768
+  },
+  {
+    "key": "MY_LEARNING",
+    "screen": "/my-learning",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Góc học tập của tôi",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/village.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/my-learning",
+    "width": 768
+  },
+  {
+    "key": "PROFILE",
+    "screen": "/profile",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Hồ sơ người học",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/profile",
+    "width": 768
+  },
+  {
+    "key": "COURSES",
+    "screen": "/courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Học tiếng Việt",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Chuyện ở làng quê",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/courses",
+    "width": 768
+  },
+  {
+    "key": "COURSE_DETAIL",
+    "screen": "/courses/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ẩm thực Việt Nam",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/courses/1",
+    "width": 768
+  },
+  {
+    "key": "MY_COURSES",
+    "screen": "/my-courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khóa học của tôi",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/my-courses",
+    "width": 768
+  },
+  {
+    "key": "LEARN_LESSON",
+    "screen": "/learn/1/lesson/101",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Các bài học của bạn",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/learn/1/lesson/101",
+    "width": 768
+  },
+  {
+    "key": "BLOG",
+    "screen": "/blog",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Câu chuyện đáng mang theo.",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/blog",
+    "width": 768
+  },
+  {
+    "key": "BLOG_DETAIL",
+    "screen": "/blog/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/blog/van-hoa-ca-phe-viet-nam",
+    "width": 768
+  },
+  {
+    "key": "QUIZ_ATTEMPT",
+    "screen": "/quiz-attempts/501",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/quiz-attempts/501",
+    "width": 768
+  },
+  {
+    "key": "CULTURE",
+    "screen": "/culture",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khám phá văn hóa Việt Nam",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/culture",
+    "width": 768
+  },
+  {
+    "key": "CULTURE_DETAIL",
+    "screen": "/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/culture/van-hoa-ca-phe-viet-nam",
+    "width": 768
+  },
+  {
+    "key": "AI_SCENARIOS",
+    "screen": "/ai-scenarios",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Kịch bản nhập vai thực tế",
+    "images": [
+      {
+        "alt": "Gọi món tại quán Phở gia truyền Hà Nội",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Trả giá quà lưu niệm tại Chợ Bến Thành",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Gặp gỡ và chào hỏi gia đình bạn người Việt",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Phỏng vấn xin việc tại doanh nghiệp Việt Nam",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/ai-scenarios",
+    "width": 768
+  },
+  {
+    "key": "AI_SCENARIO_DETAIL",
+    "screen": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Gọi món tại quán Phở gia truyền Hà Nội",
+    "images": [
+      {
+        "alt": "Gọi món tại quán Phở gia truyền Hà Nội",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "width": 768
+  },
+  {
+    "key": "ADMIN_COURSE_PREVIEW",
+    "screen": "/admin/courses/1/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ẩm thực Việt Nam",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/admin/courses/1/preview",
+    "width": 768
+  },
+  {
+    "key": "ADMIN_LESSON_PREVIEW",
+    "screen": "/admin/lessons/101/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Gọi một bát phở",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/admin/lessons/101/preview",
+    "width": 768
+  },
+  {
+    "key": "ADMIN_QUIZ_PREVIEW",
+    "screen": "/admin/quizzes/1/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/admin/quizzes/1/preview",
+    "width": 768
+  },
+  {
+    "key": "ADMIN_CULTURE",
+    "screen": "/admin/culture",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quản lý bài viết văn hóa",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nghệ thuật bài trí và triết lý ẩm thực cung đình Huế",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 753,
+    "url": "/admin/culture",
+    "width": 768,
+    "lazyScrollVerified": true
+  },
+  {
+    "key": "ADMIN_CULTURE_EDIT",
+    "screen": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Biên tập: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 768,
+    "url": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "width": 768
+  },
+  {
+    "key": "HOME",
+    "screen": "/",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Xin chào, Alex Nguyen!",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/coast.svg",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/",
+    "width": 375
+  },
+  {
+    "key": "MY_LEARNING",
+    "screen": "/my-learning",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Góc học tập của tôi",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/village.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/my-learning",
+    "width": 375
+  },
+  {
+    "key": "PROFILE",
+    "screen": "/profile",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Hồ sơ người học",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/profile",
+    "width": 375
+  },
+  {
+    "key": "COURSES",
+    "screen": "/courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Học tiếng Việt",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": false
+      },
+      {
+        "alt": "Minh họa khóa học: Chuyện ở làng quê",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/courses",
+    "width": 375
+  },
+  {
+    "key": "COURSE_DETAIL",
+    "screen": "/courses/1",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ẩm thực Việt Nam",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/courses/1",
+    "width": 375
+  },
+  {
+    "key": "MY_COURSES",
+    "screen": "/my-courses",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khóa học của tôi",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      },
+      {
+        "alt": "Minh họa khóa học: Một ngày ở Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/my-courses",
+    "width": 375
+  },
+  {
+    "key": "LEARN_LESSON",
+    "screen": "/learn/1/lesson/101",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Các bài học của bạn",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/learn/1/lesson/101",
+    "width": 375
+  },
+  {
+    "key": "BLOG",
+    "screen": "/blog",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Câu chuyện đáng mang theo.",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 360,
+    "url": "/blog",
+    "width": 375,
+    "lazyScrollVerified": true
+  },
+  {
+    "key": "BLOG_DETAIL",
+    "screen": "/blog/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/blog/van-hoa-ca-phe-viet-nam",
+    "width": 375
+  },
+  {
+    "key": "QUIZ_ATTEMPT",
+    "screen": "/quiz-attempts/501",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/quiz-attempts/501",
+    "width": 375
+  },
+  {
+    "key": "CULTURE",
+    "screen": "/culture",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Khám phá văn hóa Việt Nam",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Khám phá nét duyên phố cổ Hội An: Đèn lồng, ẩm thực và nếp sống mộc mạc",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Nét đặc trưng văn hóa chợ nổi miền Tây sông nước Cái Răng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 360,
+    "url": "/culture",
+    "width": 375,
+    "lazyScrollVerified": true
+  },
+  {
+    "key": "CULTURE_DETAIL",
+    "screen": "/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/culture/van-hoa-ca-phe-viet-nam",
+    "width": 375
+  },
+  {
+    "key": "AI_SCENARIOS",
+    "screen": "/ai-scenarios",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Kịch bản nhập vai thực tế",
+    "images": [
+      {
+        "alt": "Gọi món tại quán Phở gia truyền Hà Nội",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Trả giá quà lưu niệm tại Chợ Bến Thành",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Gặp gỡ và chào hỏi gia đình bạn người Việt",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Phỏng vấn xin việc tại doanh nghiệp Việt Nam",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 360,
+    "url": "/ai-scenarios",
+    "width": 375,
+    "lazyScrollVerified": true
+  },
+  {
+    "key": "AI_SCENARIO_DETAIL",
+    "screen": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Gọi món tại quán Phở gia truyền Hà Nội",
+    "images": [
+      {
+        "alt": "Gọi món tại quán Phở gia truyền Hà Nội",
+        "complete": true,
+        "naturalWidth": 1200,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "width": 375
+  },
+  {
+    "key": "ADMIN_COURSE_PREVIEW",
+    "screen": "/admin/courses/1/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Ẩm thực Việt Nam",
+    "images": [
+      {
+        "alt": "Minh họa khóa học: Ẩm thực Việt Nam",
+        "complete": true,
+        "naturalWidth": 300,
+        "src": "http://localhost:5174/design/food.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/admin/courses/1/preview",
+    "width": 375
+  },
+  {
+    "key": "ADMIN_LESSON_PREVIEW",
+    "screen": "/admin/lessons/101/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Gọi một bát phở",
+    "images": [
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 256,
+        "src": "http://localhost:5174/design/food-hero.svg",
+        "visible": true
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/admin/lessons/101/preview",
+    "width": 375
+  },
+  {
+    "key": "ADMIN_QUIZ_PREVIEW",
+    "screen": "/admin/quizzes/1/preview",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Một bữa sáng ở Hà Nội",
+    "images": [],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/admin/quizzes/1/preview",
+    "width": 375
+  },
+  {
+    "key": "ADMIN_CULTURE",
+    "screen": "/admin/culture",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Quản lý bài viết văn hóa",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "visible": true
+      },
+      {
+        "alt": "Bí quyết thưởng thức Phở chuẩn vị Hà Nội và văn hóa ẩm thực Tràng An",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nghệ thuật xưng hô trong gia đình và xã hội Việt Nam: Tinh tế và tôn ti",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Phong tục đón Tết Nguyên Đán: Những điều nên làm và kiêng kỵ để đón lộc",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      },
+      {
+        "alt": "Nghệ thuật bài trí và triết lý ẩm thực cung đình Huế",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 375,
+    "url": "/admin/culture",
+    "width": 375
+  },
+  {
+    "key": "ADMIN_CULTURE_EDIT",
+    "screen": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "alerts": [],
+    "fallbacks": [],
+    "heading": "Biên tập: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+    "images": [
+      {
+        "alt": "Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng",
+        "complete": true,
+        "naturalWidth": 800,
+        "src": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "visible": false
+      }
+    ],
+    "invalidAttributes": [],
+    "scrollWidth": 360,
+    "url": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "width": 375,
+    "lazyScrollVerified": true
+  }
+]

@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
@@ -42,7 +43,7 @@ export function NotificationDropdown() {
         style={{
           background: 'none',
           border: 'none',
-          color: '#fff',
+          color: 'var(--color-surface)',
           cursor: 'pointer',
           position: 'relative',
           padding: '6px',
@@ -59,8 +60,8 @@ export function NotificationDropdown() {
             position: 'absolute',
             top: '2px',
             right: '2px',
-            background: '#ef4444',
-            color: '#fff',
+            background: 'var(--color-red)',
+            color: 'var(--color-surface)',
             fontSize: '0.65rem',
             fontWeight: 'bold',
             borderRadius: '999px',
@@ -82,12 +83,12 @@ export function NotificationDropdown() {
           right: 0,
           top: '110%',
           width: '320px',
-          backgroundColor: '#fff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '12px',
           boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
           border: '1px solid #e5e7eb',
           zIndex: 1000,
-          color: '#1f2937',
+          color: 'var(--color-ink)',
           overflow: 'hidden',
         }}>
           <div style={{
@@ -96,9 +97,9 @@ export function NotificationDropdown() {
             alignItems: 'center',
             padding: '12px 16px',
             borderBottom: '1px solid #f3f4f6',
-            backgroundColor: '#fafafa',
+            backgroundColor: 'var(--color-surface)',
           }}>
-            <strong style={{ fontSize: '0.9rem' }}>Thông báo ({unreadCount})</strong>
+            <strong style={{ fontSize: '0.9rem' }}><BilingualText>{"Thông báo ("}</BilingualText>{unreadCount})</strong>
             {unreadCount > 0 && (
               <button
                 type="button"
@@ -106,23 +107,19 @@ export function NotificationDropdown() {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#8B1A1A',
+                  color: 'var(--color-red-hover)',
                   fontSize: '0.75rem',
                   cursor: 'pointer',
                   fontWeight: '600',
                 }}
-              >
-                Đọc tất cả
-              </button>
+              ><BilingualText>{"Đọc tất cả"}</BilingualText></button>
             )}
           </div>
 
           <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-            {error && <p role="alert" style={{ padding: 16, color: '#b91c1c' }}>{error}</p>}
+            {error && <p role="alert" style={{ padding: 16, color: 'var(--color-red)' }}><BilingualText>{error}</BilingualText></p>}
             {notifications.length === 0 ? (
-              <p style={{ textAlign: 'center', color: '#9ca3af', padding: '20px', fontSize: '0.85rem' }}>
-                Không có thông báo nào.
-              </p>
+              <p style={{ textAlign: 'center', color: 'var(--color-muted)', padding: '20px', fontSize: '0.85rem' }}><BilingualText>{"Không có thông báo nào."}</BilingualText></p>
             ) : (
               notifications.map((n) => (
                 <div
@@ -131,42 +128,38 @@ export function NotificationDropdown() {
                   style={{
                     padding: '12px 16px',
                     borderBottom: '1px solid #f3f4f6',
-                    backgroundColor: n.read ? '#fff' : '#fef9f9',
+                    backgroundColor: n.read ? 'var(--color-surface)' : 'var(--color-surface)',
                     cursor: 'pointer',
                     transition: 'background-color 0.15s',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: n.read ? '500' : '700', color: '#111827' }}>
-                      {n.title}
+                    <span style={{ fontSize: '0.85rem', fontWeight: n.read ? '500' : '700', color: 'var(--color-ink)' }}>
+                      <BilingualText vi={n.titleVi || n.title} en={n.title} />
                     </span>
-                    <span style={{ fontSize: '0.7rem', color: '#9ca3af' }}>{n.time}</span>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--color-muted)' }}>{n.time}</span>
                   </div>
-                  <p style={{ fontSize: '0.78rem', color: '#6b7280', margin: '4px 0 0 0', lineHeight: 1.4 }}>
-                    {n.message}
+                  <p style={{ fontSize: '0.78rem', color: 'var(--color-muted)', margin: '4px 0 0 0', lineHeight: 1.4 }}>
+                    <BilingualText>{n.message}</BilingualText>
                   </p>
                   {n.link && (
                     <Link
                       to={n.link}
                       onClick={() => setOpen(false)}
-                      style={{ fontSize: '0.75rem', color: '#8B1A1A', fontWeight: '600', textDecoration: 'none', display: 'inline-block', marginTop: '4px' }}
-                    >
-                      Xem chi tiết →
-                    </Link>
+                      style={{ fontSize: '0.75rem', color: 'var(--color-red-hover)', fontWeight: '600', textDecoration: 'none', display: 'inline-block', marginTop: '4px' }}
+                    ><BilingualText>{"Xem chi tiết →"}</BilingualText></Link>
                   )}
                 </div>
               ))
             )}
           </div>
 
-          <div style={{ padding: '8px 16px', textAlign: 'center', backgroundColor: '#f9fafb', borderTop: '1px solid #f3f4f6' }}>
+          <div style={{ padding: '8px 16px', textAlign: 'center', backgroundColor: 'var(--color-surface)', borderTop: '1px solid #f3f4f6' }}>
             <Link
               to="/notifications"
               onClick={() => setOpen(false)}
-              style={{ fontSize: '0.8rem', color: '#8B1A1A', textDecoration: 'none', fontWeight: '600' }}
-            >
-              Xem toàn bộ thông báo
-            </Link>
+              style={{ fontSize: '0.8rem', color: 'var(--color-red-hover)', textDecoration: 'none', fontWeight: '600' }}
+            ><BilingualText>{"Xem toàn bộ thông báo"}</BilingualText></Link>
           </div>
         </div>
       )}

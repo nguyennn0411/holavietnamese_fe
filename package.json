@@ -6,20 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test qa/*.test.mjs",
+    "dev:qa": "vite --config qa/vite.config.js"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.20.0",
-    "lucide-react": "^1.49.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "react-router-dom": "^7.18.4",
-    "tailwindcss": "^4.3.3"
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.1",
-    "prettier": "^3.9.9",
     "vite": "^8.3.1"
   }
 }

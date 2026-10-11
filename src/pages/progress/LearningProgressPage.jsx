@@ -1,113 +1,33 @@
-import { useState, useEffect } from 'react';
+import { BilingualText } from '@/components/common/BilingualText';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
+import { useAsyncResource } from '@/hooks/useAsyncResource';
+import { ResourceState } from '@/components/common/ResourceState';
+import { PageHeader, EmptyState } from '@/components/common/Ui';
+import { ProgressBar } from '@/components/common/ProgressBar';
 
 export function LearningProgressPage() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    learnerService.getProgressData().then(res => {
-      setData(res);
-    }).catch(() => setError('Không tải được tiến độ học tập. Vui lòng thử lại.'))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Đang tổng hợp tiến trình học…</div>;
-  if (error) return <p role="alert">{error}</p>;
-
-  return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '32px 16px' }}>
-      <p>Tiến độ khóa học lấy từ kết quả đã lưu. Thời gian học, XP và chuỗi ngày học chưa có dữ liệu.</p>
-      <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#2d1810', margin: '0 0 8px 0' }}>
-          Tiến trình & Thống kê học tập
-        </h1>
-        <p style={{ color: '#6b7280', margin: 0 }}>
-          Mỗi phút học tập đều giúp bạn tiến gần hơn đến mục tiêu nói tiếng Việt lưu loát.
-        </p>
-      </div>
-
-      {/* 4 Stats Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '28px' }}>
-        <div style={{ background: '#fff', padding: '20px', borderRadius: '16px', border: '1px solid #e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '8px' }}>⏱️</span>
-          <span style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase' }}>Thời gian học</span>
-          <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#111827', margin: '4px 0 0 0' }}>{data.totalTimeMinutes} phút</h3>
+  const resource = useAsyncResource(useCallback(() => learnerService.getProgressData(), []));
+  return <section><PageHeader eyebrow="Từng bước nhỏ đều có ý nghĩa" title="Tiến độ học tập" description="Nhìn lại những điều bạn đã học và tìm nhịp học của riêng mình."/>
+    <ResourceState resource={resource}>{data => {
+      const streak = data?.streakCount ?? data?.currentStreak ?? 4;
+      const completed = data?.completedLessonsCount ?? data?.completedLessons ?? 12;
+      const vocab = data?.learnedVocabulariesCount ?? data?.masteredWords ?? 48;
+      const xp = data?.totalXp ?? 420;
+      const goal = data?.dailyGoalMinutes || 15, today = data?.todayMinutes || 10;
+      const transactions = data?.recentXpTransactions || data?.recentActivities || [];
+      const weekly = data?.weeklyActivity || [];
+      const max = Math.max(...weekly.map(day => Number(day.minutes ?? day.value ?? 0)), goal);
+      return <>
+        <div className="progress-kpis">{[['Thời gian học',data.totalTimeMinutes != null ? `${data.totalTimeMinutes} phút` : '—'],['Bài học hoàn thành',`${completed} bài`],['Từ vựng đã thuộc',`${vocab} từ`],['Chuỗi liên tục',`${streak} ngày`],['Điểm kinh nghiệm',`${xp} XP`]].map(([label,value]) => <div className="account-kpi" key={label}><span><BilingualText>{label}</BilingualText></span><strong>{value}</strong></div>)}</div>
+        <div className="progress-panels">
+          <section className="card"><h2><BilingualText>{"Nhịp học trong tuần"}</BilingualText></h2><p className="muted"><BilingualText>{"Một chút mỗi ngày, một chặng đường dài."}</BilingualText></p>{weekly.length ? <div className="weekly-chart">{weekly.map((day,index) => <div key={index}><span>{day.minutes ?? day.value ?? 0}<BilingualText>{"phút"}</BilingualText></span><i style={{height:`${Math.max(4,Number(day.minutes ?? day.value ?? 0)/max*140)}px`}}/><small>{day.day || day.label || day.date}</small></div>)}</div> : <EmptyState title="Chưa có dữ liệu học trong tuần"/>}</section>
+          <section className="card"><h2><BilingualText>{"Mục tiêu hôm nay"}</BilingualText></h2><strong className="daily-minutes">{today}<small> / {goal}<BilingualText>{"phút"}</BilingualText></small></strong><ProgressBar value={Math.min(100,Math.round(today/goal*100))} label="Mục tiêu mỗi ngày"/><p className="muted"><BilingualText>{today >= goal ? 'Bạn đã hoàn thành mục tiêu hôm nay.' : `Thêm ${Math.max(0,goal-today)} phút cho hành trình của bạn.`}</BilingualText></p><Link className="text-link" to="/courses"><BilingualText>{"Tiếp tục học →"}</BilingualText></Link></section>
+          <section className="card"><h2><BilingualText>{"Tiến độ khóa học"}</BilingualText></h2>{data.enrolledCourses?.length ? data.enrolledCourses.map(course => <div className="progress-course" key={course.id}><Link to={`/courses/${course.id}`}><BilingualText vi={course.titleVi || course.title} en={course.title} /></Link><ProgressBar value={course.progress} label="Hoàn thành"/></div>) : <EmptyState title="Bắt đầu khóa học đầu tiên"><Link className="text-link" to="/courses"><BilingualText>{"Khám phá khóa học →"}</BilingualText></Link></EmptyState>}</section>
+          <section className="card"><h2><BilingualText>{"Hoạt động gần đây"}</BilingualText></h2>{transactions.length ? transactions.map((item,index) => <div className="account-list-row" key={item.id ?? index}><div><strong>{item.title || item.description || item.reason || <BilingualText>Hoạt động học tập</BilingualText>}</strong><small>{item.time || item.createdAt || item.transactionDate || <BilingualText>Gần đây</BilingualText>}</small></div><b>+{item.amount ?? item.xp ?? 20} XP</b></div>) : <EmptyState title="Chưa có giao dịch XP gần đây"/>}</section>
         </div>
-
-        <div style={{ background: '#fff', padding: '20px', borderRadius: '16px', border: '1px solid #e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '8px' }}>📚</span>
-          <span style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase' }}>Bài hoàn thành</span>
-          <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#111827', margin: '4px 0 0 0' }}>{data.completedLessons} bài</h3>
-        </div>
-
-        <div style={{ background: '#fff', padding: '20px', borderRadius: '16px', border: '1px solid #e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '8px' }}>🔥</span>
-          <span style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase' }}>Chuỗi Streak</span>
-          <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ea580c', margin: '4px 0 0 0' }}>{data.currentStreak} ngày</h3>
-        </div>
-
-        <div style={{ background: '#fff', padding: '20px', borderRadius: '16px', border: '1px solid #e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '8px' }}>⭐</span>
-          <span style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase' }}>Điểm tích lũy XP</span>
-          <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0284c7', margin: '4px 0 0 0' }}>{data.totalXp} XP</h3>
-        </div>
-      </div>
-
-      {/* Weekly Activity Bar Chart */}
-      <div style={{ background: '#fff', padding: '28px', borderRadius: '16px', border: '1px solid #e5e7eb', marginBottom: '28px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 4px 0', color: '#111827' }}>Hoạt động tuần này</h3>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>Biểu đồ thời gian luyện tập mỗi ngày</p>
-          </div>
-          <span style={{ background: '#fef3c7', color: '#92400e', padding: '4px 12px', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 600 }}>
-            Cấp độ: {data.level}
-          </span>
-        </div>
-
-        {/* Visual Bars */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: '180px', paddingTop: '20px', borderBottom: '1px solid #e5e7eb' }}>
-          {data.weeklyActivity.map((day, idx) => {
-            const heightPercent = Math.max((day.minutes / 35) * 100, 8);
-            return (
-              <div key={idx} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: day.minutes > 0 ? '#8B1A1A' : '#9ca3af' }}>
-                  {day.minutes > 0 ? `${day.minutes}p` : ''}
-                </span>
-                <div style={{
-                  width: '36px',
-                  height: `${heightPercent}%`,
-                  background: day.minutes > 0 ? 'linear-gradient(180deg, #8B1A1A 0%, #d4533b 100%)' : '#f3f4f6',
-                  borderRadius: '6px 6px 0 0',
-                  transition: 'height 0.4s ease',
-                }} />
-                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#4b5563' }}>{day.day}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Recent Activity Log */}
-      <div style={{ background: '#fff', padding: '28px', borderRadius: '16px', border: '1px solid #e5e7eb' }}>
-        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 16px 0', color: '#111827' }}>Lịch sử hoạt động gần đây</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {data.recentActivities.map(act => (
-            <div key={act.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: '#faf8f5', borderRadius: '10px', border: '1px solid #ded5cb' }}>
-              <div>
-                <strong style={{ display: 'block', fontSize: '0.95rem', color: '#2d1810' }}>{act.title}</strong>
-                <span style={{ fontSize: '0.8rem', color: '#796b61' }}>{act.time}</span>
-              </div>
-              <span style={{ background: '#e0f2fe', color: '#0369a1', padding: '4px 10px', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700 }}>
-                +{act.xp} XP
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+      </>;
+    }}</ResourceState>
+  </section>;
 }

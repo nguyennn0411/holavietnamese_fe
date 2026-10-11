@@ -1,0 +1,770 @@
+[
+  {
+    "key": "HOME",
+    "title": "Trang chủ khách / dashboard học viên",
+    "inferred": false,
+    "isNew": false,
+    "route": "/",
+    "screen": "/",
+    "references": [
+      "02_Home_Dashboard.png"
+    ]
+  },
+  {
+    "key": "LOGIN",
+    "title": "Đăng nhập",
+    "inferred": false,
+    "isNew": false,
+    "route": "/login",
+    "screen": "/login",
+    "references": [
+      "01_Login.png"
+    ]
+  },
+  {
+    "key": "REGISTER",
+    "title": "Đăng ký",
+    "inferred": true,
+    "isNew": false,
+    "route": "/register",
+    "screen": "/register",
+    "references": [
+      "01_Login.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "VERIFY_EMAIL",
+    "title": "Xác minh email",
+    "inferred": true,
+    "isNew": false,
+    "route": "/verify-email",
+    "screen": "/verify-email",
+    "references": [
+      "01_Login.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "FORGOT_PASSWORD",
+    "title": "Quên mật khẩu",
+    "inferred": true,
+    "isNew": false,
+    "route": "/forgot-password",
+    "screen": "/forgot-password",
+    "references": [
+      "01_Login.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "RESET_PASSWORD",
+    "title": "Đặt lại mật khẩu",
+    "inferred": true,
+    "isNew": false,
+    "route": "/reset-password",
+    "screen": "/reset-password",
+    "references": [
+      "01_Login.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ONBOARDING",
+    "title": "Thiết lập mục tiêu ban đầu",
+    "inferred": true,
+    "isNew": false,
+    "route": "/onboarding",
+    "screen": "/onboarding",
+    "references": [
+      "01_Login.png",
+      "13_Profile.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "MY_LEARNING",
+    "title": "Góc học tập",
+    "inferred": false,
+    "isNew": false,
+    "route": "/my-learning",
+    "screen": "/my-learning",
+    "references": [
+      "12_My_Learning.png"
+    ]
+  },
+  {
+    "key": "PROFILE",
+    "title": "Hồ sơ",
+    "inferred": false,
+    "isNew": false,
+    "route": "/profile",
+    "screen": "/profile",
+    "references": [
+      "13_Profile.png"
+    ]
+  },
+  {
+    "key": "SETTINGS",
+    "title": "Cài đặt học tập",
+    "inferred": true,
+    "isNew": false,
+    "route": "/settings",
+    "screen": "/settings",
+    "references": [
+      "13_Profile.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "PROGRESS",
+    "title": "Tiến độ",
+    "inferred": false,
+    "isNew": false,
+    "route": "/progress",
+    "screen": "/progress",
+    "references": [
+      "15_Progress.png"
+    ]
+  },
+  {
+    "key": "ACHIEVEMENTS",
+    "title": "Thành tích / hộ chiếu",
+    "inferred": false,
+    "isNew": false,
+    "route": "/achievements",
+    "screen": "/achievements",
+    "references": [
+      "14_Achievements.png"
+    ]
+  },
+  {
+    "key": "NOTIFICATIONS",
+    "title": "Trung tâm thông báo",
+    "inferred": true,
+    "isNew": false,
+    "route": "/notifications",
+    "screen": "/notifications",
+    "references": [
+      "12_My_Learning.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "COURSES",
+    "title": "Danh sách khóa học",
+    "inferred": false,
+    "isNew": false,
+    "route": "/courses",
+    "screen": "/courses",
+    "references": [
+      "03_Learn.png"
+    ]
+  },
+  {
+    "key": "COURSE_DETAIL",
+    "title": "Chi tiết khóa học",
+    "inferred": false,
+    "isNew": false,
+    "route": "/courses/:courseId",
+    "screen": "/courses/1",
+    "references": [
+      "04_Course_Detail.png"
+    ]
+  },
+  {
+    "key": "MY_COURSES",
+    "title": "Khóa học của tôi",
+    "inferred": true,
+    "isNew": false,
+    "route": "/my-courses",
+    "screen": "/my-courses",
+    "references": [
+      "03_Learn.png",
+      "12_My_Learning.png"
+    ]
+  },
+  {
+    "key": "LEARN_RESUME",
+    "title": "Tiếp tục khóa học (chuyển hướng bài học)",
+    "inferred": true,
+    "isNew": false,
+    "route": "/learn/:courseId",
+    "screen": "/learn/1",
+    "references": [
+      "04_Course_Detail.png",
+      "16_Lesson_Intro.png"
+    ]
+  },
+  {
+    "key": "LEARN_LESSON",
+    "title": "Học bài: intro / từ vựng / nghe / hội thoại / luyện tập / quiz gate",
+    "inferred": false,
+    "isNew": false,
+    "route": "/learn/:courseId/lesson/:lessonId",
+    "screen": "/learn/1/lesson/101",
+    "references": [
+      "16_Lesson_Intro.png",
+      "17_Lesson_Vocabulary.png",
+      "18_Lesson_Listen.png",
+      "19_Lesson_Dialogue.png",
+      "20_Lesson_Practice.png",
+      "21_Lesson_Quiz_Gate.png"
+    ]
+  },
+  {
+    "key": "VOCABULARY",
+    "title": "Sổ từ vựng",
+    "inferred": false,
+    "isNew": false,
+    "route": "/vocabulary",
+    "screen": "/vocabulary",
+    "references": [
+      "07_Vocabulary.png"
+    ]
+  },
+  {
+    "key": "VOCABULARY_NOTEBOOK_DETAIL",
+    "title": "Chi tiết từ trong sổ",
+    "inferred": true,
+    "isNew": false,
+    "route": "/vocabulary/notebook/:id",
+    "screen": "/vocabulary/notebook/1",
+    "references": [
+      "07_Vocabulary.png",
+      "17_Lesson_Vocabulary.png"
+    ]
+  },
+  {
+    "key": "VOCABULARY_REVIEW",
+    "title": "Ôn tập flashcard",
+    "inferred": false,
+    "isNew": true,
+    "route": "/vocabulary/review",
+    "screen": "/vocabulary/review",
+    "references": [
+      "08_Vocabulary_Review.png"
+    ]
+  },
+  {
+    "key": "EXPLORE",
+    "title": "Hành trình Việt Nam",
+    "inferred": false,
+    "isNew": true,
+    "route": "/explore",
+    "screen": "/explore",
+    "references": [
+      "05_Explore_Vietnam.png"
+    ]
+  },
+  {
+    "key": "DESTINATION_DETAIL",
+    "title": "Chi tiết điểm đến, 4 tabs",
+    "inferred": false,
+    "isNew": true,
+    "route": "/explore/:id",
+    "screen": "/explore/danang",
+    "references": [
+      "06_Destination_Detail.png"
+    ]
+  },
+  {
+    "key": "BLOG",
+    "title": "Danh sách blog",
+    "inferred": false,
+    "isNew": true,
+    "route": "/blog",
+    "screen": "/blog",
+    "references": [
+      "24_Blog_Home.png"
+    ]
+  },
+  {
+    "key": "BLOG_DETAIL",
+    "title": "Chi tiết blog",
+    "inferred": false,
+    "isNew": true,
+    "route": "/blog/:id",
+    "screen": "/blog/van-hoa-ca-phe-viet-nam",
+    "references": [
+      "25_Blog_Detail.png"
+    ]
+  },
+  {
+    "key": "QUIZ",
+    "title": "Giới thiệu / bắt đầu quiz",
+    "inferred": true,
+    "isNew": true,
+    "route": "/quizzes/:quizId",
+    "screen": "/quizzes/1",
+    "references": [
+      "21_Lesson_Quiz_Gate.png",
+      "22_Quiz.png"
+    ]
+  },
+  {
+    "key": "QUIZ_ATTEMPT",
+    "title": "Làm quiz",
+    "inferred": false,
+    "isNew": true,
+    "route": "/quiz-attempts/:attemptId",
+    "screen": "/quiz-attempts/501",
+    "references": [
+      "22_Quiz.png"
+    ]
+  },
+  {
+    "key": "QUIZ_RESULT",
+    "title": "Kết quả quiz",
+    "inferred": false,
+    "isNew": true,
+    "route": "/quiz-attempts/:attemptId/result",
+    "screen": "/quiz-attempts/501/result",
+    "references": [
+      "23_Quiz_Result.png"
+    ]
+  },
+  {
+    "key": "CULTURE",
+    "title": "Thư viện văn hóa",
+    "inferred": false,
+    "isNew": false,
+    "route": "/culture",
+    "screen": "/culture",
+    "references": [
+      "09_Culture.png"
+    ]
+  },
+  {
+    "key": "CULTURE_DETAIL",
+    "title": "Chi tiết văn hóa",
+    "inferred": false,
+    "isNew": false,
+    "route": "/culture/:id",
+    "screen": "/culture/van-hoa-ca-phe-viet-nam",
+    "references": [
+      "10_Culture_Detail.png"
+    ]
+  },
+  {
+    "key": "AI_TUTOR",
+    "title": "AI Tutor: 7 chế độ + lịch sử",
+    "inferred": false,
+    "isNew": false,
+    "route": "/ai-tutor",
+    "screen": "/ai-tutor",
+    "references": [
+      "11_AI_Tutor.png"
+    ]
+  },
+  {
+    "key": "AI_SCENARIOS",
+    "title": "Kịch bản nhập vai",
+    "inferred": true,
+    "isNew": false,
+    "route": "/ai-scenarios",
+    "screen": "/ai-scenarios",
+    "references": [
+      "03_Learn.png",
+      "11_AI_Tutor.png"
+    ]
+  },
+  {
+    "key": "AI_SCENARIO_DETAIL",
+    "title": "Chi tiết kịch bản",
+    "inferred": true,
+    "isNew": false,
+    "route": "/ai-scenarios/:id",
+    "screen": "/ai-scenarios/goi-mon-pho-ha-noi",
+    "references": [
+      "04_Course_Detail.png",
+      "10_Culture_Detail.png",
+      "11_AI_Tutor.png"
+    ]
+  },
+  {
+    "key": "AI_ROLEPLAY",
+    "title": "Hội thoại nhập vai",
+    "inferred": true,
+    "isNew": false,
+    "route": "/ai-roleplay/:id",
+    "screen": "/ai-roleplay/goi-mon-pho-ha-noi",
+    "references": [
+      "11_AI_Tutor.png",
+      "19_Lesson_Dialogue.png"
+    ]
+  },
+  {
+    "key": "AI_SESSION_RESULT",
+    "title": "Đánh giá phiên nhập vai",
+    "inferred": true,
+    "isNew": false,
+    "route": "/ai-sessions/:id/result",
+    "screen": "/ai-sessions/goi-mon-pho-ha-noi/result",
+    "references": [
+      "23_Quiz_Result.png",
+      "15_Progress.png"
+    ]
+  },
+  {
+    "key": "ADMIN",
+    "title": "Dashboard quản trị",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin",
+    "screen": "/admin",
+    "references": [
+      "26_Admin_Course_Builder.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ADMIN_COURSES",
+    "title": "Danh sách khóa học quản trị",
+    "inferred": true,
+    "isNew": true,
+    "route": "/admin/courses",
+    "screen": "/admin/courses",
+    "references": [
+      "26_Admin_Course_Builder.png",
+      "28_Admin_Question_Bank.png"
+    ]
+  },
+  {
+    "key": "ADMIN_COURSE_BUILDER",
+    "title": "Course builder",
+    "inferred": false,
+    "isNew": true,
+    "route": "/admin/courses/:courseId",
+    "screen": "/admin/courses/1",
+    "references": [
+      "26_Admin_Course_Builder.png"
+    ]
+  },
+  {
+    "key": "ADMIN_COURSE_PREVIEW",
+    "title": "Xem trước khóa học",
+    "inferred": true,
+    "isNew": true,
+    "route": "/admin/courses/:courseId/preview",
+    "screen": "/admin/courses/1/preview",
+    "references": [
+      "26_Admin_Course_Builder.png",
+      "04_Course_Detail.png"
+    ]
+  },
+  {
+    "key": "ADMIN_LESSONS",
+    "title": "Danh sách bài học quản trị",
+    "inferred": true,
+    "isNew": true,
+    "route": "/admin/lessons",
+    "screen": "/admin/lessons",
+    "references": [
+      "27_Admin_Lesson_Builder.png",
+      "28_Admin_Question_Bank.png"
+    ]
+  },
+  {
+    "key": "ADMIN_LESSON_BUILDER",
+    "title": "Lesson builder / activity editor",
+    "inferred": false,
+    "isNew": true,
+    "route": "/admin/lessons/:lessonId",
+    "screen": "/admin/lessons/101",
+    "references": [
+      "27_Admin_Lesson_Builder.png"
+    ]
+  },
+  {
+    "key": "ADMIN_LESSON_PREVIEW",
+    "title": "Xem trước bài học",
+    "inferred": true,
+    "isNew": true,
+    "route": "/admin/lessons/:lessonId/preview",
+    "screen": "/admin/lessons/101/preview",
+    "references": [
+      "27_Admin_Lesson_Builder.png",
+      "16_Lesson_Intro.png",
+      "17_Lesson_Vocabulary.png",
+      "18_Lesson_Listen.png",
+      "19_Lesson_Dialogue.png",
+      "20_Lesson_Practice.png",
+      "21_Lesson_Quiz_Gate.png"
+    ]
+  },
+  {
+    "key": "ADMIN_QUESTIONS",
+    "title": "Ngân hàng câu hỏi / phiên bản",
+    "inferred": false,
+    "isNew": true,
+    "route": "/admin/questions",
+    "screen": "/admin/questions",
+    "references": [
+      "28_Admin_Question_Bank.png"
+    ]
+  },
+  {
+    "key": "ADMIN_QUIZZES",
+    "title": "Danh sách quiz quản trị",
+    "inferred": true,
+    "isNew": true,
+    "route": "/admin/quizzes",
+    "screen": "/admin/quizzes",
+    "references": [
+      "29_Admin_Quiz_Builder.png",
+      "28_Admin_Question_Bank.png"
+    ]
+  },
+  {
+    "key": "ADMIN_QUIZ_BUILDER",
+    "title": "Quiz builder / chọn câu hỏi",
+    "inferred": false,
+    "isNew": true,
+    "route": "/admin/quizzes/:quizId",
+    "screen": "/admin/quizzes/1",
+    "references": [
+      "29_Admin_Quiz_Builder.png"
+    ]
+  },
+  {
+    "key": "ADMIN_QUIZ_PREVIEW",
+    "title": "Xem trước quiz",
+    "inferred": true,
+    "isNew": true,
+    "route": "/admin/quizzes/:quizId/preview",
+    "screen": "/admin/quizzes/1/preview",
+    "references": [
+      "29_Admin_Quiz_Builder.png",
+      "22_Quiz.png"
+    ]
+  },
+  {
+    "key": "ADMIN_VOCABULARY",
+    "title": "Từ vựng quản trị: danh sách, form, chi tiết",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/vocabulary",
+    "screen": "/admin/vocabulary",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "27_Admin_Lesson_Builder.png"
+    ]
+  },
+  {
+    "key": "ADMIN_VOCABULARY_TOPICS",
+    "title": "Chủ đề từ vựng: danh sách / thêm / sửa",
+    "inferred": true,
+    "isNew": true,
+    "route": "/admin/vocabulary-topics",
+    "screen": "/admin/vocabulary-topics",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ADMIN_USERS",
+    "title": "Danh sách người dùng / form tạo",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/users",
+    "screen": "/admin/users",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ADMIN_USER_DETAIL",
+    "title": "Chi tiết người dùng",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/users/:id",
+    "screen": "/admin/users/1",
+    "references": [
+      "26_Admin_Course_Builder.png",
+      "13_Profile.png"
+    ]
+  },
+  {
+    "key": "ADMIN_ROLES",
+    "title": "Vai trò / modal phân quyền",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/roles",
+    "screen": "/admin/roles",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ADMIN_SETTINGS",
+    "title": "Cài đặt hệ thống",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/settings",
+    "screen": "/admin/settings",
+    "references": [
+      "27_Admin_Lesson_Builder.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ADMIN_ACHIEVEMENTS",
+    "title": "Thành tích / modal cấu hình",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/achievements",
+    "screen": "/admin/achievements",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "14_Achievements.png"
+    ]
+  },
+  {
+    "key": "ADMIN_XP_RULES",
+    "title": "Quy tắc XP",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/xp-rules",
+    "screen": "/admin/xp-rules",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ADMIN_AUDIT_LOGS",
+    "title": "Nhật ký hệ thống",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/audit-logs",
+    "screen": "/admin/audit-logs",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ADMIN_CULTURE",
+    "title": "Danh sách bài văn hóa",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/culture",
+    "screen": "/admin/culture",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "09_Culture.png"
+    ]
+  },
+  {
+    "key": "ADMIN_CULTURE_EDIT",
+    "title": "Sửa bài văn hóa",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/culture/:id",
+    "screen": "/admin/culture/van-hoa-ca-phe-viet-nam",
+    "references": [
+      "27_Admin_Lesson_Builder.png",
+      "10_Culture_Detail.png"
+    ]
+  },
+  {
+    "key": "ADMIN_CULTURE_NEW",
+    "title": "Tạo bài văn hóa",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/culture/new",
+    "screen": "/admin/culture/new",
+    "references": [
+      "27_Admin_Lesson_Builder.png",
+      "10_Culture_Detail.png"
+    ]
+  },
+  {
+    "key": "ADMIN_CULTURE_CATEGORIES",
+    "title": "Danh mục văn hóa / modal",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/culture-categories",
+    "screen": "/admin/culture-categories",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "00_Design_System.png"
+    ]
+  },
+  {
+    "key": "ADMIN_AI_SCENARIOS",
+    "title": "Danh sách kịch bản AI",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/ai-scenarios",
+    "screen": "/admin/ai-scenarios",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "11_AI_Tutor.png"
+    ]
+  },
+  {
+    "key": "ADMIN_AI_SCENARIO_BUILDER",
+    "title": "Sửa kịch bản AI",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/ai-scenarios/:id",
+    "screen": "/admin/ai-scenarios/goi-mon-pho-ha-noi",
+    "references": [
+      "27_Admin_Lesson_Builder.png",
+      "19_Lesson_Dialogue.png"
+    ]
+  },
+  {
+    "key": "ADMIN_AI_SCENARIO_NEW",
+    "title": "Tạo kịch bản AI",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/ai-scenarios/new",
+    "screen": "/admin/ai-scenarios/new",
+    "references": [
+      "27_Admin_Lesson_Builder.png",
+      "19_Lesson_Dialogue.png"
+    ]
+  },
+  {
+    "key": "ADMIN_AI_SETTINGS",
+    "title": "Cấu hình AI",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/ai-settings",
+    "screen": "/admin/ai-settings",
+    "references": [
+      "27_Admin_Lesson_Builder.png",
+      "11_AI_Tutor.png"
+    ]
+  },
+  {
+    "key": "ADMIN_AI_USAGE",
+    "title": "Sử dụng / chi phí AI",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/ai-usage",
+    "screen": "/admin/ai-usage",
+    "references": [
+      "26_Admin_Course_Builder.png",
+      "15_Progress.png"
+    ]
+  },
+  {
+    "key": "ADMIN_AI_REVIEWS",
+    "title": "Đánh giá chất lượng AI",
+    "inferred": true,
+    "isNew": false,
+    "route": "/admin/ai-reviews",
+    "screen": "/admin/ai-reviews",
+    "references": [
+      "28_Admin_Question_Bank.png",
+      "11_AI_Tutor.png"
+    ]
+  }
+]

@@ -11,7 +11,7 @@ import React from 'react';
 export function DongSonDrum({ className, style }) {
   const cx = 500;
   const cy = 500;
-  const strokeColor = '#B57C6E';
+  const strokeColor = 'var(--color-gold)';
 
   // 1. Central 14-point star polygon
   const sunPoints = 14;

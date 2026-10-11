@@ -1,12 +1,23 @@
-import { useCallback } from "react";
-import { courseService } from "@/features/shared/services";
-import { useAsyncResource } from "./useAsyncResource";
+import { useCallback } from 'react'
+import { courseService } from '@/services/courseService'
+import { learningService } from '@/services/learningService'
+import { useAsyncResource } from './useAsyncResource'
+export function useLessons(courseId) { return useAsyncResource(useCallback(() => learningService.lessons(courseId), [courseId])) }
+export function useLearning(courseId, lessonId) {
+  return useAsyncResource(useCallback(async signal => {
+    const [course, lessons] = await Promise.all([courseService.detail(courseId), learningService.lessons(courseId)])
+    if (!lessons.some(l => String(l.id) === String(lessonId))) throw new Error('This lesson is not part of this course.')
+    signal.throwIfAborted()
+    const lesson = await learningService.start(lessonId)
+    const progress = await learningService.progress(courseId)
+    return { course, lesson, lessons: lessons.map(l => l.id === lesson.id ? lesson : l), progress }
+  }, [courseId, lessonId]))
+}
 export function useResumeCourse(courseId) {
   return useAsyncResource(useCallback(async () => {
-    const course = await courseService.getCourse(courseId);
-    const lessons = course.modules.flatMap(m=>m.lessons).filter(l=>!l.isLocked);
-    const target = lessons.find(l=>l.id===course.enrollment?.lastAccessedLessonId)
-      || lessons.find(l=>l.learningStatus!=="COMPLETED") || lessons[0];
-    return target?.id || null;
-  },[courseId]));
+    const [courses, lessons] = await Promise.all([courseService.myCourses(), learningService.lessons(courseId)])
+    const course = courses.find(c => String(c.courseId) === String(courseId))
+    const target = lessons.find(l => l.id === course?.lastAccessedLessonId) || lessons.find(l => !l.isCompleted) || lessons[0]
+    return target?.id || null
+  }, [courseId]))
 }

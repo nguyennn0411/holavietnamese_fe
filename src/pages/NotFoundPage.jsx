@@ -1,11 +1,12 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom'
 
 export function NotFoundPage() {
   return (
-    <section className="page">
+    <section className="state">
       <h1>404</h1>
-      <p>Page not found.</p>
-      <Link to="/">Back to home</Link>
+      <p><BilingualText>{"Không tìm thấy trang bạn đang tìm."}</BilingualText></p>
+      <Link className="button" to="/"><BilingualText>{"Về trang chủ"}</BilingualText></Link>
     </section>
   )
 }

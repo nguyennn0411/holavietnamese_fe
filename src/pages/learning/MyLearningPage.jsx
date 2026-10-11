@@ -1,196 +1,37 @@
-import { useState, useEffect } from 'react';
+import { BilingualText } from '@/components/common/BilingualText';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 import { learnerService } from '@/services/learnerService';
+import { useAsyncResource } from '@/hooks/useAsyncResource';
+import { ResourceState } from '@/components/common/ResourceState';
+import { PageHeader, Tabs, EmptyState, Artwork } from '@/components/common/Ui';
+import { ProgressBar } from '@/components/common/ProgressBar';
+import { ContentImage } from '@/components/common/ContentImage';
 
 export function MyLearningPage() {
-  const [activeTab, setActiveTab] = useState('courses');
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    learnerService.getMyLearningOverview().then(res => {
-      setData(res);
-    }).catch(() => setError('Không tải được dữ liệu học tập. Vui lòng thử lại.'))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) {
-    return <div style={{ padding: '40px', textAlign: 'center' }}>Đang tải dữ liệu học tập…</div>;
-  }
-  if (error) return <p role="alert">{error}</p>;
-
-  return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 16px' }}>
-      {/* Page Header */}
-      <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#2d1810', margin: '0 0 8px 0' }}>
-          Góc học tập của tôi (My Learning)
-        </h1>
-        <p style={{ color: '#6b7280', margin: 0 }}>
-          Theo dõi khóa học, sổ tay từ vựng, hành trình khám phá và lịch sử thi cử.
-        </p>
-      </div>
-
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: '8px', borderBottom: '2px solid #e5e7eb', marginBottom: '28px' }}>
-        {[
-          { id: 'courses', label: '📚 Khóa học của tôi', count: data?.enrolledCourses?.length },
-          { id: 'vocabulary', label: '📖 Sổ tay từ vựng', count: data?.savedVocabCount },
-          { id: 'journey', label: '🛵 Hành trình Việt Nam', count: data?.journeyProgress == null ? undefined : `${data.journeyProgress}%` },
-          { id: 'quiz', label: '📝 Lịch sử bài thi', count: data?.quizHistory?.length },
-        ].map(tab => (
-          <button
-            key={tab.id}
-            type="button"
-            onClick={() => setActiveTab(tab.id)}
-            style={{
-              padding: '12px 20px',
-              border: 'none',
-              background: 'none',
-              borderBottom: activeTab === tab.id ? '3px solid #8B1A1A' : '3px solid transparent',
-              color: activeTab === tab.id ? '#8B1A1A' : '#6b7280',
-              fontWeight: activeTab === tab.id ? '700' : '500',
-              cursor: 'pointer',
-              fontSize: '0.95rem',
-              marginBottom: '-2px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-          >
-            {tab.label}
-            {tab.count !== undefined && (
-              <span style={{
-                background: activeTab === tab.id ? '#fee2e2' : '#f3f4f6',
-                color: activeTab === tab.id ? '#8B1A1A' : '#6b7280',
-                fontSize: '0.75rem',
-                padding: '2px 8px',
-                borderRadius: '999px',
-                fontWeight: '600',
-              }}>
-                {tab.count}
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab 1: Courses */}
-      {activeTab === 'courses' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
-          {data?.enrolledCourses?.map(course => (
-            <div key={course.id} style={{ background: '#fff', borderRadius: '16px', overflow: 'hidden', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-              {course.image && <img src={course.image} alt={course.title} style={{ width: '100%', height: '160px', objectFit: 'cover' }} />}
-              <div style={{ padding: '20px' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#111827', margin: '0 0 10px 0' }}>{course.title}</h3>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#6b7280', marginBottom: '6px' }}>
-                  <span>Tiến độ</span>
-                  <strong>{course.progress}%</strong>
-                </div>
-                <div style={{ height: '8px', background: '#f3f4f6', borderRadius: '4px', overflow: 'hidden', marginBottom: '14px' }}>
-                  <div style={{ height: '100%', width: `${course.progress}%`, background: '#8B1A1A', borderRadius: '4px' }} />
-                </div>
-                <p style={{ fontSize: '0.85rem', color: '#4b5563', margin: '0 0 16px 0' }}>
-                  Tiếp theo: <strong>{course.nextLesson}</strong>
-                </p>
-                <Link
-                  to={`/courses/${course.id}`}
-                  style={{
-                    display: 'block',
-                    textAlign: 'center',
-                    padding: '10px',
-                    borderRadius: '8px',
-                    background: '#8B1A1A',
-                    color: '#fff',
-                    textDecoration: 'none',
-                    fontWeight: 600,
-                    fontSize: '0.9rem',
-                  }}
-                >
-                  Tiếp tục học ngay →
-                </Link>
-              </div>
-            </div>
-          ))}
-          <div style={{ background: '#fdfaf5', borderRadius: '16px', border: '2px dashed #ded5cb', padding: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-            <span style={{ fontSize: '2.5rem', marginBottom: '10px' }}>➕</span>
-            <h4 style={{ margin: '0 0 6px 0', color: '#2d1810' }}>Khám phá thêm khóa học</h4>
-            <p style={{ fontSize: '0.85rem', color: '#6b7280', marginBottom: '16px' }}>Mở rộng vốn từ và nâng cao kỹ năng giao tiếp tiếng Việt.</p>
-            <Link to="/courses" style={{ padding: '8px 18px', borderRadius: '999px', background: '#dca653', color: '#382414', textDecoration: 'none', fontWeight: 700, fontSize: '0.85rem' }}>
-              Xem danh sách khóa học
-            </Link>
+  const [tab, setTab] = useState('courses');
+  const resource = useAsyncResource(useCallback(() => learnerService.getMyLearningOverview(), []));
+  return <section>
+    <PageHeader eyebrow="Hành trình của riêng bạn" title="Góc học tập của tôi" description="Từng bài học, từng từ mới. Một chút tiến bộ mỗi ngày." />
+    <Tabs value={tab} onChange={setTab} items={[{id:'courses',label:'Khóa học của tôi'},{id:'vocabulary',label:'Từ vựng đã lưu'},{id:'journey',label:'Hành trình văn hóa'},{id:'quiz',label:'Lịch sử quiz'}]} />
+    <ResourceState resource={resource}>{data => <>
+      {tab === 'courses' && <div className="course-grid">
+        {data.enrolledCourses?.map(course => <article className="card learning-course" key={course.id}>
+          <ContentImage className="learning-course-image" src={course.image} alt={course.title} fallback={<Artwork kind={course.id % 2 ? 'food' : 'village'} alt={`Minh họa khóa học: ${course.title}`}/>}/>
+          <div className="learning-course-body"><span className="badge"><BilingualText>{course.progress >= 100 ? 'Đã hoàn thành' : 'Đang học'}</BilingualText></span><h2><BilingualText vi={course.titleVi || course.title} en={course.title} /></h2>
+            <ProgressBar value={course.progress} label="Tiến độ khóa học" />
+            {course.nextLesson && <p className="muted"><BilingualText>{"Bài tiếp theo:"}</BilingualText>{course.nextLesson}</p>}
+            <Link className="button" to={`/courses/${course.id}`}><BilingualText>{course.progress >= 100 ? 'Xem lại khóa học' : 'Tiếp tục học →'}</BilingualText></Link>
           </div>
-        </div>
-      )}
-
-      {/* Tab 2: Vocabulary */}
-      {activeTab === 'vocabulary' && (
-        <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid #e5e7eb' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <div>
-              <h3 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', color: '#111827' }}>Từ vựng đã lưu ({data?.savedVocabCount})</h3>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>Những từ bạn đã đánh dấu cần ôn tập trong các bài học</p>
-            </div>
-            <Link to="/vocabulary" style={{ padding: '8px 16px', borderRadius: '8px', background: '#8B1A1A', color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem' }}>
-              Mở Sổ tay đầy đủ ↗
-            </Link>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '14px' }}>
-            {data?.recentVocab?.map((v, i) => (
-              <div key={i} style={{ padding: '16px', borderRadius: '10px', background: '#faf8f5', border: '1px solid #ded5cb' }}>
-                <span style={{ fontSize: '0.7rem', color: v.mastered ? '#16a34a' : '#d97706', fontWeight: 700, textTransform: 'uppercase' }}>
-                  {v.mastered ? '✓ Đã thuộc' : '● Đang ôn tập'}
-                </span>
-                <h4 style={{ margin: '6px 0 2px 0', fontSize: '1.1rem', color: '#2d1810' }}>{v.vi}</h4>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: '#6b7280' }}>{v.en}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Tab 3: Journey */}
-      {activeTab === 'journey' && (
-        <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid #e5e7eb' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-            <span style={{ fontSize: '3rem' }}>🏮</span>
-            <div>
-              <h3 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', color: '#111827' }}>Điểm đến hiện tại: {data?.journeyCity}</h3>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>{data?.journeyProgress == null ? 'Chưa có dữ liệu hành trình.' : `Bạn đã hoàn thành ${data.journeyProgress}% chặng đường khám phá.`}</p>
-            </div>
-          </div>
-          <div style={{ height: '10px', background: '#f3f4f6', borderRadius: '5px', overflow: 'hidden', marginBottom: '20px' }}>
-            <div style={{ height: '100%', width: `${data?.journeyProgress ?? 0}%`, background: '#dca653', borderRadius: '5px' }} />
-          </div>
-          <Link to="/achievements" style={{ display: 'inline-block', padding: '10px 20px', borderRadius: '8px', background: '#8B1A1A', color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem' }}>
-            Xem Hộ chiếu & Tem địa phương 🛂
-          </Link>
-        </div>
-      )}
-
-      {/* Tab 4: Quiz History */}
-      {activeTab === 'quiz' && (
-        <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid #e5e7eb' }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.2rem', color: '#111827' }}>Lịch sử làm bài kiểm tra</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {data?.quizHistory?.map(q => (
-              <div key={q.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', borderRadius: '10px', background: '#fafafa', border: '1px solid #f3f4f6' }}>
-                <div>
-                  <strong style={{ display: 'block', fontSize: '0.95rem', color: '#111827' }}>{q.quizName}</strong>
-                  <span style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Ngày làm: {q.date}</span>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <span style={{ fontSize: '1.2rem', fontWeight: 800, color: q.score >= 80 ? '#16a34a' : '#ea580c' }}>
-                    {q.score}/100
-                  </span>
-                  <Link to={`/quiz-attempts/${q.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600 }}>{q.passed ? 'Đạt chuẩn' : 'Chưa đạt'} · Xem kết quả</Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+        </article>)}
+        <div className="card learning-course-add"><span className="state-symbol">+</span><h2><BilingualText>{"Một câu chuyện mới?"}</BilingualText></h2><p className="muted"><BilingualText>{"Khám phá thêm tiếng Việt qua những điều bạn yêu thích."}</BilingualText></p><Link className="button secondary" to="/courses"><BilingualText>{"Khám phá khóa học"}</BilingualText></Link></div>
+      </div>}
+      {tab === 'vocabulary' && <section className="card"><div className="builder-heading"><div><h2><BilingualText>{"Từ vựng đã lưu ("}</BilingualText>{data.savedVocabCount ?? 0})</h2><p className="muted"><BilingualText>{"Những từ quen thuộc trên hành trình học của bạn."}</BilingualText></p></div><div className="actions"><Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{"Mở sổ tay"}</BilingualText></Link><Link className="button" to={ROUTES.VOCABULARY_REVIEW}><BilingualText>{"Ôn tập →"}</BilingualText></Link></div></div>
+        {data.recentVocab?.length ? <div className="mylearning-vocab-grid">{data.recentVocab.map((word,index) => <div className="mylearning-word-chip" key={index}><span className="badge"><BilingualText>{word.mastered ? 'Đã thuộc' : 'Đang ôn tập'}</BilingualText></span><h3>{word.vi}</h3><p className="muted">{word.en}</p></div>)}</div> : <EmptyState title="Sổ tay đang chờ những từ đầu tiên" description="Lưu từ mới trong bài học hoặc thêm vào sổ tay."/>}
+      </section>}
+      {tab === 'journey' && <div className="journey-learning card"><Artwork kind="lanterns"/><div><span className="eyebrow"><BilingualText>{"Hành trình văn hóa"}</BilingualText></span><h2><BilingualText>{data.journeyCity || 'Khám phá Việt Nam'}</BilingualText></h2>{data.journeyProgress != null ? <ProgressBar value={data.journeyProgress} label="Tiến độ hành trình"/> : <p className="muted"><BilingualText>{"Chưa có dữ liệu tiến độ hành trình."}</BilingualText></p>}<div className="actions"><Link className="button" to="/explore"><BilingualText>{"Xem các điểm đến →"}</BilingualText></Link><Link className="button secondary" to="/achievements"><BilingualText>{"Hộ chiếu & thành tích"}</BilingualText></Link></div></div></div>}
+      {tab === 'quiz' && <section className="card"><h2><BilingualText>{"Nhìn lại những điều đã học"}</BilingualText></h2>{data.quizHistory?.length ? data.quizHistory.map(quiz => <div className="list-row" key={quiz.id}><div><strong>{quiz.quizName}</strong><p className="muted">{quiz.date}</p></div><div className="actions"><span className="badge">{quiz.score}/100 · <BilingualText>{quiz.passed ? 'Đạt' : 'Cần ôn tập'}</BilingualText></span><Link className="text-link" to={`/quiz-attempts/${quiz.id}/result`}><BilingualText>{"Xem kết quả →"}</BilingualText></Link></div></div>) : <EmptyState title="Chưa có bài kiểm tra đã hoàn thành" description="Các kết quả quiz sẽ xuất hiện tại đây."/>}</section>}
+    </>}</ResourceState>
+  </section>;
 }
