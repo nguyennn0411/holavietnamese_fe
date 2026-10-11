@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { adminService } from '@/services/adminService';
 
@@ -20,18 +21,16 @@ export function AdminSettingsPage() {
     }catch(err){setError(err.message);}finally{setBusy(false);}
   };
 
-  if (!settings) return <div className="state" role={error?"alert":"status"}>{error || "Đang tải cấu hình hệ thống…"}</div>;
+  if (!settings) return <div className="state" role={error?"alert":"status"}><BilingualText>{error || "Đang tải cấu hình hệ thống…"}</BilingualText></div>;
 
   return (
     <div style={{ maxWidth: '800px' }}>
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}>Cấu hình Hệ thống</h1>
-        <p style={{ color: 'var(--color-muted)', margin: 0, fontSize: '0.9rem' }}>
-          Quản lý các thông số chung của ứng dụng, dịch vụ AI và các cổng xác thực.
-        </p>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}><BilingualText>{"Cấu hình Hệ thống"}</BilingualText></h1>
+        <p style={{ color: 'var(--color-muted)', margin: 0, fontSize: '0.9rem' }}><BilingualText>{"Quản lý các thông số chung của ứng dụng, dịch vụ AI và các cổng xác thực."}</BilingualText></p>
       </div>
 
-      {error && <div className="ui-notice ui-notice--error" role="alert">{error}</div>}
+      {error && <div className="ui-notice ui-notice--error" role="alert"><BilingualText>{error}</BilingualText></div>}
       {msg && (
         <div style={{ padding: '10px 16px', background: 'var(--color-sage-soft)', color: 'var(--color-ink)', borderRadius: '8px', marginBottom: '16px' }}>
           ✓ {msg}
@@ -40,9 +39,7 @@ export function AdminSettingsPage() {
 
       <form onSubmit={handleSave} className="admin-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <div>
-          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '6px' }}>
-            Tên ứng dụng
-          </label>
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '6px' }}><BilingualText>{"Tên ứng dụng"}</BilingualText></label>
           <input
             type="text"
             value={settings.appName}
@@ -53,9 +50,7 @@ export function AdminSettingsPage() {
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '6px' }}>
-            Email hỗ trợ hệ thống
-          </label>
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '6px' }}><BilingualText>{"Email hỗ trợ hệ thống"}</BilingualText></label>
           <input
             type="email"
             value={settings.contactEmail}
@@ -66,9 +61,7 @@ export function AdminSettingsPage() {
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '6px' }}>
-            Nhà cung cấp AI Tutor (Hội thoại & Gợi ý phản hồi)
-          </label>
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '6px' }}><BilingualText>{"Nhà cung cấp AI Tutor (Hội thoại & Gợi ý phản hồi)"}</BilingualText></label>
           <input
             type="text"
             value={settings.aiTutorProvider}
@@ -81,8 +74,8 @@ export function AdminSettingsPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', padding: '16px 0', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <strong style={{ display: 'block', color: 'var(--color-ink)' }}>Cho phép đăng ký tài khoản mới</strong>
-              <span style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}>Bật/tắt biểu mẫu đăng ký học viên trên trang web</span>
+              <strong style={{ display: 'block', color: 'var(--color-ink)' }}><BilingualText>{"Cho phép đăng ký tài khoản mới"}</BilingualText></strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}><BilingualText>{"Bật/tắt biểu mẫu đăng ký học viên trên trang web"}</BilingualText></span>
             </div>
             <input
               type="checkbox"
@@ -94,8 +87,8 @@ export function AdminSettingsPage() {
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <strong style={{ display: 'block', color: 'var(--color-ink)' }}>Kích hoạt đăng nhập Google OAuth</strong>
-              <span style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}>Bật nút Sign in with Google qua thư viện GSI</span>
+              <strong style={{ display: 'block', color: 'var(--color-ink)' }}><BilingualText>{"Kích hoạt đăng nhập Google OAuth"}</BilingualText></strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}><BilingualText>{"Bật nút Sign in with Google qua thư viện GSI"}</BilingualText></span>
             </div>
             <input
               type="checkbox"
@@ -107,8 +100,8 @@ export function AdminSettingsPage() {
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <strong style={{ display: 'block', color: 'var(--color-ink)' }}>Chế độ bảo trì hệ thống (Maintenance Mode)</strong>
-              <span style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}>Chỉ cho phép tài khoản Admin đăng nhập khi bảo trì</span>
+              <strong style={{ display: 'block', color: 'var(--color-ink)' }}><BilingualText>{"Chế độ bảo trì hệ thống (Maintenance Mode)"}</BilingualText></strong>
+              <span style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}><BilingualText>{"Chỉ cho phép tài khoản Admin đăng nhập khi bảo trì"}</BilingualText></span>
             </div>
             <input
               type="checkbox"
@@ -131,9 +124,7 @@ export function AdminSettingsPage() {
             fontWeight: 700,
             cursor: 'pointer',
           }}
-        >
-          Lưu cấu hình hệ thống
-        </button>
+        ><BilingualText>{"Lưu cấu hình hệ thống"}</BilingualText></button>
       </form>
     </div>
   );

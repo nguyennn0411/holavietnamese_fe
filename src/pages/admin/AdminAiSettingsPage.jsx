@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
 
@@ -20,37 +21,27 @@ export function AdminAiSettingsPage() {
     <div className="admin-content">
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
-          {toast}
+          <BilingualText>{toast}</BilingualText>
         </div>
       )}
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-            AI GOVERNANCE & LLM CONFIG • NGƯỜI 4
-          </span>
-          <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}>Cấu hình hệ thống AI</h1>
-          <p style={{ margin: 0, color: 'var(--color-sage)', fontSize: '14px' }}>
-            Quản trị mô hình ngôn ngữ lớn (LLM), phiên bản System Prompt, kiểm soát giới hạn tần suất, chi phí và bảo mật API.
-          </p>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}><BilingualText>{"AI GOVERNANCE & LLM CONFIG • NGƯỜI 4"}</BilingualText></span>
+          <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}><BilingualText>{"Cấu hình hệ thống AI"}</BilingualText></h1>
+          <p style={{ margin: 0, color: 'var(--color-forest)', fontSize: '14px' }}><BilingualText>{"Quản trị mô hình ngôn ngữ lớn (LLM), phiên bản System Prompt, kiểm soát giới hạn tần suất, chi phí và bảo mật API."}</BilingualText></p>
         </div>
 
-        <button className="button" onClick={handleSave} style={{ fontSize: '13px' }}>
-          💾 Lưu tất cả cấu hình
-        </button>
+        <button className="button" onClick={handleSave} style={{ fontSize: '13px' }}><BilingualText>{"💾 Lưu tất cả cấu hình"}</BilingualText></button>
       </div>
 
       {/* Security Banner: API Key chỉ ở backend */}
       <div style={{ background: 'var(--color-sage-soft)', border: '1px solid var(--color-border)', borderRadius: '14px', padding: '18px 22px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '14px' }}>
         <span style={{ fontSize: '28px' }}>🛡️</span>
         <div>
-          <strong style={{ fontSize: '14px', color: 'var(--color-ink)', display: 'block' }}>
-            Kiến trúc bảo mật API Key an toàn:
-          </strong>
-          <span style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
-            API key của nhà cung cấp (Google Gemini, OpenAI, Claude) <strong>chỉ được lưu trữ và gọi tại Backend Server</strong> (thông qua Backend Proxy endpoint: <code>/api/v1/ai/completions</code>). Không có bất kỳ API key nào lộ ra Frontend client.
-          </span>
+          <strong style={{ fontSize: '14px', color: 'var(--color-ink)', display: 'block' }}><BilingualText>{"Kiến trúc bảo mật API Key an toàn:"}</BilingualText></strong>
+          <span style={{ fontSize: '13px', color: 'var(--color-ink)' }}><BilingualText>{"API key của nhà cung cấp (Google Gemini, OpenAI, Claude)"}</BilingualText><strong><BilingualText>{"chỉ được lưu trữ và gọi tại Backend Server"}</BilingualText></strong><BilingualText>{"(thông qua Backend Proxy endpoint:"}</BilingualText><code>/api/v1/ai/completions</code><BilingualText>{"). Không có bất kỳ API key nào lộ ra Frontend client."}</BilingualText></span>
         </div>
       </div>
 
@@ -60,13 +51,9 @@ export function AdminAiSettingsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
             {/* Allowed Models */}
             <div className="admin-card">
-              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}>
-                1. Chọn mô hình được phép (LLM Providers)
-              </h2>
+              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"1. Chọn mô hình được phép (LLM Providers)"}</BilingualText></h2>
 
-              <label>
-                Mô hình đang hoạt động chính (Default Active Model):
-                <select
+              <label><BilingualText>{"Mô hình đang hoạt động chính (Default Active Model):"}</BilingualText><select
                   value={settings.activeModel}
                   onChange={e => setSettings({ ...settings, activeModel: e.target.value })}
                 >
@@ -79,15 +66,13 @@ export function AdminAiSettingsPage() {
               </label>
 
               <div style={{ marginTop: '16px' }}>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-ink)', display: 'block', marginBottom: '8px' }}>
-                  Danh sách mô hình được cấp phép trong hệ thống:
-                </span>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-ink)', display: 'block', marginBottom: '8px' }}><BilingualText>{"Danh sách mô hình được cấp phép trong hệ thống:"}</BilingualText></span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {settings.allowedModels.map(m => (
                     <div key={m.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--color-cream)', padding: '10px 14px', borderRadius: '10px', fontSize: '13px' }}>
                       <div>
                         <strong>{m.name}</strong>
-                        <div style={{ fontSize: '11px', color: 'var(--color-sage)' }}>Nhà cung cấp: {m.provider}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--color-forest)' }}><BilingualText>{"Nhà cung cấp:"}</BilingualText>{m.provider}</div>
                       </div>
                       <span style={{ fontSize: '12px', color: 'var(--color-ink)', fontWeight: 700 }}>
                         ${m.costPer1kTokens} / 1k tokens
@@ -100,13 +85,9 @@ export function AdminAiSettingsPage() {
 
             {/* System Prompt Versioning */}
             <div className="admin-card">
-              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}>
-                2. Phiên bản hướng dẫn hệ thống (System Prompt)
-              </h2>
+              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"2. Phiên bản hướng dẫn hệ thống (System Prompt)"}</BilingualText></h2>
 
-              <label>
-                Phiên bản System Prompt hiện hành:
-                <input
+              <label><BilingualText>{"Phiên bản System Prompt hiện hành:"}</BilingualText><input
                   type="text"
                   value={settings.systemPromptVersion}
                   onChange={e => setSettings({ ...settings, systemPromptVersion: e.target.value })}
@@ -115,15 +96,12 @@ export function AdminAiSettingsPage() {
               </label>
 
               <div style={{ marginTop: '14px', padding: '12px 14px', background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '10px', fontSize: '12.5px', color: 'var(--color-red-hover)' }}>
-                📌 <strong>Quy tắc bắt buộc đã tích hợp trong prompt v2.2.0:</strong><br />
-                - Phản hồi phải dựa trên lịch sử hội thoại thực tế của người học.<br />
-                - <em>Nếu chưa có công cụ đo đạc âm thanh thực tế, tuyệt đối không sinh điểm số phát âm ảo (Pronunciation score) gây hiểu lầm cho người học.</em>
+                📌 <strong><BilingualText>{"Quy tắc bắt buộc đã tích hợp trong prompt v2.2.0:"}</BilingualText></strong><br /><BilingualText>{"- Phản hồi phải dựa trên lịch sử hội thoại thực tế của người học."}</BilingualText><br />
+                - <em><BilingualText>{"Nếu chưa có công cụ đo đạc âm thanh thực tế, tuyệt đối không sinh điểm số phát âm ảo (Pronunciation score) gây hiểu lầm cho người học."}</BilingualText></em>
               </div>
 
               <div style={{ marginTop: '16px' }}>
-                <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--color-ink)', display: 'block', marginBottom: '6px' }}>
-                  Lịch sử các phiên bản hướng dẫn:
-                </span>
+                <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--color-ink)', display: 'block', marginBottom: '6px' }}><BilingualText>{"Lịch sử các phiên bản hướng dẫn:"}</BilingualText></span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {settings.promptVersionsHistory.map(v => (
                     <div key={v.version} style={{ fontSize: '12px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', padding: '8px 12px', borderRadius: '8px' }}>
@@ -143,13 +121,9 @@ export function AdminAiSettingsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
             {/* Conversation & Rate Limits */}
             <div className="admin-card">
-              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}>
-                3. Giới hạn hội thoại & Tần suất sử dụng
-              </h2>
+              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"3. Giới hạn hội thoại & Tần suất sử dụng"}</BilingualText></h2>
 
-              <label>
-                Số lượt hội thoại tối đa mỗi phiên (Max turns per session):
-                <input
+              <label><BilingualText>{"Số lượt hội thoại tối đa mỗi phiên (Max turns per session):"}</BilingualText><input
                   type="number"
                   min={10}
                   max={50}
@@ -158,9 +132,7 @@ export function AdminAiSettingsPage() {
                 />
               </label>
 
-              <label style={{ marginTop: '12px' }}>
-                Độ dài câu trả lời tối đa (Max output tokens):
-                <input
+              <label style={{ marginTop: '12px' }}><BilingualText>{"Độ dài câu trả lời tối đa (Max output tokens):"}</BilingualText><input
                   type="number"
                   min={256}
                   max={2048}
@@ -169,9 +141,7 @@ export function AdminAiSettingsPage() {
                 />
               </label>
 
-              <label style={{ marginTop: '12px' }}>
-                Giới hạn tần suất gọi API (Rate limit / phút / người dùng):
-                <input
+              <label style={{ marginTop: '12px' }}><BilingualText>{"Giới hạn tần suất gọi API (Rate limit / phút / người dùng):"}</BilingualText><input
                   type="number"
                   min={5}
                   max={60}
@@ -180,9 +150,7 @@ export function AdminAiSettingsPage() {
                 />
               </label>
 
-              <label style={{ marginTop: '12px' }}>
-                Số phiên tối đa trong ngày mỗi học viên (Daily sessions cap):
-                <input
+              <label style={{ marginTop: '12px' }}><BilingualText>{"Số phiên tối đa trong ngày mỗi học viên (Daily sessions cap):"}</BilingualText><input
                   type="number"
                   min={10}
                   max={100}
@@ -194,13 +162,9 @@ export function AdminAiSettingsPage() {
 
             {/* Budget & Cost Cap */}
             <div className="admin-card">
-              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}>
-                4. Kiểm soát ngân sách & Giới hạn chi phí
-              </h2>
+              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"4. Kiểm soát ngân sách & Giới hạn chi phí"}</BilingualText></h2>
 
-              <label>
-                Ngân sách tối đa hàng tháng (Monthly Budget Cap - USD):
-                <input
+              <label><BilingualText>{"Ngân sách tối đa hàng tháng (Monthly Budget Cap - USD):"}</BilingualText><input
                   type="number"
                   step="10"
                   value={settings.limits.monthlyBudgetCapUsd}
@@ -208,9 +172,7 @@ export function AdminAiSettingsPage() {
                 />
               </label>
 
-              <label style={{ marginTop: '12px' }}>
-                Ngưỡng cảnh báo chi phí (% Budget Alert Threshold):
-                <input
+              <label style={{ marginTop: '12px' }}><BilingualText>{"Ngưỡng cảnh báo chi phí (% Budget Alert Threshold):"}</BilingualText><input
                   type="number"
                   min={50}
                   max={95}
@@ -221,7 +183,7 @@ export function AdminAiSettingsPage() {
 
               <div style={{ marginTop: '16px', background: 'var(--color-cream)', padding: '14px', borderRadius: '10px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: '6px' }}>
-                  <span>Chi phí tháng hiện tại:</span>
+                  <span><BilingualText>{"Chi phí tháng hiện tại:"}</BilingualText></span>
                   <span style={{ color: 'var(--color-ink)' }}>${settings.limits.currentMonthSpendUsd} / ${settings.limits.monthlyBudgetCapUsd}</span>
                 </div>
                 <div style={{ height: '8px', background: 'var(--color-border)', borderRadius: '999px', overflow: 'hidden' }}>
@@ -233,8 +195,7 @@ export function AdminAiSettingsPage() {
                     }}
                   />
                 </div>
-                <span style={{ fontSize: '11px', color: 'var(--color-sage)', display: 'block', marginTop: '4px' }}>
-                  Hệ thống đang hoạt động trong ngưỡng an toàn ({Math.round((settings.limits.currentMonthSpendUsd / settings.limits.monthlyBudgetCapUsd) * 100)}%).
+                <span style={{ fontSize: '11px', color: 'var(--color-forest)', display: 'block', marginTop: '4px' }}><BilingualText>{"Hệ thống đang hoạt động trong ngưỡng an toàn ("}</BilingualText>{Math.round((settings.limits.currentMonthSpendUsd / settings.limits.monthlyBudgetCapUsd) * 100)}%).
                 </span>
               </div>
             </div>

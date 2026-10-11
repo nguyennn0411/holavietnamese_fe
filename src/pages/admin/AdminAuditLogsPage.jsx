@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { adminService } from '@/services/adminService';
 
@@ -12,26 +13,24 @@ export function AdminAuditLogsPage() {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}>Nhật ký Quản trị (Audit Logs)</h1>
-        <p style={{ color: 'var(--color-muted)', margin: 0, fontSize: '0.9rem' }}>
-          Ghi nhận toàn bộ thao tác thay đổi dữ liệu, phân quyền và can thiệp bảo mật của ban quản trị và hệ thống.
-        </p>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}><BilingualText>{"Nhật ký Quản trị (Audit Logs)"}</BilingualText></h1>
+        <p style={{ color: 'var(--color-muted)', margin: 0, fontSize: '0.9rem' }}><BilingualText>{"Ghi nhận toàn bộ thao tác thay đổi dữ liệu, phân quyền và can thiệp bảo mật của ban quản trị và hệ thống."}</BilingualText></p>
       </div>
 
       <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
-        {state.loading && <div className="state">Đang tải nhật ký…</div>}
-        {state.error && <div className="state" role="alert">{state.error}</div>}
-        {!state.loading && !state.error && logs.length === 0 && <div className="state">Chưa có nhật ký hệ thống.</div>}
+        {state.loading && <div className="state"><BilingualText>{"Đang tải nhật ký…"}</BilingualText></div>}
+        {state.error && <div className="state" role="alert"><BilingualText>{state.error}</BilingualText></div>}
+        {!state.loading && !state.error && logs.length === 0 && <div className="state"><BilingualText>{"Chưa có nhật ký hệ thống."}</BilingualText></div>}
         {!state.loading && !state.error && logs.length > 0 && (
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Thời gian</th>
-              <th>Admin thực hiện</th>
-              <th>Thao tác</th>
-              <th>Đối tượng tác động</th>
-              <th>Chi tiết</th>
-              <th>Kết quả</th>
+              <th><BilingualText>{"Thời gian"}</BilingualText></th>
+              <th><BilingualText>{"Admin thực hiện"}</BilingualText></th>
+              <th><BilingualText>{"Thao tác"}</BilingualText></th>
+              <th><BilingualText>{"Đối tượng tác động"}</BilingualText></th>
+              <th><BilingualText>{"Chi tiết"}</BilingualText></th>
+              <th><BilingualText>{"Kết quả"}</BilingualText></th>
             </tr>
           </thead>
           <tbody>
@@ -46,13 +45,13 @@ export function AdminAuditLogsPage() {
                   </span>
                 </td>
                 <td>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--color-sage)' }}>
-                    {log.details || 'Không có mô tả thêm'}
+                  <span style={{ fontSize: '0.8rem', color: 'var(--color-forest)' }}>
+                    <BilingualText>{log.details || 'Không có mô tả thêm'}</BilingualText>
                   </span>
                 </td>
                 <td>
                   <span className={`admin-badge ${log.status === 'SUCCESS' ? 'admin-badge-success' : 'admin-badge-danger'}`}>
-                    {log.status}
+                    <BilingualText>{log.status}</BilingualText>
                   </span>
                 </td>
               </tr>

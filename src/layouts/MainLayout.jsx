@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
@@ -30,7 +31,7 @@ export function MainLayout() {
 
   return (
     <div className="layout-shell">
-      <a className="skip-link" href="#main-content">Chuyển đến nội dung chính</a>
+      <a className="skip-link" href="#main-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
       <LayoutToast message={toastError} onClose={() => setToastError(null)} />
       <AppHeader isAuthenticated={isAuthenticated} user={user} loading={loading} stats={learnerStats} onLogout={logout} />
       <main className="layout-main" id="main-content"><Outlet /></main>

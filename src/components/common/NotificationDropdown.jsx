@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
@@ -98,7 +99,7 @@ export function NotificationDropdown() {
             borderBottom: '1px solid #f3f4f6',
             backgroundColor: 'var(--color-surface)',
           }}>
-            <strong style={{ fontSize: '0.9rem' }}>Thông báo ({unreadCount})</strong>
+            <strong style={{ fontSize: '0.9rem' }}><BilingualText>{"Thông báo ("}</BilingualText>{unreadCount})</strong>
             {unreadCount > 0 && (
               <button
                 type="button"
@@ -111,18 +112,14 @@ export function NotificationDropdown() {
                   cursor: 'pointer',
                   fontWeight: '600',
                 }}
-              >
-                Đọc tất cả
-              </button>
+              ><BilingualText>{"Đọc tất cả"}</BilingualText></button>
             )}
           </div>
 
           <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-            {error && <p role="alert" style={{ padding: 16, color: 'var(--color-red)' }}>{error}</p>}
+            {error && <p role="alert" style={{ padding: 16, color: 'var(--color-red)' }}><BilingualText>{error}</BilingualText></p>}
             {notifications.length === 0 ? (
-              <p style={{ textAlign: 'center', color: 'var(--color-muted)', padding: '20px', fontSize: '0.85rem' }}>
-                Không có thông báo nào.
-              </p>
+              <p style={{ textAlign: 'center', color: 'var(--color-muted)', padding: '20px', fontSize: '0.85rem' }}><BilingualText>{"Không có thông báo nào."}</BilingualText></p>
             ) : (
               notifications.map((n) => (
                 <div
@@ -138,21 +135,19 @@ export function NotificationDropdown() {
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <span style={{ fontSize: '0.85rem', fontWeight: n.read ? '500' : '700', color: 'var(--color-ink)' }}>
-                      {n.title}
+                      <BilingualText vi={n.titleVi || n.title} en={n.title} />
                     </span>
                     <span style={{ fontSize: '0.7rem', color: 'var(--color-muted)' }}>{n.time}</span>
                   </div>
                   <p style={{ fontSize: '0.78rem', color: 'var(--color-muted)', margin: '4px 0 0 0', lineHeight: 1.4 }}>
-                    {n.message}
+                    <BilingualText>{n.message}</BilingualText>
                   </p>
                   {n.link && (
                     <Link
                       to={n.link}
                       onClick={() => setOpen(false)}
                       style={{ fontSize: '0.75rem', color: 'var(--color-red-hover)', fontWeight: '600', textDecoration: 'none', display: 'inline-block', marginTop: '4px' }}
-                    >
-                      Xem chi tiết →
-                    </Link>
+                    ><BilingualText>{"Xem chi tiết →"}</BilingualText></Link>
                   )}
                 </div>
               ))
@@ -164,9 +159,7 @@ export function NotificationDropdown() {
               to="/notifications"
               onClick={() => setOpen(false)}
               style={{ fontSize: '0.8rem', color: 'var(--color-red-hover)', textDecoration: 'none', fontWeight: '600' }}
-            >
-              Xem toàn bộ thông báo
-            </Link>
+            ><BilingualText>{"Xem toàn bộ thông báo"}</BilingualText></Link>
           </div>
         </div>
       )}

@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useRef, useState } from 'react'
 import { vocabularyService } from '@/services/vocabularyService'
 import { Modal } from '@/components/common/Modal'
@@ -18,11 +19,11 @@ export function VocabularyDeleteModal({ entry, onClose, onDeleted }) {
   }
 
   return <Modal title="Xóa từ vựng?" busy={pending} onClose={onClose}>
-    <p>Xóa “{entry.word}” khỏi sổ tay của bạn?</p>
-    {error && <p role="alert">{error}</p>}
+    <p><BilingualText>{"Xóa “"}</BilingualText>{entry.word}<BilingualText>{"” khỏi sổ tay của bạn?"}</BilingualText></p>
+    {error && <p role="alert"><BilingualText>{error}</BilingualText></p>}
     <div className="actions">
-      <button type="button" className="secondary" disabled={pending} onClick={onClose}>Hủy</button>
-      <button type="button" className="danger" disabled={pending} onClick={remove}>{pending ? 'Đang xóa…' : 'Xóa'}</button>
+      <button type="button" className="secondary" disabled={pending} onClick={onClose}><BilingualText>{"Hủy"}</BilingualText></button>
+      <button type="button" className="danger" disabled={pending} onClick={remove}><BilingualText>{pending ? 'Đang xóa…' : 'Xóa'}</BilingualText></button>
     </div>
   </Modal>
 }

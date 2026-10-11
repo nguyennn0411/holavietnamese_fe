@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NotificationDropdown } from '@/components/common/NotificationDropdown';
@@ -26,8 +27,8 @@ export function AppHeader({ isAuthenticated, user, loading, stats, onLogout }) {
             </>
           ) : (
             <div className="site-header__guest-actions">
-              <Link to="/login" className="site-header__login">Đăng nhập</Link>
-              <Link to="/register" className="site-header__cta">Học miễn phí</Link>
+              <Link to="/login" className="site-header__login"><BilingualText>{"Đăng nhập"}</BilingualText></Link>
+              <Link to="/register" className="site-header__cta"><BilingualText>{"Học miễn phí"}</BilingualText></Link>
             </div>
           )}
         </div>

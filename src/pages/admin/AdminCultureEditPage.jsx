@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -105,18 +106,18 @@ export function AdminCultureEditPage() {
     <div className="admin-content">
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
-          {toast}
+          <BilingualText>{toast}</BilingualText>
         </div>
       )}
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '14px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: 'var(--color-sage)', marginBottom: '6px' }}>
-            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}>← Quay lại danh sách bài viết</Link>
+          <nav style={{ fontSize: '13px', color: 'var(--color-forest)', marginBottom: '6px' }}>
+            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Quay lại danh sách bài viết"}</BilingualText></Link>
           </nav>
           <h1 style={{ margin: 0, fontSize: '30px' }}>
-            {isNew ? 'Soạn thảo bài viết văn hóa mới' : `Biên tập: ${formData.title}`}
+            <BilingualText>{isNew ? 'Soạn thảo bài viết văn hóa mới' : `Biên tập: ${formData.title}`}</BilingualText>
           </h1>
         </div>
 
@@ -126,25 +127,19 @@ export function AdminCultureEditPage() {
             className={`button ${activeTab === 'editor' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('editor')}
             style={{ fontSize: '13px' }}
-          >
-            ✏️ Trình biên tập
-          </button>
+          ><BilingualText>{"✏️ Trình biên tập"}</BilingualText></button>
           <button
             type="button"
             className={`button ${activeTab === 'preview' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('preview')}
             style={{ fontSize: '13px' }}
-          >
-            👁️ Xem trước (Preview)
-          </button>
+          ><BilingualText>{"👁️ Xem trước (Preview)"}</BilingualText></button>
           <button
             type="button"
             className="button"
             onClick={handleSubmit}
             style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
-          >
-            💾 Lưu bài viết
-          </button>
+          ><BilingualText>{"💾 Lưu bài viết"}</BilingualText></button>
         </div>
       </div>
 
@@ -154,48 +149,40 @@ export function AdminCultureEditPage() {
             {/* Left Column: Title, Content, Phrases */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="admin-card">
-                <label>
-                  Tiêu đề bài viết:
-                  <input
+                <label><BilingualText>{"Tiêu đề bài viết:"}</BilingualText><input
                     type="text"
                     required
                     value={formData.title ?? ''}
                     onChange={e => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="Ví dụ: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng..."
+                    placeholder={bilingualLabel("Ví dụ: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng...")}
                   />
                 </label>
 
-                <label style={{ marginTop: '14px' }}>
-                  Tiêu đề phụ / Mô tả ngắn:
-                  <input
+                <label style={{ marginTop: '14px' }}><BilingualText>{"Tiêu đề phụ / Mô tả ngắn:"}</BilingualText><input
                     type="text"
                     value={formData.subtitle ?? ''}
                     onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
-                    placeholder="Mô tả tóm lược nét hấp dẫn của bài viết..."
+                    placeholder={bilingualLabel("Mô tả tóm lược nét hấp dẫn của bài viết...")}
                   />
                 </label>
 
-                <label style={{ marginTop: '14px' }}>
-                  Tóm tắt mở đầu (Summary):
-                  <textarea
+                <label style={{ marginTop: '14px' }}><BilingualText>{"Tóm tắt mở đầu (Summary):"}</BilingualText><textarea
                     rows={3}
                     value={formData.summary ?? ''}
                     onChange={e => setFormData({ ...formData, summary: e.target.value })}
-                    placeholder="Đoạn văn ngắn làm nổi bật ý nghĩa văn hóa..."
+                    placeholder={bilingualLabel("Đoạn văn ngắn làm nổi bật ý nghĩa văn hóa...")}
                   />
                 </label>
               </div>
 
               {/* Markdown Content */}
               <div className="admin-card">
-                <label>
-                  Nội dung chi tiết bài viết (Hỗ trợ Markdown):
-                  <textarea
+                <label><BilingualText>{"Nội dung chi tiết bài viết (Hỗ trợ Markdown):"}</BilingualText><textarea
                     rows={16}
                     required
                     value={formData.content ?? ''}
                     onChange={e => setFormData({ ...formData, content: e.target.value })}
-                    placeholder="Soạn nội dung bài viết với các đề mục ###, đoạn văn, và hình ảnh..."
+                    placeholder={bilingualLabel("Soạn nội dung bài viết với các đề mục ###, đoạn văn, và hình ảnh...")}
                     style={{ fontFamily: 'monospace', fontSize: '13.5px', lineHeight: 1.6 }}
                   />
                 </label>
@@ -205,16 +192,10 @@ export function AdminCultureEditPage() {
               <div className="admin-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <div>
-                    <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}>
-                      Từ vựng & Cụm từ liên quan (Useful Phrases)
-                    </h3>
-                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-sage)' }}>
-                      Học viên có thể nghe phát âm và lưu trực tiếp vào Sổ từ vựng khi đọc bài viết này.
-                    </p>
+                    <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Từ vựng & Cụm từ liên quan (Useful Phrases)"}</BilingualText></h3>
+                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-forest)' }}><BilingualText>{"Học viên có thể nghe phát âm và lưu trực tiếp vào Sổ từ vựng khi đọc bài viết này."}</BilingualText></p>
                   </div>
-                  <button type="button" className="button secondary" onClick={handleAddPhrase} style={{ fontSize: '12px', padding: '6px 12px' }}>
-                    + Thêm từ
-                  </button>
+                  <button type="button" className="button secondary" onClick={handleAddPhrase} style={{ fontSize: '12px', padding: '6px 12px' }}><BilingualText>{"+ Thêm từ"}</BilingualText></button>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -222,21 +203,21 @@ export function AdminCultureEditPage() {
                     <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1.5fr auto', gap: '10px', alignItems: 'center', background: 'var(--color-cream)', padding: '10px', borderRadius: '10px' }}>
                       <input
                         type="text"
-                        placeholder="Từ tiếng Việt (vd: Cà phê phin)"
+                        placeholder={bilingualLabel("Từ tiếng Việt (vd: Cà phê phin)")}
                         value={phrase.word ?? ''}
                         onChange={e => handlePhraseChange(idx, 'word', e.target.value)}
                         style={{ fontSize: '13px' }}
                       />
                       <input
                         type="text"
-                        placeholder="Phiên âm (vd: kà-phê-phin)"
+                        placeholder={bilingualLabel("Phiên âm (vd: kà-phê-phin)")}
                         value={phrase.pronunciation ?? ''}
                         onChange={e => handlePhraseChange(idx, 'pronunciation', e.target.value)}
                         style={{ fontSize: '13px' }}
                       />
                       <input
                         type="text"
-                        placeholder="Nghĩa tiếng Anh / Diễn giải"
+                        placeholder={bilingualLabel("Nghĩa tiếng Anh / Diễn giải")}
                         value={phrase.meaning ?? ''}
                         onChange={e => handlePhraseChange(idx, 'meaning', e.target.value)}
                         style={{ fontSize: '13px' }}
@@ -258,24 +239,20 @@ export function AdminCultureEditPage() {
             {/* Right Column: Settings & Metadata */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}>Phân loại & Trạng thái</h3>
+                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Phân loại & Trạng thái"}</BilingualText></h3>
 
-                <label>
-                  Trạng thái xuất bản:
-                  <select
+                <label><BilingualText>{"Trạng thái xuất bản:"}</BilingualText><select
                     value={formData.status ?? ''}
                     onChange={e => setFormData({ ...formData, status: e.target.value })}
                   >
-                    <option value="PUBLISHED">Đã xuất bản (Published)</option>
-                    <option value="IN_REVIEW">Chờ duyệt (In Review)</option>
-                    <option value="DRAFT">Bản nháp (Draft)</option>
-                    <option value="ARCHIVED">Lưu trữ (Archived)</option>
+                    <option value="PUBLISHED">{bilingualLabel("Đã xuất bản (Published)")}</option>
+                    <option value="IN_REVIEW">{bilingualLabel("Chờ duyệt (In Review)")}</option>
+                    <option value="DRAFT">{bilingualLabel("Bản nháp (Draft)")}</option>
+                    <option value="ARCHIVED">{bilingualLabel("Lưu trữ (Archived)")}</option>
                   </select>
                 </label>
 
-                <label style={{ marginTop: '12px' }}>
-                  Danh mục văn hóa:
-                  <select
+                <label style={{ marginTop: '12px' }}><BilingualText>{"Danh mục văn hóa:"}</BilingualText><select
                     value={formData.category ?? ''}
                     onChange={e => handleCategoryChange(e.target.value)}
                   >
@@ -287,36 +264,30 @@ export function AdminCultureEditPage() {
                   </select>
                 </label>
 
-                <label style={{ marginTop: '12px' }}>
-                  Vùng miền:
-                  <select
+                <label style={{ marginTop: '12px' }}><BilingualText>{"Vùng miền:"}</BilingualText><select
                     value={formData.region ?? ''}
                     onChange={e => setFormData({ ...formData, region: e.target.value })}
                   >
-                    <option value="Toàn quốc">Toàn quốc (National)</option>
-                    <option value="Miền Bắc">Miền Bắc (Northern)</option>
-                    <option value="Miền Trung">Miền Trung (Central)</option>
-                    <option value="Miền Nam">Miền Nam (Southern)</option>
+                    <option value="Toàn quốc">{bilingualLabel("Toàn quốc (National)")}</option>
+                    <option value="Miền Bắc">{bilingualLabel("Miền Bắc (Northern)")}</option>
+                    <option value="Miền Trung">{bilingualLabel("Miền Trung (Central)")}</option>
+                    <option value="Miền Nam">{bilingualLabel("Miền Nam (Southern)")}</option>
                   </select>
                 </label>
 
-                <label style={{ marginTop: '12px' }}>
-                  Điểm đến cụ thể:
-                  <input
+                <label style={{ marginTop: '12px' }}><BilingualText>{"Điểm đến cụ thể:"}</BilingualText><input
                     type="text"
                     value={formData.destination ?? ''}
                     onChange={e => setFormData({ ...formData, destination: e.target.value })}
-                    placeholder="Ví dụ: Hà Nội, Hội An, Huế..."
+                    placeholder={bilingualLabel("Ví dụ: Hà Nội, Hội An, Huế...")}
                   />
                 </label>
               </div>
 
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}>Ảnh bìa bài viết</h3>
+                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Ảnh bìa bài viết"}</BilingualText></h3>
 
-                <label>
-                  URL hình ảnh:
-                  <input
+                <label><BilingualText>{"URL hình ảnh:"}</BilingualText><input
                     type="text"
                     value={formData.coverImage ?? ''}
                     onChange={e => setFormData({ ...formData, coverImage: e.target.value })}
@@ -335,29 +306,23 @@ export function AdminCultureEditPage() {
               </div>
 
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}>Thông tin tác giả</h3>
+                <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Thông tin tác giả"}</BilingualText></h3>
 
-                <label>
-                  Tên tác giả:
-                  <input
+                <label><BilingualText>{"Tên tác giả:"}</BilingualText><input
                     type="text"
                     value={formData.author ?? ''}
                     onChange={e => setFormData({ ...formData, author: e.target.value })}
                   />
                 </label>
 
-                <label style={{ marginTop: '12px' }}>
-                  Chức danh tác giả:
-                  <input
+                <label style={{ marginTop: '12px' }}><BilingualText>{"Chức danh tác giả:"}</BilingualText><input
                     type="text"
                     value={formData.authorRole ?? ''}
                     onChange={e => setFormData({ ...formData, authorRole: e.target.value })}
                   />
                 </label>
 
-                <label style={{ marginTop: '12px' }}>
-                  Thời lượng ước tính:
-                  <input
+                <label style={{ marginTop: '12px' }}><BilingualText>{"Thời lượng ước tính:"}</BilingualText><input
                     type="text"
                     value={formData.readTime ?? ''}
                     onChange={e => setFormData({ ...formData, readTime: e.target.value })}
@@ -371,13 +336,10 @@ export function AdminCultureEditPage() {
         /* Live Preview Mode */
         <div className="admin-card" style={{ padding: '36px', background: 'var(--color-surface)' }}>
           <div style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '18px', marginBottom: '24px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase' }}>
-              PREVIEW TRÊN GIAO DIỆN HỌC VIÊN
-            </span>
-            <h1 style={{ fontSize: '32px', margin: '8px 0', color: 'var(--color-ink)' }}>{formData.title || 'Chưa có tiêu đề'}</h1>
+            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase' }}><BilingualText>{"PREVIEW TRÊN GIAO DIỆN HỌC VIÊN"}</BilingualText></span>
+            <h1 style={{ fontSize: '32px', margin: '8px 0', color: 'var(--color-ink)' }}><BilingualText>{formData.title || 'Chưa có tiêu đề'}</BilingualText></h1>
             <p style={{ fontSize: '16px', color: 'var(--color-red-hover)' }}>{formData.subtitle}</p>
-            <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
-              Tác giả: <strong>{formData.author}</strong> • Điểm đến: 📍 {formData.destination}
+            <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}><BilingualText>{"Tác giả:"}</BilingualText><strong>{formData.author}</strong><BilingualText>{"• Điểm đến: 📍"}</BilingualText>{formData.destination}
             </div>
           </div>
 
@@ -388,17 +350,17 @@ export function AdminCultureEditPage() {
           )}
 
           <div style={{ whiteSpace: 'pre-line', fontSize: '16px', lineHeight: 1.8, color: 'var(--color-ink)' }}>
-            {formData.content || '(Nội dung bài viết chưa được nhập)'}
+            <BilingualText>{formData.content || '(Nội dung bài viết chưa được nhập)'}</BilingualText>
           </div>
 
           {formData.usefulPhrases?.length > 0 && (
             <div style={{ marginTop: '36px', padding: '24px', background: 'var(--color-cream)', borderRadius: '16px' }}>
-              <h3 style={{ margin: '0 0 14px 0', color: 'var(--color-red-hover)' }}>📖 Cụm từ hữu ích kèm theo bài viết:</h3>
+              <h3 style={{ margin: '0 0 14px 0', color: 'var(--color-red-hover)' }}><BilingualText>{"📖 Cụm từ hữu ích kèm theo bài viết:"}</BilingualText></h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
                 {formData.usefulPhrases.filter(p => p.word).map((p, idx) => (
                   <div key={idx} style={{ background: 'var(--color-surface)', padding: '10px 14px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
                     <strong style={{ color: 'var(--color-red-hover)' }}>{p.word}</strong>
-                    <div style={{ fontSize: '12px', color: 'var(--color-sage)' }}>{p.meaning}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--color-forest)' }}>{p.meaning}</div>
                   </div>
                 ))}
               </div>

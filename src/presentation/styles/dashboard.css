@@ -1,5 +1,5 @@
 .dashboard-welcome {
-  background: linear-gradient(135deg, var(--color-red-hover) 0%, var(--color-gold) 100%);
+  background: var(--color-red-hover);
   color: var(--color-surface); border-radius: 1rem; padding: 2rem;
   margin-bottom: 1.5rem;
 }

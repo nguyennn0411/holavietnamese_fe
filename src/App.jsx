@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
@@ -58,6 +59,8 @@ const AdminXpRulesPage = lazy(() => import('@/pages/admin/AdminXpRulesPage').the
 const AdminAuditLogsPage = lazy(() => import('@/pages/admin/AdminAuditLogsPage').then(module => ({ default: module.AdminAuditLogsPage })));
 const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage').then(module => ({ default: module.AdminSettingsPage })));
 const AdminVocabularyPage = lazy(() => import('@/pages/admin/AdminVocabularyPage').then(module => ({ default: module.AdminVocabularyPage })));
+const AdminDestinationsPage = lazy(() => import('@/pages/admin/AdminDestinationsPage').then(module => ({ default: module.AdminDestinationsPage })));
+const AdminDestinationDetailPage = lazy(() => import('@/pages/admin/AdminDestinationDetailPage').then(module => ({ default: module.AdminDestinationDetailPage })));
 const AdminVocabularyTopicsPage = lazy(() =>
   import('@/pages/admin/AdminVocabularyTopicsPage')
     .then((module) => ({ default: module.AdminVocabularyTopicsPage }))
@@ -93,7 +96,7 @@ function App() {
     <BrowserRouter>
       <ErrorBoundary>
         <AuthProvider>
-          <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/>Đang tải trang…</div>}><Routes>
+          <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><BilingualText>{"Đang tải trang…"}</BilingualText></div>}><Routes>
             {/* Standalone Fullscreen Auth Routes (Người 1) */}
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
@@ -119,6 +122,8 @@ function App() {
               <Route path={ROUTES.VOCABULARY_REVIEW} element={<VocabularyReviewPage />} />
               <Route path={ROUTES.EXPLORE} element={<ExploreVietnamPage />} />
               <Route path={ROUTES.DESTINATION_DETAIL} element={<DestinationDetailPage />} />
+              <Route path={ROUTES.EXPLORE_VIETNAM} element={<ExploreVietnamPage />} />
+              <Route path={ROUTES.LEARNER_DESTINATION_DETAIL} element={<DestinationDetailPage />} />
               <Route path={ROUTES.BLOG} element={<BlogHomePage />} />
               <Route path={ROUTES.BLOG_DETAIL} element={<BlogDetailPage />} />
 
@@ -162,6 +167,8 @@ function App() {
                 <Route path={ROUTES.ADMIN_QUIZ_BUILDER} element={<AdminQuizBuilderPage />} />
                 <Route path={ROUTES.ADMIN_QUIZ_PREVIEW} element={<AdminQuizPreviewPage />} />
                 <Route path={ROUTES.ADMIN_VOCABULARY} element={<AdminVocabularyPage />} />
+                <Route path={ROUTES.ADMIN_DESTINATIONS} element={<AdminDestinationsPage />} />
+                <Route path={ROUTES.ADMIN_DESTINATION_DETAIL} element={<AdminDestinationDetailPage />} />
                 <Route path={ROUTES.ADMIN} element={<AdminDashboardPage />} />
                 <Route path={ROUTES.ADMIN_USERS} element={<AdminUsersPage />} />
                 <Route path={ROUTES.ADMIN_USER_DETAIL} element={<AdminUserDetailPage />} />

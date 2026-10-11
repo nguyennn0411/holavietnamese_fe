@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect, useRef } from 'react';
 import { aiTutorService } from '@/services/aiTutorService';
 import { vocabularyService } from '@/services/vocabularyService';
@@ -214,11 +215,9 @@ export function AiTutorPage() {
 
       {/* Header section */}
       <div>
-        <span className="p4-header-badge">AI Assistant • 7 Modes</span>
-        <h1 className="p4-title">Một cuộc trò chuyện nhỏ, một bước tiến xa.</h1>
-        <p className="p4-subtitle">
-          Gia sư AI thông minh chuyên sâu tiếng Việt. Chọn chế độ phù hợp từ ngữ pháp, dịch thuật, hội thoại đời thường cho đến văn hóa và tiếng Việt 3 miền.
-        </p>
+        <span className="p4-header-badge"><BilingualText>{"AI Assistant • 7 Modes"}</BilingualText></span>
+        <h1 className="p4-title"><BilingualText>{"Một cuộc trò chuyện nhỏ, một bước tiến xa."}</BilingualText></h1>
+        <p className="p4-subtitle"><BilingualText>{"Gia sư AI thông minh chuyên sâu tiếng Việt. Chọn chế độ phù hợp từ ngữ pháp, dịch thuật, hội thoại đời thường cho đến văn hóa và tiếng Việt 3 miền."}</BilingualText></p>
       </div>
 
       {/* Main 2-column Tutor workspace */}
@@ -226,18 +225,15 @@ export function AiTutorPage() {
         {/* Sidebar: Conversation history */}
         <aside className="tutor-sidebar">
           <div className="tutor-sidebar__header">
-            <span className="tutor-sidebar__title">
-              💬 Lịch sử trò chuyện
-            </span>
-            <span style={{ fontSize: '11px', color: 'var(--color-muted)' }}>{sessions.length} phiên</span>
+            <span className="tutor-sidebar__title"><BilingualText>{"💬 Lịch sử trò chuyện"}</BilingualText></span>
+            <span style={{ fontSize: '11px', color: 'var(--color-muted)' }}>{sessions.length}<BilingualText>{"phiên"}</BilingualText></span>
           </div>
 
           <button
             className="btn-new-chat"
             onClick={() => handleCreateNewChat(currentMode)}
           >
-            <span>+</span> Cuộc trò chuyện mới
-          </button>
+            <span>+</span><BilingualText>{"Cuộc trò chuyện mới"}</BilingualText></button>
 
           {/* 7 Modes Switcher Bar */}
           <div className="tutor-modes-bar" role="tablist" aria-label="Các chế độ AI Tutor">
@@ -250,16 +246,16 @@ export function AiTutorPage() {
                   aria-selected={isSelected}
                   className={`mode-pill ${isSelected ? 'active' : ''}`}
                   onClick={() => handleSwitchMode(mode.id)}
-                  title={mode.description}
+                  title={bilingualLabel(mode.description)}
                 >
                   <span className="mode-icon">{mode.icon}</span>
-                  <span>{mode.name}</span>
+                  <span><BilingualText>{mode.name}</BilingualText></span>
                 </button>
               );
             })}
           </div>
 
-          <p className="eyebrow">Cuộc trò chuyện gần đây</p>
+          <p className="eyebrow"><BilingualText>{"Cuộc trò chuyện gần đây"}</BilingualText></p>
           <div className="tutor-history-list">
             {sessions.map(s => {
               const sessionMode = aiTutorService.getMode(s.mode);
@@ -285,12 +281,12 @@ export function AiTutorPage() {
                         onClick={e => e.stopPropagation()}
                       />
                     ) : (
-                      <span className="tutor-history-item__title">{s.title}</span>
+                      <span className="tutor-history-item__title"><BilingualText vi={s.titleVi || s.title} en={s.title} /></span>
                     )}
                     <span className="tutor-history-item__meta">
-                      <span>{sessionMode?.icon} {sessionMode?.name}</span>
+                      <span>{sessionMode?.icon} <BilingualText>{sessionMode?.name}</BilingualText></span>
                       <span>•</span>
-                      <span>{s.messages?.length || 0} tin</span>
+                      <span>{s.messages?.length || 0}<BilingualText>{"tin"}</BilingualText></span>
                     </span>
                   </div>
 
@@ -327,14 +323,13 @@ export function AiTutorPage() {
                 {activeModeConfig.icon}
               </div>
               <div>
-                <div className="current-mode-title">
-                  Chế độ {activeModeConfig.name} — {activeModeConfig.title}
+                <div className="current-mode-title"><BilingualText>{"Chế độ"}</BilingualText> <BilingualText>{activeModeConfig.name}</BilingualText> — <BilingualText>{activeModeConfig.title}</BilingualText>
                 </div>
-                <div className="current-mode-desc">{activeModeConfig.description}</div>
+                <div className="current-mode-desc"><BilingualText>{activeModeConfig.description}</BilingualText></div>
               </div>
             </div>
-            <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '6px', background: activeModeConfig.bg, color: activeModeConfig.color, fontWeight: 700 }}>
-              {activeModeConfig.badge}
+            <span className="current-mode-badge" style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '6px', background: activeModeConfig.bg, color: activeModeConfig.color, fontWeight: 700 }}>
+              <BilingualText>{activeModeConfig.badge}</BilingualText>
             </span>
           </div>
 
@@ -354,9 +349,7 @@ export function AiTutorPage() {
                     {/* Word tags saved */}
                     {msg.savedWords && msg.savedWords.length > 0 && (
                       <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px dashed var(--color-border)' }}>
-                        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-red-hover)', marginBottom: '6px' }}>
-                          📚 Từ vựng hữu ích gợi ý trong tin nhắn này:
-                        </div>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-red-hover)', marginBottom: '6px' }}><BilingualText>{"📚 Từ vựng hữu ích gợi ý trong tin nhắn này:"}</BilingualText></div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                           {msg.savedWords.map((item, idx) => (
                             <button
@@ -367,8 +360,7 @@ export function AiTutorPage() {
                               style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-red-hover)' }}
                             >
                               <span>⭐</span>
-                              <strong>{item.word}</strong>: {item.meaning} (Lưu từ)
-                            </button>
+                              <strong>{item.word}</strong>: {item.meaning}<BilingualText>{"(Lưu từ)"}</BilingualText></button>
                           ))}
                         </div>
                       </div>
@@ -382,15 +374,13 @@ export function AiTutorPage() {
                           onClick={() => handleSpeak(msg.text)}
                           title="Nghe phát âm tiếng Việt chuẩn"
                         >
-                          <span>🔊</span> Nghe giọng đọc
-                        </button>
+                          <span>🔊</span><BilingualText>{"Nghe giọng đọc"}</BilingualText></button>
                         <button
                           className="message-action-btn"
                           onClick={() => handleCopy(msg.text)}
                           title="Sao chép nội dung"
                         >
-                          <span>📋</span> Sao chép
-                        </button>
+                          <span>📋</span><BilingualText>{"Sao chép"}</BilingualText></button>
                       </div>
                     )}
                   </div>
@@ -402,8 +392,8 @@ export function AiTutorPage() {
               <div className="message-row ai">
                 <div className="message-avatar">{activeModeConfig.icon}</div>
                 <div className="message-bubble">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-sage)' }}>
-                    <span>✨ Hola AI đang suy nghĩ và phản hồi...</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-forest)' }}>
+                    <span><BilingualText>{"✨ Hola AI đang suy nghĩ và phản hồi..."}</BilingualText></span>
                   </div>
                 </div>
               </div>
@@ -414,7 +404,7 @@ export function AiTutorPage() {
 
           {/* Quick Prompts Chips */}
           <div className="tutor-quick-prompts">
-            <span className="quick-prompt-label">Gợi ý:</span>
+            <span className="quick-prompt-label"><BilingualText>{"Gợi ý:"}</BilingualText></span>
             {activeModeConfig.quickPrompts.map((prompt, index) => (
               <button
                 key={index}
@@ -422,7 +412,7 @@ export function AiTutorPage() {
                 onClick={() => handleSendMessage(prompt)}
                 disabled={isSending}
               >
-                {prompt}
+                <BilingualText>{prompt}</BilingualText>
               </button>
             ))}
           </div>
@@ -440,7 +430,7 @@ export function AiTutorPage() {
 
             <textarea
               className="tutor-textarea"
-              placeholder={activeModeConfig.placeholder}
+              placeholder={bilingualLabel(activeModeConfig.placeholder)}
               value={inputText}
               onChange={e => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -453,7 +443,7 @@ export function AiTutorPage() {
               onClick={() => handleSendMessage()}
               disabled={!inputText.trim() || isSending}
             >
-              <span>Gửi</span>
+              <span><BilingualText>{"Gửi"}</BilingualText></span>
               <span>➔</span>
             </button>
           </div>

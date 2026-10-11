@@ -11,6 +11,7 @@ import '../src/presentation/styles/dashboard.css';
 import '../src/presentation/styles/account.css';
 import '../src/presentation/styles/ai-tutor.css';
 import '../src/presentation/styles/design-system.css';
+import '../src/presentation/styles/heritage.css';
 const qaParams = new URLSearchParams(location.search);
 const screen = qaParams.get('screen') || (location.pathname.startsWith('/qa/') ? '/' : location.pathname + location.search);
 const screenUrl = new URL(screen, location.origin);

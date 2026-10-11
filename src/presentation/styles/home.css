@@ -10,7 +10,7 @@
   --home-paper: var(--color-cream);
   --home-surface: var(--color-surface);
   --home-ink: var(--color-ink);
-  --home-muted: var(--color-sage);
+  --home-muted: var(--color-muted);
   --home-gold: var(--color-gold);
   --home-gold-light: var(--color-gold-soft);
   --home-border: var(--color-border);
@@ -120,12 +120,12 @@
 
 .home-badge-streak {
   border-color: var(--color-gold-soft);
-  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-cream) 100%);
+  background: var(--color-surface);
 }
 
 .home-badge-xp {
   border-color: var(--color-sage-soft);
-  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface) 100%);
+  background: var(--color-surface);
 }
 
 /* Hero Split: Continue Lesson & Goal Tracker */
@@ -148,7 +148,7 @@
 
 /* Continue Card */
 .home-dash-card--continue {
-  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-cream) 100%);
+  background: var(--color-surface);
 }
 
 .home-card-drum-overlay {
@@ -239,7 +239,7 @@
 .home-continue-progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--color-red), var(--color-red-hover));
+  background: var(--color-red);
   transition: width 0.4s ease;
 }
 
@@ -447,7 +447,7 @@
 
 .home-quick-icon--audio {
   background: var(--color-sage-soft);
-  color: var(--color-sage);
+  color: var(--color-forest);
 }
 
 .home-quick-icon--culture {
@@ -777,7 +777,7 @@
 
 .home-mission-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-gold), var(--color-red-hover));
+  background: var(--color-gold);
   border-radius: 999px;
 }
 
@@ -1015,7 +1015,7 @@
 /* CTA Banner */
 .home-cta-banner {
   padding: 4.5rem 1.5rem;
-  background: linear-gradient(135deg, var(--color-red-hover) 0%, var(--color-red-hover) 50%, var(--color-red) 100%);
+  background: var(--color-red-hover);
   color: var(--color-surface);
   text-align: center;
 }

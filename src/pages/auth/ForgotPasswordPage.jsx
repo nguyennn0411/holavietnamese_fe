@@ -1,8 +1,9 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import dongSonBg from '@/assets/images/dongson_auth_bg.png';
+import dongSonBg from '@/assets/images/dongson_heritage.png';
 
 export function ForgotPasswordPage() {
   const navigate = useNavigate();
@@ -74,27 +75,27 @@ export function ForgotPasswordPage() {
           <div className="auth-welcome-pill">
             <span className="auth-welcome-code">🔑</span>
             <span className="auth-welcome-text">
-              {step === 1 ? 'Bước 1: Nhập Email' : step === 2 ? 'Bước 2: Xác thực OTP' : 'Bước 3: Mật khẩu mới'}
+              <BilingualText>{step === 1 ? 'Bước 1: Nhập Email' : step === 2 ? 'Bước 2: Xác thực OTP' : 'Bước 3: Mật khẩu mới'}</BilingualText>
             </span>
           </div>
 
           <h1 className="auth-heading">
-            {step === 1 ? 'Quên mật khẩu?' : step === 2 ? 'Nhập mã OTP' : 'Tạo mật khẩu mới'}
+            <BilingualText>{step === 1 ? 'Quên mật khẩu?' : step === 2 ? 'Nhập mã OTP' : 'Tạo mật khẩu mới'}</BilingualText>
           </h1>
           <p className="auth-subtitle">
-            {step === 1 && 'Nhập email tài khoản, chúng tôi sẽ gửi mã OTP xác nhận.'}
-            {step === 2 && `Mã xác nhận 6 số đã được gửi tới ${email}.`}
-            {step === 3 && 'Tạo mật khẩu an toàn mới để tiếp tục hành trình học tiếng Việt.'}
+            <BilingualText>{step === 1 && 'Nhập email tài khoản, chúng tôi sẽ gửi mã OTP xác nhận.'}</BilingualText>
+            <BilingualText>{step === 2 && `Mã xác nhận 6 số đã được gửi tới ${email}.`}</BilingualText>
+            <BilingualText>{step === 3 && 'Tạo mật khẩu an toàn mới để tiếp tục hành trình học tiếng Việt.'}</BilingualText>
           </p>
 
-          {status.error && <div className="auth-message auth-message-error">{status.error}</div>}
-          {status.message && <div className="auth-message auth-message-success">{status.message}</div>}
+          {status.error && <div className="auth-message auth-message-error"><BilingualText>{status.error}</BilingualText></div>}
+          {status.message && <div className="auth-message auth-message-success"><BilingualText>{status.message}</BilingualText></div>}
 
           {/* Step 1: Input Email */}
           {step === 1 && (
             <form className="auth-form" onSubmit={handleInitiate}>
               <div className="auth-field">
-                <label className="auth-label">Địa chỉ Email</label>
+                <label className="auth-label"><BilingualText>{"Địa chỉ Email"}</BilingualText></label>
                 <input
                   className="auth-input"
                   type="email"
@@ -110,7 +111,7 @@ export function ForgotPasswordPage() {
                 className="auth-btn auth-btn-primary"
                 disabled={status.loading}
               >
-                {status.loading ? 'Đang gửi mã…' : 'Gửi mã OTP qua email'}
+                <BilingualText>{status.loading ? 'Đang gửi mã…' : 'Gửi mã OTP qua email'}</BilingualText>
               </button>
             </form>
           )}
@@ -119,7 +120,7 @@ export function ForgotPasswordPage() {
           {step === 2 && (
             <form className="auth-form" onSubmit={handleVerifyOtp}>
               <div className="auth-field">
-                <label className="auth-label">Mã OTP (6 chữ số)</label>
+                <label className="auth-label"><BilingualText>{"Mã OTP (6 chữ số)"}</BilingualText></label>
                 <input
                   className="auth-input"
                   type="text"
@@ -137,7 +138,7 @@ export function ForgotPasswordPage() {
                 className="auth-btn auth-btn-primary"
                 disabled={status.loading}
               >
-                {status.loading ? 'Đang kiểm tra…' : 'Xác thực mã OTP'}
+                <BilingualText>{status.loading ? 'Đang kiểm tra…' : 'Xác thực mã OTP'}</BilingualText>
               </button>
 
               <button
@@ -145,9 +146,7 @@ export function ForgotPasswordPage() {
                 className="auth-show-btn"
                 onClick={() => setStep(1)}
                 style={{ marginTop: '8px' }}
-              >
-                ← Đổi email khác
-              </button>
+              ><BilingualText>{"← Đổi email khác"}</BilingualText></button>
             </form>
           )}
 
@@ -155,11 +154,11 @@ export function ForgotPasswordPage() {
           {step === 3 && (
             <form className="auth-form" onSubmit={handleResetPassword}>
               <div className="auth-field">
-                <label className="auth-label">Mật khẩu mới</label>
+                <label className="auth-label"><BilingualText>{"Mật khẩu mới"}</BilingualText></label>
                 <input
                   className="auth-input"
                   type="password"
-                  placeholder="Tối thiểu 6 ký tự"
+                  placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
@@ -167,11 +166,11 @@ export function ForgotPasswordPage() {
               </div>
 
               <div className="auth-field">
-                <label className="auth-label">Xác nhận mật khẩu</label>
+                <label className="auth-label"><BilingualText>{"Xác nhận mật khẩu"}</BilingualText></label>
                 <input
                   className="auth-input"
                   type="password"
-                  placeholder="Nhập lại mật khẩu mới"
+                  placeholder={bilingualLabel("Nhập lại mật khẩu mới")}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
@@ -183,13 +182,12 @@ export function ForgotPasswordPage() {
                 className="auth-btn auth-btn-primary"
                 disabled={status.loading}
               >
-                {status.loading ? 'Đang cập nhật…' : 'Lưu mật khẩu mới & Đăng nhập'}
+                <BilingualText>{status.loading ? 'Đang cập nhật…' : 'Lưu mật khẩu mới & Đăng nhập'}</BilingualText>
               </button>
             </form>
           )}
 
-          <p className="auth-footer-text">
-            Nhớ lại mật khẩu rồi? <Link to="/login" className="auth-footer-link">Quay lại đăng nhập</Link>
+          <p className="auth-footer-text"><BilingualText>{"Nhớ lại mật khẩu rồi?"}</BilingualText><Link to="/login" className="auth-footer-link"><BilingualText>{"Quay lại đăng nhập"}</BilingualText></Link>
           </p>
         </div>
       </div>
@@ -198,13 +196,11 @@ export function ForgotPasswordPage() {
         <div className="auth-drum-bg">
           <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
         </div>
-        <div className="auth-visual-topline"><span /> Bảo mật tài khoản · Đồng bộ tiến độ</div>
+        <div className="auth-visual-topline"><span /><BilingualText>{"Bảo mật tài khoản · Đồng bộ tiến độ"}</BilingualText></div>
         <div className="auth-hero-card">
-          <div className="auth-hero-tag">BẢO MẬT TÀI KHOẢN</div>
-          <h2 className="auth-hero-title">Khôi phục mật khẩu 3 bước chuẩn an toàn.</h2>
-          <p className="auth-hero-desc">
-            Xác thực OTP 2 lớp qua email đảm bảo quyền sở hữu tài khoản và giữ nguyên mọi dữ liệu khóa học đã lưu.
-          </p>
+          <div className="auth-hero-tag"><BilingualText>{"BẢO MẬT TÀI KHOẢN"}</BilingualText></div>
+          <h2 className="auth-hero-title"><BilingualText>{"Khôi phục mật khẩu 3 bước chuẩn an toàn."}</BilingualText></h2>
+          <p className="auth-hero-desc"><BilingualText>{"Xác thực OTP 2 lớp qua email đảm bảo quyền sở hữu tài khoản và giữ nguyên mọi dữ liệu khóa học đã lưu."}</BilingualText></p>
         </div>
       </aside>
     </div>

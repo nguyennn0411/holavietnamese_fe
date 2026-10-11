@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -34,11 +35,9 @@ export class ErrorBoundary extends React.Component {
           fontFamily: 'system-ui, sans-serif',
         }}>
           <span style={{ fontSize: '3rem', marginBottom: '16px' }}>⚠️</span>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}>
-            Đã xảy ra lỗi giao diện
-          </h2>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}><BilingualText>{"Đã xảy ra lỗi giao diện"}</BilingualText></h2>
           <p style={{ color: 'var(--color-muted)', maxWidth: '460px', margin: '0 0 24px 0', fontSize: '0.9rem' }}>
-            {this.state.error?.message || 'Có sự cố phát sinh khi tải thành phần này. Vui lòng thử tải lại trang.'}
+            <BilingualText>{this.state.error?.message || 'Có sự cố phát sinh khi tải thành phần này. Vui lòng thử tải lại trang.'}</BilingualText>
           </p>
           <div style={{ display: 'flex', gap: '12px' }}>
             <button
@@ -52,9 +51,7 @@ export class ErrorBoundary extends React.Component {
                 fontWeight: 600,
                 cursor: 'pointer',
               }}
-            >
-              🔄 Tải lại trang
-            </button>
+            ><BilingualText>{"🔄 Tải lại trang"}</BilingualText></button>
             <button
               type="button"
               onClick={this.handleReset}
@@ -67,9 +64,7 @@ export class ErrorBoundary extends React.Component {
                 fontWeight: 700,
                 cursor: 'pointer',
               }}
-            >
-              Về Trang chủ
-            </button>
+            ><BilingualText>{"Về Trang chủ"}</BilingualText></button>
           </div>
         </div>
       );
