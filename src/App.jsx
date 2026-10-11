@@ -44,6 +44,7 @@ import { AdminAuditLogsPage } from "@/pages/admin/AdminAuditLogsPage";
 import { AdminSettingsPage } from "@/pages/admin/AdminSettingsPage";
 
 import { LearnPage } from "@/features/course/LearnPage";
+import { AlphabetPage } from "@/features/alphabet/AlphabetPage";
 import { LessonLearningPage as ActivityLessonPage } from "@/features/lesson/LessonLearningPage";
 import {
   GrammarListPage,
@@ -85,6 +86,7 @@ function App() {
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<HomePage />} />
               <Route path="/learn" element={<LearnPage />} />
+              <Route path="/alphabet" element={<AlphabetPage />} />
               <Route path="/grammar" element={<GrammarListPage />} />
               <Route path="/grammar/:id" element={<GrammarDetailPage />} />
               <Route path={ROUTES.COURSES} element={<LearnPage />} />

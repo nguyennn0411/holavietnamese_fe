@@ -253,11 +253,11 @@ export function LessonActivity({
       );
   }
   return (
-    <div className="m2-activity">
+    <section className="m2-activity m2-lesson-card" aria-labelledby={`activity-title-${a.id}`}>
       <Badge>{a.activityType.replace(/_/g, " ")}</Badge>
-      <h1><BilingualText vi={a.titleVi} en={a.titleEn || a.title} variant="title" /></h1>
+      <h2 id={`activity-title-${a.id}`}><BilingualText vi={a.titleVi} en={a.titleEn || a.title} variant="sectionTitle" /></h2>
       <p><BilingualText vi={a.instructionVi} en={a.instructionEn || a.instruction} /></p>
       {body}
-    </div>
+    </section>
   );
 }

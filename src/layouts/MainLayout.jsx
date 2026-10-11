@@ -93,6 +93,7 @@ export function MainLayout() {
           <NavLink to="/" end className="layout-nav-link"><BilingualText vi="Trang chủ" en="Home" variant="caption" /></NavLink>
           <NavLink to="/my-learning" className="layout-nav-link"><BilingualText vi="Góc học tập" en="My learning" variant="caption" /></NavLink>
           <NavLink to="/learn" className="layout-nav-link"><BilingualText vi="Khóa học" en="Courses" variant="caption" /></NavLink>
+          <NavLink to="/alphabet" className="layout-nav-link"><BilingualText vi="Bảng chữ cái" en="Alphabet" variant="caption" /></NavLink>
           <NavLink to="/grammar" className="layout-nav-link"><BilingualText vi="Ngữ pháp" en="Grammar" variant="caption" /></NavLink>
           <NavLink to="/progress" className="layout-nav-link"><BilingualText vi="Tiến độ" en="Progress" variant="caption" /></NavLink>
           <NavLink to="/achievements" className="layout-nav-link"><BilingualText vi="Thành tích" en="Achievements" variant="caption" /></NavLink>

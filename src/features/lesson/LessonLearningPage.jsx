@@ -1,11 +1,13 @@
 import { BilingualText } from "../shared/BilingualText";
 import { useEffect, useState } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { Clock3, ListChecks, Target } from "lucide-react";
 import { lessonService, courseService, get } from "../shared/services";
 import { Badge, Progress, State, useAction, useLoad } from "../shared/ui";
 import { LessonActivity } from "./ActivityRenderer";
 import { Modal } from "@/components/common/Modal";
 import { ModuleAccordion } from "../course/Curriculum";
+import "./lesson-learning.css";
 export function LessonLearningPage({ preview = false }) {
   const params = useParams(),
     id = params.id || params.lessonId,
@@ -112,7 +114,9 @@ export function LessonLearningPage({ preview = false }) {
             }
           };
           return (
-            <div className="m2-learning-shell">
+            <div
+              className={`m2-learning-shell${preview ? " m2-learning-preview" : ""}`}
+            >
               {!preview && (
                 <aside
                   className="m2-course-navigation"
@@ -146,87 +150,132 @@ export function LessonLearningPage({ preview = false }) {
                 </aside>
               )}
               <section className="m2-learning-content">
-                <header className="m2-lesson-header">
-                  <Link
-                    to={
-                      preview
-                        ? `/admin/lessons/${id}`
-                        : `/courses/${l.courseId}`
-                    }
-                  >
-                    <BilingualText
-                      vi={preview ? "← Về trình biên tập" : "← Về khóa học"}
-                      en={preview ? "Back to builder" : "Back to Course"}
-                      variant="caption"
-                    />
-                  </Link>
+                <Link
+                  className="m2-lesson-back"
+                  to={
+                    preview ? `/admin/lessons/${id}` : `/courses/${l.courseId}`
+                  }
+                >
+                  <BilingualText
+                    vi={preview ? "← Về trình biên tập" : "← Về khóa học"}
+                    en={preview ? "Back to builder" : "Back to Course"}
+                    variant="caption"
+                  />
+                </Link>
+                <header className="m2-lesson-header m2-lesson-card">
                   {preview && <Badge>Preview · no progress saved</Badge>}
-                  <p>
-                    <BilingualText
-                      vi={l.courseTitleVi}
-                      en={l.courseTitleEn || l.courseTitle}
-                      variant="caption"
-                    />
-                    <br />
+                  <p className="m2-lesson-context">
                     <BilingualText
                       vi={l.moduleTitleVi}
                       en={l.moduleTitleEn || l.moduleTitle}
                       variant="caption"
                     />
                   </p>
-                  <div className="row">
-                    <h2>
+                  <h1 className="m2-lesson-title">
+                    <BilingualText
+                      vi={l.titleVi}
+                      en={l.titleEn || l.title}
+                      variant="pageTitle"
+                    />
+                  </h1>
+                </header>
+                {(l.descriptionVi || l.descriptionEn || l.description) && (
+                  <section
+                    className="m2-lesson-card m2-lesson-overview"
+                    aria-labelledby="lesson-overview-title"
+                  >
+                    <h2 id="lesson-overview-title">
                       <BilingualText
-                        vi={l.titleVi}
-                        en={l.titleEn || l.title}
-                        variant="title"
+                        vi="Nội dung bài học"
+                        en="Lesson overview"
+                        variant="sectionTitle"
                       />
                     </h2>
-                    <span>
+                    <p>
                       <BilingualText
-                        vi={`${index + 1} / ${activities.length} hoạt động`}
-                        en={`${index + 1} / ${activities.length} activities`}
-                        variant="caption"
+                        vi={l.descriptionVi}
+                        en={l.descriptionEn || l.description}
                       />
-                    </span>
-                  </div>
-                  <p>
-                    <BilingualText
-                      vi={l.descriptionVi}
-                      en={l.descriptionEn || l.description}
-                    />
-                  </p>
+                    </p>
+                  </section>
+                )}
+                <div className="m2-lesson-info-grid">
                   {(l.learningObjectiveVi ||
                     l.learningObjectiveEn ||
                     l.learningObjective) && (
-                    <p>
-                      <BilingualText
-                        vi="Mục tiêu bài học"
-                        en="Learning objective"
-                        variant="heading"
-                      />
-                      <br />
-                      <BilingualText
-                        vi={l.learningObjectiveVi}
-                        en={l.learningObjectiveEn || l.learningObjective}
-                      />
-                    </p>
+                    <section
+                      className="m2-lesson-card m2-lesson-objective"
+                      aria-labelledby="lesson-objective-title"
+                    >
+                      <h2 id="lesson-objective-title">
+                        <Target size={20} aria-hidden="true" />
+                        <BilingualText
+                          vi="Mục tiêu bài học"
+                          en="Learning objective"
+                          variant="sectionTitle"
+                        />
+                      </h2>
+                      <p>
+                        <BilingualText
+                          vi={l.learningObjectiveVi}
+                          en={l.learningObjectiveEn || l.learningObjective}
+                        />
+                      </p>
+                    </section>
                   )}
-                  <p>
-                    <BilingualText
-                      vi={`${l.estimatedMinutes} phút · Hoàn thành ${progress?.progressPercent ?? 0}%`}
-                      en={`${l.estimatedMinutes} minutes · ${progress?.progressPercent ?? 0}% complete`}
-                      variant="caption"
+                  <section
+                    className="m2-lesson-card m2-lesson-stats"
+                    aria-labelledby="lesson-stats-title"
+                  >
+                    <h2 id="lesson-stats-title">
+                      <BilingualText
+                        vi="Thời lượng & tiến độ"
+                        en="Time & progress"
+                        variant="sectionTitle"
+                      />
+                    </h2>
+                    <div className="m2-lesson-meta">
+                      {l.estimatedMinutes != null && (
+                        <span className="m2-lesson-info-badge">
+                          <Clock3 size={18} aria-hidden="true" />
+                          <BilingualText
+                            vi={`${l.estimatedMinutes} phút`}
+                            en={`${l.estimatedMinutes} minutes`}
+                            variant="caption"
+                          />
+                        </span>
+                      )}
+                      <span className="m2-lesson-info-badge">
+                        <ListChecks size={18} aria-hidden="true" />
+                        <BilingualText
+                          vi={`Hoạt động ${index + 1} / ${activities.length}`}
+                          en={`Activity ${index + 1} / ${activities.length}`}
+                          variant="caption"
+                        />
+                      </span>
+                    </div>
+                    <div className="m2-lesson-progress-label">
+                      <BilingualText
+                        vi={preview ? "Đang xem trước" : "Đã hoàn thành"}
+                        en={preview ? "Preview position" : "Completed"}
+                        variant="caption"
+                      />
+                      <strong>
+                        {preview
+                          ? Math.round(((index + 1) * 100) / activities.length)
+                          : progress?.progressPercent || 0}
+                        %
+                      </strong>
+                    </div>
+                    <Progress
+                      value={
+                        preview
+                          ? ((index + 1) * 100) / activities.length
+                          : progress?.progressPercent || 0
+                      }
                     />
-                  </p>
-                  <Progress
-                    value={
-                      preview
-                        ? ((index + 1) * 100) / activities.length
-                        : progress?.progressPercent || 0
-                    }
-                  />
-                </header>
+                  </section>
+                </div>
                 {!preview && progress?.completed && (
                   <div className="m2-lesson-complete" role="status">
                     <BilingualText
@@ -261,9 +310,17 @@ export function LessonLearningPage({ preview = false }) {
                   preview={preview}
                 />
                 {(notice || action.error) && (
-                  <p role="alert" className="m2-error"><BilingualText vi={(action.error || notice).split(' / ')[0]} en={(action.error || notice).split(' / ')[1]} /></p>
+                  <p role="alert" className="m2-error">
+                    <BilingualText
+                      vi={(action.error || notice).split(" / ")[0]}
+                      en={(action.error || notice).split(" / ")[1]}
+                    />
+                  </p>
                 )}
-                <nav className="m2-lesson-nav">
+                <nav
+                  className="m2-lesson-nav m2-lesson-card"
+                  aria-label="Điều hướng hoạt động / Activity navigation"
+                >
                   <button
                     className="secondary"
                     disabled={index === 0 || action.busy}
@@ -303,11 +360,19 @@ export function LessonLearningPage({ preview = false }) {
                           setNotice("");
                         }}
                       >
-                        <BilingualText vi="Bỏ qua hoạt động tùy chọn" en="Skip optional" variant="caption" />
+                        <BilingualText
+                          vi="Bỏ qua hoạt động tùy chọn"
+                          en="Skip optional"
+                          variant="caption"
+                        />
                       </button>
                     ) : (
                       <Link to={`/courses/${l.courseId}`}>
-                        <BilingualText vi="Về khóa học" en="Return to course" variant="caption" />
+                        <BilingualText
+                          vi="Về khóa học"
+                          en="Return to course"
+                          variant="caption"
+                        />
                       </Link>
                     ))}
                   <button
@@ -338,15 +403,37 @@ export function LessonLearningPage({ preview = false }) {
                 </nav>
                 {completion && (
                   <Modal
-                    title={<BilingualText vi={completion.courseCompleted ? "Đã hoàn thành khóa học!" : "Đã hoàn thành bài học!"} en={completion.courseCompleted ? "Course complete!" : "Lesson complete!"} variant="title" />}
+                    title={
+                      <BilingualText
+                        vi={
+                          completion.courseCompleted
+                            ? "Đã hoàn thành khóa học!"
+                            : "Đã hoàn thành bài học!"
+                        }
+                        en={
+                          completion.courseCompleted
+                            ? "Course complete!"
+                            : "Lesson complete!"
+                        }
+                        variant="title"
+                      />
+                    }
                     onClose={() => setCompletion(null)}
                   >
-                    <p><BilingualText vi={`Bạn đã hoàn thành: ${l.titleVi}.`} en={`You completed: ${l.titleEn || l.title}.`} /></p>
+                    <p>
+                      <BilingualText
+                        vi={`Bạn đã hoàn thành: ${l.titleVi}.`}
+                        en={`You completed: ${l.titleEn || l.title}.`}
+                      />
+                    </p>
                     <Progress
                       value={completion.courseProgress?.progressPercentage}
                     />
                     <p>
-                      <BilingualText vi={`${completion.courseProgress?.completedLessons} / ${completion.courseProgress?.totalLessons} bài đã hoàn thành`} en={`${completion.courseProgress?.completedLessons} / ${completion.courseProgress?.totalLessons} lessons completed`} />
+                      <BilingualText
+                        vi={`${completion.courseProgress?.completedLessons} / ${completion.courseProgress?.totalLessons} bài đã hoàn thành`}
+                        en={`${completion.courseProgress?.completedLessons} / ${completion.courseProgress?.totalLessons} lessons completed`}
+                      />
                     </p>
                     <div className="actions">
                       {completion.nextLesson && (
@@ -354,14 +441,36 @@ export function LessonLearningPage({ preview = false }) {
                           className="button"
                           to={`/lesson/${completion.nextLesson.id}`}
                         >
-                          <BilingualText vi={`Tiếp theo: ${completion.nextLesson.titleVi}`} en={`Next: ${completion.nextLesson.titleEn || completion.nextLesson.title}`} variant="caption" />
+                          <BilingualText
+                            vi={`Tiếp theo: ${completion.nextLesson.titleVi}`}
+                            en={`Next: ${completion.nextLesson.titleEn || completion.nextLesson.title}`}
+                            variant="caption"
+                          />
                         </Link>
                       )}
-                      <Link to={`/courses/${l.courseId}`}><BilingualText vi="Về khóa học" en="Back to Course" variant="caption" /></Link>
+                      <Link to={`/courses/${l.courseId}`}>
+                        <BilingualText
+                          vi="Về khóa học"
+                          en="Back to Course"
+                          variant="caption"
+                        />
+                      </Link>
                       {completion.courseCompleted && (
                         <>
-                          <Link to="/progress"><BilingualText vi="Xem tiến độ" en="View Progress" variant="caption" /></Link>
-                          <Link to="/learn"><BilingualText vi="Khám phá khóa học tiếp theo" en="Explore Next Course" variant="caption" /></Link>
+                          <Link to="/progress">
+                            <BilingualText
+                              vi="Xem tiến độ"
+                              en="View Progress"
+                              variant="caption"
+                            />
+                          </Link>
+                          <Link to="/learn">
+                            <BilingualText
+                              vi="Khám phá khóa học tiếp theo"
+                              en="Explore Next Course"
+                              variant="caption"
+                            />
+                          </Link>
                         </>
                       )}
                     </div>

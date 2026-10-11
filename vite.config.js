@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
     port: 5173,
     proxy: {
       '/media/foundation': { target: env.VITE_PROXY_TARGET || 'http://127.0.0.1:18080', changeOrigin: true },
+      '/media/pronunciation': { target: env.VITE_PROXY_TARGET || 'http://127.0.0.1:18080', changeOrigin: true },
       '/api': { target: env.VITE_PROXY_TARGET || 'http://127.0.0.1:18080', changeOrigin: true },
     },
   },

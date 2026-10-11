@@ -104,6 +104,11 @@ export function LearnPage() {
   const enrolled = mine.data?.content || [];
   return (
     <div className="m2">
+      <Link to="/alphabet" className="alphabet-entry">
+        <span aria-hidden="true">Aa</span>
+        <div><strong>Bảng chữ cái tiếng Việt</strong><small>29 chữ cái, nguyên âm, phụ âm và thanh điệu · Bấm để nghe phát âm</small></div>
+        <ArrowUpRight size={20} aria-hidden="true" />
+      </Link>
       {mine.error && (
         <p role="alert" className="m2-error">
           <BilingualText
