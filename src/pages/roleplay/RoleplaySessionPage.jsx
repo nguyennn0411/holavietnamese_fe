@@ -2,8 +2,10 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function RoleplaySessionPage() {
+  const { confirm, confirmationDialog } = useConfirmDialog();
   const { id } = useParams();
   const navigate = useNavigate();
   const scenario = aiRoleplayService.getScenario(id);
@@ -108,8 +110,8 @@ export function RoleplaySessionPage() {
     navigate(`/ai-sessions/${id}/result`);
   };
 
-  const handleResetSession = () => {
-    if (window.confirm('Bạn muốn bắt đầu lại phiên roleplay này từ đầu?')) {
+  const handleResetSession = async () => {
+    if (await confirm({ title: 'Bắt đầu lại phiên roleplay?', description: 'Toàn bộ hội thoại và tiến độ trong phiên hiện tại sẽ được đặt lại.', confirmLabel: 'Bắt đầu lại', tone: 'warning' })) {
       const fresh = aiRoleplayService.resetRoleplaySession(id);
       setSession(fresh);
       showToast('Đã đặt lại phiên hội thoại kịch bản!');
@@ -130,6 +132,7 @@ export function RoleplaySessionPage() {
 
   return (
     <div className="p4-container">
+      {confirmationDialog}
       {toastMessage && (
         <div className="p4-toast">
           <span>✨</span>

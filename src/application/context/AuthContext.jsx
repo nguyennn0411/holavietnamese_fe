@@ -53,6 +53,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const updateCurrentUser = useCallback((changes) => {
+    setUser((previous) => {
+      const merged = { ...previous, ...changes };
+      persistUser(merged);
+      return merged;
+    });
+  }, []);
+
   // On mount: if token exists, load profile
   useEffect(() => {
     if (isAuthenticated) {
@@ -213,6 +221,7 @@ export const AuthProvider = ({ children }) => {
     isAdmin,
     isLearner,
     fetchProfile,
+    updateCurrentUser,
   };
 
   return (

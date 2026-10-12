@@ -6,6 +6,7 @@ import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { AdminRoute } from '@/components/common/AdminRoute';
 import { ROUTES } from '@/constants/routes';
+const AppToaster = lazy(() => import('@/components/common/AppToaster'));
 
 // Layouts
 import { MainLayout } from '@/layouts/MainLayout';
@@ -29,6 +30,11 @@ const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage').then(mod
 const LearningProgressPage = lazy(() => import('@/pages/progress/LearningProgressPage').then(module => ({ default: module.LearningProgressPage })));
 const AchievementsPage = lazy(() => import('@/pages/achievements/AchievementsPage').then(module => ({ default: module.AchievementsPage })));
 const NotificationsPage = lazy(() => import('@/pages/notifications/NotificationsPage').then(module => ({ default: module.NotificationsPage })));
+
+// EdTech Next-Gen Experience
+const DashboardScreen = lazy(() => import('@/pages/edtech/DashboardScreen').then(module => ({ default: module.DashboardScreen })));
+const InteractiveLessonScreen = lazy(() => import('@/pages/edtech/InteractiveLessonScreen').then(module => ({ default: module.InteractiveLessonScreen })));
+const VocabularyHubScreen = lazy(() => import('@/pages/edtech/VocabularyHubScreen').then(module => ({ default: module.VocabularyHubScreen })));
 
 // Courses & Vocabulary Pages (Người 2 & Người 3)
 const CourseListPage = lazy(() => import('@/pages/courses/CourseListPage').then(module => ({ default: module.CourseListPage })));
@@ -94,6 +100,7 @@ const AdminQuizPreviewPage = lazy(() => import('@/pages/admin/AdminQuizPages').t
 function App() {
   return (
     <BrowserRouter>
+      <Suspense fallback={null}><AppToaster /></Suspense>
       <ErrorBoundary>
         <AuthProvider>
           <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><BilingualText>{"Đang tải trang…"}</BilingualText></div>}><Routes>
@@ -106,11 +113,14 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
             </Route>
-            <Route path="/forbidden" element={<ForbiddenPage />} />
+            {/* Distraction-Free Fullscreen Interactive Lesson */}
+            <Route path={ROUTES.EDTECH_LESSON} element={<InteractiveLessonScreen />} />
 
             {/* Learner Main Layout */}
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<HomePage />} />
+              <Route path={ROUTES.EDTECH_DASHBOARD} element={<DashboardScreen />} />
+              <Route path={ROUTES.EDTECH_VOCABULARY} element={<VocabularyHubScreen />} />
               <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
               <Route path={ROUTES.COURSES} element={<CourseListPage />} />
               <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
