@@ -2,8 +2,10 @@ import { BilingualText, bilingualLabel } from '@/components/common/BilingualText
 import { useState, useEffect, useRef } from 'react';
 import { aiTutorService } from '@/services/aiTutorService';
 import { vocabularyService } from '@/services/vocabularyService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AiTutorPage() {
+  const { confirm, confirmationDialog } = useConfirmDialog();
   const modes = aiTutorService.getModes();
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState('');
@@ -98,9 +100,9 @@ export function AiTutorPage() {
     }
   };
 
-  const handleDeleteSession = (e, id) => {
+  const handleDeleteSession = async (e, id) => {
     e.stopPropagation();
-    if (window.confirm('Bạn có chắc chắn muốn xóa phiên hội thoại này?')) {
+    if (await confirm({ title: 'Xóa cuộc trò chuyện?', description: 'Lịch sử của phiên hội thoại này sẽ bị xóa và không thể khôi phục.', confirmLabel: 'Xóa cuộc trò chuyện' })) {
       const remaining = aiTutorService.deleteSession(id);
       setSessions(remaining);
       const newActiveId = aiTutorService.getActiveSessionId();
@@ -206,6 +208,7 @@ export function AiTutorPage() {
 
   return (
     <div className="p4-container">
+      {confirmationDialog}
       {toastMessage && (
         <div className="p4-toast">
           <span>✨</span>

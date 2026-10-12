@@ -2,6 +2,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { useEffect, useId, useRef, useState } from 'react';
 import { mediaSource } from './mediaSource';
+import { ArrowLeft, ArrowRight, Inbox, Volume2 } from 'lucide-react';
 
 export function PageHeader({ eyebrow, title, description, actions }) {
   return <header className="page-header"><div>{eyebrow && <p className="eyebrow"><BilingualText>{eyebrow}</BilingualText></p>}<h1><BilingualText>{title}</BilingualText></h1>{description && <p className="lead"><BilingualText>{description}</BilingualText></p>}</div>{actions && <div className="actions">{actions}</div>}</header>;
@@ -16,7 +17,7 @@ export function Breadcrumb({ items }) {
 }
 
 export function EmptyState({ title = 'Chưa có nội dung', description, children }) {
-  return <div className="state"><span className="state-symbol" aria-hidden="true">◇</span><h2><BilingualText>{title}</BilingualText></h2>{description && <p><BilingualText>{description}</BilingualText></p>}{children && <div className="actions">{children}</div>}</div>;
+  return <div className="state"><span className="state-symbol" aria-hidden="true"><Inbox size={28}/></span><h2><BilingualText>{title}</BilingualText></h2>{description && <p><BilingualText>{description}</BilingualText></p>}{children && <div className="actions">{children}</div>}</div>;
 }
 
 export function Notice({ children, kind = 'info' }) {
@@ -25,7 +26,7 @@ export function Notice({ children, kind = 'info' }) {
 
 export function Pagination({ page, totalPages, onChange }) {
   if (totalPages < 2) return null;
-  return <nav className="pagination" aria-label="Phân trang"><button className="secondary" disabled={page <= 0} onClick={() => onChange(page - 1)}><BilingualText>{"← Trước"}</BilingualText></button><span>{page + 1} / {totalPages}</span><button className="secondary" disabled={page + 1 >= totalPages} onClick={() => onChange(page + 1)}><BilingualText>{"Sau →"}</BilingualText></button></nav>;
+  return <nav className="pagination" aria-label="Phân trang"><button className="secondary" disabled={page <= 0} onClick={() => onChange(page - 1)}><ArrowLeft size={16}/><BilingualText>{"Trước"}</BilingualText></button><span>{page + 1} / {totalPages}</span><button className="secondary" disabled={page + 1 >= totalPages} onClick={() => onChange(page + 1)}><BilingualText>{"Sau"}</BilingualText><ArrowRight size={16}/></button></nav>;
 }
 
 export function Artwork({ kind = 'food', className = '', alt = '' }) {
@@ -65,5 +66,5 @@ function SpeechAttempt({ text, audioUrl, className, fallbackToSpeech }) {
   }
   return <><button type="button" className={`speak-button ${className}`} disabled={!text && !audioUrl}
     aria-label={`Nghe phát âm: ${text || 'Âm thanh'}`} aria-describedby={error ? errorId : undefined}
-    onClick={speak}>♪</button>{error && <small className="media-error speak-error" id={errorId} role="status"><BilingualText>{error}</BilingualText></small>}</>;
+    onClick={speak}><Volume2 size={17} aria-hidden="true"/></button>{error && <small className="media-error speak-error" id={errorId} role="status"><BilingualText>{error}</BilingualText></small>}</>;
 }

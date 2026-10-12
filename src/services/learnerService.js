@@ -35,6 +35,42 @@ export const learnerService = {
     const payload = Object.fromEntries(fields.filter((key) => data[key] !== undefined).map((key) => [key, data[key]]));
     return axiosClient.put('/api/users/me', payload);
   },
+  getAvatarUploadSignature() {
+    return axiosClient.post('/api/users/me/avatar/signature');
+  },
+  saveAvatarUrl(avatarUrl) {
+    return axiosClient.put('/api/users/me/avatar', { avatarUrl });
+  },
+  async uploadAvatar(file) {
+    const signatureResponse = await this.getAvatarUploadSignature();
+    const signature = resultOf(signatureResponse);
+    const requiredFields = ['uploadUrl', 'apiKey', 'timestamp', 'signature'];
+    if (!requiredFields.every((field) => signature?.[field] !== undefined && signature[field] !== '')) {
+      throw new Error(signatureResponse?.message || 'Không nhận được thông tin tải ảnh hợp lệ.');
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('api_key', signature.apiKey);
+    formData.append('timestamp', String(signature.timestamp));
+    formData.append('signature', signature.signature);
+    if (signature.folder) formData.append('folder', signature.folder);
+    if (signature.publicId) formData.append('public_id', signature.publicId);
+
+    const cloudinaryResponse = await fetch(signature.uploadUrl, {
+      method: 'POST',
+      body: formData,
+    });
+    const uploaded = await cloudinaryResponse.json().catch(() => ({}));
+    if (!cloudinaryResponse.ok) {
+      throw new Error(uploaded?.error?.message || uploaded?.message || 'Upload ảnh thất bại.');
+    }
+    if (!uploaded?.secure_url) {
+      throw new Error('Cloudinary không trả về đường dẫn ảnh.');
+    }
+
+    return this.saveAvatarUrl(uploaded.secure_url);
+  },
   async getSettings() {
     return resultOf(await axiosClient.get('/api/users/settings'));
   },
