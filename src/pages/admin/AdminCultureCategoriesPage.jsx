@@ -3,8 +3,10 @@ import { Modal } from '@/components/common/Modal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminCultureCategoriesPage() {
+  const { confirm, confirmationDialog } = useConfirmDialog();
   const [categories, setCategories] = useState(() => adminCultureAiService.getCategories());
   const [editingCategory, setEditingCategory] = useState(null);
   const [toast, setToast] = useState('');
@@ -38,8 +40,8 @@ export function AdminCultureCategoriesPage() {
     showToast('Đã lưu thông tin danh mục thành công!');
   };
 
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa danh mục "${name}"?`)) {
+  const handleDelete = async (id, name) => {
+    if (await confirm({ title: 'Xóa danh mục văn hóa?', description: `Danh mục “${name}” sẽ bị xóa khỏi hệ thống.`, confirmLabel: 'Xóa danh mục' })) {
       const remaining = adminCultureAiService.deleteCategory(id);
       setCategories(remaining);
       showToast('Đã xóa danh mục.');
@@ -48,6 +50,7 @@ export function AdminCultureCategoriesPage() {
 
   return (
     <div className="admin-content">
+      {confirmationDialog}
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           <BilingualText>{toast}</BilingualText>

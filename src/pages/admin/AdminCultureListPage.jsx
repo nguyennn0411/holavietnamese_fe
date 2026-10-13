@@ -3,8 +3,10 @@ import { ContentImage } from '@/components/common/ContentImage';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminCultureListPage() {
+  const { confirm, confirmationDialog } = useConfirmDialog();
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -27,8 +29,8 @@ export function AdminCultureListPage() {
     showToast(`Đã cập nhật trạng thái bài viết thành: ${newStatus}`);
   };
 
-  const handleDelete = (id, title) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa bài viết "${title}"?`)) {
+  const handleDelete = async (id, title) => {
+    if (await confirm({ title: 'Xóa bài viết văn hóa?', description: `Bài viết “${title}” sẽ bị xóa và không thể khôi phục.`, confirmLabel: 'Xóa bài viết' })) {
       adminCultureAiService.deleteArticle(id);
       showToast('Đã xóa bài viết thành công.');
     }
@@ -51,6 +53,7 @@ export function AdminCultureListPage() {
 
   return (
     <div className="admin-content">
+      {confirmationDialog}
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           <BilingualText>{toast}</BilingualText>

@@ -1,7 +1,7 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useState } from 'react';
 import { generatePath, Link, useLocation, useParams } from 'react-router-dom';
-import { Breadcrumb, PageHeader, EmptyState } from '@/components/common/Ui';
+import { Breadcrumb, PageHeader, EmptyState, Artwork } from '@/components/common/Ui';
 import { ContentImage } from '@/components/common/ContentImage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { DestinationRegion } from '@/components/destinations/DestinationMetadata';
@@ -9,6 +9,7 @@ import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { DESTINATION_REGIONS } from '@/models/Destination';
 import { destinationService } from '@/services/destinationService';
 import { ROUTES } from '@/constants/routes';
+import { Search, X, MapPin, Compass, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 
 const emptyFilters = { keyword: '', region: '' };
 
@@ -19,32 +20,206 @@ export function ExploreVietnamPage() {
   const detailRoute = location.pathname === ROUTES.EXPLORE ? ROUTES.DESTINATION_DETAIL : ROUTES.LEARNER_DESTINATION_DETAIL;
   const resource = useAsyncResource(useCallback(signal => destinationService.list(query, { signal }), [query]));
 
-  return <section>
-    <PageHeader eyebrow="Ngôn ngữ chỉ là điểm bắt đầu" title="Khám phá Việt Nam" description="Học ngôn ngữ. Gặp gỡ văn hóa. Cảm thấy gần gũi hơn mỗi ngày." />
-    <form className="library-toolbar" style={{ flexWrap: 'wrap', alignItems: 'end' }} onSubmit={event => { event.preventDefault(); setQuery(current => ({ ...current, keyword: keyword.trim() })); }}>
-      <label style={{ flex: '1 1 260px' }}><BilingualText>Tìm kiếm</BilingualText><input value={keyword} onChange={event => setKeyword(event.target.value)} placeholder="Tên tiếng Việt hoặc tiếng Anh · Vietnamese or English name" /></label>
-      <label style={{ flex: '1 1 180px' }}><BilingualText vi="Vùng miền" en="Region" /><select value={query.region} onChange={event => setQuery(current => ({ ...current, region: event.target.value }))}>
-        <option value="">Tất cả vùng miền · All regions</option>{DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi} · {region.en}</option>)}
-      </select></label>
-      <div className="actions"><button type="submit"><BilingualText>Tìm kiếm</BilingualText></button><button type="button" className="secondary" onClick={() => { setKeyword(''); setQuery({ ...emptyFilters }); }}><BilingualText>Đặt lại bộ lọc</BilingualText></button></div>
-    </form>
-    <ResourceState resource={resource}>{items => {
-      const destinations = items.filter(item => item.status === 'PUBLISHED');
-      return destinations.length === 0
-        ? <EmptyState title={<BilingualText vi="Chưa có điểm đến phù hợp" en="No matching destinations" />} description={<BilingualText vi="Thử từ khóa hoặc vùng miền khác. Các điểm đến sẽ xuất hiện khi được xuất bản." en="Try another keyword or region. Destinations appear once published." />} />
-        : <div className="journey-board card">
-          <aside className="journey-map"><p className="eyebrow"><BilingualText>VIỆT NAM · VIET NAM</BilingualText></p><img src="/design/vietnam-map.svg" alt="Bản đồ Việt Nam" /><div><h2><BilingualText>Một đất nước để khám phá.</BilingualText><br /><BilingualText>Một ngôn ngữ để sống cùng.</BilingualText></h2><p className="muted"><BilingualText>Mỗi điểm đến mang một từ mới, một hương vị mới và một góc nhìn mới.</BilingualText></p></div></aside>
-          <div className="journey-stops">{destinations.map(destination => <Link className="journey-stop" key={destination.id} to={generatePath(detailRoute, { id: String(destination.id) })}>
-            <span className="journey-dot" aria-hidden="true" />
-            <div className="journey-thumbnail"><ContentImage src={destination.imageUrl} alt={destination.nameVi} className="figma-art" /></div>
-            <div><p className="eyebrow"><DestinationRegion value={destination.region} /></p><h2><BilingualText vi={destination.nameVi} en={destination.nameEn} /></h2>
-              {(destination.shortDescriptionVi || destination.shortDescriptionEn) && <p><BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn} /></p>}
-              <small><BilingualText>Chi tiết</BilingualText> →</small>
-            </div><span className="journey-number" aria-hidden="true">→</span>
-          </Link>)}</div>
-        </div>;
-    }}</ResourceState>
-  </section>;
+  const handleRegionClick = (val) => {
+    setQuery(current => ({ ...current, region: val }));
+  };
+
+  return (
+    <section className="explore-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* Hero Header */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF9EE] via-[#F7F0E3] to-[#EEE3D1] border border-[#DECBB4] p-6 sm:p-10 shadow-sm">
+        <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none overflow-hidden hidden md:block">
+          <Artwork kind="dong-son" className="w-full h-full object-contain object-right" />
+        </div>
+
+        <div className="relative z-10 max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#A62A24] text-xs font-bold uppercase tracking-wider shadow-xs">
+            <Sparkles size={14} className="text-[#A62A24]" />
+            <BilingualText>{"Ngôn ngữ chỉ là điểm bắt đầu • Culture & Destinations"}</BilingualText>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#431914] tracking-tight leading-tight">
+            <BilingualText>{"Khám phá Việt Nam"}</BilingualText>
+          </h1>
+
+          <p className="text-sm sm:text-base text-[#78685B] leading-relaxed max-w-2xl">
+            <BilingualText>
+              {"Học ngôn ngữ. Gặp gỡ văn hóa. Cảm thấy gần gũi hơn mỗi ngày qua từng nẻo đường đất nước hình chữ S."}
+            </BilingualText>
+          </p>
+        </div>
+      </div>
+
+      {/* Modern Filter Toolbar */}
+      <form
+        className="library-toolbar bg-white rounded-2xl border border-[#DECBB4] p-4 sm:p-5 shadow-xs space-y-3"
+        style={{ flexWrap: 'wrap', alignItems: 'end' }}
+        onSubmit={event => {
+          event.preventDefault();
+          setQuery(current => ({ ...current, keyword: keyword.trim() }));
+        }}
+      >
+        <div className="flex flex-wrap items-center gap-2 pb-1 w-full">
+          <span className="text-xs font-bold text-[#78685B] mr-1">Vùng miền:</span>
+          <button
+            type="button"
+            onClick={() => handleRegionClick('')}
+            className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+              !query.region
+                ? 'bg-[#A62A24] text-white shadow-xs'
+                : 'bg-[#FFF9EE] text-[#431914] border border-[#DECBB4] hover:bg-[#F7F0E3]'
+            }`}
+          >
+            Tất cả
+          </button>
+          {DESTINATION_REGIONS.map(reg => (
+            <button
+              key={reg.value}
+              type="button"
+              onClick={() => handleRegionClick(reg.value)}
+              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                query.region === reg.value
+                  ? 'bg-[#A62A24] text-white shadow-xs'
+                  : 'bg-[#FFF9EE] text-[#431914] border border-[#DECBB4] hover:bg-[#F7F0E3]'
+              }`}
+            >
+              {reg.vi}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
+          <label style={{ flex: '1 1 260px' }} className="w-full">
+            <span className="sr-only"><BilingualText>Tìm kiếm</BilingualText></span>
+            <div className="relative w-full">
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78685B]" />
+              <input
+                value={keyword}
+                onChange={event => setKeyword(event.target.value)}
+                placeholder="Tên tiếng Việt hoặc tiếng Anh · Vietnamese or English name"
+                className="w-full pl-10 pr-9 py-2.5 bg-[#FFF9EE] border border-[#DECBB4] focus:border-[#A62A24] rounded-xl text-xs sm:text-sm text-[#431914] outline-hidden"
+              />
+              {keyword && (
+                <button
+                  type="button"
+                  onClick={() => setKeyword('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#78685B] hover:text-[#431914]"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          </label>
+
+          <label style={{ flex: '0 1 200px' }} className="w-full sm:w-auto">
+            <span className="sr-only"><BilingualText vi="Vùng miền" en="Region" /></span>
+            <select
+              value={query.region}
+              onChange={event => setQuery(current => ({ ...current, region: event.target.value }))}
+              className="w-full py-2.5 px-3 bg-[#FFF9EE] border border-[#DECBB4] focus:border-[#A62A24] rounded-xl text-xs sm:text-sm text-[#431914] outline-hidden"
+            >
+              <option value="">Tất cả vùng miền · All regions</option>
+              {DESTINATION_REGIONS.map(region => (
+                <option key={region.value} value={region.value}>{region.vi} · {region.en}</option>
+              ))}
+            </select>
+          </label>
+
+          <div className="actions flex items-center gap-2 w-full sm:w-auto shrink-0">
+            <button
+              type="submit"
+              className="px-5 py-2.5 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-md transition-all"
+            >
+              <BilingualText>Tìm kiếm</BilingualText>
+            </button>
+            <button
+              type="button"
+              className="secondary px-4 py-2.5 rounded-xl bg-[#FFF9EE] hover:bg-[#F7F0E3] text-[#431914] border border-[#DECBB4] font-semibold text-xs transition-all"
+              onClick={() => { setKeyword(''); setQuery({ ...emptyFilters }); }}
+            >
+              <BilingualText>Đặt lại bộ lọc</BilingualText>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      {/* Destinations Board */}
+      <ResourceState resource={resource}>
+        {items => {
+          const destinations = items.filter(item => item.status === 'PUBLISHED');
+          return destinations.length === 0
+            ? (
+              <EmptyState
+                title={<BilingualText vi="Chưa có điểm đến phù hợp" en="No matching destinations" />}
+                description={<BilingualText vi="Thử từ khóa hoặc vùng miền khác. Các điểm đến sẽ xuất hiện khi được xuất bản." en="Try another keyword or region. Destinations appear once published." />}
+              />
+            )
+            : (
+              <div className="journey-board card bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-sm">
+                <aside className="journey-map">
+                  <p className="eyebrow text-xs font-bold text-[#A62A24] tracking-widest uppercase mb-2">
+                    <BilingualText>VIỆT NAM · VIET NAM</BilingualText>
+                  </p>
+                  <img
+                    src="/design/vietnam-map.svg"
+                    alt="Bản đồ Việt Nam"
+                    className="max-h-[500px] w-full object-contain drop-shadow-md mx-auto my-4"
+                  />
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-serif text-[#431914] leading-snug">
+                      <BilingualText>Một đất nước để khám phá.</BilingualText>
+                      <br />
+                      <BilingualText>Một ngôn ngữ để sống cùng.</BilingualText>
+                    </h2>
+                    <p className="muted text-xs text-[#78685B] mt-2">
+                      <BilingualText>Mỗi điểm đến mang một từ mới, một hương vị mới và một góc nhìn mới.</BilingualText>
+                    </p>
+                  </div>
+                </aside>
+
+                <div className="journey-stops space-y-4">
+                  {destinations.map(destination => (
+                    <Link
+                      className="journey-stop group relative block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#DECBB4] hover:border-[#A62A24] shadow-xs hover:shadow-md transition-all text-decoration-none"
+                      key={destination.id}
+                      to={generatePath(detailRoute, { id: String(destination.id) })}
+                    >
+                      <span className="journey-dot" aria-hidden="true" />
+                      <div className="journey-thumbnail rounded-xl overflow-hidden shadow-xs">
+                        <ContentImage
+                          src={destination.imageUrl}
+                          alt={destination.nameVi}
+                          className="figma-art w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                      <div>
+                        <p className="eyebrow text-[11px] font-bold text-[#A62A24] uppercase tracking-wider mb-1">
+                          <DestinationRegion value={destination.region} />
+                        </p>
+                        <h2 className="text-lg sm:text-xl font-black text-[#431914] group-hover:text-[#A62A24] transition-colors leading-snug">
+                          <BilingualText vi={destination.nameVi} en={destination.nameEn} />
+                        </h2>
+                        {(destination.shortDescriptionVi || destination.shortDescriptionEn) && (
+                          <p className="text-xs sm:text-sm text-[#78685B] line-clamp-2 mt-1 leading-relaxed">
+                            <BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn} />
+                          </p>
+                        )}
+                        <small className="inline-flex items-center gap-1 text-xs font-bold text-[#A62A24] mt-2 group-hover:underline">
+                          <BilingualText>Chi tiết</BilingualText> →
+                        </small>
+                      </div>
+                      <span className="journey-number text-[#78685B] group-hover:text-[#A62A24] group-hover:translate-x-1 transition-all" aria-hidden="true">
+                        →
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+        }}
+      </ResourceState>
+    </section>
+  );
 }
 
 export function DestinationDetailPage() {
@@ -55,23 +230,88 @@ export function DestinationDetailPage() {
   const resource = useAsyncResource(useCallback(signal => legacySlug
     ? destinationService.getBySlug(id, { signal })
     : destinationService.get(id, { signal }), [id, legacySlug]));
-  const missing = <EmptyState title="Không tìm thấy điểm đến"><Link className="button secondary" to={backRoute}><BilingualText vi="Về Khám phá Việt Nam" en="Back to Explore Vietnam" /></Link></EmptyState>;
+  const missing = (
+    <EmptyState title="Không tìm thấy điểm đến">
+      <Link className="button secondary" to={backRoute}>
+        <BilingualText vi="Về Khám phá Việt Nam" en="Back to Explore Vietnam" />
+      </Link>
+    </EmptyState>
+  );
 
   if (resource.error?.status === 404) return missing;
-  return <ResourceState resource={resource}>{destination => {
-    if (!destination || destination.status !== 'PUBLISHED') return missing;
-    return <section>
-      <Breadcrumb items={[{ label: 'Khám phá Việt Nam', to: backRoute }, { label: destination.nameVi }]} />
-      <div className="destination-hero card">
-        <div><p className="eyebrow"><DestinationRegion value={destination.region} /></p><h1><BilingualText vi={destination.nameVi} en={destination.nameEn} /></h1>
-          {(destination.shortDescriptionVi || destination.shortDescriptionEn) && <p className="lead" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}><BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn} /></p>}
-        </div><ContentImage src={destination.imageUrl} alt={destination.nameVi} className="figma-art" loading="eager" />
-      </div>
-      {(destination.descriptionVi || destination.descriptionEn) && <div className="split-grid">
-        {destination.descriptionVi && <section className="card"><h2><BilingualText vi="Khám phá điểm đến" en="Explore the destination" /></h2><div className="rich-text" lang="vi" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{destination.descriptionVi}</div></section>}
-        {destination.descriptionEn && <section className="card"><h2><BilingualText vi="Mô tả tiếng Anh" en="English description" /></h2><div className="rich-text" lang="en" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{destination.descriptionEn}</div></section>}
-      </div>}
-      <div className="actions" style={{ marginTop: 20 }}><Link className="button secondary" to={backRoute}><BilingualText vi="← Khám phá Việt Nam" en="← Explore Vietnam" /></Link></div>
-    </section>;
-  }}</ResourceState>;
+  return (
+    <ResourceState resource={resource}>
+      {destination => {
+        if (!destination || destination.status !== 'PUBLISHED') return missing;
+        return (
+          <section className="destination-detail-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+            <Breadcrumb items={[{ label: 'Khám phá Việt Nam', to: backRoute }, { label: destination.nameVi }]} />
+
+            {/* Destination Hero Banner */}
+            <div className="destination-hero card rounded-3xl bg-white border border-[#DECBB4] p-6 sm:p-10 shadow-sm overflow-hidden">
+              <div className="space-y-4">
+                <p className="eyebrow text-xs font-bold text-[#A62A24] uppercase tracking-wider">
+                  <DestinationRegion value={destination.region} />
+                </p>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#431914] tracking-tight">
+                  <BilingualText vi={destination.nameVi} en={destination.nameEn} />
+                </h1>
+                {(destination.shortDescriptionVi || destination.shortDescriptionEn) && (
+                  <p className="lead text-sm sm:text-base text-[#78685B] leading-relaxed" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
+                    <BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn} />
+                  </p>
+                )}
+              </div>
+              <div className="rounded-2xl overflow-hidden shadow-md mt-4 lg:mt-0">
+                <ContentImage
+                  src={destination.imageUrl}
+                  alt={destination.nameVi}
+                  className="figma-art w-full h-full object-cover"
+                  loading="eager"
+                />
+              </div>
+            </div>
+
+            {/* Cultural Stories & Descriptions */}
+            {(destination.descriptionVi || destination.descriptionEn) && (
+              <div className="split-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+                {destination.descriptionVi && (
+                  <section className="card bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-4">
+                    <h2 className="text-lg sm:text-xl font-black text-[#431914] flex items-center gap-2">
+                      <Sparkles size={18} className="text-[#DA251D]" />
+                      <BilingualText vi="Khám phá điểm đến" en="Explore the destination" />
+                    </h2>
+                    <div className="rich-text text-sm sm:text-base text-[#431914] leading-relaxed" lang="vi" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
+                      {destination.descriptionVi}
+                    </div>
+                  </section>
+                )}
+                {destination.descriptionEn && (
+                  <section className="card bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-4">
+                    <h2 className="text-lg sm:text-xl font-black text-[#431914] flex items-center gap-2">
+                      <Compass size={18} className="text-[#DA251D]" />
+                      <BilingualText vi="Mô tả tiếng Anh" en="English description" />
+                    </h2>
+                    <div className="rich-text text-sm sm:text-base text-[#78685B] leading-relaxed" lang="en" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
+                      {destination.descriptionEn}
+                    </div>
+                  </section>
+                )}
+              </div>
+            )}
+
+            <div className="actions pt-4">
+              <Link
+                className="button secondary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF9EE] text-[#431914] border border-[#DECBB4] font-semibold text-xs shadow-xs transition-all"
+                to={backRoute}
+              >
+                <ArrowLeft size={14} />
+                <BilingualText vi="← Khám phá Việt Nam" en="← Explore Vietnam" />
+              </Link>
+            </div>
+          </section>
+        );
+      }}
+    </ResourceState>
+  );
 }
