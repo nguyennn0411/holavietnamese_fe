@@ -1,4 +1,7 @@
 :root { font-family: Inter, system-ui, -apple-system, sans-serif; color: var(--color-ink); background: var(--color-surface); line-height: 1.6; --green: var(--color-ink); --muted: var(--color-muted); --border: var(--color-border); }
+.alphabet-course-entry { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; text-decoration: none; margin: 0 0 24px; }
+.alphabet-course-entry strong { color: #b54438; }
+.alphabet-course-entry span { color: #606b80; }
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; }
 button, input, textarea, select { font: inherit; }

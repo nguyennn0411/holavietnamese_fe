@@ -5,6 +5,7 @@ import { ROUTES } from '@/constants/routes';
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ', icon: '⌂', end: true },
   { to: '/courses', label: 'Học tiếng Việt' },
+  { to: ROUTES.ALPHABET, label: 'Bảng chữ cái' },
   { to: '/explore', label: 'Khám phá Việt Nam' },
   { to: ROUTES.VOCABULARY, label: 'Từ vựng' },
   { to: '/culture', label: 'Văn hóa' },
