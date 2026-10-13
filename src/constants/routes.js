@@ -23,6 +23,7 @@ export const ROUTES = {
 
   // Courses & Learning (Người 2)
   COURSES: '/courses',
+  ALPHABET: '/alphabet',
   COURSE_DETAIL: '/courses/:courseId',
   MY_COURSES: '/my-courses',
   LEARN_RESUME: '/learn/:courseId',

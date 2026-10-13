@@ -66,6 +66,29 @@ export function CourseListPage() {
         </div>
       </section>
 
+      {/* Alphabet Entry Banner */}
+      <Link
+        to="/alphabet"
+        className="card alphabet-course-entry flex flex-wrap items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FFF9EE] to-[#F5E1D8] border border-[#DECBB4] hover:border-[#A62A24] shadow-xs transition-all text-decoration-none group"
+      >
+        <div className="flex items-center gap-3.5">
+          <span className="w-10 h-10 rounded-xl bg-[#A62A24] text-white flex items-center justify-center font-bold text-base shadow-xs group-hover:scale-105 transition-transform">
+            Aa
+          </span>
+          <div>
+            <strong className="block text-sm sm:text-base font-bold text-[#A62A24] group-hover:underline">
+              Bảng chữ cái tiếng Việt →
+            </strong>
+            <span className="text-xs text-[#78685B]">
+              29 chữ cái, ghép âm và thanh điệu · Bấm để nghe phát âm
+            </span>
+          </div>
+        </div>
+        <span className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-[#A62A24]">
+          Học ngay →
+        </span>
+      </Link>
+
       {/* Modern Filter Toolbar */}
       <section className="bg-white/80 backdrop-blur-md rounded-2xl border border-[#DECBB4] p-4 sm:p-5 shadow-xs space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
