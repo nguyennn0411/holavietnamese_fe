@@ -66,6 +66,7 @@ export const ROUTES = {
   ADMIN_VOCABULARY: '/admin/vocabulary',
   ADMIN_DESTINATIONS: '/admin/destinations',
   ADMIN_DESTINATION_DETAIL: '/admin/destinations/:id',
+  ADMIN_JOURNEY: '/admin/journey',
   ADMIN_USERS: '/admin/users',
   ADMIN_USER_DETAIL: '/admin/users/:id',
   ADMIN_ROLES: '/admin/roles',

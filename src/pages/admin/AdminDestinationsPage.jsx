@@ -35,6 +35,7 @@ export function AdminDestinationsPage() {
       <button type="button" onClick={() => { setMessage(''); setCreating(true); }}><BilingualText vi="+ Thêm điểm đến" en="+ Add destination" /></button>
     </div>
     {message && <Notice kind="success"><BilingualText vi={message} en="Destination created." /></Notice>}
+    <p><Link className="text-link" to={ROUTES.ADMIN_JOURNEY}><BilingualText vi="Thiết lập hành trình →" en="Configure journey →" /></Link></p>
     <form className="admin-card" style={{ padding: 16, marginBottom: 20 }} onSubmit={event => { event.preventDefault(); filter('keyword', keyword.trim()); }}>
       <div className="actions">
         <label style={{ flex: '1 1 220px' }}><BilingualText>Tìm kiếm</BilingualText><input value={keyword} onChange={event => setKeyword(event.target.value)} placeholder="Tên tiếng Việt hoặc tiếng Anh" /></label>
