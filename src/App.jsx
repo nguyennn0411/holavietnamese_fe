@@ -1,6 +1,6 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, BilingualTextProvider } from '@/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
@@ -91,9 +91,15 @@ const AdminQuestionBankPage = lazy(() => import('@/pages/admin/AdminQuizPages').
 const AdminQuizBuilderPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizBuilderPage })));
 const AdminQuizPreviewPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizPreviewPage })));
 
+function RouteTextLanguage({ children }) {
+  const { pathname } = useLocation();
+  const isAdmin = pathname === ROUTES.ADMIN || pathname.startsWith(`${ROUTES.ADMIN}/`);
+  return <BilingualTextProvider language={isAdmin ? 'vi' : 'bilingual'}>{children}</BilingualTextProvider>;
+}
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter><RouteTextLanguage>
       <ErrorBoundary>
         <AuthProvider>
           <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><BilingualText>{"Đang tải trang…"}</BilingualText></div>}><Routes>
@@ -195,7 +201,7 @@ function App() {
           </Routes></Suspense>
         </AuthProvider>
       </ErrorBoundary>
-    </BrowserRouter>
+    </RouteTextLanguage></BrowserRouter>
   );
 }
 

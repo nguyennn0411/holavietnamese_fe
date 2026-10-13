@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { ResourceState } from '@/components/common/ResourceState';
@@ -179,7 +179,7 @@ function AdminVocabularyTopicModal({
                 value={draft.slug}
                 maxLength={120}
                 required
-                placeholder={bilingualLabel("Ví dụ: greetings")}
+                placeholder={vietnameseLabel("Ví dụ: greetings")}
                 onChange={(event) =>
                   change('slug', event.target.value)
                 }
@@ -221,7 +221,7 @@ function AdminVocabularyTopicModal({
                     key={status}
                     value={status}
                   >
-                    {bilingualLabel(status)}
+                    {vietnameseLabel(status)}
                   </option>
                 ))}
               </select>

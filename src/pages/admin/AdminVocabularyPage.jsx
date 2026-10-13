@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
 import { ResourceState } from '@/components/common/ResourceState';
@@ -66,11 +66,11 @@ export function AdminVocabularyPage() {
     {message && <div className="success state" role="status"><BilingualText>{message}</BilingualText></div>}
     <form className="admin-card" style={{ padding: 16, marginBottom: 20 }} onSubmit={(event) => { event.preventDefault(); filter('keyword', keyword.trim()); }}>
       <div className="actions">
-        <label style={{ flex: '1 1 220px' }}><BilingualText>{"Tìm kiếm"}</BilingualText><input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={bilingualLabel("Nhập từ khóa…")} /></label>
-        <label style={{ flex: '1 1 150px' }}><BilingualText>{"Trạng thái"}</BilingualText><select value={query.status} onChange={(event) => filter('status', event.target.value)}><option value="">{bilingualLabel("Tất cả trạng thái")}</option>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{bilingualLabel(status)}</option>)}</select></label>
-        <label style={{ flex: '1 1 120px' }}>CEFR<input list="vocabulary-cefr-filter" value={query.cefrLevel} onChange={(event) => filter('cefrLevel', event.target.value)} placeholder={bilingualLabel("Tất cả trình độ")} /></label>
-        <label style={{ flex: '1 1 140px' }}><BilingualText>{"Từ loại"}</BilingualText><input value={query.partOfSpeech} onChange={(event) => filter('partOfSpeech', event.target.value)} placeholder={bilingualLabel("Ví dụ: phrase")} /></label>
-        <label style={{ flex: '1 1 180px' }}><BilingualText>{"Chủ đề"}</BilingualText><select value={query.topicId} disabled={topics.loading || Boolean(topics.error)} onChange={(event) => filter('topicId', event.target.value)}><option value="">{bilingualLabel(topics.loading ? 'Đang tải chủ đề…' : 'Tất cả chủ đề')}</option>{topics.data.map((topic) => <option key={topic.id} value={topic.id}>{topic.name}</option>)}</select></label>
+        <label style={{ flex: '1 1 220px' }}><BilingualText>{"Tìm kiếm"}</BilingualText><input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={vietnameseLabel("Nhập từ khóa…")} /></label>
+        <label style={{ flex: '1 1 150px' }}><BilingualText>{"Trạng thái"}</BilingualText><select value={query.status} onChange={(event) => filter('status', event.target.value)}><option value="">{vietnameseLabel("Tất cả trạng thái")}</option>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></label>
+        <label style={{ flex: '1 1 120px' }}>CEFR<input list="vocabulary-cefr-filter" value={query.cefrLevel} onChange={(event) => filter('cefrLevel', event.target.value)} placeholder={vietnameseLabel("Tất cả trình độ")} /></label>
+        <label style={{ flex: '1 1 140px' }}><BilingualText>{"Từ loại"}</BilingualText><input value={query.partOfSpeech} onChange={(event) => filter('partOfSpeech', event.target.value)} placeholder={vietnameseLabel("Ví dụ: phrase")} /></label>
+        <label style={{ flex: '1 1 180px' }}><BilingualText>{"Chủ đề"}</BilingualText><select value={query.topicId} disabled={topics.loading || Boolean(topics.error)} onChange={(event) => filter('topicId', event.target.value)}><option value="">{vietnameseLabel(topics.loading ? 'Đang tải chủ đề…' : 'Tất cả chủ đề')}</option>{topics.data.map((topic) => <option key={topic.id} value={topic.id}>{topic.name}</option>)}</select></label>
       </div>
       <datalist id="vocabulary-cefr-filter">{CEFR_LEVELS.map((level) => <option key={level} value={level} />)}</datalist>
       <div className="actions"><button type="submit"><BilingualText>{"Tìm kiếm"}</BilingualText></button><button type="button" className="secondary" onClick={() => { setKeyword(''); setQuery({ ...emptyFilters }); }}><BilingualText>{"Đặt lại bộ lọc"}</BilingualText></button></div>
