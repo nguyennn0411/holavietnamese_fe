@@ -1,5 +1,5 @@
 import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
 import { CEFR_LEVELS, VOCABULARY_STATUSES, newExample, newMeaning, vocabularyDraft, vocabularyPayload } from '@/models/AdminVocabulary';
@@ -29,6 +29,7 @@ function VocabularyDetail({ entry, onEdit }) {
 }
 
 export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, onSaved, onEdit }) {
+  const submitting = useRef(false);
   const [entry, setEntry] = useState(null);
   const [draft, setDraft] = useState(() => vocabularyDraft());
   const [loading, setLoading] = useState(mode !== 'create');
@@ -55,13 +56,15 @@ export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, 
   const availableTopics = [...topics.data, ...(entry?.topics ?? []).filter((topic) => !topics.data.some((option) => option.id === topic.id))];
 
   async function submit(event) {
-    event.preventDefault(); setError('');
+    event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true; setError('');
     try {
       const payload = vocabularyPayload(draft);
       setPending(true);
       const response = mode === 'edit' ? await adminVocabularyService.update(id, payload) : await adminVocabularyService.create(payload);
       onSaved(response);
-    } catch (failure) { setError(failure.message); } finally { setPending(false); }
+    } catch (failure) { setError(failure.message); } finally { submitting.current = false; setPending(false); }
   }
 
   const title = mode === 'view' ? 'Chi tiết từ vựng' : mode === 'edit' ? 'Cập nhật từ vựng' : 'Thêm từ vựng';
