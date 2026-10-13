@@ -32,6 +32,7 @@ const NotificationsPage = lazy(() => import('@/pages/notifications/Notifications
 
 // Courses & Vocabulary Pages (Người 2 & Người 3)
 const CourseListPage = lazy(() => import('@/pages/courses/CourseListPage').then(module => ({ default: module.CourseListPage })));
+const AlphabetPage = lazy(() => import('@/features/alphabet/AlphabetPage').then(module => ({ default: module.AlphabetPage })));
 const CourseDetailPage = lazy(() => import('@/pages/courses/CourseDetailPage').then(module => ({ default: module.CourseDetailPage })));
 const MyCoursesPage = lazy(() => import('@/pages/my-courses/MyCoursesPage').then(module => ({ default: module.MyCoursesPage })));
 const LessonLearningPage = lazy(() => import('@/pages/learning/LessonLearningPage').then(module => ({ default: module.LessonLearningPage })));
@@ -113,6 +114,7 @@ function App() {
               <Route path={ROUTES.HOME} element={<HomePage />} />
               <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
               <Route path={ROUTES.COURSES} element={<CourseListPage />} />
+              <Route path={ROUTES.ALPHABET} element={<AlphabetPage />} />
               <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
               <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
               <Route path={ROUTES.VOCABULARY} element={<VocabularyCatalogPage />} />

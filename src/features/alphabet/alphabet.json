@@ -1,0 +1,91 @@
+{
+  "letters": [
+    { "id": "a", "symbol": "a", "reading": "a", "example": "ba" },
+    { "id": "a-breve", "symbol": "ă", "reading": "á", "example": "ăn" },
+    { "id": "a-circumflex", "symbol": "â", "reading": "ớ", "example": "cân" },
+    { "id": "b", "symbol": "b", "reading": "bê", "example": "ba" },
+    { "id": "c", "symbol": "c", "reading": "xê", "example": "cá" },
+    { "id": "d", "symbol": "d", "reading": "dê", "example": "da" },
+    { "id": "d-stroke", "symbol": "đ", "reading": "đê", "example": "đi" },
+    { "id": "e", "symbol": "e", "reading": "e", "example": "em" },
+    { "id": "e-circumflex", "symbol": "ê", "reading": "ê", "example": "ghế" },
+    { "id": "g", "symbol": "g", "reading": "giê", "example": "gà" },
+    { "id": "h", "symbol": "h", "reading": "hát", "example": "hoa" },
+    { "id": "i", "symbol": "i", "reading": "i ngắn", "example": "đi" },
+    { "id": "k", "symbol": "k", "reading": "ca", "example": "kem" },
+    { "id": "l", "symbol": "l", "reading": "e lờ", "example": "lá" },
+    { "id": "m", "symbol": "m", "reading": "em mờ", "example": "mẹ" },
+    { "id": "n", "symbol": "n", "reading": "en nờ", "example": "na" },
+    { "id": "o", "symbol": "o", "reading": "o", "example": "to" },
+    { "id": "o-circumflex", "symbol": "ô", "reading": "ô", "example": "cô" },
+    { "id": "o-horn", "symbol": "ơ", "reading": "ơ", "example": "mơ" },
+    { "id": "p", "symbol": "p", "reading": "pê", "example": "pin" },
+    { "id": "q", "symbol": "q", "reading": "cu", "example": "quà" },
+    { "id": "r", "symbol": "r", "reading": "e rờ", "example": "rau" },
+    { "id": "s", "symbol": "s", "reading": "ét sì", "example": "sữa" },
+    { "id": "t", "symbol": "t", "reading": "tê", "example": "to" },
+    { "id": "u", "symbol": "u", "reading": "u", "example": "thu" },
+    { "id": "u-horn", "symbol": "ư", "reading": "ư", "example": "thư" },
+    { "id": "v", "symbol": "v", "reading": "vê", "example": "về" },
+    { "id": "x", "symbol": "x", "reading": "ích xì", "example": "xe" },
+    { "id": "y", "symbol": "y", "reading": "i dài", "example": "y tá" }
+  ],
+  "vowels": ["a", "ă", "â", "e", "ê", "i", "o", "ô", "ơ", "u", "ư", "y"],
+  "consonantGroups": [
+    { "id": "ch", "symbol": "ch", "reading": "chờ", "example": "cha" },
+    { "id": "gh", "symbol": "gh", "reading": "gờ", "example": "ghế" },
+    { "id": "gi", "symbol": "gi", "reading": "giờ", "example": "giá" },
+    { "id": "kh", "symbol": "kh", "reading": "khờ", "example": "khi" },
+    { "id": "ng", "symbol": "ng", "reading": "ngờ", "example": "nga" },
+    { "id": "ngh", "symbol": "ngh", "reading": "ngờ", "example": "nghe" },
+    { "id": "nh", "symbol": "nh", "reading": "nhờ", "example": "nhà" },
+    { "id": "ph", "symbol": "ph", "reading": "phờ", "example": "phở" },
+    { "id": "qu", "symbol": "qu", "reading": "quờ", "example": "quà" },
+    { "id": "th", "symbol": "th", "reading": "thờ", "example": "thơ" },
+    { "id": "tr", "symbol": "tr", "reading": "trờ", "example": "trà" }
+  ],
+  "tones": [
+    {
+      "id": "tone-ngang",
+      "symbol": "a",
+      "label": "Ngang",
+      "reading": "a",
+      "example": "ma"
+    },
+    {
+      "id": "tone-sac",
+      "symbol": "á",
+      "label": "Sắc",
+      "reading": "á",
+      "example": "má"
+    },
+    {
+      "id": "tone-huyen",
+      "symbol": "à",
+      "label": "Huyền",
+      "reading": "à",
+      "example": "mà"
+    },
+    {
+      "id": "tone-hoi",
+      "symbol": "ả",
+      "label": "Hỏi",
+      "reading": "ả",
+      "example": "mả"
+    },
+    {
+      "id": "tone-nga",
+      "symbol": "ã",
+      "label": "Ngã",
+      "reading": "ã",
+      "example": "mã"
+    },
+    {
+      "id": "tone-nang",
+      "symbol": "ạ",
+      "label": "Nặng",
+      "reading": "ạ",
+      "example": "mạ"
+    }
+  ]
+}
