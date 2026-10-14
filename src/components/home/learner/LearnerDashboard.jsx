@@ -24,15 +24,57 @@ import { RecentActivityFeed } from './RecentActivityFeed';
  * Master Learner Cockpit Dashboard for Authenticated Users
  */
 export function LearnerDashboard({ user }) {
-  const [progress, setProgress] = useState(null);
+  const [progress, setProgress] = useState(() => {
+    try {
+      const saved = localStorage.getItem('learner_progress');
+      if (saved) return JSON.parse(saved);
+      const stats = localStorage.getItem('learner_stats');
+      if (stats) {
+        const s = JSON.parse(stats);
+        return { streakCount: s.streak, totalXp: s.xp, hearts: s.hearts };
+      }
+    } catch {
+      // ignore
+    }
+    return null;
+  });
   const [error, setError] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ hours: 5, minutes: 24, seconds: 18 });
-  const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
-  const [claimedQuests, setClaimedQuests] = useState({ q1: false, q2: false, q3: false });
+  const [hasCheckedInToday, setHasCheckedInToday] = useState(() => {
+    try {
+      const savedProg = localStorage.getItem('learner_progress');
+      if (savedProg) {
+        const parsed = JSON.parse(savedProg);
+        if (parsed.hasCheckedInToday !== undefined) return Boolean(parsed.hasCheckedInToday);
+      }
+    } catch {
+      // ignore
+    }
+    return false;
+  });
+
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const [claimedQuests, setClaimedQuests] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`claimed_quests_${user?.id || 'me'}_${todayKey}`);
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return { q1: false, q2: false, q3: false };
+  });
   const [reviewedWords, setReviewedWords] = useState({});
 
   useEffect(() => {
-    learnerService.getProgressData().then(setProgress).catch((err) => setError(err.message));
+    learnerService.getProgressData()
+      .then((data) => {
+        setProgress(data);
+        if (data.hasCheckedInToday !== undefined) {
+          setHasCheckedInToday(Boolean(data.hasCheckedInToday));
+        }
+        localStorage.setItem('learner_progress', JSON.stringify(data));
+      })
+      .catch((err) => setError(err.message));
   }, []);
 
   useEffect(() => {
@@ -73,15 +115,68 @@ export function LearnerDashboard({ user }) {
     return item;
   });
 
-  const handleDailyCheckIn = () => {
+  const handleDailyCheckIn = async () => {
     if (hasCheckedInToday) return;
-    audioFeedback.playSuccessChime();
-    setHasCheckedInToday(true);
+    try {
+      audioFeedback.playSuccessChime();
+      setHasCheckedInToday(true);
+      const res = await learnerService.checkInToday();
+      if (res) {
+        setProgress((prev) => {
+          const next = {
+            ...prev,
+            streakCount: res.streakCount ?? ((prev?.streakCount || 0) + 1),
+            totalXp: res.totalXp ?? ((prev?.totalXp || 0) + 10),
+            hearts: res.hearts ?? prev?.hearts ?? 5,
+            hasCheckedInToday: true,
+          };
+          localStorage.setItem('learner_progress', JSON.stringify(next));
+          return next;
+        });
+        window.dispatchEvent(new CustomEvent('learner-stats-updated', {
+          detail: {
+            streakCount: res.streakCount,
+            totalXp: res.totalXp,
+            hearts: res.hearts,
+          }
+        }));
+      }
+    } catch (e) {
+      console.error('Check-in failed:', e);
+    }
   };
 
-  const handleClaimQuest = (questId) => {
+  const handleClaimQuest = async (questId) => {
     audioFeedback.playSuccessChime();
-    setClaimedQuests((prev) => ({ ...prev, [questId]: true }));
+    setClaimedQuests((prev) => {
+      const next = { ...prev, [questId]: true };
+      localStorage.setItem(`claimed_quests_${user?.id || 'me'}_${todayKey}`, JSON.stringify(next));
+      return next;
+    });
+
+    const quest = DEFAULT_QUESTS.find((q) => q.id === questId);
+    const xpReward = quest?.xp || 20;
+
+    try {
+      const res = await learnerService.awardXp(xpReward, 'DAILY_QUEST', quest?.title || 'Nhiệm vụ hàng ngày');
+      if (res) {
+        setProgress((prev) => {
+          const next = {
+            ...prev,
+            totalXp: res.totalXp ?? ((prev?.totalXp || 0) + xpReward),
+          };
+          localStorage.setItem('learner_progress', JSON.stringify(next));
+          return next;
+        });
+        window.dispatchEvent(new CustomEvent('learner-stats-updated', {
+          detail: {
+            totalXp: res.totalXp,
+          }
+        }));
+      }
+    } catch (e) {
+      console.error('Award quest XP failed:', e);
+    }
   };
 
   const handleWaterWord = (viWord) => {
@@ -94,6 +189,28 @@ export function LearnerDashboard({ user }) {
     QUICK_SRS_WORDS.forEach((w) => setReviewedWords((prev) => ({ ...prev, [w.vi]: true })));
     audioFeedback.playSuccessChime();
   };
+
+  // Build dynamic 7-day streak calendar based on real current day
+  const todayDayNum = new Date().getDay(); // 0: CN, 1: T2, 2: T3, 3: T4, 4: T5, 5: T6, 6: T7
+  const streakCount = progress?.streakCount ?? 0;
+  const orderedWeekDays = [
+    { day: 'T2', num: 1 },
+    { day: 'T3', num: 2 },
+    { day: 'T4', num: 3 },
+    { day: 'T5', num: 4 },
+    { day: 'T6', num: 5 },
+    { day: 'T7', num: 6 },
+    { day: 'CN', num: 0 },
+  ];
+  const dynamicStreakDays = orderedWeekDays.map((item) => {
+    const isToday = item.num === todayDayNum;
+    const active = isToday ? hasCheckedInToday : streakCount > 0;
+    return {
+      day: item.day,
+      isToday,
+      active,
+    };
+  });
 
   return (
     <div className="dashboard-page relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 overflow-hidden">
@@ -109,8 +226,9 @@ export function LearnerDashboard({ user }) {
       <LearnerHeaderRibbon
         user={user}
         greeting={greeting}
-        streakCount={progress?.streakCount ?? progress?.currentStreak ?? 7}
-        totalXp={progress?.totalXp ?? 145}
+        streakCount={progress?.streakCount ?? 0}
+        totalXp={progress?.totalXp ?? 0}
+        hearts={progress?.hearts ?? 5}
         hasCheckedInToday={hasCheckedInToday}
       />
 
@@ -122,7 +240,7 @@ export function LearnerDashboard({ user }) {
 
       {/* 2. Interactive 7-Day Streak Calendar Tracker Bar */}
       <StreakTracker
-        streakDays={DEFAULT_STREAK_DAYS}
+        streakDays={dynamicStreakDays}
         hasCheckedInToday={hasCheckedInToday}
         onDailyCheckIn={handleDailyCheckIn}
       />

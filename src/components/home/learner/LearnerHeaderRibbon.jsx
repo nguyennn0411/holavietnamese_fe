@@ -8,12 +8,13 @@ import { Sparkles, Flame, Zap, Heart, Compass } from 'lucide-react';
 export function LearnerHeaderRibbon({
   user,
   greeting,
-  streakCount = 7,
-  totalXp = 145,
+  streakCount = 0,
+  totalXp = 0,
+  hearts = 5,
   hasCheckedInToday = false,
 }) {
-  const effectiveStreak = hasCheckedInToday ? streakCount + 1 : streakCount;
-  const effectiveXp = totalXp + (hasCheckedInToday ? 10 : 0);
+  const effectiveStreak = streakCount;
+  const effectiveXp = totalXp;
 
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-[#DECBB4]/60 pb-6">
@@ -55,7 +56,7 @@ export function LearnerHeaderRibbon({
         <div className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/92 backdrop-blur-xs border border-[#DECBB4]/60 shadow-[0_4px_16px_rgba(67,25,20,0.03)]">
           <Heart size={22} className="text-[#ef4444] shrink-0" fill="currentColor" />
           <div>
-            <span className="block text-sm font-black text-[#431914] leading-tight">5/5</span>
+            <span className="block text-sm font-black text-[#431914] leading-tight">{hearts}/5</span>
             <span className="block text-[10px] text-[#78685B] font-semibold uppercase">Trái tim</span>
           </div>
         </div>

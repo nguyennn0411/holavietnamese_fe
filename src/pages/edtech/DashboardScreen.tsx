@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { learnerService } from '@/services/learnerService';
 import { motion } from 'motion/react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
@@ -213,7 +214,49 @@ const RELATED_LEARNING_HUBS = [
 
 export const DashboardScreen: React.FC = () => {
   const navigate = useNavigate();
-  const [progress] = useState<UserProgressDTO>(MOCK_USER_PROGRESS);
+  const [progress, setProgress] = useState<UserProgressDTO>(() => {
+    try {
+      const saved = localStorage.getItem('learner_progress');
+      if (saved) {
+        const p = JSON.parse(saved);
+        return {
+          ...MOCK_USER_PROGRESS,
+          streakDays: p.streakCount ?? MOCK_USER_PROGRESS.streakDays,
+          xpTotal: p.totalXp ?? MOCK_USER_PROGRESS.xpTotal,
+          hearts: p.hearts ?? MOCK_USER_PROGRESS.hearts,
+        };
+      }
+      const stats = localStorage.getItem('learner_stats');
+      if (stats) {
+        const s = JSON.parse(stats);
+        return {
+          ...MOCK_USER_PROGRESS,
+          streakDays: s.streak ?? MOCK_USER_PROGRESS.streakDays,
+          xpTotal: s.xp ?? MOCK_USER_PROGRESS.xpTotal,
+          hearts: s.hearts ?? MOCK_USER_PROGRESS.hearts,
+        };
+      }
+    } catch {
+      // ignore
+    }
+    return MOCK_USER_PROGRESS;
+  });
+
+  useEffect(() => {
+    learnerService.getProgressData()
+      .then((data) => {
+        if (data) {
+          setProgress((prev) => ({
+            ...prev,
+            streakDays: data.streakCount ?? prev.streakDays,
+            xpTotal: data.totalXp ?? prev.xpTotal,
+            hearts: data.hearts ?? prev.hearts,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const [challenges, setChallenges] = useState<DailyChallengeDTO[]>(MOCK_CHALLENGES);
   const [selectedNode, setSelectedNode] = useState(MOCK_UNIT.nodes[1]);
 

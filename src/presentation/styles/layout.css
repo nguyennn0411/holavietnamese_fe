@@ -17,11 +17,24 @@
 .skip-link:focus { transform:translateY(0); }
 
 /* Brand */
-.site-brand { display:inline-flex; align-items:center; gap:11px; color:var(--layout-ink); text-decoration:none; }
-.site-brand__mark { display:grid; place-items:center; width:40px; height:40px; flex:0 0 40px; border-radius:12px 12px 12px 4px; color:var(--color-gold); background:var(--color-ink); box-shadow:0 8px 20px rgba(49,23,19,.18); font:800 19px/1 Georgia,serif; }
+.site-brand { display:inline-flex; align-items:center; width:232px; height:78px; color:var(--layout-ink); text-decoration:none; }
+.site-brand__logo { display:block; width:100%; height:100%; object-fit:contain; object-position:center; }
+.site-brand__mark { display:grid; place-items:center; width:40px; height:40px; flex:0 0 40px; border-radius:12px 12px 12px 4px; color:var(--color-gold); background:var(--color-ink); box-shadow:0 8px 20px rgba(49,23,19,.18); }
+.site-brand__icon { display:block; width:36px; height:36px; overflow:visible; }
+.site-brand__lotus { fill:var(--color-gold); stroke:var(--color-gold); stroke-width:.45; stroke-linejoin:round; }
+.site-brand__lotus--left,.site-brand__lotus--right { opacity:.78; }
+.site-brand__lotus--inner { fill:var(--color-surface); opacity:.92; }
+.site-brand__h { fill:none; stroke:var(--color-ink); stroke-width:1.35; stroke-linecap:round; stroke-linejoin:round; }
 .site-brand__copy { display:flex; flex-direction:column; min-width:0; line-height:1.2; }
-.site-brand__copy strong { font-size:16px; letter-spacing:-.035em; }
+.site-brand__copy strong { color:var(--layout-ink); font-size:16px; letter-spacing:-.035em; }
 .site-brand__copy small { margin-top:4px; color:var(--layout-muted); font-size:9px; letter-spacing:.04em; }
+.site-brand--compact { width:166px; height:64px; }
+.ai-tutor-fab { position:fixed; right:24px; bottom:24px; z-index:700; display:flex; align-items:center; justify-content:center; width:76px; height:76px; overflow:hidden; border:2px solid var(--color-gold); border-radius:50%; background:var(--color-cream); box-shadow:0 12px 28px rgba(67,25,20,.2); transition:transform .2s, box-shadow .2s; }
+.ai-tutor-fab:hover { transform:translateY(-4px) rotate(-3deg); box-shadow:0 16px 34px rgba(67,25,20,.26); }
+.ai-tutor-fab:focus-visible { outline:3px solid var(--color-red); outline-offset:4px; }
+.ai-tutor-fab img { width:94px; height:100px; object-fit:contain; object-position:center bottom; transform:translateY(-9px); pointer-events:none; }
+.ai-tutor-fab__label { position:absolute; right:0; bottom:-23px; padding:3px 7px; border-radius:999px; color:var(--color-surface); background:var(--color-ink); font-size:9px; font-weight:800; white-space:nowrap; opacity:0; transform:translateY(-4px); transition:opacity .2s, transform .2s; pointer-events:none; }
+.ai-tutor-fab:hover .ai-tutor-fab__label,.ai-tutor-fab:focus-visible .ai-tutor-fab__label { opacity:1; transform:translateY(0); }
 
 /* Header and navigation */
 .site-header { position:sticky; top:0; z-index:500; padding:14px 24px 0; background:var(--layout-paper); }
@@ -83,7 +96,7 @@
 
 @media(max-width:1120px) {
   .site-header__inner { grid-template-columns:auto 1fr auto; }
-  .site-brand--compact .site-brand__copy { display:none; }
+  .site-brand--compact { width:166px; height:64px; }
   .site-nav__link { padding-inline:10px; }
   .learner-stats { display:none; }
 }
@@ -93,7 +106,7 @@
   .layout-main { width:min(100% - 28px,1400px); padding:22px 0 40px; }
   .site-header { position:sticky; padding:9px 12px 0; }
   .site-header__inner { grid-template-columns:1fr auto; min-height:58px; padding:7px 8px 7px 12px; border-radius:14px; }
-  .site-brand--compact .site-brand__copy { display:flex; }
+  .site-brand--compact { width:156px; height:60px; }
   .site-brand__copy strong { font-size:14px; }
   .site-header__actions > div > button:not(.user-menu__trigger) { display:none!important; }
   .user-menu__name,.user-menu__chevron { display:none; }
@@ -110,7 +123,9 @@
 }
 
 @media(max-width:430px) {
-  .site-brand--compact .site-brand__copy { display:none; }
+  .ai-tutor-fab { right:14px; bottom:72px; width:62px; height:62px; }
+  .ai-tutor-fab img { width:78px; height:82px; }
+  .site-brand--compact { width:142px; height:56px; }
   .site-footer__bottom { flex-direction:column; gap:5px; }
 }
 
