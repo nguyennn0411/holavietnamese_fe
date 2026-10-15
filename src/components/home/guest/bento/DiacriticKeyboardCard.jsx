@@ -1,0 +1,125 @@
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
+import { Keyboard, Delete, Volume2 } from 'lucide-react';
+import { audioFeedback } from '@/utils/audioFeedback';
+import { speakVietnamese } from '@/utils/speech';
+import { DIACRITIC_CHARS, SAMPLE_PRESET_WORDS } from '@/components/home/data/homeData';
+
+/**
+ * Bento 3: Virtual Diacritic Keyboard Notepad Card
+ */
+export function DiacriticKeyboardCard() {
+  const [typedText, setTypedText] = useState('Phở bò');
+
+  return (
+    <motion.div
+      whileHover={{ y: -3 }}
+      className="w-full bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(67,25,20,0.04)] flex flex-col justify-between space-y-4 text-left"
+    >
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Keyboard size={18} className="text-[#A62A24]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#A62A24]">
+              Trợ lý gõ dấu ảo
+            </span>
+          </div>
+          <span className="text-[10px] font-semibold text-[#78685B]">Không cần Unikey</span>
+        </div>
+        <h3 className="text-lg sm:text-xl font-black text-[#431914]">
+          Bàn phím gõ dấu 1-chạm tương tác
+        </h3>
+        <p className="text-xs text-[#78685B]">
+          Bấm phím để chèn dấu tiếng Việt và phát âm ngay lập tức:
+        </p>
+      </div>
+
+      {/* Interactive Notepad Display */}
+      <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4] space-y-2">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-[10px] font-bold uppercase text-[#78685B]">Khung gõ thử:</span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setTypedText((prev) => prev.slice(0, -1));
+                audioFeedback.playTap();
+              }}
+              className="text-[11px] text-[#78685B] hover:text-[#A62A24] font-bold flex items-center gap-0.5 cursor-pointer"
+              title="Xóa ký tự cuối"
+            >
+              <Delete size={12} />
+              <span>Xóa</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setTypedText('');
+                audioFeedback.playTap();
+              }}
+              className="text-[11px] text-[#78685B] hover:text-[#A62A24] font-bold cursor-pointer"
+            >
+              Làm trống
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center justify-between gap-2 bg-white px-3 py-2 rounded-xl border border-[#DECBB4]/60">
+          <span className="font-black text-[#431914] text-base truncate">
+            {typedText || <span className="text-stone-300 font-normal italic">Bấm phím bên dưới…</span>}
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              if (typedText) speakVietnamese(typedText);
+            }}
+            disabled={!typedText}
+            className="!min-h-0 !min-w-0 !p-0 w-8 h-8 rounded-lg bg-[#F5E1D8] hover:bg-[#A62A24] text-[#A62A24] hover:text-white flex items-center justify-center transition-colors shrink-0 disabled:opacity-40 cursor-pointer"
+            title="Phát âm từ vừa gõ"
+            aria-label="Phát âm từ vừa gõ"
+          >
+            <Volume2 className="w-4 h-4 shrink-0" strokeWidth={2.2} />
+          </button>
+        </div>
+      </div>
+
+      {/* Mechanical Keyboard Keycaps */}
+      <div className="grid grid-cols-6 gap-1.5">
+        {DIACRITIC_CHARS.map((char) => (
+          <button
+            key={char}
+            type="button"
+            onClick={() => {
+              setTypedText((prev) => prev + char);
+              speakVietnamese(char);
+              audioFeedback.playTap();
+            }}
+            className="py-2 rounded-xl bg-white border border-[#DECBB4] hover:border-[#A62A24] font-black text-sm text-[#431914] hover:text-[#A62A24] shadow-[0_2px_0_#DECBB4] hover:shadow-[0_2px_0_#A62A24] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+          >
+            {char}
+          </button>
+        ))}
+      </div>
+
+      {/* Preset Words */}
+      <div className="flex items-center gap-1.5 pt-1 overflow-x-auto">
+        <span className="text-[10px] text-[#78685B] font-bold shrink-0">Từ mẫu:</span>
+        {SAMPLE_PRESET_WORDS.map((w) => (
+          <button
+            key={w}
+            type="button"
+            onClick={() => {
+              setTypedText(w);
+              speakVietnamese(w);
+              audioFeedback.playTap();
+            }}
+            className="px-2.5 py-0.5 rounded-lg bg-[#FFF9EE] hover:bg-[#F5E1D8] border border-[#DECBB4]/80 text-[#431914] text-[11px] font-bold shrink-0 transition-colors cursor-pointer"
+          >
+            {w}
+          </button>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+export default DiacriticKeyboardCard;

@@ -2,6 +2,7 @@ import { BilingualText, vietnameseLabel } from '@/components/common/BilingualTex
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { toast } from 'sonner';
 
 export function AdminScenarioBuilderPage() {
   const { id } = useParams();
@@ -112,7 +113,7 @@ export function AdminScenarioBuilderPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
-      alert('Vui lòng nhập tên kịch bản!');
+      toast.error('Vui lòng nhập tên kịch bản.');
       return;
     }
 

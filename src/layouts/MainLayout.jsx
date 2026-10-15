@@ -1,9 +1,11 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'motion/react';
 import { useAuth } from '@/application/context/AuthContext';
 import { AppFooter, AppHeader, LayoutToast } from '@/components/layout';
 import { learnerService } from '@/services/learnerService';
+import { PageTransition } from '@/components/common/PageTransition';
 
 export function MainLayout() {
   const { isAuthenticated, user, logout, loading } = useAuth();
@@ -29,12 +31,18 @@ export function MainLayout() {
       .catch(() => setLearnerStats({ streak: 0, xp: 0 }));
   }, [isAuthenticated]);
 
+  const isGuestHome = (location.pathname === '/' || location.pathname === '') && !isAuthenticated;
+
   return (
     <div className="layout-shell">
       <a className="skip-link" href="#main-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
       <LayoutToast message={toastError} onClose={() => setToastError(null)} />
       <AppHeader isAuthenticated={isAuthenticated} user={user} loading={loading} stats={learnerStats} onLogout={logout} />
-      <main className="layout-main" id="main-content"><Outlet /></main>
+      <main className={`layout-main ${isGuestHome ? 'layout-main--full' : ''}`} id="main-content">
+        <AnimatePresence mode="wait" initial={false}>
+          <PageTransition key={location.pathname}><Outlet /></PageTransition>
+        </AnimatePresence>
+      </main>
       <AppFooter />
     </div>
   );

@@ -1,15 +1,27 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { learnerService } from '@/services/learnerService';
 import { useAuth } from '@/application/context/AuthContext';
 import { ContentImage } from '@/components/common/ContentImage';
+import { Camera, LoaderCircle, Upload } from 'lucide-react';
+import { toast } from 'sonner';
+
+const AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
 
 export function ProfilePage() {
-  const { fetchProfile } = useAuth();
+  const { fetchProfile, updateCurrentUser } = useAuth();
+  const avatarInputRef = useRef(null);
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({});
   const [editing, setEditing] = useState(false);
   const [state, setState] = useState({ loading: true, error: '', message: '' });
+  const [avatarPreview, setAvatarPreview] = useState('');
+  const [avatarState, setAvatarState] = useState({ uploading: false, error: '' });
+
+  useEffect(() => () => {
+    if (avatarPreview.startsWith('blob:')) URL.revokeObjectURL(avatarPreview);
+  }, [avatarPreview]);
 
   useEffect(() => {
     learnerService
@@ -35,6 +47,40 @@ export function ProfilePage() {
     } catch (err) {
       setState({ loading: false, error: err.message, message: '' });
     }
+  };
+
+  const uploadAvatar = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!AVATAR_TYPES.includes(file.type)) {
+      setAvatarState({ uploading: false, error: 'Chỉ chấp nhận ảnh JPEG, PNG hoặc WebP.' });
+      return;
+    }
+    if (file.size > MAX_AVATAR_SIZE) {
+      setAvatarState({ uploading: false, error: 'Ảnh đại diện không được vượt quá 5MB.' });
+      return;
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarPreview(previewUrl);
+    setAvatarState({ uploading: true, error: '' });
+    setState((current) => ({ ...current, error: '', message: '' }));
+    try {
+      const response = await learnerService.uploadAvatar(file);
+      const updatedUser = response?.result ?? response;
+      if (!updatedUser?.avatarUrl) throw new Error(response?.message || 'Máy chủ không trả về ảnh đại diện mới.');
+      setProfile((current) => ({ ...current, ...updatedUser }));
+      setForm((current) => ({ ...current, ...updatedUser }));
+      updateCurrentUser(updatedUser);
+      setAvatarPreview('');
+      setState((current) => ({ ...current, message: response?.message || 'Cập nhật ảnh đại diện thành công.' }));
+      toast.success(response?.message || 'Cập nhật ảnh đại diện thành công.');
+    } catch (error) {
+      setAvatarState({ uploading: false, error: error.message || 'Không thể tải ảnh đại diện lên.' });
+      return;
+    }
+    setAvatarState({ uploading: false, error: '' });
   };
 
   if (state.loading && !profile) {
@@ -73,17 +119,24 @@ export function ProfilePage() {
 
       {/* Hero Avatar & Identity Card */}
       <section className="profile-hero">
-        <div className="profile-avatar">
+        <div className={`profile-avatar profile-avatar--editable ${avatarState.uploading ? 'is-uploading' : ''}`}>
             <ContentImage
-              src={profile.avatarUrl}
+              src={avatarPreview || profile.avatarUrl}
               alt={`Ảnh đại diện của ${profile.fullName || profile.username || 'học viên'}`}
               fallback={profile.fullName?.[0]?.toUpperCase() || 'H'}
               style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
             />
+            <input ref={avatarInputRef} className="profile-avatar-input" type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadAvatar} disabled={avatarState.uploading} aria-label="Chọn ảnh đại diện" />
+            <button type="button" className="profile-avatar-action" onClick={() => avatarInputRef.current?.click()} disabled={avatarState.uploading} aria-label="Thay đổi ảnh đại diện">
+              {avatarState.uploading ? <LoaderCircle className="profile-avatar-spinner" size={19}/> : <Camera size={19}/>}
+            </button>
         </div>
-        <div>
+        <div className="profile-identity">
           <h2>{profile.fullName || profile.username}</h2>
           <p>{profile.email}</p>
+          <button type="button" className="profile-upload-link" onClick={() => avatarInputRef.current?.click()} disabled={avatarState.uploading}><Upload size={14}/><BilingualText>{avatarState.uploading ? 'Đang tải ảnh lên…' : 'Đổi ảnh đại diện'}</BilingualText></button>
+          <small><BilingualText>{"JPEG, PNG hoặc WebP · tối đa 5MB"}</BilingualText></small>
+          {avatarState.error && <span className="profile-avatar-error" role="alert"><BilingualText>{avatarState.error}</BilingualText></span>}
         </div>
         <button
           type="button"
@@ -114,16 +167,6 @@ export function ProfilePage() {
               value={form.phoneNumber || ''}
               onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
               placeholder="VD: 0912345678"
-            />
-          </label>
-
-          <label>
-            <span><BilingualText>{"Ảnh đại diện (URL)"}</BilingualText></span>
-            <input
-              type="url"
-              value={form.avatarUrl || ''}
-              onChange={(e) => setForm({ ...form, avatarUrl: e.target.value })}
-              placeholder="https://..."
             />
           </label>
 

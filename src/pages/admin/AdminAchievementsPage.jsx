@@ -2,6 +2,7 @@ import { BilingualText, vietnameseLabel } from '@/components/common/BilingualTex
 import { Modal } from '@/components/common/Modal';
 import { useState, useEffect } from 'react';
 import { adminService } from '@/services/adminService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminAchievementsPage() {
   const [achievements, setAchievements] = useState([]);
@@ -19,6 +20,7 @@ export function AdminAchievementsPage() {
   });
   const [msg, setMsg] = useState('');
   const [error,setError]=useState('');
+  const { confirm, confirmationDialog } = useConfirmDialog();
 
   useEffect(() => {
     loadData();
@@ -59,13 +61,14 @@ export function AdminAchievementsPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Bạn có chắc muốn xóa huy hiệu này?')) return;
+    if (!await confirm({ title: 'Xóa huy hiệu?', description: 'Huy hiệu sẽ bị xóa khỏi hệ thống và không thể khôi phục.', confirmLabel: 'Xóa huy hiệu' })) return;
     try { const res = await adminService.deleteAchievement(id); setMsg(res.message || 'Đã xóa huy hiệu.'); loadData(); }
     catch (error) { setMsg(error.message); }
   };
 
   return (
     <div>
+      {confirmationDialog}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}><BilingualText>{"Quản lý Thành tích & Huy hiệu"}</BilingualText></h1>

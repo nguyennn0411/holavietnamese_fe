@@ -2,13 +2,16 @@ import { BilingualText, vietnameseLabel } from '@/components/common/BilingualTex
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { toast } from 'sonner';
+import { Trash2 } from 'lucide-react';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminAiScenariosPage() {
   const [search, setSearch] = useState('');
   const [topicFilter, setTopicFilter] = useState('all');
   const [levelFilter, setLevelFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [toast, setToast] = useState('');
+  const { confirm, confirmationDialog } = useConfirmDialog();
 
   const scenarios = adminCultureAiService.getScenarios({
     search,
@@ -17,21 +20,16 @@ export function AdminAiScenariosPage() {
     status: statusFilter,
   });
 
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(''), 3000);
-  };
-
   const handleStatusChange = (id, newStatus) => {
     adminCultureAiService.updateScenarioStatus(id, newStatus);
-    showToast(`Đã đổi trạng thái kịch bản sang: ${newStatus}`);
+    toast.success(`Đã đổi trạng thái kịch bản sang: ${newStatus}`);
   };
 
-  const handleDelete = (id, title) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa kịch bản "${title}"?`)) {
-      adminCultureAiService.deleteScenario(id);
-      showToast('Đã xóa kịch bản.');
-    }
+  const handleDelete = async (id, title) => {
+    const accepted = await confirm({ title: 'Xóa kịch bản AI?', description: `Kịch bản “${title}” sẽ bị xóa và không thể khôi phục.`, confirmLabel: 'Xóa kịch bản' });
+    if (!accepted) return;
+    adminCultureAiService.deleteScenario(id);
+    toast.success('Đã xóa kịch bản.');
   };
 
   const getStatusBadge = (status) => {
@@ -49,11 +47,7 @@ export function AdminAiScenariosPage() {
 
   return (
     <div className="admin-content">
-      {toast && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
-          <BilingualText>{toast}</BilingualText>
-        </div>
-      )}
+      {confirmationDialog}
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
@@ -224,7 +218,7 @@ export function AdminAiScenariosPage() {
                         title="Xóa kịch bản"
                         onClick={() => handleDelete(sc.id, sc.title)}
                       >
-                        🗑️
+                        <Trash2 size={15} aria-hidden="true" />
                       </button>
                     </div>
                   </td>
