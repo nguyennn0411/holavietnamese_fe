@@ -1,5 +1,5 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { useEffect, useRef, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { ResourceState } from '@/components/common/ResourceState';
 import { VOCABULARY_STATUSES } from '@/models/AdminVocabulary';
@@ -71,6 +71,7 @@ function AdminVocabularyTopicModal({
   const [draft, setDraft] = useState(() => ({ ...emptyTopic }));
   const [loading, setLoading] = useState(mode === 'edit');
   const [busy, setBusy] = useState(false);
+  const submitting = useRef(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -113,6 +114,8 @@ function AdminVocabularyTopicModal({
 
   const submit = async (event) => {
     event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
 
     setError('');
     setBusy(true);
@@ -129,6 +132,7 @@ function AdminVocabularyTopicModal({
     } catch (saveError) {
       setError(saveError.message);
     } finally {
+      submitting.current = false;
       setBusy(false);
     }
   };
@@ -179,7 +183,7 @@ function AdminVocabularyTopicModal({
                 value={draft.slug}
                 maxLength={120}
                 required
-                placeholder={bilingualLabel("Ví dụ: greetings")}
+                placeholder={vietnameseLabel("Ví dụ: greetings")}
                 onChange={(event) =>
                   change('slug', event.target.value)
                 }
@@ -221,7 +225,7 @@ function AdminVocabularyTopicModal({
                     key={status}
                     value={status}
                   >
-                    {bilingualLabel(status)}
+                    {vietnameseLabel(status)}
                   </option>
                 ))}
               </select>

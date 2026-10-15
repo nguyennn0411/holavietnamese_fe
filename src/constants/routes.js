@@ -8,6 +8,11 @@ export const ROUTES = {
   RESET_PASSWORD: '/reset-password',
   ONBOARDING: '/onboarding',
 
+  // EdTech Next-Gen Experience
+  EDTECH_DASHBOARD: '/edtech/dashboard',
+  EDTECH_LESSON: '/edtech/lesson',
+  EDTECH_VOCABULARY: '/edtech/vocabulary',
+
   // Learner
   MY_LEARNING: '/my-learning',
   PROFILE: '/profile',
@@ -66,6 +71,7 @@ export const ROUTES = {
   ADMIN_VOCABULARY: '/admin/vocabulary',
   ADMIN_DESTINATIONS: '/admin/destinations',
   ADMIN_DESTINATION_DETAIL: '/admin/destinations/:id',
+  ADMIN_JOURNEY: '/admin/journey',
   ADMIN_USERS: '/admin/users',
   ADMIN_USER_DETAIL: '/admin/users/:id',
   ADMIN_ROLES: '/admin/roles',

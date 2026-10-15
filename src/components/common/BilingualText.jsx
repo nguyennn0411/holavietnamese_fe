@@ -1,4 +1,11 @@
+import { createContext, useContext } from 'react';
 import { UI_TRANSLATIONS } from './uiTranslations';
+
+const TextLanguageContext = createContext('bilingual');
+
+export function BilingualTextProvider({ language = 'bilingual', children }) {
+  return <TextLanguageContext.Provider value={language}>{children}</TextLanguageContext.Provider>;
+}
 
 const patterns = [
   [/^Xin chào, (.+)!$/, match => `Hello, ${match[1]}!`],
@@ -38,8 +45,18 @@ export function bilingualLabel(value) {
   return pair && pair[0].toLowerCase() !== pair[1].toLowerCase() ? `${pair[0]} · ${pair[1]}` : value;
 }
 
+export function vietnameseLabel(value) {
+  return bilingualPair(value)?.[0] ?? value;
+}
+
+export function useBilingualLabel() {
+  return useContext(TextLanguageContext) === 'vi' ? vietnameseLabel : bilingualLabel;
+}
+
 export function BilingualText({ children, vi, en, className = '' }) {
+  const language = useContext(TextLanguageContext);
   const pair = en ? [vi ?? children, en] : vi !== undefined ? null : bilingualPair(children);
+  if (language === 'vi') return pair ? pair[0] : vi ?? children ?? null;
   if (!pair || (typeof pair[0] === 'string' && pair[0].toLowerCase() === pair[1].toLowerCase())) return children ?? vi ?? null;
   return <span className={`bilingual-text ${className}`.trim()}>
     <span className="bilingual-text__vi" lang="vi">{pair[0]}</span>

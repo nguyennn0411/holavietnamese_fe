@@ -5,6 +5,7 @@ import { ContentImage } from '@/components/common/ContentImage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { Breadcrumb, EmptyState, Notice, PageHeader } from '@/components/common/Ui';
 import { DestinationForm } from '@/components/destinations/DestinationForm';
+import { DestinationContentEditor } from '@/components/destinations/DestinationContentEditor';
 import { DestinationMetadata, DestinationRegion, DestinationStatusBadge } from '@/components/destinations/DestinationMetadata';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { adminDestinationService } from '@/services/destinationService';
@@ -37,6 +38,7 @@ export function AdminDestinationDetailPage() {
         </>}
       </section>
       <section className="admin-card" style={{ marginTop: 20 }}><DestinationMetadata entry={entry} /></section>
+      {!editing && <DestinationContentEditor key={entry.id} destinationId={entry.id} />}
       <div className="actions" style={{ marginTop: 20 }}><Link className="button secondary" to={ROUTES.ADMIN_DESTINATIONS}><BilingualText vi="Về danh sách điểm đến" en="Back to destinations" /></Link></div>
     </>}</ResourceState>
   </div>;

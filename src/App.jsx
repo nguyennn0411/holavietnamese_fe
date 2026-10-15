@@ -1,11 +1,12 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, BilingualTextProvider } from '@/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { AdminRoute } from '@/components/common/AdminRoute';
 import { ROUTES } from '@/constants/routes';
+const AppToaster = lazy(() => import('@/components/common/AppToaster'));
 
 // Layouts
 import { MainLayout } from '@/layouts/MainLayout';
@@ -29,6 +30,11 @@ const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage').then(mod
 const LearningProgressPage = lazy(() => import('@/pages/progress/LearningProgressPage').then(module => ({ default: module.LearningProgressPage })));
 const AchievementsPage = lazy(() => import('@/pages/achievements/AchievementsPage').then(module => ({ default: module.AchievementsPage })));
 const NotificationsPage = lazy(() => import('@/pages/notifications/NotificationsPage').then(module => ({ default: module.NotificationsPage })));
+
+// EdTech Next-Gen Experience
+const DashboardScreen = lazy(() => import('@/pages/edtech/DashboardScreen').then(module => ({ default: module.DashboardScreen })));
+const InteractiveLessonScreen = lazy(() => import('@/pages/edtech/InteractiveLessonScreen').then(module => ({ default: module.InteractiveLessonScreen })));
+const VocabularyHubScreen = lazy(() => import('@/pages/edtech/VocabularyHubScreen').then(module => ({ default: module.VocabularyHubScreen })));
 
 // Courses & Vocabulary Pages (Người 2 & Người 3)
 const CourseListPage = lazy(() => import('@/pages/courses/CourseListPage').then(module => ({ default: module.CourseListPage })));
@@ -62,6 +68,7 @@ const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage').t
 const AdminVocabularyPage = lazy(() => import('@/pages/admin/AdminVocabularyPage').then(module => ({ default: module.AdminVocabularyPage })));
 const AdminDestinationsPage = lazy(() => import('@/pages/admin/AdminDestinationsPage').then(module => ({ default: module.AdminDestinationsPage })));
 const AdminDestinationDetailPage = lazy(() => import('@/pages/admin/AdminDestinationDetailPage').then(module => ({ default: module.AdminDestinationDetailPage })));
+const AdminJourneyPage = lazy(() => import('@/pages/admin/AdminJourneyPage').then(module => ({ default: module.AdminJourneyPage })));
 const AdminVocabularyTopicsPage = lazy(() =>
   import('@/pages/admin/AdminVocabularyTopicsPage')
     .then((module) => ({ default: module.AdminVocabularyTopicsPage }))
@@ -92,9 +99,16 @@ const AdminQuestionBankPage = lazy(() => import('@/pages/admin/AdminQuizPages').
 const AdminQuizBuilderPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizBuilderPage })));
 const AdminQuizPreviewPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizPreviewPage })));
 
+function RouteTextLanguage({ children }) {
+  const { pathname } = useLocation();
+  const isAdmin = pathname === ROUTES.ADMIN || pathname.startsWith(`${ROUTES.ADMIN}/`);
+  return <BilingualTextProvider language={isAdmin ? 'vi' : 'bilingual'}>{children}</BilingualTextProvider>;
+}
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter><RouteTextLanguage>
+      <Suspense fallback={null}><AppToaster /></Suspense>
       <ErrorBoundary>
         <AuthProvider>
           <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><BilingualText>{"Đang tải trang…"}</BilingualText></div>}><Routes>
@@ -108,10 +122,14 @@ function App() {
               <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
             </Route>
             <Route path="/forbidden" element={<ForbiddenPage />} />
+            {/* Distraction-Free Fullscreen Interactive Lesson */}
+            <Route path={ROUTES.EDTECH_LESSON} element={<InteractiveLessonScreen />} />
 
             {/* Learner Main Layout */}
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<HomePage />} />
+              <Route path={ROUTES.EDTECH_DASHBOARD} element={<DashboardScreen />} />
+              <Route path={ROUTES.EDTECH_VOCABULARY} element={<VocabularyHubScreen />} />
               <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
               <Route path={ROUTES.COURSES} element={<CourseListPage />} />
               <Route path={ROUTES.ALPHABET} element={<AlphabetPage />} />
@@ -171,6 +189,7 @@ function App() {
                 <Route path={ROUTES.ADMIN_VOCABULARY} element={<AdminVocabularyPage />} />
                 <Route path={ROUTES.ADMIN_DESTINATIONS} element={<AdminDestinationsPage />} />
                 <Route path={ROUTES.ADMIN_DESTINATION_DETAIL} element={<AdminDestinationDetailPage />} />
+                <Route path={ROUTES.ADMIN_JOURNEY} element={<AdminJourneyPage />} />
                 <Route path={ROUTES.ADMIN} element={<AdminDashboardPage />} />
                 <Route path={ROUTES.ADMIN_USERS} element={<AdminUsersPage />} />
                 <Route path={ROUTES.ADMIN_USER_DETAIL} element={<AdminUserDetailPage />} />
@@ -197,7 +216,7 @@ function App() {
           </Routes></Suspense>
         </AuthProvider>
       </ErrorBoundary>
-    </BrowserRouter>
+    </RouteTextLanguage></BrowserRouter>
   );
 }
 

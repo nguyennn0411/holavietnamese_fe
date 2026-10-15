@@ -1,10 +1,12 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminCultureListPage() {
+  const { confirm, confirmationDialog } = useConfirmDialog();
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -27,8 +29,8 @@ export function AdminCultureListPage() {
     showToast(`Đã cập nhật trạng thái bài viết thành: ${newStatus}`);
   };
 
-  const handleDelete = (id, title) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa bài viết "${title}"?`)) {
+  const handleDelete = async (id, title) => {
+    if (await confirm({ title: 'Xóa bài viết văn hóa?', description: `Bài viết “${title}” sẽ bị xóa và không thể khôi phục.`, confirmLabel: 'Xóa bài viết' })) {
       adminCultureAiService.deleteArticle(id);
       showToast('Đã xóa bài viết thành công.');
     }
@@ -51,6 +53,7 @@ export function AdminCultureListPage() {
 
   return (
     <div className="admin-content">
+      {confirmationDialog}
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           <BilingualText>{toast}</BilingualText>
@@ -76,13 +79,13 @@ export function AdminCultureListPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1fr auto', gap: '14px', alignItems: 'center' }}>
           <input
             type="text"
-            placeholder={bilingualLabel("Tìm theo tiêu đề bài viết hoặc tên tác giả...")}
+            placeholder={vietnameseLabel("Tìm theo tiêu đề bài viết hoặc tên tác giả...")}
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
 
           <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}>
-            <option value="all">{bilingualLabel("Tất cả danh mục")}</option>
+            <option value="all">{vietnameseLabel("Tất cả danh mục")}</option>
             {categories.map(c => (
               <option key={c.id} value={c.id}>
                 {c.icon} {c.name}
@@ -91,11 +94,11 @@ export function AdminCultureListPage() {
           </select>
 
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
-            <option value="all">{bilingualLabel("Tất cả trạng thái")}</option>
-            <option value="PUBLISHED">{bilingualLabel("Đã xuất bản (Published)")}</option>
-            <option value="IN_REVIEW">{bilingualLabel("Chờ duyệt (In Review)")}</option>
-            <option value="DRAFT">{bilingualLabel("Bản nháp (Draft)")}</option>
-            <option value="ARCHIVED">{bilingualLabel("Lưu trữ (Archived)")}</option>
+            <option value="all">{vietnameseLabel("Tất cả trạng thái")}</option>
+            <option value="PUBLISHED">{vietnameseLabel("Đã xuất bản")}</option>
+            <option value="IN_REVIEW">{vietnameseLabel("Chờ duyệt")}</option>
+            <option value="DRAFT">{vietnameseLabel("Bản nháp")}</option>
+            <option value="ARCHIVED">{vietnameseLabel("Lưu trữ")}</option>
           </select>
 
           {(search || categoryFilter !== 'all' || statusFilter !== 'all') && (

@@ -27,14 +27,15 @@ export function VocabularyOverview({ active, children }) {
 function NotebookOverview({ active, children }) {
   const resource = useVocabulary({ search: '', courseId: '', lessonId: '' });
   const count = !resource.loading && !resource.error ? resource.data?.length : undefined;
-  return <><NotebookBanner count={count}>{children}</NotebookBanner><VocabularyNavigation active={active} count={count} /></>;
+  const dueCount = resource.data?.filter(entry => entry.review?.due).length;
+  return <><NotebookBanner count={count} dueCount={dueCount}>{children}</NotebookBanner><VocabularyNavigation active={active} count={count} /></>;
 }
 
-function NotebookBanner({ count, children }) {
+function NotebookBanner({ count, dueCount, children }) {
   return <div className="notebook-banner vocabulary-overview">
     <span className="vocabulary-icon vocabulary-icon--bookmark" aria-hidden="true" />
     <div><strong><BilingualText>{"Sổ tay tiếng Việt của bạn"}</BilingualText></strong>
-      <small>{count != null ? <BilingualText vi={<>{count} từ trong sổ tay <span aria-hidden="true">·</span> {count} từ sẵn sàng ôn tập</>} en={<>{count} words in your notebook · {count} ready to review</>} /> : <BilingualText>{'Lưu lại từ hay, ôn lại mỗi ngày.'}</BilingualText>}</small>
+      <small>{count != null ? <BilingualText vi={<>{count} từ trong sổ tay <span aria-hidden="true">·</span> {dueCount ?? 0} từ sẵn sàng ôn tập</>} en={<>{count} words in your notebook · {dueCount ?? 0} ready to review</>} /> : <BilingualText>{'Lưu lại từ hay, ôn lại mỗi ngày.'}</BilingualText>}</small>
     </div>{children}
   </div>;
 }

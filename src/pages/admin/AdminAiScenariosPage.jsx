@@ -1,14 +1,17 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { toast } from 'sonner';
+import { Trash2 } from 'lucide-react';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminAiScenariosPage() {
   const [search, setSearch] = useState('');
   const [topicFilter, setTopicFilter] = useState('all');
   const [levelFilter, setLevelFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [toast, setToast] = useState('');
+  const { confirm, confirmationDialog } = useConfirmDialog();
 
   const scenarios = adminCultureAiService.getScenarios({
     search,
@@ -17,21 +20,16 @@ export function AdminAiScenariosPage() {
     status: statusFilter,
   });
 
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(''), 3000);
-  };
-
   const handleStatusChange = (id, newStatus) => {
     adminCultureAiService.updateScenarioStatus(id, newStatus);
-    showToast(`Đã đổi trạng thái kịch bản sang: ${newStatus}`);
+    toast.success(`Đã đổi trạng thái kịch bản sang: ${newStatus}`);
   };
 
-  const handleDelete = (id, title) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa kịch bản "${title}"?`)) {
-      adminCultureAiService.deleteScenario(id);
-      showToast('Đã xóa kịch bản.');
-    }
+  const handleDelete = async (id, title) => {
+    const accepted = await confirm({ title: 'Xóa kịch bản AI?', description: `Kịch bản “${title}” sẽ bị xóa và không thể khôi phục.`, confirmLabel: 'Xóa kịch bản' });
+    if (!accepted) return;
+    adminCultureAiService.deleteScenario(id);
+    toast.success('Đã xóa kịch bản.');
   };
 
   const getStatusBadge = (status) => {
@@ -49,11 +47,7 @@ export function AdminAiScenariosPage() {
 
   return (
     <div className="admin-content">
-      {toast && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
-          <BilingualText>{toast}</BilingualText>
-        </div>
-      )}
+      {confirmationDialog}
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
@@ -65,7 +59,7 @@ export function AdminAiScenariosPage() {
 
         <div style={{ display: 'flex', gap: '10px' }}>
           <Link to="/admin/ai-settings" className="button secondary" style={{ fontSize: '13px' }}><BilingualText>{"🤖 Cấu hình mô hình AI"}</BilingualText></Link>
-          <Link to="/admin/ai-scenarios/new" className="button" style={{ fontSize: '13px' }}><BilingualText>{"+ Tạo kịch bản mới (Builder)"}</BilingualText></Link>
+          <Link to="/admin/ai-scenarios/new" className="button" style={{ fontSize: '13px' }}><BilingualText>{"+ Tạo kịch bản mới"}</BilingualText></Link>
         </div>
       </div>
 
@@ -74,35 +68,35 @@ export function AdminAiScenariosPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1fr 1fr auto', gap: '12px', alignItems: 'center' }}>
           <input
             type="text"
-            placeholder={bilingualLabel("Tìm theo tên kịch bản, địa điểm...")}
+            placeholder={vietnameseLabel("Tìm theo tên kịch bản, địa điểm...")}
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
 
           <select value={topicFilter} onChange={e => setTopicFilter(e.target.value)}>
-            <option value="all">{bilingualLabel("Tất cả chủ đề")}</option>
-            <option value="dining">{bilingualLabel("🍜 Ẩm thực & Quán xá")}</option>
-            <option value="shopping">{bilingualLabel("🛍️ Mua sắm & Mặc cả")}</option>
-            <option value="travel">{bilingualLabel("🛵 Di chuyển & Du lịch")}</option>
-            <option value="hospitality">{bilingualLabel("🏨 Khách sạn & Nghỉ dưỡng")}</option>
-            <option value="social">{bilingualLabel("🏡 Gia đình & Bạn bè")}</option>
-            <option value="work">{bilingualLabel("💼 Giao tiếp công sở")}</option>
+            <option value="all">{vietnameseLabel("Tất cả chủ đề")}</option>
+            <option value="dining">{vietnameseLabel("🍜 Ẩm thực & Quán xá")}</option>
+            <option value="shopping">{vietnameseLabel("🛍️ Mua sắm & Mặc cả")}</option>
+            <option value="travel">{vietnameseLabel("🛵 Di chuyển & Du lịch")}</option>
+            <option value="hospitality">{vietnameseLabel("🏨 Khách sạn & Nghỉ dưỡng")}</option>
+            <option value="social">{vietnameseLabel("🏡 Gia đình & Bạn bè")}</option>
+            <option value="work">{vietnameseLabel("💼 Giao tiếp công sở")}</option>
           </select>
 
           <select value={levelFilter} onChange={e => setLevelFilter(e.target.value)}>
-            <option value="all">{bilingualLabel("Tất cả trình độ")}</option>
-            <option value="A1">{bilingualLabel("A1 - Sơ cấp 1")}</option>
-            <option value="A2">{bilingualLabel("A2 - Sơ cấp 2")}</option>
-            <option value="B1">{bilingualLabel("B1 - Trung cấp 1")}</option>
-            <option value="B2">{bilingualLabel("B2 - Trung cấp 2")}</option>
-            <option value="C1">{bilingualLabel("C1 - Nâng cao")}</option>
+            <option value="all">{vietnameseLabel("Tất cả trình độ")}</option>
+            <option value="A1">{vietnameseLabel("A1 - Sơ cấp 1")}</option>
+            <option value="A2">{vietnameseLabel("A2 - Sơ cấp 2")}</option>
+            <option value="B1">{vietnameseLabel("B1 - Trung cấp 1")}</option>
+            <option value="B2">{vietnameseLabel("B2 - Trung cấp 2")}</option>
+            <option value="C1">{vietnameseLabel("C1 - Nâng cao")}</option>
           </select>
 
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
-            <option value="all">{bilingualLabel("Tất cả trạng thái")}</option>
-            <option value="ACTIVE">{bilingualLabel("Đang hoạt động")}</option>
-            <option value="DRAFT">{bilingualLabel("Bản nháp")}</option>
-            <option value="ARCHIVED">{bilingualLabel("Đã khóa")}</option>
+            <option value="all">{vietnameseLabel("Tất cả trạng thái")}</option>
+            <option value="ACTIVE">{vietnameseLabel("Đang hoạt động")}</option>
+            <option value="DRAFT">{vietnameseLabel("Bản nháp")}</option>
+            <option value="ARCHIVED">{vietnameseLabel("Đã khóa")}</option>
           </select>
 
           {(search || topicFilter !== 'all' || levelFilter !== 'all' || statusFilter !== 'all') && (
@@ -207,8 +201,8 @@ export function AdminAiScenariosPage() {
                         to={`/admin/ai-scenarios/${sc.id}`}
                         className="button secondary"
                         style={{ fontSize: '11px', padding: '5px 8px' }}
-                        title="Scenario Builder: Chỉnh sửa vai trò, bối cảnh, tiêu chí"
-                      ><BilingualText>{"⚙️ Builder"}</BilingualText></Link>
+                        title="Chỉnh sửa vai trò, bối cảnh, tiêu chí"
+                      ><BilingualText>{"⚙️ Chỉnh sửa"}</BilingualText></Link>
 
                       <Link
                         to={`/ai-roleplay/${sc.id}`}
@@ -224,7 +218,7 @@ export function AdminAiScenariosPage() {
                         title="Xóa kịch bản"
                         onClick={() => handleDelete(sc.id, sc.title)}
                       >
-                        🗑️
+                        <Trash2 size={15} aria-hidden="true" />
                       </button>
                     </div>
                   </td>

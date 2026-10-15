@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { Modal } from '@/components/common/Modal';
 import { ResourceState } from '@/components/common/ResourceState';
@@ -35,11 +35,12 @@ export function AdminDestinationsPage() {
       <button type="button" onClick={() => { setMessage(''); setCreating(true); }}><BilingualText vi="+ Thêm điểm đến" en="+ Add destination" /></button>
     </div>
     {message && <Notice kind="success"><BilingualText vi={message} en="Destination created." /></Notice>}
+    <p><Link className="text-link" to={ROUTES.ADMIN_JOURNEY}><BilingualText vi="Thiết lập hành trình →" en="Configure journey →" /></Link></p>
     <form className="admin-card" style={{ padding: 16, marginBottom: 20 }} onSubmit={event => { event.preventDefault(); filter('keyword', keyword.trim()); }}>
       <div className="actions">
-        <label style={{ flex: '1 1 220px' }}><BilingualText>Tìm kiếm</BilingualText><input value={keyword} onChange={event => setKeyword(event.target.value)} placeholder="Tên tiếng Việt hoặc tiếng Anh · Vietnamese or English name" /></label>
-        <label style={{ flex: '1 1 150px' }}><BilingualText>Trạng thái</BilingualText><select value={query.status} onChange={event => filter('status', event.target.value)}><option value="">{bilingualLabel('Tất cả trạng thái')}</option>{DESTINATION_STATUSES.map(status => <option key={status} value={status}>{bilingualLabel(status)}</option>)}</select></label>
-        <label style={{ flex: '1 1 150px' }}><BilingualText vi="Vùng miền" en="Region" /><select value={query.region} onChange={event => filter('region', event.target.value)}><option value="">Tất cả vùng miền · All regions</option>{DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi} · {region.en}</option>)}</select></label>
+        <label style={{ flex: '1 1 220px' }}><BilingualText>Tìm kiếm</BilingualText><input value={keyword} onChange={event => setKeyword(event.target.value)} placeholder="Tên tiếng Việt hoặc tiếng Anh" /></label>
+        <label style={{ flex: '1 1 150px' }}><BilingualText>Trạng thái</BilingualText><select value={query.status} onChange={event => filter('status', event.target.value)}><option value="">{vietnameseLabel('Tất cả trạng thái')}</option>{DESTINATION_STATUSES.map(status => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></label>
+        <label style={{ flex: '1 1 150px' }}><BilingualText vi="Vùng miền" en="Region" /><select value={query.region} onChange={event => filter('region', event.target.value)}><option value="">Tất cả vùng miền</option>{DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi}</option>)}</select></label>
       </div>
       <div className="actions"><button type="submit"><BilingualText>Tìm kiếm</BilingualText></button><button type="button" className="secondary" onClick={() => { setKeyword(''); setQuery({ ...emptyFilters }); }}><BilingualText>Đặt lại bộ lọc</BilingualText></button></div>
     </form>
