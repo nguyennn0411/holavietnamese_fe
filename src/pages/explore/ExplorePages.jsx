@@ -12,6 +12,7 @@ import { DESTINATION_REGIONS } from '@/models/Destination';
 import { destinationService } from '@/services/destinationService';
 import { journeyService } from '@/services/journeyService';
 import { ROUTES } from '@/constants/routes';
+import '@/components/destinations/destinations.css';
 import { Search, X, Compass, ArrowLeft, Sparkles } from 'lucide-react';
 
 const emptyFilters = { keyword: '', region: '' };
@@ -104,7 +105,7 @@ export function ExploreVietnamPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
-          <label style={{ flex: '1 1 260px' }} className="w-full">
+          <label className="explore-keyword-filter w-full">
             <span className="sr-only"><BilingualText>Tìm kiếm</BilingualText></span>
             <div className="relative w-full">
               <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78685B]" />
@@ -126,7 +127,7 @@ export function ExploreVietnamPage() {
             </div>
           </label>
 
-          <label style={{ flex: '0 1 200px' }} className="w-full sm:w-auto">
+          <label className="explore-region-filter w-full sm:w-auto">
             <span className="sr-only"><BilingualText vi="Vùng miền" en="Region" /></span>
             <select
               value={query.region}
@@ -201,6 +202,7 @@ export function ExploreVietnamPage() {
                       to={generatePath(detailRoute, { id: String(destination.id) })}
                       aria-disabled={stop ? !stop.accessible : undefined}
                       aria-current={stop?.status === 'CURRENT' ? 'step' : undefined}
+                      data-journey-status={stop?.status}
                       title={stop && !stop.accessible ? 'Hoàn thành điểm đến trước để mở khóa.' : undefined}
                       onClick={event => { if (stop && !stop.accessible) event.preventDefault(); }}
                     >

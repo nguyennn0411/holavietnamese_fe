@@ -5,6 +5,7 @@ import { useAuth } from '@/application/context/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import { Notice } from '@/components/common/Ui';
 import { vocabularyService } from '@/services/vocabularyService';
+import { Bookmark, BookmarkCheck } from 'lucide-react';
 
 export function SaveVocabularyButton({ entry, compact = false, initialSavedEntry = null, checking = false, checkError, onSaved, onDeleted }) {
   const { isAuthenticated, loading } = useAuth();
@@ -57,7 +58,8 @@ export function SaveVocabularyButton({ entry, compact = false, initialSavedEntry
         aria-pressed={!!savedEntry} aria-busy={pending}
         title={savedEntry ? 'Xóa khỏi sổ tay' : 'Lưu vào sổ tay'}
         disabled={loading || pending || checking || Boolean(checkError)} onClick={save}>
-        <BilingualText>{pending ? (savedEntry ? 'Đang xóa…' : 'Đang lưu…') : savedEntry ? 'Đã lưu vào sổ tay' : 'Lưu vào sổ tay'}</BilingualText>
+        {savedEntry ? <BookmarkCheck size={18} aria-hidden="true" /> : <Bookmark size={18} aria-hidden="true" />}
+        <span className={compact ? 'sr-only' : undefined}><BilingualText>{pending ? (savedEntry ? 'Đang xóa…' : 'Đang lưu…') : savedEntry ? 'Đã lưu vào sổ tay' : 'Lưu vào sổ tay'}</BilingualText></span>
       </button>
     </div>
     {message && <Notice kind="success"><BilingualText>{message}</BilingualText> {savedEntry && <Link to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{"Mở sổ tay"}</BilingualText></Link>}</Notice>}

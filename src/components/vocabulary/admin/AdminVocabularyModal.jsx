@@ -7,7 +7,7 @@ import { CEFR_LEVELS, VOCABULARY_STATUSES, newExample, newMeaning, vocabularyDra
 const dateText = (value) => value ? new Date(value).toLocaleString('vi-VN') : '—';
 
 function VocabularyDetail({ entry, onEdit }) {
-  return <div>
+  return <div className="admin-vocabulary-detail">
     <dl>
       <dt>ID</dt><dd>{entry.id}</dd><dt><BilingualText>{"Từ vựng"}</BilingualText></dt><dd>{entry.word}</dd>
       <dt><BilingualText>{"Phiên âm"}</BilingualText></dt><dd>{entry.pronunciation || '—'}</dd><dt><BilingualText>{"Từ loại"}</BilingualText></dt><dd>{entry.partOfSpeech}</dd>
@@ -72,7 +72,7 @@ export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, 
     {loading ? <div className="state" role="status"><BilingualText>{"Đang tải từ vựng…"}</BilingualText></div> : loadError
       ? <div className="state" role="alert"><p>{loadError}</p><button type="button" onClick={() => setRevision((value) => value + 1)}><BilingualText>{"Thử lại"}</BilingualText></button></div>
       : mode === 'view' ? <VocabularyDetail entry={entry} onEdit={onEdit} />
-      : <form onSubmit={submit}>
+      : <form className="admin-vocabulary-form" onSubmit={submit}>
         <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
           <label><BilingualText>{"Từ vựng"}</BilingualText><input value={draft.word} onChange={(event) => change('word', event.target.value)} required maxLength={200} lang="vi" /></label>
           <label><BilingualText>{"Phiên âm"}</BilingualText><input value={draft.pronunciation} onChange={(event) => change('pronunciation', event.target.value)} maxLength={200} /></label>

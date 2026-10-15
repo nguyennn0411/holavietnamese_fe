@@ -4,6 +4,11 @@ import { adminVocabularyService } from '@/services/adminVocabularyService';
 import { ResourceState } from '@/components/common/ResourceState';
 import { AdminVocabularyModal } from '@/components/vocabulary/admin/AdminVocabularyModal';
 import { CEFR_LEVELS, VOCABULARY_STATUSES } from '@/models/AdminVocabulary';
+import { Breadcrumb, PageHeader } from '@/components/common/Ui';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
+import { Plus, Tags } from 'lucide-react';
+import '@/components/vocabulary/admin/admin-vocabulary.css';
 
 const emptyFilters = { keyword: '', status: '', cefrLevel: '', partOfSpeech: '', topicId: '' };
 
@@ -58,13 +63,14 @@ export function AdminVocabularyPage() {
     reload();
   };
 
-  return <div>
-    <div className="row" style={{ flexWrap: 'wrap', marginBottom: 24 }}>
-      <div><h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px' }}><BilingualText>{"Quản lý từ vựng"}</BilingualText></h1><p style={{ color: 'var(--color-muted)', margin: 0 }}><BilingualText>{"Quản lý từ vựng, chủ đề, nghĩa và ví dụ tiếng Việt."}</BilingualText></p></div>
-      <button type="button" onClick={() => setModal({ mode: 'create' })}><BilingualText>{"+ Thêm từ vựng"}</BilingualText></button>
-    </div>
+  return <div className="admin-vocabulary-page">
+    <Breadcrumb items={[{ label: 'Quản trị', to: ROUTES.ADMIN }, { label: 'Từ vựng' }]} />
+    <PageHeader eyebrow="Từ vựng tiếng Việt" title="Quản lý từ vựng" description="Quản lý từ vựng, chủ đề, nghĩa và ví dụ tiếng Việt." actions={<>
+      <Link className="button secondary" to={ROUTES.ADMIN_VOCABULARY_TOPICS}><Tags size={16} aria-hidden="true" /><BilingualText>Chủ đề từ vựng</BilingualText></Link>
+      <button type="button" onClick={() => setModal({ mode: 'create' })}><Plus size={16} aria-hidden="true" /><BilingualText vi="Thêm từ vựng" en="Add vocabulary" /></button>
+    </>} />
     {message && <div className="success state" role="status"><BilingualText>{message}</BilingualText></div>}
-    <form className="admin-card" style={{ padding: 16, marginBottom: 20 }} onSubmit={(event) => { event.preventDefault(); filter('keyword', keyword.trim()); }}>
+    <form className="admin-card admin-vocabulary-filters" onSubmit={(event) => { event.preventDefault(); filter('keyword', keyword.trim()); }}>
       <div className="actions">
         <label style={{ flex: '1 1 220px' }}><BilingualText>{"Tìm kiếm"}</BilingualText><input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={vietnameseLabel("Nhập từ khóa…")} /></label>
         <label style={{ flex: '1 1 150px' }}><BilingualText>{"Trạng thái"}</BilingualText><select value={query.status} onChange={(event) => filter('status', event.target.value)}><option value="">{vietnameseLabel("Tất cả trạng thái")}</option>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></label>

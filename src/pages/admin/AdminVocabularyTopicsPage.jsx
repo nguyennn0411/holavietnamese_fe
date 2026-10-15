@@ -4,6 +4,9 @@ import { Modal } from '@/components/common/Modal';
 import { ResourceState } from '@/components/common/ResourceState';
 import { VOCABULARY_STATUSES } from '@/models/AdminVocabulary';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
+import { Breadcrumb } from '@/components/common/Ui';
+import { ROUTES } from '@/constants/routes';
+import '@/components/vocabulary/admin/admin-vocabulary.css';
 
 const emptyTopic = {
   name: '',
@@ -156,7 +159,7 @@ function AdminVocabularyTopicModal({
           <p><BilingualText>{"Đang tải chủ đề…"}</BilingualText></p>
         </div>
       ) : (
-        <form onSubmit={submit}>
+        <form className="admin-vocabulary-topic-form" onSubmit={submit}>
           {error && (
             <div
               className="ui-notice ui-notice--error"
@@ -331,15 +334,17 @@ export function AdminVocabularyTopicsPage() {
   };
 
   return (
-    <div>
+    <div className="admin-vocabulary-page admin-vocabulary-topics-page">
+      <Breadcrumb items={[{ label: 'Từ vựng', to: ROUTES.ADMIN_VOCABULARY }, { label: 'Chủ đề từ vựng' }]} />
       <div
-        className="actions"
+        className="page-header"
         style={{
           justifyContent: 'space-between',
           marginBottom: 20,
         }}
       >
         <div>
+          <p className="eyebrow"><BilingualText>Từ vựng tiếng Việt</BilingualText></p>
           <h1><BilingualText>{"Chủ đề từ vựng"}</BilingualText></h1>
           <p className="muted"><BilingualText>{"Quản lý các chủ đề dùng để phân loại từ vựng."}</BilingualText></p>
         </div>

@@ -43,7 +43,7 @@ export function DestinationForm({ entry, onSaved, onCancel, onBusyChange }) {
     { key: 'imageUrl', vi: 'Đường dẫn ảnh', en: 'Image URL', max: 2048 },
   ];
 
-  return <form onSubmit={submit}>
+  return <form className="destination-form" onSubmit={submit}>
     <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
       {fields.map(field => <label key={field.key} htmlFor={`${formId}-${field.key}`}>
         <BilingualText vi={`${field.vi}${field.required ? ' *' : ''}`} en={field.en} />

@@ -9,7 +9,7 @@ import { adminVocabularyService } from '@/services/adminVocabularyService';
 
 export function DestinationContentEditor({ destinationId }) {
   const resource = useAsyncResource(useCallback(signal => adminJourneyService.content(destinationId, { signal }), [destinationId]));
-  return <section className="admin-card" style={{ marginTop: 20 }}>
+  return <section className="admin-card destination-content-editor" style={{ marginTop: 20 }}>
     <h2><BilingualText vi="Nội dung liên kết" en="Linked content" /></h2>
     <ResourceState resource={resource}>{data => <ContentEditor destinationId={destinationId} initial={data} />}</ResourceState>
   </section>;
@@ -51,7 +51,7 @@ function ContentSelector({ kind, selected, onChange }) {
   const resource = useAsyncResource(useCallback(signal => lesson
     ? contentService.list('lessons', { q: query, page, size: 10 }, signal)
     : adminVocabularyService.list({ keyword: query }, { signal }), [lesson, query, page]));
-  return <section>
+  return <section className="destination-content-selector">
     <h3><BilingualText vi={lesson ? 'Bài học' : 'Từ ngữ địa phương'} en={lesson ? 'Lessons' : 'Local language'} /></h3>
     <ul>{selected.map(item => <li key={item.id}>{label(item)} <button type="button" className="secondary" aria-label={`Bỏ liên kết ${label(item)}`} onClick={() => onChange(selected.filter(s => s.id !== item.id))}>×</button></li>)}</ul>
     <div className="actions"><input aria-label={lesson ? 'Tìm bài học để liên kết' : 'Tìm từ để liên kết'} value={search} onChange={event => setSearch(event.target.value)} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); setQuery(search.trim()); setPage(0); } }} /><button type="button" className="secondary" onClick={() => { setQuery(search.trim()); setPage(0); }}><BilingualText>Tìm kiếm</BilingualText></button></div>

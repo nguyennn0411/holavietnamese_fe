@@ -10,15 +10,16 @@ import { adminDestinationService } from '@/services/destinationService';
 import { adminJourneyService } from '@/services/journeyService';
 import { DESTINATION_STATUSES } from '@/models/Destination';
 import { ROUTES } from '@/constants/routes';
+import '@/components/destinations/destinations.css';
 
 export function AdminJourneyPage() {
   const resource = useAsyncResource(useCallback(async signal => {
     const [configuration, destinations] = await Promise.all([adminJourneyService.get({ signal }), adminDestinationService.list({}, { signal })]);
     return { configuration, destinations };
   }, []));
-  return <section>
+  return <section className="admin-destinations-page admin-journey-page">
     <Breadcrumb items={[{ label: 'Điểm đến', to: ROUTES.ADMIN_DESTINATIONS }, { label: 'Thiết lập hành trình' }]} />
-    <PageHeader title="Thiết lập hành trình" description="Chọn điểm dừng và lưu thứ tự khám phá Việt Nam." />
+    <PageHeader eyebrow="Khám phá Việt Nam" title="Thiết lập hành trình" description="Chọn điểm dừng và lưu thứ tự khám phá Việt Nam." />
     <ResourceState resource={resource}>{data => <JourneyEditor initial={data.configuration.stops} destinations={data.destinations} />}</ResourceState>
   </section>;
 }
@@ -41,13 +42,13 @@ function JourneyEditor({ initial, destinations }) {
     catch (failure) { setError(failure); }
     finally { setPending(false); }
   }
-  return <form onSubmit={save}>
+  return <form className="admin-journey-form" onSubmit={save}>
     <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
       <section className="admin-card">
         <div className="actions"><label><BilingualText vi="Thêm điểm dừng" en="Add a stop" /><select value={selected} onChange={event => setSelected(event.target.value)}><option value="">Chọn điểm đến</option>{available.map(d => <option key={d.id} value={d.id}>{d.nameVi} · {vietnameseLabel(d.status)}</option>)}</select></label><button type="button" className="secondary" disabled={!selected} onClick={add}><BilingualText>Thêm</BilingualText></button></div>
         <p className="muted"><BilingualText vi="Điểm được xuất bản đầu tiên trong danh sách là điểm khởi đầu. Chỉ điểm dừng và điểm đến cùng được xuất bản mới xuất hiện với học viên." en="The first published stop is the start. Both the stop and its destination must be published to appear for learners." /></p>
         {stops.length === 0 ? <EmptyState title="Chưa có điểm dừng" /> : <div style={{ overflowX: 'auto' }}><table className="admin-table"><thead><tr><th>Thứ tự</th><th>Điểm đến</th><th>Vùng miền</th><th>Trạng thái điểm dừng</th><th>Thao tác</th></tr></thead><tbody>{stops.map((stop, index) => <tr key={stop.destination.id}>
-          <td>{index + 1}</td><td><Link to={generatePath(ROUTES.ADMIN_DESTINATION_DETAIL, { id: String(stop.destination.id) })}>{stop.destination.nameVi}</Link></td><td><DestinationRegion value={stop.destination.region} /></td>
+          <td><span className="journey-order">{index + 1}</span></td><td><Link to={generatePath(ROUTES.ADMIN_DESTINATION_DETAIL, { id: String(stop.destination.id) })}>{stop.destination.nameVi}</Link></td><td><DestinationRegion value={stop.destination.region} /></td>
           <td><select aria-label={`Trạng thái ${stop.destination.nameVi}`} value={stop.status} onChange={event => setStops(current => current.map(s => s.destination.id === stop.destination.id ? { ...s, status: event.target.value } : s))}>{DESTINATION_STATUSES.map(status => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></td>
           <td><div className="actions"><button type="button" className="secondary" disabled={index === 0} aria-label={`Đưa ${stop.destination.nameVi} lên`} onClick={() => setStops(current => moveItem(current, index, -1))}>↑</button><button type="button" className="secondary" disabled={index === stops.length - 1} aria-label={`Đưa ${stop.destination.nameVi} xuống`} onClick={() => setStops(current => moveItem(current, index, 1))}>↓</button><button type="button" className="secondary" onClick={() => setStops(current => current.filter(s => s.destination.id !== stop.destination.id))}><BilingualText>Xóa</BilingualText></button></div></td>
         </tr>)}</tbody></table></div>}

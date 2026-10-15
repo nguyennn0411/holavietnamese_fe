@@ -1,0 +1,23 @@
+/* Passport subsection only. Achievement cards, XP and badge presentation remain owned by their module. */
+.vietnam-passport.achieve-passport-card { padding: 28px; border: 1px solid var(--color-border); border-radius: 24px; background: linear-gradient(135deg,var(--color-surface),var(--color-paper)); box-shadow: var(--heritage-shadow); }
+.vietnam-passport .achieve-passport-header { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 24px; }
+.vietnam-passport .achieve-passport-icon { display: inline-grid; place-items: center; flex: 0 0 56px; height: 56px; border: 1px solid var(--color-clay); border-radius: 16px; color: var(--color-red); background: var(--color-red-soft); }
+.vietnam-passport .achieve-passport-header > div { min-width: 0; }
+.vietnam-passport .achieve-passport-header h3 { font-size: 22px; font-weight: 800; margin: 0 0 10px; }
+.vietnam-passport .achieve-passport-header p { max-width: 700px; color: var(--color-muted); font-size: 14px; line-height: 1.7; margin: 0; }
+.vietnam-passport .achieve-stamp-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.vietnam-passport .achieve-stamp-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-width: 0; min-height: 210px; padding: 24px 18px; border: 1px dashed var(--color-border); border-radius: 16px; background: var(--color-surface); opacity: 1; filter: none; text-align: center; }
+.vietnam-passport .achieve-stamp-box.unlocked { border: 1px solid var(--color-sage); background: var(--color-sage-soft); transform: none; }
+.vietnam-passport .passport-stamp-icon { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; color: var(--color-muted); background: var(--color-paper); }
+.vietnam-passport .unlocked .passport-stamp-icon { color: var(--color-forest); background: var(--color-sage); }
+.vietnam-passport .achieve-stamp-city { color: var(--color-ink); font-size: 17px; font-weight: 800; overflow-wrap: anywhere; }
+.vietnam-passport .achieve-stamp-name { font-size: 11px; letter-spacing: .08em; color: var(--color-muted); margin: 0; }
+.vietnam-passport .achieve-stamp-tag { display: inline-flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 6px; padding: 7px 10px; border-radius: 999px; background: var(--color-sage); color: var(--color-forest); font-size: 11px; }
+.vietnam-passport .achieve-stamp-tag.locked { background: var(--color-paper); color: var(--color-muted); }
+.vietnam-passport .achieve-stamp-grid > :is(.auth-message,.account-desc) { grid-column: 1 / -1; }
+@media(max-width:1000px) { .vietnam-passport .achieve-stamp-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) {
+  .vietnam-passport.achieve-passport-card { padding: 20px; }
+  .vietnam-passport .achieve-passport-header { flex-direction: column; }
+  .vietnam-passport .achieve-stamp-grid { grid-template-columns: minmax(0,1fr); }
+}
