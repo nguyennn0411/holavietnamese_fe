@@ -6,6 +6,8 @@ import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { adminJourneyService } from '@/services/journeyService';
 import { contentService } from '@/services/contentService';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 
 export function DestinationContentEditor({ destinationId }) {
   const resource = useAsyncResource(useCallback(signal => adminJourneyService.content(destinationId, { signal }), [destinationId]));
@@ -34,6 +36,7 @@ function ContentEditor({ destinationId, initial }) {
     <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
       <ContentSelector kind="LESSON" selected={lessons} onChange={setLessons} />
       <ContentSelector kind="VOCABULARY" selected={words} onChange={setWords} />
+      <p className="muted">Biến thể vùng miền đã xuất bản của các từ chuẩn được liên kết sẽ hiển thị theo vùng của điểm đến. <Link className="text-link" to={ROUTES.ADMIN_REGIONAL_LANGUAGE}>Quản lý biến thể</Link></p>
       <p className="muted"><BilingualText vi="Liên kết Culture và Practice sẽ được mở khi nội dung từ các module phụ trách sẵn sàng." en="Culture and Practice linking will be available when their modules are ready." /></p>
       <button type="submit"><BilingualText vi={pending ? 'Đang lưu…' : 'Lưu nội dung liên kết'} en={pending ? 'Saving…' : 'Save linked content'} /></button>
     </fieldset>

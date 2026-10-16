@@ -85,12 +85,13 @@ export function VocabularyCatalogPage() {
         eyebrow="Khám phá từng từ một"
         title="Từ vựng tiếng Việt"
         description="Khám phá những từ vựng đã được xuất bản và lưu những từ bạn muốn ôn lại."
-        actions={
+        actions={<>
             <Link
               to={ROUTES.VOCABULARY_REVIEW}
               className="button"
             ><BilingualText>{"Ôn từ vựng →"}</BilingualText></Link>
-        }
+            <Link className="button secondary" to={ROUTES.REGIONAL_VIETNAMESE}><BilingualText vi="Tiếng Việt vùng miền" en="Regional Vietnamese" /></Link>
+        </>}
       />
 
       <VocabularyOverview key={overviewRevision} active="catalog">

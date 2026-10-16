@@ -47,6 +47,10 @@ const VocabularyNotebookPage = lazy(() => import('@/pages/vocabulary/VocabularyN
 const VocabularyNotebookDetailPage = lazy(() => import('@/pages/vocabulary/VocabularyNotebookDetailPage').then(module => ({ default: module.VocabularyNotebookDetailPage })));
 const VocabularyCatalogPage = lazy(() => import('@/pages/vocabulary/VocabularyCatalogPage').then(module => ({ default: module.VocabularyCatalogPage })));
 const VocabularyDetailPage = lazy(() => import('@/pages/vocabulary/VocabularyDetailPage').then(module => ({ default: module.VocabularyDetailPage })));
+const RegionalVietnamesePage = lazy(() => import('@/pages/regional/RegionalVietnamesePage').then(module => ({ default: module.RegionalVietnamesePage })));
+const AdminRegionalLanguagePage = lazy(() => import('@/pages/admin/AdminRegionalLanguagePage').then(module => ({ default: module.AdminRegionalLanguagePage })));
+const AdminImportPage = lazy(() => import('@/pages/admin/AdminImportPage').then(module => ({ default: module.AdminImportPage })));
+const AdminImportHistoryPage = lazy(() => import('@/pages/admin/AdminImportHistoryPage').then(module => ({ default: module.AdminImportHistoryPage })));
 // Văn hóa, AI Tutor & Roleplay Pages (Người 4)
 const CultureExplorePage = lazy(() => import('@/pages/culture/CultureExplorePage').then(module => ({ default: module.CultureExplorePage })));
 const CultureDetailPage = lazy(() => import('@/pages/culture/CultureDetailPage').then(module => ({ default: module.CultureDetailPage })));
@@ -140,6 +144,7 @@ function App() {
               <Route path={ROUTES.VOCABULARY_NOTEBOOK} element={<VocabularyNotebookPage />} />
               <Route path={ROUTES.VOCABULARY_NOTEBOOK_DETAIL} element={<VocabularyNotebookDetailPage />} />
               <Route path={ROUTES.VOCABULARY_REVIEW} element={<VocabularyReviewPage />} />
+              <Route path={ROUTES.REGIONAL_VIETNAMESE} element={<RegionalVietnamesePage />} />
               <Route path={ROUTES.EXPLORE} element={<ExploreVietnamPage />} />
               <Route path={ROUTES.DESTINATION_DETAIL} element={<DestinationDetailPage />} />
               <Route path={ROUTES.EXPLORE_VIETNAM} element={<ExploreVietnamPage />} />
@@ -187,6 +192,9 @@ function App() {
                 <Route path={ROUTES.ADMIN_QUIZ_BUILDER} element={<AdminQuizBuilderPage />} />
                 <Route path={ROUTES.ADMIN_QUIZ_PREVIEW} element={<AdminQuizPreviewPage />} />
                 <Route path={ROUTES.ADMIN_VOCABULARY} element={<AdminVocabularyPage />} />
+                <Route path={ROUTES.ADMIN_REGIONAL_LANGUAGE} element={<AdminRegionalLanguagePage />} />
+                <Route path={ROUTES.ADMIN_IMPORT} element={<AdminImportPage />} />
+                <Route path={ROUTES.ADMIN_IMPORT_HISTORY} element={<AdminImportHistoryPage />} />
                 <Route path={ROUTES.ADMIN_DESTINATIONS} element={<AdminDestinationsPage />} />
                 <Route path={ROUTES.ADMIN_DESTINATION_DETAIL} element={<AdminDestinationDetailPage />} />
                 <Route path={ROUTES.ADMIN_JOURNEY} element={<AdminJourneyPage />} />

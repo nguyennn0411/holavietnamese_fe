@@ -67,6 +67,8 @@ export function AdminVocabularyPage() {
     <Breadcrumb items={[{ label: 'Quản trị', to: ROUTES.ADMIN }, { label: 'Từ vựng' }]} />
     <PageHeader eyebrow="Từ vựng tiếng Việt" title="Quản lý từ vựng" description="Quản lý từ vựng, chủ đề, nghĩa và ví dụ tiếng Việt." actions={<>
       <Link className="button secondary" to={ROUTES.ADMIN_VOCABULARY_TOPICS}><Tags size={16} aria-hidden="true" /><BilingualText>Chủ đề từ vựng</BilingualText></Link>
+      <Link className="button secondary" to={ROUTES.ADMIN_REGIONAL_LANGUAGE}>Từ ngữ vùng miền</Link>
+      <Link className="button secondary" to={ROUTES.ADMIN_IMPORT}>Nhập Excel</Link>
       <button type="button" onClick={() => setModal({ mode: 'create' })}><Plus size={16} aria-hidden="true" /><BilingualText vi="Thêm từ vựng" en="Add vocabulary" /></button>
     </>} />
     {message && <div className="success state" role="status"><BilingualText>{message}</BilingualText></div>}

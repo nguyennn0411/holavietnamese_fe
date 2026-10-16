@@ -8,6 +8,7 @@ import { EmptyState, Notice, Tabs } from '@/components/common/Ui';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { journeyService } from '@/services/journeyService';
 import { ROUTES } from '@/constants/routes';
+import { RegionalVariantCard } from '@/components/regional/RegionalComparison';
 import '@/components/destinations/destinations.css';
 
 const tabs = [{ id: 'learn', label: 'Learn' }, { id: 'language', label: 'Local Language' }, { id: 'culture', label: 'Culture' }, { id: 'practice', label: 'Practice' }];
@@ -34,6 +35,11 @@ export function DestinationJourneyContent({ destinationId }) {
     {!isAuthenticated ? <EmptyState title="Đăng nhập để xem tiến độ"><Link className="button" to={ROUTES.LOGIN}><BilingualText>Đăng nhập</BilingualText></Link></EmptyState> : <ResourceState resource={resource}>{data => <>
       {tab === 'learn' && (data.lessons.length ? <ul>{data.lessons.map(lesson => <li key={lesson.id}><Link to={generatePath(ROUTES.LEARN_LESSON, { courseId: String(lesson.courseId), lessonId: String(lesson.id) })}><BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} /></Link>{lesson.completed && <> · <BilingualText vi="Đã hoàn thành" en="Completed" /></>}</li>)}</ul> : <EmptyState title="Chưa có bài học liên kết" />)}
       {tab === 'language' && (data.vocabulary.length ? <ul>{data.vocabulary.map(word => <li key={word.id}><Link to={generatePath(ROUTES.VOCABULARY_CATALOG_DETAIL, { id: String(word.id) })}>{word.word}</Link>{word.pronunciation && ` · ${word.pronunciation}`}</li>)}</ul> : <EmptyState title="Chưa có từ ngữ địa phương liên kết" />)}
+      {tab === 'language' && (data.regionalVariants?.length > 0) && <section className="destination-regional-variants">
+        <h3><BilingualText vi="Cách nói tại địa phương" en="Local expressions" /></h3>
+        {data.regionalVariants.map(variant => <div key={variant.id}><p><BilingualText vi="Từ chuẩn: " en="Standard word: " /><Link to={generatePath(ROUTES.VOCABULARY_CATALOG_DETAIL, { id: String(variant.vocabularyId) })}>{variant.masterWord}</Link></p><RegionalVariantCard variant={variant} /></div>)}
+        <Link className="text-link" to={ROUTES.REGIONAL_VIETNAMESE}><BilingualText vi="So sánh Bắc – Trung – Nam →" en="Compare North, Central and South →" /></Link>
+      </section>}
       {(tab === 'culture' || tab === 'practice') && <EmptyState title="Nội dung chưa sẵn sàng" description={tab === 'culture' ? 'Chưa có nội dung văn hóa được liên kết với điểm đến này.' : 'Chưa có bài luyện được liên kết với điểm đến này.'} />}
       {data.journey && <div className="destination-journey-progress">
         <ProgressBar value={data.journey.progressPercent} label="Tiến độ điểm đến" />
