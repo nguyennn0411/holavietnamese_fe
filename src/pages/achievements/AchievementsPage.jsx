@@ -1,27 +1,38 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { learnerService } from '@/services/learnerService';
+import { journeyService } from '@/services/journeyService';
+import { Stamp, CheckCircle2, Clock3, MapPin } from 'lucide-react';
+import '@/components/destinations/passport.css';
 
 export function AchievementsPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [passportError, setPassportError] = useState('');
 
   useEffect(() => {
+    let active = true;
+    const passport = journeyService.passport().then(stamps => ({ stamps }), failure => ({ error: failure.message }));
     learnerService
       .getAchievements()
-      .then((res) => {
+      .then(async (res) => {
+        const result = await passport;
+        if (!active) return;
+        setPassportError(result.error || '');
         setData(
           Array.isArray(res)
-            ? { badges: res, passportStamps: [] }
-            : { badges: res?.badges ?? [], passportStamps: res?.passportStamps ?? [] }
+            ? { badges: res, passportStamps: result.stamps ?? [] }
+            : { badges: res?.badges ?? [], passportStamps: result.stamps ?? [] }
         );
         setLoading(false);
       })
       .catch((err) => {
+        if (!active) return;
         setError(err.message || 'Không thể tải thành tích.');
         setLoading(false);
       });
+    return () => { active = false; };
   }, []);
 
   if (loading) {
@@ -89,9 +100,9 @@ export function AchievementsPage() {
       </div>
 
       {/* Passport Stamps Section */}
-      <div className="achieve-passport-card">
+      <div className="achieve-passport-card vietnam-passport">
         <div className="achieve-passport-header">
-          <span className="achieve-passport-icon">🛂</span>
+          <span className="achieve-passport-icon"><Stamp size={28} aria-hidden="true" /></span>
           <div>
             <h3><BilingualText>{"Hộ chiếu khám phá Việt Nam"}</BilingualText></h3>
             <p><BilingualText>{"Mỗi khi hoàn thành các bài học gắn liền với địa danh, bạn sẽ nhận được một con tem hộ chiếu đặc trưng!"}</BilingualText></p>
@@ -99,21 +110,22 @@ export function AchievementsPage() {
         </div>
 
         <div className="achieve-stamp-grid">
-          {data.passportStamps.length === 0 ? (
+          {passportError ? <p className="auth-message auth-message-error" role="alert">{passportError}</p> : data.passportStamps.length === 0 ? (
             <p className="account-desc"><BilingualText>{"Chưa có dữ liệu hành trình."}</BilingualText></p>
           ) : (
             data.passportStamps.map((stamp) => (
               <div
-                key={stamp.id}
+                key={stamp.destinationId}
                 className={`achieve-stamp-box ${stamp.unlocked ? 'unlocked' : ''}`}
               >
+                <span className="passport-stamp-icon" aria-hidden="true">{stamp.unlocked ? <CheckCircle2 size={28} /> : <MapPin size={28} />}</span>
                 <span className="achieve-stamp-city">{stamp.city}</span>
-                <p className="achieve-stamp-name">{stamp.stamp}</p>
+                <p className="achieve-stamp-name">Vietnam Passport</p>
                 {stamp.unlocked ? (
-                  <span className="achieve-stamp-tag"><BilingualText>{"Đã đóng dấu ("}</BilingualText>{stamp.date || <BilingualText>Gần đây</BilingualText>})
+                  <span className="achieve-stamp-tag"><CheckCircle2 size={14} aria-hidden="true" /><BilingualText vi={`Đã đóng dấu (${stamp.stampedAt ? new Date(stamp.stampedAt).toLocaleDateString('vi-VN') : '—'})`} en={`Stamped (${stamp.stampedAt ? new Date(stamp.stampedAt).toLocaleDateString('vi-VN') : '—'})`} />
                   </span>
                 ) : (
-                  <span className="achieve-stamp-tag locked"><BilingualText>{"Chưa mở khóa"}</BilingualText></span>
+                  <span className="achieve-stamp-tag locked"><Clock3 size={14} aria-hidden="true" /><BilingualText vi="Chưa nhận dấu" en="Stamp not earned yet" /></span>
                 )}
               </div>
             ))

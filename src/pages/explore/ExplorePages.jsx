@@ -1,24 +1,40 @@
 import { BilingualText } from '@/components/common/BilingualText';
+import { useAuth } from '@/application/context/AuthContext';
 import { useCallback, useState } from 'react';
 import { generatePath, Link, useLocation, useParams } from 'react-router-dom';
-import { Breadcrumb, PageHeader, EmptyState, Artwork } from '@/components/common/Ui';
+import { Breadcrumb, EmptyState, Artwork } from '@/components/common/Ui';
 import { ContentImage } from '@/components/common/ContentImage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { DestinationRegion } from '@/components/destinations/DestinationMetadata';
+import { DestinationJourneyContent } from '@/components/destinations/DestinationJourneyContent';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { DESTINATION_REGIONS } from '@/models/Destination';
 import { destinationService } from '@/services/destinationService';
+import { journeyService } from '@/services/journeyService';
 import { ROUTES } from '@/constants/routes';
-import { Search, X, MapPin, Compass, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import '@/components/destinations/destinations.css';
+import { Search, X, Compass, ArrowLeft, Sparkles } from 'lucide-react';
 
 const emptyFilters = { keyword: '', region: '' };
+function stopLabel(stop) {
+  if (stop?.status === 'COMPLETED') return <BilingualText vi="Đã hoàn thành" en="Completed" />;
+  if (stop?.status === 'LOCKED') return <BilingualText vi="Đang khóa" en="Locked" />;
+  if (stop?.status === 'CURRENT') return <BilingualText vi="Hiện tại" en="Current" />;
+  return <BilingualText vi="Đã mở khóa" en="Unlocked" />;
+}
 
 export function ExploreVietnamPage() {
+  const { isAuthenticated, user } = useAuth();
+  const viewerId = user?.id ?? user?.userId;
   const [query, setQuery] = useState(emptyFilters);
   const [keyword, setKeyword] = useState('');
   const location = useLocation();
   const detailRoute = location.pathname === ROUTES.EXPLORE ? ROUTES.DESTINATION_DETAIL : ROUTES.LEARNER_DESTINATION_DETAIL;
-  const resource = useAsyncResource(useCallback(signal => destinationService.list(query, { signal }), [query]));
+  const resource = useAsyncResource(useCallback(async signal => {
+    if (!isAuthenticated) throw Object.assign(new Error('Đăng nhập để xem hành trình.'), { status: 401 });
+    const [items, journey] = await Promise.all([destinationService.list(query, { signal }), journeyService.get(query, { signal })]);
+    return { items, journey };
+  }, [query, viewerId, isAuthenticated]));
 
   const handleRegionClick = (val) => {
     setQuery(current => ({ ...current, region: val }));
@@ -89,7 +105,7 @@ export function ExploreVietnamPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
-          <label style={{ flex: '1 1 260px' }} className="w-full">
+          <label className="explore-keyword-filter w-full">
             <span className="sr-only"><BilingualText>Tìm kiếm</BilingualText></span>
             <div className="relative w-full">
               <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78685B]" />
@@ -111,7 +127,7 @@ export function ExploreVietnamPage() {
             </div>
           </label>
 
-          <label style={{ flex: '0 1 200px' }} className="w-full sm:w-auto">
+          <label className="explore-region-filter w-full sm:w-auto">
             <span className="sr-only"><BilingualText vi="Vùng miền" en="Region" /></span>
             <select
               value={query.region}
@@ -144,9 +160,9 @@ export function ExploreVietnamPage() {
       </form>
 
       {/* Destinations Board */}
-      <ResourceState resource={resource}>
-        {items => {
-          const destinations = items.filter(item => item.status === 'PUBLISHED');
+      {!isAuthenticated ? <EmptyState title="Đăng nhập để xem hành trình"><Link className="button" to={ROUTES.LOGIN}><BilingualText>Đăng nhập</BilingualText></Link></EmptyState> : <ResourceState resource={resource}>
+        {({ items, journey }) => {
+          const destinations = journey.totalStops > 0 ? journey.stops.map(stop => stop.destination) : items.filter(item => item.status === 'PUBLISHED');
           return destinations.length === 0
             ? (
               <EmptyState
@@ -158,7 +174,7 @@ export function ExploreVietnamPage() {
               <div className="journey-board card bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-sm">
                 <aside className="journey-map">
                   <p className="eyebrow text-xs font-bold text-[#A62A24] tracking-widest uppercase mb-2">
-                    <BilingualText>VIỆT NAM · VIET NAM</BilingualText>
+                    {journey.totalStops > 0 ? <BilingualText vi={`VIỆT NAM · ${journey.completedStops}/${journey.totalStops} điểm đến`} en={`VIETNAM · ${journey.progressPercent}% complete`} /> : <BilingualText>VIỆT NAM · VIET NAM</BilingualText>}
                   </p>
                   <img
                     src="/design/vietnam-map.svg"
@@ -178,11 +194,17 @@ export function ExploreVietnamPage() {
                 </aside>
 
                 <div className="journey-stops space-y-4">
-                  {destinations.map(destination => (
-                    <Link
+                  {destinations.map(destination => {
+                    const stop = journey.stops.find(item => item.destination.id === destination.id);
+                    return <Link
                       className="journey-stop group relative block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#DECBB4] hover:border-[#A62A24] shadow-xs hover:shadow-md transition-all text-decoration-none"
                       key={destination.id}
                       to={generatePath(detailRoute, { id: String(destination.id) })}
+                      aria-disabled={stop ? !stop.accessible : undefined}
+                      aria-current={stop?.status === 'CURRENT' ? 'step' : undefined}
+                      data-journey-status={stop?.status}
+                      title={stop && !stop.accessible ? 'Hoàn thành điểm đến trước để mở khóa.' : undefined}
+                      onClick={event => { if (stop && !stop.accessible) event.preventDefault(); }}
                     >
                       <span className="journey-dot" aria-hidden="true" />
                       <div className="journey-thumbnail rounded-xl overflow-hidden shadow-xs">
@@ -194,7 +216,7 @@ export function ExploreVietnamPage() {
                       </div>
                       <div>
                         <p className="eyebrow text-[11px] font-bold text-[#A62A24] uppercase tracking-wider mb-1">
-                          <DestinationRegion value={destination.region} />
+                          <DestinationRegion value={destination.region} />{stop && <> · {stopLabel(stop)}</>}
                         </p>
                         <h2 className="text-lg sm:text-xl font-black text-[#431914] group-hover:text-[#A62A24] transition-colors leading-snug">
                           <BilingualText vi={destination.nameVi} en={destination.nameEn} />
@@ -205,19 +227,19 @@ export function ExploreVietnamPage() {
                           </p>
                         )}
                         <small className="inline-flex items-center gap-1 text-xs font-bold text-[#A62A24] mt-2 group-hover:underline">
-                          <BilingualText>Chi tiết</BilingualText> →
+                          {stop ? <BilingualText vi={`${stop.progressPercent}% · ${stop.completedLessons}/${stop.requiredLessons} bài học`} en={`${stop.progressPercent}% · ${stop.completedLessons}/${stop.requiredLessons} lessons`} /> : <BilingualText>Chi tiết</BilingualText>} →
                         </small>
                       </div>
                       <span className="journey-number text-[#78685B] group-hover:text-[#A62A24] group-hover:translate-x-1 transition-all" aria-hidden="true">
                         →
                       </span>
-                    </Link>
-                  ))}
+                    </Link>;
+                  })}
                 </div>
               </div>
             );
         }}
-      </ResourceState>
+      </ResourceState>}
     </section>
   );
 }
@@ -300,6 +322,7 @@ export function DestinationDetailPage() {
               </div>
             )}
 
+            <DestinationJourneyContent key={destination.id} destinationId={destination.id} />
             <div className="actions pt-4">
               <Link
                 className="button secondary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF9EE] text-[#431914] border border-[#DECBB4] font-semibold text-xs shadow-xs transition-all"

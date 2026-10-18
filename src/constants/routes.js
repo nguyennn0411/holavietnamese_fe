@@ -38,6 +38,10 @@ export const ROUTES = {
   VOCABULARY_NOTEBOOK: '/vocabulary/notebook',
   VOCABULARY_NOTEBOOK_DETAIL: '/vocabulary/notebook/:id',
   VOCABULARY_REVIEW: '/vocabulary/review',
+  REGIONAL_VIETNAMESE: '/regional-vietnamese',
+  ADMIN_REGIONAL_LANGUAGE: '/admin/regional-language',
+  ADMIN_IMPORT: '/admin/import',
+  ADMIN_IMPORT_HISTORY: '/admin/imports',
 
   EXPLORE: '/explore',
   DESTINATION_DETAIL: '/explore/:id',
@@ -73,6 +77,7 @@ export const ROUTES = {
   ADMIN_VOCABULARY: '/admin/vocabulary',
   ADMIN_DESTINATIONS: '/admin/destinations',
   ADMIN_DESTINATION_DETAIL: '/admin/destinations/:id',
+  ADMIN_JOURNEY: '/admin/journey',
   ADMIN_USERS: '/admin/users',
   ADMIN_USER_DETAIL: '/admin/users/:id',
   ADMIN_ROLES: '/admin/roles',

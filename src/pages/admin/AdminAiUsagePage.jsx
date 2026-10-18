@@ -38,7 +38,7 @@ export function AdminAiUsagePage() {
           <div style={{ fontSize: '28px', fontWeight: 850, color: 'var(--color-ink)', margin: '6px 0' }}>
             {(summary.totalTokens / 1000000).toFixed(2)}M
           </div>
-          <span style={{ fontSize: '11px', color: 'var(--color-forest)' }}><BilingualText>{"Prompt + Completion"}</BilingualText></span>
+          <span style={{ fontSize: '11px', color: 'var(--color-forest)' }}><BilingualText>{"Đầu vào + Đầu ra"}</BilingualText></span>
         </div>
 
         <div className="admin-card" style={{ padding: '20px' }}>
@@ -58,7 +58,7 @@ export function AdminAiUsagePage() {
         </div>
 
         <div className="admin-card" style={{ padding: '20px' }}>
-          <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 700, textTransform: 'uppercase' }}><BilingualText>{"Tỷ lệ lỗi (Error)"}</BilingualText></span>
+          <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 700, textTransform: 'uppercase' }}><BilingualText>{"Tỷ lệ lỗi"}</BilingualText></span>
           <div style={{ fontSize: '28px', fontWeight: 850, color: 'var(--color-ink)', margin: '6px 0' }}>
             {summary.errorRate}
           </div>
@@ -150,7 +150,7 @@ export function AdminAiUsagePage() {
       {/* Real-time API Logs Table */}
       <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
         <div style={{ padding: '18px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 style={{ margin: 0, fontSize: '17px', color: 'var(--color-ink)' }}><BilingualText>{"Nhật ký gọi API gần đây (Audit Logs)"}</BilingualText></h2>
+          <h2 style={{ margin: 0, fontSize: '17px', color: 'var(--color-ink)' }}><BilingualText>{"Nhật ký gọi API gần đây"}</BilingualText></h2>
           <span style={{ fontSize: '12px', color: 'var(--color-ink)', fontWeight: 700 }}><BilingualText>{"● Live Stream"}</BilingualText></span>
         </div>
 

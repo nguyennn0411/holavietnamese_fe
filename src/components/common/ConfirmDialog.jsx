@@ -64,4 +64,3 @@ export function useConfirmDialog() {
   useEffect(() => () => resolver.current?.(false), []);
   return { confirm, confirmationDialog: <ConfirmDialog options={options} onResolve={onResolve}/> };
 }
-

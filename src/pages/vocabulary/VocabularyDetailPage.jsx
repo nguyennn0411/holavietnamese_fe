@@ -9,11 +9,13 @@ import { VocabularyCatalogPage } from './VocabularyCatalogPage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { vocabularyCatalogService } from '@/services/vocabularyCatalogService';
+import { useVocabulary } from '@/hooks/useVocabulary';
 import '@/components/vocabulary/vocabulary.css';
 
 export function VocabularyDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const notebook = useVocabulary({ search: '', courseId: '', lessonId: '' });
   const [notebookRevision, setNotebookRevision] = useState(0);
   const resource = useAsyncResource(useCallback(
     (signal) => vocabularyCatalogService.get(id, { signal }),
@@ -25,6 +27,7 @@ export function VocabularyDetailPage() {
     <VocabularyCatalogPage key={notebookRevision} />
     <section className="vocabulary-detail-page vocabulary-ui vocabulary-catalog-detail">
       <Modal title="Chi tiết từ vựng" onClose={() => navigate(ROUTES.VOCABULARY)}>
+      {notebook.error && <p role="alert">{notebook.error.message} <button type="button" className="secondary" onClick={notebook.reload}><BilingualText>{"Thử lại"}</BilingualText></button></p>}
       <ResourceState resource={resource}>
         {(entry) => entry?.id ? (
           <>
@@ -39,7 +42,7 @@ export function VocabularyDetailPage() {
                 {entry.pronunciation && <p className="muted vocabulary-pronunciation">{entry.pronunciation}</p>}
                 {entry.partOfSpeech && <span className="muted">{entry.partOfSpeech}</span>}
               </div>
-              <div className="vocabulary-detail-word-actions"><SpeakButton text={entry.word} audioUrl={entry.audioUrl} fallbackToSpeech /><SaveVocabularyButton key={entry.id} entry={entry} onSaved={() => setNotebookRevision(value => value + 1)} onDeleted={() => setNotebookRevision(value => value + 1)} /></div>
+              <div className="vocabulary-detail-word-actions"><SpeakButton text={entry.word} audioUrl={entry.audioUrl} fallbackToSpeech /><SaveVocabularyButton key={entry.id} entry={entry} initialSavedEntry={notebook.data?.find(saved => saved.masterVocabularyId === entry.id) || null} checking={notebook.loading} checkError={notebook.error} onSaved={() => { notebook.reload(); setNotebookRevision(value => value + 1); }} onDeleted={() => { notebook.reload(); setNotebookRevision(value => value + 1); }} /></div>
             </article>
             {entry.meanings?.length ? entry.meanings.map((meaning, index) => (
               <section className="card vocabulary-meaning-detail" key={meaning.id ?? index}>

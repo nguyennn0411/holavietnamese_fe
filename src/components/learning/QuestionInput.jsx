@@ -1,9 +1,10 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, useBilingualLabel } from '@/components/common/BilingualText';
 import { moveItem } from './answerUtils';
 import { ContentImage } from '@/components/common/ContentImage';
 import { MediaPlayer } from './MediaPlayer';
 
 export function QuestionInput({ question, answer = {}, onChange, disabled = false }) {
+  const bilingualLabel = useBilingualLabel();
   const type = question.questionType || 'FILL_BLANK', options = question.options || [];
   const choice = ['MULTIPLE_CHOICE','MULTIPLE_SELECT','TRUE_FALSE','IMAGE_SELECTION'].includes(type) || (type === 'LISTENING' && options.length > 0);
   if (choice) return <div className="question-options">{options.map((option, index) => {

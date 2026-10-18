@@ -35,7 +35,7 @@ export function AdminLayout() {
   }, [open]);
   const location = useLocation();
   const current = groups.flatMap(group => group.links).find(([to]) => location.pathname === to || (to !== '/admin' && location.pathname.startsWith(to + '/')))?.[1] || 'Quản trị nội dung';
-  return <div className={`admin-wrapper ${open ? 'admin-menu-open' : ''}`}>
+  return <div className={`admin-wrapper ${open ? 'admin-menu-open' : ''}`} lang="vi">
     <a className="skip-link" href="#admin-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
     <aside ref={sidebar} id="admin-navigation" className="admin-sidebar">
       <Link to="/admin" className="admin-sidebar-header">hola admin<span><BilingualText>{"CONTENT & LEARNING"}</BilingualText></span></Link>

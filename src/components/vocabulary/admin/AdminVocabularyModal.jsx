@@ -1,5 +1,5 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { useEffect, useRef, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
 import { CEFR_LEVELS, VOCABULARY_STATUSES, newExample, newMeaning, vocabularyDraft, vocabularyPayload } from '@/models/AdminVocabulary';
@@ -7,7 +7,7 @@ import { CEFR_LEVELS, VOCABULARY_STATUSES, newExample, newMeaning, vocabularyDra
 const dateText = (value) => value ? new Date(value).toLocaleString('vi-VN') : '—';
 
 function VocabularyDetail({ entry, onEdit }) {
-  return <div>
+  return <div className="admin-vocabulary-detail">
     <dl>
       <dt>ID</dt><dd>{entry.id}</dd><dt><BilingualText>{"Từ vựng"}</BilingualText></dt><dd>{entry.word}</dd>
       <dt><BilingualText>{"Phiên âm"}</BilingualText></dt><dd>{entry.pronunciation || '—'}</dd><dt><BilingualText>{"Từ loại"}</BilingualText></dt><dd>{entry.partOfSpeech}</dd>
@@ -29,6 +29,7 @@ function VocabularyDetail({ entry, onEdit }) {
 }
 
 export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, onSaved, onEdit }) {
+  const submitting = useRef(false);
   const [entry, setEntry] = useState(null);
   const [draft, setDraft] = useState(() => vocabularyDraft());
   const [loading, setLoading] = useState(mode !== 'create');
@@ -55,13 +56,15 @@ export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, 
   const availableTopics = [...topics.data, ...(entry?.topics ?? []).filter((topic) => !topics.data.some((option) => option.id === topic.id))];
 
   async function submit(event) {
-    event.preventDefault(); setError('');
+    event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true; setError('');
     try {
       const payload = vocabularyPayload(draft);
       setPending(true);
       const response = mode === 'edit' ? await adminVocabularyService.update(id, payload) : await adminVocabularyService.create(payload);
       onSaved(response);
-    } catch (failure) { setError(failure.message); } finally { setPending(false); }
+    } catch (failure) { setError(failure.message); } finally { submitting.current = false; setPending(false); }
   }
 
   const title = mode === 'view' ? 'Chi tiết từ vựng' : mode === 'edit' ? 'Cập nhật từ vựng' : 'Thêm từ vựng';
@@ -69,15 +72,15 @@ export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, 
     {loading ? <div className="state" role="status"><BilingualText>{"Đang tải từ vựng…"}</BilingualText></div> : loadError
       ? <div className="state" role="alert"><p>{loadError}</p><button type="button" onClick={() => setRevision((value) => value + 1)}><BilingualText>{"Thử lại"}</BilingualText></button></div>
       : mode === 'view' ? <VocabularyDetail entry={entry} onEdit={onEdit} />
-      : <form onSubmit={submit}>
+      : <form className="admin-vocabulary-form" onSubmit={submit}>
         <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
           <label><BilingualText>{"Từ vựng"}</BilingualText><input value={draft.word} onChange={(event) => change('word', event.target.value)} required maxLength={200} lang="vi" /></label>
           <label><BilingualText>{"Phiên âm"}</BilingualText><input value={draft.pronunciation} onChange={(event) => change('pronunciation', event.target.value)} maxLength={200} /></label>
-          <label><BilingualText>{"Từ loại"}</BilingualText><input value={draft.partOfSpeech} onChange={(event) => change('partOfSpeech', event.target.value)} required maxLength={40} placeholder={bilingualLabel("Ví dụ: phrase, noun, verb")} /></label>
+          <label><BilingualText>{"Từ loại"}</BilingualText><input value={draft.partOfSpeech} onChange={(event) => change('partOfSpeech', event.target.value)} required maxLength={40} placeholder={vietnameseLabel("Ví dụ: phrase, noun, verb")} /></label>
           <label><BilingualText>{"Trình độ CEFR"}</BilingualText><input list="vocabulary-cefr-form" value={draft.cefrLevel} onChange={(event) => change('cefrLevel', event.target.value)} required maxLength={10} /></label>
           <datalist id="vocabulary-cefr-form">{CEFR_LEVELS.map((level) => <option key={level} value={level} />)}</datalist>
           <label><BilingualText>{"Audio URL"}</BilingualText><input value={draft.audioUrl} onChange={(event) => change('audioUrl', event.target.value)} maxLength={2048} /></label>
-          <label><BilingualText>{"Trạng thái"}</BilingualText><select value={draft.status} onChange={(event) => change('status', event.target.value)}>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{bilingualLabel(status)}</option>)}</select></label>
+          <label><BilingualText>{"Trạng thái"}</BilingualText><select value={draft.status} onChange={(event) => change('status', event.target.value)}>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></label>
           <fieldset style={{ margin: '0 0 14px', minWidth: 0 }}><legend><BilingualText>{"Chủ đề"}</BilingualText></legend>
             {topics.loading ? <p role="status"><BilingualText>{"Đang tải chủ đề…"}</BilingualText></p> : topics.error ? <div role="alert"><p><BilingualText>{topics.error.message}</BilingualText></p><button type="button" className="secondary" onClick={reloadTopics}><BilingualText>{"Thử lại chủ đề"}</BilingualText></button></div> : availableTopics.length === 0 ? <p><BilingualText>{"Chưa có chủ đề."}</BilingualText></p> : availableTopics.map((topic) => <label key={topic.id} style={{ flexDirection: 'row', alignItems: 'center' }}><input type="checkbox" style={{ width: 'auto' }} checked={draft.topicIds.includes(topic.id)} onChange={(event) => change('topicIds', event.target.checked ? [...draft.topicIds, topic.id] : draft.topicIds.filter((value) => value !== topic.id))} />{topic.name}</label>)}
           </fieldset>

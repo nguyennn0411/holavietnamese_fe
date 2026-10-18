@@ -1,20 +1,24 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import { Notice } from '@/components/common/Ui';
 import { vocabularyService } from '@/services/vocabularyService';
+import { Bookmark, BookmarkCheck } from 'lucide-react';
 
-export function SaveVocabularyButton({ entry, compact = false, onSaved, onDeleted }) {
+export function SaveVocabularyButton({ entry, compact = false, initialSavedEntry = null, checking = false, checkError, onSaved, onDeleted }) {
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const submitting = useRef(false);
   const [pending, setPending] = useState(false);
-  const [savedEntry, setSavedEntry] = useState(null);
+  const [savedEntry, setSavedEntry] = useState(initialSavedEntry);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  useEffect(() => {
+    if (!checking) setSavedEntry(initialSavedEntry);
+  }, [initialSavedEntry, checking, entry.id]);
 
   async function save() {
     if (submitting.current) return;
@@ -53,8 +57,9 @@ export function SaveVocabularyButton({ entry, compact = false, onSaved, onDelete
         aria-label={compact ? (pending ? (savedEntry ? 'Đang xóa…' : 'Đang lưu…') : savedEntry ? `Xóa “${entry.word}” khỏi sổ tay` : `Lưu “${entry.word}” vào sổ tay`) : undefined}
         aria-pressed={!!savedEntry} aria-busy={pending}
         title={savedEntry ? 'Xóa khỏi sổ tay' : 'Lưu vào sổ tay'}
-        disabled={loading || pending} onClick={save}>
-        <BilingualText>{pending ? (savedEntry ? 'Đang xóa…' : 'Đang lưu…') : savedEntry ? 'Đã lưu vào sổ tay' : 'Lưu vào sổ tay'}</BilingualText>
+        disabled={loading || pending || checking || Boolean(checkError)} onClick={save}>
+        {savedEntry ? <BookmarkCheck size={18} aria-hidden="true" /> : <Bookmark size={18} aria-hidden="true" />}
+        <span className={compact ? 'sr-only' : undefined}><BilingualText>{pending ? (savedEntry ? 'Đang xóa…' : 'Đang lưu…') : savedEntry ? 'Đã lưu vào sổ tay' : 'Lưu vào sổ tay'}</BilingualText></span>
       </button>
     </div>
     {message && <Notice kind="success"><BilingualText>{message}</BilingualText> {savedEntry && <Link to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{"Mở sổ tay"}</BilingualText></Link>}</Notice>}

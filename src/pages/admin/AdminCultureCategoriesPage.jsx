@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -80,7 +80,7 @@ export function AdminCultureCategoriesPage() {
           <thead>
             <tr>
               <th style={{ width: '80px', textAlign: 'center' }}><BilingualText>{"Thứ tự"}</BilingualText></th>
-              <th style={{ width: '60px' }}><BilingualText>{"Icon"}</BilingualText></th>
+              <th style={{ width: '60px' }}><BilingualText>{"Biểu tượng"}</BilingualText></th>
               <th><BilingualText>{"Tên danh mục & Slug"}</BilingualText></th>
               <th><BilingualText>{"Mô tả chuyên mục"}</BilingualText></th>
               <th><BilingualText>{"Số bài viết"}</BilingualText></th>
@@ -159,7 +159,7 @@ export function AdminCultureCategoriesPage() {
         <Modal title={editingCategory.id ? "Chỉnh sửa danh mục" : "Thêm danh mục văn hóa"} onClose={()=>setEditingCategory(null)}>
 <form onSubmit={handleSave}>
               <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr', gap: '12px' }}>
-                <label><BilingualText>{"Icon:"}</BilingualText><input
+                <label><BilingualText>{"Biểu tượng:"}</BilingualText><input
                     type="text"
                     value={editingCategory.icon}
                     onChange={e => setEditingCategory({ ...editingCategory, icon: e.target.value })}
@@ -172,7 +172,7 @@ export function AdminCultureCategoriesPage() {
                     type="text"
                     value={editingCategory.name}
                     onChange={e => setEditingCategory({ ...editingCategory, name: e.target.value })}
-                    placeholder={bilingualLabel("Food (Ẩm thực)...")}
+                    placeholder={vietnameseLabel("Food (Ẩm thực)...")}
                     required
                   />
                 </label>
@@ -191,7 +191,7 @@ export function AdminCultureCategoriesPage() {
                   rows={3}
                   value={editingCategory.description}
                   onChange={e => setEditingCategory({ ...editingCategory, description: e.target.value })}
-                  placeholder={bilingualLabel("Mô tả nội dung học viên sẽ khám phá trong danh mục này...")}
+                  placeholder={vietnameseLabel("Mô tả nội dung học viên sẽ khám phá trong danh mục này...")}
                 />
               </label>
 

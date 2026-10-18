@@ -18,16 +18,16 @@ export function RecentActivityFeed({ activities = [] }) {
             >
               <div className="space-y-0.5">
                 <strong className="block text-xs sm:text-sm font-bold text-[#431914]">
-                  {activity.titleVi || activity.title}
+                  {activity.titleVi || activity.title || activity.description || activity.eventType}
                 </strong>
                 <small className="text-[11px] text-[#78685B] flex items-center gap-1">
                   <Calendar size={11} />
-                  {activity.time}
+                  {activity.time || activity.createdAt}
                 </small>
               </div>
-              {activity.xp != null && (
+              {(activity.xp ?? activity.amount) != null && (
                 <span className="px-2.5 py-1 rounded-lg bg-[#F8E6B7] text-[#431914] font-bold text-xs">
-                  +{activity.xp} XP
+                  +{activity.xp ?? activity.amount} XP
                 </span>
               )}
             </div>
