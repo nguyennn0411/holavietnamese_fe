@@ -1,9 +1,11 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { AuthFooter } from '@/components/auth/AuthFooter';
+import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import dongSonBg from '@/assets/images/dongson_heritage.png';
+import { Eye, EyeOff } from 'lucide-react';
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -13,6 +15,8 @@ export function ResetPasswordPage() {
   const [otp, setOtp] = useState(initialOtp);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [status, setStatus] = useState({ loading: false, message: '', error: '' });
   const navigate = useNavigate();
 
@@ -39,52 +43,114 @@ export function ResetPasswordPage() {
 
   return (
     <div className="auth-container">
+      {/* Left Panel */}
       <div className="auth-left-panel">
-        <div className="auth-left-content">
-          <AuthHeader />
+        <AuthHeader />
 
-          <div className="auth-welcome-pill">
-            <span className="auth-welcome-code">🔒</span>
-            <span className="auth-welcome-text"><BilingualText>{"Mật khẩu mới"}</BilingualText></span>
-          </div>
+        <main className="auth-left-content">
+          <h1 className="auth-heading">
+            <BilingualText vi="Đặt lại mật khẩu" en="Reset Password" />
+          </h1>
+          <p className="auth-subtitle">
+            <BilingualText
+              vi="Nhập mật khẩu mới cho tài khoản của bạn để hoàn tất đặt lại."
+              en="Enter a new password for your account to complete the reset."
+            />
+          </p>
 
-          <h1 className="auth-heading"><BilingualText vi={<>Tạo mật khẩu<br />mới</>} en="Create a new password" /></h1>
-          <p className="auth-subtitle"><BilingualText>{"Nhập mật khẩu mới cho tài khoản của bạn để hoàn tất đặt lại."}</BilingualText></p>
-
-          {status.error && <div className="auth-message auth-message-error"><BilingualText>{status.error}</BilingualText></div>}
-          {status.message && <div className="auth-message auth-message-success"><BilingualText>{status.message}</BilingualText></div>}
+          {status.error && (
+            <div className="auth-message auth-message-error">
+              <BilingualText>{status.error}</BilingualText>
+            </div>
+          )}
+          {status.message && (
+            <div className="auth-message auth-message-success">
+              <BilingualText>{status.message}</BilingualText>
+            </div>
+          )}
 
           <form className="auth-form" onSubmit={handleReset}>
-            <div className="auth-field">
-              <label className="auth-label"><BilingualText>{"Email"}</BilingualText></label>
-              <input className="auth-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </div>
-            <div className="auth-field">
-              <label className="auth-label"><BilingualText>{"Mã OTP"}</BilingualText></label>
-              <input className="auth-input" inputMode="numeric" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value)} required />
-            </div>
-            <div className="auth-field">
-              <label className="auth-label"><BilingualText>{"Mật khẩu mới"}</BilingualText></label>
-              <input
-                className="auth-input"
-                type="password"
-                placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+            <div className="auth-form-grid">
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="reset-direct-email">
+                  <BilingualText vi="Email" en="Email" />
+                </label>
+                <input
+                  id="reset-direct-email"
+                  className="auth-input"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-            <div className="auth-field">
-              <label className="auth-label"><BilingualText>{"Xác nhận mật khẩu"}</BilingualText></label>
-              <input
-                className="auth-input"
-                type="password"
-                placeholder={bilingualLabel("Nhập lại mật khẩu mới")}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="reset-direct-otp">
+                  <BilingualText vi="Mã OTP" en="OTP Code" />
+                </label>
+                <input
+                  id="reset-direct-otp"
+                  className="auth-input"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="reset-direct-pass">
+                  <BilingualText vi="Mật khẩu mới" en="New Password" />
+                </label>
+                <div className="auth-password-row">
+                  <input
+                    id="reset-direct-pass"
+                    className="auth-input auth-password-input"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="auth-show-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="reset-direct-confirm">
+                  <BilingualText vi="Xác nhận mật khẩu" en="Confirm Password" />
+                </label>
+                <div className="auth-password-row">
+                  <input
+                    id="reset-direct-confirm"
+                    className="auth-input auth-password-input"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    placeholder={bilingualLabel("Nhập lại mật khẩu")}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="auth-show-btn"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    title={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  >
+                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
             </div>
 
             <button
@@ -92,26 +158,25 @@ export function ResetPasswordPage() {
               className="auth-btn auth-btn-primary"
               disabled={status.loading || !!status.message}
             >
-              <BilingualText>{status.loading ? 'Đang cập nhật…' : 'Lưu mật khẩu mới'}</BilingualText>
+              <BilingualText
+                vi={status.loading ? 'Đang cập nhật…' : 'Lưu mật khẩu mới'}
+                en={status.loading ? 'Updating…' : 'Save New Password'}
+              />
             </button>
           </form>
 
-          <p className="auth-footer-text"><BilingualText>{"Quay lại"}</BilingualText><Link to="/login" className="auth-footer-link"><BilingualText>{"Đăng nhập"}</BilingualText></Link>
+          <p className="auth-footer-text">
+            <Link to="/login" className="auth-footer-link">
+              <BilingualText vi="← Quay lại đăng nhập" en="← Back to Sign In" />
+            </Link>
           </p>
-        </div>
+        </main>
+
+        <AuthFooter />
       </div>
 
-      <aside className="auth-right-panel" aria-label="Bảo mật tài khoản">
-        <div className="auth-drum-bg">
-          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
-        </div>
-        <div className="auth-visual-topline"><span /><BilingualText>{"Bảo mật tài khoản · Khôi phục nhanh"}</BilingualText></div>
-        <div className="auth-hero-card">
-          <div className="auth-hero-tag"><BilingualText>{"BẢO MẬT TÀI KHOẢN"}</BilingualText></div>
-          <h2 className="auth-hero-title"><BilingualText>{"Khởi động lại an toàn."}</BilingualText></h2>
-          <p className="auth-hero-desc"><BilingualText>{"Sau khi đổi mật khẩu, bạn có thể đăng nhập ngay trên mọi thiết bị và đồng bộ tiến độ tức thì."}</BilingualText></p>
-        </div>
-      </aside>
+      {/* Right Panel: Exact Dong Son Visual from Figma Reference */}
+      <AuthRightPanel />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
 import { useAuth } from '@/application/context/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import { PageTransition } from '@/components/common/PageTransition';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 const groups = [
   { title: 'Tổng quan', links: [[ROUTES.ADMIN, 'Dashboard'], [ROUTES.ADMIN_USERS, 'Người dùng']] },
   { title: 'Nội dung học tập', links: [['/admin/courses', 'Khóa học'], ['/admin/lessons', 'Bài học'], [ROUTES.ADMIN_VOCABULARY, 'Từ vựng'],[ROUTES.ADMIN_VOCABULARY_TOPICS, 'Chủ đề từ vựng'], ['/admin/questions', 'Ngân hàng câu hỏi'], ['/admin/quizzes', 'Quiz']] },
@@ -42,6 +43,6 @@ export function AdminLayout() {
       <div className="admin-sidebar-footer"><Link to="/"><ArrowLeft size={16} aria-hidden="true"/><BilingualText>{"Giao diện học viên"}</BilingualText></Link><button className="admin-logout" onClick={logout}><LogOut size={16} aria-hidden="true"/><BilingualText>{"Đăng xuất"}</BilingualText></button></div>
     </aside>
     {open && <button className="admin-menu-backdrop" aria-label="Đóng menu" onClick={() => setOpen(false)} />}
-    <div className="admin-main-area"><header className="admin-topbar"><button className="mobile-menu-button secondary" aria-label="Mở menu quản trị" aria-controls="admin-navigation" aria-expanded={open} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><span><BilingualText>{"Quản trị /"}</BilingualText><strong><BilingualText>{current}</BilingualText></strong></span><span className="admin-identity"><BilingualText>{user?.fullName || user?.username || 'Quản trị viên'}</BilingualText> <span className="badge"><BilingualText>{"ADMIN"}</BilingualText></span></span></header><main className="admin-content" id="admin-content"><AnimatePresence mode="wait" initial={false}><PageTransition key={location.pathname}><Outlet /></PageTransition></AnimatePresence></main></div>
+    <div className="admin-main-area"><header className="admin-topbar"><button className="mobile-menu-button secondary" aria-label="Mở menu quản trị" aria-controls="admin-navigation" aria-expanded={open} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><span><BilingualText>{"Quản trị /"}</BilingualText><strong><BilingualText>{current}</BilingualText></strong></span><LanguageSwitcher compact /><span className="admin-identity"><BilingualText>{user?.fullName || user?.username || 'Quản trị viên'}</BilingualText> <span className="badge"><BilingualText>{"ADMIN"}</BilingualText></span></span></header><main className="admin-content" id="admin-content"><AnimatePresence mode="wait" initial={false}><PageTransition key={location.pathname}><Outlet /></PageTransition></AnimatePresence></main></div>
   </div>;
 }

@@ -4,23 +4,25 @@ import { TonePitchCard } from './bento/TonePitchCard';
 import { AiTutorPreviewCard } from './bento/AiTutorPreviewCard';
 import { DiacriticKeyboardCard } from './bento/DiacriticKeyboardCard';
 import { SituationalDrillsCard } from './bento/SituationalDrillsCard';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Bento Grid Showcase section highlighting 4 interactive modern learning innovations.
  */
 export function BentoGridSection() {
+  const { t } = useTranslation('home');
   return (
     <section className="bento-showcase space-y-8">
       <div className="text-center max-w-2xl mx-auto space-y-2">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#A62A24] text-xs font-bold uppercase tracking-wider">
           <Sparkles size={14} />
-          <span>Tính năng EdTech thế hệ mới • Modern Innovations</span>
+          <span>{t('features.eyebrow')}</span>
         </div>
         <h2 className="text-3xl sm:text-4xl font-black text-[#431914] tracking-tight">
-          Học như chơi game. Tiến bộ qua từng ngày.
+          {t('features.title')}
         </h2>
         <p className="text-sm text-[#78685B] leading-relaxed">
-          Giải quyết triệt để 3 thách thức lớn nhất của người nước ngoài: phân biệt 6 thanh điệu, gõ dấu tiếng Việt và ngữ điệu giao tiếp đời thường.
+          {t('features.description')}
         </p>
       </div>
 

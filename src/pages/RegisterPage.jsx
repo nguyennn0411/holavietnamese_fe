@@ -1,9 +1,12 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { AuthFooter } from '@/components/auth/AuthFooter';
+import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
 import { useState } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { useNavigate, Navigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
-import dongSonBg from '@/assets/images/dongson_heritage.png';
+import { onboardingService } from '@/features/onboarding/services/onboardingService';
+import { Eye, EyeOff } from 'lucide-react';
 
 const LANGUAGE_OPTIONS = [
   { value: 'en', label: '🇬🇧 English' },
@@ -32,10 +35,13 @@ const LEVEL_OPTIONS = [
 
 export function RegisterPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const fromOnboarding = searchParams.get('source') === 'onboarding';
   const { register, isAuthenticated } = useAuth();
 
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -43,6 +49,7 @@ export function RegisterPage() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
@@ -81,6 +88,12 @@ export function RegisterPage() {
       errors.password = 'Vui lòng nhập mật khẩu';
     } else if (password.length < 6) {
       errors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+    }
+
+    if (!confirmPassword) {
+      errors.confirmPassword = 'Vui lòng xác nhận mật khẩu';
+    } else if (confirmPassword !== password) {
+      errors.confirmPassword = 'Mật khẩu xác nhận không trùng khớp';
     }
 
     if (!fullName.trim()) {
@@ -130,9 +143,15 @@ export function RegisterPage() {
       const result = await register(payload);
 
       if (result.success) {
-        // Backend returned code 1000 + auto-generated token
-        // AuthContext automatically stored token & user info in localStorage & state
-        navigate(result.user ? '/onboarding' : '/verify-email', {
+        const completedGuestOnboarding = onboardingService.hasCompletedExperience();
+        if (result.user && completedGuestOnboarding) {
+          try {
+            await onboardingService.syncGuestProgress();
+          } catch {
+            // Progress stays local and can be retried when connectivity returns.
+          }
+        }
+        navigate(result.user ? (completedGuestOnboarding ? '/edtech/dashboard' : '/onboarding/reason') : '/verify-email', {
           replace: true,
           state: {
             email: email.trim(),
@@ -142,14 +161,12 @@ export function RegisterPage() {
       } else {
         // Backend Error Handling
         if (result.code === 1005) {
-          // Trùng tên đăng nhập
           setStep(1);
           setFieldErrors((prev) => ({
             ...prev,
             username: result.message || 'Tên đăng nhập đã được sử dụng',
           }));
         } else if (result.code === 1006) {
-          // Trùng Email
           setStep(1);
           setFieldErrors((prev) => ({
             ...prev,
@@ -198,178 +215,239 @@ export function RegisterPage() {
     <div className="auth-container">
       {/* Left Panel */}
       <div className="auth-left-panel">
-        <div className="auth-left-content">
-          {/* Brand */}
-          <AuthHeader />
+        <AuthHeader />
 
-          {/* Welcome pill */}
-          <div className="auth-welcome-pill">
-            <span className="auth-welcome-code">VN</span>
-            <span className="auth-welcome-text">
-              <BilingualText>{step === 1 ? 'Tài khoản mới' : 'Lộ trình học'}</BilingualText>
-            </span>
-          </div>
-
+        <main className="auth-left-content">
           {/* Heading */}
           <h1 className="auth-heading">
             {step === 1 ? (
-              <BilingualText vi={<>Bắt đầu hành trình<br /><span>tiếng Việt</span></>} en="Begin your Vietnamese journey" />
+              <BilingualText vi="Tạo tài khoản" en="Create Account" />
             ) : (
-              <BilingualText vi={<>Cá nhân hóa<br /><span>lộ trình học</span></>} en="Personalize your learning path" />
+              <BilingualText vi="Cá nhân hóa lộ trình" en="Personalize Your Path" />
             )}
           </h1>
 
           {/* Subtitle */}
           <p className="auth-subtitle">
-            <BilingualText>{step === 1
-              ? 'Điền thông tin tài khoản để bắt đầu hành trình học tiếng Việt.'
-              : 'Chọn ngôn ngữ và mục tiêu để Hola cá nhân hóa bài học cho bạn.'}</BilingualText>
+            {step === 1 ? (
+              <BilingualText
+                vi="Bắt đầu học tiếng Việt cùng HolaVietnamese."
+                en="Start learning Vietnamese with HolaVietnamese."
+              />
+            ) : (
+              <BilingualText
+                vi="Chọn ngôn ngữ và mục tiêu để Hola cá nhân hóa bài học cho bạn."
+                en="Select your language and goals so Hola can tailor your lessons."
+              />
+            )}
           </p>
 
           {/* Step indicator */}
           <div className="auth-step-indicator">
-            <div className={`auth-step-item ${step >= 1 ? 'auth-step-item-active' : ''}`}><span>1</span><small><BilingualText>{"Tài khoản"}</BilingualText></small></div>
+            <div className={`auth-step-item ${step >= 1 ? 'auth-step-item-active' : ''}`}>
+              <span>1</span>
+              <small><BilingualText vi="Tài khoản" en="Account" /></small>
+            </div>
             <i className={step >= 2 ? 'active' : ''} />
-            <div className={`auth-step-item ${step >= 2 ? 'auth-step-item-active' : ''}`}><span>2</span><small><BilingualText>{"Cá nhân hóa"}</BilingualText></small></div>
+            <div className={`auth-step-item ${step >= 2 ? 'auth-step-item-active' : ''}`}>
+              <span>2</span>
+              <small><BilingualText vi="Lộ trình" en="Path" /></small>
+            </div>
           </div>
 
           {/* General Error Banner */}
-          {error && <div className="auth-message auth-message-error"><BilingualText>{error}</BilingualText></div>}
+          {error && (
+            <div className="auth-message auth-message-error" role="alert" aria-live="assertive">
+              <BilingualText>{error}</BilingualText>
+            </div>
+          )}
 
           {/* Step 1 Form */}
           {step === 1 && (
-            <form className="auth-form" onSubmit={handleNext} noValidate>
-              {/* Username */}
-              <div className="auth-field">
-                <label className="auth-label" htmlFor="username"><BilingualText>{"Tên đăng nhập"}</BilingualText><em>*</em>
-                </label>
-                <input
-                  id="username"
-                  className={`auth-input ${fieldErrors.username ? 'auth-input-error' : ''}`}
-                  type="text"
-                  placeholder="david2026"
-                  value={username}
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                    if (fieldErrors.username) setFieldErrors((prev) => ({ ...prev, username: '' }));
-                  }}
-                  required
-                />
-                {fieldErrors.username && (
-                  <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.username}</BilingualText></span>
-                )}
-              </div>
-
-              {/* Email */}
-              <div className="auth-field">
-                <label className="auth-label" htmlFor="email"><BilingualText>{"Email"}</BilingualText><em>*</em>
-                </label>
-                <input
-                  id="email"
-                  className={`auth-input ${fieldErrors.email ? 'auth-input-error' : ''}`}
-                  type="email"
-                  placeholder="david@example.com"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: '' }));
-                  }}
-                  required
-                />
-                {fieldErrors.email && (
-                  <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.email}</BilingualText></span>
-                )}
-              </div>
-
-              {/* Password */}
-              <div className="auth-field">
-                <label className="auth-label" htmlFor="password"><BilingualText>{"Mật khẩu"}</BilingualText><em>*</em>
-                </label>
-                <div className="auth-password-row">
+            <form className="auth-form" onSubmit={handleNext} noValidate aria-busy={loading}>
+              <div className="auth-register-grid">
+                {/* Username */}
+                <div className="auth-field">
+                  <label className="auth-label" htmlFor="username">
+                    <BilingualText vi="Tên đăng nhập" en="Username" /><em>*</em>
+                  </label>
                   <input
-                    id="password"
-                    className={`auth-input auth-password-input ${fieldErrors.password ? 'auth-input-error' : ''}`}
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
-                    value={password}
+                    id="username"
+                    className={`auth-input ${fieldErrors.username ? 'auth-input-error' : ''}`}
+                    type="text"
+                    placeholder="david2026"
+                    value={username}
                     onChange={(e) => {
-                      setPassword(e.target.value);
-                      if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: '' }));
+                      setUsername(e.target.value);
+                      if (fieldErrors.username) setFieldErrors((prev) => ({ ...prev, username: '' }));
                     }}
                     required
                   />
-                  <button
-                    type="button"
-                    className="auth-show-btn"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                  >
-                    <BilingualText>{showPassword ? 'Ẩn' : 'Hiện'}</BilingualText>
-                  </button>
+                  {fieldErrors.username && (
+                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.username}</BilingualText></span>
+                  )}
                 </div>
-                {fieldErrors.password && (
-                  <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.password}</BilingualText></span>
-                )}
+
+                {/* Full Name */}
+                <div className="auth-field">
+                  <label className="auth-label" htmlFor="fullName">
+                    <BilingualText vi="Họ và tên" en="Full Name" /><em>*</em>
+                  </label>
+                  <input
+                    id="fullName"
+                    className={`auth-input ${fieldErrors.fullName ? 'auth-input-error' : ''}`}
+                    type="text"
+                    placeholder="David Miller"
+                    value={fullName}
+                    onChange={(e) => {
+                      setFullName(e.target.value);
+                      if (fieldErrors.fullName) setFieldErrors((prev) => ({ ...prev, fullName: '' }));
+                    }}
+                    required
+                  />
+                  {fieldErrors.fullName && (
+                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.fullName}</BilingualText></span>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div className="auth-field">
+                  <label className="auth-label" htmlFor="email">
+                    <BilingualText vi="Email" en="Email" /><em>*</em>
+                  </label>
+                  <input
+                    id="email"
+                    className={`auth-input ${fieldErrors.email ? 'auth-input-error' : ''}`}
+                    type="email"
+                    placeholder="david@example.com"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: '' }));
+                    }}
+                    required
+                  />
+                  {fieldErrors.email && (
+                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.email}</BilingualText></span>
+                  )}
+                </div>
+
+                {/* Phone Number */}
+                <div className="auth-field">
+                  <label className="auth-label" htmlFor="phoneNumber">
+                    <BilingualText vi="Số điện thoại" en="Phone Number" />
+                    <span className="auth-optional"><BilingualText vi="Tùy chọn" en="Optional" /></span>
+                  </label>
+                  <input
+                    id="phoneNumber"
+                    className="auth-input"
+                    type="tel"
+                    placeholder="0912345678"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="auth-field">
+                  <label className="auth-label" htmlFor="password">
+                    <BilingualText vi="Mật khẩu" en="Password" /><em>*</em>
+                  </label>
+                  <div className="auth-password-row">
+                    <input
+                      id="password"
+                      className={`auth-input auth-password-input ${fieldErrors.password ? 'auth-input-error' : ''}`}
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: '' }));
+                      }}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="auth-show-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                      title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  {fieldErrors.password && (
+                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.password}</BilingualText></span>
+                  )}
+                </div>
+
+                {/* Confirm Password */}
+                <div className="auth-field">
+                  <label className="auth-label" htmlFor="confirmPassword">
+                    <BilingualText vi="Xác nhận mật khẩu" en="Confirm Password" /><em>*</em>
+                  </label>
+                  <div className="auth-password-row">
+                    <input
+                      id="confirmPassword"
+                      className={`auth-input auth-password-input ${fieldErrors.confirmPassword ? 'auth-input-error' : ''}`}
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder={bilingualLabel("Nhập lại mật khẩu")}
+                      value={confirmPassword}
+                      onChange={(e) => {
+                        setConfirmPassword(e.target.value);
+                        if (fieldErrors.confirmPassword) setFieldErrors((prev) => ({ ...prev, confirmPassword: '' }));
+                      }}
+                      autoComplete="new-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="auth-show-btn"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                      title={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    >
+                      {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  {fieldErrors.confirmPassword && (
+                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.confirmPassword}</BilingualText></span>
+                  )}
+                </div>
               </div>
 
-              {/* Full Name */}
-              <div className="auth-field">
-                <label className="auth-label" htmlFor="fullName"><BilingualText>{"Họ và tên"}</BilingualText><em>*</em>
-                </label>
-                <input
-                  id="fullName"
-                  className={`auth-input ${fieldErrors.fullName ? 'auth-input-error' : ''}`}
-                  type="text"
-                  placeholder="David Miller"
-                  value={fullName}
-                  onChange={(e) => {
-                    setFullName(e.target.value);
-                    if (fieldErrors.fullName) setFieldErrors((prev) => ({ ...prev, fullName: '' }));
-                  }}
-                  required
-                />
-                {fieldErrors.fullName && <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.fullName}</BilingualText></span>}
+              {/* Action Buttons */}
+              <div className="auth-btn-row">
+                <button
+                  type="submit"
+                  className="auth-btn auth-btn-primary"
+                  disabled={loading}
+                >
+                  <BilingualText vi="Tiếp tục" en="Continue" />
+                  <span aria-hidden="true">→</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="auth-btn auth-btn-quick"
+                  onClick={handleQuickRegister}
+                  disabled={loading}
+                >
+                  <BilingualText
+                    vi={loading ? 'Đang xử lý…' : 'Đăng ký nhanh'}
+                    en={loading ? 'Processing…' : 'Quick Register'}
+                  />
+                </button>
               </div>
-
-              {/* Phone Number */}
-              <div className="auth-field">
-                <label className="auth-label" htmlFor="phoneNumber"><BilingualText>{"Số điện thoại"}</BilingualText><span className="auth-optional"><BilingualText>{"Không bắt buộc"}</BilingualText></span>
-                </label>
-                <input
-                  id="phoneNumber"
-                  className="auth-input"
-                  type="tel"
-                  placeholder="0912345678"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                />
-              </div>
-
-              {/* Primary Next Button (Full 2-step onboarding) */}
-              <button
-                type="submit"
-                className="auth-btn auth-btn-primary"
-                disabled={loading}
-              ><BilingualText>{"Tiếp tục"}</BilingualText><span aria-hidden="true">→</span>
-              </button>
-
-              {/* Quick Register Button (Cách 1: Rút gọn) */}
-              <button
-                type="button"
-                className="auth-btn auth-btn-quick"
-                onClick={handleQuickRegister}
-                disabled={loading}
-              >
-                <BilingualText>{loading ? 'Đang xử lý…' : 'Đăng ký nhanh, bỏ qua cá nhân hóa'}</BilingualText>
-              </button>
             </form>
           )}
 
           {/* Step 2 Form (Cá nhân hóa lộ trình học) */}
           {step === 2 && (
-            <form className="auth-form" onSubmit={handleStep2Submit}>
+            <form className="auth-form" onSubmit={handleStep2Submit} aria-busy={loading}>
               <div className="auth-field">
-                <label className="auth-label" htmlFor="nativeLanguage"><BilingualText>{"Ngôn ngữ mẹ đẻ"}</BilingualText><em>*</em>
+                <label className="auth-label" htmlFor="nativeLanguage">
+                  <BilingualText vi="Ngôn ngữ mẹ đẻ" en="Native Language" /><em>*</em>
                 </label>
                 <select
                   id="nativeLanguage"
@@ -387,7 +465,8 @@ export function RegisterPage() {
               </div>
 
               <div className="auth-field">
-                <label className="auth-label" htmlFor="learningGoal"><BilingualText>{"Mục tiêu học tiếng Việt"}</BilingualText><em>*</em>
+                <label className="auth-label" htmlFor="learningGoal">
+                  <BilingualText vi="Mục tiêu học tiếng Việt" en="Learning Goal" /><em>*</em>
                 </label>
                 <select
                   id="learningGoal"
@@ -405,7 +484,8 @@ export function RegisterPage() {
               </div>
 
               <div className="auth-field">
-                <label className="auth-label" htmlFor="targetLevel"><BilingualText>{"Trình độ muốn đạt"}</BilingualText><em>*</em>
+                <label className="auth-label" htmlFor="targetLevel">
+                  <BilingualText vi="Trình độ muốn đạt" en="Target Level" /><em>*</em>
                 </label>
                 <select
                   id="targetLevel"
@@ -428,42 +508,37 @@ export function RegisterPage() {
                   className="auth-btn auth-btn-secondary"
                   onClick={handleBack}
                   disabled={loading}
-                ><BilingualText>{"← Quay lại"}</BilingualText></button>
+                >
+                  <BilingualText vi="← Quay lại" en="← Back" />
+                </button>
                 <button
                   type="submit"
                   className="auth-btn auth-btn-primary"
                   disabled={loading}
                 >
-                  <BilingualText>{loading ? 'Đang tạo tài khoản…' : 'Hoàn tất đăng ký'}</BilingualText>
+                  <BilingualText
+                    vi={loading ? 'Đang tạo tài khoản…' : 'Hoàn tất đăng ký'}
+                    en={loading ? 'Creating account…' : 'Complete Registration'}
+                  />
                 </button>
               </div>
             </form>
           )}
 
           {/* Footer link */}
-          <p className="auth-footer-text"><BilingualText>{"Đã có tài khoản?"}</BilingualText>{' '}
-            <Link to="/login" className="auth-footer-link"><BilingualText>{"Đăng nhập ngay"}</BilingualText></Link>
+          <p className="auth-footer-text">
+            <BilingualText vi="Đã có tài khoản?" en="Already have an account?" />{' '}
+            <Link to="/login" className="auth-footer-link">
+              <BilingualText vi="Đăng nhập ngay" en="Sign in" />
+            </Link>
           </p>
-        </div>
+        </main>
+
+        <AuthFooter />
       </div>
 
-      {/* Right Panel */}
-      <div className="auth-right-panel">
-        <div className="auth-drum-bg">
-          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
-        </div>
-        <div className="auth-visual-topline"><span /><BilingualText>{"Khám phá ngôn ngữ · Kết nối văn hóa"}</BilingualText></div>
-        <div className="auth-hero-card">
-          <div className="auth-hero-tag">HOLA VIETNAMESE</div>
-          <h2 className="auth-hero-title"><BilingualText>{"Một lộ trình được thiết kế riêng cho bạn."}</BilingualText></h2>
-          <p className="auth-hero-desc"><BilingualText>{"Cho chúng tôi biết mục tiêu của bạn. Hola sẽ biến mỗi buổi học thành một bước tiến vừa sức và đầy cảm hứng."}</BilingualText></p>
-          <div className="auth-proof-row">
-            <div><strong>10+</strong><span><BilingualText>{"chủ đề thực tế"}</BilingualText></span></div>
-            <div><strong>A1–B2</strong><span><BilingualText>{"lộ trình rõ ràng"}</BilingualText></span></div>
-            <div><strong>24/7</strong><span><BilingualText>{"học mọi lúc"}</BilingualText></span></div>
-          </div>
-        </div>
-      </div>
+      {/* Right Panel: Exact Dong Son Visual from Figma Reference */}
+      <AuthRightPanel />
     </div>
   );
 }

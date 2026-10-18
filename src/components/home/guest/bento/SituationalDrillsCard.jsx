@@ -23,7 +23,7 @@ export function SituationalDrillsCard() {
           <span className="px-3 py-1 rounded-full bg-[#F5E1D8] text-[#A62A24] text-xs font-bold uppercase tracking-wider">
             Tình huống thực tế • Situational Drills
           </span>
-          <span className="text-[11px] font-semibold text-[#78685B]">50+ Kịch bản</span>
+          <span className="text-[11px] font-semibold text-[#78685B]">Interactive preview</span>
         </div>
         <h3 className="text-lg sm:text-xl font-black text-[#431914]">
           Bước ra đường phố và giao tiếp tự tin

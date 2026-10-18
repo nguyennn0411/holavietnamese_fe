@@ -1,9 +1,11 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { AuthFooter } from '@/components/auth/AuthFooter';
+import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { learnerService } from '@/services/learnerService';
-import dongSonBg from '@/assets/images/dongson_heritage.png';
+import { Eye, EyeOff } from 'lucide-react';
 
 export function ForgotPasswordPage() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ export function ForgotPasswordPage() {
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [status, setStatus] = useState({ loading: false, message: '', error: '' });
 
   // Step 1: Initiate (Send OTP)
@@ -24,8 +28,8 @@ export function ForgotPasswordPage() {
       const res = await learnerService.forgotPasswordInitiate(email);
       setStatus({ loading: false, message: res.message || 'Mã OTP 6 số đã được gửi vào email của bạn!', error: '' });
       setStep(2);
-    } catch (err) {
-      setStatus({ loading: false, message: '', error: err.message || 'Không tìm thấy tài khoản với email này.' });
+    } catch {
+      setStatus({ loading: false, message: '', error: 'Không thể gửi mã OTP. Vui lòng kiểm tra lại địa chỉ email hoặc thử lại sau.' });
     }
   };
 
@@ -68,41 +72,86 @@ export function ForgotPasswordPage() {
 
   return (
     <div className="auth-container">
+      {/* Left Panel */}
       <div className="auth-left-panel">
-        <div className="auth-left-content">
-          <AuthHeader />
+        <AuthHeader />
 
-          <div className="auth-welcome-pill">
-            <span className="auth-welcome-code">🔑</span>
-            <span className="auth-welcome-text">
-              <BilingualText>{step === 1 ? 'Bước 1: Nhập Email' : step === 2 ? 'Bước 2: Xác thực OTP' : 'Bước 3: Mật khẩu mới'}</BilingualText>
-            </span>
-          </div>
-
+        <main className="auth-left-content">
+          {/* Heading */}
           <h1 className="auth-heading">
-            <BilingualText>{step === 1 ? 'Quên mật khẩu?' : step === 2 ? 'Nhập mã OTP' : 'Tạo mật khẩu mới'}</BilingualText>
+            {step === 1 && <BilingualText vi="Quên mật khẩu?" en="Forgot Password?" />}
+            {step === 2 && <BilingualText vi="Xác thực mã OTP" en="Verify OTP Code" />}
+            {step === 3 && <BilingualText vi="Đặt lại mật khẩu" en="Reset Password" />}
           </h1>
+
+          {/* Subtitle */}
           <p className="auth-subtitle">
-            <BilingualText>{step === 1 && 'Nhập email tài khoản, chúng tôi sẽ gửi mã OTP xác nhận.'}</BilingualText>
-            <BilingualText>{step === 2 && `Mã xác nhận 6 số đã được gửi tới ${email}.`}</BilingualText>
-            <BilingualText>{step === 3 && 'Tạo mật khẩu an toàn mới để tiếp tục hành trình học tiếng Việt.'}</BilingualText>
+            {step === 1 && (
+              <BilingualText
+                vi="Nhập email để nhận hướng dẫn đặt lại mật khẩu."
+                en="Enter your email to receive password reset instructions."
+              />
+            )}
+            {step === 2 && (
+              <BilingualText
+                vi={`Mã xác nhận 6 số đã được gửi tới ${email}.`}
+                en={`A 6-digit verification code was sent to ${email}.`}
+              />
+            )}
+            {step === 3 && (
+              <BilingualText
+                vi="Tạo mật khẩu an toàn mới cho tài khoản của bạn."
+                en="Create a new secure password for your account."
+              />
+            )}
           </p>
 
-          {status.error && <div className="auth-message auth-message-error"><BilingualText>{status.error}</BilingualText></div>}
-          {status.message && <div className="auth-message auth-message-success"><BilingualText>{status.message}</BilingualText></div>}
+          {/* Step indicator */}
+          <div className="auth-step-indicator">
+            <div className={`auth-step-item ${step >= 1 ? 'auth-step-item-active' : ''}`}>
+              <span>1</span>
+              <small><BilingualText vi="Email" en="Email" /></small>
+            </div>
+            <i className={step >= 2 ? 'active' : ''} />
+            <div className={`auth-step-item ${step >= 2 ? 'auth-step-item-active' : ''}`}>
+              <span>2</span>
+              <small><BilingualText vi="Mã OTP" en="OTP" /></small>
+            </div>
+            <i className={step >= 3 ? 'active' : ''} />
+            <div className={`auth-step-item ${step >= 3 ? 'auth-step-item-active' : ''}`}>
+              <span>3</span>
+              <small><BilingualText vi="Mật khẩu" en="Password" /></small>
+            </div>
+          </div>
+
+          {/* Messages */}
+          {status.error && (
+            <div className="auth-message auth-message-error" role="alert" aria-live="assertive">
+              <BilingualText>{status.error}</BilingualText>
+            </div>
+          )}
+          {status.message && (
+            <div className="auth-message auth-message-success" role="status" aria-live="polite">
+              <BilingualText>{status.message}</BilingualText>
+            </div>
+          )}
 
           {/* Step 1: Input Email */}
           {step === 1 && (
-            <form className="auth-form" onSubmit={handleInitiate}>
+            <form className="auth-form" onSubmit={handleInitiate} aria-busy={status.loading}>
               <div className="auth-field">
-                <label className="auth-label"><BilingualText>{"Địa chỉ Email"}</BilingualText></label>
+                <label className="auth-label" htmlFor="forgot-email">
+                  <BilingualText vi="Địa chỉ Email" en="Email Address" />
+                </label>
                 <input
+                  id="forgot-email"
                   className="auth-input"
                   type="email"
                   placeholder="alex@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  autoComplete="email"
                 />
               </div>
 
@@ -111,17 +160,23 @@ export function ForgotPasswordPage() {
                 className="auth-btn auth-btn-primary"
                 disabled={status.loading}
               >
-                <BilingualText>{status.loading ? 'Đang gửi mã…' : 'Gửi mã OTP qua email'}</BilingualText>
+                <BilingualText
+                  vi={status.loading ? 'Đang gửi mã…' : 'Gửi hướng dẫn'}
+                  en={status.loading ? 'Sending code…' : 'Send Instructions'}
+                />
               </button>
             </form>
           )}
 
           {/* Step 2: Input OTP */}
           {step === 2 && (
-            <form className="auth-form" onSubmit={handleVerifyOtp}>
+            <form className="auth-form" onSubmit={handleVerifyOtp} aria-busy={status.loading}>
               <div className="auth-field">
-                <label className="auth-label"><BilingualText>{"Mã OTP (6 chữ số)"}</BilingualText></label>
+                <label className="auth-label" htmlFor="forgot-otp">
+                  <BilingualText vi="Mã OTP (6 chữ số)" en="OTP Code (6 digits)" />
+                </label>
                 <input
+                  id="forgot-otp"
                   className="auth-input"
                   type="text"
                   maxLength={6}
@@ -129,7 +184,7 @@ export function ForgotPasswordPage() {
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.trim())}
                   required
-                  style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '1.4rem', fontWeight: 'bold' }}
+                  style={{ textAlign: 'center', letterSpacing: '6px', fontSize: '1.4rem', fontWeight: 'bold' }}
                 />
               </div>
 
@@ -138,43 +193,75 @@ export function ForgotPasswordPage() {
                 className="auth-btn auth-btn-primary"
                 disabled={status.loading}
               >
-                <BilingualText>{status.loading ? 'Đang kiểm tra…' : 'Xác thực mã OTP'}</BilingualText>
+                <BilingualText
+                  vi={status.loading ? 'Đang kiểm tra…' : 'Xác thực mã OTP'}
+                  en={status.loading ? 'Verifying…' : 'Verify OTP Code'}
+                />
               </button>
 
               <button
                 type="button"
-                className="auth-show-btn"
+                className="auth-btn auth-btn-secondary"
                 onClick={() => setStep(1)}
-                style={{ marginTop: '8px' }}
-              ><BilingualText>{"← Đổi email khác"}</BilingualText></button>
+              >
+                <BilingualText vi="← Đổi email khác" en="← Use another email" />
+              </button>
             </form>
           )}
 
           {/* Step 3: New Password */}
           {step === 3 && (
-            <form className="auth-form" onSubmit={handleResetPassword}>
+            <form className="auth-form" onSubmit={handleResetPassword} aria-busy={status.loading}>
               <div className="auth-field">
-                <label className="auth-label"><BilingualText>{"Mật khẩu mới"}</BilingualText></label>
-                <input
-                  className="auth-input"
-                  type="password"
-                  placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                />
+                <label className="auth-label" htmlFor="reset-new-password">
+                  <BilingualText vi="Mật khẩu mới" en="New Password" />
+                </label>
+                <div className="auth-password-row">
+                  <input
+                    id="reset-new-password"
+                    className="auth-input auth-password-input"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="auth-show-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
               </div>
 
               <div className="auth-field">
-                <label className="auth-label"><BilingualText>{"Xác nhận mật khẩu"}</BilingualText></label>
-                <input
-                  className="auth-input"
-                  type="password"
-                  placeholder={bilingualLabel("Nhập lại mật khẩu mới")}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
+                <label className="auth-label" htmlFor="reset-confirm-password">
+                  <BilingualText vi="Xác nhận mật khẩu mới" en="Confirm New Password" />
+                </label>
+                <div className="auth-password-row">
+                  <input
+                    id="reset-confirm-password"
+                    className="auth-input auth-password-input"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    placeholder={bilingualLabel("Nhập lại mật khẩu mới")}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="auth-show-btn"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    title={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  >
+                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
               </div>
 
               <button
@@ -182,27 +269,27 @@ export function ForgotPasswordPage() {
                 className="auth-btn auth-btn-primary"
                 disabled={status.loading}
               >
-                <BilingualText>{status.loading ? 'Đang cập nhật…' : 'Lưu mật khẩu mới & Đăng nhập'}</BilingualText>
+                <BilingualText
+                  vi={status.loading ? 'Đang cập nhật…' : 'Lưu mật khẩu mới'}
+                  en={status.loading ? 'Updating…' : 'Save New Password'}
+                />
               </button>
             </form>
           )}
 
-          <p className="auth-footer-text"><BilingualText>{"Nhớ lại mật khẩu rồi?"}</BilingualText><Link to="/login" className="auth-footer-link"><BilingualText>{"Quay lại đăng nhập"}</BilingualText></Link>
+          {/* Footer link */}
+          <p className="auth-footer-text">
+            <Link to="/login" className="auth-footer-link">
+              <BilingualText vi="← Quay lại đăng nhập" en="← Back to Sign In" />
+            </Link>
           </p>
-        </div>
+        </main>
+
+        <AuthFooter />
       </div>
 
-      <aside className="auth-right-panel" aria-label="Bảo mật tài khoản">
-        <div className="auth-drum-bg">
-          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
-        </div>
-        <div className="auth-visual-topline"><span /><BilingualText>{"Bảo mật tài khoản · Đồng bộ tiến độ"}</BilingualText></div>
-        <div className="auth-hero-card">
-          <div className="auth-hero-tag"><BilingualText>{"BẢO MẬT TÀI KHOẢN"}</BilingualText></div>
-          <h2 className="auth-hero-title"><BilingualText>{"Khôi phục mật khẩu 3 bước chuẩn an toàn."}</BilingualText></h2>
-          <p className="auth-hero-desc"><BilingualText>{"Xác thực OTP 2 lớp qua email đảm bảo quyền sở hữu tài khoản và giữ nguyên mọi dữ liệu khóa học đã lưu."}</BilingualText></p>
-        </div>
-      </aside>
+      {/* Right Panel: Exact Dong Son Visual from Figma Reference */}
+      <AuthRightPanel />
     </div>
   );
 }
