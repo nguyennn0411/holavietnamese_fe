@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
 import { CEFR_LEVELS, VOCABULARY_STATUSES, newExample, newMeaning, vocabularyDraft, vocabularyPayload } from '@/models/AdminVocabulary';
+import { DictionaryAttribution } from '@/components/vocabulary/DictionaryElements';
+import '@/components/vocabulary/dictionary.css';
 
 const dateText = (value) => value ? new Date(value).toLocaleString('vi-VN') : '—';
 
@@ -11,19 +13,21 @@ function VocabularyDetail({ entry, onEdit }) {
     <dl>
       <dt>ID</dt><dd>{entry.id}</dd><dt><BilingualText>{"Từ vựng"}</BilingualText></dt><dd>{entry.word}</dd>
       <dt><BilingualText>{"Phiên âm"}</BilingualText></dt><dd>{entry.pronunciation || '—'}</dd><dt><BilingualText>{"Từ loại"}</BilingualText></dt><dd>{entry.partOfSpeech}</dd>
-      <dt>CEFR</dt><dd>{entry.cefrLevel}</dd><dt><BilingualText>{"Audio URL"}</BilingualText></dt><dd style={{ overflowWrap: 'anywhere' }}>{entry.audioUrl || '—'}</dd>
+      <dt>CEFR</dt><dd>{entry.cefrLevel || 'Chưa phân loại'}</dd><dt><BilingualText>{"Audio URL"}</BilingualText></dt><dd style={{ overflowWrap: 'anywhere' }}>{entry.audioUrl || '—'}</dd>
       <dt><BilingualText>{"Trạng thái"}</BilingualText></dt><dd><BilingualText>{entry.status}</BilingualText></dd><dt><BilingualText>{"Chủ đề"}</BilingualText></dt><dd>{(entry.topics ?? []).map((topic) => topic.name).join(', ') || '—'}</dd>
       <dt><BilingualText>{"Ngày xuất bản"}</BilingualText></dt><dd>{dateText(entry.publishedAt)}</dd><dt><BilingualText>{"Ngày lưu trữ"}</BilingualText></dt><dd>{dateText(entry.archivedAt)}</dd>
       <dt><BilingualText>{"Ngày tạo"}</BilingualText></dt><dd>{dateText(entry.createdAt)}</dd><dt><BilingualText>{"Cập nhật lần cuối"}</BilingualText></dt><dd>{dateText(entry.updatedAt)}</dd>
     </dl>
     {(entry.meanings ?? []).map((meaning, index) => <section className="admin-card" key={meaning.id ?? index} style={{ marginBottom: 14 }}>
       <h3><BilingualText>{"Nghĩa"}</BilingualText>{index + 1}: {meaning.translationEn}</h3>
+      {meaning.definitionVi && <p lang="vi" style={{ whiteSpace: 'pre-wrap' }}><strong>Định nghĩa Việt–Việt: </strong>{meaning.definitionVi}</p>}
       <p><BilingualText>{"Định nghĩa:"}</BilingualText>{meaning.definitionEn || '—'}</p><p><BilingualText>{"Ghi chú sử dụng:"}</BilingualText>{meaning.usageNote || '—'}</p><p><BilingualText>{"Thứ tự:"}</BilingualText>{meaning.displayOrder ?? 0}</p>
       {(meaning.examples ?? []).map((example, exampleIndex) => <div key={example.id ?? exampleIndex}>
         <h4><BilingualText>{"Ví dụ"}</BilingualText>{exampleIndex + 1}</h4><p lang="vi">{example.exampleVi}</p><p>{example.translationEn}</p>
         <p style={{ overflowWrap: 'anywhere' }}><BilingualText>{"Audio URL:"}</BilingualText>{example.audioUrl || '—'}</p><p><BilingualText>{"Thứ tự:"}</BilingualText>{example.displayOrder ?? 0}</p>
       </div>)}
     </section>)}
+    <DictionaryAttribution source={entry.source} />
     <div className="actions"><button type="button" onClick={onEdit}><BilingualText>{"Sửa từ vựng"}</BilingualText></button></div>
   </div>;
 }
@@ -77,7 +81,7 @@ export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, 
           <label><BilingualText>{"Từ vựng"}</BilingualText><input value={draft.word} onChange={(event) => change('word', event.target.value)} required maxLength={200} lang="vi" /></label>
           <label><BilingualText>{"Phiên âm"}</BilingualText><input value={draft.pronunciation} onChange={(event) => change('pronunciation', event.target.value)} maxLength={200} /></label>
           <label><BilingualText>{"Từ loại"}</BilingualText><input value={draft.partOfSpeech} onChange={(event) => change('partOfSpeech', event.target.value)} required maxLength={40} placeholder={vietnameseLabel("Ví dụ: phrase, noun, verb")} /></label>
-          <label><BilingualText>{"Trình độ CEFR"}</BilingualText><input list="vocabulary-cefr-form" value={draft.cefrLevel} onChange={(event) => change('cefrLevel', event.target.value)} required maxLength={10} /></label>
+          <label><BilingualText>{"Trình độ CEFR"}</BilingualText><select value={draft.cefrLevel} onChange={(event) => change('cefrLevel', event.target.value)}><option value="">Chưa phân loại</option>{CEFR_LEVELS.map(level => <option key={level}>{level}</option>)}</select></label>
           <datalist id="vocabulary-cefr-form">{CEFR_LEVELS.map((level) => <option key={level} value={level} />)}</datalist>
           <label><BilingualText>{"Audio URL"}</BilingualText><input value={draft.audioUrl} onChange={(event) => change('audioUrl', event.target.value)} maxLength={2048} /></label>
           <label><BilingualText>{"Trạng thái"}</BilingualText><select value={draft.status} onChange={(event) => change('status', event.target.value)}>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></label>
@@ -86,14 +90,17 @@ export function AdminVocabularyModal({ mode, id, topics, reloadTopics, onClose, 
           </fieldset>
           {draft.meanings.map((meaning, meaningIndex) => <section className="admin-card" key={meaningIndex} style={{ marginBottom: 14 }}>
             <div className="row"><h3><BilingualText>{"Nghĩa"}</BilingualText>{meaningIndex + 1}</h3><button type="button" className="secondary" disabled={draft.meanings.length === 1} onClick={() => change('meanings', draft.meanings.filter((_, index) => index !== meaningIndex))}><BilingualText>{"Xóa nghĩa"}</BilingualText>{meaningIndex + 1}</button></div>
-            <label><BilingualText>{"Bản dịch tiếng Anh"}</BilingualText><input value={meaning.translationEn} onChange={(event) => changeMeaning(meaningIndex, 'translationEn', event.target.value)} required maxLength={500} /></label>
+            <label>Định nghĩa Việt–Việt<textarea value={meaning.definitionVi} onChange={event => changeMeaning(meaningIndex, 'definitionVi', event.target.value)} rows={4} maxLength={10000} lang="vi" /></label>
+            <label><BilingualText>{"Bản dịch tiếng Anh"}</BilingualText><input value={meaning.translationEn} onChange={(event) => changeMeaning(meaningIndex, 'translationEn', event.target.value)} maxLength={500} /></label>
+            <p className="muted">Mỗi nghĩa cần định nghĩa tiếng Việt hoặc thông tin tiếng Anh có căn cứ. Không tự gán bản dịch khi chưa xác định đúng nghĩa.</p>
+            <label>Nhãn cách dùng<input value={meaning.labelsInput ?? (meaning.labels || []).join(', ')} onChange={event => changeMeaning(meaningIndex, 'labelsInput', event.target.value)} placeholder="Nhãn từ nguồn, cách nhau bằng dấu phẩy" /></label>
             <label><BilingualText>{"Định nghĩa tiếng Anh"}</BilingualText><textarea value={meaning.definitionEn} onChange={(event) => changeMeaning(meaningIndex, 'definitionEn', event.target.value)} rows={2} /></label>
             <label><BilingualText>{"Ghi chú sử dụng"}</BilingualText><textarea value={meaning.usageNote} onChange={(event) => changeMeaning(meaningIndex, 'usageNote', event.target.value)} rows={2} /></label>
             <label><BilingualText>{"Thứ tự nghĩa"}</BilingualText><input type="number" min={0} step={1} value={meaning.displayOrder} onChange={(event) => changeMeaning(meaningIndex, 'displayOrder', event.target.value)} /></label>
             {meaning.examples.map((example, exampleIndex) => <fieldset key={exampleIndex} style={{ margin: '0 0 14px', minWidth: 0 }}>
               <legend><BilingualText>{"Ví dụ"}</BilingualText>{exampleIndex + 1}</legend>
               <label><BilingualText>{"Ví dụ tiếng Việt"}</BilingualText><textarea lang="vi" value={example.exampleVi} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'exampleVi', event.target.value)} required rows={2} /></label>
-              <label><BilingualText>{"Bản dịch ví dụ"}</BilingualText><textarea value={example.translationEn} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'translationEn', event.target.value)} required rows={2} /></label>
+              <label><BilingualText>{"Bản dịch ví dụ"}</BilingualText><textarea value={example.translationEn} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'translationEn', event.target.value)} rows={2} /></label>
               <label><BilingualText>{"Audio URL của ví dụ"}</BilingualText><input value={example.audioUrl} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'audioUrl', event.target.value)} maxLength={2048} /></label>
               <label><BilingualText>{"Thứ tự ví dụ"}</BilingualText><input type="number" min={0} step={1} value={example.displayOrder} onChange={(event) => changeExample(meaningIndex, exampleIndex, 'displayOrder', event.target.value)} /></label>
               <button type="button" className="secondary" onClick={() => changeMeaning(meaningIndex, 'examples', meaning.examples.filter((_, index) => index !== exampleIndex))}><BilingualText>{"Xóa ví dụ"}</BilingualText>{exampleIndex + 1}</button>

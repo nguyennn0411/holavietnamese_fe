@@ -18,7 +18,7 @@ export const vocabularyService = {
       lessonId,
       ...(isMaster ? { masterVocabularyId: source.id } : {}),
       word: source.wordVi ?? source.word,
-      meaning: source.meaningEn ?? meaning?.translationEn ?? source.meaning,
+      meaning: source.meaningEn ?? (meaning ? (meaning.translationEn || meaning.definitionVi || meaning.definitionEn || '').trim().slice(0, 1000) : source.meaning),
       pronunciation: source.pronunciation ?? '',
       exampleSentence: isMaster ? exampleSentence.slice(0, 2000) : exampleSentence,
       note: isMaster ? note.slice(0, 2000) : note,

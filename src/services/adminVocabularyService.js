@@ -3,6 +3,9 @@ import axiosClient from '@/infrastructure/api/axiosClient';
 const resultOf = (response) => response?.result ?? response;
 
 export const adminVocabularyService = {
+  async search(filters = {}, options = {}) {
+    return resultOf(await axiosClient.get('/api/admin/vocabulary/search', { ...options, params: Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== '' && value != null)) }));
+  },
   async list(filters = {}, options = {}) {
     return resultOf(
       await axiosClient.get('/api/admin/vocabulary', {

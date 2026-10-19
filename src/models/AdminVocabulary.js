@@ -2,7 +2,7 @@ export const VOCABULARY_STATUSES = ['DRAFT', 'PENDING_REVIEW', 'PUBLISHED', 'ARC
 export const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
 export const newExample = () => ({ exampleVi: '', translationEn: '', audioUrl: '', displayOrder: 0 });
-export const newMeaning = () => ({ translationEn: '', definitionEn: '', usageNote: '', displayOrder: 0, examples: [] });
+export const newMeaning = () => ({ translationEn: '', definitionEn: '', definitionVi: '', labels: [], usageNote: '', displayOrder: 0, examples: [] });
 
 export function vocabularyDraft(entry) {
   return {
@@ -16,6 +16,8 @@ export function vocabularyDraft(entry) {
     meanings: entry ? (entry.meanings ?? []).map((meaning) => ({
       translationEn: meaning.translationEn ?? '',
       definitionEn: meaning.definitionEn ?? '',
+      definitionVi: meaning.definitionVi ?? '',
+      labels: meaning.labels ?? [],
       usageNote: meaning.usageNote ?? '',
       displayOrder: meaning.displayOrder ?? 0,
       examples: (meaning.examples ?? []).map((example) => ({
@@ -43,22 +45,26 @@ export function vocabularyPayload(draft) {
     return number;
   };
   if (!draft.meanings.length) throw new Error('Cần ít nhất một nghĩa.');
+  if (draft.cefrLevel && !CEFR_LEVELS.includes(draft.cefrLevel)) throw new Error('CEFR phải là A1–C2 hoặc để trống khi chưa phân loại.');
+  for (const meaning of draft.meanings) if (![meaning.translationEn, meaning.definitionVi, meaning.definitionEn].some(value => value?.trim())) throw new Error('Mỗi nghĩa cần định nghĩa tiếng Việt hoặc nghĩa tiếng Anh.');
   return {
     word: required(draft.word, 'Từ vựng', 200),
     pronunciation: optional(draft.pronunciation),
     partOfSpeech: required(draft.partOfSpeech, 'Từ loại', 40),
-    cefrLevel: required(draft.cefrLevel, 'Trình độ CEFR', 10),
+    cefrLevel: optional(draft.cefrLevel),
     audioUrl: optional(draft.audioUrl),
     status: draft.status,
     topicIds: draft.topicIds,
     meanings: draft.meanings.map((meaning) => ({
-      translationEn: required(meaning.translationEn, 'Bản dịch nghĩa', 500),
+      translationEn: meaning.translationEn.trim() ? required(meaning.translationEn, 'Bản dịch nghĩa', 500) : null,
       definitionEn: optional(meaning.definitionEn),
+      definitionVi: optional(meaning.definitionVi || ''),
+      labels: meaning.labelsInput == null ? (meaning.labels || []) : meaning.labelsInput.split(',').map(value => value.trim()).filter(Boolean),
       usageNote: optional(meaning.usageNote),
       displayOrder: order(meaning.displayOrder),
       examples: meaning.examples.map((example) => ({
         exampleVi: required(example.exampleVi, 'Ví dụ tiếng Việt'),
-        translationEn: required(example.translationEn, 'Bản dịch ví dụ'),
+        translationEn: optional(example.translationEn),
         audioUrl: optional(example.audioUrl),
         displayOrder: order(example.displayOrder),
       })),
