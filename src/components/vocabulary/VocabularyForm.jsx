@@ -12,6 +12,7 @@ export function VocabularyForm({ entry, lessonId = null, lessons = [], lessonOpt
     const form = new FormData(event.currentTarget)
     const selectedLesson = form.get('lessonId')
     const data = { lessonId: lessonId ?? (selectedLesson ? Number(selectedLesson) : null),
+      ...(entry?.masterVocabularyId != null ? { masterVocabularyId: entry.masterVocabularyId } : {}),
       ...Object.fromEntries(['word', 'meaning', 'pronunciation', 'exampleSentence', 'note'].map(key => [key, form.get(key)])) }
     submitting.current = true; setPending(true); setError('')
     try {
@@ -20,8 +21,8 @@ export function VocabularyForm({ entry, lessonId = null, lessons = [], lessonOpt
     } catch (e) { setError(e.message) } finally { submitting.current = false; setPending(false) }
   }
   return <Modal title={entry ? 'Chỉnh sửa từ vựng' : 'Lưu từ vựng'} onClose={onClose} busy={pending}><form className="vocabulary-notebook-form" onSubmit={submit}>
-    <label><BilingualText>{"Từ tiếng Việt"}</BilingualText><input name="word" defaultValue={entry?.word || ''} required maxLength={200} autoFocus lang="vi" disabled={pending} /></label>
-    <label><BilingualText>{"Nghĩa"}</BilingualText><textarea name="meaning" defaultValue={entry?.meaning || ''} required maxLength={1000} rows={2} disabled={pending} /></label>
+    <label><BilingualText>{"Từ tiếng Việt"}</BilingualText><input name="word" defaultValue={entry?.word || ''} required maxLength={200} autoFocus lang="vi" disabled={pending} readOnly={entry?.masterVocabularyId != null} /></label>
+    <label><BilingualText>{"Nghĩa"}</BilingualText><textarea name="meaning" defaultValue={entry?.meaning || ''} required maxLength={1000} rows={2} disabled={pending} readOnly={entry?.masterVocabularyId != null} /></label>
     <label><BilingualText>{"Phát âm"}</BilingualText><input name="pronunciation" defaultValue={entry?.pronunciation || ''} maxLength={200} disabled={pending} /></label>
     <label><BilingualText>{"Câu ví dụ"}</BilingualText><textarea name="exampleSentence" defaultValue={entry?.exampleSentence || ''} maxLength={2000} rows={2} lang="vi" disabled={pending} /></label>
     <label><BilingualText>{"Ghi chú"}</BilingualText><textarea name="note" defaultValue={entry?.note || ''} maxLength={2000} rows={2} disabled={pending} /></label>

@@ -30,7 +30,7 @@ export function AdminAiSettingsPage() {
         <div>
           <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', letterSpacing: '0.08em', textTransform: 'uppercase' }}><BilingualText>{"AI GOVERNANCE & LLM CONFIG • NGƯỜI 4"}</BilingualText></span>
           <h1 style={{ margin: '4px 0 6px 0', fontSize: '32px' }}><BilingualText>{"Cấu hình hệ thống AI"}</BilingualText></h1>
-          <p style={{ margin: 0, color: 'var(--color-forest)', fontSize: '14px' }}><BilingualText>{"Quản trị mô hình ngôn ngữ lớn (LLM), phiên bản System Prompt, kiểm soát giới hạn tần suất, chi phí và bảo mật API."}</BilingualText></p>
+          <p style={{ margin: 0, color: 'var(--color-forest)', fontSize: '14px' }}><BilingualText>{"Quản trị mô hình ngôn ngữ lớn (LLM), phiên bản hướng dẫn hệ thống, kiểm soát giới hạn tần suất, chi phí và bảo mật API."}</BilingualText></p>
         </div>
 
         <button className="button" onClick={handleSave} style={{ fontSize: '13px' }}><BilingualText>{"💾 Lưu tất cả cấu hình"}</BilingualText></button>
@@ -51,9 +51,9 @@ export function AdminAiSettingsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
             {/* Allowed Models */}
             <div className="admin-card">
-              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"1. Chọn mô hình được phép (LLM Providers)"}</BilingualText></h2>
+              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"1. Chọn mô hình được phép"}</BilingualText></h2>
 
-              <label><BilingualText>{"Mô hình đang hoạt động chính (Default Active Model):"}</BilingualText><select
+              <label><BilingualText>{"Mô hình đang hoạt động chính:"}</BilingualText><select
                   value={settings.activeModel}
                   onChange={e => setSettings({ ...settings, activeModel: e.target.value })}
                 >
@@ -85,9 +85,9 @@ export function AdminAiSettingsPage() {
 
             {/* System Prompt Versioning */}
             <div className="admin-card">
-              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"2. Phiên bản hướng dẫn hệ thống (System Prompt)"}</BilingualText></h2>
+              <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"2. Phiên bản hướng dẫn hệ thống"}</BilingualText></h2>
 
-              <label><BilingualText>{"Phiên bản System Prompt hiện hành:"}</BilingualText><input
+              <label><BilingualText>{"Phiên bản hướng dẫn hệ thống hiện hành:"}</BilingualText><input
                   type="text"
                   value={settings.systemPromptVersion}
                   onChange={e => setSettings({ ...settings, systemPromptVersion: e.target.value })}
@@ -97,7 +97,7 @@ export function AdminAiSettingsPage() {
 
               <div style={{ marginTop: '14px', padding: '12px 14px', background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '10px', fontSize: '12.5px', color: 'var(--color-red-hover)' }}>
                 📌 <strong><BilingualText>{"Quy tắc bắt buộc đã tích hợp trong prompt v2.2.0:"}</BilingualText></strong><br /><BilingualText>{"- Phản hồi phải dựa trên lịch sử hội thoại thực tế của người học."}</BilingualText><br />
-                - <em><BilingualText>{"Nếu chưa có công cụ đo đạc âm thanh thực tế, tuyệt đối không sinh điểm số phát âm ảo (Pronunciation score) gây hiểu lầm cho người học."}</BilingualText></em>
+                - <em><BilingualText>{"Nếu chưa có công cụ đo đạc âm thanh thực tế, tuyệt đối không sinh điểm số phát âm ảo gây hiểu lầm cho người học."}</BilingualText></em>
               </div>
 
               <div style={{ marginTop: '16px' }}>
@@ -123,7 +123,7 @@ export function AdminAiSettingsPage() {
             <div className="admin-card">
               <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"3. Giới hạn hội thoại & Tần suất sử dụng"}</BilingualText></h2>
 
-              <label><BilingualText>{"Số lượt hội thoại tối đa mỗi phiên (Max turns per session):"}</BilingualText><input
+              <label><BilingualText>{"Số lượt hội thoại tối đa mỗi phiên:"}</BilingualText><input
                   type="number"
                   min={10}
                   max={50}
@@ -132,7 +132,7 @@ export function AdminAiSettingsPage() {
                 />
               </label>
 
-              <label style={{ marginTop: '12px' }}><BilingualText>{"Độ dài câu trả lời tối đa (Max output tokens):"}</BilingualText><input
+              <label style={{ marginTop: '12px' }}><BilingualText>{"Giới hạn số token đầu ra:"}</BilingualText><input
                   type="number"
                   min={256}
                   max={2048}
@@ -150,7 +150,7 @@ export function AdminAiSettingsPage() {
                 />
               </label>
 
-              <label style={{ marginTop: '12px' }}><BilingualText>{"Số phiên tối đa trong ngày mỗi học viên (Daily sessions cap):"}</BilingualText><input
+              <label style={{ marginTop: '12px' }}><BilingualText>{"Số phiên tối đa trong ngày mỗi học viên:"}</BilingualText><input
                   type="number"
                   min={10}
                   max={100}
@@ -164,7 +164,7 @@ export function AdminAiSettingsPage() {
             <div className="admin-card">
               <h2 style={{ margin: '0 0 16px 0', fontSize: '18px', color: 'var(--color-ink)' }}><BilingualText>{"4. Kiểm soát ngân sách & Giới hạn chi phí"}</BilingualText></h2>
 
-              <label><BilingualText>{"Ngân sách tối đa hàng tháng (Monthly Budget Cap - USD):"}</BilingualText><input
+              <label><BilingualText>{"Ngân sách tối đa hàng tháng (USD):"}</BilingualText><input
                   type="number"
                   step="10"
                   value={settings.limits.monthlyBudgetCapUsd}

@@ -24,6 +24,11 @@ const PUBLIC_API_PREFIXES = [
 // REQUEST interceptor: auto-attach Bearer token
 axiosClient.interceptors.request.use(
   (config) => {
+    // Let the browser create the multipart boundary for file uploads.
+    if (typeof FormData !== 'undefined' && config.data instanceof FormData) {
+      if (typeof config.headers?.delete === 'function') config.headers.delete('Content-Type');
+      else delete config.headers['Content-Type'];
+    }
     const isPublic = PUBLIC_API_PREFIXES.some(prefix => config.url?.startsWith(prefix));
     if (!isPublic) {
       const token = localStorage.getItem('token');

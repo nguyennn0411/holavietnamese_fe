@@ -1,12 +1,32 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 import { ContentImage } from '@/components/common/ContentImage';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, Sparkles } from 'lucide-react';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function UserMenu({ user, isAdmin, onLogout }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const displayName = user?.fullName || user?.username || 'Học viên';
+  const reduceMotion = useReducedMotion();
+  const { confirm, confirmationDialog } = useConfirmDialog();
+
+  const handleLogout = async () => {
+    closeMenu();
+    const confirmed = await confirm({
+      title: <BilingualText vi="Đăng xuất khỏi HolaVietnamese?" en="Log out of HolaVietnamese?" />,
+      description: <BilingualText vi="Bạn có chắc chắn muốn đăng xuất không?" en="Are you sure you want to log out?" />,
+      confirmLabel: <BilingualText vi="Đăng xuất" en="Log Out" />,
+      cancelLabel: <BilingualText vi="Hủy" en="Cancel" />,
+      tone: 'danger',
+    });
+    if (confirmed) {
+      onLogout();
+    }
+  };
 
   useEffect(() => {
     const closeOnOutsideClick = (event) => {
@@ -34,18 +54,22 @@ export function UserMenu({ user, isAdmin, onLogout }) {
             fallback={<span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>} />
         </span>
         <span className="user-menu__name">{displayName}</span>
-        <span className="user-menu__chevron" aria-hidden="true">⌄</span>
+        <ChevronDown className="user-menu__chevron" size={16} aria-hidden="true" />
       </button>
+      <AnimatePresence>
       {open && (
-        <div className="user-menu__panel" role="menu">
+        <motion.div className="user-menu__panel" role="menu" initial={reduceMotion ? false : { opacity: 0, y: -8, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={reduceMotion ? undefined : { opacity: 0, y: -6, scale: .98 }} transition={{ duration: reduceMotion ? 0 : .18 }}>
           <div className="user-menu__identity"><strong>{displayName}</strong><span>@{user?.username || 'learner'} · <BilingualText>{isAdmin ? 'Quản trị viên' : 'Học viên'}</BilingualText></span></div>
-          <Link to="/profile" onClick={closeMenu} role="menuitem"><BilingualText>{"Hồ sơ cá nhân"}</BilingualText></Link>
-          <Link to="/settings" onClick={closeMenu} role="menuitem"><BilingualText>{"Cài đặt học tập"}</BilingualText></Link>
-          <Link to="/achievements" onClick={closeMenu} role="menuitem"><BilingualText>{"Thành tích"}</BilingualText></Link>
-          {isAdmin && <Link to="/admin" onClick={closeMenu} role="menuitem" className="user-menu__admin"><BilingualText>{"Trang quản trị"}</BilingualText></Link>}
-          <button type="button" className="user-menu__logout" onClick={() => { closeMenu(); onLogout(); }} role="menuitem"><BilingualText>{"Đăng xuất"}</BilingualText></button>
-        </div>
+          <Link to={ROUTES.EDTECH_DASHBOARD} onClick={closeMenu} role="menuitem"><Sparkles size={16}/><BilingualText>{"Lộ trình học EdTech"}</BilingualText></Link>
+          <Link to="/profile" onClick={closeMenu} role="menuitem"><UserRound size={16}/><BilingualText>{"Hồ sơ cá nhân"}</BilingualText></Link>
+          <Link to="/settings" onClick={closeMenu} role="menuitem"><Settings size={16}/><BilingualText>{"Cài đặt học tập"}</BilingualText></Link>
+          <Link to="/achievements" onClick={closeMenu} role="menuitem"><Trophy size={16}/><BilingualText>{"Thành tích"}</BilingualText></Link>
+          {isAdmin && <Link to="/admin" onClick={closeMenu} role="menuitem" className="user-menu__admin"><Shield size={16}/><BilingualText>{"Trang quản trị"}</BilingualText></Link>}
+          <button type="button" className="user-menu__logout" onClick={handleLogout} role="menuitem"><LogOut size={16}/><BilingualText>{"Đăng xuất"}</BilingualText></button>
+        </motion.div>
       )}
+      </AnimatePresence>
+      {confirmationDialog}
     </div>
   );
 }

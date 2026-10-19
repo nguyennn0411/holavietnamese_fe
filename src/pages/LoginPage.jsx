@@ -4,7 +4,9 @@ import { Navigate, Link, useLocation, useNavigate, useSearchParams } from 'react
 import { useAuth } from '@/application/context/AuthContext';
 import { AuthFooter } from '@/components/auth/AuthFooter';
 import { AuthHeader } from '@/components/auth/AuthHeader';
-import dongSonBg from '@/assets/images/dongson_heritage.png';
+import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
+import { onboardingService } from '@/features/onboarding/services/onboardingService';
+import { Eye, EyeOff } from 'lucide-react';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -23,6 +25,8 @@ export function LoginPage() {
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [googleButtonReady, setGoogleButtonReady] = useState(false);
+  const [googleUnavailable, setGoogleUnavailable] = useState(false);
 
   useEffect(() => {
     if (location.state?.message) {
@@ -61,6 +65,7 @@ export function LoginPage() {
     if (!GOOGLE_CLIENT_ID || isAuthenticated || gsiInitializedRef.current) return;
 
     let intervalId = null;
+    let timeoutId = null;
 
     const initGoogle = () => {
       if (window.google?.accounts?.id && !gsiInitializedRef.current) {
@@ -73,6 +78,7 @@ export function LoginPage() {
             ux_mode: 'popup',
           });
           if (googleBtnRef.current) {
+            googleBtnRef.current.replaceChildren();
             window.google.accounts.id.renderButton(googleBtnRef.current, {
               type: 'standard',
               theme: 'outline',
@@ -81,9 +87,11 @@ export function LoginPage() {
               shape: 'pill',
               width: 380,
             });
+            requestAnimationFrame(() => setGoogleButtonReady(Boolean(googleBtnRef.current?.childElementCount)));
           }
         } catch (err) {
           console.warn('GSI Initialization warning:', err);
+          setGoogleUnavailable(true);
         }
       }
     };
@@ -97,10 +105,17 @@ export function LoginPage() {
           initGoogle();
         }
       }, 100);
+      timeoutId = setTimeout(() => {
+        if (!gsiInitializedRef.current) {
+          if (intervalId) clearInterval(intervalId);
+          setGoogleUnavailable(true);
+        }
+      }, 8000);
     }
 
     return () => {
       if (intervalId) clearInterval(intervalId);
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, [GOOGLE_CLIENT_ID, isAuthenticated, handleGoogleCallback]);
 
@@ -129,8 +144,16 @@ export function LoginPage() {
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
           navigate('/admin', { replace: true });
         } else {
+          const completedGuestOnboarding = onboardingService.hasCompletedExperience();
+          if (completedGuestOnboarding) {
+            try {
+              await onboardingService.syncGuestProgress();
+            } catch {
+              // Progress stays local and can be retried when connectivity returns.
+            }
+          }
           const from = location.state?.from || searchParams.get('from');
-          navigate(from || '/', { replace: true });
+          navigate(completedGuestOnboarding ? '/edtech/dashboard' : (from || '/'), { replace: true });
         }
       }
     } catch {
@@ -145,38 +168,47 @@ export function LoginPage() {
       {/* Left Panel */}
       <div className="auth-left-panel">
         <AuthHeader />
+
         <main className="auth-left-content">
-
-          {/* Welcome Pill */}
-          <div className="auth-welcome-pill">
-            <span className="auth-welcome-code"><BilingualText>{"Xin chào"}</BilingualText></span>
-            <span className="auth-welcome-text"><BilingualText>{"Chào mừng bạn trở lại"}</BilingualText></span>
-          </div>
-
           {/* Heading */}
-          <h1 className="auth-heading"><BilingualText vi={<>Tiếp tục hành trình<br /><span>tiếng Việt</span> của bạn</>} en="Continue your Vietnamese journey" /></h1>
-          <p className="auth-subtitle"><BilingualText>{"Đăng nhập để tiếp tục bài học và giữ vững chuỗi ngày tiến bộ."}</BilingualText></p>
+          <h1 className="auth-heading">
+            <BilingualText vi="Đăng nhập" en="Sign In" />
+          </h1>
+
+          {/* Subtitle */}
+          <p className="auth-subtitle">
+            <BilingualText
+              vi="Tiếp tục hành trình học tiếng Việt của bạn."
+              en="Continue your Vietnamese learning journey."
+            />
+          </p>
 
           {/* Error Message */}
-          {error && <div className="auth-message auth-message-error"><BilingualText>{error}</BilingualText></div>}
+          {error && (
+            <div className="auth-message auth-message-error" role="alert" aria-live="assertive">
+              <BilingualText>{error}</BilingualText>
+            </div>
+          )}
 
           {/* Success Message */}
           {successMessage && (
-            <div className="auth-message auth-message-success">
+            <div className="auth-message auth-message-success" role="status" aria-live="polite">
               <BilingualText>{successMessage}</BilingualText>
             </div>
           )}
 
           {/* Form */}
-          <form className="auth-form" onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit} aria-busy={loading}>
             {/* Email Field */}
             <div className="auth-field">
-              <label className="auth-label" htmlFor="login-identity"><BilingualText>{"Tài khoản hoặc email"}</BilingualText></label>
+              <label className="auth-label" htmlFor="login-identity">
+                <BilingualText vi="Email hoặc tên đăng nhập" en="Email or username" />
+              </label>
               <input
                 id="login-identity"
                 className="auth-input"
                 type="text"
-                placeholder={bilingualLabel("Nhập tên tài khoản hoặc email")}
+                placeholder={bilingualLabel("Nhập email hoặc tên đăng nhập")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -186,7 +218,9 @@ export function LoginPage() {
 
             {/* Password Field */}
             <div className="auth-field">
-              <label className="auth-label" htmlFor="login-password"><BilingualText>{"Mật khẩu"}</BilingualText></label>
+              <label className="auth-label" htmlFor="login-password">
+                <BilingualText vi="Mật khẩu" en="Password" />
+              </label>
               <div className="auth-password-wrapper">
                 <input
                   id="login-password"
@@ -203,8 +237,9 @@ export function LoginPage() {
                   className="auth-show-btn"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                 >
-                  <BilingualText>{showPassword ? 'Ẩn' : 'Hiện'}</BilingualText>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -218,9 +253,11 @@ export function LoginPage() {
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
                 />
-                <span><BilingualText>{"Ghi nhớ đăng nhập"}</BilingualText></span>
+                <span><BilingualText vi="Ghi nhớ đăng nhập" en="Remember me" /></span>
               </label>
-              <Link to="/forgot-password" className="auth-forgot-link"><BilingualText>{"Quên mật khẩu?"}</BilingualText></Link>
+              <Link to="/forgot-password" className="auth-forgot-link">
+                <BilingualText vi="Quên mật khẩu?" en="Forgot password?" />
+              </Link>
             </div>
 
             {/* Primary Button */}
@@ -229,15 +266,19 @@ export function LoginPage() {
               className="auth-btn auth-btn-primary"
               disabled={loading}
             >
-              <BilingualText>{loading ? 'Đang đăng nhập…' : 'Đăng nhập'}</BilingualText>
+              <BilingualText
+                vi={loading ? 'Đang đăng nhập…' : 'Đăng nhập'}
+                en={loading ? 'Signing in…' : 'Sign In'}
+              />
             </button>
-
           </form>
 
           {/* Divider */}
           <div className="auth-divider">
             <span className="auth-divider-line" />
-            <span className="auth-divider-text"><BilingualText>{"hoặc tiếp tục với"}</BilingualText></span>
+            <span className="auth-divider-text">
+              <BilingualText vi="hoặc tiếp tục với" en="or continue with" />
+            </span>
             <span className="auth-divider-line" />
           </div>
 
@@ -245,9 +286,25 @@ export function LoginPage() {
           <div className="auth-google-section">
             {GOOGLE_CLIENT_ID ? (
               <>
-                <div ref={googleBtnRef} className="auth-google-btn-container" />
+                <div ref={googleBtnRef} className={`auth-google-btn-container ${googleButtonReady ? 'is-ready' : ''}`} />
+                {!googleButtonReady && (
+                  <button type="button" className="auth-btn auth-btn-google auth-google-fallback" disabled>
+                    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                    </svg>
+                    <BilingualText
+                      vi={googleUnavailable ? 'Không thể tải đăng nhập Google' : 'Đang tải đăng nhập Google…'}
+                      en={googleUnavailable ? 'Google sign-in unavailable' : 'Loading Google sign-in…'}
+                    />
+                  </button>
+                )}
                 {googleLoading && (
-                  <p className="auth-google-loading"><BilingualText>{"Signing in with Google…"}</BilingualText></p>
+                  <p className="auth-google-loading">
+                    <BilingualText vi="Đang đăng nhập với Google…" en="Signing in with Google…" />
+                  </p>
                 )}
               </>
             ) : (
@@ -262,35 +319,26 @@ export function LoginPage() {
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg><BilingualText>{"Đăng nhập với Google"}</BilingualText></button>
+                </svg>
+                <BilingualText vi="Đăng nhập với Google" en="Sign in with Google" />
+              </button>
             )}
           </div>
 
           {/* Footer Link */}
-          <p className="auth-footer-text"><BilingualText>{"Chưa có tài khoản?"}</BilingualText>{' '}
-            <Link to="/register" className="auth-footer-link"><BilingualText>{"Đăng ký miễn phí"}</BilingualText></Link>
+          <p className="auth-footer-text">
+            <BilingualText vi="Chưa có tài khoản?" en="Don't have an account?" />{' '}
+            <Link to="/register" className="auth-footer-link">
+              <BilingualText vi="Đăng ký miễn phí" en="Sign up for free" />
+            </Link>
           </p>
         </main>
+
         <AuthFooter />
       </div>
 
-      {/* Right Panel */}
-      <aside className="auth-right-panel" aria-label="Giới thiệu HolaVietnamese">
-        <div className="auth-drum-bg">
-          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
-        </div>
-        <div className="auth-visual-topline"><span /><BilingualText>{"Học tiếng Việt theo cách của bạn"}</BilingualText></div>
-        <div className="auth-hero-card">
-          <div className="auth-quote-mark">“</div>
-          <h2 className="auth-hero-title"><BilingualText vi={<>Mỗi ngày một chút,<br />tiếng Việt gần hơn.</>} en="A little each day. Vietnamese feels closer." /></h2>
-          <p className="auth-hero-desc"><BilingualText>{"Bài học thực tế, lộ trình cá nhân hóa và tiến độ luôn được lưu lại cho riêng bạn."}</BilingualText></p>
-          <div className="auth-hero-chips">
-            <span className="auth-chip"><BilingualText>{"✓ Học theo lộ trình"}</BilingualText></span>
-            <span className="auth-chip"><BilingualText>{"✓ Theo dõi tiến độ"}</BilingualText></span>
-            <span className="auth-chip"><BilingualText>{"✓ Văn hóa bản địa"}</BilingualText></span>
-          </div>
-        </div>
-      </aside>
+      {/* Right Panel: Exact Dong Son Visual from Figma Reference */}
+      <AuthRightPanel />
     </div>
   );
 }

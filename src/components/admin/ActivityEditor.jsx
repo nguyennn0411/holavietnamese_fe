@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { contentService } from '@/services/contentService';
 import { Notice } from '@/components/common/Ui';
@@ -24,7 +24,7 @@ export function ActivityEditor({ initial, lessonId, onSaved }) {
     } catch(err){setError(err.message);}finally{setBusy(false);}
   }
   return <form onSubmit={save}><h2><BilingualText>{initial.id?'Chỉnh sửa hoạt động':'Hoạt động mới'}</BilingualText></h2>
-    <label><BilingualText>{"Loại hoạt động"}</BilingualText><select value={form.activityType} onChange={event=>setForm({...form,activityType:event.target.value})}>{types.map(type=><option key={type} value={type}>{bilingualLabel(type)}</option>)}</select></label>
+    <label><BilingualText>{"Loại hoạt động"}</BilingualText><select value={form.activityType} onChange={event=>setForm({...form,activityType:event.target.value})}>{types.map(type=><option key={type} value={type}>{vietnameseLabel(type)}</option>)}</select></label>
     <label><BilingualText>{"Tiêu đề"}</BilingualText><input required value={form.title} onChange={event=>setForm({...form,title:event.target.value})}/></label>
     <label><BilingualText>{"Tiêu đề tiếng Việt"}</BilingualText><input value={form.titleVi||''} onChange={event=>setForm({...form,titleVi:event.target.value})}/></label>
     <label><BilingualText>{"Hướng dẫn"}</BilingualText><textarea value={form.instruction||''} onChange={event=>setForm({...form,instruction:event.target.value})}/></label>
@@ -42,7 +42,7 @@ export function ActivityEditor({ initial, lessonId, onSaved }) {
     {form.activityType==='QUIZ' && <label><BilingualText>{"Quiz liên kết"}</BilingualText><input type="number" min="1" required value={form.quizId||''} onChange={event=>setForm({...form,quizId:event.target.value})}/><a className="text-link" href="/admin/quizzes"><BilingualText>{"Mở danh sách quiz →"}</BilingualText></a></label>}
     {form.activityType==='GRAMMAR' && <label><BilingualText>{"ID chủ đề ngữ pháp (cách nhau bằng dấu phẩy)"}</BilingualText><input value={form.grammarTopicIds.join(',')} onChange={event=>setForm({...form,grammarTopicIds:event.target.value.split(',').map(value=>Number(value.trim())).filter(value=>value>0)})}/></label>}
     <label><BilingualText>{"Điểm tối đa"}</BilingualText><input type="number" min="0" required value={form.maxScore} onChange={event=>setForm({...form,maxScore:event.target.value})}/></label>
-    <label><BilingualText>{"Trạng thái"}</BilingualText><select value={form.status} onChange={event=>setForm({...form,status:event.target.value})}>{['DRAFT','PUBLISHED','ARCHIVED'].map(status=><option key={status} value={status}>{bilingualLabel(status)}</option>)}</select></label>
+    <label><BilingualText>{"Trạng thái"}</BilingualText><select value={form.status} onChange={event=>setForm({...form,status:event.target.value})}>{['DRAFT','PUBLISHED','ARCHIVED'].map(status=><option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></label>
     <label className="checkbox-row"><input type="checkbox" checked={!!form.isRequired} onChange={event=>setForm({...form,isRequired:event.target.checked})}/><BilingualText>{"Bắt buộc"}</BilingualText></label>
     {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}<button disabled={busy}><BilingualText>{busy?'Đang lưu…':'Lưu hoạt động'}</BilingualText></button>
   </form>;

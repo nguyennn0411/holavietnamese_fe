@@ -1,0 +1,24 @@
+export const REGIONAL_REGIONS = [
+  { value: 'NORTH', vi: 'Miền Bắc', en: 'North' },
+  { value: 'CENTRAL', vi: 'Miền Trung', en: 'Central' },
+  { value: 'SOUTH', vi: 'Miền Nam', en: 'South' },
+];
+export const REGIONAL_STATUSES = ['DRAFT', 'PENDING_REVIEW', 'PUBLISHED', 'ARCHIVED'];
+export function regionalDraft(entry) {
+  return Object.fromEntries(['vocabularyId', 'region', 'word', 'meaning', 'pronunciation', 'audioUrl', 'exampleSentence', 'usageNote', 'status']
+    .map(key => [key, entry?.[key] ?? (key === 'status' ? 'DRAFT' : '')]));
+}
+export function regionalPayload(draft) {
+  if (!/^\d+$/.test(String(draft.vocabularyId)) || !Number.isSafeInteger(Number(draft.vocabularyId)) || Number(draft.vocabularyId) < 1) throw new Error('Vui lòng chọn từ vựng chuẩn.');
+  if (!REGIONAL_REGIONS.some(region => region.value === draft.region)) throw new Error('Vui lòng chọn miền Bắc, Trung hoặc Nam.');
+  if (!REGIONAL_STATUSES.includes(draft.status)) throw new Error('Trạng thái không hợp lệ.');
+  const text = (key, max, required = false) => {
+    const value = (draft[key] ?? '').trim();
+    if (required && !value) throw new Error('Từ biến thể và nghĩa không được để trống.');
+    if (value.length > max) throw new Error(`${key}: tối đa ${max} ký tự.`);
+    return value || null;
+  };
+  return { vocabularyId: Number(draft.vocabularyId), region: draft.region, status: draft.status,
+    word: text('word', 200, true), meaning: text('meaning', 1000, true), pronunciation: text('pronunciation', 200),
+    audioUrl: text('audioUrl', 2048), exampleSentence: text('exampleSentence', 2000), usageNote: text('usageNote', 2000) };
+}

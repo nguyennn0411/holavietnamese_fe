@@ -1,10 +1,12 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminCultureCategoriesPage() {
+  const { confirm, confirmationDialog } = useConfirmDialog();
   const [categories, setCategories] = useState(() => adminCultureAiService.getCategories());
   const [editingCategory, setEditingCategory] = useState(null);
   const [toast, setToast] = useState('');
@@ -38,8 +40,8 @@ export function AdminCultureCategoriesPage() {
     showToast('Đã lưu thông tin danh mục thành công!');
   };
 
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa danh mục "${name}"?`)) {
+  const handleDelete = async (id, name) => {
+    if (await confirm({ title: 'Xóa danh mục văn hóa?', description: `Danh mục “${name}” sẽ bị xóa khỏi hệ thống.`, confirmLabel: 'Xóa danh mục' })) {
       const remaining = adminCultureAiService.deleteCategory(id);
       setCategories(remaining);
       showToast('Đã xóa danh mục.');
@@ -48,6 +50,7 @@ export function AdminCultureCategoriesPage() {
 
   return (
     <div className="admin-content">
+      {confirmationDialog}
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           <BilingualText>{toast}</BilingualText>
@@ -77,7 +80,7 @@ export function AdminCultureCategoriesPage() {
           <thead>
             <tr>
               <th style={{ width: '80px', textAlign: 'center' }}><BilingualText>{"Thứ tự"}</BilingualText></th>
-              <th style={{ width: '60px' }}><BilingualText>{"Icon"}</BilingualText></th>
+              <th style={{ width: '60px' }}><BilingualText>{"Biểu tượng"}</BilingualText></th>
               <th><BilingualText>{"Tên danh mục & Slug"}</BilingualText></th>
               <th><BilingualText>{"Mô tả chuyên mục"}</BilingualText></th>
               <th><BilingualText>{"Số bài viết"}</BilingualText></th>
@@ -156,7 +159,7 @@ export function AdminCultureCategoriesPage() {
         <Modal title={editingCategory.id ? "Chỉnh sửa danh mục" : "Thêm danh mục văn hóa"} onClose={()=>setEditingCategory(null)}>
 <form onSubmit={handleSave}>
               <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr', gap: '12px' }}>
-                <label><BilingualText>{"Icon:"}</BilingualText><input
+                <label><BilingualText>{"Biểu tượng:"}</BilingualText><input
                     type="text"
                     value={editingCategory.icon}
                     onChange={e => setEditingCategory({ ...editingCategory, icon: e.target.value })}
@@ -169,7 +172,7 @@ export function AdminCultureCategoriesPage() {
                     type="text"
                     value={editingCategory.name}
                     onChange={e => setEditingCategory({ ...editingCategory, name: e.target.value })}
-                    placeholder={bilingualLabel("Food (Ẩm thực)...")}
+                    placeholder={vietnameseLabel("Food (Ẩm thực)...")}
                     required
                   />
                 </label>
@@ -188,7 +191,7 @@ export function AdminCultureCategoriesPage() {
                   rows={3}
                   value={editingCategory.description}
                   onChange={e => setEditingCategory({ ...editingCategory, description: e.target.value })}
-                  placeholder={bilingualLabel("Mô tả nội dung học viên sẽ khám phá trong danh mục này...")}
+                  placeholder={vietnameseLabel("Mô tả nội dung học viên sẽ khám phá trong danh mục này...")}
                 />
               </label>
 

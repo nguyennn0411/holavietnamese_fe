@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -65,19 +65,19 @@ export function AdminUsersPage() {
       {state.error && <div className="state" role="alert"><p><BilingualText>{state.error}</BilingualText></p><button onClick={load}><BilingualText>{"Thử lại"}</BilingualText></button></div>}
 
       <form className="admin-card" onSubmit={(e) => { e.preventDefault(); setQuery((q) => ({ ...q, search: input.trim(), page: 0 })); }} style={{ padding: 16, marginBottom: 20, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <input aria-label="Tìm người dùng" placeholder={bilingualLabel("Tìm tên, username hoặc email…")} value={input} onChange={(e) => setInput(e.target.value)} style={{ flex: '1 1 260px' }} />
+        <input aria-label="Tìm người dùng" placeholder={vietnameseLabel("Tìm tên, username hoặc email…")} value={input} onChange={(e) => setInput(e.target.value)} style={{ flex: '1 1 260px' }} />
         <select aria-label="Trạng thái" value={query.status} onChange={(e) => setQuery((q) => ({ ...q, status: e.target.value, page: 0 }))}>
-          <option value="">{bilingualLabel("Tất cả trạng thái")}</option><option value="ACTIVE">{bilingualLabel("ACTIVE")}</option><option value="INACTIVE">{bilingualLabel("INACTIVE")}</option><option value="LOCKED">{bilingualLabel("LOCKED")}</option><option value="DISABLED">{bilingualLabel("DISABLED")}</option>
+          <option value="">{vietnameseLabel("Tất cả trạng thái")}</option><option value="ACTIVE">{vietnameseLabel("ACTIVE")}</option><option value="INACTIVE">{vietnameseLabel("INACTIVE")}</option><option value="LOCKED">{vietnameseLabel("LOCKED")}</option><option value="DISABLED">{vietnameseLabel("DISABLED")}</option>
         </select>
         <select aria-label="Vai trò" value={query.role} onChange={(e) => setQuery((q) => ({ ...q, role: e.target.value, page: 0 }))}>
-          <option value="">{bilingualLabel("Tất cả vai trò")}</option><option value="LEARNER">{bilingualLabel("LEARNER")}</option><option value="INSTRUCTOR">{bilingualLabel("INSTRUCTOR")}</option><option value="ADMIN">{bilingualLabel("ADMIN")}</option>
+          <option value="">{vietnameseLabel("Tất cả vai trò")}</option><option value="LEARNER">{vietnameseLabel("LEARNER")}</option><option value="INSTRUCTOR">{vietnameseLabel("INSTRUCTOR")}</option><option value="ADMIN">{vietnameseLabel("ADMIN")}</option>
         </select>
         <button type="submit"><BilingualText>{"Tìm kiếm"}</BilingualText></button>
       </form>
 
       <div className="admin-card" style={{ padding: 0, overflowX: 'auto' }}>
         {state.loading ? <div className="state"><BilingualText>{"Đang tải người dùng…"}</BilingualText></div> : users.length === 0 ? <div className="state"><BilingualText>{"Không tìm thấy người dùng phù hợp."}</BilingualText></div> : (
-          <table className="admin-table"><thead><tr><th><BilingualText>{"Người dùng"}</BilingualText></th><th><BilingualText>{"Email"}</BilingualText></th><th><BilingualText>{"Vai trò"}</BilingualText></th><th><BilingualText>{"Trạng thái"}</BilingualText></th><th style={{ textAlign: 'right' }}><BilingualText>{"Thao tác"}</BilingualText></th></tr></thead>
+          <table className="admin-table"><thead><tr><th><BilingualText>{"Người dùng"}</BilingualText></th><th><BilingualText>{"Thư điện tử"}</BilingualText></th><th><BilingualText>{"Vai trò"}</BilingualText></th><th><BilingualText>{"Trạng thái"}</BilingualText></th><th style={{ textAlign: 'right' }}><BilingualText>{"Thao tác"}</BilingualText></th></tr></thead>
             <tbody>{users.map((user) => {
               const userRoles = user.roles ?? (user.role ? [user.role] : []);
               return <tr key={user.id ?? user.userId}>

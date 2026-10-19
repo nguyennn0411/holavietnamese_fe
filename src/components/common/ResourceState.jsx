@@ -1,13 +1,14 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { Link, useLocation } from 'react-router-dom'
-export function ResourceState({ resource, children }) {
+import { AlertCircle, RefreshCw } from 'lucide-react'
+export function ResourceState({ resource, children, skeletonRows = 3 }) {
   const location = useLocation()
-  if (resource.loading) return <div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><p><BilingualText>{"Đang tải nội dung…"}</BilingualText></p></div>
-  if (resource.error) return <div className="state" role="alert">
-    <p><BilingualText>{resource.error.message}</BilingualText></p>
+  if (resource.loading) return <div className="resource-skeleton" role="status" aria-label="Đang tải nội dung"><div className="skeleton skeleton--title"/>{Array.from({ length: skeletonRows }, (_, index) => <div className="skeleton skeleton--row" key={index}/>)}</div>
+  if (resource.error) return <div className="state resource-error" role="alert">
+    <span className="state-symbol" aria-hidden="true"><AlertCircle size={28}/></span><h2><BilingualText>{"Không thể tải nội dung"}</BilingualText></h2><p><BilingualText>{resource.error.message}</BilingualText></p>
     {resource.error.status === 401
       ? <Link className="button" to="/login" state={{ from: location.pathname + location.search }}><BilingualText>{"Đăng nhập"}</BilingualText></Link>
-      : resource.reload && <button onClick={resource.reload}><BilingualText>{"Thử lại"}</BilingualText></button>}
+      : resource.reload && <button onClick={resource.reload}><RefreshCw size={16}/><BilingualText>{"Thử lại"}</BilingualText></button>}
   </div>
   return children(resource.data)
 }

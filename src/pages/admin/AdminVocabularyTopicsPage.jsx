@@ -1,9 +1,12 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { useEffect, useRef, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { ResourceState } from '@/components/common/ResourceState';
 import { VOCABULARY_STATUSES } from '@/models/AdminVocabulary';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
+import { Breadcrumb } from '@/components/common/Ui';
+import { ROUTES } from '@/constants/routes';
+import '@/components/vocabulary/admin/admin-vocabulary.css';
 
 const emptyTopic = {
   name: '',
@@ -71,6 +74,7 @@ function AdminVocabularyTopicModal({
   const [draft, setDraft] = useState(() => ({ ...emptyTopic }));
   const [loading, setLoading] = useState(mode === 'edit');
   const [busy, setBusy] = useState(false);
+  const submitting = useRef(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -113,6 +117,8 @@ function AdminVocabularyTopicModal({
 
   const submit = async (event) => {
     event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
 
     setError('');
     setBusy(true);
@@ -129,6 +135,7 @@ function AdminVocabularyTopicModal({
     } catch (saveError) {
       setError(saveError.message);
     } finally {
+      submitting.current = false;
       setBusy(false);
     }
   };
@@ -152,7 +159,7 @@ function AdminVocabularyTopicModal({
           <p><BilingualText>{"Đang tải chủ đề…"}</BilingualText></p>
         </div>
       ) : (
-        <form onSubmit={submit}>
+        <form className="admin-vocabulary-topic-form" onSubmit={submit}>
           {error && (
             <div
               className="ui-notice ui-notice--error"
@@ -179,7 +186,7 @@ function AdminVocabularyTopicModal({
                 value={draft.slug}
                 maxLength={120}
                 required
-                placeholder={bilingualLabel("Ví dụ: greetings")}
+                placeholder={vietnameseLabel("Ví dụ: greetings")}
                 onChange={(event) =>
                   change('slug', event.target.value)
                 }
@@ -221,7 +228,7 @@ function AdminVocabularyTopicModal({
                     key={status}
                     value={status}
                   >
-                    {bilingualLabel(status)}
+                    {vietnameseLabel(status)}
                   </option>
                 ))}
               </select>
@@ -327,15 +334,17 @@ export function AdminVocabularyTopicsPage() {
   };
 
   return (
-    <div>
+    <div className="admin-vocabulary-page admin-vocabulary-topics-page">
+      <Breadcrumb items={[{ label: 'Từ vựng', to: ROUTES.ADMIN_VOCABULARY }, { label: 'Chủ đề từ vựng' }]} />
       <div
-        className="actions"
+        className="page-header"
         style={{
           justifyContent: 'space-between',
           marginBottom: 20,
         }}
       >
         <div>
+          <p className="eyebrow"><BilingualText>Từ vựng tiếng Việt</BilingualText></p>
           <h1><BilingualText>{"Chủ đề từ vựng"}</BilingualText></h1>
           <p className="muted"><BilingualText>{"Quản lý các chủ đề dùng để phân loại từ vựng."}</BilingualText></p>
         </div>

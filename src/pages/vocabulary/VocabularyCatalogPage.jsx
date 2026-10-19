@@ -7,6 +7,7 @@ import { VocabularyOverview } from '@/components/vocabulary/VocabularyNavigation
 import { SaveVocabularyButton } from '@/components/vocabulary/SaveVocabularyButton';
 import { ResourceState } from '@/components/common/ResourceState';
 import { vocabularyCatalogService } from '@/services/vocabularyCatalogService';
+import { useVocabulary } from '@/hooks/useVocabulary';
 import '@/components/vocabulary/vocabulary.css';
 
 const emptyFilters = {
@@ -17,6 +18,8 @@ const emptyFilters = {
 };
 
 export function VocabularyCatalogPage() {
+  const notebook = useVocabulary({ search: '', courseId: '', lessonId: '' });
+  const savedWords = new Map((notebook.data || []).filter(entry => entry.masterVocabularyId != null).map(entry => [entry.masterVocabularyId, entry]));
   const [query, setQuery] = useState({ ...emptyFilters });
   const [keyword, setKeyword] = useState('');
   const [revision, setRevision] = useState(0);
@@ -82,12 +85,13 @@ export function VocabularyCatalogPage() {
         eyebrow="Khám phá từng từ một"
         title="Từ vựng tiếng Việt"
         description="Khám phá những từ vựng đã được xuất bản và lưu những từ bạn muốn ôn lại."
-        actions={
+        actions={<>
             <Link
               to={ROUTES.VOCABULARY_REVIEW}
               className="button"
             ><BilingualText>{"Ôn từ vựng →"}</BilingualText></Link>
-        }
+            <Link className="button secondary" to={ROUTES.REGIONAL_VIETNAMESE}><BilingualText vi="Tiếng Việt vùng miền" en="Regional Vietnamese" /></Link>
+        </>}
       />
 
       <VocabularyOverview key={overviewRevision} active="catalog">
@@ -152,6 +156,7 @@ export function VocabularyCatalogPage() {
           aria-pressed={String(query.topicId) === String(topic.id)} onClick={() => filter('topicId', String(topic.id))}>{topic.name}</button>)}
       </div>
 
+      {notebook.error && <p role="alert">{notebook.error.message} <button type="button" className="secondary" onClick={notebook.reload}><BilingualText>{"Thử lại"}</BilingualText></button></p>}
       <ResourceState
         resource={{
           ...resource,
@@ -173,7 +178,7 @@ export function VocabularyCatalogPage() {
                   className="card catalog-word-card"
                   key={item.id}
                 >
-                  <SaveVocabularyButton key={item.id} entry={item} compact onSaved={() => setOverviewRevision(value => value + 1)} onDeleted={() => setOverviewRevision(value => value + 1)} />
+                  <SaveVocabularyButton key={item.id} entry={item} compact initialSavedEntry={savedWords.get(item.id) || null} checking={notebook.loading} checkError={notebook.error} onSaved={() => { notebook.reload(); setOverviewRevision(value => value + 1); }} onDeleted={() => { notebook.reload(); setOverviewRevision(value => value + 1); }} />
                   <div className="row catalog-word-meta">
                     <span className="badge">
                       {item.partOfSpeech}
