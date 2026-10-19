@@ -1,7 +1,8 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, BilingualTextProvider } from '@/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
+import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { AdminRoute } from '@/components/common/AdminRoute';
@@ -19,7 +20,15 @@ const RegisterPage = lazy(() => import('@/pages/RegisterPage').then(module => ({
 const VerifyEmailPage = lazy(() => import('@/pages/auth/VerifyEmailPage').then(module => ({ default: module.VerifyEmailPage })));
 const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage').then(module => ({ default: module.ForgotPasswordPage })));
 const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })));
-const OnboardingPage = lazy(() => import('@/pages/auth/OnboardingPage').then(module => ({ default: module.OnboardingPage })));
+const WelcomePage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.WelcomePage })));
+const ReasonPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.ReasonPage })));
+const LevelPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.LevelPage })));
+const BenefitsPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.BenefitsPage })));
+const DailyGoalPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.DailyGoalPage })));
+const LearningPathPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.LearningPathPage })));
+const FirstLessonPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.FirstLessonPage })));
+const PlacementTestPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.PlacementTestPage })));
+const CompletionPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.CompletionPage })));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then(module => ({ default: module.NotFoundPage })));
 const ForbiddenPage = lazy(() => import('@/pages/ForbiddenPage').then(module => ({ default: module.ForbiddenPage })));
 
@@ -33,8 +42,6 @@ const NotificationsPage = lazy(() => import('@/pages/notifications/Notifications
 
 // EdTech Next-Gen Experience
 const DashboardScreen = lazy(() => import('@/pages/edtech/DashboardScreen').then(module => ({ default: module.DashboardScreen })));
-const InteractiveLessonScreen = lazy(() => import('@/pages/edtech/InteractiveLessonScreen').then(module => ({ default: module.InteractiveLessonScreen })));
-const VocabularyHubScreen = lazy(() => import('@/pages/edtech/VocabularyHubScreen').then(module => ({ default: module.VocabularyHubScreen })));
 
 // Courses & Vocabulary Pages (Người 2 & Người 3)
 const CourseListPage = lazy(() => import('@/pages/courses/CourseListPage').then(module => ({ default: module.CourseListPage })));
@@ -47,6 +54,10 @@ const VocabularyNotebookPage = lazy(() => import('@/pages/vocabulary/VocabularyN
 const VocabularyNotebookDetailPage = lazy(() => import('@/pages/vocabulary/VocabularyNotebookDetailPage').then(module => ({ default: module.VocabularyNotebookDetailPage })));
 const VocabularyCatalogPage = lazy(() => import('@/pages/vocabulary/VocabularyCatalogPage').then(module => ({ default: module.VocabularyCatalogPage })));
 const VocabularyDetailPage = lazy(() => import('@/pages/vocabulary/VocabularyDetailPage').then(module => ({ default: module.VocabularyDetailPage })));
+const RegionalVietnamesePage = lazy(() => import('@/pages/regional/RegionalVietnamesePage').then(module => ({ default: module.RegionalVietnamesePage })));
+const AdminRegionalLanguagePage = lazy(() => import('@/pages/admin/AdminRegionalLanguagePage').then(module => ({ default: module.AdminRegionalLanguagePage })));
+const AdminImportPage = lazy(() => import('@/pages/admin/AdminImportPage').then(module => ({ default: module.AdminImportPage })));
+const AdminImportHistoryPage = lazy(() => import('@/pages/admin/AdminImportHistoryPage').then(module => ({ default: module.AdminImportHistoryPage })));
 // Văn hóa, AI Tutor & Roleplay Pages (Người 4)
 const CultureExplorePage = lazy(() => import('@/pages/culture/CultureExplorePage').then(module => ({ default: module.CultureExplorePage })));
 const CultureDetailPage = lazy(() => import('@/pages/culture/CultureDetailPage').then(module => ({ default: module.CultureDetailPage })));
@@ -68,6 +79,7 @@ const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage').t
 const AdminVocabularyPage = lazy(() => import('@/pages/admin/AdminVocabularyPage').then(module => ({ default: module.AdminVocabularyPage })));
 const AdminDestinationsPage = lazy(() => import('@/pages/admin/AdminDestinationsPage').then(module => ({ default: module.AdminDestinationsPage })));
 const AdminDestinationDetailPage = lazy(() => import('@/pages/admin/AdminDestinationDetailPage').then(module => ({ default: module.AdminDestinationDetailPage })));
+const AdminJourneyPage = lazy(() => import('@/pages/admin/AdminJourneyPage').then(module => ({ default: module.AdminJourneyPage })));
 const AdminVocabularyTopicsPage = lazy(() =>
   import('@/pages/admin/AdminVocabularyTopicsPage')
     .then((module) => ({ default: module.AdminVocabularyTopicsPage }))
@@ -98,30 +110,45 @@ const AdminQuestionBankPage = lazy(() => import('@/pages/admin/AdminQuizPages').
 const AdminQuizBuilderPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizBuilderPage })));
 const AdminQuizPreviewPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizPreviewPage })));
 
+function RouteTextLanguage({ children }) {
+  const { pathname } = useLocation();
+  const isAdmin = pathname === ROUTES.ADMIN || pathname.startsWith(`${ROUTES.ADMIN}/`);
+  return <BilingualTextProvider language={isAdmin ? 'vi' : 'bilingual'}>{children}</BilingualTextProvider>;
+}
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter><RouteTextLanguage>
       <Suspense fallback={null}><AppToaster /></Suspense>
       <ErrorBoundary>
-        <AuthProvider>
+        <AuthProvider><OnboardingProvider>
           <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><BilingualText>{"Đang tải trang…"}</BilingualText></div>}><Routes>
             {/* Standalone Fullscreen Auth Routes (Người 1) */}
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+            <Route path={ROUTES.SIGNUP} element={<RegisterPage />} />
+            <Route path={ROUTES.WELCOME} element={<WelcomePage />} />
+            <Route path={ROUTES.ONBOARDING} element={<Navigate to="/onboarding/reason" replace />} />
+            <Route path="/onboarding/reason" element={<ReasonPage />} />
+            <Route path="/onboarding/level" element={<LevelPage />} />
+            <Route path="/onboarding/benefits" element={<BenefitsPage />} />
+            <Route path="/onboarding/daily-goal" element={<DailyGoalPage />} />
+            <Route path="/onboarding/learning-path" element={<LearningPathPage />} />
+            <Route path="/onboarding/first-lesson" element={<FirstLessonPage />} />
+            <Route path="/onboarding/placement-test" element={<PlacementTestPage />} />
+            <Route path="/onboarding/completed" element={<CompletionPage />} />
             <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
             <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
             <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
-            </Route>
+            <Route path="/forbidden" element={<ForbiddenPage />} />
             {/* Distraction-Free Fullscreen Interactive Lesson */}
-            <Route path={ROUTES.EDTECH_LESSON} element={<InteractiveLessonScreen />} />
+            <Route path={ROUTES.EDTECH_LESSON} element={<Navigate to={ROUTES.EDTECH_DASHBOARD} replace />} />
 
             {/* Learner Main Layout */}
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<HomePage />} />
               <Route path={ROUTES.EDTECH_DASHBOARD} element={<DashboardScreen />} />
-              <Route path={ROUTES.EDTECH_VOCABULARY} element={<VocabularyHubScreen />} />
+              <Route path={ROUTES.EDTECH_VOCABULARY} element={<Navigate to={ROUTES.VOCABULARY} replace />} />
               <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
               <Route path={ROUTES.COURSES} element={<CourseListPage />} />
               <Route path={ROUTES.ALPHABET} element={<AlphabetPage />} />
@@ -132,6 +159,7 @@ function App() {
               <Route path={ROUTES.VOCABULARY_NOTEBOOK} element={<VocabularyNotebookPage />} />
               <Route path={ROUTES.VOCABULARY_NOTEBOOK_DETAIL} element={<VocabularyNotebookDetailPage />} />
               <Route path={ROUTES.VOCABULARY_REVIEW} element={<VocabularyReviewPage />} />
+              <Route path={ROUTES.REGIONAL_VIETNAMESE} element={<RegionalVietnamesePage />} />
               <Route path={ROUTES.EXPLORE} element={<ExploreVietnamPage />} />
               <Route path={ROUTES.DESTINATION_DETAIL} element={<DestinationDetailPage />} />
               <Route path={ROUTES.EXPLORE_VIETNAM} element={<ExploreVietnamPage />} />
@@ -179,8 +207,12 @@ function App() {
                 <Route path={ROUTES.ADMIN_QUIZ_BUILDER} element={<AdminQuizBuilderPage />} />
                 <Route path={ROUTES.ADMIN_QUIZ_PREVIEW} element={<AdminQuizPreviewPage />} />
                 <Route path={ROUTES.ADMIN_VOCABULARY} element={<AdminVocabularyPage />} />
+                <Route path={ROUTES.ADMIN_REGIONAL_LANGUAGE} element={<AdminRegionalLanguagePage />} />
+                <Route path={ROUTES.ADMIN_IMPORT} element={<AdminImportPage />} />
+                <Route path={ROUTES.ADMIN_IMPORT_HISTORY} element={<AdminImportHistoryPage />} />
                 <Route path={ROUTES.ADMIN_DESTINATIONS} element={<AdminDestinationsPage />} />
                 <Route path={ROUTES.ADMIN_DESTINATION_DETAIL} element={<AdminDestinationDetailPage />} />
+                <Route path={ROUTES.ADMIN_JOURNEY} element={<AdminJourneyPage />} />
                 <Route path={ROUTES.ADMIN} element={<AdminDashboardPage />} />
                 <Route path={ROUTES.ADMIN_USERS} element={<AdminUsersPage />} />
                 <Route path={ROUTES.ADMIN_USER_DETAIL} element={<AdminUserDetailPage />} />
@@ -205,9 +237,9 @@ function App() {
               </Route>
             </Route>
           </Routes></Suspense>
-        </AuthProvider>
+        </OnboardingProvider></AuthProvider>
       </ErrorBoundary>
-    </BrowserRouter>
+    </RouteTextLanguage></BrowserRouter>
   );
 }
 

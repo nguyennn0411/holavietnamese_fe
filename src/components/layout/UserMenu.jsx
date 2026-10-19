@@ -5,12 +5,28 @@ import { ROUTES } from '@/constants/routes';
 import { ContentImage } from '@/components/common/ContentImage';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, Sparkles } from 'lucide-react';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function UserMenu({ user, isAdmin, onLogout }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const displayName = user?.fullName || user?.username || 'Học viên';
   const reduceMotion = useReducedMotion();
+  const { confirm, confirmationDialog } = useConfirmDialog();
+
+  const handleLogout = async () => {
+    closeMenu();
+    const confirmed = await confirm({
+      title: <BilingualText vi="Đăng xuất khỏi HolaVietnamese?" en="Log out of HolaVietnamese?" />,
+      description: <BilingualText vi="Bạn có chắc chắn muốn đăng xuất không?" en="Are you sure you want to log out?" />,
+      confirmLabel: <BilingualText vi="Đăng xuất" en="Log Out" />,
+      cancelLabel: <BilingualText vi="Hủy" en="Cancel" />,
+      tone: 'danger',
+    });
+    if (confirmed) {
+      onLogout();
+    }
+  };
 
   useEffect(() => {
     const closeOnOutsideClick = (event) => {
@@ -49,10 +65,11 @@ export function UserMenu({ user, isAdmin, onLogout }) {
           <Link to="/settings" onClick={closeMenu} role="menuitem"><Settings size={16}/><BilingualText>{"Cài đặt học tập"}</BilingualText></Link>
           <Link to="/achievements" onClick={closeMenu} role="menuitem"><Trophy size={16}/><BilingualText>{"Thành tích"}</BilingualText></Link>
           {isAdmin && <Link to="/admin" onClick={closeMenu} role="menuitem" className="user-menu__admin"><Shield size={16}/><BilingualText>{"Trang quản trị"}</BilingualText></Link>}
-          <button type="button" className="user-menu__logout" onClick={() => { closeMenu(); onLogout(); }} role="menuitem"><LogOut size={16}/><BilingualText>{"Đăng xuất"}</BilingualText></button>
+          <button type="button" className="user-menu__logout" onClick={handleLogout} role="menuitem"><LogOut size={16}/><BilingualText>{"Đăng xuất"}</BilingualText></button>
         </motion.div>
       )}
       </AnimatePresence>
+      {confirmationDialog}
     </div>
   );
 }

@@ -317,7 +317,7 @@ export function MyLearningPage() {
                         key={quiz.id}
                       >
                         <div className="space-y-1">
-                          <strong className="block text-sm font-bold text-[#431914]">{quiz.quizName}</strong>
+                          <strong className="block text-sm font-bold text-[#431914]">{quiz.quizName || quiz.quiz_name}</strong>
                           <p className="text-[11px] text-[#78685B] flex items-center gap-1">
                             <Calendar size={12} />
                             {quiz.date}

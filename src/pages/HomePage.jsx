@@ -12,9 +12,13 @@ import { LearnerDashboard } from '@/components/home/learner/LearnerDashboard';
 export function HomePage() {
   const { user, isAuthenticated } = useAuth();
 
+  if (isAuthenticated) {
+    return <LearnerDashboard user={user} />;
+  }
+
   return (
     <div className="homepage-heritage-root relative w-full min-h-screen">
-      {/* 
+      {/*
         Mặt trống đồng Đông Sơn - Nền chìm toàn màn hình (Cả Guest và Learner)
         - Cố định trung tâm màn hình (fixed inset-0), hiện diện trang trọng ở mọi vị trí cuộn
         - Hoa văn mặt trời, chim lạc và các vành đồng tâm bao phủ toàn bộ khung nhìn
@@ -24,7 +28,7 @@ export function HomePage() {
 
       {/* Nội dung trang chủ */}
       <div className="relative z-10 w-full">
-        {isAuthenticated ? <LearnerDashboard user={user} /> : <GuestHome />}
+        <GuestHome />
       </div>
     </div>
   );

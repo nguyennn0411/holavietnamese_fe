@@ -5,10 +5,12 @@ import { ContentImage } from '@/components/common/ContentImage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { Breadcrumb, EmptyState, Notice, PageHeader } from '@/components/common/Ui';
 import { DestinationForm } from '@/components/destinations/DestinationForm';
+import { DestinationContentEditor } from '@/components/destinations/DestinationContentEditor';
 import { DestinationMetadata, DestinationRegion, DestinationStatusBadge } from '@/components/destinations/DestinationMetadata';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { adminDestinationService } from '@/services/destinationService';
 import { ROUTES } from '@/constants/routes';
+import '@/components/destinations/destinations.css';
 
 export function AdminDestinationDetailPage() {
   const { id } = useParams();
@@ -24,10 +26,10 @@ export function AdminDestinationDetailPage() {
 
   if (resource.error?.status === 404) return <EmptyState title="Không tìm thấy điểm đến"><Link className="button secondary" to={ROUTES.ADMIN_DESTINATIONS}><BilingualText vi="Về danh sách điểm đến" en="Back to destinations" /></Link></EmptyState>;
 
-  return <div>
+  return <div className="admin-destinations-page admin-destination-detail-page">
     <Breadcrumb items={[{ label: 'Điểm đến', to: ROUTES.ADMIN_DESTINATIONS }, { label: editing ? 'Chỉnh sửa' : 'Chi tiết' }]} />
     <ResourceState resource={resource}>{entry => <>
-      <PageHeader title={<BilingualText vi={entry.nameVi} en={entry.nameEn} />} actions={!editing && <button type="button" onClick={() => { setMessage(''); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa điểm đến" en="Edit destination" /></button>} />
+      <PageHeader eyebrow="Quản lý điểm đến" title={<BilingualText vi={entry.nameVi} en={entry.nameEn} />} actions={!editing && <button type="button" onClick={() => { setMessage(''); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa điểm đến" en="Edit destination" /></button>} />
       {message && <Notice kind="success"><BilingualText vi={message} en="Destination saved." /></Notice>}
       <section className="admin-card">
         {editing ? <DestinationForm key={entry.id} entry={entry} onSaved={saved} onCancel={() => setParams({})} /> : <>
@@ -37,6 +39,7 @@ export function AdminDestinationDetailPage() {
         </>}
       </section>
       <section className="admin-card" style={{ marginTop: 20 }}><DestinationMetadata entry={entry} /></section>
+      {!editing && <DestinationContentEditor key={entry.id} destinationId={entry.id} />}
       <div className="actions" style={{ marginTop: 20 }}><Link className="button secondary" to={ROUTES.ADMIN_DESTINATIONS}><BilingualText vi="Về danh sách điểm đến" en="Back to destinations" /></Link></div>
     </>}</ResourceState>
   </div>;

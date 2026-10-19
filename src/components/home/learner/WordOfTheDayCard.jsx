@@ -11,14 +11,14 @@ export function WordOfTheDayCard({ wordData = WORD_OF_THE_DAY }) {
     <section className="bg-[#FFF9EE]/92 backdrop-blur-xs border border-[#DECBB4] rounded-3xl p-6 shadow-2xs space-y-3 text-left">
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-black uppercase tracking-wider text-[#A62A24] bg-[#F5E1D8] px-2.5 py-0.5 rounded-md">
-          Từ vựng & Văn hóa trong ngày
+          Word & Culture of the Day
         </span>
         <button
           type="button"
           onClick={() => speakVietnamese(wordData.speechText || wordData.word)}
           className="!min-h-0 !min-w-0 !p-0 w-8 h-8 rounded-full bg-white border border-[#DECBB4] text-[#A62A24] flex items-center justify-center hover:bg-[#A62A24] hover:text-white transition-all shadow-2xs shrink-0 cursor-pointer group/wod audio-btn"
-          title="Nghe phát âm “Dạ”"
-          aria-label="Nghe phát âm Dạ"
+          title={`Listen to: ${wordData.speechText || wordData.word}`}
+          aria-label={`Listen to pronunciation of ${wordData.word}`}
         >
           <Volume2 className="w-4 h-4 shrink-0 transition-transform group-hover/wod:scale-110" strokeWidth={2.2} />
         </button>

@@ -17,7 +17,7 @@ export function CourseCard({ course, enrollment }) {
       {/* Thumbnail area with overlay badges */}
       <div className="relative overflow-hidden aspect-[16/10] bg-[#EEE3D1]">
         <CourseThumbnail course={course} />
-        
+
         {/* Level badge floating */}
         <div className="absolute top-3 left-3 z-10">
           <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#24382B] text-[#FFF9EE] shadow-sm tracking-wide">

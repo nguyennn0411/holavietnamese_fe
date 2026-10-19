@@ -29,7 +29,7 @@ export function AppHeader({ isAuthenticated, user, loading, stats, onLogout }) {
           ) : (
             <div className="site-header__guest-actions">
               <Link to="/login" className="site-header__login"><BilingualText>{"Đăng nhập"}</BilingualText></Link>
-              <Link to="/register" className="site-header__cta"><BilingualText>{"Học miễn phí"}</BilingualText></Link>
+              <Link to="/welcome" className="site-header__cta"><BilingualText>{"Học miễn phí"}</BilingualText></Link>
             </div>
           )}
         </div>

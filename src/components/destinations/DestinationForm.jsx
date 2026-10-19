@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { Notice } from '@/components/common/Ui';
 import { destinationDraft, destinationPayload, DESTINATION_REGIONS, DESTINATION_STATUSES } from '@/models/Destination';
@@ -43,7 +43,7 @@ export function DestinationForm({ entry, onSaved, onCancel, onBusyChange }) {
     { key: 'imageUrl', vi: 'Đường dẫn ảnh', en: 'Image URL', max: 2048 },
   ];
 
-  return <form onSubmit={submit}>
+  return <form className="destination-form" onSubmit={submit}>
     <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
       {fields.map(field => <label key={field.key} htmlFor={`${formId}-${field.key}`}>
         <BilingualText vi={`${field.vi}${field.required ? ' *' : ''}`} en={field.en} />
@@ -53,13 +53,13 @@ export function DestinationForm({ entry, onSaved, onCancel, onBusyChange }) {
       </label>)}
       <label htmlFor={`${formId}-region`}><BilingualText vi="Vùng miền *" en="Region" />
         <select id={`${formId}-region`} value={draft.region} onChange={event => change('region', event.target.value)} required>
-          <option value="">Chọn vùng miền · Select a region</option>
-          {DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi} · {region.en}</option>)}
+          <option value="">Chọn vùng miền</option>
+          {DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi}</option>)}
         </select>
       </label>
       <label htmlFor={`${formId}-status`}><BilingualText>Trạng thái</BilingualText>
         <select id={`${formId}-status`} value={draft.status} onChange={event => change('status', event.target.value)}>
-          {DESTINATION_STATUSES.map(status => <option key={status} value={status}>{bilingualLabel(status)}</option>)}
+          {DESTINATION_STATUSES.map(status => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}
         </select>
       </label>
       {draft.imageUrl && <ContentImage src={draft.imageUrl} alt={draft.nameVi || 'Ảnh điểm đến'} className="figma-art" style={{ maxHeight: 180, objectFit: 'cover', borderRadius: 8 }} />}

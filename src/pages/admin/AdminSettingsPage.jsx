@@ -100,7 +100,7 @@ export function AdminSettingsPage() {
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <strong style={{ display: 'block', color: 'var(--color-ink)' }}><BilingualText>{"Chế độ bảo trì hệ thống (Maintenance Mode)"}</BilingualText></strong>
+              <strong style={{ display: 'block', color: 'var(--color-ink)' }}><BilingualText>{"Chế độ bảo trì hệ thống"}</BilingualText></strong>
               <span style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}><BilingualText>{"Chỉ cho phép tài khoản Admin đăng nhập khi bảo trì"}</BilingualText></span>
             </div>
             <input

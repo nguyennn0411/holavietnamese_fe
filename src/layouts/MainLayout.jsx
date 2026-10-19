@@ -1,31 +1,26 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { useAuth } from '@/application/context/AuthContext';
-import { AppFooter, AppHeader, LayoutToast } from '@/components/layout';
+import { AppFooter, LayoutToast } from '@/components/layout';
 import { learnerService } from '@/services/learnerService';
 import { PageTransition } from '@/components/common/PageTransition';
-import { AiTutorFloatingButton } from '@/components/common/AiTutorFloatingButton';
+import { LearnerSidebar, LearnerTopbar } from '@/components/learner/LearnerShell';
+import { GuestMobileDrawer, GuestSidebar, GuestTopbar } from '@/components/guest/GuestShell';
 
 export function MainLayout() {
-  const { isAuthenticated, user, logout, loading } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
-  const [learnerStats, setLearnerStats] = useState(() => {
-    try {
-      const saved = localStorage.getItem('learner_stats');
-      if (saved) return JSON.parse(saved);
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        const u = JSON.parse(savedUser);
-        return { streak: u.streakCount ?? 0, xp: u.totalXp ?? 0, hearts: u.hearts ?? 5 };
-      }
-    } catch {
-      // ignore
-    }
-    return { streak: 0, xp: 0, hearts: 5 };
-  });
+  const [learnerStats, setLearnerStats] = useState({ streak: 0, xp: 0 });
   const [toastError, setToastError] = useState(location.state?.authError || null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    const saved = localStorage.getItem('hola:sidebar-collapsed');
+    if (saved !== null) return saved === 'true';
+    const legacyKey = isAuthenticated ? 'hola:learner-sidebar' : 'hola:guest-sidebar';
+    return localStorage.getItem(legacyKey) === 'collapsed';
+  });
+  const [guestDrawerOpen, setGuestDrawerOpen] = useState(false);
 
   useEffect(() => {
     if (!location.state?.authError) return undefined;
@@ -35,56 +30,68 @@ export function MainLayout() {
   }, [location.state]);
 
   useEffect(() => {
-    const handleUpdate = (e) => {
-      if (e.detail) {
-        setLearnerStats((prev) => {
-          const next = {
-            streak: e.detail.streakCount ?? e.detail.streak ?? prev.streak,
-            xp: e.detail.totalXp ?? e.detail.xp ?? prev.xp,
-            hearts: e.detail.hearts ?? prev.hearts ?? 5,
-          };
-          localStorage.setItem('learner_stats', JSON.stringify(next));
-          return next;
-        });
-      }
-    };
-    window.addEventListener('learner-stats-updated', handleUpdate);
-    return () => window.removeEventListener('learner-stats-updated', handleUpdate);
-  }, []);
-
-  useEffect(() => {
     if (!isAuthenticated) {
-      setLearnerStats({ streak: 0, xp: 0, hearts: 5 });
+      setLearnerStats({ streak: 0, xp: 0 });
       return;
     }
 
     learnerService.getProgressData()
-      .then((progress) => {
-        const stats = {
-          streak: progress.streakCount ?? 0,
-          xp: progress.totalXp ?? 0,
-          hearts: progress.hearts ?? 5,
-        };
-        setLearnerStats(stats);
-        localStorage.setItem('learner_stats', JSON.stringify(stats));
-      })
-      .catch(() => {});
+      .then((progress) => setLearnerStats({ streak: progress.streakCount ?? 0, xp: progress.totalXp ?? 0 }))
+      .catch(() => setLearnerStats({ streak: 0, xp: 0 }));
   }, [isAuthenticated]);
 
   const isGuestHome = (location.pathname === '/' || location.pathname === '') && !isAuthenticated;
 
+  const toggleSidebar = useCallback(() => {
+    setIsSidebarCollapsed((previous) => {
+      const next = !previous;
+      localStorage.setItem('hola:sidebar-collapsed', String(next));
+      localStorage.setItem('hola:guest-sidebar', next ? 'collapsed' : 'expanded');
+      localStorage.setItem('hola:learner-sidebar', next ? 'collapsed' : 'expanded');
+      return next;
+    });
+  }, []);
+
+  const closeGuestDrawer = useCallback(() => setGuestDrawerOpen(false), []);
+
+  useEffect(() => closeGuestDrawer(), [location.pathname, closeGuestDrawer]);
+
   return (
-    <div className="layout-shell">
+    <div className={`layout-shell ${isAuthenticated ? 'learner-app' : 'guest-app'} ${isSidebarCollapsed ? 'is-sidebar-collapsed' : ''}`}>
       <a className="skip-link" href="#main-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
       <LayoutToast message={toastError} onClose={() => setToastError(null)} />
-      <AppHeader isAuthenticated={isAuthenticated} user={user} loading={loading} stats={learnerStats} onLogout={logout} />
-      <main className={`layout-main ${isGuestHome ? 'layout-main--full' : ''}`} id="main-content">
-        <AnimatePresence mode="wait" initial={false}>
-          <PageTransition key={location.pathname}><Outlet /></PageTransition>
-        </AnimatePresence>
-      </main>
-      <AppFooter />
-      <AiTutorFloatingButton />
+      {isAuthenticated ? (
+        <LearnerSidebar collapsed={isSidebarCollapsed} onToggle={toggleSidebar} />
+      ) : (
+        <>
+          <GuestSidebar collapsed={isSidebarCollapsed} onToggle={toggleSidebar} />
+          <GuestMobileDrawer open={guestDrawerOpen} onClose={closeGuestDrawer} />
+        </>
+      )}
+      <div className="layout-shell__body">
+        {isAuthenticated ? (
+          <LearnerTopbar user={user} stats={learnerStats} onLogout={logout} />
+        ) : (
+          <GuestTopbar onOpenMenu={() => setGuestDrawerOpen(true)} />
+        )}
+        <main
+          className={`layout-main ${isGuestHome ? 'layout-main--full' : ''} ${isAuthenticated ? 'learner-app__main' : 'guest-app__main'}`}
+          id="main-content"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <PageTransition key={location.pathname}><Outlet /></PageTransition>
+          </AnimatePresence>
+        </main>
+        {isAuthenticated ? (
+          <div className="learner-app__footer">
+            <AppFooter />
+          </div>
+        ) : (
+          <div className="guest-app__footer">
+            <AppFooter />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

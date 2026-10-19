@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
 
@@ -184,14 +184,14 @@ export function AdminAiReviewsPage() {
           <div className="admin-card" style={{ background: 'var(--color-surface)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <span style={{ fontSize: '20px' }}>🧪</span>
-              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Kiểm thử kịch bản AI (Prompt Sandbox)"}</BilingualText></h3>
+              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Kiểm thử kịch bản AI"}</BilingualText></h3>
             </div>
-            <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: 'var(--color-forest)' }}><BilingualText>{"Kiểm tra trực tiếp phản hồi của mô hình với phiên bản System Prompt hiện hành trước khi xuất bản rộng rãi."}</BilingualText></p>
+            <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: 'var(--color-forest)' }}><BilingualText>{"Kiểm tra trực tiếp phản hồi của mô hình với phiên bản hướng dẫn hệ thống hiện hành trước khi xuất bản rộng rãi."}</BilingualText></p>
 
             <label><BilingualText>{"Chọn kịch bản kiểm thử:"}</BilingualText><select value={testScenarioId} onChange={e => setTestScenarioId(e.target.value)}>
-                <option value="goi-mon-pho-ha-noi">{bilingualLabel("Gọi món tại quán Phở gia truyền Hà Nội")}</option>
-                <option value="tra-gia-cho-ben-thanh">{bilingualLabel("Trả giá quà lưu niệm tại Chợ Bến Thành")}</option>
-                <option value="bat-xe-om-cong-nghe">{bilingualLabel("Đón xe ôm công nghệ & Chỉ đường")}</option>
+                <option value="goi-mon-pho-ha-noi">{vietnameseLabel("Gọi món tại quán Phở gia truyền Hà Nội")}</option>
+                <option value="tra-gia-cho-ben-thanh">{vietnameseLabel("Trả giá quà lưu niệm tại Chợ Bến Thành")}</option>
+                <option value="bat-xe-om-cong-nghe">{vietnameseLabel("Đón xe ôm công nghệ & Chỉ đường")}</option>
               </select>
             </label>
 

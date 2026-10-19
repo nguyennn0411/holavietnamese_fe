@@ -31,8 +31,7 @@ import { aiTutorService } from '@/services/aiTutorService';
 import { vocabularyService } from '@/services/vocabularyService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { audioFeedback } from '@/utils/audioFeedback';
-
-const AI_MASCOT_IMG = '/design/hero/slide5_aitutor.jpg';
+import { TutorMascotAvatar } from '@/components/mascot';
 
 /**
  * FormattedMessageText - Renders markdown bold keywords, bullet points,
@@ -676,11 +675,7 @@ export function AiTutorPage() {
               {/* Mascot Status */}
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <img
-                    src={AI_MASCOT_IMG}
-                    alt="Hola AI Mascot"
-                    className="w-12 h-12 rounded-2xl object-cover border-2 border-white shadow-md ring-2 ring-[#DA251D]/20"
-                  />
+                  <TutorMascotAvatar state={isListening ? 'listening' : isSending ? 'thinking' : speakingMessageId ? 'speaking' : 'idle'} size="small" />
                   <span
                     className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white"
                     title="Online • Sẵn sàng giải đáp"
@@ -784,11 +779,7 @@ export function AiTutorPage() {
                   {/* Left AI Avatar */}
                   {isAi && (
                     <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-2xs border border-[#DECBB4]">
-                      <img
-                        src={AI_MASCOT_IMG}
-                        alt="AI Mascot"
-                        className="w-full h-full object-cover"
-                      />
+                      <TutorMascotAvatar state={isSpeaking ? 'speaking' : 'idle'} size="tiny" />
                     </div>
                   )}
 
@@ -965,11 +956,7 @@ export function AiTutorPage() {
                 className="flex items-start gap-3"
               >
                 <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-2xs border border-[#DECBB4]">
-                  <img
-                    src={AI_MASCOT_IMG}
-                    alt="AI Mascot"
-                    className="w-full h-full object-cover"
-                  />
+                  <TutorMascotAvatar state="thinking" size="tiny" />
                 </div>
                 <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3">
                   <div className="flex items-center gap-1">

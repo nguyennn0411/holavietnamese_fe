@@ -1,5 +1,6 @@
 import React from 'react';
 import { HeroBannerSlider, AnimatedMarquee } from '@/components/home/hero';
+import { GuestCulturalStrip } from './GuestCulturalStrip';
 import { AmbientWatermark } from '../common/HeritageWatermark';
 import { HeroInteractiveWidget } from './HeroInteractiveWidget';
 import { MetricsRibbon } from './MetricsRibbon';
@@ -7,11 +8,15 @@ import { BentoGridSection } from './BentoGridSection';
 import { GamifiedRoadmapTeaser } from './GamifiedRoadmapTeaser';
 import { ExpatTestimonials } from './ExpatTestimonials';
 import { CallToActionBanner } from './CallToActionBanner';
+import { useTranslation } from 'react-i18next';
+import { BuffaloMascot, MascotSpeechBubble } from '@/components/mascot';
+import { Sparkles, ArrowRight } from 'lucide-react';
 
 /**
  * Guest Home Landing Page for Unauthenticated Visitors
  */
 export function GuestHome() {
+  const { t } = useTranslation('home');
   return (
     <div className="immersive-home relative w-full overflow-hidden">
       {/* Scrollable Ambient Heritage Background Watermarks */}
@@ -25,24 +30,63 @@ export function GuestHome() {
         className="absolute -right-28 top-[2700px] w-[560px] h-[560px] opacity-[0.045]"
       />
 
+      {/* Elegant Cultural Introduction Strip */}
+      <GuestCulturalStrip />
+
       {/* 1. Flagship 3D Animated Hero Slider (85-95vh) */}
       <HeroBannerSlider />
 
       {/* 2. Seamless Infinite Horizontal Marquee */}
       <AnimatedMarquee />
 
+      {/* Friendly Guide Introduction: Meet Nghé */}
+      <section className="nghe-guest-intro" aria-labelledby="nghe-guest-title">
+        <div className="nghe-guest-intro__card">
+          <div className="nghe-guest-intro__stage">
+            <div className="nghe-guest-intro__bubble">
+              <MascotSpeechBubble arrow="bottom">
+                {t('mascot.greeting')}
+              </MascotSpeechBubble>
+            </div>
+            <div className="nghe-guest-intro__pedestal">
+              <BuffaloMascot
+                variant="welcome"
+                size="large"
+                animated
+                accessibilityLabel={t('mascot.alt')}
+              />
+            </div>
+          </div>
+
+          <div className="nghe-guest-intro__content">
+            <div className="nghe-guest-intro__eyebrow">
+              <Sparkles size={14} />
+              <span>{t('mascot.kicker', 'BẠN ĐỒNG HÀNH TIẾNG VIỆT • LEARNING BUDDY')}</span>
+            </div>
+            <h2 id="nghe-guest-title">{t('mascot.title')}</h2>
+            <p>{t('mascot.description')}</p>
+            <div className="nghe-guest-intro__actions">
+              <a href="/welcome" className="nghe-guest-intro__cta">
+                <span>{t('mascot.action')}</span>
+                <ArrowRight size={16} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. Interactive Quick 10-Second Trial Mini-Lesson */}
-      <section className="w-full py-12 px-4 sm:px-8 lg:px-14 bg-gradient-to-b from-[#FFF9ED] via-white to-[#FFF9ED] border-b border-[#DECBB4]/60">
+      <section id="mini-lesson" className="w-full scroll-mt-24 py-12 px-4 sm:px-8 lg:px-14 bg-gradient-to-b from-[#FFF9ED] via-white to-[#FFF9ED] border-b border-[#DECBB4]/60">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="space-y-3 text-left max-w-xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#DA251D] text-xs font-black uppercase tracking-wider">
-              <span>☕ Trải nghiệm tức thì • Hands-on Mini Lesson</span>
+              <span>☕ {t('miniLesson.badge')}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-[#202124] tracking-tight">
-              Thử thách 10 giây: Ghép câu gọi cà phê đầu tiên!
+              {t('miniLesson.title')}
             </h2>
             <p className="text-sm text-[#78685B] leading-relaxed">
-              Chạm vào các quân từ để sắp xếp thành câu tiếng Việt hoàn chỉnh. Nghe phát âm chuẩn người bản xứ và nhận điểm thưởng XP đầu tiên ngay lập tức!
+              {t('miniLesson.description')}
             </p>
           </div>
           <div className="flex justify-center w-full lg:w-auto">
@@ -55,21 +99,21 @@ export function GuestHome() {
       <MetricsRibbon />
 
       {/* 5. Bento Grid Showcase: Full-Width Section */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-gradient-to-b from-[#FFF9EE] via-[#FAF8F5]/60 to-[#FFF9EE]">
+      <section id="features" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-gradient-to-b from-[#FFF9EE] via-[#FAF8F5]/60 to-[#FFF9EE]">
         <div className="max-w-7xl mx-auto">
           <BentoGridSection />
         </div>
       </section>
 
       {/* 6. Gamified Roadmap Teaser: Full-Width Section */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-[#FAF8F5]/60">
+      <section id="learning-path" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-[#FAF8F5]/60">
         <div className="max-w-7xl mx-auto">
           <GamifiedRoadmapTeaser />
         </div>
       </section>
 
       {/* 7. Expat Testimonials: Full-Width Section */}
-      <section className="w-full py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-gradient-to-b from-[#FFF9EE] to-[#FAF8F5]/60">
+      <section id="testimonials" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-gradient-to-b from-[#FFF9EE] to-[#FAF8F5]/60">
         <div className="max-w-7xl mx-auto">
           <ExpatTestimonials />
         </div>
