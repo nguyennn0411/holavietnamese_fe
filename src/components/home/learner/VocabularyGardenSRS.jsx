@@ -13,7 +13,7 @@ export function VocabularyGardenSRS({
   onWaterAll,
 }) {
   return (
-    <section className="bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-6 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-4 text-left">
+    <section className="bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-6 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-4 text-left" aria-label="Vocabulary warm-up review">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#DECBB4]/40 pb-3">
         <div className="flex items-center gap-2">
           <span className="w-8 h-8 rounded-xl bg-[#F8E6B7] text-[#431914] flex items-center justify-center font-bold">

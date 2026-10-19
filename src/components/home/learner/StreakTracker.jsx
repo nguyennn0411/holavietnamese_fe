@@ -1,26 +1,28 @@
 import React from 'react';
 import { Flame, CheckCircle, Gift, Shield } from 'lucide-react';
-import { DEFAULT_STREAK_DAYS } from '@/components/home/data/homeData';
+import { useTranslation } from 'react-i18next';
 
 /**
  * 7-Day Interactive Streak Calendar Tracker Bar
  */
 export function StreakTracker({
-  streakDays = DEFAULT_STREAK_DAYS,
+  streakDays = [],
   hasCheckedInToday = false,
   onDailyCheckIn,
+  streakShieldCount,
 }) {
+  const { t } = useTranslation('learner');
   return (
     <section className="bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgb(67,25,20,0.04)] flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div className="space-y-1 text-left">
         <div className="flex items-center gap-2">
           <Flame size={18} className="text-[#ff7a00]" fill="currentColor" />
           <h2 className="text-sm sm:text-base font-black text-[#431914]">
-            Chuỗi 7 ngày liên tục • Weekly Streak Tracker
+            {t('weeklyStreak')}
           </h2>
         </div>
         <p className="text-xs text-[#78685B]">
-          Học ít nhất 1 bài mỗi ngày để giữ ngọn lửa không bị tắt.
+          {t('streakHint')}
         </p>
       </div>
 
@@ -51,7 +53,7 @@ export function StreakTracker({
 
       {/* Streak Check-in & Shield Status */}
       <div className="flex items-center gap-3 flex-wrap">
-        <button
+        {onDailyCheckIn ? <button
           type="button"
           onClick={onDailyCheckIn}
           disabled={hasCheckedInToday}
@@ -72,12 +74,12 @@ export function StreakTracker({
               <span>Điểm danh hôm nay (+10 XP)</span>
             </>
           )}
-        </button>
+        </button> : null}
 
-        <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4]/60 text-xs text-[#78685B]">
+        {streakShieldCount != null ? <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4]/60 text-xs text-[#78685B]">
           <Shield size={16} className="text-emerald-600 shrink-0" />
           <span>1 Khiên bảo vệ sẵn sàng</span>
-        </div>
+        </div> : null}
       </div>
     </section>
   );

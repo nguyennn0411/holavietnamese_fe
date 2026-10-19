@@ -1,7 +1,8 @@
 import { BilingualText, BilingualTextProvider } from '@/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
+import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { AdminRoute } from '@/components/common/AdminRoute';
@@ -19,7 +20,15 @@ const RegisterPage = lazy(() => import('@/pages/RegisterPage').then(module => ({
 const VerifyEmailPage = lazy(() => import('@/pages/auth/VerifyEmailPage').then(module => ({ default: module.VerifyEmailPage })));
 const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage').then(module => ({ default: module.ForgotPasswordPage })));
 const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })));
-const OnboardingPage = lazy(() => import('@/pages/auth/OnboardingPage').then(module => ({ default: module.OnboardingPage })));
+const WelcomePage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.WelcomePage })));
+const ReasonPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.ReasonPage })));
+const LevelPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.LevelPage })));
+const BenefitsPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.BenefitsPage })));
+const DailyGoalPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.DailyGoalPage })));
+const LearningPathPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.LearningPathPage })));
+const FirstLessonPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.FirstLessonPage })));
+const PlacementTestPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.PlacementTestPage })));
+const CompletionPage = lazy(() => import('@/features/onboarding/pages/OnboardingPages').then(module => ({ default: module.CompletionPage })));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then(module => ({ default: module.NotFoundPage })));
 const ForbiddenPage = lazy(() => import('@/pages/ForbiddenPage').then(module => ({ default: module.ForbiddenPage })));
 
@@ -33,8 +42,6 @@ const NotificationsPage = lazy(() => import('@/pages/notifications/Notifications
 
 // EdTech Next-Gen Experience
 const DashboardScreen = lazy(() => import('@/pages/edtech/DashboardScreen').then(module => ({ default: module.DashboardScreen })));
-const InteractiveLessonScreen = lazy(() => import('@/pages/edtech/InteractiveLessonScreen').then(module => ({ default: module.InteractiveLessonScreen })));
-const VocabularyHubScreen = lazy(() => import('@/pages/edtech/VocabularyHubScreen').then(module => ({ default: module.VocabularyHubScreen })));
 
 // Courses & Vocabulary Pages (Người 2 & Người 3)
 const CourseListPage = lazy(() => import('@/pages/courses/CourseListPage').then(module => ({ default: module.CourseListPage })));
@@ -114,26 +121,34 @@ function App() {
     <BrowserRouter><RouteTextLanguage>
       <Suspense fallback={null}><AppToaster /></Suspense>
       <ErrorBoundary>
-        <AuthProvider>
+        <AuthProvider><OnboardingProvider>
           <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><BilingualText>{"Đang tải trang…"}</BilingualText></div>}><Routes>
             {/* Standalone Fullscreen Auth Routes (Người 1) */}
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+            <Route path={ROUTES.SIGNUP} element={<RegisterPage />} />
+            <Route path={ROUTES.WELCOME} element={<WelcomePage />} />
+            <Route path={ROUTES.ONBOARDING} element={<Navigate to="/onboarding/reason" replace />} />
+            <Route path="/onboarding/reason" element={<ReasonPage />} />
+            <Route path="/onboarding/level" element={<LevelPage />} />
+            <Route path="/onboarding/benefits" element={<BenefitsPage />} />
+            <Route path="/onboarding/daily-goal" element={<DailyGoalPage />} />
+            <Route path="/onboarding/learning-path" element={<LearningPathPage />} />
+            <Route path="/onboarding/first-lesson" element={<FirstLessonPage />} />
+            <Route path="/onboarding/placement-test" element={<PlacementTestPage />} />
+            <Route path="/onboarding/completed" element={<CompletionPage />} />
             <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
             <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
             <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
-            </Route>
             <Route path="/forbidden" element={<ForbiddenPage />} />
             {/* Distraction-Free Fullscreen Interactive Lesson */}
-            <Route path={ROUTES.EDTECH_LESSON} element={<InteractiveLessonScreen />} />
+            <Route path={ROUTES.EDTECH_LESSON} element={<Navigate to={ROUTES.EDTECH_DASHBOARD} replace />} />
 
             {/* Learner Main Layout */}
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<HomePage />} />
               <Route path={ROUTES.EDTECH_DASHBOARD} element={<DashboardScreen />} />
-              <Route path={ROUTES.EDTECH_VOCABULARY} element={<VocabularyHubScreen />} />
+              <Route path={ROUTES.EDTECH_VOCABULARY} element={<Navigate to={ROUTES.VOCABULARY} replace />} />
               <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
               <Route path={ROUTES.COURSES} element={<CourseListPage />} />
               <Route path={ROUTES.ALPHABET} element={<AlphabetPage />} />
@@ -222,7 +237,7 @@ function App() {
               </Route>
             </Route>
           </Routes></Suspense>
-        </AuthProvider>
+        </OnboardingProvider></AuthProvider>
       </ErrorBoundary>
     </RouteTextLanguage></BrowserRouter>
   );

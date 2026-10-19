@@ -1,24 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Check, Play, Star, Compass } from 'lucide-react';
 import { ROADMAP_NODES } from '@/components/home/data/homeData';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Gamified Learning Roadmap Adventure Path Teaser
  */
 export function GamifiedRoadmapTeaser() {
+  const navigate = useNavigate();
+  const { t } = useTranslation('home');
   return (
     <section className="roadmap-teaser py-8 space-y-8">
       <div className="text-center max-w-2xl mx-auto space-y-2">
         <p className="eyebrow text-xs font-bold uppercase tracking-wider text-[#A62A24]">
-          Lộ trình phiêu lưu • Learning Adventure
+          {t('roadmap.eyebrow')}
         </p>
         <h2 className="text-3xl sm:text-4xl font-black text-[#431914] tracking-tight">
-          Từng chặng rõ ràng, học 5 phút mỗi ngày
+          {t('roadmap.title')}
         </h2>
         <p className="text-sm text-[#78685B]">
-          Mỗi bài học được chia nhỏ theo chặng. Mở khóa huy hiệu, tích lũy XP và làm chủ tiếng Việt theo chuẩn CEFR.
+          {t('roadmap.description')}
         </p>
       </div>
 
@@ -28,13 +31,19 @@ export function GamifiedRoadmapTeaser() {
             <motion.div
               key={node.id}
               whileHover={{ scale: 1.012 }}
+              role={node.status === 'locked' ? undefined : 'link'}
+              tabIndex={node.status === 'locked' ? undefined : 0}
+              onClick={() => node.status !== 'locked' && navigate(node.status === 'current' ? '/welcome' : '/courses')}
+              onKeyDown={(event) => {
+                if (node.status !== 'locked' && (event.key === 'Enter' || event.key === ' ')) navigate(node.status === 'current' ? '/welcome' : '/courses');
+              }}
               className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
                 node.status === 'completed'
                   ? 'bg-white border-emerald-300 shadow-2xs'
                   : node.status === 'current'
                   ? 'bg-[#FFF9EE] border-2 border-[#A62A24] shadow-md ring-4 ring-[#A62A24]/10'
                   : 'bg-[#FAF8F5] border-[#DECBB4]/50 opacity-60'
-              }`}
+              } ${node.status !== 'locked' ? 'cursor-pointer' : 'cursor-not-allowed'}`}
             >
               {/* Node Icon */}
               <div
@@ -63,7 +72,7 @@ export function GamifiedRoadmapTeaser() {
                   </span>
                   {node.status === 'current' && (
                     <span className="text-[10px] font-bold text-[#A62A24] uppercase tracking-wider">
-                      Đang ở chặng này
+                      {t('roadmap.current')}
                     </span>
                   )}
                 </div>
@@ -97,11 +106,11 @@ export function GamifiedRoadmapTeaser() {
 
         <div className="pt-8 text-center">
           <Link
-            to="/edtech/dashboard"
+            to="/welcome"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#A62A24] hover:bg-[#89221E] text-white font-black text-xs shadow-[0_4px_0_#89221E] active:translate-y-1 active:shadow-none transition-all"
           >
             <Compass size={16} />
-            <span>Mở Lộ Trình Học EdTech Toàn Diện →</span>
+            <span>{t('roadmap.action')}</span>
           </Link>
         </div>
       </div>

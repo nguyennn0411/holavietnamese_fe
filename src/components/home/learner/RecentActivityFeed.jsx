@@ -8,7 +8,7 @@ import { EmptyState } from '@/components/common/Ui';
 export function RecentActivityFeed({ activities = [] }) {
   return (
     <section className="bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-4 text-left">
-      <h2 className="text-lg font-black text-[#431914]">Hoạt động học tập gần đây</h2>
+      <h3 className="text-lg font-black text-[#431914]">Hoạt động học tập gần đây</h3>
       {activities.length ? (
         <div className="space-y-3">
           {activities.map((activity) => (

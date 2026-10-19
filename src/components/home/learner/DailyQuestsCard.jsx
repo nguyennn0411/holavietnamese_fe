@@ -1,12 +1,12 @@
 import React from 'react';
 import { Gift, Clock } from 'lucide-react';
-import { DEFAULT_QUESTS } from '@/components/home/data/homeData';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Daily Quests Card with Tiered Chests and Countdown Timer
  */
 export function DailyQuestsCard({
-  quests = DEFAULT_QUESTS,
+  quests = [],
   claimedQuests = {},
   timeLeft = { hours: 5, minutes: 24, seconds: 18 },
   today = 8,
@@ -14,12 +14,13 @@ export function DailyQuestsCard({
   goalPercent = 53,
   onClaimQuest,
 }) {
+  const { t } = useTranslation('learner');
   return (
     <section className="bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-6 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-4 text-left">
       <div className="flex items-center justify-between border-b border-[#DECBB4]/40 pb-3">
         <div className="flex items-center gap-2">
           <Gift size={18} className="text-[#A62A24]" />
-          <h3 className="text-base font-black text-[#431914]">Nhiệm vụ hôm nay</h3>
+          <h3 className="text-base font-black text-[#431914]">{t('todayChallenges')}</h3>
         </div>
         <div className="flex items-center gap-1 text-[11px] font-mono text-[#78685B] bg-[#FAF8F5] px-2 py-0.5 rounded-md border border-[#DECBB4]/50">
           <Clock size={12} className="text-[#A62A24]" />
@@ -32,6 +33,14 @@ export function DailyQuestsCard({
       </div>
 
       <div className="space-y-3">
+        {!quests.length && (
+          <div className="rounded-2xl bg-[#FFF9EE] border border-[#DECBB4]/60 p-4 text-center space-y-2">
+            <p className="text-xs text-[#78685B] leading-5">{t('challengeEmpty')}</p>
+            <a href="/courses" className="inline-block text-[11px] font-bold text-[#A62A24] hover:underline">
+              Start a lesson to unlock challenges →
+            </a>
+          </div>
+        )}
         {quests.map((quest) => {
           const isClaimed = claimedQuests[quest.id];
           return (
@@ -60,7 +69,7 @@ export function DailyQuestsCard({
                   <span className="text-[10px] text-[#78685B]">{quest.progress}</span>
                 </div>
               </div>
-              {quest.done && !isClaimed ? (
+              {quest.done && !isClaimed && onClaimQuest ? (
                 <button
                   type="button"
                   onClick={() => onClaimQuest(quest.id)}
@@ -81,8 +90,8 @@ export function DailyQuestsCard({
       {/* Daily Goal Time Progress */}
       <div className="pt-2 border-t border-[#DECBB4]/40 space-y-2">
         <div className="flex items-center justify-between text-xs text-[#78685B]">
-          <span>Mục tiêu thời gian:</span>
-          <strong className="text-[#431914]">{today}/{dailyGoal} phút</strong>
+          <span>{t('dailyGoal')}</span>
+          <strong className="text-[#431914]">{today}/{dailyGoal} {t('minutes')}</strong>
         </div>
         <div className="w-full bg-[#EEE3D1] h-2 rounded-full overflow-hidden">
           <div

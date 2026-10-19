@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, RotateCcw, Check, CheckCircle2 } from 'lucide-react';
 import { audioFeedback } from '@/utils/audioFeedback';
 import { speakVietnamese } from '@/utils/speech';
+import { useTranslation } from 'react-i18next';
 
 /**
  * 10-Second Hands-on Mini Lesson Widget (Order Iced Milk Coffee)
  */
 export function HeroInteractiveWidget() {
-  const targetWords = ['Cho', 'tôi', 'một ly', 'cà phê sữa đá'];
+  const navigate = useNavigate();
+  const { t } = useTranslation('home');
+  const exercises = [
+    { prompt: 'I would like an iced milk coffee please', phrase: 'Cho tôi một ly cà phê sữa đá', target: ['Cho', 'tôi', 'một ly', 'cà phê sữa đá'], bank: ['cà phê sữa đá', 'Cho', 'bát phở', 'tôi', 'một ly'] },
+    { prompt: 'Thank you very much', phrase: 'Cảm ơn bạn rất nhiều', target: ['Cảm ơn', 'bạn', 'rất nhiều'], bank: ['rất nhiều', 'Xin chào', 'Cảm ơn', 'bạn'] },
+  ];
+  const [exerciseIndex, setExerciseIndex] = useState(0);
+  const exercise = exercises[exerciseIndex];
+  const targetWords = exercise.target;
   const [selectedTokens, setSelectedTokens] = useState([]);
-  const [availableTokens, setAvailableTokens] = useState([
-    'cà phê sữa đá',
-    'Cho',
-    'bát phở',
-    'tôi',
-    'một ly',
-  ]);
+  const [availableTokens, setAvailableTokens] = useState(exercises[0].bank);
   const [status, setStatus] = useState('idle');
 
   const handleSelectToken = (token) => {
@@ -51,7 +55,7 @@ export function HeroInteractiveWidget() {
     if (isCorrect) {
       audioFeedback.playSuccessChime();
       setStatus('correct');
-      speakVietnamese('Cho tôi một ly cà phê sữa đá');
+      speakVietnamese(exercise.phrase);
     } else {
       audioFeedback.playErrorSound();
       setStatus('incorrect');
@@ -60,7 +64,19 @@ export function HeroInteractiveWidget() {
 
   const handleReset = () => {
     setSelectedTokens([]);
-    setAvailableTokens(['cà phê sữa đá', 'Cho', 'bát phở', 'tôi', 'một ly']);
+    setAvailableTokens(exercise.bank);
+    setStatus('idle');
+  };
+
+  const handleContinue = () => {
+    if (exerciseIndex === exercises.length - 1) {
+      navigate('/welcome');
+      return;
+    }
+    const nextIndex = exerciseIndex + 1;
+    setExerciseIndex(nextIndex);
+    setSelectedTokens([]);
+    setAvailableTokens(exercises[nextIndex].bank);
     setStatus('idle');
   };
 
@@ -69,26 +85,28 @@ export function HeroInteractiveWidget() {
       {/* Top Header Tag with Dual Speed Controls */}
       <div className="flex items-center justify-between border-b border-[#DECBB4]/40 pb-3">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse motion-reduce:animate-none" />
           <span className="text-[11px] font-black uppercase tracking-wider text-[#A62A24]">
-            Trải nghiệm 10 giây • Try It Free
+            {t('widget.badge')}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
           <button
             type="button"
-            onClick={() => speakVietnamese('Cho tôi một ly cà phê sữa đá', 0.9)}
+            onClick={() => speakVietnamese(exercise.phrase, 0.9)}
             className="!min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#F5E1D8] hover:bg-[#A62A24] text-[#A62A24] hover:text-white transition-all text-[11px] font-bold shadow-2xs cursor-pointer"
-            title="Nghe chuẩn (1.0x)"
+            title={t('widget.normalAudio')}
+            aria-label={t('widget.normalAudio')}
           >
             <Volume2 className="w-3.5 h-3.5 shrink-0" strokeWidth={2.2} />
             <span>1.0x</span>
           </button>
           <button
             type="button"
-            onClick={() => speakVietnamese('Cho tôi một ly cà phê sữa đá', 0.6)}
+            onClick={() => speakVietnamese(exercise.phrase, 0.6)}
             className="!min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF8F5] hover:bg-[#DECBB4] text-[#78685B] hover:text-[#431914] transition-all text-[11px] font-bold border border-[#DECBB4]/60 cursor-pointer"
-            title="Nghe chậm (0.6x)"
+            title={t('widget.slowAudio')}
+            aria-label={t('widget.slowAudio')}
           >
             <span>🐢 0.6x</span>
           </button>
@@ -98,10 +116,10 @@ export function HeroInteractiveWidget() {
       {/* Target prompt */}
       <div>
         <p className="text-[11px] font-bold uppercase tracking-wider text-[#78685B]">
-          Dịch sang tiếng Việt tự nhiên:
+          {t('widget.translate')}
         </p>
         <p className="text-base sm:text-lg font-black text-[#431914] mt-0.5">
-          “I would like an iced milk coffee please”
+          “{exercise.prompt}”
         </p>
       </div>
 
@@ -109,7 +127,7 @@ export function HeroInteractiveWidget() {
       <div className="min-h-[58px] p-2.5 rounded-2xl bg-[#FAF8F5] border-2 border-dashed border-[#DECBB4] flex flex-wrap items-center gap-2">
         {selectedTokens.length === 0 ? (
           <span className="text-xs text-[#78685B]/60 italic select-none pl-1">
-            Bấm chọn các quân từ bên dưới theo thứ tự…
+            {t('widget.empty')}
           </span>
         ) : (
           selectedTokens.map((token, idx) => (
@@ -151,10 +169,12 @@ export function HeroInteractiveWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between"
+            role="status"
+            aria-live="polite"
           >
             <div className="flex items-center gap-2">
               <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
-              <span className="font-bold">Chính xác tuyệt đối! Bạn vừa gọi món như người Việt!</span>
+              <span className="font-bold">{t('widget.correct')}</span>
             </div>
             <span className="font-black text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-lg shrink-0">
               +15 XP
@@ -168,14 +188,15 @@ export function HeroInteractiveWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className="p-3 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-center justify-between"
+            role="alert"
           >
-            <span>Thứ tự đúng: Cho + tôi + một ly + cà phê sữa đá</span>
+            <span>{t('widget.answer', { answer: targetWords.join(' + ') })}</span>
             <button
               type="button"
               onClick={handleReset}
               className="text-xs font-bold underline text-red-700 ml-2"
             >
-              Thử lại
+              {t('widget.retry')}
             </button>
           </motion.div>
         )}
@@ -187,15 +208,16 @@ export function HeroInteractiveWidget() {
           type="button"
           onClick={handleReset}
           className="!min-h-0 !min-w-0 p-2.5 rounded-xl text-[#78685B] hover:text-[#431914] hover:bg-[#FFF9EE] transition-colors shrink-0 cursor-pointer"
-          title="Làm lại từ đầu"
+          title={t('widget.reset')}
+          aria-label={t('widget.reset')}
         >
           <RotateCcw className="w-4 h-4 shrink-0" />
         </button>
 
         <button
           type="button"
-          disabled={selectedTokens.length === 0 || status === 'correct'}
-          onClick={handleCheck}
+          disabled={selectedTokens.length === 0}
+          onClick={status === 'correct' ? handleContinue : handleCheck}
           className={`flex-1 py-3 px-5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 ${
             status === 'correct'
               ? 'bg-emerald-600 text-white shadow-[0_4px_0_#047857]'
@@ -207,10 +229,10 @@ export function HeroInteractiveWidget() {
           {status === 'correct' ? (
             <>
               <Check size={16} />
-              <span>Ghép đúng rồi! 🎉</span>
+              <span>{exerciseIndex === exercises.length - 1 ? t('widget.fullLesson') : t('widget.next')}</span>
             </>
           ) : (
-            <span>Kiểm tra đáp án</span>
+            <span>{t('widget.check')}</span>
           )}
         </button>
       </div>

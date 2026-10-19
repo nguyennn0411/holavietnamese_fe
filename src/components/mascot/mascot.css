@@ -1,0 +1,369 @@
+/* ==========================================================================
+   Nghé Vietnamese Buffalo Mascot Styles
+   Clean, modern, single-character presentation with zero clipping or ghosting.
+   ========================================================================== */
+
+.nghe-mascot {
+  --nghe-width: 140px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--nghe-width);
+  height: auto;
+  aspect-ratio: 360 / 512;
+  flex: 0 0 auto;
+  overflow: visible;
+  background: transparent;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Sizing conventions */
+.nghe-mascot--tiny {
+  --nghe-width: 44px;
+}
+
+.nghe-mascot--small {
+  --nghe-width: 64px;
+}
+
+.nghe-mascot--medium {
+  --nghe-width: 130px;
+}
+
+.nghe-mascot--large {
+  --nghe-width: 185px;
+}
+
+.nghe-mascot--intro {
+  --nghe-width: 190px;
+}
+
+/* Image rendering */
+.nghe-mascot__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 18px rgba(80, 42, 29, 0.09));
+  transition: filter 0.28s ease, transform 0.28s ease;
+}
+
+/* Micro-animations */
+.nghe-mascot.is-animated {
+  animation: nghe-float 4.2s ease-in-out infinite;
+}
+
+.nghe-mascot.is-animated:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.nghe-mascot.is-animated:hover .nghe-mascot__img {
+  filter: drop-shadow(0 14px 26px rgba(80, 42, 29, 0.16));
+}
+
+.nghe-mascot--happy.is-animated {
+  animation: nghe-celebrate 0.85s ease-out 2, nghe-float 4.2s 1.7s ease-in-out infinite;
+}
+
+.nghe-mascot--thinking.is-animated,
+.nghe-mascot--loading.is-animated,
+.nghe-tutor-avatar.is-thinking .nghe-mascot {
+  animation: nghe-think 2.2s ease-in-out infinite;
+}
+
+@keyframes nghe-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes nghe-celebrate {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-10px) rotate(-2.5deg);
+  }
+  60% {
+    transform: translateY(-4px) rotate(2deg);
+  }
+}
+
+@keyframes nghe-think {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px) scale(0.99);
+  }
+}
+
+@keyframes nghe-pulse {
+  50% {
+    box-shadow: 0 0 0 7px rgba(180, 35, 24, 0);
+  }
+}
+
+/* Speech Bubble */
+.nghe-speech {
+  position: relative;
+  display: inline-block;
+  padding: 12px 18px;
+  border: 1px solid #ebd9c3;
+  border-radius: 18px;
+  color: #3e261d;
+  background: #fffdf9;
+  box-shadow: 0 8px 24px rgba(80, 42, 29, 0.08);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: left;
+}
+
+/* Speech bubble arrow pointers */
+.nghe-speech--arrow-bottom:after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  left: 32px;
+  width: 13px;
+  height: 13px;
+  background: #fffdf9;
+  border-right: 1px solid #ebd9c3;
+  border-bottom: 1px solid #ebd9c3;
+  transform: rotate(45deg);
+}
+
+.nghe-speech--arrow-right:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -7px;
+  width: 13px;
+  height: 13px;
+  background: #fffdf9;
+  border-top: 1px solid #ebd9c3;
+  border-right: 1px solid #ebd9c3;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.nghe-speech--arrow-left:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -7px;
+  width: 13px;
+  height: 13px;
+  background: #fffdf9;
+  border-bottom: 1px solid #ebd9c3;
+  border-left: 1px solid #ebd9c3;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* AI Tutor Avatar */
+.nghe-tutor-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nghe-tutor-avatar > i {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 13px;
+  height: 13px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #22a45d;
+  z-index: 2;
+}
+
+.nghe-tutor-avatar.is-listening > i {
+  background: #e5a928;
+  animation: nghe-pulse 1s infinite;
+}
+
+.nghe-tutor-avatar.is-thinking > i {
+  background: #6a7de1;
+  animation: nghe-pulse 1.3s infinite;
+}
+
+.nghe-tutor-avatar.is-speaking > i {
+  background: #da251d;
+  animation: nghe-pulse 0.7s infinite;
+}
+
+/* Onboarding Guide Dialog */
+.nghe-guide {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  background: rgba(37, 24, 19, 0.58);
+  backdrop-filter: blur(5px);
+}
+
+.nghe-guide__card {
+  position: relative;
+  width: min(720px, 100%);
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  align-items: center;
+  gap: 28px;
+  padding: 28px;
+  border: 1px solid #ebd9c3;
+  border-radius: 28px;
+  background: #fffaf1;
+  box-shadow: 0 30px 80px rgba(35, 18, 13, 0.3);
+}
+
+.nghe-guide__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #f5e9dc;
+  color: #5c3b31;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.nghe-guide__close:hover {
+  background: #ebd8c6;
+}
+
+.nghe-guide__card > div > span:first-child {
+  color: #b42318;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nghe-guide h2 {
+  margin: 7px 0 10px;
+  color: #2b1c18;
+  font-size: 1.65rem;
+}
+
+.nghe-guide p {
+  margin: 0;
+  color: #70584e;
+  line-height: 1.65;
+}
+
+.nghe-guide__actions {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nghe-guide__actions span {
+  display: flex;
+  gap: 8px;
+}
+
+.nghe-guide__actions button,
+.nghe-guide-replay {
+  min-height: 39px;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #dbc6b3;
+  border-radius: 11px;
+  color: #5c3b31;
+  background: #fff;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.nghe-guide__actions button:hover,
+.nghe-guide-replay:hover {
+  background: #fefcf9;
+  border-color: #c9ad96;
+}
+
+.nghe-guide__actions .is-primary {
+  border-color: #a5231a;
+  color: #fff;
+  background: #a5231a;
+}
+
+.nghe-guide__actions .is-primary:hover {
+  background: #8e1c14;
+}
+
+.nghe-guide-replay {
+  position: fixed;
+  z-index: 50;
+  right: 18px;
+  bottom: 18px;
+  padding: 6px 14px 6px 8px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(69, 31, 20, 0.17);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .nghe-mascot,
+  .nghe-mascot.is-animated,
+  .nghe-tutor-avatar > i {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .nghe-guide__card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 24px 18px;
+    gap: 18px;
+  }
+
+  .nghe-guide__card > .nghe-mascot {
+    --nghe-width: 145px;
+    margin: 0 auto;
+  }
+
+  .nghe-guide__actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .nghe-guide__actions span {
+    justify-content: center;
+  }
+
+  .nghe-guide-replay {
+    right: 12px;
+    bottom: 74px;
+    font-size: 0;
+    padding: 6px;
+  }
+
+  .nghe-guide-replay .nghe-mascot {
+    --nghe-width: 42px;
+  }
+}

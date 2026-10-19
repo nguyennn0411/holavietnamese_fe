@@ -3,10 +3,12 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
+  SIGNUP: '/signup',
   VERIFY_EMAIL: '/verify-email',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   ONBOARDING: '/onboarding',
+  WELCOME: '/welcome',
 
   // EdTech Next-Gen Experience
   EDTECH_DASHBOARD: '/edtech/dashboard',

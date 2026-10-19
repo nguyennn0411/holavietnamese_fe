@@ -12,6 +12,10 @@ import { LearnerDashboard } from '@/components/home/learner/LearnerDashboard';
 export function HomePage() {
   const { user, isAuthenticated } = useAuth();
 
+  if (isAuthenticated) {
+    return <LearnerDashboard user={user} />;
+  }
+
   return (
     <div className="homepage-heritage-root relative w-full min-h-screen">
       {/*
@@ -24,7 +28,7 @@ export function HomePage() {
 
       {/* Nội dung trang chủ */}
       <div className="relative z-10 w-full">
-        {isAuthenticated ? <LearnerDashboard user={user} /> : <GuestHome />}
+        <GuestHome />
       </div>
     </div>
   );

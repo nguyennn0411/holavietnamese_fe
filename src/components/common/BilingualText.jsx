@@ -1,5 +1,7 @@
 import { createContext, useContext } from 'react';
 import { UI_TRANSLATIONS } from './uiTranslations';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/i18n';
 
 const TextLanguageContext = createContext('bilingual');
 
@@ -42,7 +44,8 @@ export function bilingualPair(value) {
 // Native select options and placeholders accept text rather than nested markup.
 export function bilingualLabel(value) {
   const pair = bilingualPair(value);
-  return pair && pair[0].toLowerCase() !== pair[1].toLowerCase() ? `${pair[0]} · ${pair[1]}` : value;
+  if (!pair) return value;
+  return (i18n.resolvedLanguage || i18n.language || 'en').startsWith('vi') ? pair[0] : pair[1];
 }
 
 export function vietnameseLabel(value) {
@@ -54,12 +57,13 @@ export function useBilingualLabel() {
 }
 
 export function BilingualText({ children, vi, en, className = '' }) {
-  const language = useContext(TextLanguageContext);
+  const { i18n: activeI18n } = useTranslation();
+  const contextLanguage = useContext(TextLanguageContext);
   const pair = en ? [vi ?? children, en] : vi !== undefined ? null : bilingualPair(children);
-  if (language === 'vi') return pair ? pair[0] : vi ?? children ?? null;
+  if (contextLanguage === 'vi') return pair ? pair[0] : vi ?? children ?? null;
   if (!pair || (typeof pair[0] === 'string' && pair[0].toLowerCase() === pair[1].toLowerCase())) return children ?? vi ?? null;
+  const currentLang = (activeI18n?.resolvedLanguage || activeI18n?.language || 'en').startsWith('vi') ? 'vi' : 'en';
   return <span className={`bilingual-text ${className}`.trim()}>
-    <span className="bilingual-text__vi" lang="vi">{pair[0]}</span>
-    <span className="bilingual-text__en" lang="en">{pair[1]}</span>
+    <span className="bilingual-text__current" lang={currentLang}>{currentLang === 'vi' ? pair[0] : pair[1]}</span>
   </span>;
 }
