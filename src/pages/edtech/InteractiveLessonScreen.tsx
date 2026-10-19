@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { LessonResponse, QuestionDTO, VietnameseTone, WordBankToken } from '@/types/edtech';
@@ -11,6 +11,7 @@ import { DictationExercise } from '@/components/edtech/exercises/DictationExerci
 import { MinimalPairsComparator, COMMON_MINIMAL_PAIRS } from '@/components/edtech/ui/MinimalPairsComparator';
 import { LessonCompleteModal } from '@/components/edtech/lesson/LessonCompleteModal';
 import { audioFeedback } from '@/utils/audioFeedback';
+import { learnerService } from '@/services/learnerService';
 
 // High-fidelity Mock Lesson matching Spring Boot DTO contract
 export const MOCK_LESSON: LessonResponse = {
@@ -120,13 +121,47 @@ export const InteractiveLessonScreen: React.FC = () => {
   // Lesson State
   const [lesson] = useState<LessonResponse>(MOCK_LESSON);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hearts, setHearts] = useState(5);
+  const [hearts, setHearts] = useState<number>(() => {
+    try {
+      const savedProg = localStorage.getItem('learner_progress');
+      if (savedProg) {
+        const p = JSON.parse(savedProg);
+        if (p.hearts !== undefined) return p.hearts;
+      }
+      const savedStats = localStorage.getItem('learner_stats');
+      if (savedStats) {
+        const s = JSON.parse(savedStats);
+        if (s.hearts !== undefined) return s.hearts;
+      }
+    } catch {
+      // ignore
+    }
+    return 5;
+  });
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
   const [feedback, setFeedback] = useState<FeedbackState | null>(null);
   const [totalXpEarned, setTotalXpEarned] = useState(0);
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
   const [isLessonFinished, setIsLessonFinished] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+
+  useEffect(() => {
+    if (isLessonFinished && totalXpEarned > 0) {
+      learnerService.awardXp(totalXpEarned, 'LESSON_COMPLETED', `Hoàn thành bài học: ${lesson.title}`)
+        .then((res) => {
+          if (res) {
+            window.dispatchEvent(new CustomEvent('learner-stats-updated', {
+              detail: {
+                totalXp: res.totalXp,
+                streakCount: res.streakCount,
+                hearts: res.hearts,
+              }
+            }));
+          }
+        })
+        .catch((e) => console.error('Failed to award lesson XP:', e));
+    }
+  }, [isLessonFinished, totalXpEarned, lesson.title]);
 
   // Exercise Specific States
   // 1. Flashcard: flipped or acknowledged
@@ -299,7 +334,12 @@ export const InteractiveLessonScreen: React.FC = () => {
       setCorrectAnswersCount((prev) => prev + 1);
     } else {
       audioFeedback.playErrorSound();
-      setHearts((prev) => Math.max(0, prev - 1));
+      setHearts((prev) => {
+        const next = Math.max(0, prev - 1);
+        learnerService.updateHearts(next).catch(() => {});
+        window.dispatchEvent(new CustomEvent('learner-stats-updated', { detail: { hearts: next } }));
+        return next;
+      });
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
     }

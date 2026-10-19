@@ -86,6 +86,15 @@ export const learnerService = {
   async getProgressData() {
     return resultOf(await axiosClient.get('/api/users/progress'));
   },
+  async checkInToday() {
+    return resultOf(await axiosClient.post('/api/users/checkin'));
+  },
+  async awardXp(amount, eventType = 'LESSON_COMPLETED', description = 'Hoàn thành bài học') {
+    return resultOf(await axiosClient.post('/api/users/xp/award', { amount, eventType, description }));
+  },
+  async updateHearts(hearts) {
+    return resultOf(await axiosClient.put('/api/users/hearts', { hearts }));
+  },
   async getMyLearningOverview() {
     return resultOf(await axiosClient.get('/api/users/progress'));
   },

@@ -53,9 +53,7 @@ export function GuestSidebar({ collapsed, onToggle }) {
     >
       <ChevronLeft className="sidebar-toggle-btn__icon" />
     </button>
-    <div className="guest-sidebar__brand">
-      <Brand compact />
-    </div>
+    <div className="guest-sidebar__brand"><Brand compact collapsed={collapsed} /></div>
     <GuestNavigation collapsed={collapsed} />
   </aside>;
 }
@@ -107,7 +105,7 @@ export function GuestMobileDrawer({ open, onClose }) {
   return <AnimatePresence>{open && <>
     <motion.button type="button" className="guest-drawer__backdrop" aria-label="Close navigation" onClick={onClose} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} />
     <motion.aside ref={drawerRef} className="guest-drawer" role="dialog" aria-modal="true" aria-label="Guest navigation" initial={{x:'-100%'}} animate={{x:0}} exit={{x:'-100%'}} transition={{type:'spring',damping:28,stiffness:280}}>
-      <div className="guest-drawer__head"><Brand compact/><button ref={closeRef} type="button" onClick={onClose} aria-label="Close navigation"><X/></button></div>
+      <div className="guest-drawer__head"><button ref={closeRef} type="button" onClick={onClose} aria-label="Close navigation"><X/></button></div>
       <GuestNavigation onNavigate={onClose}/>
       <div className="guest-drawer__actions"><Link to="/login" onClick={onClose}>{t('signIn')}</Link><Link to="/welcome" onClick={onClose}>{t('learnFree')}</Link></div>
     </motion.aside>

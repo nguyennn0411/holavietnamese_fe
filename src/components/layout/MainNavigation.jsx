@@ -12,7 +12,6 @@ const NAV_ITEMS = [
   { to: ROUTES.VOCABULARY, label: 'Từ vựng', en: 'Vocabulary', icon: Languages },
   { to: '/culture', label: 'Văn hóa', en: 'Culture', icon: Landmark },
   { to: '/blog', label: 'Blog', en: 'Stories', icon: Newspaper },
-  { to: '/ai-tutor', label: 'AI Tutor', en: 'AI Assistant', icon: Sparkles },
   { to: '/my-learning', label: 'Góc học tập', en: 'My learning', icon: GraduationCap },
 ];
 

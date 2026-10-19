@@ -99,15 +99,37 @@
   transition: padding var(--sidebar-duration) var(--sidebar-easing);
 }
 .learner-sidebar__brand {
-  height: 54px;
+  min-height: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  padding: 0 6px 12px;
+  padding: 0 10px;
   border-bottom: 1px solid #ead8c5;
   box-sizing: border-box;
   overflow: hidden;
+}
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  min-width: 0;
+}
+.site-brand__logo {
+  display: block;
+  height: 34px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+}
+.site-brand__icon {
+  display: none;
+  width: 34px;
+  height: 34px;
+  max-width: 34px;
+  max-height: 34px;
+  object-fit: contain;
 }
 .learner-sidebar__brand svg { width: 15px; }
 .learner-sidebar__nav {
@@ -288,9 +310,29 @@
   transition: opacity 160ms ease, max-width var(--sidebar-duration) var(--sidebar-easing), transform 160ms ease;
 }
 
-.is-sidebar-collapsed .site-brand {
+.is-sidebar-collapsed .site-brand,
+.site-brand--collapsed {
   gap: 0;
+  width: 38px;
+  flex: 0 0 38px;
+  overflow: hidden;
   justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+.is-sidebar-collapsed .site-brand__logo,
+.site-brand--collapsed .site-brand__logo {
+  display: none !important;
+}
+.is-sidebar-collapsed .site-brand__icon,
+.site-brand--collapsed .site-brand__icon {
+  display: block !important;
+  width: 34px;
+  height: 34px;
+  max-width: 34px;
+  max-height: 34px;
+  object-fit: contain;
+  margin: 0 auto;
 }
 
 .is-sidebar-collapsed .learner-sidebar,
@@ -301,6 +343,8 @@
 .is-sidebar-collapsed .guest-sidebar__brand {
   justify-content: center;
   padding-inline: 0;
+  min-height: 56px;
+  height: 56px;
 }
 .is-sidebar-collapsed .learner-sidebar__link,
 .is-sidebar-collapsed .guest-sidebar__link {
@@ -343,7 +387,7 @@
 @media(max-width:1100px){.learner-topbar__welcome em{display:none}.learner-topbar__stats>a{padding-inline:8px}.learner-topbar{grid-template-columns:1fr auto auto;gap:10px}}
 @media(max-width:820px){
   .layout-shell.learner-app{display:flex!important;flex-direction:column!important;padding-bottom:72px}
-  .learner-sidebar{grid-column:auto!important;position:fixed!important;inset:auto 0 0 0!important;width:100%!important;min-width:100%!important;max-width:100%!important;height:68px!important;padding:7px 8px max(7px,env(safe-area-inset-bottom))!important;border:0!important;border-top:1px solid #ead8c5!important;box-shadow:0 -10px 32px rgba(88,28,23,.08)!important}
+  .learner-sidebar{grid-column:auto!important;position:fixed!important;inset:auto 0 0 0!important;top:auto!important;width:100%!important;min-width:100%!important;max-width:100%!important;height:68px!important;padding:7px 8px max(7px,env(safe-area-inset-bottom))!important;border:0!important;border-top:1px solid #ead8c5!important;box-shadow:0 -10px 32px rgba(88,28,23,.08)!important}
   .learner-sidebar__brand,.learner-sidebar__tip,.learner-sidebar__link:not(.is-mobile-primary),.sidebar-toggle-btn{display:none!important}
   .learner-sidebar__nav{height:100%;padding:0;display:grid;grid-template-columns:repeat(5,1fr);overflow:visible}
   .learner-sidebar__link{min-height:52px;padding:3px;display:flex;flex-direction:column;justify-content:center;gap:1px;text-align:center;font-size:8px}
@@ -388,7 +432,7 @@
   overflow: visible !important;
   transition: padding var(--sidebar-duration) var(--sidebar-easing) !important;
 }
-.guest-sidebar__brand{position:relative;min-height:56px;height:56px;padding:0 6px 12px;display:flex;align-items:center;justify-content:flex-start;border-bottom:1px solid #ead8c5;box-sizing:border-box}
+.guest-sidebar__brand{position:relative;min-height:56px;height:56px;padding:0 10px;display:flex;align-items:center;justify-content:flex-start;border-bottom:1px solid #ead8c5;box-sizing:border-box}
 .guest-drawer__head>button{width:31px;height:31px;min-height:31px;padding:0;display:grid;place-items:center;border:1px solid #ead8c5;border-radius:10px;background:#fff;color:#735f55}
 .guest-drawer__head>button:hover{color:#b42318;border-color:#b42318}
 .guest-drawer__head svg{width:16px}

@@ -119,11 +119,15 @@ export function AiTutorPage() {
   const [speakingMessageId, setSpeakingMessageId] = useState(null);
   const [speechRate, setSpeechRate] = useState(0.95);
   const [copiedId, setCopiedId] = useState(null);
+  const [aiStatus, setAiStatus] = useState({ isLiveCall: false, activeModel: 'gemini-1.5-flash', apiKeyConfigured: false, apiKeyMasked: '' });
+  const [showKeyModal, setShowKeyModal] = useState(false);
+  const [apiKeyInput, setApiKeyInput] = useState('');
+  const [isConfiguringKey, setIsConfiguringKey] = useState(false);
 
   const messagesEndRef = useRef(null);
   const speechRecognitionRef = useRef(null);
 
-  // Load sessions on mount
+  // Load sessions and AI status on mount
   useEffect(() => {
     const loadedSessions = aiTutorService.getAllSessions();
     const activeId = aiTutorService.getActiveSessionId();
@@ -135,7 +139,30 @@ export function AiTutorPage() {
       setCurrentSession(active);
       setCurrentMode(active.mode || 'tutor');
     }
+
+    aiTutorService.getAiStatus().then((st) => {
+      if (st) setAiStatus(st);
+    });
   }, []);
+
+  const handleSaveApiKey = async (e) => {
+    e.preventDefault();
+    if (!apiKeyInput.trim()) return;
+    setIsConfiguringKey(true);
+    try {
+      const res = await aiTutorService.configureApiKey(apiKeyInput.trim());
+      showToast(res?.message || 'Đã lưu cấu hình Google Gemini API Key!');
+      const newStatus = await aiTutorService.getAiStatus();
+      setAiStatus(newStatus);
+      setShowKeyModal(false);
+      setApiKeyInput('');
+      audioFeedback.playSuccessChime();
+    } catch (err) {
+      showToast(err.message || 'Lỗi cấu hình API Key. Vui lòng thử lại!');
+    } finally {
+      setIsConfiguringKey(false);
+    }
+  };
 
   // Scroll to bottom on new message or sending state
   useEffect(() => {
@@ -202,11 +229,19 @@ export function AiTutorPage() {
   const handleSwitchMode = (modeId) => {
     audioFeedback.playTap();
     setCurrentMode(modeId);
-    if (currentSession) {
-      const updated = aiTutorService.updateSessionMode(currentSession.id, modeId);
-      setCurrentSession(updated);
+    let sessionToUpdate = currentSession;
+    if (!sessionToUpdate) {
+      sessionToUpdate = aiTutorService.createSession(modeId);
+      setCurrentSession(sessionToUpdate);
+      setActiveSessionId(sessionToUpdate.id);
       setSessions(aiTutorService.getAllSessions());
+      showToast(`Đã chuyển sang chế độ ${aiTutorService.getMode(modeId).title}!`);
+      return;
     }
+    const updated = aiTutorService.updateSessionMode(sessionToUpdate.id, modeId);
+    setCurrentSession(updated);
+    setSessions(aiTutorService.getAllSessions());
+    showToast(`Đã chuyển sang chế độ ${aiTutorService.getMode(modeId).title}!`);
   };
 
   const handleDeleteSession = async (e, id) => {
@@ -248,8 +283,16 @@ export function AiTutorPage() {
   };
 
   const handleSendMessage = async (textToSend) => {
-    const text = (textToSend || inputText).trim();
-    if (!text || isSending || !currentSession) return;
+    const text = (textToSend ?? inputText).trim();
+    if (!text || isSending) return;
+
+    let sessionToUse = currentSession;
+    if (!sessionToUse) {
+      sessionToUse = aiTutorService.createSession(currentMode);
+      setCurrentSession(sessionToUse);
+      setActiveSessionId(sessionToUse.id);
+      setSessions(aiTutorService.getAllSessions());
+    }
 
     audioFeedback.playTap();
     setIsSending(true);
@@ -257,7 +300,7 @@ export function AiTutorPage() {
 
     try {
       const { updatedSession } = await aiTutorService.sendMessage(
-        currentSession.id,
+        sessionToUse.id,
         text,
         currentMode
       );
@@ -277,6 +320,11 @@ export function AiTutorPage() {
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSendMessage();
   };
 
   const handleSpeak = (msgId, text) => {
@@ -375,6 +423,92 @@ export function AiTutorPage() {
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {confirmationDialog}
+
+        {/* Modal cấu hình Google Gemini API Key */}
+        <AnimatePresence>
+          {showKeyModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full max-w-md bg-white rounded-3xl border border-[#DECBB4] p-6 shadow-2xl space-y-4 text-left"
+              >
+                <div className="flex items-center justify-between border-b border-[#DECBB4]/60 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-xl bg-[#FFF9EE] border border-[#DECBB4] flex items-center justify-center text-base">
+                      🤖
+                    </span>
+                    <div>
+                      <h3 className="text-sm font-black text-[#202124]">Cấu hình Google Gemini API</h3>
+                      <p className="text-[11px] text-[#78685B]">Kích hoạt LLM trực tiếp cho AI Tutor</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowKeyModal(false)}
+                    className="text-stone-400 hover:text-stone-700 text-lg font-bold p-1 cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-3 text-xs text-[#78685B]">
+                  <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4]/60 space-y-1">
+                    <div className="flex items-center justify-between font-bold">
+                      <span>Trạng thái hiện tại:</span>
+                      <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${
+                        aiStatus.isLiveCall ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        {aiStatus.isLiveCall ? '🟢 Live Gemini 1.5' : '⚡ Smart NLP Engine'}
+                      </span>
+                    </div>
+                    {aiStatus.apiKeyMasked && (
+                      <p className="text-[11px] text-stone-500 font-mono">
+                        Key đang dùng: {aiStatus.apiKeyMasked}
+                      </p>
+                    )}
+                  </div>
+
+                  <form onSubmit={handleSaveApiKey} className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-bold text-[#202124] mb-1">
+                        Nhập Google Gemini API Key mới:
+                      </label>
+                      <input
+                        type="password"
+                        placeholder="AIzaSy..."
+                        value={apiKeyInput}
+                        onChange={(e) => setApiKeyInput(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-[#FAF8F5] border border-[#DECBB4] text-xs font-mono text-[#202124] focus:outline-none focus:border-[#DA251D]"
+                      />
+                      <p className="text-[10px] text-stone-400 mt-1">
+                        Khóa API được lưu an toàn trong database backend và kiểm tra trực tiếp với Google Gemini endpoint.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowKeyModal(false)}
+                        className="px-4 py-2 rounded-xl bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        Hủy
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={!apiKeyInput.trim() || isConfiguringKey}
+                        className="px-4 py-2 rounded-xl bg-[#DA251D] hover:bg-[#89221E] text-white text-xs font-bold disabled:opacity-50 transition-colors shadow-xs cursor-pointer flex items-center gap-1.5"
+                      >
+                        {isConfiguringKey ? 'Đang kiểm tra...' : 'Lưu & Kích hoạt'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
 
       {/* Floating Notification Toast */}
       <AnimatePresence>
@@ -568,9 +702,23 @@ export function AiTutorPage() {
                 </div>
               </div>
 
-              {/* Speed Controller & Sound Mode */}
-              <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                <span className="text-[11px] font-bold text-[#78685B]">Tốc độ đọc:</span>
+              {/* AI Engine Status & Key Modal Trigger & Speed Controller */}
+              <div className="flex items-center gap-2 shrink-0 self-end sm:self-center flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setShowKeyModal(true)}
+                  className={`px-3 py-1 rounded-xl border text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer ${
+                    aiStatus.isLiveCall
+                      ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
+                      : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
+                  }`}
+                  title="Cấu hình Google Gemini API Key để kích hoạt Live AI trực tiếp"
+                >
+                  <span className={`w-2 h-2 rounded-full ${aiStatus.isLiveCall ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                  <span>{aiStatus.isLiveCall ? 'Gemini 1.5 Live' : 'Smart NLP Engine'}</span>
+                  <Zap size={12} className={aiStatus.isLiveCall ? 'text-emerald-600' : 'text-amber-600'} />
+                </button>
+
                 <button
                   type="button"
                   onClick={() => {
@@ -645,6 +793,53 @@ export function AiTutorPage() {
                   >
                     {/* Message Body with rich Markdown formatting */}
                     <FormattedMessageText text={msg.text} isAi={isAi} />
+
+                    {/* Grammar Correction Badge */}
+                    {isAi && (msg.grammarCorrection || msg.grammarCheck?.explanation) && (
+                      <div className="mt-3 p-3 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-amber-900 text-xs space-y-1 shadow-2xs">
+                        <div className="flex items-center gap-1.5 font-bold text-amber-800">
+                          <Edit3 size={13} className="text-amber-600 shrink-0" />
+                          <span>Nhận xét & Sửa lỗi ngữ pháp:</span>
+                        </div>
+                        <p className="text-amber-900/90 leading-relaxed">
+                          {msg.grammarCorrection || msg.grammarCheck?.explanation}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Native Phrasing Alternative */}
+                    {isAi && (msg.nativeAlternative || (msg.grammarCheck?.corrected && msg.grammarCheck.corrected !== msg.grammarCheck.original)) && (
+                      <div className="mt-2.5 p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-emerald-950 text-xs space-y-1 shadow-2xs">
+                        <div className="flex items-center gap-1.5 font-bold text-emerald-800">
+                          <Sparkles size={13} className="text-emerald-600 shrink-0" />
+                          <span>Cách diễn đạt tự nhiên hơn của người bản xứ:</span>
+                        </div>
+                        <p className="font-semibold text-emerald-900 leading-relaxed italic">
+                          "{msg.nativeAlternative || msg.grammarCheck?.corrected}"
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Cultural Nuance Note */}
+                    {isAi && msg.culturalNote && (
+                      <div className="mt-2.5 p-3 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4] text-[#431914] text-xs space-y-1 shadow-2xs">
+                        <div className="flex items-center gap-1.5 font-bold text-[#DA251D]">
+                          <span>🏮</span>
+                          <span>Lưu ý văn hóa & Ngữ cảnh ứng xử:</span>
+                        </div>
+                        <p className="text-[#431914]/90 leading-relaxed">
+                          {msg.culturalNote}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Translation Reference */}
+                    {isAi && msg.translation && (
+                      <div className="mt-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs flex items-start gap-2">
+                        <Globe size={13} className="text-sky-600 mt-0.5 shrink-0" />
+                        <span className="italic leading-relaxed">{msg.translation}</span>
+                      </div>
+                    )}
 
                     {/* Useful Vocabulary Cards extracted from message */}
                     {msg.savedWords && msg.savedWords.length > 0 && (
@@ -805,7 +1000,7 @@ export function AiTutorPage() {
           </div>
 
           {/* Input Area Bar */}
-          <div className="p-3 sm:p-4 bg-white border-t border-[#DECBB4]/60 flex items-center gap-2 sm:gap-3">
+          <form onSubmit={handleSubmit} className="p-3 sm:p-4 bg-white border-t border-[#DECBB4]/60 flex items-center gap-2 sm:gap-3">
             {/* Voice Input Mic Button */}
             <button
               type="button"
@@ -837,17 +1032,16 @@ export function AiTutorPage() {
               onKeyDown={handleKeyDown}
               placeholder={bilingualLabel(activeModeConfig.placeholder)}
               rows={1}
-              disabled={isSending}
+              disabled={isSending || !currentSession}
               className="flex-1 py-3 px-4 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4]/80 text-xs sm:text-sm text-[#202124] placeholder:text-[#78685B]/60 focus:outline-none focus:border-[#DA251D] focus:bg-white resize-none transition-all"
             />
 
             {/* Send Button */}
             <button
-              type="button"
-              onClick={() => handleSendMessage()}
-              disabled={!inputText.trim() || isSending}
+              type="submit"
+              disabled={!inputText.trim() || isSending || !currentSession}
               className={`p-3 rounded-2xl flex items-center justify-center transition-all shrink-0 cursor-pointer ${
-                inputText.trim() && !isSending
+                inputText.trim() && !isSending && currentSession
                   ? 'bg-[#DA251D] hover:bg-[#89221E] text-white shadow-[0_3px_0_#89221E] active:translate-y-0.5 active:shadow-none'
                   : 'bg-stone-200 text-stone-400 cursor-not-allowed'
               }`}
@@ -856,7 +1050,7 @@ export function AiTutorPage() {
             >
               <Send size={18} strokeWidth={2.5} />
             </button>
-          </div>
+          </form>
         </main>
       </div>
     </div>

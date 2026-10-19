@@ -1,3 +1,5 @@
+import axiosClient from '@/infrastructure/api/axiosClient';
+
 // AI Tutor Service supporting 7 modes:
 // Tutor, Grammar, Translation, Conversation, Culture Guide, Travel, Regional Vietnamese
 
@@ -126,6 +128,163 @@ export const TUTOR_MODES = [
 const STORAGE_KEY = 'hola_ai_tutor_sessions_v1';
 const ACTIVE_SESSION_KEY = 'hola_ai_tutor_active_id_v1';
 
+const normalizeText = (value = '') => value
+  .toLocaleLowerCase('vi-VN')
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/đ/g, 'd')
+  .trim();
+
+function getRecentConversation(messages = []) {
+  return messages
+    .filter(message => message.sender === 'user' || message.sender === 'ai')
+    .slice(-6);
+}
+
+function conversationalReply(query, messages = []) {
+  const normalized = normalizeText(query);
+  const lower = query.toLowerCase();
+
+  // 1. Age error: "tôi có 20 tuổi"
+  if (/.*(toi|minh|em)\s+(co|la)\s+\d+\s+tuoi.*/.test(normalized) || lower.includes('có 20 tuổi') || lower.includes('có 18 tuổi') || lower.includes('có 25 tuổi')) {
+    const ageMatch = query.match(/\d+/);
+    const age = ageMatch ? ageMatch[0] : '20';
+    return {
+      text: `### 📝 Nhận xét ngữ pháp: Cách nói tuổi trong tiếng Việt
+Trong tiếng Việt, khi nói về số tuổi, chúng ta **không dùng từ "có"** (khác với tiếng Pháp *"J'ai 20 ans"* hay tiếng Tây Ban Nha *"Tengo 20 años"*). Người Việt nói trực tiếp số tuổi ngay sau đại từ!
+
+✨ **Cách nói tự nhiên của người bản xứ:**  
+> **"Năm nay tôi ${age} tuổi ạ."** (hoặc thân mật: *"Mình ${age} tuổi."*)
+
+💡 **Cấu trúc chuẩn:** \`[Đại từ] + [năm nay] + [số tuổi] + tuổi (ạ).\``,
+      grammarCorrection: "Không dùng 'có' cho số tuổi. Người Việt nói: 'Tôi [số tuổi] tuổi'.",
+      nativeAlternative: `Năm nay tôi ${age} tuổi ạ.`,
+      explanation: "Không dùng 'có' để nói tuổi trong tiếng Việt.",
+      savedWords: [
+        { word: 'Năm nay', meaning: 'This year (placed naturally before stating age)' },
+        { word: 'Tuổi', meaning: 'Years old / Age' },
+      ],
+    };
+  }
+
+  // 2. Passive voice error with "bị" vs "được"
+  if (lower.includes('bị khen') || lower.includes('bị điểm 10') || lower.includes('bị thưởng') || lower.includes('bị trúng số') || lower.includes('bị tăng lương')) {
+    return {
+      text: `### 💡 Phân biệt tinh tế: "Được" vs "Bị"
+Người Việt rất coi trọng việc thể hiện cảm xúc qua câu bị động:
+- **"Được"**: Dành cho điều may mắn, tốt lành hoặc được người khác khen ngợi.
+- **"Bị"**: Chỉ dùng cho điều không may, tiêu cực hoặc mang lại cảm giác khó chịu.
+
+Vì vậy, khi được khen hay nhận thưởng, hãy tự hào dùng **"Được"** nhé!
+
+✨ **Câu chuẩn:**  
+> **"${query.replace(/bị/g, 'được')}"**`,
+      grammarCorrection: "Sai sắc thái: Thay 'bị' bằng 'được' khi nói về điều may mắn, tích cực.",
+      nativeAlternative: query.replace(/bị/g, 'được'),
+      explanation: "• Được: Điều tốt đẹp, may mắn. • Bị: Rủi ro, không mong muốn.",
+      savedWords: [
+        { word: 'Được khen', meaning: 'To be praised (positive)' },
+        { word: 'Bị phạt', meaning: 'To be penalized (negative)' },
+      ],
+    };
+  }
+
+  // 3. Adjective before noun: "đỏ xe", "to nhà", "đẹp áo"
+  if (lower.includes('đỏ xe') || lower.includes('to nhà') || lower.includes('đẹp áo') || lower.includes('ngon phở')) {
+    const fixed = query.replace('đỏ xe', 'xe đỏ').replace('to nhà', 'nhà to').replace('đẹp áo', 'áo đẹp').replace('ngon phở', 'phở ngon');
+    return {
+      text: `### 📝 Trật tự từ trong tiếng Việt
+Trong tiếng Việt, **Tính từ luôn đứng SAU Danh từ** để bổ nghĩa (ngược với tiếng Anh *red car* -> *xe đỏ*).
+
+✨ **Câu sửa tự nhiên:**  
+> **"${fixed}"**
+
+💡 **Công thức ghi nhớ:** \`[Danh từ] + [Tính từ]\` (ví dụ: *xe đỏ*, *áo đẹp*, *nhà to*, *phở ngon*).`,
+      grammarCorrection: "Trật tự từ sai: Tính từ bổ nghĩa phải đứng sau danh từ.",
+      nativeAlternative: fixed,
+      explanation: "Danh từ đứng trước, tính từ bổ nghĩa đứng sau.",
+      savedWords: [
+        { word: 'Xe đỏ', meaning: 'Red car (Noun + Adjective)' },
+        { word: 'Áo đẹp', meaning: 'Beautiful clothes' },
+      ],
+    };
+  }
+
+  // 4. Food & Coffee
+  if (normalized.includes('ca phe') || normalized.includes('coffee')) {
+    return {
+      text: `### ☕ Văn hóa Cà Phê Việt Nam
+Cà phê Việt Nam nổi tiếng với hương vị đậm đà quyến rũ! Đây là các món cà phê kinh điển bạn nên thử:
+1. **Cà phê sữa đá** (miền Bắc gọi là *Nâu đá*): Cà phê phin hòa cùng sữa đặc ngọt béo.
+2. **Cà phê đen đá**: Dành cho người thích vị đắng nguyên bản (có thể dặn *ít đường*).
+3. **Bạc xỉu**: Ngọt ngào, nhẹ nhàng (nhiều sữa, ít cà phê).
+4. **Cà phê trứng**: Kem trứng thơm ngậy đánh bông bồng bềnh trên tách cà phê nóng Hà Nội!`,
+      nativeAlternative: 'Cho mình một ly cà phê sữa đá ít ngọt nhé!',
+      culturalNote: 'Ngồi cà phê vỉa hè ngắm phố xá là thói quen thư giãn đặc trưng của người Việt từ Bắc chí Nam.',
+      savedWords: [
+        { word: 'Cà phê sữa đá', meaning: 'Vietnamese iced coffee with condensed milk' },
+        { word: 'Bạc xỉu', meaning: 'Sweet condensed milk with light splash of coffee' },
+        { word: 'Ít đường / Ít ngọt', meaning: 'Less sweet / less sugar' },
+      ],
+    };
+  }
+
+  // 5. Food & Pho
+  if (normalized.includes('pho') || normalized.includes('banh mi')) {
+    return {
+      text: `### 🍜 Khám phá Ẩm Thực Đường Phố
+Để gọi món ngon chuẩn như người sành ăn, bạn hãy dùng các mẫu câu này nhé:
+- Khi ăn Phở: *"Cho cháu một bát phở bò tái nạm, ít hành, kèm đĩa quẩy giòn ạ!"*
+- Khi mua Bánh mì: *"Bán cho em một ổ bánh mì thập cẩm, nhiều pate, không ớt nhé chị!"*`,
+      nativeAlternative: 'Cho em một bát phở bò chín, nước trong, ít hành nhé ạ!',
+      culturalNote: 'Phở miền Bắc chuộng vị thanh nhẹ ăn cùng giấm tỏi và quẩy giòn; phở miền Nam đậm đà ăn kèm tương đen và rổ rau thơm tươi rói.',
+      savedWords: [
+        { word: 'Phở tái nạm', meaning: 'Pho with rare steak and flank beef' },
+        { word: 'Quẩy giòn', meaning: 'Crispy fried dough sticks' },
+        { word: 'Bánh mì thập cẩm', meaning: 'Mixed combo Vietnamese baguette' },
+      ],
+    };
+  }
+
+  // 6. Price & Shopping
+  if (normalized.includes('bao nhieu') || normalized.includes('tra gia') || normalized.includes('mac ca') || normalized.includes('how much')) {
+    return {
+      text: `### 🛍️ Mẹo Mặc Cả & Hỏi Giá Lịch Sự
+Khi mua sắm tại chợ truyền thống Việt Nam:
+1. **Hỏi giá nhã nhặn:** *"Dạ cô ơi, cái này giá bao nhiêu một cái/kg ạ?"*
+2. **Mặc cả vui vẻ:** *"Cô bớt cho cháu một chút lấy may nhé! Cháu mở hàng cho cô nha!"*
+3. **Chốt giá:** *"Hai trăm nghìn được không cô, cháu lấy hai cái luôn ạ!"*`,
+      nativeAlternative: 'Dạ cái này bao nhiêu tiền hả chị? Bớt chút cho em mở hàng may mắn nhé!',
+      culturalNote: 'Văn hóa "Mở hàng": Người bán rất quý khách mua xởi lởi vào buổi sáng sớm vì tin rằng sẽ mang lại may mắn cả ngày.',
+      savedWords: [
+        { word: 'Bao nhiêu tiền?', meaning: 'How much does it cost?' },
+        { word: 'Mở hàng may mắn', meaning: 'First purchase of the day for good luck' },
+      ],
+    };
+  }
+
+  // 7. Greetings
+  const greeting = /^(xin chao|chao|hello|hi|hey|alo)\b/.test(normalized);
+  if (greeting) {
+    return {
+      text: `Chào bạn! Rất vui được đồng hành cùng bạn hôm nay! 😊\n\nNgoài câu **"Xin chào"** thông thường, người Việt thường chào thân mật kèm đại từ nhân xưng:\n- *"Chào bạn nhé!"* (với bạn bè)\n- *"Em chào anh/chị ạ!"* (lịch sự với người lớn hơn)\n- *"Bạn ăn cơm chưa?"* (lời chào hỏi thăm tình cảm kinh điển của người Việt!).\n\nHôm nay bạn muốn luyện tập chủ đề gì cùng mình nào?`,
+      nativeAlternative: 'Chào bạn nhé! Hôm nay bạn thế nào?',
+      culturalNote: '"Ăn cơm chưa?" là câu chào thể hiện sự quan tâm ấm áp, không nhất thiết là mời ăn uống.',
+      savedWords: [
+        { word: 'Chào bạn nhé', meaning: 'Hello friend (friendly & polite)' },
+        { word: 'Ăn cơm chưa?', meaning: 'Have you eaten yet? (Warm Vietnamese greeting)' },
+      ],
+    };
+  }
+
+  // 8. General conversational response
+  return {
+    text: `Mình hiểu câu bạn vừa chia sẻ: **"${query}"**! 😊\n\nĐây là cách diễn đạt rất tốt và người Việt hoàn toàn hiểu ý bạn. Để luyện tập sâu hơn, bạn muốn:\n1. 💬 Tiếp tục trò chuyện và biến tấu câu này trong tình huống đời thường?\n2. 📝 Xem cách nói tự nhiên hơn của người bản xứ?\n3. 🔍 Tìm hiểu từ vựng hoặc điểm ngữ pháp liên quan?`,
+    nativeAlternative: query.endsWith('ạ') ? query : `${query} ạ`,
+    explanation: 'Bạn đang diễn đạt rất tốt! Hãy tiếp tục duy trì phản xạ tiếng Việt nhé.',
+  };
+}
+
 function createDefaultSessions() {
   const initialSession = {
     id: 'session-welcome',
@@ -190,6 +349,20 @@ export const aiTutorService = {
     return sessions.find(s => s.id === id) || sessions[0];
   },
 
+  async getAiStatus() {
+    try {
+      const res = await axiosClient.get('/api/ai/status', { timeout: 2500 });
+      return res?.result ?? res ?? { isLiveCall: false, activeModel: 'gemini-1.5-flash', apiKeyConfigured: false };
+    } catch {
+      return { isLiveCall: false, activeModel: 'gemini-1.5-flash', apiKeyConfigured: false };
+    }
+  },
+
+  async configureApiKey(apiKey) {
+    const res = await axiosClient.post('/api/ai/configure-key', { apiKey }, { timeout: 6000 });
+    return res?.result ?? res;
+  },
+
   createSession(mode = 'tutor', title = '') {
     const modeConfig = this.getMode(mode);
     const newSession = {
@@ -208,6 +381,9 @@ export const aiTutorService = {
         },
       ],
     };
+
+    // Optionally sync session creation to backend asynchronously if backend is up
+    axiosClient.post('/api/ai/sessions', { id: newSession.id, mode, title: newSession.title }, { timeout: 3000 }).catch(() => {});
 
     const sessions = [newSession, ...this.getAllSessions()];
     this.saveSessions(sessions);
@@ -239,20 +415,62 @@ export const aiTutorService = {
   },
 
   updateSessionMode(id, newMode) {
+    const modeConfig = this.getMode(newMode);
     const sessions = this.getAllSessions().map(s => {
       if (s.id === id) {
-        return { ...s, mode: newMode, updatedAt: new Date().toISOString() };
+        const userMsgCount = (s.messages || []).filter(m => m.sender === 'user').length;
+        let updatedMessages = s.messages || [];
+        let updatedTitle = s.title;
+
+        // If this session has no user messages yet, customize it for the new mode!
+        if (userMsgCount === 0) {
+          updatedTitle = `Hội thoại mới (${modeConfig.name})`;
+          updatedMessages = [
+            {
+              id: `msg-${Date.now()}`,
+              sender: 'ai',
+              mode: newMode,
+              text: `Chào mừng bạn đến với chế độ **${modeConfig.title}**! ${modeConfig.icon}\n\n${modeConfig.description}\n\nHãy gửi câu hỏi hoặc chọn một trong các gợi ý bên dưới để chúng ta cùng luyện tập nhé!`,
+              timestamp: new Date().toISOString(),
+            },
+          ];
+        } else {
+          // If there's an ongoing chat, add a helpful AI mode switch notification
+          updatedMessages = [
+            ...s.messages,
+            {
+              id: `msg-${Date.now()}-switch`,
+              sender: 'ai',
+              mode: newMode,
+              text: `✨ **Đã chuyển sang chế độ ${modeConfig.title} (${modeConfig.name})** ${modeConfig.icon}\n\n${modeConfig.description}\n\nHãy tiếp tục gửi câu hỏi hoặc câu cần kiểm tra theo chế độ mới này nhé!`,
+              timestamp: new Date().toISOString(),
+            },
+          ];
+        }
+
+        return {
+          ...s,
+          mode: newMode,
+          title: updatedTitle,
+          messages: updatedMessages,
+          updatedAt: new Date().toISOString(),
+        };
       }
       return s;
     });
+
     this.saveSessions(sessions);
     return sessions.find(s => s.id === id);
   },
 
   async sendMessage(sessionId, text, currentMode = 'tutor') {
     const sessions = this.getAllSessions();
-    const session = sessions.find(s => s.id === sessionId);
-    if (!session) throw new Error('Session not found');
+    let session = sessions.find(s => s.id === sessionId);
+    if (!session) {
+      // Fallback: auto-create session if somehow not found
+      session = this.createSession(currentMode);
+      sessionId = session.id;
+    }
 
     const userMsg = {
       id: `msg-${Date.now()}-u`,
@@ -264,38 +482,84 @@ export const aiTutorService = {
 
     // Auto rename session title on first user message if it has a generic title
     let newTitle = session.title;
-    if (session.messages.filter(m => m.sender === 'user').length === 0) {
+    if ((session.messages || []).filter(m => m.sender === 'user').length === 0) {
       newTitle = text.length > 28 ? `${text.slice(0, 28)}...` : text;
     }
 
-    // Generate intelligent AI response
-    const aiResponseData = await this.generateResponse(text, currentMode, session.messages);
+    let aiMsg = null;
 
-    const aiMsg = {
-      id: `msg-${Date.now()}-ai`,
-      sender: 'ai',
-      mode: currentMode,
-      text: aiResponseData.text,
-      grammarCheck: aiResponseData.grammarCheck || null,
-      savedWords: aiResponseData.savedWords || [],
-      timestamp: new Date().toISOString(),
-    };
+    // 1. Try real Backend AI API with fast timeout (3.5s)
+    try {
+      const apiRes = await axiosClient.post(
+        `/api/ai/sessions/${sessionId}/messages`,
+        { text: text.trim(), mode: currentMode },
+        { timeout: 12000 }
+      );
+
+      const r = apiRes?.result ?? apiRes;
+      if (r?.text) {
+        aiMsg = {
+          id: r.id || `msg-${Date.now()}-ai`,
+          sender: 'ai',
+          mode: currentMode,
+          text: r.text,
+          translation: r.translation || null,
+          explanation: r.explanation || null,
+          nativeAlternative: r.nativeAlternative || null,
+          culturalNote: r.culturalNote || null,
+          grammarCorrection: r.grammarCorrection || null,
+          grammarCheck: r.grammarCorrection ? {
+            original: text.trim(),
+            corrected: r.nativeAlternative || text.trim(),
+            explanation: r.grammarCorrection,
+          } : null,
+          savedWords: r.savedWords || [],
+          timestamp: r.timestamp || new Date().toISOString(),
+        };
+      }
+    } catch (apiErr) {
+      // Fast and safe fallback to smart offline engine
+      console.info('Backend AI not responding in 3.5s or offline, using smart local engine:', apiErr.message);
+    }
+
+    // 2. Intelligent local fallback if backend was unavailable
+    if (!aiMsg) {
+      const aiResponseData = await this.generateResponse(text, currentMode, session.messages || []);
+      aiMsg = {
+        id: `msg-${Date.now()}-ai`,
+        sender: 'ai',
+        mode: currentMode,
+        text: aiResponseData.text,
+        translation: aiResponseData.translation || null,
+        explanation: aiResponseData.explanation || null,
+        nativeAlternative: aiResponseData.nativeAlternative || null,
+        culturalNote: aiResponseData.culturalNote || null,
+        grammarCorrection: aiResponseData.grammarCorrection || null,
+        grammarCheck: aiResponseData.grammarCheck || (aiResponseData.grammarCorrection ? {
+          original: text.trim(),
+          corrected: aiResponseData.nativeAlternative || text.trim(),
+          explanation: aiResponseData.grammarCorrection,
+        } : null),
+        savedWords: aiResponseData.savedWords || [],
+        timestamp: new Date().toISOString(),
+      };
+    }
 
     const updatedSession = {
       ...session,
       title: newTitle,
       mode: currentMode,
       updatedAt: new Date().toISOString(),
-      messages: [...session.messages, userMsg, aiMsg],
+      messages: [...(session.messages || []), userMsg, aiMsg],
     };
 
-    const updatedSessions = sessions.map(s => (s.id === sessionId ? updatedSession : s));
+    const updatedSessions = this.getAllSessions().map(s => (s.id === sessionId ? updatedSession : s));
     this.saveSessions(updatedSessions);
 
     return { userMsg, aiMsg, updatedSession };
   },
 
-  async generateResponse(query, mode) {
+  async generateResponse(query, mode, messages = []) {
     // Simulate slight natural AI processing time (350ms)
     await new Promise(r => setTimeout(r, 350));
 
@@ -515,34 +779,12 @@ Dưới đây là các mẫu câu "sinh tồn" cực kỳ hữu ích cho bạn:
 
     // Mode: CONVERSATION
     if (mode === 'conversation') {
-      return {
-        text: `Chào bạn! Rất vui được trò chuyện với bạn hôm nay! 😊
-
-Tôi nghe bạn nói rất thú vị. Bạn có biết là người Việt Nam cực kỳ thích ngồi quán cóc vỉa hè để uống cà phê hoặc trà chanh chém gió không?
-
-Bạn đã thử món cà phê sữa đá hoặc cà phê trứng của Việt Nam bao giờ chưa? Bạn thấy hương vị của nó thế nào so với cà phê ở nước bạn? Hãy kể cho tôi nghe nhé!`,
-      };
+      const cr = conversationalReply(query, messages);
+      return typeof cr === 'string' ? { text: cr } : cr;
     }
 
     // Default TUTOR mode
-    return {
-      text: `### 🎓 Giải đáp từ AI Tutor
-
-Chào bạn! Với câu hỏi: **"${query}"**, đây là lời giải thích chi tiết dành cho bạn:
-
-#### 1. Bản chất & Quy tắc cốt lõi:
-Trong tiếng Việt, ngữ cảnh và cách dùng từ đóng vai trò quyết định ý nghĩa câu nói. Các từ hư từ như *đã, đang, sẽ, rồi, chưa* giúp xác định thì của hành động mà không cần biến đổi hình thái từ như các ngôn ngữ phương Tây.
-
-#### 2. Ví dụ minh họa thực tế:
-- **Câu chuẩn:** *"Tôi đang học tiếng Việt cùng gia sư AI."*
-- **Câu mở rộng:** *"Mỗi ngày tôi dành 30 phút luyện tập phản xạ giao tiếp để tự tin hơn."*
-
-#### 3. Mẹo ghi nhớ cho người học:
-Hãy ghi nhớ từ vựng theo cụm (collocation) và đặt câu hoàn chỉnh thay vì học từ đơn lẻ. Điều này giúp bạn phản xạ nhanh mà không cần mất thời gian dịch nhẩm trong đầu!`,
-      savedWords: [
-        { word: 'Phản xạ giao tiếp', meaning: 'Communication reflex' },
-        { word: 'Tự tin', meaning: 'Confident' },
-      ],
-    };
+    const defCr = conversationalReply(query, messages);
+    return typeof defCr === 'string' ? { text: defCr } : defCr;
   },
 };
