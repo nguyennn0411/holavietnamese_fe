@@ -18,6 +18,8 @@
 
 /* Brand */
 .site-brand { display:inline-flex; align-items:center; gap:11px; color:var(--layout-ink); text-decoration:none; }
+.site-brand__logo { display:block; height:34px; width:auto; max-width:130px; object-fit:contain; }
+.site-brand__icon { display:none; width:34px; height:34px; object-fit:contain; }
 .site-brand__mark { display:grid; place-items:center; width:40px; height:40px; flex:0 0 40px; border-radius:12px 12px 12px 4px; color:var(--color-gold); background:var(--color-ink); box-shadow:0 8px 20px rgba(49,23,19,.18); font:800 19px/1 Georgia,serif; }
 .site-brand__copy { display:flex; flex-direction:column; min-width:0; line-height:1.2; }
 .site-brand__copy strong { font-size:16px; letter-spacing:-.035em; }

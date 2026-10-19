@@ -41,7 +41,7 @@ export function LearnerSidebar({ collapsed, onToggle }) {
     >
       <ChevronLeft className="sidebar-toggle-btn__icon" />
     </button>
-    <div className="learner-sidebar__brand"><Brand compact /></div>
+    <div className="learner-sidebar__brand"><Brand compact collapsed={collapsed} /></div>
     <nav className="learner-sidebar__nav">
       {learnerItems.map(({ to, label, icon: Icon, status, end, mobile }) => to ? (
         <NavLink key={label} to={to} end={end} className={`learner-sidebar__link ${mobile ? 'is-mobile-primary' : ''}`} title={collapsed ? t(label) : undefined}>
