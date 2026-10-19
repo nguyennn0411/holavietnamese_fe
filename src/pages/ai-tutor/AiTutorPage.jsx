@@ -124,8 +124,14 @@ export function AiTutorPage() {
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [isConfiguringKey, setIsConfiguringKey] = useState(false);
 
-  const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
   const speechRecognitionRef = useRef(null);
+  const isFirstRender = useRef(true);
+
+  // Ensure window stays at top on page mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
 
   // Load sessions and AI status on mount
   useEffect(() => {
@@ -164,9 +170,18 @@ export function AiTutorPage() {
     }
   };
 
-  // Scroll to bottom on new message or sending state
+  // Scroll to bottom of chat messages container ONLY (without scrolling the page window)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (!chatContainerRef.current) return;
+    if (isFirstRender.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      isFirstRender.current = false;
+    } else {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   }, [currentSession?.messages, isSending]);
 
   // Setup Web Speech Recognition if available
@@ -760,7 +775,10 @@ export function AiTutorPage() {
           </div>
 
           {/* Chat Messages Stream */}
-          <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-5 max-h-[520px] bg-gradient-to-b from-[#FAF8F5]/40 via-white to-[#FAF8F5]/40">
+          <div
+            ref={chatContainerRef}
+            className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-5 max-h-[520px] bg-gradient-to-b from-[#FAF8F5]/40 via-white to-[#FAF8F5]/40"
+          >
             {currentSession?.messages?.map((msg) => {
               const isAi = msg.sender === 'ai';
               const isSpeaking = speakingMessageId === msg.id;
@@ -976,8 +994,6 @@ export function AiTutorPage() {
                 </div>
               </motion.div>
             )}
-
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Quick Prompts Chips Carousel */}
