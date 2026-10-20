@@ -56,6 +56,11 @@ export function MainLayout() {
 
   useEffect(() => closeGuestDrawer(), [location.pathname, closeGuestDrawer]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    document.getElementById('main-content')?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [location.pathname]);
+
   return (
     <div className={`layout-shell ${isAuthenticated ? 'learner-app' : 'guest-app'} ${isSidebarCollapsed ? 'is-sidebar-collapsed' : ''}`}>
       <a className="skip-link" href="#main-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>

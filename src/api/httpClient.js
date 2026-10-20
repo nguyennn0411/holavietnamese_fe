@@ -1,7 +1,14 @@
-const configuredApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
-const API_BASE_URL = configuredApiBaseUrl
-  ? (configuredApiBaseUrl.endsWith('/api') ? configuredApiBaseUrl : `${configuredApiBaseUrl}/api`)
-  : '/api'
+const rawBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '')
+const apiBase = rawBase.endsWith('/api') ? rawBase : rawBase ? `${rawBase}/api` : '/api'
+
+export function resolveApiUrl(path) {
+  if (!path) return apiBase
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+  const cleanPath = (path.startsWith('/') ? path : `/${path}`).replace(/^\/api(?=\/|$)/, '')
+  return `${apiBase}${cleanPath}`
+}
 
 let csrfPromise
 export function resetCsrf() { csrfPromise = undefined }
@@ -13,14 +20,18 @@ async function csrf() {
 
 export async function httpClient(path, options = {}) {
   const method = (options.method || 'GET').toUpperCase()
-  const accessToken = localStorage.getItem('token')
-  const csrfToken = !accessToken && !['GET', 'HEAD', 'OPTIONS'].includes(method) ? await csrf() : null
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const jwtToken = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null
+  const csrfToken = (!jwtToken && !['GET', 'HEAD', 'OPTIONS'].includes(method)) ? await csrf() : null
+
+  const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData
+  const resolvedUrl = resolveApiUrl(path)
+
+  const response = await fetch(resolvedUrl, {
     ...options,
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      ...(!isFormData ? { 'Content-Type': 'application/json' } : {}),
+      ...(jwtToken ? { Authorization: `Bearer ${jwtToken}` } : {}),
       ...(csrfToken ? { [csrfToken.headerName]: csrfToken.token } : {}),
       ...options.headers,
     },
