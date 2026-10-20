@@ -10,6 +10,7 @@ import { Menu, X, Flame, Zap } from 'lucide-react';
 export function AppHeader({ isAuthenticated, user, loading, stats, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const isAdmin = user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_ADMIN');
+  const isContentManager = user?.roles?.includes('CONTENT_MANAGER') || user?.roles?.includes('ROLE_CONTENT_MANAGER');
   return (
     <header className="site-header">
       <div className="site-header__inner">
@@ -24,7 +25,7 @@ export function AppHeader({ isAuthenticated, user, loading, stats, onLogout }) {
                 <span title="Tổng điểm kinh nghiệm"><Zap size={15} aria-hidden="true"/> <strong>{stats.xp}</strong> XP</span>
               </div>
               <NotificationDropdown />
-              <UserMenu user={user} isAdmin={isAdmin} onLogout={onLogout} />
+              <UserMenu user={user} isAdmin={isAdmin} isContentManager={isContentManager} onLogout={onLogout} />
             </>
           ) : (
             <div className="site-header__guest-actions">

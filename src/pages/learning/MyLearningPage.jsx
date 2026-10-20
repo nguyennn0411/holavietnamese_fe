@@ -13,18 +13,90 @@ import {
   Compass,
   CheckCircle2,
   Calendar,
+  Flame,
+  Clock,
+  Play
 } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { learnerService } from '@/services/learnerService';
+import { courseService } from '@/services/courseService';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { ResourceState } from '@/components/common/ResourceState';
 import { EmptyState, Artwork, SpeakButton } from '@/components/common/Ui';
 import { ProgressBar } from '@/components/common/ProgressBar';
 import { ContentImage } from '@/components/common/ContentImage';
 
-export function MyLearningPage() {
-  const [tab, setTab] = useState('courses');
-  const resource = useAsyncResource(useCallback(() => learnerService.getMyLearningOverview(), []));
+export function MyLearningPage({ initialTab = 'courses' }) {
+  const [tab, setTab] = useState(initialTab);
+  const [courseFilter, setCourseFilter] = useState('all'); // 'all' | 'in_progress' | 'completed'
+
+  const resource = useAsyncResource(
+    useCallback(async () => {
+      const [overview, coursesResult] = await Promise.all([
+        learnerService.getMyLearningOverview().catch(() => ({})),
+        courseService.myCourses().catch(() => []),
+      ]);
+
+      const myCoursesList = Array.isArray(coursesResult) ? coursesResult : (coursesResult?.content || []);
+      const overviewCourses = overview?.enrolledCourses || [];
+
+      // Hợp nhất dữ liệu các khóa học đã đăng ký
+      const courseMap = new Map();
+
+      // 1. Dữ liệu chi tiết từ /api/me/courses
+      myCoursesList.forEach((c) => {
+        const id = c.courseId || c.id;
+        courseMap.set(String(id), {
+          id,
+          courseId: id,
+          title: c.title,
+          titleVi: c.titleVi || c.title,
+          image: c.thumbnailUrl || c.image,
+          thumbnailUrl: c.thumbnailUrl || c.image,
+          level: c.level || 'A1',
+          totalLessons: Number(c.totalLessons) || 0,
+          completedLessons: Number(c.completedLessons) || 0,
+          progressPercentage: Number(c.progressPercentage) || 0,
+          status: c.status,
+          lastAccessedLessonId: c.lastAccessedLessonId,
+          nextLesson: c.progressPercentage === 100 ? 'Đã hoàn thành' : 'Tiếp tục bài học',
+        });
+      });
+
+      // 2. Bổ sung từ overview nếu chưa có
+      overviewCourses.forEach((c) => {
+        const id = c.id || c.courseId;
+        const key = String(id);
+        if (!courseMap.has(key)) {
+          courseMap.set(key, {
+            id,
+            courseId: id,
+            title: c.title,
+            titleVi: c.titleVi || c.title,
+            image: c.image || c.thumbnailUrl,
+            thumbnailUrl: c.image || c.thumbnailUrl,
+            level: c.level || 'A1',
+            totalLessons: Number(c.totalLessons) || 0,
+            completedLessons: Number(c.completedLessons) || 0,
+            progressPercentage: Number(c.progress) || 0,
+            status: c.progress >= 100 ? 'COMPLETED' : 'IN_PROGRESS',
+            lastAccessedLessonId: c.lastAccessedLessonId,
+            nextLesson: c.nextLesson,
+          });
+        }
+      });
+
+      const mergedCourses = Array.from(courseMap.values());
+
+      return {
+        ...overview,
+        enrolledCourses: mergedCourses,
+        totalEnrolled: mergedCourses.length,
+        completedCoursesCount: mergedCourses.filter((c) => c.progressPercentage >= 100 || c.status === 'COMPLETED').length,
+        inProgressCoursesCount: mergedCourses.filter((c) => c.progressPercentage < 100 && c.status !== 'COMPLETED').length,
+      };
+    }, [])
+  );
 
   const tabItems = [
     { id: 'courses', label: 'Khóa học của tôi', icon: BookOpen },
@@ -53,7 +125,14 @@ export function MyLearningPage() {
             </BilingualText>
           </p>
 
-          <div className="pt-2">
+          <div className="pt-2 flex flex-wrap items-center gap-3">
+            <Link
+              to="/courses"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-xs transition-all"
+            >
+              <BilingualText>{"Khám phá thêm khóa học →"}</BilingualText>
+            </Link>
+
             <Link
               to="/edtech/dashboard"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 hover:bg-white text-[#431914] border border-[#DECBB4] font-semibold text-xs shadow-xs transition-all hover:border-[#A62A24]"
@@ -77,7 +156,7 @@ export function MyLearningPage() {
               role="tab"
               aria-selected={isActive}
               onClick={() => setTab(item.id)}
-              className={`flex-shrink-0 px-4 py-3 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all duration-200 ${
+              className={`flex-shrink-0 px-4 py-3 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all duration-200 cursor-pointer ${
                 isActive
                   ? 'border-[#A62A24] text-[#A62A24] bg-[#FFF9EE]'
                   : 'border-transparent text-[#78685B] hover:text-[#431914] hover:bg-[#FFF9EE]/50'
@@ -90,267 +169,496 @@ export function MyLearningPage() {
         })}
       </div>
 
-      {/* Main Tab Content */}
+      {/* Main Content Area */}
       <ResourceState resource={resource}>
-        {(data) => (
-          <div className="space-y-6">
-            {/* TAB 1: Enrolled Courses */}
-            {tab === 'courses' && (
-              <div className="course-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {data.enrolledCourses?.map((course) => {
-                  const isCompleted = course.progress >= 100;
-                  return (
-                    <motion.article
-                      whileHover={{ y: -4 }}
-                      key={course.id}
-                      className="card learning-course group relative flex flex-col bg-[#FFF9EE] border border-[#DECBB4] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-                    >
-                      <div className="relative overflow-hidden aspect-[16/10] bg-[#EEE3D1]">
-                        <ContentImage
-                          className="learning-course-image w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          src={course.image}
-                          alt={course.title}
-                          fallback={
-                            <Artwork
-                              kind={course.id % 2 ? 'food' : 'village'}
-                              alt={`Minh họa khóa học: ${course.title}`}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
-                          }
-                        />
-                        <div className="absolute top-3 right-3 z-10">
-                          <span
-                            className={`badge px-2.5 py-1 text-xs font-bold rounded-lg shadow-sm flex items-center gap-1 ${
-                              isCompleted
-                                ? 'bg-emerald-800 text-emerald-100 border border-emerald-700'
-                                : 'bg-[#A62A24] text-white border border-[#89221E]'
-                            }`}
-                          >
-                            {isCompleted ? <CheckCircle2 size={12} /> : null}
-                            <BilingualText>{isCompleted ? 'Đã hoàn thành' : 'Đang học'}</BilingualText>
-                          </span>
-                        </div>
-                      </div>
+        {(data) => {
+          const allCourses = data.enrolledCourses || [];
+          const activeCourse = allCourses.find((c) => c.progressPercentage < 100 && c.status !== 'COMPLETED') || allCourses[0];
 
-                      <div className="learning-course-body p-5 flex flex-col flex-1 justify-between gap-4">
-                        <div className="space-y-2">
-                          <h2 className="text-lg font-bold text-[#431914] group-hover:text-[#A62A24] transition-colors leading-snug line-clamp-2">
-                            <BilingualText vi={course.titleVi || course.title} en={course.title} />
-                          </h2>
+          // Lọc danh sách khóa học theo bộ lọc con
+          const filteredCourses = allCourses.filter((c) => {
+            const isCompleted = c.progressPercentage >= 100 || c.status === 'COMPLETED';
+            if (courseFilter === 'in_progress') return !isCompleted;
+            if (courseFilter === 'completed') return isCompleted;
+            return true;
+          });
 
-                          <div className="pt-1">
-                            <ProgressBar value={course.progress} label="Tiến độ khóa học" />
-                          </div>
-
-                          {course.nextLesson && (
-                            <p className="text-xs text-[#78685B] pt-1">
-                              <span className="font-semibold text-[#431914]">
-                                <BilingualText>{"Bài tiếp theo: "}</BilingualText>
-                              </span>
-                              {course.nextLesson}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="pt-2 border-t border-[#DECBB4]/40">
-                          <Link
-                            className="button w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
-                            to={`/courses/${course.id}`}
-                          >
-                            <BilingualText>{isCompleted ? 'Xem lại khóa học' : 'Tiếp tục học →'}</BilingualText>
-                            <ArrowRight size={14} />
-                          </Link>
-                        </div>
-                      </div>
-                    </motion.article>
-                  );
-                })}
-
-                {/* Add New Course Card */}
-                <motion.div
-                  whileHover={{ y: -4 }}
-                  className="card learning-course-add group flex flex-col items-center justify-center text-center p-8 bg-[#FFF9EE]/70 border-2 border-dashed border-[#DECBB4] hover:border-[#A62A24] rounded-2xl transition-all"
-                >
-                  <span className="w-12 h-12 rounded-2xl bg-[#F5E1D8] text-[#A62A24] flex items-center justify-center mb-3 shadow-xs group-hover:scale-110 transition-transform">
-                    <Plus size={24} />
-                  </span>
-                  <h2 className="text-lg font-bold text-[#431914] mb-1">
-                    <BilingualText>{"Một câu chuyện mới?"}</BilingualText>
-                  </h2>
-                  <p className="text-xs text-[#78685B] max-w-xs mb-4">
-                    <BilingualText>{"Khám phá thêm tiếng Việt qua những điều bạn yêu thích."}</BilingualText>
-                  </p>
-                  <Link
-                    className="button secondary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
-                    to="/courses"
-                  >
-                    <BilingualText>{"Khám phá khóa học"}</BilingualText>
-                    <ArrowRight size={13} />
-                  </Link>
-                </motion.div>
-              </div>
-            )}
-
-            {/* TAB 2: Saved Vocabulary */}
-            {tab === 'vocabulary' && (
-              <section className="card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
-                <div className="builder-heading flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DECBB4]/60 pb-5">
+          return (
+            <div className="space-y-8">
+              {/* Stat Summary Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-[#FFF9EE] border border-[#DECBB4] text-[#A62A24] flex items-center justify-center shrink-0">
+                    <BookOpen size={20} />
+                  </div>
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-black text-[#431914]">
-                      <BilingualText>{"Từ vựng đã lưu ("}</BilingualText>
-                      {data.savedVocabCount ?? 0})
-                    </h2>
-                    <p className="text-xs text-[#78685B] mt-1">
-                      <BilingualText>{"Những từ quen thuộc trên hành trình học của bạn."}</BilingualText>
-                    </p>
-                  </div>
-                  <div className="actions flex items-center gap-3">
-                    <Link
-                      className="button secondary px-4 py-2 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
-                      to={ROUTES.VOCABULARY_NOTEBOOK}
-                    >
-                      <BilingualText>{"Mở sổ tay"}</BilingualText>
-                    </Link>
-                    <Link
-                      className="button px-5 py-2 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
-                      to={ROUTES.VOCABULARY_REVIEW}
-                    >
-                      <BilingualText>{"Ôn tập →"}</BilingualText>
-                    </Link>
-                  </div>
-                </div>
-
-                {data.recentVocab?.length ? (
-                  <div className="mylearning-vocab-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {data.recentVocab.map((word, index) => (
-                      <div
-                        className="mylearning-word-chip bg-white/90 border border-[#DECBB4] rounded-2xl p-4 shadow-xs hover:shadow-md transition-all space-y-2"
-                        key={index}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span
-                            className={`badge px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
-                              word.mastered
-                                ? 'bg-[#EDF0E5] text-[#24382B]'
-                                : 'bg-[#F8E6B7] text-[#431914]'
-                            }`}
-                          >
-                            <BilingualText>{word.mastered ? 'Đã thuộc' : 'Đang ôn tập'}</BilingualText>
-                          </span>
-                          <SpeakButton text={word.vi} />
-                        </div>
-                        <h3 className="text-base font-bold text-[#431914]">{word.vi}</h3>
-                        <p className="text-xs text-[#78685B]">{word.en}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <EmptyState
-                    title="Sổ tay đang chờ những từ đầu tiên"
-                    description="Lưu từ mới trong bài học hoặc thêm vào sổ tay để ôn tập ngắt quãng."
-                  />
-                )}
-              </section>
-            )}
-
-            {/* TAB 3: Cultural Journey */}
-            {tab === 'journey' && (
-              <div className="journey-learning card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col md:flex-row items-center gap-8">
-                <div className="w-48 h-48 shrink-0 rounded-2xl overflow-hidden border border-[#DECBB4] shadow-sm bg-white p-2">
-                  <Artwork kind="lanterns" className="w-full h-full object-cover rounded-xl" />
-                </div>
-                <div className="space-y-4 flex-1">
-                  <div>
-                    <span className="eyebrow text-xs font-bold uppercase tracking-wider text-[#A62A24]">
-                      <BilingualText>{"Hành trình văn hóa"}</BilingualText>
+                    <span className="text-[11px] font-bold text-[#78685B] block uppercase tracking-wider">
+                      Bài đã học
                     </span>
-                    <h2 className="text-2xl sm:text-3xl font-black text-[#431914] mt-1">
-                      <BilingualText>{data.journeyCity || 'Khám phá Việt Nam'}</BilingualText>
-                    </h2>
+                    <strong className="text-lg sm:text-xl font-black text-[#431914]">
+                      {data.completedLessons ?? data.completedLessonsCount ?? 0}
+                    </strong>
                   </div>
+                </div>
 
-                  {data.journeyProgress != null ? (
-                    <div className="max-w-md">
-                      <ProgressBar value={data.journeyProgress} label="Tiến độ hành trình" />
-                    </div>
-                  ) : (
-                    <p className="text-xs text-[#78685B]">
-                      <BilingualText>{"Chưa có dữ liệu tiến độ hành trình."}</BilingualText>
-                    </p>
+                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
+                    <Languages size={20} />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-[#78685B] block uppercase tracking-wider">
+                      Từ đã lưu
+                    </span>
+                    <strong className="text-lg sm:text-xl font-black text-[#431914]">
+                      {data.savedVocabCount ?? 0}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 text-orange-600 flex items-center justify-center shrink-0">
+                    <Flame size={20} />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-[#78685B] block uppercase tracking-wider">
+                      Chuỗi học tập
+                    </span>
+                    <strong className="text-lg sm:text-xl font-black text-[#431914]">
+                      {data.currentStreak ?? data.streakCount ?? 1} ngày
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
+                    <Clock size={20} />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-[#78685B] block uppercase tracking-wider">
+                      Thời gian học
+                    </span>
+                    <strong className="text-lg sm:text-xl font-black text-[#431914]">
+                      {data.totalTimeMinutes ?? 45} phút
+                    </strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* TAB 1: Enrolled Courses */}
+              {tab === 'courses' && (
+                <div className="space-y-6">
+                  {/* Hero Continue Learning Card if active course exists */}
+                  {activeCourse && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="rounded-3xl bg-gradient-to-r from-[#24382B] via-[#2F4A39] to-[#3B5B47] text-[#FFF9EE] p-6 sm:p-8 shadow-md border border-[#24382B] flex flex-col md:flex-row md:items-center justify-between gap-6"
+                    >
+                      <div className="space-y-2 max-w-xl">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EDF0E5] text-[#24382B] font-extrabold text-[11px] uppercase tracking-wider">
+                          <Play size={12} fill="currentColor" />
+                          <BilingualText>{"Tiếp tục hành trình học tập"}</BilingualText>
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-black text-white">
+                          <BilingualText vi={activeCourse.titleVi || activeCourse.title} en={activeCourse.title} />
+                        </h2>
+                        <div className="flex items-center gap-3 text-xs text-[#D5DDCB]">
+                          <span className="font-bold text-amber-300">{activeCourse.level}</span>
+                          <span>•</span>
+                          <span>
+                            Đã hoàn thành {activeCourse.completedLessons}/{activeCourse.totalLessons || '—'} bài học ({activeCourse.progressPercentage}%)
+                          </span>
+                        </div>
+                        <div className="w-full max-w-md h-2 rounded-full bg-white/20 overflow-hidden mt-1">
+                          <div
+                            className="h-full bg-amber-400 rounded-full transition-all duration-300"
+                            style={{ width: `${activeCourse.progressPercentage}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+                        <Link
+                          to={
+                            activeCourse.lastAccessedLessonId
+                              ? `/learn/${activeCourse.id}/lesson/${activeCourse.lastAccessedLessonId}`
+                              : `/learn/${activeCourse.id}`
+                          }
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#431914] font-black text-xs shadow-md transition-all"
+                        >
+                          <Play size={15} fill="currentColor" />
+                          <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>
+                        </Link>
+                        <Link
+                          to={`/courses/${activeCourse.id}`}
+                          className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all"
+                        >
+                          <BilingualText>{"Chi tiết khóa"}</BilingualText>
+                        </Link>
+                      </div>
+                    </motion.div>
                   )}
 
-                  <div className="actions flex flex-wrap items-center gap-3 pt-2">
-                    <Link
-                      className="button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
-                      to="/explore"
-                    >
-                      <BilingualText>{"Xem các điểm đến →"}</BilingualText>
-                    </Link>
-                    <Link
-                      className="button secondary px-5 py-2.5 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
-                      to="/achievements"
-                    >
-                      <BilingualText>{"Hộ chiếu & thành tích"}</BilingualText>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* TAB 4: Quiz History */}
-            {tab === 'quiz' && (
-              <section className="card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
-                <div className="border-b border-[#DECBB4]/60 pb-4">
-                  <h2 className="text-xl sm:text-2xl font-black text-[#431914]">
-                    <BilingualText>{"Nhìn lại những điều đã học"}</BilingualText>
-                  </h2>
-                  <p className="text-xs text-[#78685B] mt-0.5">
-                    <BilingualText>{"Lịch sử làm bài kiểm tra và đánh giá năng lực tiếng Việt của bạn."}</BilingualText>
-                  </p>
-                </div>
-
-                {data.quizHistory?.length ? (
-                  <div className="space-y-3">
-                    {data.quizHistory.map((quiz) => (
-                      <div
-                        className="list-row flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/80 border border-[#DECBB4] gap-3"
-                        key={quiz.id}
+                  {/* Course Filter Controls (All, In Progress, Completed) */}
+                  <div className="flex items-center justify-between border-b border-[#DECBB4]/60 pb-3 flex-wrap gap-3">
+                    <div className="flex items-center gap-2" role="tablist" aria-label="Bộ lọc khóa học">
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={courseFilter === 'all'}
+                        onClick={() => setCourseFilter('all')}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          courseFilter === 'all'
+                            ? 'bg-[#A62A24] text-white shadow-xs'
+                            : 'bg-white text-[#78685B] hover:text-[#431914] border border-[#DECBB4]'
+                        }`}
                       >
-                        <div className="space-y-1">
-                          <strong className="block text-sm font-bold text-[#431914]">{quiz.quizName || quiz.quiz_name}</strong>
-                          <p className="text-[11px] text-[#78685B] flex items-center gap-1">
-                            <Calendar size={12} />
-                            {quiz.date}
-                          </p>
-                        </div>
-                        <div className="actions flex items-center gap-3 self-end sm:self-auto">
-                          <span
-                            className={`badge px-2.5 py-1 rounded-lg text-xs font-bold ${
-                              quiz.passed ? 'bg-[#EDF0E5] text-[#24382B]' : 'bg-[#F5E1D8] text-[#A62A24]'
-                            }`}
-                          >
-                            {quiz.score}/100 · <BilingualText>{quiz.passed ? 'Đạt' : 'Cần ôn tập'}</BilingualText>
-                          </span>
-                          <Link
-                            className="text-link text-xs font-bold text-[#A62A24] hover:underline"
-                            to={`/quiz-attempts/${quiz.id}/result`}
-                          >
-                            <BilingualText>{"Xem kết quả →"}</BilingualText>
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
+                        <BilingualText>{"Tất cả"}</BilingualText> ({allCourses.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={courseFilter === 'in_progress'}
+                        onClick={() => setCourseFilter('in_progress')}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          courseFilter === 'in_progress'
+                            ? 'bg-[#A62A24] text-white shadow-xs'
+                            : 'bg-white text-[#78685B] hover:text-[#431914] border border-[#DECBB4]'
+                        }`}
+                      >
+                        <BilingualText>{"Đang học"}</BilingualText> ({data.inProgressCoursesCount ?? 0})
+                      </button>
+
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={courseFilter === 'completed'}
+                        onClick={() => setCourseFilter('completed')}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          courseFilter === 'completed'
+                            ? 'bg-[#A62A24] text-white shadow-xs'
+                            : 'bg-white text-[#78685B] hover:text-[#431914] border border-[#DECBB4]'
+                        }`}
+                      >
+                        <BilingualText>{"Đã hoàn thành"}</BilingualText> ({data.completedCoursesCount ?? 0})
+                      </button>
+                    </div>
+
+                    <Link
+                      to="/courses"
+                      className="text-xs font-bold text-[#A62A24] hover:text-[#89221E] inline-flex items-center gap-1"
+                    >
+                      <span>+ <BilingualText>{"Khám phá khóa học mới"}</BilingualText></span>
+                    </Link>
                   </div>
-                ) : (
-                  <EmptyState
-                    title="Chưa có bài kiểm tra đã hoàn thành"
-                    description="Các kết quả quiz sau mỗi chương học sẽ xuất hiện tại đây."
-                  />
-                )}
-              </section>
-            )}
-          </div>
-        )}
+
+                  {/* Course Cards Grid */}
+                  {filteredCourses.length > 0 ? (
+                    <div className="course-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredCourses.map((course) => {
+                        const isCompleted = course.progressPercentage >= 100 || course.status === 'COMPLETED';
+                        const continueUrl = course.lastAccessedLessonId
+                          ? `/learn/${course.id}/lesson/${course.lastAccessedLessonId}`
+                          : `/learn/${course.id}`;
+
+                        return (
+                          <motion.article
+                            whileHover={{ y: -4 }}
+                            key={course.id}
+                            className="card learning-course group relative flex flex-col bg-[#FFF9EE] border border-[#DECBB4] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                          >
+                            <div className="relative overflow-hidden aspect-[16/10] bg-[#EEE3D1]">
+                              <ContentImage
+                                className="learning-course-image w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                src={course.image || course.thumbnailUrl}
+                                alt={course.title}
+                                fallback={
+                                  <Artwork
+                                    kind={course.id % 2 ? 'food' : 'village'}
+                                    alt={`Minh họa khóa học: ${course.title}`}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                  />
+                                }
+                              />
+                              <div className="absolute top-3 left-3 z-10">
+                                <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#24382B] text-[#FFF9EE] shadow-sm tracking-wide">
+                                  {course.level}
+                                </span>
+                              </div>
+                              <div className="absolute top-3 right-3 z-10">
+                                <span
+                                  className={`badge px-2.5 py-1 text-xs font-bold rounded-lg shadow-sm flex items-center gap-1 ${
+                                    isCompleted
+                                      ? 'bg-emerald-800 text-emerald-100 border border-emerald-700'
+                                      : 'bg-[#A62A24] text-white border border-[#89221E]'
+                                  }`}
+                                >
+                                  {isCompleted ? <CheckCircle2 size={12} /> : null}
+                                  <BilingualText>{isCompleted ? 'Đã hoàn thành' : 'Đang học'}</BilingualText>
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="learning-course-body p-5 flex flex-col flex-1 justify-between gap-4">
+                              <div className="space-y-2">
+                                <h2 className="text-lg font-bold text-[#431914] group-hover:text-[#A62A24] transition-colors leading-snug line-clamp-2">
+                                  <Link to={`/courses/${course.id}`} className="hover:underline">
+                                    <BilingualText vi={course.titleVi || course.title} en={course.title} />
+                                  </Link>
+                                </h2>
+
+                                <div className="pt-1">
+                                  <ProgressBar
+                                    value={course.progressPercentage}
+                                    label={
+                                      course.totalLessons
+                                        ? `${course.completedLessons}/${course.totalLessons} bài học`
+                                        : `${course.progressPercentage}% hoàn thành`
+                                    }
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="pt-2 border-t border-[#DECBB4]/40 flex items-center gap-2">
+                                <Link
+                                  className="button flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
+                                  to={continueUrl}
+                                >
+                                  <BilingualText>{isCompleted ? 'Xem lại khóa học' : 'Tiếp tục học →'}</BilingualText>
+                                  <ArrowRight size={14} />
+                                </Link>
+
+                                <Link
+                                  className="px-3 py-2.5 rounded-xl border border-[#DECBB4] bg-white hover:bg-[#F7F0E3] text-[#431914] text-xs font-bold transition-all"
+                                  to={`/courses/${course.id}`}
+                                  title="Chi tiết khóa học"
+                                >
+                                  <BookOpen size={14} />
+                                </Link>
+                              </div>
+                            </div>
+                          </motion.article>
+                        );
+                      })}
+
+                      {/* Add New Course Card */}
+                      <motion.div
+                        whileHover={{ y: -4 }}
+                        className="card learning-course-add group flex flex-col items-center justify-center text-center p-8 bg-[#FFF9EE]/70 border-2 border-dashed border-[#DECBB4] hover:border-[#A62A24] rounded-2xl transition-all"
+                      >
+                        <span className="w-12 h-12 rounded-2xl bg-[#F5E1D8] text-[#A62A24] flex items-center justify-center mb-3 shadow-xs group-hover:scale-110 transition-transform">
+                          <Plus size={24} />
+                        </span>
+                        <h2 className="text-lg font-bold text-[#431914] mb-1">
+                          <BilingualText>{"Khám phá khóa học mới?"}</BilingualText>
+                        </h2>
+                        <p className="text-xs text-[#78685B] max-w-xs mb-4">
+                          <BilingualText>{"Mở rộng hành trình học tập tiếng Việt theo chủ đề bạn yêu thích."}</BilingualText>
+                        </p>
+                        <Link
+                          className="button secondary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
+                          to="/courses"
+                        >
+                          <BilingualText>{"Khám phá khóa học"}</BilingualText>
+                          <ArrowRight size={13} />
+                        </Link>
+                      </motion.div>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <EmptyState
+                        title={allCourses.length ? "Không có khóa học nào ở trạng thái này" : "Bạn chưa đăng ký khóa học nào"}
+                        description={
+                          allCourses.length
+                            ? "Hãy thử đổi bộ lọc sang tất cả khóa học để xem toàn bộ danh sách."
+                            : "Khám phá ngay kho khóa học phong phú để bắt đầu hành trình học tiếng Việt."
+                        }
+                      />
+                      <div className="flex justify-center">
+                        {allCourses.length ? (
+                          <button
+                            type="button"
+                            onClick={() => setCourseFilter('all')}
+                            className="px-4 py-2 rounded-xl bg-[#A62A24] text-white font-bold text-xs shadow-xs hover:bg-[#89221E] cursor-pointer"
+                          >
+                            <BilingualText>{"Xem tất cả khóa học"}</BilingualText>
+                          </button>
+                        ) : (
+                          <Link
+                            to="/courses"
+                            className="px-5 py-2.5 rounded-xl bg-[#A62A24] text-white font-bold text-xs shadow-md hover:bg-[#89221E]"
+                          >
+                            <BilingualText>{"Khám phá khóa học ngay →"}</BilingualText>
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 2: Saved Vocabulary */}
+              {tab === 'vocabulary' && (
+                <section className="card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+                  <div className="builder-heading flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DECBB4]/60 pb-5">
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-black text-[#431914]">
+                        <BilingualText>{"Từ vựng đã lưu ("}</BilingualText>
+                        {data.savedVocabCount ?? 0})
+                      </h2>
+                      <p className="text-xs text-[#78685B] mt-1">
+                        <BilingualText>{"Những từ quen thuộc trên hành trình học của bạn."}</BilingualText>
+                      </p>
+                    </div>
+                    <div className="actions flex items-center gap-3">
+                      <Link
+                        className="button secondary px-4 py-2 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
+                        to={ROUTES.VOCABULARY_NOTEBOOK}
+                      >
+                        <BilingualText>{"Mở sổ tay"}</BilingualText>
+                      </Link>
+                      <Link
+                        className="button px-5 py-2 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
+                        to={ROUTES.VOCABULARY_REVIEW}
+                      >
+                        <BilingualText>{"Ôn tập →"}</BilingualText>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {data.recentVocab?.length ? (
+                    <div className="mylearning-vocab-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {data.recentVocab.map((word, index) => (
+                        <div
+                          className="mylearning-word-chip bg-white/90 border border-[#DECBB4] rounded-2xl p-4 shadow-xs hover:shadow-md transition-all space-y-2"
+                          key={index}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={`badge px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
+                                word.mastered
+                                  ? 'bg-[#EDF0E5] text-[#24382B]'
+                                  : 'bg-[#F8E6B7] text-[#431914]'
+                              }`}
+                            >
+                              <BilingualText>{word.mastered ? 'Đã thuộc' : 'Đang ôn tập'}</BilingualText>
+                            </span>
+                            <SpeakButton text={word.vi} />
+                          </div>
+                          <h3 className="text-base font-bold text-[#431914]">{word.vi}</h3>
+                          <p className="text-xs text-[#78685B]">{word.en}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <EmptyState
+                      title="Sổ tay đang chờ những từ đầu tiên"
+                      description="Lưu từ mới trong bài học hoặc thêm vào sổ tay để ôn tập ngắt quãng."
+                    />
+                  )}
+                </section>
+              )}
+
+              {/* TAB 3: Cultural Journey */}
+              {tab === 'journey' && (
+                <div className="journey-learning card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col md:flex-row items-center gap-8">
+                  <div className="w-48 h-48 shrink-0 rounded-2xl overflow-hidden border border-[#DECBB4] shadow-sm bg-white p-2">
+                    <Artwork kind="lanterns" className="w-full h-full object-cover rounded-xl" />
+                  </div>
+                  <div className="space-y-4 flex-1">
+                    <div>
+                      <span className="eyebrow text-xs font-bold uppercase tracking-wider text-[#A62A24]">
+                        <BilingualText>{"Hành trình văn hóa"}</BilingualText>
+                      </span>
+                      <h2 className="text-2xl sm:text-3xl font-black text-[#431914] mt-1">
+                        <BilingualText>{data.journeyCity || 'Khám phá Việt Nam'}</BilingualText>
+                      </h2>
+                    </div>
+
+                    {data.journeyProgress != null ? (
+                      <div className="max-w-md">
+                        <ProgressBar value={data.journeyProgress} label="Tiến độ hành trình" />
+                      </div>
+                    ) : (
+                      <p className="text-xs text-[#78685B]">
+                        <BilingualText>{"Chưa có dữ liệu tiến độ hành trình."}</BilingualText>
+                      </p>
+                    )}
+
+                    <div className="actions flex flex-wrap items-center gap-3 pt-2">
+                      <Link
+                        className="button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
+                        to="/explore"
+                      >
+                        <BilingualText>{"Xem các điểm đến →"}</BilingualText>
+                      </Link>
+                      <Link
+                        className="button secondary px-5 py-2.5 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
+                        to="/achievements"
+                      >
+                        <BilingualText>{"Hộ chiếu & thành tích"}</BilingualText>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: Quiz History */}
+              {tab === 'quiz' && (
+                <section className="card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+                  <div className="border-b border-[#DECBB4]/60 pb-4">
+                    <h2 className="text-xl sm:text-2xl font-black text-[#431914]">
+                      <BilingualText>{"Nhìn lại những điều đã học"}</BilingualText>
+                    </h2>
+                    <p className="text-xs text-[#78685B] mt-0.5">
+                      <BilingualText>{"Lịch sử làm bài kiểm tra và đánh giá năng lực tiếng Việt của bạn."}</BilingualText>
+                    </p>
+                  </div>
+
+                  {data.quizHistory?.length ? (
+                    <div className="space-y-3">
+                      {data.quizHistory.map((quiz) => (
+                        <div
+                          className="list-row flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/80 border border-[#DECBB4] gap-3"
+                          key={quiz.id}
+                        >
+                          <div className="space-y-1">
+                            <strong className="block text-sm font-bold text-[#431914]">{quiz.quizName}</strong>
+                            <p className="text-[11px] text-[#78685B] flex items-center gap-1">
+                              <Calendar size={12} />
+                              {quiz.date}
+                            </p>
+                          </div>
+                          <div className="actions flex items-center gap-3 self-end sm:self-auto">
+                            <span
+                              className={`badge px-2.5 py-1 rounded-lg text-xs font-bold ${
+                                quiz.passed ? 'bg-[#EDF0E5] text-[#24382B]' : 'bg-[#F5E1D8] text-[#A62A24]'
+                              }`}
+                            >
+                              {quiz.score}/100 · <BilingualText>{quiz.passed ? 'Đạt' : 'Cần ôn tập'}</BilingualText>
+                            </span>
+                            <Link
+                              className="text-link text-xs font-bold text-[#A62A24] hover:underline"
+                              to={`/quiz-attempts/${quiz.id}/result`}
+                            >
+                              <BilingualText>{"Xem kết quả →"}</BilingualText>
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <EmptyState
+                      title="Chưa có bài kiểm tra đã hoàn thành"
+                      description="Các kết quả quiz sau mỗi chương học sẽ xuất hiện tại đây."
+                    />
+                  )}
+                </section>
+              )}
+            </div>
+          );
+        }}
       </ResourceState>
     </div>
   );

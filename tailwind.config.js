@@ -86,12 +86,17 @@ export default {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-33.333333%)' },
         },
+        'fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(6px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         'bounce-subtle': 'bounce-subtle 2s infinite ease-in-out',
         'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'shake': 'shake 0.4s ease-in-out',
         'marquee': 'marquee 22s linear infinite',
+        'fade-in': 'fade-in 0.25s ease-out',
       },
     },
   },

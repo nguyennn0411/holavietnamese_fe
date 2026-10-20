@@ -1,12 +1,11 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { Link, useParams } from 'react-router-dom';
+import { useState, useMemo, useRef, useEffect } from 'react';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useCourse } from '@/hooks/useCourses';
-import { CourseInfo, CourseThumbnail } from '@/components/course/CourseInfo';
-import { EnrollButton } from '@/components/course/EnrollButton';
+import { CourseThumbnail } from '@/components/course/CourseInfo';
 import { ResourceState } from '@/components/common/ResourceState';
-import { CourseCurriculum } from '@/components/course/CourseCurriculum';
-import { CourseProgress } from '@/components/course/CourseProgress';
-import { Artwork } from '@/components/common/Ui';
+import { courseService } from '@/services/courseService';
+import { useAuth } from '@/application/context/AuthContext';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -15,17 +14,1061 @@ import {
   Sparkles,
   ChevronDown,
   Play,
+  PlayCircle,
   Lock,
   Award,
-  Compass
+  Compass,
+  MessageCircle,
+  FileText,
+  Headphones,
+  CheckSquare,
+  ShieldCheck,
+  GraduationCap,
+  AlertCircle,
+  X,
+  ArrowRight
 } from 'lucide-react';
 
+/**
+ * Phân tích và trả về thông tin hiển thị cho loại bài học (Icon, Tên hiển thị, Màu sắc)
+ */
+function getLessonTypeInfo(lesson) {
+  const rawType = (lesson.lessonType || '').toUpperCase();
+  const title = (lesson.title || lesson.titleVi || '').toLowerCase();
+
+  if (
+    rawType === 'CONVERSATION' ||
+    rawType === 'DIALOGUE' ||
+    title.includes('hội thoại') ||
+    title.includes('dialogue') ||
+    title.includes('chào hỏi')
+  ) {
+    return {
+      type: 'DIALOGUE',
+      labelVi: 'Hội thoại',
+      icon: MessageCircle,
+      badgeClass: 'bg-amber-50 text-amber-800 border-amber-200/80',
+    };
+  }
+
+  if (
+    rawType === 'VOCABULARY' ||
+    title.includes('từ vựng') ||
+    title.includes('vocabulary')
+  ) {
+    return {
+      type: 'VOCABULARY',
+      labelVi: 'Từ vựng',
+      icon: BookOpen,
+      badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
+    };
+  }
+
+  if (
+    rawType === 'GRAMMAR' ||
+    title.includes('ngữ pháp') ||
+    title.includes('grammar')
+  ) {
+    return {
+      type: 'GRAMMAR',
+      labelVi: 'Ngữ pháp',
+      icon: FileText,
+      badgeClass: 'bg-blue-50 text-blue-800 border-blue-200/80',
+    };
+  }
+
+  if (
+    rawType === 'SPEAKING' ||
+    rawType === 'LISTENING' ||
+    title.includes('nghe') ||
+    title.includes('nói') ||
+    title.includes('phát âm') ||
+    title.includes('giao tiếp')
+  ) {
+    return {
+      type: 'SPEAKING',
+      labelVi: 'Nghe & Nói',
+      icon: Headphones,
+      badgeClass: 'bg-purple-50 text-purple-800 border-purple-200/80',
+    };
+  }
+
+  if (
+    rawType === 'PRACTICE' ||
+    rawType === 'QUIZ' ||
+    rawType === 'ASSESSMENT' ||
+    rawType === 'REVIEW' ||
+    title.includes('luyện tập') ||
+    title.includes('kiểm tra') ||
+    title.includes('đánh giá') ||
+    title.includes('quiz')
+  ) {
+    return {
+      type: 'PRACTICE',
+      labelVi: 'Luyện tập & Quiz',
+      icon: CheckSquare,
+      badgeClass: 'bg-rose-50 text-rose-800 border-rose-200/80',
+    };
+  }
+
+  if (rawType === 'CULTURE' || title.includes('văn hóa') || title.includes('culture')) {
+    return {
+      type: 'CULTURE',
+      labelVi: 'Văn hóa',
+      icon: Compass,
+      badgeClass: 'bg-teal-50 text-teal-800 border-teal-200/80',
+    };
+  }
+
+  return {
+    type: 'LESSON',
+    labelVi: 'Bài học',
+    icon: PlayCircle,
+    badgeClass: 'bg-stone-100 text-stone-700 border-stone-200/80',
+  };
+}
+
+/**
+ * Định dạng thời lượng từ phút sang dạng dễ đọc: X phút hoặc Xh Ym
+ */
+function formatDuration(minutes) {
+  if (!minutes || minutes <= 0) return '0 phút';
+  if (minutes < 60) return `${minutes} phút`;
+  const hours = Math.floor(minutes / 60);
+  const remainingMins = minutes % 60;
+  return remainingMins > 0 ? `${hours}h ${remainingMins}m` : `${hours} giờ`;
+}
+
+/**
+ * Chuẩn đầu ra mặc định theo trình độ nếu backend chưa cấu hình learningOutcomes
+ */
+const DEFAULT_OUTCOMES_BY_LEVEL = {
+  A0: [
+    'Nắm vững 29 chữ cái tiếng Việt và các quy tắc ghép vần chuẩn xác',
+    'Phát âm chuẩn xác 6 thanh điệu đặc trưng cùng trợ lý AI Tutor',
+    'Tự tin đọc và nhận biết các từ vựng căn bản trong đời sống hàng ngày',
+    'Giao tiếp những câu chào hỏi, cảm ơn và xin lỗi sơ đẳng',
+  ],
+  A1: [
+    'Tự tin giao tiếp các chủ đề thông dụng: Chào hỏi, giới thiệu bản thân, mua sắm',
+    'Làm chủ hơn 300 từ vựng cốt lõi và các cấu trúc câu giao tiếp căn bản',
+    'Luyện phát âm chuẩn giọng Bắc - Nam với sự trợ giúp của AI Tutor',
+    'Hiểu nét văn hóa xưng hô lễ phép đặc trưng của người Việt Nam',
+  ],
+  A2: [
+    'Giao tiếp trôi chảy các tình huống công việc, ẩm thực, du lịch và phương tiện',
+    'Mở rộng vốn từ hơn 600 từ vựng và câu ghép mở rộng ngữ pháp',
+    'Tự tin chia sẻ cảm xúc, sở thích, lịch trình và câu chuyện cá nhân',
+    'Khám phá văn hóa ẩm thực và danh lam thắng cảnh qua bài học ngữ cảnh',
+  ],
+  B1: [
+    'Thảo luận đa chiều về các chủ đề văn hóa, xã hội và phong tục tập quán',
+    'Làm chủ ngữ điệu biểu cảm và phản xạ giao tiếp tự nhiên như người bản xứ',
+    'Đọc hiểu tài liệu ngắn, tin tức và các đoạn hội thoại nâng cao',
+    'Kỹ năng viết đoạn văn và phản hồi tương tác linh hoạt trong đời sống',
+  ],
+};
+
+const getModuleKey = (m, idx) => (m?.id !== undefined && m?.id !== null ? m.id : `mod-${idx}`);
+const getLessonKey = (l, mIdx, lIdx) => (l?.id !== undefined && l?.id !== null ? l.id : `les-${mIdx}-${lIdx}`);
+
+/**
+ * Giao diện chi tiết khóa học
+ */
+function CourseDetailView({ course, courseId, enrollment, onReload }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
+
+  // Xác định chính xác trạng thái đã đăng ký
+  const isEnrolled = !!(
+    enrollment?.isEnrolled ||
+    (enrollment?.status && ['ACTIVE', 'NOT_STARTED', 'IN_PROGRESS', 'COMPLETED'].includes(enrollment.status)) ||
+    (course?.enrollment?.status && ['ACTIVE', 'NOT_STARTED', 'IN_PROGRESS', 'COMPLETED'].includes(course.enrollment.status))
+  );
+
+  const targetCourseId = course?.id || courseId;
+
+  // Lấy danh sách module (hỗ trợ module lồng nhau, metadata và gom toàn bộ bài học chưa nhóm)
+  const modules = useMemo(() => {
+    const existingModules = Array.isArray(course?.modules)
+      ? course.modules.map((m) => ({
+          ...m,
+          titleVi: m.titleVi || m.metadata?.titleVi || m.title,
+          descriptionVi: m.descriptionVi || m.metadata?.descriptionVi || m.description,
+          descriptionEn: m.descriptionEn || m.metadata?.descriptionEn || m.description,
+        }))
+      : [];
+
+    const allCourseLessons = Array.isArray(course?.lessons) ? course.lessons : [];
+
+    if (existingModules.length > 0) {
+      // Thu thập toàn bộ ID bài học đã có trong các module
+      const moduleLessonIds = new Set();
+      existingModules.forEach((m) => {
+        (m.lessons || []).forEach((l) => {
+          if (l.id != null) moduleLessonIds.add(String(l.id));
+        });
+      });
+
+      // Tìm những bài học có trong course.lessons nhưng chưa thuộc module nào
+      const ungrouped = allCourseLessons.filter(
+        (l) => l.id != null && !moduleLessonIds.has(String(l.id))
+      );
+
+      if (ungrouped.length > 0) {
+        return [
+          ...existingModules,
+          {
+            id: 'ungrouped',
+            title: 'Bài học bổ sung',
+            titleVi: 'Bài học bổ sung',
+            descriptionVi: 'Các bài học tổng hợp và mở rộng trong khóa học',
+            lessons: ungrouped,
+          },
+        ];
+      }
+
+      return existingModules;
+    }
+
+    if (allCourseLessons.length > 0) {
+      return [
+        {
+          id: 0,
+          title: 'Bài học',
+          titleVi: 'Nội dung bài học',
+          descriptionVi: 'Toàn bộ danh sách bài học của khóa học',
+          lessons: allCourseLessons,
+        },
+      ];
+    }
+
+    return [];
+  }, [course?.modules, course?.lessons]);
+
+  // Phân tích trạng thái khóa/mở khóa của toàn bộ bài học
+  const {
+    allLessons,
+    totalLessons,
+    completedLessons,
+    progressPercent,
+    activeLessonId,
+    activeModuleKey,
+    statusMap,
+  } = useMemo(() => {
+    const flattened = [];
+    modules.forEach((m, mIdx) => {
+      const mKey = getModuleKey(m, mIdx);
+      (m.lessons || []).forEach((l, lIdx) => {
+        flattened.push({
+          ...l,
+          moduleKey: mKey,
+          uniqueKey: getLessonKey(l, mIdx, lIdx),
+        });
+      });
+    });
+
+    const total = flattened.length;
+    const completed = flattened.filter((l) => l.learningStatus === 'COMPLETED').length;
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    // Khi người học CHƯA ĐĂNG KÝ: Tất cả bài học đều bị khóa
+    if (!isEnrolled) {
+      const map = {};
+      flattened.forEach((l) => {
+        map[l.uniqueKey] = {
+          isLocked: true,
+          isCompleted: false,
+          isNext: false,
+        };
+      });
+      return {
+        allLessons: flattened,
+        totalLessons: total,
+        completedLessons: 0,
+        progressPercent: 0,
+        activeLessonId: null,
+        activeModuleKey: modules[0] ? getModuleKey(modules[0], 0) : null,
+        statusMap: map,
+      };
+    }
+
+    // Khi người học ĐÃ ĐĂNG KÝ: Mở khóa tuần tự theo tiến độ
+    const firstIncomplete = flattened.find((l) => l.learningStatus !== 'COMPLETED');
+    const currentActive = firstIncomplete || flattened[flattened.length - 1] || null;
+
+    let passedActive = false;
+    const map = {};
+
+    flattened.forEach((l) => {
+      const isCompleted = l.learningStatus === 'COMPLETED';
+      let isLocked = false;
+      let isNext = false;
+
+      if (isCompleted) {
+        isLocked = false;
+      } else if (!passedActive && l.uniqueKey === currentActive?.uniqueKey) {
+        isLocked = false;
+        isNext = true;
+        passedActive = true;
+      } else if (passedActive) {
+        isLocked = true;
+      }
+
+      map[l.uniqueKey] = {
+        isLocked,
+        isCompleted,
+        isNext,
+      };
+    });
+
+    return {
+      allLessons: flattened,
+      totalLessons: total,
+      completedLessons: completed,
+      progressPercent: percent,
+      activeLessonId: currentActive?.id || null,
+      activeModuleKey: currentActive?.moduleKey || (modules[0] ? getModuleKey(modules[0], 0) : null),
+      statusMap: map,
+    };
+  }, [modules, isEnrolled]);
+
+  const isCompleted = isEnrolled && ((totalLessons > 0 && completedLessons === totalLessons) || enrollment?.status === 'COMPLETED' || enrollment?.progressPercentage === 100);
+
+  // Quản lý trạng thái đóng/mở Accordion của từng Module
+  const [expandedModules, setExpandedModules] = useState(() => {
+    const initial = new Set();
+    if (activeModuleKey != null) {
+      initial.add(activeModuleKey);
+    } else if (modules[0]) {
+      initial.add(getModuleKey(modules[0], 0));
+    }
+    return initial;
+  });
+
+  const toggleModule = (moduleKey) => {
+    setExpandedModules((prev) => {
+      const next = new Set(prev);
+      if (next.has(moduleKey)) {
+        next.delete(moduleKey);
+      } else {
+        next.add(moduleKey);
+      }
+      return next;
+    });
+  };
+
+  const isAllExpanded = modules.length > 0 && expandedModules.size >= modules.length;
+  const toggleAllModules = () => {
+    if (isAllExpanded) {
+      setExpandedModules(new Set());
+    } else {
+      setExpandedModules(new Set(modules.map((m, idx) => getModuleKey(m, idx))));
+    }
+  };
+
+  // Quản lý Toast thông báo khi bấm vào bài học bị khóa
+  const [toastData, setToastData] = useState(null);
+  const toastTimerRef = useRef(null);
+
+  const closeToast = () => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setToastData(null);
+  };
+
+  const handleLockedClick = (e, lessonTitle) => {
+    e.preventDefault();
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+
+    if (!isEnrolled) {
+      setToastData({
+        message: `Bạn cần đăng ký khóa học để truy cập bài học "${lessonTitle}".`,
+        type: 'NOT_ENROLLED',
+      });
+    } else {
+      setToastData({
+        message: `Bài "${lessonTitle}" đang bị khóa. Hãy hoàn thành các bài học trước để mở khóa nhé!`,
+        type: 'LOCKED_NEXT',
+      });
+    }
+
+    toastTimerRef.current = setTimeout(() => {
+      setToastData(null);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
+
+  // Tính tổng thời lượng khóa học
+  const totalDurationMinutes = useMemo(() => {
+    if (course.estimatedMinutes || course.estimatedDuration) {
+      return course.estimatedMinutes || course.estimatedDuration;
+    }
+    let sum = 0;
+    allLessons.forEach((l) => {
+      sum += Number(l.estimatedMinutes || l.estimatedDuration || 15);
+    });
+    return sum || 60;
+  }, [course, allLessons]);
+
+  // Chuẩn đầu ra (Bilingual support & sạch sẽ)
+  const outcomes = useMemo(() => {
+    const raw = String(course.learningOutcomes || '').trim();
+    if (!raw) {
+      return (DEFAULT_OUTCOMES_BY_LEVEL[course.level] || DEFAULT_OUTCOMES_BY_LEVEL.A1).map((t) => ({ vi: t, en: '' }));
+    }
+
+    // Trường hợp 1: Dạng phân tách bởi dấu gạch chéo "vi1; vi2 / en1; en2"
+    if (raw.includes(' / ')) {
+      const [viBlock, enBlock] = raw.split(' / ');
+      const viItems = viBlock.split(';').map((s) => s.trim()).filter(Boolean);
+      const enItems = (enBlock || '').split(';').map((s) => s.trim()).filter(Boolean);
+      return viItems.map((vi, idx) => ({
+        vi,
+        en: enItems[idx] || '',
+      }));
+    }
+
+    // Trường hợp 2: Dạng 2 dòng Vi và En
+    const lines = raw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+    if (lines.length === 2 && !lines[0].includes(';') && !lines[1].includes(';')) {
+      return [{ vi: lines[0], en: lines[1] }];
+    }
+
+    // Trường hợp 3: Danh sách nhiều dòng hoặc phân tách bởi dấu chấm phẩy
+    const items = [];
+    lines.forEach((line) => {
+      line.split(';').map((s) => s.trim()).filter(Boolean).forEach((piece) => {
+        if (piece.includes(' / ')) {
+          const [vi, en] = piece.split(' / ').map((s) => s.trim());
+          items.push({ vi, en: en || '' });
+        } else {
+          items.push({ vi: piece, en: '' });
+        }
+      });
+    });
+
+    if (items.length > 0) return items;
+    return (DEFAULT_OUTCOMES_BY_LEVEL[course.level] || DEFAULT_OUTCOMES_BY_LEVEL.A1).map((t) => ({ vi: t, en: '' }));
+  }, [course.learningOutcomes, course.level]);
+
+  // Xử lý đăng ký khóa học (Enroll)
+  const [enrollPending, setEnrollPending] = useState(false);
+  const [enrollError, setEnrollError] = useState(null);
+
+  async function handleEnroll() {
+    // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập kèm đường dẫn hiện tại
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: location.pathname } });
+      return;
+    }
+
+    setEnrollPending(true);
+    setEnrollError(null);
+    try {
+      const result = await courseService.enroll(targetCourseId);
+      if (!result?.isEnrolled) throw new Error('Đăng ký khóa học chưa hoàn tất. Vui lòng thử lại.');
+      closeToast();
+      onReload?.();
+    } catch (err) {
+      if (err?.status === 401 || err?.status === 403) {
+        navigate('/login', { state: { from: location.pathname } });
+      } else {
+        setEnrollError(err.message || 'Không thể đăng ký khóa học vào lúc này.');
+      }
+    } finally {
+      setEnrollPending(false);
+    }
+  }
+
+  // Đường dẫn tiếp tục học
+  const continueLearnUrl = activeLessonId
+    ? `/learn/${targetCourseId}/lesson/${activeLessonId}`
+    : `/learn/${targetCourseId}`;
+
+  return (
+    <div className="course-detail-view w-full space-y-8">
+      {/* Toast thông báo tương tác bài học bị khóa */}
+      {toastData && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 right-6 z-50 flex items-center justify-between gap-4 bg-[#431914] text-[#FFF9EE] px-5 py-3.5 rounded-2xl shadow-2xl border border-[#FFCD00]/50 max-w-lg transition-all animate-bounce-subtle"
+        >
+          <div className="flex items-center gap-3">
+            <Lock size={18} className="text-[#FFCD00] shrink-0" />
+            <span className="text-xs sm:text-sm font-semibold leading-snug">{toastData.message}</span>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {toastData.type === 'NOT_ENROLLED' ? (
+              <button
+                type="button"
+                onClick={handleEnroll}
+                disabled={enrollPending}
+                className="px-3 py-1.5 rounded-xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+              >
+                Đăng ký ngay
+              </button>
+            ) : (
+              <Link
+                to={continueLearnUrl}
+                onClick={closeToast}
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-bold text-xs shadow-xs transition-colors"
+              >
+                <span>Học tiếp</span>
+                <ArrowRight size={12} />
+              </Link>
+            )}
+
+            <button
+              type="button"
+              onClick={closeToast}
+              aria-label="Đóng thông báo"
+              className="p-1 rounded-lg text-[#FFF9EE]/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            >
+              <X size={15} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Bố cục chính Desktop: 65% trái, 35% phải sticky */}
+      <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-8 lg:gap-10 items-start">
+        {/* ===================== CỘT TRÁI (65%): GIỚI THIỆU, CHUẨN ĐẦU RA, DANH SÁCH MODULE ===================== */}
+        <div className="w-full space-y-8">
+          {/* 1. Phần Giới Thiệu Khóa Học */}
+          <section className="bg-gradient-to-br from-[#FFF9EE] via-[#FDFBF7] to-[#F7F0E3] rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-5">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="px-3.5 py-1 rounded-full bg-[#DA251D] text-white font-extrabold text-xs uppercase tracking-wider shadow-xs">
+                {course.level}
+              </span>
+
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF2D6] text-[#A62A24] border border-[#FFCD00]/50 font-bold text-xs">
+                <Sparkles size={13} className="text-[#DA251D]" />
+                <BilingualText>{course.isFree ? 'Khóa học miễn phí' : 'Khóa học chính thức'}</BilingualText>
+              </span>
+
+              {isEnrolled && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-xs">
+                  <CheckCircle2 size={13} className="text-emerald-700" />
+                  <BilingualText>{"Đã tham gia học"}</BilingualText>
+                </span>
+              )}
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#431914] tracking-tight leading-tight">
+              <BilingualText vi={course.titleVi || course.title} en={course.title} />
+            </h1>
+
+            <p className="text-sm sm:text-base text-[#78685B] leading-relaxed preserve-lines">
+              <BilingualText vi={course.descriptionVi || course.description} en={course.description} />
+            </p>
+
+            {/* Các điểm nổi bật */}
+            <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#DECBB4]/50 text-xs font-semibold text-[#431914]">
+                <GraduationCap size={16} className="text-[#DA251D] shrink-0" />
+                <span>Lộ trình theo chuẩn CEFR</span>
+              </div>
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#DECBB4]/50 text-xs font-semibold text-[#431914]">
+                <MessageCircle size={16} className="text-[#DA251D] shrink-0" />
+                <span>Hội thoại thực tế & AI Tutor</span>
+              </div>
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#DECBB4]/50 text-xs font-semibold text-[#431914]">
+                <CheckSquare size={16} className="text-[#DA251D] shrink-0" />
+                <span>Luyện tập & Đánh giá tức thì</span>
+              </div>
+            </div>
+          </section>
+
+          {/* 2. Phần Chuẩn Đầu Ra (Learning Outcomes) */}
+          {outcomes.length > 0 && (
+            <section className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-5">
+              <div className="flex items-center gap-2.5">
+                <Award size={22} className="text-[#DA251D] shrink-0" />
+                <div>
+                  <h2 className="text-lg sm:text-xl font-black text-[#431914] tracking-tight">
+                    <BilingualText>{"Bạn sẽ học được gì từ khóa học này"}</BilingualText>
+                  </h2>
+                  <p className="text-xs text-[#78685B] mt-0.5">
+                    <BilingualText>{"Chuẩn đầu ra và các kỹ năng ngôn ngữ cốt lõi sau khóa học."}</BilingualText>
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                {outcomes.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 p-3.5 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4]/60 hover:border-[#FFCD00] transition-colors"
+                  >
+                    <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                      ✓
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-[#431914] leading-snug">
+                      <BilingualText vi={item.vi} en={item.en || undefined} />
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Điều kiện tiên quyết & Yêu cầu khóa học (nếu có) */}
+          {(course.requirementsVi || course.requirements || course.prerequisitesVi || course.prerequisites || course.targetAudienceVi || course.targetAudience) && (
+            <section className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-4">
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck size={22} className="text-[#DA251D] shrink-0" />
+                <div>
+                  <h2 className="text-lg sm:text-xl font-black text-[#431914] tracking-tight">
+                    <BilingualText>{"Yêu cầu & Đối tượng phù hợp"}</BilingualText>
+                  </h2>
+                  <p className="text-xs text-[#78685B] mt-0.5">
+                    <BilingualText>{"Thông tin chuẩn bị trước khi tham gia khóa học."}</BilingualText>
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4]/60 text-xs sm:text-sm text-[#431914] leading-relaxed">
+                <BilingualText
+                  vi={course.requirementsVi || course.prerequisitesVi || course.targetAudienceVi || course.requirements || course.prerequisites}
+                  en={course.requirements || course.prerequisites || course.targetAudience}
+                />
+              </div>
+            </section>
+          )}
+
+          {/* 3. Phần Danh Sách Module & Bài Học (Accordion) */}
+          <section className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#DECBB4]/40 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <BookOpen size={22} className="text-[#DA251D]" />
+                  <h2 className="text-lg sm:text-xl font-black text-[#431914] tracking-tight">
+                    <BilingualText>{"Nội dung khóa học"}</BilingualText>
+                  </h2>
+                </div>
+                <p className="text-xs text-[#78685B] mt-1">
+                  <span>{modules.length} modules</span>
+                  <span className="mx-1.5">•</span>
+                  <span>{totalLessons} bài học</span>
+                  <span className="mx-1.5">•</span>
+                  <span>{formatDuration(totalDurationMinutes)} thời lượng</span>
+                </p>
+              </div>
+
+              {modules.length > 1 && (
+                <button
+                  type="button"
+                  onClick={toggleAllModules}
+                  className="self-start sm:self-center text-xs font-bold text-[#A62A24] hover:text-[#DA251D] hover:underline transition-colors py-1.5 px-3 rounded-xl bg-[#FFF2D6]/70 hover:bg-[#FFF2D6] border border-[#FFCD00]/50 cursor-pointer shadow-2xs"
+                >
+                  {isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
+                </button>
+              )}
+            </div>
+
+            {/* Danh sách các Module */}
+            {modules.length === 0 ? (
+              <p className="text-xs text-[#78685B] italic py-4">
+                <BilingualText>{"Chưa có nội dung bài học nào được công bố."}</BilingualText>
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {modules.map((module, mIdx) => {
+                  const moduleKey = getModuleKey(module, mIdx);
+                  const isExpanded = expandedModules.has(moduleKey);
+                  const moduleLessons = module.lessons || [];
+
+                  // Tính toán thời lượng và tiến độ trong module
+                  let moduleMinutes = 0;
+                  let completedCountInModule = 0;
+                  moduleLessons.forEach((l) => {
+                    moduleMinutes += Number(l.estimatedMinutes || l.estimatedDuration || 15);
+                    if (l.learningStatus === 'COMPLETED') completedCountInModule += 1;
+                  });
+
+                  const isModuleFinished =
+                    moduleLessons.length > 0 && completedCountInModule === moduleLessons.length;
+
+                  return (
+                    <div
+                      key={moduleKey}
+                      className="rounded-2xl border border-[#DECBB4] overflow-hidden bg-[#FFFDF9] transition-all shadow-xs"
+                    >
+                      {/* Nút Accordion Header của Module */}
+                      <button
+                        type="button"
+                        onClick={() => toggleModule(moduleKey)}
+                        className="w-full flex items-center justify-between p-4 sm:p-5 text-left cursor-pointer hover:bg-[#FFF9EE]/70 transition-colors select-none focus:outline-none"
+                        aria-expanded={isExpanded}
+                      >
+                        <div className="flex items-center gap-3.5 pr-2">
+                          <span className="w-8 h-8 rounded-xl bg-[#FFF2D6] text-[#A62A24] font-black text-xs flex items-center justify-center shrink-0 border border-[#FFCD00]/40 shadow-2xs">
+                            {mIdx + 1}
+                          </span>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-[#A62A24] uppercase tracking-wide">
+                                Module {mIdx + 1}
+                              </span>
+                              {isModuleFinished && (
+                                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                                  <CheckCircle2 size={11} />
+                                  Hoàn thành
+                                </span>
+                              )}
+                            </div>
+                            <h3 className="text-sm sm:text-base font-bold text-[#431914] leading-snug">
+                              <BilingualText vi={module.titleVi || module.title} en={module.title} />
+                            </h3>
+                            {(module.descriptionVi || module.description || module.metadata?.descriptionVi) && (
+                              <p className="text-xs text-[#78685B] line-clamp-2 mt-1 font-normal">
+                                <BilingualText
+                                  vi={module.descriptionVi || module.metadata?.descriptionVi || module.description}
+                                  en={module.description || module.metadata?.descriptionEn}
+                                />
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 text-xs text-[#78685B] shrink-0">
+                          <span className="hidden sm:inline-block">
+                            {moduleLessons.length} bài học
+                          </span>
+                          <span className="hidden md:inline-block text-[#A62A24] font-medium">
+                            • {formatDuration(moduleMinutes)}
+                          </span>
+                          <ChevronDown
+                            size={18}
+                            className={`text-[#A62A24] transition-transform duration-200 ${
+                              isExpanded ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </div>
+                      </button>
+
+                      {/* Danh sách Lesson khi Accordion mở */}
+                      {isExpanded && (
+                        <div className="p-4 sm:p-5 pt-0 space-y-2.5 border-t border-[#DECBB4]/40 bg-white">
+                          {moduleLessons.length === 0 ? (
+                            <p className="text-xs text-[#78685B] italic py-2">
+                              <BilingualText>{"Module này chưa có bài học."}</BilingualText>
+                            </p>
+                          ) : (
+                            moduleLessons.map((lesson, lIdx) => {
+                              const lessonUniqueKey = getLessonKey(lesson, mIdx, lIdx);
+                              const lessonLockInfo = statusMap[lessonUniqueKey] || {
+                                isLocked: !isEnrolled,
+                                isCompleted: false,
+                                isNext: false,
+                              };
+                              const typeInfo = getLessonTypeInfo(lesson);
+                              const TypeIcon = typeInfo.icon;
+                              const lessonDuration = Number(
+                                lesson.estimatedMinutes || lesson.estimatedDuration || 15
+                              );
+
+                              // Trường hợp 1: Bài học CHƯA ĐƯỢC MỞ KHÓA -> Có icon Lock, ngăn truy cập trực tiếp
+                              if (lessonLockInfo.isLocked) {
+                                return (
+                                  <div
+                                    key={lessonUniqueKey}
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-disabled="true"
+                                    onClick={(e) =>
+                                      handleLockedClick(e, lesson.titleVi || lesson.title)
+                                    }
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter' || e.key === ' ') {
+                                        handleLockedClick(e, lesson.titleVi || lesson.title);
+                                      }
+                                    }}
+                                    className="flex items-center justify-between p-3.5 rounded-xl bg-[#F9F8F6] border border-[#EAE2D7] text-xs sm:text-sm cursor-not-allowed select-none transition-all group opacity-85 hover:opacity-100"
+                                    title="Bài học đang bị khóa - Bấm để xem thông tin mở khóa"
+                                  >
+                                    <div className="flex items-center gap-3 min-w-0">
+                                      <div className="w-7 h-7 rounded-lg bg-stone-100 text-stone-400 flex items-center justify-center shrink-0 border border-stone-200">
+                                        <Lock size={13} />
+                                      </div>
+                                      <div className="truncate">
+                                        <div className="flex items-center gap-2">
+                                          <span className="font-semibold text-stone-500 truncate">
+                                            {lIdx + 1}.{' '}
+                                            <BilingualText
+                                              vi={lesson.titleVi || lesson.title}
+                                              en={lesson.title}
+                                            />
+                                          </span>
+                                          <span
+                                            className={`hidden sm:inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold border ${typeInfo.badgeClass} opacity-60`}
+                                          >
+                                            {typeInfo.labelVi}
+                                          </span>
+                                        </div>
+                                        {(lesson.descriptionVi || lesson.description || lesson.objectiveVi || lesson.objectiveEn) && (
+                                          <p className="text-xs text-stone-400 line-clamp-1 mt-0.5 font-normal truncate">
+                                            <BilingualText
+                                              vi={lesson.descriptionVi || lesson.objectiveVi || lesson.description}
+                                              en={lesson.description || lesson.objectiveEn}
+                                            />
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-2.5 text-[11px] text-stone-400 shrink-0 ml-2">
+                                      <span className="inline-flex items-center gap-1">
+                                        <Clock size={12} />
+                                        {lessonDuration} phút
+                                      </span>
+                                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-stone-200 text-stone-600 font-bold text-[10px]">
+                                        <Lock size={10} />
+                                        <span>Đã khóa</span>
+                                      </span>
+                                    </div>
+                                  </div>
+                                );
+                              }
+
+                              // Trường hợp 2: Bài học ĐÃ MỞ KHÓA -> Có Link truy cập trực tiếp
+                              return (
+                                <Link
+                                  key={lessonUniqueKey}
+                                  to={`/learn/${targetCourseId}/lesson/${lesson.id}`}
+                                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#FFFDF9] hover:bg-white border border-[#DECBB4]/60 hover:border-[#DA251D] text-xs sm:text-sm cursor-pointer transition-all shadow-2xs hover:shadow-sm group"
+                                >
+                                  <div className="flex items-center gap-3 min-w-0">
+                                    <div
+                                      className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border ${
+                                        lessonLockInfo.isCompleted
+                                          ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
+                                          : lessonLockInfo.isNext
+                                          ? 'bg-[#DA251D] text-white border-[#DA251D] animate-pulse'
+                                          : 'bg-[#FFF2D6] text-[#A62A24] border-[#FFCD00]/50'
+                                      }`}
+                                    >
+                                      {lessonLockInfo.isCompleted ? (
+                                        <CheckCircle2 size={15} />
+                                      ) : lessonLockInfo.isNext ? (
+                                        <Play size={13} fill="currentColor" />
+                                      ) : (
+                                        <TypeIcon size={14} />
+                                      )}
+                                    </div>
+
+                                    <div className="truncate">
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-bold text-[#431914] group-hover:text-[#DA251D] transition-colors truncate">
+                                          {lIdx + 1}.{' '}
+                                          <BilingualText
+                                            vi={lesson.titleVi || lesson.title}
+                                            en={lesson.title}
+                                          />
+                                        </span>
+                                        <span
+                                          className={`hidden sm:inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold border ${typeInfo.badgeClass}`}
+                                        >
+                                          {typeInfo.labelVi}
+                                        </span>
+                                      </div>
+                                      {(lesson.descriptionVi || lesson.description || lesson.objectiveVi || lesson.objectiveEn) && (
+                                        <p className="text-xs text-[#78685B] line-clamp-1 mt-0.5 font-normal truncate">
+                                          <BilingualText
+                                            vi={lesson.descriptionVi || lesson.objectiveVi || lesson.description}
+                                            en={lesson.description || lesson.objectiveEn}
+                                          />
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="flex items-center gap-2.5 text-[11px] text-[#78685B] shrink-0 ml-2">
+                                    <span className="inline-flex items-center gap-1 font-medium">
+                                      <Clock size={12} className="text-[#A62A24]" />
+                                      {lessonDuration} phút
+                                    </span>
+
+                                    {lessonLockInfo.isCompleted ? (
+                                      <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                                        Đã học
+                                      </span>
+                                    ) : lessonLockInfo.isNext ? (
+                                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#DA251D] text-white font-extrabold text-[10px] shadow-xs">
+                                        <Play size={10} fill="white" />
+                                        Học ngay
+                                      </span>
+                                    ) : (
+                                      <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#A62A24] font-bold text-[10px]">
+                                        Vào bài
+                                      </span>
+                                    )}
+                                  </div>
+                                </Link>
+                              );
+                            })
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+        </div>
+
+        {/* ===================== CỘT PHẢI (35%): CARD ĐĂNG KÝ STICKY ===================== */}
+        <aside className="w-full lg:sticky lg:top-24 space-y-6 self-start">
+          <div className="bg-white rounded-3xl border border-[#DECBB4] p-5 sm:p-6 shadow-md hover:shadow-lg transition-all space-y-6">
+            {/* Ảnh Course */}
+            <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-sm border border-[#DECBB4]/60 relative group bg-[#FFF9EE]">
+              <CourseThumbnail course={course} />
+              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-[#431914]/85 backdrop-blur-xs text-[#FFF9EE] text-[11px] font-black uppercase tracking-wider">
+                {course.level}
+              </div>
+            </div>
+
+            {/* Thông tin số bài, thời lượng */}
+            <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[#FFF9EE]/70 border border-[#DECBB4]/50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#DECBB4]/60 text-[#A62A24] flex items-center justify-center shrink-0">
+                  <BookOpen size={16} />
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-[#78685B] uppercase block">
+                    Số bài học
+                  </span>
+                  <span className="text-sm font-black text-[#431914]">
+                    {totalLessons} bài học
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#DECBB4]/60 text-[#A62A24] flex items-center justify-center shrink-0">
+                  <Clock size={16} />
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-[#78685B] uppercase block">
+                    Thời lượng
+                  </span>
+                  <span className="text-sm font-black text-[#431914]">
+                    {formatDuration(totalDurationMinutes)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Tiến độ nếu đã đăng ký */}
+            {isEnrolled && (
+              <div className="space-y-2 p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/60">
+                <div className="flex items-center justify-between text-xs font-bold text-emerald-900">
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 size={14} className="text-emerald-700" />
+                    <span>Tiến độ học tập</span>
+                  </span>
+                  <span>{progressPercent}%</span>
+                </div>
+                <div className="w-full h-2.5 rounded-full bg-emerald-200/50 overflow-hidden">
+                  <div
+                    className="h-full bg-emerald-600 rounded-full transition-all duration-300"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <div className="text-[11px] text-emerald-800 font-medium">
+                  Đã hoàn thành {completedLessons}/{totalLessons} bài học
+                </div>
+              </div>
+            )}
+
+            {/* Nút Enroll / Continue / Review (CTA Chính) */}
+            <div className="space-y-2.5">
+              {isEnrolled ? (
+                <Link
+                  to={continueLearnUrl}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all"
+                >
+                  <Play size={16} fill="white" />
+                  <BilingualText>
+                    {isCompleted
+                      ? 'Xem lại khóa học →'
+                      : completedLessons > 0
+                      ? 'Tiếp tục học ngay →'
+                      : 'Bắt đầu học bài đầu tiên →'}
+                  </BilingualText>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleEnroll}
+                  disabled={enrollPending}
+                  aria-busy={enrollPending}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] disabled:bg-[#DA251D]/60 text-white font-black text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
+                >
+                  {enrollPending ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Đang đăng ký…</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={16} />
+                      <BilingualText>
+                        {course.isFree ? 'Đăng ký học miễn phí' : 'Đăng ký học ngay'}
+                      </BilingualText>
+                    </>
+                  )}
+                </button>
+              )}
+
+              {enrollError && (
+                <p className="text-xs text-rose-600 font-semibold text-center flex items-center justify-center gap-1">
+                  <AlertCircle size={13} />
+                  <span>{enrollError}</span>
+                </p>
+              )}
+            </div>
+
+            {/* Danh sách quyền lợi và tiện ích đi kèm */}
+            <div className="border-t border-[#DECBB4]/40 pt-4 space-y-2.5 text-xs text-[#78685B]">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={15} className="text-emerald-600 shrink-0" />
+                <span>Truy cập trọn đời trên máy tính & điện thoại</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles size={15} className="text-[#DA251D] shrink-0" />
+                <span>Tương tác AI Tutor luyện nói & sửa phát âm 24/7</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Award size={15} className="text-[#FFCD00] shrink-0" />
+                <span>Cấp chứng nhận hoàn thành khóa học</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Component CourseDetailPage chính
+ */
 export function CourseDetailPage() {
   const { courseId } = useParams();
   const resource = useCourse(courseId);
 
   return (
-    <section className="course-detail-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <section className="course-detail-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-2 text-xs font-semibold text-[#78685B]">
         <Link
@@ -42,202 +1085,17 @@ export function CourseDetailPage() {
       </nav>
 
       <ResourceState resource={resource}>
-        {({ course, enrollment }) => {
-          const outcomes = String(course.learningOutcomes || '')
-            .split(/\n|;/)
-            .map((item) => item.trim())
-            .filter(Boolean);
-
-          return (
-            <div className="space-y-8">
-              {/* Hero Course Showcase */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF9EE] via-[#F7F0E3] to-[#EEE3D1] border border-[#DECBB4] p-6 sm:p-10 shadow-sm">
-                <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none overflow-hidden hidden md:block">
-                  <Artwork kind="dong-son" className="w-full h-full object-contain object-right" />
-                </div>
-
-                <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                  {/* Left Column: Course Intro */}
-                  <div className="lg:col-span-7 space-y-5">
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <span className="badge px-3 py-1 rounded-full bg-[#DA251D] text-white font-bold text-xs uppercase tracking-wider shadow-xs">
-                        {course.level}
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#FFF2D6] text-[#A62A24] border border-[#FFCD00]/50 font-bold text-xs">
-                        <Sparkles size={13} />
-                        <BilingualText>{course.isFree ? 'Miễn phí' : 'Khóa học chính thức'}</BilingualText>
-                      </span>
-                    </div>
-
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#431914] tracking-tight leading-tight">
-                      <BilingualText vi={course.titleVi || course.title} en={course.title} />
-                    </h1>
-
-                    <p className="text-sm sm:text-base text-[#78685B] leading-relaxed preserve-lines max-w-2xl">
-                      <BilingualText vi={course.descriptionVi || course.description} en={course.description} />
-                    </p>
-
-                    {/* Metadata Strip */}
-                    <div className="pt-2">
-                      <CourseInfo course={course} />
-                    </div>
-
-                    {/* Primary Enrollment Call To Action */}
-                    <div className="pt-4 flex flex-wrap items-center gap-4">
-                      <EnrollButton
-                        courseId={courseId}
-                        enrollment={enrollment}
-                        onEnrolled={resource.reload}
-                      />
-
-                      {enrollment?.isEnrolled && (
-                        <Link
-                          to={`/learn/${courseId}`}
-                          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all"
-                        >
-                          <Play size={16} fill="white" />
-                          <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right Column: Thumbnail Showcase */}
-                  <div className="lg:col-span-5 flex justify-center">
-                    <div className="w-full max-w-md aspect-video sm:aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-white">
-                      <CourseThumbnail course={course} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* What You Will Learn (Learning Outcomes) */}
-              {outcomes.length > 0 && (
-                <section className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-5">
-                  <div className="flex items-center gap-2">
-                    <Award size={20} className="text-[#DA251D]" />
-                    <h2 className="text-lg sm:text-xl font-black text-[#431914] tracking-tight">
-                      <BilingualText>{"Bạn sẽ học được gì từ khóa học này"}</BilingualText>
-                    </h2>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                    {outcomes.map((text, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-start gap-3 p-3.5 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4]/60 hover:border-[#FFCD00] transition-colors"
-                      >
-                        <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                          ✓
-                        </span>
-                        <span className="text-xs sm:text-sm font-semibold text-[#431914] leading-snug">
-                          {text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* Curriculum Breakdown For Enrolled Students */}
-              {enrollment?.isEnrolled && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                  <div className="lg:col-span-8">
-                    <CourseCurriculum courseId={courseId} />
-                  </div>
-                  <aside className="lg:col-span-4 bg-white rounded-3xl border border-[#DECBB4] p-6 shadow-xs space-y-5 sticky top-6">
-                    <div className="flex items-center gap-2">
-                      <Compass size={18} className="text-[#DA251D]" />
-                      <h2 className="text-base font-black text-[#431914]">
-                        <BilingualText>{"Tiến độ của bạn"}</BilingualText>
-                      </h2>
-                    </div>
-                    <CourseProgress courseId={courseId} />
-                    <Link
-                      className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-bold text-xs sm:text-sm shadow-md transition-all"
-                      to={`/learn/${courseId}`}
-                    >
-                      <BilingualText>{"Tiếp tục học →"}</BilingualText>
-                    </Link>
-                  </aside>
-                </div>
-              )}
-
-              {/* Curriculum Breakdown For Visitors / Not Enrolled */}
-              {!enrollment?.isEnrolled && course.modules?.length > 0 && (
-                <section className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-6">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <BookOpen size={20} className="text-[#DA251D]" />
-                      <h2 className="text-lg sm:text-xl font-black text-[#431914] tracking-tight">
-                        <BilingualText>{"Nội dung chi tiết khóa học"}</BilingualText>
-                      </h2>
-                    </div>
-                    <p className="text-xs text-[#78685B]">
-                      <BilingualText>
-                        {"Bao gồm các bài học thực tế, bài tập phát âm, và trắc nghiệm củng cố kiến thức."}
-                      </BilingualText>
-                    </p>
-                  </div>
-
-                  <div className="space-y-4">
-                    {course.modules.map((module, mIdx) => (
-                      <details
-                        key={module.id}
-                        className="group rounded-2xl border border-[#DECBB4] overflow-hidden bg-[#FFFDF9] open:bg-white transition-all shadow-xs"
-                        open={mIdx === 0}
-                      >
-                        <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer font-bold text-[#431914] hover:text-[#DA251D] transition-colors select-none">
-                          <div className="flex items-center gap-3">
-                            <span className="w-7 h-7 rounded-xl bg-[#FFF2D6] text-[#A62A24] font-black text-xs flex items-center justify-center shrink-0">
-                              {mIdx + 1}
-                            </span>
-                            <span className="text-sm sm:text-base font-bold">
-                              <BilingualText vi={module.titleVi || module.title} en={module.title} />
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2 text-xs text-[#78685B]">
-                            <span>{module.lessons?.length || 0} bài học</span>
-                            <ChevronDown size={16} className="group-open:rotate-180 transition-transform" />
-                          </div>
-                        </summary>
-
-                        <div className="p-4 sm:p-5 pt-0 space-y-2 border-t border-[#DECBB4]/40 bg-white">
-                          {module.lessons?.map((lesson, lIdx) => (
-                            <div
-                              key={lesson.id}
-                              className="flex items-center justify-between p-3 rounded-xl bg-[#FFF9EE]/70 hover:bg-[#FFF9EE] border border-[#DECBB4]/40 text-xs sm:text-sm transition-colors"
-                            >
-                              <div className="flex items-center gap-2.5">
-                                <span className="w-5 h-5 rounded-full bg-white border border-[#DECBB4] text-[10px] font-bold text-[#78685B] flex items-center justify-center shrink-0">
-                                  {lIdx + 1}
-                                </span>
-                                <span className="font-semibold text-[#431914]">
-                                  <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2 text-[11px] text-[#78685B] shrink-0">
-                                <span className="inline-flex items-center gap-1">
-                                  <Clock size={11} className="text-[#A62A24]" />
-                                  {lesson.estimatedMinutes} phút
-                                </span>
-                                <span className="px-2 py-0.5 rounded-md bg-[#F5E1D8] text-[#A62A24] font-bold text-[10px]">
-                                  <Lock size={10} className="inline mr-0.5" />
-                                  Đăng ký
-                                </span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </details>
-                    ))}
-                  </div>
-                </section>
-              )}
-            </div>
-          );
-        }}
+        {({ course, enrollment }) => (
+          <CourseDetailView
+            key={course?.id || courseId}
+            course={course}
+            courseId={courseId}
+            enrollment={enrollment}
+            onReload={resource.reload}
+          />
+        )}
       </ResourceState>
     </section>
   );
 }
+export default CourseDetailPage;

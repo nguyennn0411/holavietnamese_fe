@@ -7,7 +7,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, Sparkles } from 'lucide-react';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
-export function UserMenu({ user, isAdmin, onLogout }) {
+export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const displayName = user?.fullName || user?.username || 'Học viên';
@@ -59,12 +59,13 @@ export function UserMenu({ user, isAdmin, onLogout }) {
       <AnimatePresence>
       {open && (
         <motion.div className="user-menu__panel" role="menu" initial={reduceMotion ? false : { opacity: 0, y: -8, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={reduceMotion ? undefined : { opacity: 0, y: -6, scale: .98 }} transition={{ duration: reduceMotion ? 0 : .18 }}>
-          <div className="user-menu__identity"><strong>{displayName}</strong><span>@{user?.username || 'learner'} · <BilingualText>{isAdmin ? 'Quản trị viên' : 'Học viên'}</BilingualText></span></div>
+          <div className="user-menu__identity"><strong>{displayName}</strong><span>@{user?.username || 'learner'} · <BilingualText>{isAdmin ? 'Quản trị viên' : isContentManager ? 'Quản lý nội dung' : 'Học viên'}</BilingualText></span></div>
           <Link to={ROUTES.EDTECH_DASHBOARD} onClick={closeMenu} role="menuitem"><Sparkles size={16}/><BilingualText>{"Lộ trình học EdTech"}</BilingualText></Link>
           <Link to="/profile" onClick={closeMenu} role="menuitem"><UserRound size={16}/><BilingualText>{"Hồ sơ cá nhân"}</BilingualText></Link>
           <Link to="/settings" onClick={closeMenu} role="menuitem"><Settings size={16}/><BilingualText>{"Cài đặt học tập"}</BilingualText></Link>
           <Link to="/achievements" onClick={closeMenu} role="menuitem"><Trophy size={16}/><BilingualText>{"Thành tích"}</BilingualText></Link>
           {isAdmin && <Link to="/admin" onClick={closeMenu} role="menuitem" className="user-menu__admin"><Shield size={16}/><BilingualText>{"Trang quản trị"}</BilingualText></Link>}
+          {isContentManager && !isAdmin && <Link to="/admin/courses" onClick={closeMenu} role="menuitem" className="user-menu__admin"><Shield size={16}/><BilingualText>{"Quản lý khóa học"}</BilingualText></Link>}
           <button type="button" className="user-menu__logout" onClick={handleLogout} role="menuitem"><LogOut size={16}/><BilingualText>{"Đăng xuất"}</BilingualText></button>
         </motion.div>
       )}

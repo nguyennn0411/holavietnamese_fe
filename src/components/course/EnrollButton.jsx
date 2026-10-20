@@ -1,19 +1,84 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { courseService } from '@/services/courseService'
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { courseService } from '@/services/courseService';
+import { Sparkles, Play, AlertCircle } from 'lucide-react';
+
 export function EnrollButton({ courseId, enrollment, onEnrolled }) {
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState(null)
-  const location = useLocation()
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState(null);
+  const location = useLocation();
+
   async function enroll() {
-    setPending(true); setError(null)
-    try { await courseService.enroll(courseId); onEnrolled() }
-    catch (e) { setError(e) }
-    finally { setPending(false) }
+    setPending(true);
+    setError(null);
+    try {
+      const result = await courseService.enroll(courseId);
+      if (!result?.isEnrolled) {
+        throw new Error('Đăng ký khóa học chưa hoàn tất. Vui lòng thử lại.');
+      }
+      onEnrolled?.(result);
+    } catch (e) {
+      setError(e);
+    } finally {
+      setPending(false);
+    }
   }
-  if (enrollment?.isEnrolled) return <Link className="button" to={`/learn/${courseId}`}><BilingualText>{"Tiếp tục học →"}</BilingualText></Link>
-  return <div><button disabled={pending} onClick={enroll}><BilingualText>{pending ? 'Đang đăng ký…' : 'Đăng ký học'}</BilingualText></button>
-    {error && <p role="alert"><BilingualText>{error.message}</BilingualText> {error.status === 401 && <Link to="/login" state={{ from: location.pathname }}><BilingualText>{"Sign in"}</BilingualText></Link>}</p>}
-  </div>
+
+  if (enrollment?.isEnrolled) {
+    return (
+      <Link
+        className="button inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all no-underline"
+        to={`/learn/${courseId}`}
+      >
+        <Play size={15} fill="white" />
+        <BilingualText>{"Tiếp tục học →"}</BilingualText>
+      </Link>
+    );
+  }
+
+  return (
+    <div className="enroll-button-container space-y-2">
+      <button
+        type="button"
+        disabled={pending}
+        aria-busy={pending}
+        onClick={enroll}
+        className="w-full inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] disabled:bg-[#DA251D]/60 text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95"
+      >
+        {pending ? (
+          <>
+            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <BilingualText>{"Đang đăng ký…"}</BilingualText>
+          </>
+        ) : (
+          <>
+            <Sparkles size={16} />
+            <BilingualText>{"Đăng ký học ngay"}</BilingualText>
+          </>
+        )}
+      </button>
+
+      {error && (
+        <p
+          role="alert"
+          className="text-xs text-rose-600 font-semibold flex items-center justify-center gap-1.5 p-2 rounded-xl bg-rose-50 border border-rose-200"
+        >
+          <AlertCircle size={14} className="shrink-0" />
+          <BilingualText>{error.message || 'Không thể đăng ký.'}</BilingualText>
+          {error.status === 401 && (
+            <Link
+              to="/login"
+              state={{ from: location.pathname }}
+              className="text-[#DA251D] underline ml-1 font-bold"
+            >
+              <BilingualText>{"Đăng nhập"}</BilingualText>
+            </Link>
+          )}
+        </p>
+      )}
+    </div>
+  );
 }
+
+export default EnrollButton;

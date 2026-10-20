@@ -14,7 +14,7 @@ const groups = [
   { title: 'Hệ thống', links: [[ROUTES.ADMIN_ACHIEVEMENTS, 'Thành tích'], [ROUTES.ADMIN_XP_RULES, 'Quy tắc XP'], [ROUTES.ADMIN_ROLES, 'Vai trò & phân quyền'], [ROUTES.ADMIN_AUDIT_LOGS, 'Nhật ký hệ thống'], [ROUTES.ADMIN_SETTINGS, 'Cài đặt']] },
 ];
 export function AdminLayout() {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin, isContentManager } = useAuth();
   const [open, setOpen] = useState(false);
   const sidebar = useRef(null);
   useEffect(() => {
@@ -33,16 +33,19 @@ export function AdminLayout() {
     document.addEventListener('keydown', keydown);
     return () => { document.removeEventListener('keydown', keydown); previous?.focus(); };
   }, [open]);
+  const visibleGroups = isContentManager && !isAdmin
+    ? [{ title: 'Nội dung học tập', links: [['/admin/courses', 'Khóa học'], ['/admin/lessons', 'Bài học'], ['/admin/questions', 'Ngân hàng câu hỏi'], ['/admin/quizzes', 'Quiz']] }]
+    : groups;
   const location = useLocation();
-  const current = groups.flatMap(group => group.links).find(([to]) => location.pathname === to || (to !== '/admin' && location.pathname.startsWith(to + '/')))?.[1] || 'Quản trị nội dung';
-  return <div className={`admin-wrapper ${open ? 'admin-menu-open' : ''}`} lang="vi">
+  const current = visibleGroups.flatMap(group => group.links).find(([to]) => location.pathname === to || (to !== '/admin' && location.pathname.startsWith(to + '/')))?.[1] || 'Quản trị nội dung';
+  return <div className={`admin-wrapper ${open ? 'admin-menu-open' : ''}`}>
     <a className="skip-link" href="#admin-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
     <aside ref={sidebar} id="admin-navigation" className="admin-sidebar">
-      <Link to="/admin" className="admin-sidebar-header">hola admin<span><BilingualText>{"CONTENT & LEARNING"}</BilingualText></span></Link>
-      <nav className="admin-nav" aria-label="Điều hướng quản trị">{groups.map(group => <div className="admin-nav-group" key={group.title}><p><BilingualText>{group.title}</BilingualText></p>{group.links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/admin'} onClick={() => setOpen(false)} className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}><BilingualText>{label}</BilingualText></NavLink>)}</div>)}</nav>
+      <Link to={isAdmin ? '/admin' : '/admin/courses'} className="admin-sidebar-header">hola admin<span><BilingualText>{"CONTENT & LEARNING"}</BilingualText></span></Link>
+      <nav className="admin-nav" aria-label="Điều hướng quản trị">{visibleGroups.map(group => <div className="admin-nav-group" key={group.title}><p><BilingualText>{group.title}</BilingualText></p>{group.links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/admin'} onClick={() => setOpen(false)} className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}><BilingualText>{label}</BilingualText></NavLink>)}</div>)}</nav>
       <div className="admin-sidebar-footer"><Link to="/"><ArrowLeft size={16} aria-hidden="true"/><BilingualText>{"Giao diện học viên"}</BilingualText></Link><button className="admin-logout" onClick={logout}><LogOut size={16} aria-hidden="true"/><BilingualText>{"Đăng xuất"}</BilingualText></button></div>
     </aside>
     {open && <button className="admin-menu-backdrop" aria-label="Đóng menu" onClick={() => setOpen(false)} />}
-    <div className="admin-main-area"><header className="admin-topbar"><button className="mobile-menu-button secondary" aria-label="Mở menu quản trị" aria-controls="admin-navigation" aria-expanded={open} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><span><BilingualText>{"Quản trị /"}</BilingualText><strong><BilingualText>{current}</BilingualText></strong></span><LanguageSwitcher compact /><span className="admin-identity"><BilingualText>{user?.fullName || user?.username || 'Quản trị viên'}</BilingualText> <span className="badge"><BilingualText>{"ADMIN"}</BilingualText></span></span></header><main className="admin-content" id="admin-content"><AnimatePresence mode="wait" initial={false}><PageTransition key={location.pathname}><Outlet /></PageTransition></AnimatePresence></main></div>
+    <div className="admin-main-area"><header className="admin-topbar"><button className="mobile-menu-button secondary" aria-label="Mở menu quản trị" aria-controls="admin-navigation" aria-expanded={open} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><span><BilingualText>{"Quản trị /"}</BilingualText><strong><BilingualText>{current}</BilingualText></strong></span><LanguageSwitcher compact /><span className="admin-identity"><BilingualText>{user?.fullName || user?.username || (isAdmin ? 'Quản trị viên' : 'Người quản lý nội dung')}</BilingualText> <span className="badge"><BilingualText>{isAdmin ? 'ADMIN' : 'CONTENT MANAGER'}</BilingualText></span></span></header><main className="admin-content" id="admin-content"><AnimatePresence mode="wait" initial={false}><PageTransition key={location.pathname}><Outlet /></PageTransition></AnimatePresence></main></div>
   </div>;
 }
