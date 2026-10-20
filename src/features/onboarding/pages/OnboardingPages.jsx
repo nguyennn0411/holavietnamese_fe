@@ -151,9 +151,32 @@ export function CompletionPage() {
   const mode = location.state?.mode || (data.placementTestCompleted ? 'placement' : 'lesson');
   const result = mode === 'placement' ? data.placementResult : data.firstLessonResult;
   if (!result) return <Navigate to="/onboarding/learning-path" replace />;
-  return <div className="ob-complete"><Confetti /><Brand /><main><div className="ob-celebrate"><Mascot celebration /></div><span className="ob-complete-kicker"><Medal /> {mode === 'lesson' ? 'FIRST LESSON COMPLETE' : 'STARTING POINT FOUND'}</span><h1>{mode === 'lesson' ? "Fantastic! You've completed your first Vietnamese lesson!" : "Great job! We've found a starting point for you!"}</h1><p>Your progress is saved on this device. Create an account to keep it wherever you learn.</p>
+
+  const handleContinueToLogin = () => {
+    navigate('/login', {
+      state: {
+        from: '/edtech/dashboard',
+        message: 'Hoàn thành trải nghiệm khởi đầu! Đăng nhập để lưu tiến độ và bắt đầu lộ trình học.',
+      },
+    });
+  };
+
+  const handleRegister = () => {
+    navigate('/register', {
+      state: {
+        from: '/edtech/dashboard',
+      },
+    });
+  };
+
+  return <div className="ob-complete"><Confetti /><Brand /><main><div className="ob-celebrate"><Mascot celebration /></div><span className="ob-complete-kicker"><Medal /> {mode === 'lesson' ? 'FIRST LESSON COMPLETE' : 'STARTING POINT FOUND'}</span><h1>{mode === 'lesson' ? "Fantastic! You've completed your first Vietnamese lesson!" : "Great job! We've found a starting point for you!"}</h1><p>Tiến độ của bạn đã được ghi nhận. Hãy đăng nhập bằng Google hoặc tài khoản sẵn có để lưu kết quả và bắt đầu học nhé.</p>
     <div className="ob-stats"><article><Sparkles /><strong>+{result.xp}</strong><span>XP EARNED</span></article><article><Check /><strong>{result.correct}/{result.total}</strong><span>CORRECT</span></article><article><Target /><strong>{result.accuracy}%</strong><span>ACCURACY</span></article></div>
     <div className="ob-recommend"><BookOpen /><div><span>YOUR RECOMMENDED START</span><strong>{result.recommendation || 'Vietnamese Foundations · Lesson 2'}</strong>{result.level && <small>Suggested group: {result.level}. This is a preliminary result, not an official CEFR certification.</small>}</div></div>
-    <PrimaryButton onClick={() => navigate('/signup?source=onboarding')}>SAVE MY PROGRESS</PrimaryButton><button type="button" className="ob-text-link" onClick={() => navigate('/login?from=/onboarding/completed')}>Already have an account? Log in</button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
+      <PrimaryButton onClick={handleContinueToLogin}>ĐĂNG NHẬP ĐỂ LƯU TIẾN ĐỘ</PrimaryButton>
+      <button type="button" className="ob-text-link" onClick={handleRegister} style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-primary-dark, #89221E)', cursor: 'pointer' }}>
+        Chưa có tài khoản? Tạo tài khoản mới →
+      </button>
+    </div>
   </main></div>;
 }
