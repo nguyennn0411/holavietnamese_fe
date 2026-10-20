@@ -206,6 +206,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = hasRole('ADMIN');
+  const isContentManager = hasRole('CONTENT_MANAGER');
   const isLearner = hasRole('LEARNER');
 
   const contextValue = {
@@ -219,6 +220,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     hasRole,
     isAdmin,
+    isContentManager,
     isLearner,
     fetchProfile,
     updateCurrentUser,

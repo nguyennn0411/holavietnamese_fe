@@ -1,5 +1,7 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || '/api'
+const configuredApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
+const API_BASE_URL = configuredApiBaseUrl
+  ? (configuredApiBaseUrl.endsWith('/api') ? configuredApiBaseUrl : `${configuredApiBaseUrl}/api`)
+  : '/api'
 
 let csrfPromise
 export function resetCsrf() { csrfPromise = undefined }
@@ -11,13 +13,15 @@ async function csrf() {
 
 export async function httpClient(path, options = {}) {
   const method = (options.method || 'GET').toUpperCase()
-  const token = ['GET', 'HEAD', 'OPTIONS'].includes(method) ? null : await csrf()
+  const accessToken = localStorage.getItem('token')
+  const csrfToken = !accessToken && !['GET', 'HEAD', 'OPTIONS'].includes(method) ? await csrf() : null
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { [token.headerName]: token.token } : {}),
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      ...(csrfToken ? { [csrfToken.headerName]: csrfToken.token } : {}),
       ...options.headers,
     },
   })

@@ -47,6 +47,8 @@ export function LoginPage() {
         const roles = loggedUser?.roles || [];
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
           navigate('/admin', { replace: true });
+        } else if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
+          navigate('/admin/courses', { replace: true });
         } else {
           navigate('/', { replace: true });
         }
@@ -125,6 +127,9 @@ export function LoginPage() {
     if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
       return <Navigate to="/admin" replace />;
     }
+    if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
+      return <Navigate to="/admin/courses" replace />;
+    }
     return <Navigate to="/" replace />;
   }
 
@@ -143,6 +148,8 @@ export function LoginPage() {
         const roles = loggedUser?.roles || [];
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
           navigate('/admin', { replace: true });
+        } else if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
+          navigate('/admin/courses', { replace: true });
         } else {
           const completedGuestOnboarding = onboardingService.hasCompletedExperience();
           if (completedGuestOnboarding) {

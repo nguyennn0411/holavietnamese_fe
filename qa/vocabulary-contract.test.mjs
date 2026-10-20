@@ -132,6 +132,15 @@ test('Lesson save uses the same helper, keeps lessonId and sends no Master field
   assert.ok(lesson.includes('vocabularyService.saveWord(item, lessonId)'));
 });
 
+test('A lesson word preserves its explicit Master link and lesson origin together', async () => {
+  calls.length = 0;
+  await vocabularyService.saveWord({ wordVi: 'tạm biệt', meaningEn: 'goodbye', masterVocabularyId: 1009, exampleVi: 'Tạm biệt!' }, 101);
+  assert.equal(calls[0].body.lessonId, 101);
+  assert.equal(calls[0].body.masterVocabularyId, 1009);
+  assert.equal(calls[0].body.word, 'tạm biệt');
+  assert.equal(calls[0].body.meaning, 'goodbye');
+});
+
 test('Catalog excerpts fit Notebook limits and lesson IDs never become Master IDs', async () => {
   calls.length = 0;
   const source = structuredClone(catalogWord);
