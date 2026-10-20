@@ -57,15 +57,15 @@ export function LearnerDashboard({ user }) {
   const displayName = user?.fullName || user?.username || t('dashboard.learner');
   const lessonId = currentLesson?.lessonId ?? currentLesson?.id;
   const courseId = currentLesson?.courseId;
-  const continueTo = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : courseId ? `/learn/${courseId}` : '/courses';
+  const continueTo = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : courseId ? `/learn/${courseId}` : '/edtech/dashboard';
   const activities = Array.isArray(progress?.recentActivities) ? progress.recentActivities : [];
   const quests = Array.isArray(progress?.dailyChallenges) ? progress.dailyChallenges : [];
   const leaderboard = Array.isArray(progress?.weeklyLeaderboard) ? progress.weeklyLeaderboard : [];
 
   const modules = useMemo(() => [
-    { to: '/vocabulary', icon: Languages, title: t('dashboard.modules.vocabulary'), text: t('dashboard.modules.vocabularyText'), tone: 'red' },
-    { to: '/courses', icon: Headphones, title: t('dashboard.modules.listening'), text: t('dashboard.modules.listeningText'), tone: 'gold' },
-    { to: '/alphabet', icon: BookOpen, title: t('dashboard.modules.pronunciation'), text: t('dashboard.modules.pronunciationText'), tone: 'blue' },
+    { to: '/edtech/dashboard', icon: Sparkles, title: 'Lộ trình học', text: 'Bản đồ bài học tương tác từng bước', tone: 'red' },
+    { to: '/vocabulary', icon: Languages, title: t('dashboard.modules.vocabulary'), text: t('dashboard.modules.vocabularyText'), tone: 'gold' },
+    { to: '/courses', icon: BookOpen, title: t('dashboard.modules.courses', { defaultValue: 'Khóa học' }), text: t('dashboard.modules.coursesText', { defaultValue: 'Danh mục khóa học đa dạng theo chủ đề' }), tone: 'blue' },
     { to: '/ai-tutor', icon: MessageCircle, title: t('dashboard.modules.practice'), text: t('dashboard.modules.practiceText'), tone: 'green' },
   ], [t]);
 
@@ -88,7 +88,7 @@ export function LearnerDashboard({ user }) {
           <h1>{t('dashboard.welcomeName', { name: displayName })}</h1>
           <p>{t('dashboard.welcomeSubtitle')}</p>
         </div>
-        <Link to={continueTo} className="ld-button ld-button--primary"><Play size={16} fill="currentColor" />{currentLesson ? t('dashboard.continueLearning') : t('dashboard.exploreCourses')}</Link>
+        <Link to={continueTo} className="ld-button ld-button--primary"><Play size={16} fill="currentColor" />{currentLesson ? t('dashboard.continueLearning') : 'Xem lộ trình học'}</Link>
         <div className="ld-nghe"><MascotSpeechBubble>{currentLesson ? t('mascot.dashboard.continue') : t('mascot.dashboard.start')}</MascotSpeechBubble><BuffaloMascot variant={currentLesson ? 'encouraging' : 'teaching'} size="medium" animated accessibilityLabel={t('mascot.alt')} /></div>
       </motion.header>
 
@@ -102,7 +102,7 @@ export function LearnerDashboard({ user }) {
       <div className="ld-layout">
         <main className="ld-main-column">
           <motion.section className="ld-continue" {...entrance} transition={{ delay: reduceMotion ? 0 : .1 }}>
-            <div className="ld-section-label"><span><BookOpen size={15} />{t('dashboard.continueSection')}</span><small>{currentLesson?.courseTitle || t('dashboard.learningPath')}</small></div>
+            <div className="ld-section-label"><span><Sparkles size={15} />{t('dashboard.continueSection')}</span><small>{currentLesson?.courseTitle || 'Lộ trình học của bạn'}</small></div>
             {currentLesson ? (
               <>
                 <h2>{currentLesson.titleVi || currentLesson.title}</h2>
@@ -115,7 +115,19 @@ export function LearnerDashboard({ user }) {
                 </div>
               </>
             ) : (
-              <div className="ld-empty"><BookOpen size={28} /><h2>{t('dashboard.noCurrentLesson')}</h2><p>{t('dashboard.noCurrentLessonText')}</p><Link to="/courses" className="ld-button ld-button--primary">{t('dashboard.exploreCourses')}<ArrowRight size={16} /></Link></div>
+              <div className="ld-empty">
+                <Sparkles size={32} style={{ color: '#B42318' }} />
+                <h2>Lộ trình học tập cá nhân hóa</h2>
+                <p>Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo.</p>
+                <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.25rem' }}>
+                  <Link to="/edtech/dashboard" className="ld-button ld-button--primary">
+                    <Sparkles size={16} />Vào lộ trình học<ArrowRight size={16} />
+                  </Link>
+                  <Link to="/courses" className="ld-button" style={{ background: '#f5efe6', color: '#581C17', border: '1px solid #ebdccb' }}>
+                    {t('dashboard.exploreCourses')}<ArrowRight size={16} />
+                  </Link>
+                </div>
+              </div>
             )}
           </motion.section>
 

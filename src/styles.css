@@ -80,11 +80,24 @@ p { margin: 10px 0 20px; }
 .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .row h1 { margin-bottom: 10px; }
 .learning-grid { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
-.lesson-sidebar { background: var(--color-sage-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px 12px; position: sticky; top: 20px; }
-.lesson-sidebar h2 { font-size: 15px; padding: 0 12px; margin: 4px 0 16px; }
-.lesson-sidebar ol { list-style: none; padding: 0; margin: 0; }
-.lesson-sidebar a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 12px; font-size: 13px; text-decoration: none; border-radius: 8px; }
-.lesson-sidebar a.current { background: white; box-shadow: 0 2px 4px #203a3010; font-weight: 700; }
+/* Sleek custom scrollbar for lesson roadmap */
+.roadmap-custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #decbb4 transparent;
+}
+.roadmap-custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.roadmap-custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.roadmap-custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #decbb4;
+  border-radius: 9999px;
+}
+.roadmap-custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #b59e86;
+}
 .lesson-status { flex-shrink: 0; }
 .lesson-status.completed { color: var(--color-forest); }
 .lesson-panel { padding: 32px; }
@@ -114,11 +127,15 @@ textarea { resize: vertical; }
 .modal::backdrop { background: #17392b66; backdrop-filter: blur(3px); }
 .modal .row { margin-bottom: 16px; }
 .modal .actions { justify-content: flex-end; }
+.course-cover-upload { margin-top: 16px; }
+.course-cover-upload small { color: var(--muted); font-weight: 400; }
+.course-cover-upload-preview { display: block; width: min(100%, 320px); aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; border: 1px solid var(--color-border); margin: 8px 0 16px; }
+.lesson-media-upload-preview { display: block; width: min(100%, 360px); max-height: 240px; object-fit: contain; border-radius: 8px; border: 1px solid var(--color-border); margin: 8px 0 16px; }
 .icon-button { border: none; background: transparent; color: var(--muted); font-size: 24px; padding: 0 8px; }
 .icon-button:hover { background: var(--color-sage-soft); }
 .auth-card { max-width: 470px; margin: 32px auto; padding: 36px; }
 .auth-card h1 { font-size: 28px; margin-bottom: 28px; }
 .auth-card form > button { width: 100%; }
 @media (max-width: 1100px) { .app-header { flex-wrap: wrap; gap: 16px; } .main-nav { order: 3; flex-basis: 100%; justify-content: flex-start; overflow-x: auto; } .sign-in-link { margin-left: auto; } .hero { gap: 32px; } .greeting-card { padding: 30px; } .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 720px) { .app-main { width: calc(100% - 32px); padding: 28px 0 48px; } .app-header { padding: 16px; } .brand { font-size: 16px; } .main-nav { gap: 20px; } .main-nav a { font-size: 12px; } .hero { grid-template-columns: 1fr; padding: 20px 0 48px; gap: 36px; } .hero h1 { font-size: 42px; } .greeting-card { margin-right: 12px; } .feature-grid { grid-template-columns: 1fr; gap: 18px; } .feature-grid p { max-width: none; } .card-grid, .detail-grid, .learning-grid, .filters { grid-template-columns: 1fr; } .stats-grid { gap: 10px; } .stat { padding: 16px 12px; } .stat strong { font-size: 28px; } .stat span { font-size: 11px; } .lesson-sidebar { position: static; } .lesson-panel { padding: 22px; } .row { flex-wrap: wrap; } .filters { gap: 0; } .app-footer { flex-direction: column; padding: 24px 16px; gap: 4px; } .detail-grid { gap: 24px; } .detail-grid > .course-thumbnail { order: -1; height: 190px; } }
+@media (max-width: 720px) { .app-main { width: calc(100% - 32px); padding: 28px 0 48px; } .app-header { padding: 16px; } .brand { font-size: 16px; } .main-nav { gap: 20px; } .main-nav a { font-size: 12px; } .hero { grid-template-columns: 1fr; padding: 20px 0 48px; gap: 36px; } .hero h1 { font-size: 42px; } .greeting-card { margin-right: 12px; } .feature-grid { grid-template-columns: 1fr; gap: 18px; } .feature-grid p { max-width: none; } .card-grid, .detail-grid, .learning-grid, .filters { grid-template-columns: 1fr; } .stats-grid { gap: 10px; } .stat { padding: 16px 12px; } .stat strong { font-size: 28px; } .stat span { font-size: 11px; } .lesson-panel { padding: 22px; } .row { flex-wrap: wrap; } .filters { gap: 0; } .app-footer { flex-direction: column; padding: 24px 16px; gap: 4px; } .detail-grid { gap: 24px; } .detail-grid > .course-thumbnail { order: -1; height: 190px; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

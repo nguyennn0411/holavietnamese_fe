@@ -9,6 +9,8 @@ export const ROUTES = {
   RESET_PASSWORD: '/reset-password',
   ONBOARDING: '/onboarding',
   WELCOME: '/welcome',
+  LOGIN_REQUIRED: '/login-required',
+  AUTH_REQUIRED: '/auth-required',
 
   // EdTech Next-Gen Experience
   EDTECH_DASHBOARD: '/edtech/dashboard',

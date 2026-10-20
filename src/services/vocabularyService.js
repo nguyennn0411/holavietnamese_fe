@@ -11,12 +11,13 @@ export const vocabularyService = {
   async delete(id) { await axiosClient.delete(`/api/me/vocabulary/${id}`); return null },
   saveWord(source, lessonId = null) {
     const meaning = source.meanings?.[0]
-    const isMaster = lessonId == null && source.wordVi == null && Array.isArray(source.meanings) && source.id != null
+      const masterVocabularyId = source.masterVocabularyId ?? (lessonId == null && source.wordVi == null && Array.isArray(source.meanings) ? source.id : null)
+      const isMaster = masterVocabularyId != null
     const exampleSentence = source.exampleVi ?? meaning?.examples?.[0]?.exampleVi ?? source.exampleSentence ?? ''
     const note = meaning?.usageNote ?? source.note ?? ''
     return vocabularyService.add({
       lessonId,
-      ...(isMaster ? { masterVocabularyId: source.id } : {}),
+        ...(isMaster ? { masterVocabularyId } : {}),
       word: source.wordVi ?? source.word,
       meaning: source.meaningEn ?? (meaning ? (meaning.translationEn || meaning.definitionVi || meaning.definitionEn || '').trim().slice(0, 1000) : source.meaning),
       pronunciation: source.pronunciation ?? '',

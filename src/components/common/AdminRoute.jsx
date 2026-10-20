@@ -21,9 +21,12 @@ export function AdminRoute() {
 
   const roles = user?.roles || [];
   const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
+  const isContentManager = roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER');
+  const contentPath = ['/admin/courses', '/admin/lessons', '/admin/questions', '/admin/quizzes']
+    .some(path => location.pathname === path || location.pathname.startsWith(`${path}/`));
 
   // If user is a LEARNER attempting to access /admin -> redirect to home with flash message
-  if (!isAdmin) {
+  if (!isAdmin && !(isContentManager && contentPath)) {
     return (
       <Navigate
         to="/forbidden"

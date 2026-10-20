@@ -47,8 +47,19 @@ export function LoginPage() {
         const roles = loggedUser?.roles || [];
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
           navigate('/admin', { replace: true });
+        } else if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
+          navigate('/admin/courses', { replace: true });
         } else {
-          navigate('/', { replace: true });
+          const completedGuestOnboarding = onboardingService.hasCompletedExperience();
+          if (completedGuestOnboarding) {
+            try {
+              await onboardingService.syncGuestProgress();
+            } catch {
+              // Progress stays local and can be retried when connectivity returns.
+            }
+          }
+          const from = location.state?.from || searchParams.get('from');
+          navigate(from || (completedGuestOnboarding ? '/edtech/dashboard' : '/'), { replace: true });
         }
       }
     } catch {
@@ -125,6 +136,9 @@ export function LoginPage() {
     if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
       return <Navigate to="/admin" replace />;
     }
+    if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
+      return <Navigate to="/admin/courses" replace />;
+    }
     return <Navigate to="/" replace />;
   }
 
@@ -143,6 +157,8 @@ export function LoginPage() {
         const roles = loggedUser?.roles || [];
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
           navigate('/admin', { replace: true });
+        } else if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
+          navigate('/admin/courses', { replace: true });
         } else {
           const completedGuestOnboarding = onboardingService.hasCompletedExperience();
           if (completedGuestOnboarding) {
@@ -153,7 +169,7 @@ export function LoginPage() {
             }
           }
           const from = location.state?.from || searchParams.get('from');
-          navigate(completedGuestOnboarding ? '/edtech/dashboard' : (from || '/'), { replace: true });
+          navigate(from || (completedGuestOnboarding ? '/edtech/dashboard' : '/'), { replace: true });
         }
       }
     } catch {
@@ -328,8 +344,12 @@ export function LoginPage() {
           {/* Footer Link */}
           <p className="auth-footer-text">
             <BilingualText vi="Chưa có tài khoản?" en="Don't have an account?" />{' '}
+            <Link to="/welcome" className="auth-footer-link">
+              <BilingualText vi="Bắt đầu tại Welcome" en="Start at Welcome" />
+            </Link>
+            <span className="auth-footer-dot"> · </span>
             <Link to="/register" className="auth-footer-link">
-              <BilingualText vi="Đăng ký miễn phí" en="Sign up for free" />
+              <BilingualText vi="Đăng ký tài khoản" en="Sign up" />
             </Link>
           </p>
         </main>

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import authApi from '@/infrastructure/api/authApi';
+import { markHasAccount } from '@/utils/userState';
 
 const AuthContext = createContext(null);
 
@@ -79,6 +80,7 @@ export const AuthProvider = ({ children }) => {
         const { token, userId, username: uname, fullName, roles } = data.result;
 
         localStorage.setItem('token', token);
+        markHasAccount();
         setAccessToken(token);
         setIsAuthenticated(true);
 
@@ -113,6 +115,7 @@ export const AuthProvider = ({ children }) => {
         if (data.result?.token) {
           const { token, id, userId, username: uname, email, fullName, nativeLanguage, targetLevel, roles } = data.result;
           localStorage.setItem('token', token);
+          markHasAccount();
           setAccessToken(token);
           setIsAuthenticated(true);
           const normalizedRoles = normalizeRoles(roles);
@@ -157,6 +160,7 @@ export const AuthProvider = ({ children }) => {
         const { token, userId, username: uname, fullName, roles } = data.result;
 
         localStorage.setItem('token', token);
+        markHasAccount();
         setAccessToken(token);
         setIsAuthenticated(true);
 
@@ -206,6 +210,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = hasRole('ADMIN');
+  const isContentManager = hasRole('CONTENT_MANAGER');
   const isLearner = hasRole('LEARNER');
 
   const contextValue = {
@@ -219,6 +224,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     hasRole,
     isAdmin,
+    isContentManager,
     isLearner,
     fetchProfile,
     updateCurrentUser,
