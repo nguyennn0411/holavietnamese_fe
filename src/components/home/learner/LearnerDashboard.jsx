@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, BookOpen, Check, CircleAlert, Clock3, Flame, Languages, MessageCircle, Play, RefreshCw, Target, Trophy, Volume2, Zap } from 'lucide-react';
+import { ArrowRight, Check, CircleAlert, Clock3, Play, RefreshCw, Target, Trophy, Volume2 } from 'lucide-react';
 import { learnerService } from '@/services/learnerService';
 import { WORD_OF_THE_DAY } from '@/components/home/data/homeData';
 import { speakVietnamese } from '@/utils/speech';
@@ -23,7 +23,7 @@ function DashboardSkeleton() {
   );
 }
 
-function StatCard({ icon: Icon, label, value, detail, tone }) {
+function StatCard({ label, value, detail, tone }) {
   return (
     <article className={`ld-stat ld-stat--${tone}`}>
       <div><span>{label}</span><strong>{value ?? '—'}</strong><small>{detail}</small></div>
@@ -60,9 +60,9 @@ export function LearnerDashboard({ user }) {
 
   const modules = useMemo(() => [
     { to: '/edtech/dashboard', title: 'Lộ trình học', text: 'Bản đồ bài học tương tác từng bước', tone: 'red' },
-    { to: '/vocabulary', icon: Languages, title: t('dashboard.modules.vocabulary'), text: t('dashboard.modules.vocabularyText'), tone: 'gold' },
-    { to: '/courses', icon: BookOpen, title: t('dashboard.modules.courses', { defaultValue: 'Khóa học' }), text: t('dashboard.modules.coursesText', { defaultValue: 'Danh mục khóa học đa dạng theo chủ đề' }), tone: 'blue' },
-    { to: '/ai-tutor', icon: MessageCircle, title: t('dashboard.modules.practice'), text: t('dashboard.modules.practiceText'), tone: 'green' },
+    { to: '/vocabulary', title: t('dashboard.modules.vocabulary'), text: t('dashboard.modules.vocabularyText'), tone: 'gold' },
+    { to: '/courses', title: t('dashboard.modules.courses', { defaultValue: 'Khóa học' }), text: t('dashboard.modules.coursesText', { defaultValue: 'Danh mục khóa học đa dạng theo chủ đề' }), tone: 'blue' },
+    { to: '/ai-tutor', title: t('dashboard.modules.practice'), text: t('dashboard.modules.practiceText'), tone: 'green' },
   ], [t]);
 
   if (!progress && !error) return <DashboardSkeleton />;
@@ -89,10 +89,10 @@ export function LearnerDashboard({ user }) {
       </motion.header>
 
       <motion.section className="ld-stats" aria-label={t('dashboard.progressOverview')} {...entrance} transition={{ delay: reduceMotion ? 0 : .05 }}>
-        <StatCard icon={Flame} tone="orange" label={t('dashboard.streak')} value={progress?.streakCount ?? progress?.currentStreak} detail={t('dashboard.days')} />
-        <StatCard icon={Zap} tone="gold" label={t('dashboard.totalXp')} value={progress?.totalXp} detail="XP" />
-        <StatCard icon={Check} tone="green" label={t('dashboard.completedLessons')} value={progress?.completedLessons ?? progress?.lessonsCompleted} detail={t('dashboard.lessons')} />
-        <StatCard icon={Target} tone="red" label={t('dashboard.learningProgress')} value={currentLesson ? `${Math.round(lessonProgress)}%` : null} detail={currentLesson ? t('dashboard.currentLesson') : t('dashboard.noData')} />
+        <StatCard tone="orange" label={t('dashboard.streak')} value={progress?.streakCount ?? progress?.currentStreak} detail={t('dashboard.days')} />
+        <StatCard tone="gold" label={t('dashboard.totalXp')} value={progress?.totalXp} detail="XP" />
+        <StatCard tone="green" label={t('dashboard.completedLessons')} value={progress?.completedLessons ?? progress?.lessonsCompleted} detail={t('dashboard.lessons')} />
+        <StatCard tone="red" label={t('dashboard.learningProgress')} value={currentLesson ? `${Math.round(lessonProgress)}%` : null} detail={currentLesson ? t('dashboard.currentLesson') : t('dashboard.noData')} />
       </motion.section>
 
       <div className="ld-layout">
@@ -128,7 +128,7 @@ export function LearnerDashboard({ user }) {
 
           <motion.section className="ld-section" {...entrance} transition={{ delay: reduceMotion ? 0 : .15 }}>
             <div className="ld-heading"><div><span>{t('dashboard.quickAccess')}</span><h2>{t('dashboard.learningModules')}</h2></div><Link to="/courses">{t('dashboard.viewAll')}<ArrowRight size={14} /></Link></div>
-            <div className="ld-modules">{modules.map(({ icon: Icon, ...module }) => <Link key={module.to} to={module.to} className={`ld-module ld-module--${module.tone}`}><span><Icon size={21} /></span><div><h3>{module.title}</h3><p>{module.text}</p></div><ArrowRight size={16} /></Link>)}</div>
+            <div className="ld-modules">{modules.map((module) => <Link key={module.to} to={module.to} className={`ld-module ld-module--${module.tone}`}><div><h3>{module.title}</h3><p>{module.text}</p></div><ArrowRight size={16} /></Link>)}</div>
           </motion.section>
 
           <motion.section className="ld-card ld-activity" {...entrance} transition={{ delay: reduceMotion ? 0 : .2 }}>
