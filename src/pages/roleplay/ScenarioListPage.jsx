@@ -1,19 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  Search,
-  X,
-  Sparkles,
-  MapPin,
-  Clock,
-  Target,
-  ArrowRight,
-  RotateCcw,
-  Compass,
-  MessageCircle,
-  Play,
-} from 'lucide-react';
+import { Search, X, MapPin, Target, RotateCcw, Play } from 'lucide-react';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
@@ -58,8 +46,7 @@ export function ScenarioListPage() {
         {/* Header Hero Banner */}
         <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
           <div className="relative z-10 max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#FF7A00] text-xs font-black uppercase tracking-wider shadow-2xs">
-              <Sparkles size={14} className="text-[#FF7A00]" />
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#FF7A00] text-xs font-black uppercase tracking-wider shadow-2xs">
               <span>50+ Tình huống giao tiếp • Real-Life Scenarios</span>
             </div>
 
@@ -76,7 +63,6 @@ export function ScenarioListPage() {
                 to="/ai-tutor"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] hover:text-[#FF7A00] text-xs font-bold shadow-2xs transition-all"
               >
-                <MessageCircle size={15} className="text-[#FF7A00]" />
                 <span>Trò chuyện tự do với AI Tutor →</span>
               </Link>
             </div>
@@ -189,7 +175,7 @@ export function ScenarioListPage() {
         {/* Scenarios Grid */}
         {scenarios.length === 0 ? (
           <div className="text-center py-16 px-6 bg-white/90 backdrop-blur-md rounded-3xl border border-[#E8E5DF] space-y-3">
-            <p className="text-4xl">🎭</p>
+            <MessageSquare size={36} className="text-stone-400 mx-auto" />
             <h3 className="text-lg font-bold text-[#253044]">
               Không tìm thấy kịch bản phù hợp
             </h3>
@@ -236,7 +222,7 @@ export function ScenarioListPage() {
                   {/* Title Overlay in Photo */}
                   <div className="absolute bottom-3 inset-x-3 text-white">
                     <span className="text-[10px] font-black uppercase text-[#FFCD00] tracking-wider block">
-                      {sc.topicLabel} • ⏱️ {sc.duration}
+                      {sc.topicLabel} • {sc.duration}
                     </span>
                     <h3 className="text-base font-black truncate drop-shadow-sm mt-0.5">
                       {sc.titleVi || sc.title}
@@ -255,7 +241,7 @@ export function ScenarioListPage() {
                     <div className="p-3 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/70 space-y-1.5 text-xs">
                       <div className="flex items-center justify-between">
                         <span className="text-[#FF7A00] font-bold flex items-center gap-1">
-                          <span>🤖 AI:</span>
+                          <span>AI:</span>
                           <span className="text-[#253044]">{sc.aiRole.name}</span>
                         </span>
                         <span className="text-[10px] text-[#64748B] italic">
@@ -264,7 +250,7 @@ export function ScenarioListPage() {
                       </div>
                       <div className="flex items-center justify-between pt-1 border-t border-[#E8E5DF]/40">
                         <span className="text-[#253044] font-bold flex items-center gap-1">
-                          <span>👤 Bạn:</span>
+                          <span>Bạn:</span>
                           <span>{sc.learnerRole.role}</span>
                         </span>
                         <span className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">

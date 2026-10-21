@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -85,8 +85,7 @@ export function CallToActionBanner() {
       {/* Main Content Container */}
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center space-y-6 sm:space-y-7">
         {/* Eyebrow Pill Badge */}
-        <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#FFF4E5] text-[#C45A24] border border-[#FCD9BD]/80 shadow-[0_2px_8px_rgba(196,90,36,0.06)] text-xs font-black uppercase tracking-wider">
-          <Sparkles size={13} className="text-[#C45A24] shrink-0" aria-hidden="true" />
+        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#FFF4E5] text-[#C45A24] border border-[#FCD9BD]/80 shadow-[0_2px_8px_rgba(196,90,36,0.06)] text-xs font-black uppercase tracking-wider">
           <span>{eyebrow}</span>
         </div>
 

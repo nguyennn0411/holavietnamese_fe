@@ -2,7 +2,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { courseService } from '@/services/courseService';
-import { Sparkles, Play, AlertCircle } from 'lucide-react';
+import { Play, AlertCircle } from 'lucide-react';
 
 export function EnrollButton({ courseId, enrollment, onEnrolled }) {
   const [pending, setPending] = useState(false);
@@ -53,7 +53,7 @@ export function EnrollButton({ courseId, enrollment, onEnrolled }) {
           </>
         ) : (
           <>
-            <Sparkles size={16} />
+            <Play size={15} fill="currentColor" />
             <BilingualText>{"Đăng ký học ngay"}</BilingualText>
           </>
         )}

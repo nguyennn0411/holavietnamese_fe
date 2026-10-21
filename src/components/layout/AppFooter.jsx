@@ -2,7 +2,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { Brand } from './Brand';
-import { BookOpen, Mail, MessageCircle, Sparkles, Globe, Shield, HelpCircle, Heart } from 'lucide-react';
+import { BookOpen, Mail, MessageCircle, Heart } from 'lucide-react';
 
 export function AppFooter() {
   const currentYear = new Date().getFullYear();
@@ -25,11 +25,9 @@ export function AppFooter() {
 
           <div className="site-footer__badges">
             <span className="site-footer__pill-badge">
-              <Globe size={13} aria-hidden="true" />
               <span>English · Tiếng Việt</span>
             </span>
             <span className="site-footer__pill-badge">
-              <Sparkles size={13} aria-hidden="true" />
               <span>EdTech for Vietnam</span>
             </span>
           </div>

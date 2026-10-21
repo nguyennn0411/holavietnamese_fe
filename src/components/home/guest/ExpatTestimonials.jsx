@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { motion } from 'motion/react';
-import { Star, Volume2 } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 import { speakVietnamese } from '@/utils/speech';
 import { EXPAT_TESTIMONIALS } from '@/components/home/data/homeData';
 import { useTranslation } from 'react-i18next';
@@ -31,11 +31,6 @@ export function ExpatTestimonials() {
           >
             <span className="self-start px-2 py-1 rounded-md bg-[#FAF5EB] border border-[#E8E5DF] text-[8px] font-black tracking-wider text-[#887568]">{t('stories.badge')}</span>
             <div className="space-y-3">
-              <div className="flex items-center gap-1 text-amber-500">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} fill="currentColor" />
-                ))}
-              </div>
               <p className="text-xs sm:text-sm text-[#253044] leading-relaxed italic">
                 “{testimonial.quote}”
               </p>

@@ -1,15 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  AudioLines,
-  BookOpen,
-  ChartNoAxesColumnIncreasing,
-  Headphones,
-  Play,
-  RotateCcw,
-  Square,
-  Volume2,
-} from "lucide-react";
+import { ArrowLeft, AudioLines, Headphones, Play, RotateCcw, Square, Volume2 } from 'lucide-react';
 import data from "./alphabet.json";
 import { SyllableChart } from "./SyllableChart";
 import { entriesForTile, usePronunciationPlayer } from "./pronunciation";
@@ -72,15 +62,12 @@ export function AlphabetPage() {
           </div>
           <div className="alphabet-meta">
             <span>
-              <BookOpen size={16} aria-hidden="true" />
               29 chữ cái
             </span>
             <span>
-              <Headphones size={16} aria-hidden="true" />
               Bấm vào chữ để nghe
             </span>
             <span>
-              <ChartNoAxesColumnIncreasing size={16} aria-hidden="true" />
               Cơ bản · A0
             </span>
           </div>

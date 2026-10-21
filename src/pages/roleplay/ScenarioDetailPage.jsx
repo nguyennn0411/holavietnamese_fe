@@ -1,17 +1,7 @@
 ﻿import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import {
-  ArrowLeft,
-  Sparkles,
-  MapPin,
-  Clock,
-  Target,
-  Play,
-  Lightbulb,
-  CheckCircle2,
-  Bookmark,
-} from 'lucide-react';
+import { ArrowLeft, MapPin, Play } from 'lucide-react';
 import { BilingualText } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
@@ -23,7 +13,7 @@ export function ScenarioDetailPage() {
   if (!scenario) {
     return (
       <div className="w-full max-w-4xl mx-auto px-4 py-20 text-center space-y-4">
-        <p className="text-4xl">🎭</p>
+        <MessageCircle size={36} className="text-amber-500 mx-auto" />
         <h2 className="text-xl font-black text-[#253044]">
           Không tìm thấy kịch bản này
         </h2>
@@ -91,7 +81,7 @@ export function ScenarioDetailPage() {
                   <span>{scenario.destination}</span>
                 </span>
                 <span className="px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold">
-                  ⚡ Độ khó: {scenario.difficulty}
+                  Độ khó: {scenario.difficulty}
                 </span>
               </div>
 
@@ -136,7 +126,7 @@ export function ScenarioDetailPage() {
             {/* 1. Character Roles Split Box */}
             <section className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-6 shadow-xs space-y-4">
               <h2 className="text-base font-black text-[#253044] flex items-center gap-2">
-                <span>👥 Phân vai trong kịch bản</span>
+                <span>Phân vai trong kịch bản</span>
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -163,7 +153,6 @@ export function ScenarioDetailPage() {
                 {/* Learner Role Card */}
                 <div className="p-4 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF] space-y-2">
                   <div className="flex items-center gap-3">
-                    <span className="text-3xl shrink-0">🎓</span>
                     <div>
                       <span className="text-[10px] font-black uppercase text-[#253044] tracking-wider block">
                         Bạn đóng vai
@@ -184,8 +173,7 @@ export function ScenarioDetailPage() {
             <section className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-black text-[#253044] flex items-center gap-2">
-                  <Target size={18} className="text-[#FF7A00]" />
-                  <span>Mục tiêu cần hoàn thành</span>
+                    <span>Mục tiêu cần hoàn thành</span>
                 </h2>
                 <span className="text-xs font-bold text-[#FF7A00] bg-[#FFF0DC] px-2.5 py-0.5 rounded-full">
                   {scenario.objectives.length} nhiệm vụ
@@ -215,7 +203,6 @@ export function ScenarioDetailPage() {
             {/* Vocabulary & Phrase Hints */}
             <section className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-6 shadow-xs space-y-4">
               <h2 className="text-base font-black text-[#253044] flex items-center gap-2">
-                <Lightbulb size={18} className="text-[#FFCD00]" />
                 <span>Mẫu câu & Từ vựng gợi ý</span>
               </h2>
 
@@ -240,7 +227,7 @@ export function ScenarioDetailPage() {
             {scenario.culturalTip && (
               <section className="bg-gradient-to-br from-[#FFF7E8] to-[#FFFCF7] rounded-3xl border border-[#E8E5DF] p-6 shadow-xs space-y-2">
                 <div className="flex items-center gap-2 text-xs font-black uppercase text-[#FF7A00] tracking-wider">
-                  <span>🏮 Mẹo văn hóa thực tế:</span>
+                  <span>Mẹo văn hóa thực tế:</span>
                 </div>
                 <p className="text-xs sm:text-sm text-[#253044] leading-relaxed">
                   {scenario.culturalTip}

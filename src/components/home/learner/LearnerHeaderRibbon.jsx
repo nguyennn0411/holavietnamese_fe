@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Flame, Zap, Heart, Compass } from 'lucide-react';
+import { Flame, Zap, Heart, Compass } from 'lucide-react';
 
 /**
  * Learner Dashboard Top Header and Gamification Stats Ribbon
@@ -19,8 +19,7 @@ export function LearnerHeaderRibbon({
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-[#E8E5DF]/60 pb-6">
       <div className="space-y-1 text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider">
-          <Sparkles size={13} />
+        <div className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider">
           <span>{greeting}</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-[#253044] tracking-tight">
@@ -34,7 +33,7 @@ export function LearnerHeaderRibbon({
       {/* Gamification Stats Ribbon */}
       <div className="flex items-center gap-3 flex-wrap">
         <div className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/60 shadow-[0_4px_16px_rgba(67,25,20,0.03)]">
-          <Flame size={22} className="text-[#ff7a00] animate-bounce-subtle shrink-0" fill="currentColor" />
+          <Flame size={22} className="text-[#ff7a00] shrink-0" fill="currentColor" />
           <div>
             <span className="block text-sm font-black text-[#253044] leading-tight">
               {effectiveStreak}

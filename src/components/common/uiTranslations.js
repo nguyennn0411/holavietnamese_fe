@@ -6303,5 +6303,137 @@ export const UI_TRANSLATIONS = {
   "Español 🇪🇸": [
     "Tiếng Tây Ban Nha 🇪🇸",
     "Spanish · Español"
-  ]
+  ],
+  "Quản lý danh mục": [
+    "Quản lý danh mục",
+    "Manage categories",
+  ],
+  "Duyệt": [
+    "Duyệt",
+    "Approve",
+  ],
+  "Xem": [
+    "Xem",
+    "View",
+  ],
+  "Trình biên tập": [
+    "Trình biên tập",
+    "Editor",
+  ],
+  "Xem trước": [
+    "Xem trước",
+    "Preview",
+  ],
+  "Xem trước (Preview)": [
+    "Xem trước (Preview)",
+    "Preview",
+  ],
+  "Lưu bài viết": [
+    "Lưu bài viết",
+    "Save article",
+  ],
+  "Cụm từ hữu ích kèm theo bài viết:": [
+    "Cụm từ hữu ích kèm theo bài viết:",
+    "Useful phrases with this article:",
+  ],
+  "Cấu hình kịch bản": [
+    "Cấu hình kịch bản",
+    "Scenario settings",
+  ],
+  "Thử nghiệm giả lập": [
+    "Thử nghiệm giả lập",
+    "Simulation test",
+  ],
+  "Lưu kịch bản": [
+    "Lưu kịch bản",
+    "Save scenario",
+  ],
+  "Duyệt đạt chuẩn": [
+    "Duyệt đạt chuẩn",
+    "Approved",
+  ],
+  "Cần chỉnh Prompt": [
+    "Cần chỉnh Prompt",
+    "Needs prompt tuning",
+  ],
+  "Ẩm thực & Quán xá": [
+    "Ẩm thực & Quán xá",
+    "Food and dining",
+  ],
+  "Mua sắm & Mặc cả": [
+    "Mua sắm & Mặc cả",
+    "Shopping and bargaining",
+  ],
+  "Di chuyển & Du lịch": [
+    "Di chuyển & Du lịch",
+    "Travel and transport",
+  ],
+  "Khách sạn & Nghỉ dưỡng": [
+    "Khách sạn & Nghỉ dưỡng",
+    "Hotels and resorts",
+  ],
+  "Gia đình & Bạn bè": [
+    "Gia đình & Bạn bè",
+    "Family and friends",
+  ],
+  "Giao tiếp công sở": [
+    "Giao tiếp công sở",
+    "Workplace communication",
+  ],
+  "Phù hợp văn hóa (Culture)": [
+    "Phù hợp văn hóa (Culture)",
+    "Cultural appropriateness",
+  ],
+  "Nhận xét từ AI Tutor:": [
+    "Nhận xét từ AI Tutor:",
+    "AI Tutor feedback:",
+  ],
+  "Bạn đã nói: \"": [
+    "Bạn đã nói: \"",
+    "You said: \"",
+  ],
+  "Người bản xứ nói: \"": [
+    "Người bản xứ nói: \"",
+    "Native speaker: \"",
+  ],
+  "Tiếp tục kịch bản mới": [
+    "Tiếp tục kịch bản mới",
+    "Continue to next scenario",
+  ],
+  "Hoàn tất & Nhận đánh giá": [
+    "Hoàn tất & Nhận đánh giá",
+    "Complete & get feedback",
+  ],
+  "Bộ sưu tập danh hiệu": [
+    "Bộ sưu tập danh hiệu",
+    "Badge collection",
+  ],
+  "Tùy biến trải nghiệm": [
+    "Tùy biến trải nghiệm",
+    "Customize experience",
+  ],
+  "Công việc & Định cư": [
+    "Công việc & Định cư",
+    "Work & Career",
+  ],
+  "Thi chứng chỉ VSL": [
+    "Thi chứng chỉ VSL",
+    "Exam / VSL certification",
+  ],
+  "Văn hóa & Đời sống": [
+    "Văn hóa & Đời sống",
+    "Culture & lifestyle",
+  ],
+  "A1 – Mới bắt đầu": [
+    "A1 – Mới bắt đầu",
+    "A1 – Beginner",
+  ],
+  "A2 – Sơ cấp": [
+    "A2 – Sơ cấp",
+    "A2 – Elementary",
+  ],
+  "B1 – Trung cấp": [
+    "B1 – Trung cấp",
+    "B1 – Intermediate",
+  ],
 };

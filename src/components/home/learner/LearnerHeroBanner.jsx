@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { BookOpen, ChevronLeft, ChevronRight, Heart, MessageCircle, Pause, Play, Sparkles } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight, Heart, MessageCircle, Pause, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 /** Cinematic learner carousel shown at the top of the authenticated dashboard. */
@@ -107,13 +107,12 @@ export function LearnerHeroBanner({
     <AnimatePresence mode="popLayout"><motion.div key={slide.image} className="absolute inset-0 learner-hero-photo" style={{backgroundImage:`url(${slide.image})`}} initial={reduceMotion ? false : {opacity:0,scale:1.05}} animate={{opacity:1,scale:1}} exit={{opacity:0}} transition={{duration:.8}} aria-hidden="true" /></AnimatePresence>
     <div className="absolute inset-0 learner-hero-overlay" aria-hidden="true" />
     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-      <motion.div animate={reduceMotion ? {} : {rotate:360}} transition={{duration:60,repeat:Infinity,ease:'linear'}} className="absolute -top-12 -right-12 w-48 h-48 opacity-10"><svg viewBox="0 0 200 200" fill="none">{[0,45,90,135,180,225,270,315].map((degree) => <ellipse key={degree} cx="100" cy="100" rx="18" ry="55" fill="#FFDE00" opacity=".7" transform={`rotate(${degree} 100 100)`}/>)}</svg></motion.div>
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
     </div>
     <div className="relative z-10 p-6 sm:p-8 lg:p-10 xl:p-12">
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-8">
         <div className="space-y-3">
-          <motion.div key={`eyebrow-${currentSlide}`} initial={{opacity:0,y:-12}} animate={{opacity:1,y:0}} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-white text-xs font-bold uppercase tracking-wider"><Sparkles size={13} className="text-[#FFDE00]"/><span>{slide.eyebrow}</span></motion.div>
+          <motion.div key={`eyebrow-${currentSlide}`} initial={{opacity:0,y:-12}} animate={{opacity:1,y:0}} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-white text-xs font-bold uppercase tracking-wider"><span>{slide.eyebrow}</span></motion.div>
           <motion.h1 key={`title-${currentSlide}`} initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.08}} className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">{slide.title}</motion.h1>
           <motion.p key={`description-${currentSlide}`} initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.16}} className="text-sm sm:text-base text-white/75 max-w-lg leading-relaxed">{slide.description}</motion.p>
         </div>
@@ -126,7 +125,7 @@ export function LearnerHeroBanner({
             <AnimatePresence mode="wait"><motion.h2 key={slide.meta} initial={{opacity:0,y:6}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}} className="text-lg sm:text-xl font-black text-white leading-snug truncate">{slide.meta}</motion.h2></AnimatePresence>
             <div className="space-y-1"><div className="flex justify-between text-[11px] text-white/65 font-semibold"><span>{currentSlide === 0 ? <>{t('hero.progress')}: <strong className="text-white">{progress}%</strong></> : t('hero.discovery')}</span><span>{currentSlide === 0 ? t('hero.momentum') : t('hero.madeForLevel')}</span></div><div className="w-full bg-white/15 h-2.5 rounded-full overflow-hidden"><motion.div initial={{width:0}} animate={{width:`${currentSlide === 0 ? progress : (currentSlide + 1) * 28}%`}} transition={{duration:1,delay:.4,ease:'easeOut'}} className="h-full rounded-full bg-gradient-to-r from-[#FFDE00] to-[#ff8c00]"/></div></div>
           </div>
-          <div className="flex flex-col sm:items-end gap-2.5 shrink-0"><Link to={slide.to} className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#FFDE00] hover:bg-[#f5d000] text-[#253044] font-black text-sm shadow-[0_4px_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all group"><SlideIcon size={16} fill={SlideIcon === Play ? 'currentColor' : 'none'}/><span>{slide.action}</span><ChevronRight size={16}/></Link><Link to="/courses" className="text-[11px] font-bold text-white/70 hover:text-white">{t('hero.exploreCourses')}</Link></div>
+          <div className="flex flex-col sm:items-end gap-2.5 shrink-0"><Link to={slide.to} className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#FFDE00] hover:bg-[#f5d000] text-[#253044] font-black text-sm shadow-[0_4px_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all group"><span>{slide.action}</span><ChevronRight size={16}/></Link><Link to="/courses" className="text-[11px] font-bold text-white/70 hover:text-white">{t('hero.exploreCourses')}</Link></div>
         </div>
       </motion.div>
       {onCheckIn && !hasCheckedInToday ? <motion.div initial={{opacity:0,scale:.95}} animate={{opacity:1,scale:1}} className="mt-4 flex items-center justify-between gap-4 p-3.5 rounded-xl bg-[#FFDE00]/15 border border-[#FFDE00]/30"><span className="text-white text-xs font-semibold">{t('hero.checkInReady')}</span><button type="button" onClick={onCheckIn} className="px-4 py-2 rounded-xl bg-[#FFDE00] text-[#253044] font-black text-xs">{t('hero.checkIn')}</button></motion.div> : null}

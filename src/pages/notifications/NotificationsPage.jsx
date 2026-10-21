@@ -1,22 +1,7 @@
 ﻿import React, { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  Bell,
-  CheckCheck,
-  Trash2,
-  Settings,
-  Search,
-  BookOpen,
-  Trophy,
-  Flame,
-  Sparkles,
-  ArrowRight,
-  Clock,
-  CheckCircle2,
-  Compass,
-  Zap,
-} from 'lucide-react';
+import { Bell, CheckCheck, Trash2, Settings, Search, BookOpen, Trophy, Flame, ArrowRight, Clock, CheckCircle2, Compass, Zap } from 'lucide-react';
 import { BilingualText } from '@/components/common/BilingualText';
 import { useNotifications } from '@/hooks/useNotifications';
 import { NOTIFICATION_CATEGORIES } from '@/constants/notifications';
@@ -51,7 +36,7 @@ function getCategoryBadge(type) {
     default:
       return {
         label: 'Hệ thống',
-        icon: Sparkles,
+        icon: Bell,
         badgeClass: 'bg-[#FFF0DC] text-[#EA580C] border-[#E8E5DF]',
         cardAccent: 'hover:border-[#EA580C]',
       };

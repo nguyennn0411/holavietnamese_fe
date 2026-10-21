@@ -14,7 +14,7 @@ body .auth-login-page {
   --auth-muted: #7D6F64;
   --auth-border: #EBDED0;
   --auth-bg-left: #FBF8F3;
-  --auth-bg-right: #F6EFE6;
+  --auth-bg-right: #FFF8EE;
   --auth-input-bg: #FFFFFF;
 
   display: grid !important;
@@ -623,158 +623,55 @@ body .auth-login-page .auth-left-content {
 }
 
 /* ==========================================================================
-   4. Right Panel: Premium Dong Son Cultural Showcase
+   4. Right Panel: Full-Bleed Authentic Dong Son Heritage Visual
    ========================================================================== */
 body .auth-right-panel,
 body .auth-login-page .auth-right-panel {
   position: relative !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
+  display: block !important;
   width: 100% !important;
   height: 100vh !important;
   height: 100dvh !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
   max-height: 100dvh !important;
   overflow: hidden !important;
-  padding: clamp(24px, 4vh, 48px) clamp(24px, 4vw, 56px) !important;
+  padding: 0 !important;
   margin: 0 !important;
-  background: radial-gradient(circle at 50% 45%, #FFFDF8 0%, #FAF3E8 55%, #F0E6D4 100%) !important;
+  background-color: #FAF4EB !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
   border: none !important;
   border-left: 1px solid rgba(235, 222, 208, 0.7) !important;
   box-shadow: none !important;
   box-sizing: border-box !important;
 }
 
-/* Concentric decorative ambient rings behind drum */
-.auth-right-ambient {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: 0.7;
-}
-
-.auth-ambient-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px dashed rgba(194, 65, 12, 0.14);
-}
-
-.auth-ambient-ring-1 {
-  width: min(480px, 80vw);
-  height: min(480px, 80vw);
-}
-
-.auth-ambient-ring-2 {
-  width: min(600px, 100vw);
-  height: min(600px, 100vw);
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgba(245, 158, 11, 0.12);
-}
-
-.auth-ambient-ring-3 {
-  width: min(720px, 120vw);
-  height: min(720px, 120vw);
-  border-style: dashed;
-  border-color: rgba(194, 65, 12, 0.08);
-}
-
-.auth-right-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 480px;
-  width: 100%;
-  text-align: center;
-}
-
-.auth-drum-frame {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(240px, 46vh, 400px);
-  height: clamp(240px, 46vh, 400px);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  background: radial-gradient(circle at center, #FFFDF8 0%, rgba(255, 253, 248, 0.8) 65%, transparent 100%);
-  box-shadow: 0 0 0 1px rgba(194, 65, 12, 0.12),
-              0 14px 36px -6px rgba(67, 36, 21, 0.09);
-  margin-bottom: clamp(14px, 2.2vh, 24px);
-  transition: transform 0.4s ease;
-}
-
-.auth-drum-frame:hover {
-  transform: scale(1.02);
-}
-
-.auth-right-hero-image {
-  display: block !important;
-  width: 90% !important;
-  height: 90% !important;
-  max-width: 90% !important;
-  max-height: 90% !important;
-  object-fit: contain !important;
-  object-position: center center !important;
-  margin: auto !important;
-  padding: 0 !important;
-  border: none !important;
-  outline: none !important;
-  pointer-events: none !important;
-  user-select: none !important;
-  filter: drop-shadow(0 6px 18px rgba(180, 59, 50, 0.12)) !important;
-}
-
-.auth-heritage-caption {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  max-width: 400px;
-}
-
-.auth-heritage-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: rgba(249, 115, 22, 0.09);
-  border: 1px solid rgba(249, 115, 22, 0.22);
-  color: #C2410C;
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.auth-heritage-title {
-  font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-size: clamp(17px, 2.2vh, 21px);
-  font-weight: 800;
-  color: #2D221D;
-  margin: 2px 0 0;
-  letter-spacing: -0.01em;
-}
-
+/* Clear all remnants of old frame/ambient/text elements */
+.auth-right-ambient,
+.auth-ambient-ring,
+.auth-right-content,
+.auth-drum-frame,
+.auth-right-hero-image,
+.auth-heritage-caption,
+.auth-heritage-badge,
+.auth-heritage-title,
 .auth-heritage-desc {
-  font-size: 13px;
-  line-height: 1.55;
-  color: #6D5E54;
-  margin: 0;
+  display: none !important;
 }
 
 /* ==========================================================================
    5. Responsive Breakpoints
    ========================================================================== */
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
+  body .auth-container,
+  body .auth-login-page {
+    grid-template-columns: 1.1fr 0.9fr !important;
+  }
+}
+
+@media (max-width: 768px) {
   body .auth-container,
   body .auth-login-page {
     grid-template-columns: 1fr !important;

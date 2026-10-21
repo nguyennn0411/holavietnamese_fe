@@ -2,21 +2,7 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import {
-  BookOpen,
-  Languages,
-  MapPin,
-  Award,
-  Sparkles,
-  ArrowRight,
-  Plus,
-  Compass,
-  CheckCircle2,
-  Calendar,
-  Flame,
-  Clock,
-  Play
-} from 'lucide-react';
+import { BookOpen, Languages, MapPin, Award, ArrowRight, Plus, CheckCircle2, Calendar, Flame, Clock, Play } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { learnerService } from '@/services/learnerService';
 import { courseService } from '@/services/courseService';
@@ -110,8 +96,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
       {/* Hero Header */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
-            <Sparkles size={14} className="text-[#EA580C]" />
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
             <BilingualText>{"Hành trình của riêng bạn • Personal Learning Space"}</BilingualText>
           </div>
 
@@ -137,7 +122,6 @@ export function MyLearningPage({ initialTab = 'courses' }) {
               to="/edtech/dashboard"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 hover:bg-white text-[#253044] border border-[#E8E5DF] font-semibold text-xs shadow-xs transition-all hover:border-[#EA580C]"
             >
-              <Compass size={15} className="text-[#EA580C]" />
               <BilingualText>{"Đến Lộ trình học tương tác (EdTech) →"}</BilingualText>
             </Link>
           </div>
@@ -162,7 +146,6 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   : 'border-transparent text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8]/50'
               }`}
             >
-              <Icon size={16} className={isActive ? 'text-[#EA580C]' : 'text-[#64748B]'} />
               <BilingualText>{item.label}</BilingualText>
             </button>
           );

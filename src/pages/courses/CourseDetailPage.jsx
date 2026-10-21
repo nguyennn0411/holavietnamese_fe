@@ -6,28 +6,7 @@ import { CourseThumbnail } from '@/components/course/CourseInfo';
 import { ResourceState } from '@/components/common/ResourceState';
 import { courseService } from '@/services/courseService';
 import { useAuth } from '@/application/context/AuthContext';
-import {
-  ArrowLeft,
-  CheckCircle2,
-  BookOpen,
-  Clock,
-  Sparkles,
-  ChevronDown,
-  Play,
-  PlayCircle,
-  Lock,
-  Award,
-  Compass,
-  MessageCircle,
-  FileText,
-  Headphones,
-  CheckSquare,
-  ShieldCheck,
-  GraduationCap,
-  AlertCircle,
-  X,
-  ArrowRight
-} from 'lucide-react';
+import { ArrowLeft, CheckCircle2, BookOpen, Clock, ChevronDown, Play, PlayCircle, Lock, Compass, MessageCircle, FileText, Headphones, CheckSquare, ShieldCheck, AlertCircle, X, ArrowRight } from 'lucide-react';
 
 /**
  * Phân tích và trả về thông tin hiển thị cho loại bài học (Icon, Tên hiển thị, Màu sắc)
@@ -549,8 +528,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 {course.level}
               </span>
 
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF2D6] text-[#EA580C] border border-[#FFCD00]/50 font-bold text-xs">
-                <Sparkles size={13} className="text-[#FF7A00]" />
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#FFF2D6] text-[#EA580C] border border-[#FFCD00]/50 font-bold text-xs">
                 <BilingualText>{course.isFree ? 'Khóa học miễn phí' : 'Khóa học chính thức'}</BilingualText>
               </span>
 
@@ -573,15 +551,12 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
             {/* Các điểm nổi bật */}
             <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
-                <GraduationCap size={16} className="text-[#FF7A00] shrink-0" />
                 <span>Lộ trình theo chuẩn CEFR</span>
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
-                <MessageCircle size={16} className="text-[#FF7A00] shrink-0" />
                 <span>Hội thoại thực tế & AI Tutor</span>
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
-                <CheckSquare size={16} className="text-[#FF7A00] shrink-0" />
                 <span>Luyện tập & Đánh giá tức thì</span>
               </div>
             </div>
@@ -591,7 +566,6 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
           {outcomes.length > 0 && (
             <section className="bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-5">
               <div className="flex items-center gap-2.5">
-                <Award size={22} className="text-[#FF7A00] shrink-0" />
                 <div>
                   <h2 className="text-lg sm:text-xl font-black text-[#253044] tracking-tight">
                     <BilingualText>{"Bạn sẽ học được gì từ khóa học này"}</BilingualText>
@@ -608,9 +582,6 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                     key={idx}
                     className="flex items-start gap-3 p-3.5 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF]/60 hover:border-[#FFCD00] transition-colors"
                   >
-                    <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                      ✓
-                    </span>
                     <span className="text-xs sm:text-sm font-semibold text-[#253044] leading-snug">
                       <BilingualText vi={item.vi} en={item.en || undefined} />
                     </span>
@@ -1021,7 +992,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                     </>
                   ) : (
                     <>
-                      <Sparkles size={16} />
+                      <Play size={16} fill="currentColor" />
                       <BilingualText>
                         {course.isFree ? 'Đăng ký học miễn phí' : 'Đăng ký học ngay'}
                       </BilingualText>
@@ -1041,15 +1012,12 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
             {/* Danh sách quyền lợi và tiện ích đi kèm */}
             <div className="border-t border-[#E8E5DF]/40 pt-4 space-y-2.5 text-xs text-[#64748B]">
               <div className="flex items-center gap-2">
-                <ShieldCheck size={15} className="text-emerald-600 shrink-0" />
                 <span>Truy cập trọn đời trên máy tính & điện thoại</span>
               </div>
               <div className="flex items-center gap-2">
-                <Sparkles size={15} className="text-[#FF7A00] shrink-0" />
                 <span>Tương tác AI Tutor luyện nói & sửa phát âm 24/7</span>
               </div>
               <div className="flex items-center gap-2">
-                <Award size={15} className="text-[#FFCD00] shrink-0" />
                 <span>Cấp chứng nhận hoàn thành khóa học</span>
               </div>
             </div>

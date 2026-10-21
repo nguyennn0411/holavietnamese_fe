@@ -1,6 +1,7 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { learnerService } from '@/services/learnerService';
+import { Trophy } from 'lucide-react';
 
 export function AchievementsPage() {
   const [data, setData] = useState(null);
@@ -43,7 +44,7 @@ export function AchievementsPage() {
   return (
     <div className="account-page">
       <div className="account-header">
-        <span className="account-pill"><BilingualText>{"🏆 Bộ sưu tập danh hiệu"}</BilingualText></span>
+        <span className="account-pill"><BilingualText>{"Bộ sưu tập danh hiệu"}</BilingualText></span>
         <h1 className="account-title"><BilingualText>{"Huy hiệu & Thành tích"}</BilingualText></h1>
         <p className="account-desc"><BilingualText>{"Ghi nhận từng cột mốc nỗ lực trên hành trình khám phá ngôn ngữ và văn hóa Việt Nam."}</BilingualText></p>
       </div>
@@ -54,7 +55,7 @@ export function AchievementsPage() {
           <span className="achieve-banner-subtitle"><BilingualText>{"BỘ SƯU TẬP DANH HIỆU"}</BilingualText></span>
           <h2 className="achieve-banner-title"><BilingualText>{"Đã mở khóa"}</BilingualText>{unlockedCount} / {data.badges.length}<BilingualText>{"huy hiệu"}</BilingualText></h2>
         </div>
-        <span className="achieve-banner-icon">🏆</span>
+        <Trophy size={40} className="text-[#FF7A00]" />
       </div>
 
       {/* Badges Grid */}
@@ -69,17 +70,17 @@ export function AchievementsPage() {
               className={`achieve-badge-card ${badge.unlocked ? 'unlocked' : 'locked'}`}
             >
               <div className="achieve-badge-icon">
-                {badge.icon || (badge.unlocked ? '🏆' : '🔒')}
+                {badge.unlocked ? 'ĐẠT' : 'CHƯA'}
               </div>
               <div className="achieve-badge-info">
                 <strong>{badge.name || badge.title}</strong>
                 <p>{badge.description || badge.desc || badge.criteria}</p>
                 {badge.unlocked ? (
-                  <span className="achieve-badge-status"><BilingualText>{"✓ Đã mở khóa"}</BilingualText>{badge.unlockedAt ? `· ${badge.unlockedAt}` : ''}
+                  <span className="achieve-badge-status"><BilingualText>{"Đã mở khóa"}</BilingualText>{badge.unlockedAt ? `· ${badge.unlockedAt}` : ''}
                   </span>
                 ) : (
                   <span className="achieve-badge-status locked">
-                    🔒 {badge.conditionValue || <BilingualText>Chưa đạt điều kiện</BilingualText>}
+                    {badge.conditionValue || <BilingualText>Chưa đạt điều kiện</BilingualText>}
                   </span>
                 )}
               </div>

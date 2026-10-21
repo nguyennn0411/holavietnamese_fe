@@ -361,9 +361,9 @@
 }
 
 .ld-module {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   padding: 16px;
   border: 1px solid var(--ld-border);
@@ -422,6 +422,13 @@
 
 .ld-module > svg {
   color: #94A3B8;
+  flex-shrink: 0;
+  transition: transform .18s, color .18s;
+}
+
+.ld-module:hover > svg {
+  color: #EA580C;
+  transform: translateX(3px);
 }
 
 .ld-card {

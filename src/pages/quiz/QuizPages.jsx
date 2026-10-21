@@ -11,24 +11,7 @@ import { ProgressBar } from '@/components/common/ProgressBar';
 import { QuestionInput } from '@/components/learning/QuestionInput';
 import { answerLabel, answerPresent } from '@/components/learning/answerUtils';
 import { Modal } from '@/components/common/Modal';
-import {
-  Award,
-  Clock,
-  RotateCcw,
-  BookOpen,
-  CheckCircle2,
-  XCircle,
-  HelpCircle,
-  ArrowRight,
-  ArrowLeft,
-  Sparkles,
-  Check,
-  AlertCircle,
-  Lightbulb,
-  ShieldCheck,
-  Play,
-  Layers
-} from 'lucide-react';
+import { Award, Clock, RotateCcw, BookOpen, CheckCircle2, ArrowRight, ArrowLeft, Check, AlertCircle, Play } from 'lucide-react';
 
 /**
  * =========================================================================
@@ -87,8 +70,7 @@ export function QuizPage() {
 
               {/* Title & Badge */}
               <div className="text-center space-y-3 max-w-2xl mx-auto relative z-10">
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF0DC] text-[#C2410C] border border-[#FFCD00]/50 font-extrabold text-xs uppercase tracking-wider shadow-2xs">
-                  <Sparkles size={14} className="text-[#F97316]" />
+                <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] text-[#C2410C] border border-[#FFCD00]/50 font-extrabold text-xs uppercase tracking-wider shadow-2xs">
                   <BilingualText>{"Kiểm tra năng lực • Knowledge Check"}</BilingualText>
                 </div>
 
@@ -107,9 +89,6 @@ export function QuizPage() {
               {/* Key Exam Metrics Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 relative z-10">
                 <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
-                  <div className="w-8 h-8 rounded-xl bg-[#FFFCF7] text-[#C2410C] border border-[#E8E5DF]/60 flex items-center justify-center mx-auto">
-                    <BookOpen size={16} />
-                  </div>
                   <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
                     Số câu hỏi
                   </span>
@@ -119,9 +98,6 @@ export function QuizPage() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto">
-                    <Award size={16} />
-                  </div>
                   <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
                     Điểm đạt
                   </span>
@@ -131,9 +107,6 @@ export function QuizPage() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
-                  <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center mx-auto">
-                    <Clock size={16} />
-                  </div>
                   <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
                     Thời gian
                   </span>
@@ -143,9 +116,6 @@ export function QuizPage() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
-                  <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 flex items-center justify-center mx-auto">
-                    <RotateCcw size={16} />
-                  </div>
                   <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
                     Lần làm bài
                   </span>
@@ -158,7 +128,6 @@ export function QuizPage() {
               {/* Instructions Callout */}
               <div className="p-4 sm:p-5 rounded-2xl bg-white/80 border border-[#E8E5DF]/60 space-y-2 relative z-10 text-xs sm:text-sm text-[#253044]">
                 <strong className="font-bold text-[#C2410C] flex items-center gap-1.5">
-                  <ShieldCheck size={16} />
                   <BilingualText>{"Lưu ý trước khi làm bài:"}</BilingualText>
                 </strong>
                 <ul className="space-y-1 text-xs text-[#64748B] pl-5 list-disc">
@@ -823,8 +792,7 @@ function Result({ result }) {
                   {/* Explanation */}
                   {(question.explanationVi || question.explanation) && (
                     <div className="p-3.5 rounded-xl bg-[#FFFCF7] border border-[#FFCD00]/50 text-[#253044] flex items-start gap-2.5">
-                      <Lightbulb size={16} className="text-[#F97316] shrink-0 mt-0.5" />
-                      <div className="space-y-0.5">
+                        <div className="space-y-0.5">
                         <strong className="text-xs font-bold text-[#C2410C] block">
                           Giải thích:
                         </strong>

@@ -12,7 +12,7 @@ export function AdminAchievementsPage() {
     code: '',
     title: '',
     desc: '',
-    icon: '🌟',
+    icon: '',
     iconUrl: '',
     conditionType: 'LESSON_COUNT',
     criteria: '',
@@ -43,7 +43,7 @@ export function AdminAchievementsPage() {
       code: '',
       title: '',
       desc: '',
-      icon: '🌟',
+      icon: '',
       iconUrl: '',
       conditionType: 'LESSON_COUNT',
       criteria: '',
@@ -92,7 +92,7 @@ export function AdminAchievementsPage() {
       {error&&<div className="ui-notice ui-notice--error" role="alert"><BilingualText>{error}</BilingualText></div>}
       {msg && (
         <div style={{ padding: '10px 16px', background: 'var(--color-sage-soft)', color: 'var(--color-ink)', borderRadius: '8px', marginBottom: '16px' }}>
-          ✓ {msg}
+          {msg}
         </div>
       )}
 

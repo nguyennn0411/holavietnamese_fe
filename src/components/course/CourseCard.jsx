@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowRight, BookOpen, Clock, CheckCircle2, Play, Lock } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Lock } from 'lucide-react';
 import { CourseThumbnail } from './CourseInfo';
 
 // Màu sắc nhận diện theo khung trình độ CEFR với độ tương phản cao
@@ -101,12 +101,10 @@ export function CourseCard({ course, enrollment }) {
           {/* Metadata info */}
           <div className="flex items-center gap-3 text-xs text-[#64748B] font-semibold">
             <span className="inline-flex items-center gap-1.5">
-              <BookOpen size={13} className="text-[#FF7A00]" />
               <span>{course.totalLessons ?? course.lessonCount ?? 0} bài học</span>
             </span>
             <span className="text-stone-300">•</span>
             <span className="inline-flex items-center gap-1.5">
-              <Clock size={13} className="text-[#FF7A00]" />
               <span>
                 {course.durationLabel || `${course.estimatedMinutes ?? course.estimatedDuration ?? 0} phút`}
               </span>
@@ -137,7 +135,6 @@ export function CourseCard({ course, enrollment }) {
             <div className="space-y-1.5 bg-[#FFF7E8] p-3 rounded-xl border border-[#E8E5DF]/60">
               <div className="flex items-center justify-between text-xs font-bold text-[#253044]">
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 size={13} className={isCompleted ? 'text-emerald-600' : 'text-[#FF7A00]'} />
                   <span>Tiến độ học</span>
                 </span>
                 <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-black text-xs">
@@ -165,12 +162,10 @@ export function CourseCard({ course, enrollment }) {
             >
               {isCompleted ? (
                 <>
-                  <BookOpen size={15} />
                   <span>Xem lại khóa học</span>
                 </>
               ) : (
                 <>
-                  <Play size={14} fill="currentColor" />
                   <span>Tiếp tục học</span>
                 </>
               )}

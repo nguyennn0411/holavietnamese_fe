@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Keyboard, ArrowUp, Sparkles } from 'lucide-react';
+import { Keyboard, ArrowUp } from 'lucide-react';
 import { audioFeedback } from '@/utils/audioFeedback';
 
 interface DiacriticKeyboardBarProps {

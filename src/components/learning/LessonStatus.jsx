@@ -1,5 +1,5 @@
 ﻿import { bilingualLabel } from '@/components/common/BilingualText';
-import { CheckCircle2, Play } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 const labels = {
   NOT_STARTED: 'Chưa bắt đầu',

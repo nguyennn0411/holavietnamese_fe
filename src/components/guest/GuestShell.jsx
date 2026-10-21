@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import {
-  BookOpen, Bot, ChevronLeft, ChevronRight, Compass, GraduationCap,
-  Home, Languages, Map, Menu, Newspaper, Palette, Sparkles, X,
-} from 'lucide-react';
+import { BookOpen, Bot, ChevronLeft, Compass, GraduationCap, Home, Languages, Menu, Newspaper, Palette, X } from 'lucide-react';
 import { Brand } from '@/components/layout/Brand';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +9,7 @@ import { ROUTES } from '@/constants/routes';
 
 const guestItems = [
   { to: '/', label: 'home', icon: Home, end: true },
-  { to: ROUTES.EDTECH_DASHBOARD, label: 'learningPath', icon: Sparkles },
+  { to: ROUTES.EDTECH_DASHBOARD, label: 'learningPath', icon: Compass },
   { to: '/courses', label: 'courses', icon: GraduationCap },
   { to: '/alphabet', label: 'alphabet', icon: Languages },
   { to: '/vocabulary', label: 'vocabulary', icon: BookOpen },

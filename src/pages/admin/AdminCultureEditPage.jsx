@@ -128,19 +128,19 @@ export function AdminCultureEditPage() {
             className={`button ${activeTab === 'editor' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('editor')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"✏️ Trình biên tập"}</BilingualText></button>
+          ><BilingualText>{"Trình biên tập"}</BilingualText></button>
           <button
             type="button"
             className={`button ${activeTab === 'preview' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('preview')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"👁️ Xem trước"}</BilingualText></button>
+          ><BilingualText>{"Xem trước"}</BilingualText></button>
           <button
             type="button"
             className="button"
             onClick={handleSubmit}
             style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
-          ><BilingualText>{"💾 Lưu bài viết"}</BilingualText></button>
+          ><BilingualText>{"Lưu bài viết"}</BilingualText></button>
         </div>
       </div>
 
@@ -340,7 +340,7 @@ export function AdminCultureEditPage() {
             <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase' }}><BilingualText>{"PREVIEW TRÊN GIAO DIỆN HỌC VIÊN"}</BilingualText></span>
             <h1 style={{ fontSize: '32px', margin: '8px 0', color: 'var(--color-ink)' }}><BilingualText>{formData.title || 'Chưa có tiêu đề'}</BilingualText></h1>
             <p style={{ fontSize: '16px', color: 'var(--color-red-hover)' }}>{formData.subtitle}</p>
-            <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}><BilingualText>{"Tác giả:"}</BilingualText><strong>{formData.author}</strong><BilingualText>{"• Điểm đến: 📍"}</BilingualText>{formData.destination}
+            <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}><BilingualText>{"Tác giả:"}</BilingualText><strong>{formData.author}</strong><BilingualText>{"• Điểm đến: "}</BilingualText>{formData.destination}
             </div>
           </div>
 
@@ -356,7 +356,7 @@ export function AdminCultureEditPage() {
 
           {formData.usefulPhrases?.length > 0 && (
             <div style={{ marginTop: '36px', padding: '24px', background: 'var(--color-cream)', borderRadius: '16px' }}>
-              <h3 style={{ margin: '0 0 14px 0', color: 'var(--color-red-hover)' }}><BilingualText>{"📖 Cụm từ hữu ích kèm theo bài viết:"}</BilingualText></h3>
+              <h3 style={{ margin: '0 0 14px 0', color: 'var(--color-red-hover)' }}><BilingualText>{"Cụm từ hữu ích kèm theo bài viết:"}</BilingualText></h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
                 {formData.usefulPhrases.filter(p => p.word).map((p, idx) => (
                   <div key={idx} style={{ background: 'var(--color-surface)', padding: '10px 14px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>

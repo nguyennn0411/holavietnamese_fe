@@ -200,10 +200,10 @@ export function ProfilePage() {
               value={form.learningGoal || 'travel'}
               onChange={(e) => setForm({ ...form, learningGoal: e.target.value })}
             >
-              <option value="travel">{bilingualLabel("✈️ Du lịch & Khám phá")}</option>
-              <option value="work">{bilingualLabel("💼 Công việc & Định cư")}</option>
-              <option value="exam_vsl">{bilingualLabel("🎓 Thi chứng chỉ VSL")}</option>
-              <option value="culture">{bilingualLabel("🏮 Văn hóa & Đời sống")}</option>
+              <option value="travel">{bilingualLabel("Du lịch & Khám phá")}</option>
+              <option value="work">{bilingualLabel("Công việc & Định cư")}</option>
+              <option value="exam_vsl">{bilingualLabel("Thi chứng chỉ VSL")}</option>
+              <option value="culture">{bilingualLabel("Văn hóa & Đời sống")}</option>
             </select>
           </label>
 
@@ -213,10 +213,10 @@ export function ProfilePage() {
               value={form.targetLevel || 'A1'}
               onChange={(e) => setForm({ ...form, targetLevel: e.target.value })}
             >
-              <option value="A1">{bilingualLabel("🌱 A1 – Mới bắt đầu")}</option>
-              <option value="A2">{bilingualLabel("🌿 A2 – Sơ cấp")}</option>
-              <option value="B1">{bilingualLabel("🌳 B1 – Trung cấp")}</option>
-              <option value="B2">{bilingualLabel("🚀 B2 – Trung cấp nâng cao")}</option>
+              <option value="A1">{bilingualLabel("A1 – Mới bắt đầu")}</option>
+              <option value="A2">{bilingualLabel("A2 – Sơ cấp")}</option>
+              <option value="B1">{bilingualLabel("B1 – Trung cấp")}</option>
+              <option value="B2">{bilingualLabel("B2 – Trung cấp nâng cao")}</option>
             </select>
           </label>
 

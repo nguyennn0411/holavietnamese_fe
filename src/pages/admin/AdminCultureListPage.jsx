@@ -69,7 +69,7 @@ export function AdminCultureListPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-          <Link to="/admin/culture-categories" className="button secondary" style={{ fontSize: '13px' }}><BilingualText>{"📑 Quản lý danh mục"}</BilingualText></Link>
+          <Link to="/admin/culture-categories" className="button secondary" style={{ fontSize: '13px' }}><BilingualText>{"Quản lý danh mục"}</BilingualText></Link>
           <Link to="/admin/culture/new" className="button" style={{ fontSize: '13px' }}><BilingualText>{"+ Thêm bài viết mới"}</BilingualText></Link>
         </div>
       </div>
@@ -158,7 +158,7 @@ export function AdminCultureListPage() {
 
                     <td>
                       <span style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
-                        📍 {article.destination || article.region}
+                        {article.destination || article.region}
                       </span>
                     </td>
 
@@ -178,7 +178,7 @@ export function AdminCultureListPage() {
                             style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-ink)', borderColor: 'var(--color-border)' }}
                             title="Duyệt & Xuất bản"
                             onClick={() => handleStatusChange(article.id, 'PUBLISHED')}
-                          ><BilingualText>{"✓ Duyệt"}</BilingualText></button>
+                          ><BilingualText>{"Duyệt"}</BilingualText></button>
                         ) : (
                           <button
                             className="button secondary"
@@ -193,7 +193,7 @@ export function AdminCultureListPage() {
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 9px' }}
                           title="Chỉnh sửa nội dung"
-                        ><BilingualText>{"✏️ Sửa"}</BilingualText></Link>
+                        ><BilingualText>{"Sửa"}</BilingualText></Link>
 
                         <Link
                           to={`/culture/${article.id}`}
@@ -201,7 +201,7 @@ export function AdminCultureListPage() {
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 9px' }}
                           title="Xem trên trang học viên"
-                        ><BilingualText>{"👁️ Xem"}</BilingualText></Link>
+                        ><BilingualText>{"Xem"}</BilingualText></Link>
 
                         <button
                           className="button secondary"
@@ -209,7 +209,7 @@ export function AdminCultureListPage() {
                           title="Xóa bài viết"
                           onClick={() => handleDelete(article.id, article.title)}
                         >
-                          🗑️
+                          Xóa
                         </button>
                       </div>
                     </td>

@@ -1,17 +1,7 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import {
-  Bell,
-  CheckCheck,
-  ArrowUpRight,
-  BookOpen,
-  Trophy,
-  Flame,
-  Sparkles,
-  Settings,
-  Clock,
-} from 'lucide-react';
+import { Bell, CheckCheck, ArrowUpRight, BookOpen, Trophy, Flame, Settings, Clock } from 'lucide-react';
 import { BilingualText } from '@/components/common/BilingualText';
 import { useNotifications } from '@/hooks/useNotifications';
 
@@ -37,7 +27,7 @@ function getCategoryIcon(type) {
       };
     default:
       return {
-        icon: Sparkles,
+        icon: Bell,
         colorClass: 'text-[#EA580C] bg-[#FFF0DC] border-[#E8E5DF]',
       };
   }

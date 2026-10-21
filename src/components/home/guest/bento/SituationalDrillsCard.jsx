@@ -53,13 +53,7 @@ export function SituationalDrillsCard() {
                   : 'bg-[#FFFCF7] border-[#E8E5DF]/70 hover:border-[#EA580C]'
               }`}
             >
-              <div
-                className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                  isSelected ? 'bg-[#EA580C] text-white' : 'bg-[#FFF0DC] text-[#EA580C]'
-                }`}
-              >
-                <Icon size={14} />
-              </div>
+              
               <h4 className="text-xs font-bold text-[#253044] truncate">{item.title}</h4>
               <p className="text-[10px] text-[#64748B] truncate">{item.situation}</p>
             </button>

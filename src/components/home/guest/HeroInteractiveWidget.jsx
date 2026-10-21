@@ -108,7 +108,7 @@ export function HeroInteractiveWidget() {
             title={t('widget.slowAudio')}
             aria-label={t('widget.slowAudio')}
           >
-            <span>🐢 0.6x</span>
+            <Volume2 className="w-3.5 h-3.5 shrink-0" strokeWidth={2.2} /><span>0.6x</span>
           </button>
         </div>
       </div>

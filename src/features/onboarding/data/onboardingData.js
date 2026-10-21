@@ -1,6 +1,6 @@
 import {
   Baby, BriefcaseBusiness, Compass, Dumbbell, HeartHandshake, Landmark,
-  MessageCircle, Plane, Sparkles, Sprout, Target, Timer, Trophy, Utensils,
+  MessageCircle, Plane, Sprout, Target, Timer, Trophy, Utensils, Volume2,
 } from 'lucide-react';
 
 export const learningReasons = [
@@ -9,7 +9,7 @@ export const learningReasons = [
   { id: 'work', title: 'Work or study in Vietnam', detail: 'Feel ready for your next opportunity.', icon: BriefcaseBusiness },
   { id: 'culture', title: 'Explore Vietnamese culture', detail: 'Understand traditions, stories, and daily life.', icon: Landmark },
   { id: 'challenge', title: 'Challenge myself', detail: 'Build a rewarding new skill.', icon: Dumbbell },
-  { id: 'other', title: 'Other reasons', detail: 'Create a journey that is uniquely yours.', icon: Sparkles },
+  { id: 'other', title: 'Other reasons', detail: 'Create a journey that is uniquely yours.', icon: Compass },
 ];
 
 export const levelOptions = [
@@ -21,7 +21,7 @@ export const levelOptions = [
 ];
 
 export const dailyGoals = [
-  { minutes: 5, label: 'Casual', detail: 'One quick practice', icon: Sparkles, color: '#f59e0b' },
+  { minutes: 5, label: 'Casual', detail: 'One quick practice', icon: Timer, color: '#f59e0b' },
   { minutes: 10, label: 'Regular', detail: 'Build a steady habit', icon: Timer, color: '#16a34a', recommended: true },
   { minutes: 15, label: 'Serious', detail: 'Make confident progress', icon: Target, color: '#2563eb' },
   { minutes: 30, label: 'Intensive', detail: 'Move at a focused pace', icon: Trophy, color: '#FF7A00' },
@@ -32,7 +32,7 @@ export const benefits = [
   { title: 'Order with confidence', detail: 'Enjoy phở, coffee, and more.', icon: Utensils },
   { title: 'Find your way', detail: 'Ask for directions while traveling.', icon: Compass },
   { title: 'Understand daily speech', detail: 'Follow familiar conversations.', icon: HeartHandshake },
-  { title: 'Sound more natural', detail: 'Train your listening and pronunciation.', icon: Sparkles },
+  { title: 'Sound more natural', detail: 'Train your listening and pronunciation.', icon: Volume2 },
   { title: 'Discover the culture', detail: 'Connect language with living traditions.', icon: Landmark },
 ];
 
