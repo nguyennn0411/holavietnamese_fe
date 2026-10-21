@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Sprout, Target, Volume2, Award } from 'lucide-react';
+import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Volume2 } from 'lucide-react';
 import { benefits, dailyGoals, firstLessonQuestions, learningReasons, levelOptions, placementBands, placementQuestions } from '../data/onboardingData';
 import { useOnboarding } from '../context/OnboardingContext';
 import { Brand, Confetti, LessonHeader, Mascot, OnboardingLayout, PrimaryButton, SelectionCard } from '../components/OnboardingUI';
@@ -36,7 +36,6 @@ const playFeedbackTone = (correct) => {
 export function WelcomePage() {
   const navigate = useNavigate();
   return <div className="ob-welcome">
-    <div className="ob-lanterns" aria-hidden="true"><i /><i /><i /></div>
     <header><Brand /><button onClick={() => navigate('/login')} type="button" className="ob-login-link">LOG IN</button></header>
     <main>
       <motion.div className="ob-welcome-art" initial={{ opacity: 0, scale: .9 }} animate={{ opacity: 1, scale: 1 }}><div className="ob-sun" /><Mascot message="Xin chào! Ready for an adventure?" /></motion.div>
@@ -99,8 +98,8 @@ export function LearningPathPage() {
   const choose = (path) => { update({ learningPath: path }); window.setTimeout(() => navigate(path === 'beginner' ? '/onboarding/first-lesson' : '/onboarding/placement-test'), 180); };
   return <OnboardingLayout eyebrow="CHOOSE YOUR ADVENTURE" title="Where would you like to start?" mascotMessage="Both paths are yours — you can always change direction." wide>
     <div className="ob-paths">
-      <motion.button whileHover={{ y: -6 }} type="button" className={`ob-path-card beginner ${data.learningPath === 'beginner' ? 'is-selected' : ''}`} onClick={() => choose('beginner')}><span className="ob-path-art"><Sprout /></span><em>RECOMMENDED FOR BEGINNERS</em><h2>Start from Scratch</h2><p>Learn Vietnamese step by step, starting with greetings, essential vocabulary, and simple sentences.</p><strong>START LESSON <ChevronRight /></strong></motion.button>
-      <motion.button whileHover={{ y: -6 }} type="button" className={`ob-path-card placement ${data.learningPath === 'placement' ? 'is-selected' : ''}`} onClick={() => choose('placement')}><span className="ob-path-art"><Target /></span><em>ABOUT 5 MINUTES</em><h2>Find My Level</h2><p>Take a quick Vietnamese placement test and discover the right starting point for your learning journey.</p><strong>TAKE THE TEST <ChevronRight /></strong></motion.button>
+      <motion.button whileHover={{ y: -6 }} type="button" className={`ob-path-card beginner ${data.learningPath === 'beginner' ? 'is-selected' : ''}`} onClick={() => choose('beginner')}><em>RECOMMENDED FOR BEGINNERS</em><h2>Start from Scratch</h2><p>Learn Vietnamese step by step, starting with greetings, essential vocabulary, and simple sentences.</p><strong>START LESSON <ChevronRight /></strong></motion.button>
+      <motion.button whileHover={{ y: -6 }} type="button" className={`ob-path-card placement ${data.learningPath === 'placement' ? 'is-selected' : ''}`} onClick={() => choose('placement')}><em>ABOUT 5 MINUTES</em><h2>Find My Level</h2><p>Take a quick Vietnamese placement test and discover the right starting point for your learning journey.</p><strong>TAKE THE TEST <ChevronRight /></strong></motion.button>
     </div>
   </OnboardingLayout>;
 }
@@ -170,7 +169,7 @@ export function CompletionPage() {
   };
 
   return <div className="ob-complete"><Confetti /><Brand /><main><div className="ob-celebrate"><Mascot celebration /></div><span className="ob-complete-kicker"><Medal /> {mode === 'lesson' ? 'FIRST LESSON COMPLETE' : 'STARTING POINT FOUND'}</span><h1>{mode === 'lesson' ? "Fantastic! You've completed your first Vietnamese lesson!" : "Great job! We've found a starting point for you!"}</h1><p>Kết quả đã sẵn sàng. HolaVietnamese sẽ dùng trình độ này để gợi ý các khóa học phù hợp với bạn.</p>
-    <div className="ob-stats"><article><Award size={18} /><strong>+{result.xp}</strong><span>XP EARNED</span></article><article><Check /><strong>{result.correct}/{result.total}</strong><span>CORRECT</span></article><article><Target /><strong>{result.accuracy}%</strong><span>ACCURACY</span></article></div>
+    <div className="ob-stats"><article><strong>+{result.xp}</strong><span>XP EARNED</span></article><article><strong>{result.correct}/{result.total}</strong><span>CORRECT</span></article><article><strong>{result.accuracy}%</strong><span>ACCURACY</span></article></div>
     <div className="ob-recommend"><BookOpen /><div><span>YOUR RECOMMENDED START</span><strong>{result.recommendation || 'Vietnamese Foundations · Lesson 2'}</strong>{result.level && <small>Suggested group: {result.level}. This is a preliminary result, not an official CEFR certification.</small>}</div></div>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
       <PrimaryButton disabled={saving} onClick={handleShowRecommendations}>{saving ? 'ĐANG LƯU KẾT QUẢ…' : 'XEM KHÓA HỌC ĐƯỢC GỢI Ý'}</PrimaryButton>

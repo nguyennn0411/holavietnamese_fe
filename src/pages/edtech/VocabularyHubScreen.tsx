@@ -1,17 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'motion/react';
 import { useNavigate, Link } from 'react-router-dom';
-import {
-  Search,
-  Volume2,
-  Bookmark,
-  BookmarkCheck,
-  ArrowLeft,
-  Filter,
-  Keyboard,
-  ArrowLeftRight,
-  Home,
-} from 'lucide-react';
+import { Search, Volume2, Bookmark, BookmarkCheck, Filter, Keyboard, ArrowLeftRight, Home } from 'lucide-react';
 import { VocabularyItemDTO, VietnameseTone } from '@/types/edtech';
 import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { DiacriticKeyboardBar } from '@/components/edtech/ui/DiacriticKeyboardBar';

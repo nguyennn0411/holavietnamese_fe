@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Check, Play, Star, Compass } from 'lucide-react';
+import { Check, Play } from 'lucide-react';
 import { ROADMAP_NODES } from '@/components/home/data/homeData';
 import { useTranslation } from 'react-i18next';
 
@@ -47,7 +47,7 @@ export function GamifiedRoadmapTeaser() {
             >
               {/* Node Icon */}
               <div
-                className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 shadow-sm ${
+                className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
                   node.status === 'completed'
                     ? 'bg-emerald-700 text-white'
                     : node.status === 'current'
@@ -60,7 +60,7 @@ export function GamifiedRoadmapTeaser() {
                 ) : node.status === 'current' ? (
                   <Play size={18} fill="currentColor" />
                 ) : (
-                  <span>🔒</span>
+                  <span className="text-xs font-bold text-stone-400 font-mono">#{node.id}</span>
                 )}
               </div>
 
@@ -83,19 +83,7 @@ export function GamifiedRoadmapTeaser() {
 
               {/* Stars & Reward */}
               <div className="flex items-center gap-3 shrink-0">
-                <div className="flex items-center gap-0.5">
-                  {[1, 2, 3].map((starIdx) => (
-                    <Star
-                      key={starIdx}
-                      size={14}
-                      className={
-                        starIdx <= node.stars
-                          ? 'text-amber-500 fill-amber-400'
-                          : 'text-stone-300'
-                      }
-                    />
-                  ))}
-                </div>
+                
                 <span className="text-[11px] font-bold text-[#EA580C] bg-[#FFF0DC] px-2 py-0.5 rounded-md hidden sm:inline-block">
                   +{node.xp} XP
                 </span>
@@ -109,7 +97,6 @@ export function GamifiedRoadmapTeaser() {
             to="/welcome"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-black text-xs shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-none transition-all"
           >
-            <Compass size={16} />
             <span>{t('roadmap.action')}</span>
           </Link>
         </div>

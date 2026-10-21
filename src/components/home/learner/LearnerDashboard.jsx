@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import {
-  ArrowRight, BookOpen, Check, CircleAlert, Clock3, Compass, Flame, Headphones,
-  Languages, MessageCircle, Play, RefreshCw, Target, Trophy, Volume2, Zap,
-} from 'lucide-react';
+import { ArrowRight, BookOpen, Check, CircleAlert, Clock3, Flame, Languages, MessageCircle, Play, RefreshCw, Target, Trophy, Volume2, Zap } from 'lucide-react';
 import { learnerService } from '@/services/learnerService';
 import { WORD_OF_THE_DAY } from '@/components/home/data/homeData';
 import { speakVietnamese } from '@/utils/speech';
@@ -29,7 +26,6 @@ function DashboardSkeleton() {
 function StatCard({ icon: Icon, label, value, detail, tone }) {
   return (
     <article className={`ld-stat ld-stat--${tone}`}>
-      <span className="ld-stat__icon"><Icon size={20} strokeWidth={2.2} /></span>
       <div><span>{label}</span><strong>{value ?? '—'}</strong><small>{detail}</small></div>
     </article>
   );
@@ -63,7 +59,7 @@ export function LearnerDashboard({ user }) {
   const leaderboard = Array.isArray(progress?.weeklyLeaderboard) ? progress.weeklyLeaderboard : [];
 
   const modules = useMemo(() => [
-    { to: '/edtech/dashboard', icon: Compass, title: 'Lộ trình học', text: 'Bản đồ bài học tương tác từng bước', tone: 'red' },
+    { to: '/edtech/dashboard', title: 'Lộ trình học', text: 'Bản đồ bài học tương tác từng bước', tone: 'red' },
     { to: '/vocabulary', icon: Languages, title: t('dashboard.modules.vocabulary'), text: t('dashboard.modules.vocabularyText'), tone: 'gold' },
     { to: '/courses', icon: BookOpen, title: t('dashboard.modules.courses', { defaultValue: 'Khóa học' }), text: t('dashboard.modules.coursesText', { defaultValue: 'Danh mục khóa học đa dạng theo chủ đề' }), tone: 'blue' },
     { to: '/ai-tutor', icon: MessageCircle, title: t('dashboard.modules.practice'), text: t('dashboard.modules.practiceText'), tone: 'green' },
@@ -116,7 +112,6 @@ export function LearnerDashboard({ user }) {
               </>
             ) : (
               <div className="ld-empty">
-                <Compass size={32} style={{ color: '#EA580C' }} />
                 <h2>Lộ trình học tập cá nhân hóa</h2>
                 <p>Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo.</p>
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.25rem' }}>

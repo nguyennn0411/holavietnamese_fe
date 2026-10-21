@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { generatePath, Link, useSearchParams } from 'react-router-dom';
-import { BookOpen, Search, ArrowUpRight, SlidersHorizontal, MapPin } from 'lucide-react';
+import { Search, ArrowUpRight } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { Pagination, EmptyState } from '@/components/common/Ui';
 import { VocabularyOverview } from '@/components/vocabulary/VocabularyNavigation';
@@ -28,9 +28,9 @@ export function VocabularyCatalogPage() {
   function saved() { notebook.reload(); setOverviewRevision(value => value + 1); }
   return <section className="vocabulary-ui dictionary-page">
     <header className="dictionary-intro">
-      <div><p className="eyebrow"><BookOpen size={15} /> TỪ ĐIỂN & HỌC TẬP · DICTIONARY & LEARNING</p>
+      <div><p className="eyebrow">TỪ ĐIỂN & HỌC TẬP · DICTIONARY & LEARNING</p>
         <h1>Mỗi từ, <em>một cách hiểu.</em></h1><p>Tra nghĩa tiếng Việt, khám phá cách dùng và lưu những từ bạn muốn ghi nhớ.</p>
-        <div className="dictionary-shortcuts"><Link to={ROUTES.VOCABULARY_REVIEW}>Ôn flashcard <ArrowUpRight size={15} /></Link><Link to={ROUTES.REGIONAL_VIETNAMESE}><MapPin size={15} /> Tiếng Việt vùng miền</Link></div>
+        <div className="dictionary-shortcuts"><Link to={ROUTES.VOCABULARY_REVIEW}>Ôn flashcard <ArrowUpRight size={15} /></Link><Link to={ROUTES.REGIONAL_VIETNAMESE}>Tiếng Việt vùng miền</Link></div>
       </div><div className="dictionary-letter-art" aria-hidden="true"><span>ă â ê</span><strong>Tiếng<br />Việt.</strong><span>ô ơ ư đ</span></div>
     </header>
     <form className="dictionary-lookup" onSubmit={event => { event.preventDefault(); filter('keyword', keyword.trim()); }}>
@@ -39,7 +39,7 @@ export function VocabularyCatalogPage() {
       <p>Tìm cả từ nhiều tiếng và từ không dấu. Kết quả khớp chính xác được ưu tiên.</p>
     </form>
     <VocabularyOverview key={overviewRevision} active="catalog"><Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}>Mở sổ tay</Link></VocabularyOverview>
-    <div className="dictionary-filters"><span><SlidersHorizontal size={16} /> Bộ lọc</span>
+    <div className="dictionary-filters"><span>Bộ lọc</span>
       <label><span>Trình độ</span><select value={query.cefrLevel} disabled={filters.loading || !!filters.error} onChange={event => filter('cefrLevel', event.target.value)}><option value="">Tất cả trình độ</option>{(filters.data?.levels || []).map(level => <option key={level}>{level}</option>)}</select></label>
       <label><span>Từ loại</span><select value={query.partOfSpeech} disabled={filters.loading || !!filters.error} onChange={event => filter('partOfSpeech', event.target.value)}><option value="">Tất cả từ loại</option>{(filters.data?.partsOfSpeech || []).map(part => <option key={part} value={part}>{partOfSpeechLabel(part)}</option>)}</select></label>
       <label><span>Chủ đề</span><select value={query.topicId} disabled={filters.loading || !!filters.error} onChange={event => filter('topicId', event.target.value)}><option value="">Tất cả chủ đề</option>{(filters.data?.topics || []).map(topic => <option key={topic.id} value={topic.id}>{topic.name}</option>)}</select></label>

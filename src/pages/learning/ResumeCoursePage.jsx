@@ -2,24 +2,7 @@
 import { useState, useMemo } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  ArrowLeft,
-  BookOpen,
-  Clock,
-  CheckCircle2,
-  Play,
-  PlayCircle,
-  Lock,
-  ChevronDown,
-  ChevronUp,
-  MessageCircle,
-  FileText,
-  Headphones,
-  CheckSquare,
-  Compass,
-  Award,
-  AlertCircle
-} from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, CheckCircle2, Play, PlayCircle, Lock, ChevronDown, ChevronUp, MessageCircle, FileText, Headphones, CheckSquare, Compass, Award } from 'lucide-react';
 import { courseService } from '@/services/courseService';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { ResourceState } from '@/components/common/ResourceState';

@@ -9,15 +9,7 @@ import { LessonContent } from '@/components/learning/LessonContent';
 import { LessonNavigation } from '@/components/learning/LessonNavigation';
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm';
 import { LessonActivities } from '@/components/learning/LessonActivities';
-import {
-  ArrowLeft,
-  CheckCircle2,
-  BookOpen,
-  Bookmark,
-  PanelLeftClose,
-  PanelLeft,
-  Check
-} from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check } from 'lucide-react';
 
 export function LessonLearningPage() {
   const { courseId, lessonId } = useParams();

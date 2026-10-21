@@ -2,7 +2,7 @@
 import { moveItem } from './answerUtils';
 import { ContentImage } from '@/components/common/ContentImage';
 import { MediaPlayer } from './MediaPlayer';
-import { Check, ArrowUp, ArrowDown, X, Volume2 } from 'lucide-react';
+import { Check, ArrowUp, ArrowDown, X } from 'lucide-react';
 
 export function QuestionInput({ question, answer = {}, onChange, disabled = false }) {
   const type = question.questionType || 'FILL_BLANK';

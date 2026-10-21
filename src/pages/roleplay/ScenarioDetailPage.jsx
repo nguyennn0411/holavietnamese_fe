@@ -1,16 +1,7 @@
 ﻿import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import {
-  ArrowLeft,
-  MapPin,
-  Clock,
-  Target,
-  Play,
-  Lightbulb,
-  CheckCircle2,
-  Bookmark,
-} from 'lucide-react';
+import { ArrowLeft, MapPin, Play } from 'lucide-react';
 import { BilingualText } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
@@ -162,7 +153,6 @@ export function ScenarioDetailPage() {
                 {/* Learner Role Card */}
                 <div className="p-4 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF] space-y-2">
                   <div className="flex items-center gap-3">
-                    <Award size={28} className="text-[#FF7A00] shrink-0" />
                     <div>
                       <span className="text-[10px] font-black uppercase text-[#253044] tracking-wider block">
                         Bạn đóng vai
@@ -183,8 +173,7 @@ export function ScenarioDetailPage() {
             <section className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-black text-[#253044] flex items-center gap-2">
-                  <Target size={18} className="text-[#FF7A00]" />
-                  <span>Mục tiêu cần hoàn thành</span>
+                    <span>Mục tiêu cần hoàn thành</span>
                 </h2>
                 <span className="text-xs font-bold text-[#FF7A00] bg-[#FFF0DC] px-2.5 py-0.5 rounded-full">
                   {scenario.objectives.length} nhiệm vụ
@@ -214,7 +203,6 @@ export function ScenarioDetailPage() {
             {/* Vocabulary & Phrase Hints */}
             <section className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-6 shadow-xs space-y-4">
               <h2 className="text-base font-black text-[#253044] flex items-center gap-2">
-                <Lightbulb size={18} className="text-[#FFCD00]" />
                 <span>Mẫu câu & Từ vựng gợi ý</span>
               </h2>
 

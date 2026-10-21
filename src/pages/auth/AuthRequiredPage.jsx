@@ -1,20 +1,7 @@
 ﻿import React, { useMemo } from 'react';
 import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import {
-  Lock,
-  Bot,
-  BookOpen,
-  Compass,
-  Palette,
-  LogIn,
-  UserPlus,
-  ArrowLeft,
-  CheckCircle2,
-  ShieldCheck,
-  Flame,
-  Zap,
-} from 'lucide-react';
+import { Lock, Bot, BookOpen, Compass, Palette, LogIn, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/application/context/AuthContext';
 import { BuffaloMascot, MascotSpeechBubble } from '@/components/mascot';
 import { BilingualText } from '@/components/common/BilingualText';
@@ -354,15 +341,12 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
           {/* Bottom Security / Trust Badges */}
           <div className="pt-4 border-t border-[#E8E5DF]/50 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#64748B]">
-              <ShieldCheck size={16} className="text-emerald-700 shrink-0" />
               <BilingualText vi="Hoàn toàn miễn phí" en="100% Free to join" />
             </div>
             <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#64748B]">
-              <Zap size={16} className="text-amber-700 shrink-0" />
               <BilingualText vi="Đồng bộ tiến độ đám mây" en="Cloud progress sync" />
             </div>
             <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#64748B]">
-              <Flame size={16} className="text-red-700 shrink-0" />
               <BilingualText vi="Tích lũy Streak & Điểm XP" en="Earn streaks & XP" />
             </div>
           </div>

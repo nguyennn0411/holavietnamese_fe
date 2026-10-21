@@ -33,15 +33,15 @@ export function AdminAiReviewsPage() {
     setTimeout(() => {
       setIsTesting(false);
       setTestOutput(`[AI Test Runner - v2.2.0-stable | Model: Gemini 2.5 Flash]
-✓ Nhận diện vai trò: Cô Mai (Chủ quán phở Hà Nội)
-✓ Phân tích câu thoại người học: "Dạ cho cháu một bát phở tái lăn, không cho hành lá nhé cô!"
-✓ Kính ngữ: Rất chuẩn xác (Dạ... nhé cô)
-✓ Xử lý yêu cầu khẩu vị: Không hành lá -> Đã ghi nhận chính xác
+[ĐẠT] Nhận diện vai trò: Cô Mai (Chủ quán phở Hà Nội)
+[ĐẠT] Phân tích câu thoại người học: "Dạ cho cháu một bát phở tái lăn, không cho hành lá nhé cô!"
+[ĐẠT] Kính ngữ: Rất chuẩn xác (Dạ... nhé cô)
+[ĐẠT] Xử lý yêu cầu khẩu vị: Không hành lá -> Đã ghi nhận chính xác
 
-➔ Câu trả lời của AI tạo ra:
+Câu trả lời của AI tạo ra:
 "Được rồi cháu ơi! Một bát tái lăn không hành nhé. Thịt bò xào lăn thơm phức đang sẵn trên chảo đây. Cháu có muốn dùng thêm đĩa quẩy giòn nhúng nước dùng hay uống trà đá không nào?"
 
-➔ Đánh giá tự động:
+Đánh giá tự động:
 - Lỗi sai kiến thức ẩm thực: 0
 - Lỗi ngữ pháp tiếng Việt: 0
 - Tính phù hợp văn hóa: 100%`);
@@ -106,7 +106,7 @@ export function AdminAiReviewsPage() {
 
                   <td>
                     <span style={{ color: 'var(--color-red)', fontWeight: 750 }}>
-                      {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
+                      {`${r.rating}/5`}
                     </span>
                   </td>
 

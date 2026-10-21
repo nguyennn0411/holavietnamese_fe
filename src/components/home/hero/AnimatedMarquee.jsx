@@ -28,7 +28,7 @@ export function AnimatedMarquee() {
                 className="inline-flex items-center gap-3 px-4 text-xs sm:text-sm font-black tracking-widest uppercase text-[#FFCD00] transition-colors"
               >
                 <span>{item}</span>
-                <span className="text-[#FFF9ED] opacity-75 font-serif text-sm">✦</span>
+                <span className="text-[#FFF9ED] opacity-60 text-sm">•</span>
               </span>
             ))}
           </div>

@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useLessons } from '@/hooks/useLearning';
 import { ResourceState } from '@/components/common/ResourceState';
-import { BookOpen, Clock, PlayCircle, CheckCircle2 } from 'lucide-react';
+import { BookOpen, Clock, PlayCircle } from 'lucide-react';
 
 export function CourseCurriculum({ courseId }) {
   const resource = useLessons(courseId);

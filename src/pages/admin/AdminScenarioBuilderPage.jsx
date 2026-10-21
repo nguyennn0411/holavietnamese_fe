@@ -25,7 +25,7 @@ export function AdminScenarioBuilderPage() {
     learnerRole: '',
     aiRole: {
       name: '',
-      avatar: '👩‍🍳',
+      avatar: '',
       role: '',
       tone: '',
       initialGreeting: '',
@@ -398,13 +398,13 @@ export function AdminScenarioBuilderPage() {
                 <p style={{ fontSize: '12.5px', color: 'var(--color-red-hover)', margin: '0 0 12px' }}><BilingualText>{"Hệ thống phân tích 4 thang điểm cốt lõi dựa trên tương tác thực tế:"}</BilingualText></p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Độ lưu loát"}</BilingualText></strong><BilingualText>{": Khả năng phản xạ và nhịp đối thoại."}</BilingualText></div>
+                    <strong><BilingualText>{"Độ lưu loát"}</BilingualText></strong><BilingualText>{": Khả năng phản xạ và nhịp đối thoại."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Vốn từ vựng"}</BilingualText></strong><BilingualText>{": Từ ngữ chính xác theo chủ đề."}</BilingualText></div>
+                    <strong><BilingualText>{"Vốn từ vựng"}</BilingualText></strong><BilingualText>{": Từ ngữ chính xác theo chủ đề."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Ngữ pháp"}</BilingualText></strong><BilingualText>{": Trật tự từ và hư từ biểu cảm."}</BilingualText></div>
+                    <strong><BilingualText>{"Ngữ pháp"}</BilingualText></strong><BilingualText>{": Trật tự từ và hư từ biểu cảm."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Văn hóa & Ngữ cảnh"}</BilingualText></strong><BilingualText>{": Kính ngữ, thái độ lịch thiệp."}</BilingualText></div>
+                    <strong><BilingualText>{"Văn hóa & Ngữ cảnh"}</BilingualText></strong><BilingualText>{": Kính ngữ, thái độ lịch thiệp."}</BilingualText></div>
                 </div>
               </div>
             </div>

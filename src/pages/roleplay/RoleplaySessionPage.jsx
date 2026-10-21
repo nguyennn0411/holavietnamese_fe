@@ -4,23 +4,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  Volume2,
-  VolumeX,
-  Mic,
-  Send,
-  RotateCcw,
-  Languages,
-  HelpCircle,
-  CheckCircle2,
-  ArrowLeft,
-  ChevronRight,
-  Flag,
-  Award,
-  Lightbulb,
-  MapPin,
-  Smile
-} from 'lucide-react';
+import { Volume2, Mic, Send, RotateCcw, Languages, HelpCircle, CheckCircle2, ArrowLeft, Award } from 'lucide-react';
 
 export function RoleplaySessionPage() {
   const { confirm, confirmationDialog } = useConfirmDialog();
@@ -293,8 +277,7 @@ export function RoleplaySessionPage() {
                   : 'bg-white text-[#715A4F] border-[#E8E5DF] hover:bg-[#FFF7E8]'
               }`}
             >
-              <Lightbulb size={14} className={showHints ? 'text-[#FF7A00]' : 'text-[#715A4F]'} />
-              <BilingualText>{showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'}</BilingualText>
+                <BilingualText>{showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'}</BilingualText>
             </button>
           </div>
 
@@ -490,8 +473,7 @@ export function RoleplaySessionPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#EA580C] uppercase tracking-wider">
-                    <Lightbulb size={13} className="text-[#FF7A00]" />
-                    <BilingualText>{"Gợi ý câu trả lời tự nhiên (Bấm để gửi ngay):"}</BilingualText>
+                            <BilingualText>{"Gợi ý câu trả lời tự nhiên (Bấm để gửi ngay):"}</BilingualText>
                   </div>
                   <span className="text-[10px] text-[#64748B]">Chạm 1 lần để nói</span>
                 </div>
@@ -666,7 +648,6 @@ export function RoleplaySessionPage() {
             onClick={handleFinishSession}
             className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#EA580C] hover:from-[#EA580C] hover:to-[#8B1414] text-white font-black text-sm shadow-md hover:shadow-xl transition-all"
           >
-            <Award size={16} className="text-[#FFCD00]" />
             <BilingualText>{"Hoàn tất & Nhận đánh giá"}</BilingualText>
           </button>
         </aside>

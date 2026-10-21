@@ -1,9 +1,8 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { Trophy } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { learnerService } from '@/services/learnerService';
 import { journeyService } from '@/services/journeyService';
-import { Stamp, CheckCircle2, Clock3, MapPin } from 'lucide-react';
+import { Trophy, CheckCircle2, Clock3, MapPin } from 'lucide-react';
 import '@/components/destinations/passport.css';
 
 export function AchievementsPage() {
@@ -81,7 +80,7 @@ export function AchievementsPage() {
               className={`achieve-badge-card ${badge.unlocked ? 'unlocked' : 'locked'}`}
             >
               <div className="achieve-badge-icon">
-                {badge.icon || (badge.unlocked ? '🏆' : '🔒')}
+                {badge.unlocked ? 'ĐẠT' : 'CHƯA'}
               </div>
               <div className="achieve-badge-info">
                 <strong>{badge.name || badge.title}</strong>
@@ -91,7 +90,7 @@ export function AchievementsPage() {
                   </span>
                 ) : (
                   <span className="achieve-badge-status locked">
-                    🔒 {badge.conditionValue || <BilingualText>Chưa đạt điều kiện</BilingualText>}
+                    {badge.conditionValue || <BilingualText>Chưa đạt điều kiện</BilingualText>}
                   </span>
                 )}
               </div>
@@ -103,7 +102,6 @@ export function AchievementsPage() {
       {/* Passport Stamps Section */}
       <div className="achieve-passport-card vietnam-passport">
         <div className="achieve-passport-header">
-          <span className="achieve-passport-icon"><Stamp size={28} aria-hidden="true" /></span>
           <div>
             <h3><BilingualText>{"Hộ chiếu khám phá Việt Nam"}</BilingualText></h3>
             <p><BilingualText>{"Mỗi khi hoàn thành các bài học gắn liền với địa danh, bạn sẽ nhận được một con tem hộ chiếu đặc trưng!"}</BilingualText></p>

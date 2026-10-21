@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Compass } from 'lucide-react';
 
 /**
  * Compact, elegant cultural introduction strip for Guest Homepage.
@@ -18,9 +17,6 @@ export function GuestCulturalStrip() {
     >
       <div className="guest-cultural-strip__inner">
         <div className="guest-cultural-strip__lead">
-          <span className="guest-cultural-strip__badge" aria-hidden="true">
-            <Compass className="guest-cultural-strip__badge-icon" />
-          </span>
           <p className="guest-cultural-strip__tagline">
             {t('culturalStrip.tagline', { defaultValue: 'Discover Vietnam, one word at a time.' })}
           </p>

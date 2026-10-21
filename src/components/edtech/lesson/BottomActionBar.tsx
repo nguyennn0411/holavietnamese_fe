@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle2, XCircle, ArrowRight, Zap, HeartCrack } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/edtech/ui/Button';
 
 export interface FeedbackState {
@@ -102,13 +102,11 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
                     {/* XP or Heart indicator */}
                     {feedback.status === 'correct' && feedback.xpGained && (
                       <span className="inline-flex items-center gap-1 text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-900 ml-auto shadow-sm">
-                        <Zap className="w-3.5 h-3.5 fill-current" />
                         +{feedback.xpGained} XP
                       </span>
                     )}
                     {feedback.status === 'incorrect' && (
                       <span className="inline-flex items-center gap-1 text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-rose-200 text-rose-800 ml-auto">
-                        <HeartCrack className="w-3.5 h-3.5" />
                         -1 Tim
                       </span>
                     )}

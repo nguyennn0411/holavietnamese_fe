@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Volume2, ArrowLeftRight, Check, HelpCircle, AlertTriangle } from 'lucide-react';
+import { Volume2, ArrowLeftRight, HelpCircle } from 'lucide-react';
 import { MinimalPairDTO, VietnameseTone } from '@/types/edtech';
 import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { ToneCurveGraph } from '@/components/edtech/ui/ToneCurveGraph';

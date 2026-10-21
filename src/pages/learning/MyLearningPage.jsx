@@ -2,20 +2,7 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import {
-  BookOpen,
-  Languages,
-  MapPin,
-  Award,
-  ArrowRight,
-  Plus,
-  Compass,
-  CheckCircle2,
-  Calendar,
-  Flame,
-  Clock,
-  Play
-} from 'lucide-react';
+import { BookOpen, Languages, MapPin, Award, ArrowRight, Plus, CheckCircle2, Calendar, Flame, Clock, Play } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { learnerService } from '@/services/learnerService';
 import { courseService } from '@/services/courseService';
@@ -135,7 +122,6 @@ export function MyLearningPage({ initialTab = 'courses' }) {
               to="/edtech/dashboard"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 hover:bg-white text-[#253044] border border-[#E8E5DF] font-semibold text-xs shadow-xs transition-all hover:border-[#EA580C]"
             >
-              <Compass size={15} className="text-[#EA580C]" />
               <BilingualText>{"Đến Lộ trình học tương tác (EdTech) →"}</BilingualText>
             </Link>
           </div>
@@ -160,7 +146,6 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   : 'border-transparent text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8]/50'
               }`}
             >
-              <Icon size={16} className={isActive ? 'text-[#EA580C]' : 'text-[#64748B]'} />
               <BilingualText>{item.label}</BilingualText>
             </button>
           );

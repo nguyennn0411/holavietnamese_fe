@@ -6,8 +6,6 @@ import {
   Search,
   X,
   Play,
-  Compass,
-  GraduationCap,
 } from 'lucide-react';
 import { useCourses } from '@/hooks/useCourses';
 import { CourseCard } from '@/components/course/CourseCard';
@@ -80,7 +78,6 @@ export function CourseListPage() {
               to="/edtech/dashboard"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/90 hover:bg-white text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-all hover:border-[#FF7A00] no-underline active:scale-95"
             >
-              <Compass size={15} className="text-[#FF7A00]" />
               <BilingualText>{"Lộ trình học tương tác (EdTech) →"}</BilingualText>
             </Link>
           </div>
@@ -90,7 +87,6 @@ export function CourseListPage() {
       {isPlacementRecommendation && (
         <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/90 px-5 py-4 shadow-xs" role="status">
           <div className="flex items-start gap-3">
-            <span className="grid place-items-center w-10 h-10 shrink-0 rounded-xl bg-emerald-700 text-white"><GraduationCap size={20} /></span>
             <div>
               <strong className="block text-sm text-emerald-950">Khóa học phù hợp với kết quả Entry Test</strong>
               <span className="text-xs text-emerald-800">Kết quả của bạn phù hợp với trình độ {level}. Danh sách bên dưới đã được lọc tự động.</span>
@@ -224,7 +220,6 @@ export function CourseListPage() {
                   </div>
 
                   <div className="text-xs font-semibold text-[#64748B] flex items-center gap-1.5 self-end md:self-center">
-                    <GraduationCap size={15} className="text-[#FF7A00]" />
                     <span>
                       <BilingualText>{"Khám phá kho khóa học chuẩn CEFR"}</BilingualText>
                     </span>

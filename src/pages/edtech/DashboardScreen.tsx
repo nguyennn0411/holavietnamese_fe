@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  ArrowRight, Award, BookMarked, BookOpen, Check, ChevronDown, Clock3,
-  Flame, Gift, Heart, Lock, Map, Play, RefreshCw, Star, Trophy, X, Zap
-} from 'lucide-react';
+import { BookMarked, BookOpen, Check, Clock3, Flame, Gift, Heart, Lock, Play, RefreshCw, Trophy, X, Zap } from 'lucide-react';
 import { courseService } from '@/services/courseService';
 import { learnerService } from '@/services/learnerService';
 import { learningService } from '@/services/learningService';
@@ -573,14 +570,6 @@ export const DashboardScreen: React.FC = () => {
                               </>
                             )}
 
-                            {isCompleted && (
-                              <div className="duo-stars-cluster">
-                                <Star size={13} className="fill-[#FFC800] text-[#FFC800]" />
-                                <Star size={17} className="fill-[#FFC800] text-[#FFC800] -translate-y-1" />
-                                <Star size={13} className="fill-[#FFC800] text-[#FFC800]" />
-                              </div>
-                            )}
-
                             <button
                               type="button"
                               className={`duo-node-btn ${
@@ -594,7 +583,7 @@ export const DashboardScreen: React.FC = () => {
                               ) : isLocked ? (
                                 <Lock size={26} strokeWidth={2.5} />
                               ) : (
-                                <Star size={36} strokeWidth={2.5} className="fill-white" />
+                                <Play size={30} fill="currentColor" className="text-white ml-0.5" />
                               )}
                             </button>
                           </div>
@@ -690,7 +679,7 @@ export const DashboardScreen: React.FC = () => {
             <div className="duo-sidebar-widget">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-black text-lg text-[#251B18] flex items-center gap-2">
-                  <Trophy size={20} className="text-[#FFC800]" /> Bảng xếp hạng tuần
+                  Bảng xếp hạng tuần
                 </h3>
                 <span className="text-xs font-black px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#B45309]">
                   HẠNG VÀNG
@@ -788,7 +777,7 @@ export const DashboardScreen: React.FC = () => {
                     <Clock3 size={15} /> {selectedLesson.estimatedDuration || 12} phút
                   </span>
                   <span className="flex items-center gap-1.5 bg-[#FEF3C7] text-[#B45309] px-3 py-1.5 rounded-full">
-                    <Award size={15} /> +{selectedLesson.xpReward || 25} XP
+                    +{selectedLesson.xpReward || 25} XP
                   </span>
                 </div>
 

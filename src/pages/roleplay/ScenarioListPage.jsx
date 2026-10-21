@@ -1,18 +1,7 @@
 ﻿import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  Search,
-  X,
-  MapPin,
-  Clock,
-  Target,
-  ArrowRight,
-  RotateCcw,
-  Compass,
-  MessageCircle,
-  Play,
-} from 'lucide-react';
+import { Search, X, MapPin, Target, RotateCcw, Play } from 'lucide-react';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
@@ -74,7 +63,6 @@ export function ScenarioListPage() {
                 to="/ai-tutor"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] hover:text-[#FF7A00] text-xs font-bold shadow-2xs transition-all"
               >
-                <MessageCircle size={15} className="text-[#FF7A00]" />
                 <span>Trò chuyện tự do với AI Tutor →</span>
               </Link>
             </div>

@@ -1,30 +1,7 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  Send,
-  Mic,
-  MicOff,
-  Volume2,
-  Copy,
-  Check,
-  Trash2,
-  Edit3,
-  Plus,
-  Search,
-  Bot,
-  User,
-  BookOpen,
-  MessageSquare,
-  Compass,
-  ArrowRight,
-  BookmarkPlus,
-  Globe,
-  Award,
-  Flame,
-  Zap,
-  VolumeX,
-} from 'lucide-react';
+import { Send, Mic, MicOff, Volume2, Copy, Check, Trash2, Edit3, Plus, Search, User, BookOpen, Compass, ArrowRight, BookmarkPlus, Globe } from 'lucide-react';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { aiTutorService } from '@/services/aiTutorService';
 import { vocabularyService } from '@/services/vocabularyService';
@@ -541,7 +518,6 @@ export function AiTutorPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E8E5DF]/60 pb-5">
         <div className="space-y-1 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#FF7A00] text-xs font-black uppercase tracking-wider">
-            <Bot size={14} className="text-[#FF7A00]" />
             <span>AI Speaking Partner • 7 Chế Độ Học</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-black text-[#253044] tracking-tight">
@@ -558,7 +534,6 @@ export function AiTutorPage() {
             to="/ai-scenarios"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] hover:text-[#FF7A00] text-xs font-bold shadow-2xs transition-all"
           >
-            <Compass size={15} className="text-[#FF7A00]" />
             <span>Kịch bản nhập vai tình huống</span>
             <ArrowRight size={13} />
           </Link>
@@ -728,7 +703,7 @@ export function AiTutorPage() {
                 >
                   <span className={`w-2 h-2 rounded-full ${aiStatus.isLiveCall ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
                   <span>{aiStatus.isLiveCall ? `${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : 'Smart NLP Engine'}</span>
-                  <Zap size={12} className={aiStatus.isLiveCall ? 'text-emerald-600' : 'text-amber-600'} />
+                  
                 </button>
 
                 <button

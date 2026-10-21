@@ -13,7 +13,7 @@ import { destinationService } from '@/services/destinationService';
 import { journeyService } from '@/services/journeyService';
 import { ROUTES } from '@/constants/routes';
 import '@/components/destinations/destinations.css';
-import { Search, X, Compass, ArrowLeft } from 'lucide-react';
+import { Search, X, ArrowLeft } from 'lucide-react';
 
 const emptyFilters = { keyword: '', region: '' };
 function stopLabel(stop) {
@@ -299,7 +299,6 @@ export function DestinationDetailPage() {
                 {destination.descriptionVi && (
                   <section className="card bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-4">
                     <h2 className="text-lg sm:text-xl font-black text-[#253044] flex items-center gap-2">
-                      <Compass size={18} className="text-[#FF7A00]" />
                       <BilingualText vi="Khám phá điểm đến" en="Explore the destination" />
                     </h2>
                     <div className="rich-text text-sm sm:text-base text-[#253044] leading-relaxed" lang="vi" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
@@ -310,7 +309,6 @@ export function DestinationDetailPage() {
                 {destination.descriptionEn && (
                   <section className="card bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-4">
                     <h2 className="text-lg sm:text-xl font-black text-[#253044] flex items-center gap-2">
-                      <Compass size={18} className="text-[#FF7A00]" />
                       <BilingualText vi="Mô tả tiếng Anh" en="English description" />
                     </h2>
                     <div className="rich-text text-sm sm:text-base text-[#64748B] leading-relaxed" lang="en" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>

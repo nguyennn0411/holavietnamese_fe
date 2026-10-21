@@ -7,17 +7,7 @@ import { vocabularyService } from '@/services/vocabularyService';
 import { aiTutorService } from '@/services/aiTutorService';
 import { Breadcrumb, SpeakButton, Notice, EmptyState, Artwork } from '@/components/common/Ui';
 import { RichText } from '@/components/common/RichText';
-import {
-  Clock,
-  MapPin,
-  Bookmark,
-  MessageSquare,
-  ArrowRight,
-  ArrowLeft,
-  Volume2,
-  BookOpen,
-  Compass
-} from 'lucide-react';
+import { Clock, MapPin, ArrowLeft, Compass } from 'lucide-react';
 
 export function CultureDetailPage() {
   const { id } = useParams();
@@ -134,7 +124,6 @@ export function CultureDetailPage() {
             <section className="culture-phrases bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-5">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <BookOpen size={20} className="text-[#FF7A00]" />
                   <h2 className="text-lg sm:text-xl font-black text-[#253044]">
                     <BilingualText>{"Những cụm từ văn hóa hữu ích"}</BilingualText>
                   </h2>
@@ -169,7 +158,6 @@ export function CultureDetailPage() {
                         className="secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF] text-xs font-semibold shadow-xs transition-all"
                         onClick={() => save(phrase)}
                       >
-                        <Bookmark size={13} className="text-[#FF7A00]" />
                         <BilingualText>{"Lưu từ"}</BilingualText>
                       </button>
                     </div>
@@ -183,7 +171,6 @@ export function CultureDetailPage() {
           <div className="story-callout rounded-3xl bg-gradient-to-r from-[#FFF2D6] via-[#FFEEC9] to-[#FFF7E8] border border-[#FFCD00] p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="space-y-1 text-center sm:text-left">
               <h3 className="text-base sm:text-lg font-black text-[#253044] flex items-center justify-center sm:justify-start gap-2">
-                <BookOpen size={18} className="text-[#EA580C]" />
                 <BilingualText>{"Muốn tìm hiểu sâu hơn về câu chuyện này?"}</BilingualText>
               </h3>
               <p className="muted text-xs sm:text-sm text-[#64748B]">

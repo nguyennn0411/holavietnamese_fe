@@ -15,32 +15,7 @@ import { ContentImage } from '@/components/common/ContentImage';
 import { mediaSource } from '@/components/common/mediaSource';
 import { MediaPlayer } from './MediaPlayer';
 import alphabetData from '@/features/alphabet/alphabet.json';
-import {
-  MessageCircle,
-  BookOpen,
-  FileText,
-  CheckSquare,
-  Award,
-  Layers,
-  LayoutGrid,
-  Languages,
-  Volume2,
-  Bookmark,
-  CheckCircle2,
-  ArrowLeft,
-  ArrowRight,
-  RotateCcw,
-  Headphones,
-  Check,
-  Pause,
-  Play,
-  Lightbulb,
-  AlertCircle,
-  ZoomIn,
-  X,
-  Image as ImageIcon,
-  Maximize2
-} from 'lucide-react';
+import { MessageCircle, BookOpen, FileText, CheckSquare, Award, Layers, LayoutGrid, Languages, Bookmark, CheckCircle2, ArrowLeft, ArrowRight, RotateCcw, Headphones, Check, Pause, Play, Lightbulb, AlertCircle, ZoomIn, X } from 'lucide-react';
 
 const alphabetAudioBySymbol = new Map(
   alphabetData.letters.map(({ symbol, id }) => [symbol, `/media/alphabet/${id}.wav`])
@@ -457,7 +432,7 @@ function ActivityWorkspace({
           <div className="pt-3.5 mt-2 border-t border-[#E8E5DF]/40 space-y-2 text-stone-700 leading-relaxed">
             {(lesson.objectiveVi || lesson.objectiveEn) && (
               <div className="flex items-start gap-2">
-                <span className="font-bold text-[#EA580C] shrink-0">🎯 <BilingualText>{"Mục tiêu:"}</BilingualText></span>
+                <span className="font-bold text-[#EA580C] shrink-0"><BilingualText>{"Mục tiêu:"}</BilingualText></span>
                 <span className="font-medium text-[#253044]">
                   <BilingualText vi={lesson.objectiveVi} en={lesson.objectiveEn} />
                 </span>
@@ -742,9 +717,6 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
   if (type === 'QUIZ') {
     return (
       <div className="quiz-gate text-center py-10 px-4 space-y-4 bg-gradient-to-br from-[#FFF7E8] to-white rounded-2xl border border-[#E8E5DF]">
-        <span className="w-14 h-14 rounded-full bg-[#FFF2D6] text-[#FF7A00] inline-flex items-center justify-center mx-auto shadow-xs">
-          <Award size={28} />
-        </span>
         <h2 className="text-xl sm:text-2xl font-black text-[#253044]">
           <BilingualText>{"Nhìn xem bạn đã nói được gì!"}</BilingualText>
         </h2>
@@ -771,9 +743,6 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
   if (externalTypes.includes(type)) {
     return (
       <div className="quiz-gate text-center py-10 px-4 space-y-4 bg-gradient-to-br from-emerald-50 to-white rounded-2xl border border-emerald-200">
-        <span className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-800 inline-flex items-center justify-center mx-auto">
-          <MessageCircle size={28} />
-        </span>
         <h2 className="text-xl sm:text-2xl font-black text-[#253044]">
           <BilingualText>{"Đến lượt bạn luyện nói & trò chuyện"}</BilingualText>
         </h2>
@@ -853,7 +822,6 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
 
           {type === 'SOUND_PATTERN' && (
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold">
-              <BookOpen size={13} />
               <span>Mẫu vần & Quy tắc ghép âm</span>
             </div>
           )}
@@ -1710,7 +1678,6 @@ function GrammarRenderer({ activity = {}, content = {} }) {
                   Công thức cấu trúc:
                 </span>
                 <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FFF7E8] to-[#FFF2D6] border-2 border-[#FFCD00]/70 shadow-xs flex items-center gap-3">
-                  <BookOpen size={18} className="text-[#FF7A00] shrink-0" />
                   <span className="text-base sm:text-lg font-black text-[#253044] font-mono leading-snug">
                     {pattern}
                   </span>
