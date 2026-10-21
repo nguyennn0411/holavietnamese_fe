@@ -15,7 +15,7 @@ export function AppFooter() {
       <div className="site-footer__inner">
         {/* Brand & Mission column */}
         <div className="site-footer__about">
-          <Brand />
+          <Brand className="site-footer__brand" />
           <p className="site-footer__tagline">
             <BilingualText
               vi="Nền tảng học tiếng Việt tương tác số 1 dành cho người nước ngoài, kiều bào và người yêu văn hóa Việt Nam toàn cầu."

@@ -110,8 +110,31 @@ body .site-footer__about {
   align-items: flex-start !important;
   gap: 14px !important;
 }
-body .site-footer .site-brand {
+body .site-footer .site-brand,
+body .layout-shell.is-sidebar-collapsed .site-footer .site-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: auto !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  gap: 12px !important;
+  overflow: visible !important;
   color: #253044 !important;
+}
+body .site-footer .site-brand__logo,
+body .layout-shell.is-sidebar-collapsed .site-footer .site-brand__logo {
+  display: block !important;
+  height: 44px !important;
+  width: auto !important;
+  max-width: 180px !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+}
+body .site-footer .site-brand__icon,
+body .layout-shell.is-sidebar-collapsed .site-footer .site-brand__icon {
+  display: none !important;
 }
 body .site-footer .site-brand__mark {
   color: #FFFFFF !important;
