@@ -7,6 +7,7 @@ import { ContentImage } from '@/components/common/ContentImage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { DestinationRegion } from '@/components/destinations/DestinationMetadata';
 import { DestinationExploreContent } from '@/components/destinations/DestinationExploreContent';
+import { VietnamDiscoveryMap } from '@/components/destinations/VietnamDiscoveryMap';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { DESTINATION_REGIONS } from '@/models/Destination';
 import { destinationService } from '@/services/destinationService';
@@ -21,6 +22,7 @@ export function ExploreVietnamPage() {
   const viewerId = user?.id ?? user?.userId;
   const [query, setQuery] = useState(emptyFilters);
   const [keyword, setKeyword] = useState('');
+  const [activeDestinationId, setActiveDestinationId] = useState(null);
   const location = useLocation();
   const detailRoute = location.pathname === ROUTES.EXPLORE ? ROUTES.DESTINATION_DETAIL : ROUTES.LEARNER_DESTINATION_DETAIL;
   const resource = useAsyncResource(useCallback(async signal => {
@@ -167,29 +169,18 @@ export function ExploreVietnamPage() {
                   <p className="eyebrow text-xs font-bold text-[#EA580C] tracking-widest uppercase mb-2">
                     <BilingualText vi={`VIỆT NAM · ${destinations.length} điểm đến`} en={`VIETNAM · ${destinations.length} destinations`} />
                   </p>
-                  <img
-                    src="/design/vietnam-map.svg"
-                    alt="Bản đồ Việt Nam"
-                    className="max-h-[500px] w-full object-contain drop-shadow-md mx-auto my-4"
-                  />
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-serif text-[#253044] leading-snug">
-                      <BilingualText>Một đất nước để khám phá.</BilingualText>
-                      <br />
-                      <BilingualText>Một ngôn ngữ để sống cùng.</BilingualText>
-                    </h2>
-                    <p className="muted text-xs text-[#64748B] mt-2">
-                      <BilingualText>Mỗi điểm đến mang một từ mới, một hương vị mới và một góc nhìn mới.</BilingualText>
-                    </p>
-                  </div>
+                  <VietnamDiscoveryMap destinations={destinations} activeId={activeDestinationId}
+                    onActivate={setActiveDestinationId} detailRoute={detailRoute} />
                 </aside>
 
                 <div className="journey-stops space-y-4">
                   {destinations.map(destination => {
                     return <Link
-                      className="journey-stop group relative block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E8E5DF] hover:border-[#EA580C] shadow-xs hover:shadow-md transition-all text-decoration-none"
+                      className={`journey-stop group relative block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E8E5DF] hover:border-[#EA580C] shadow-xs hover:shadow-md transition-all text-decoration-none${activeDestinationId === destination.id ? ' is-map-active' : ''}`}
                       key={destination.id}
                       to={generatePath(detailRoute, { id: String(destination.id) })}
+                      onPointerEnter={event => { if (event.pointerType !== 'touch') setActiveDestinationId(destination.id); }}
+                      onFocus={() => setActiveDestinationId(destination.id)}
                     >
                       <span className="journey-dot" aria-hidden="true" />
                       <div className="journey-thumbnail rounded-xl overflow-hidden shadow-xs">
