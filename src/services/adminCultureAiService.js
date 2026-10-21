@@ -221,10 +221,11 @@ const INITIAL_SCENARIOS = [
 
 // Initial AI Settings
 const INITIAL_AI_SETTINGS = {
-  activeModel: 'gemini-1.5-flash',
+  activeModel: 'gpt-5-mini',
   allowedModels: [
-    { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash (Khuyên dùng - Nhanh, Tiết kiệm chi phí)', provider: 'Google', costPer1kTokens: 0.00035, isDefault: true },
-    { id: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro (Nâng cao - Suy luận sâu cho ngữ pháp & văn hóa)', provider: 'Google', costPer1kTokens: 0.0035, isDefault: false },
+    { id: 'gpt-5-mini', name: 'GPT-5 mini (Nhanh, phù hợp hội thoại)', provider: 'OpenAI', costPer1kTokens: 0.00225, isDefault: true },
+    { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash (Khuyên dùng - Nhanh, ổn định)', provider: 'Google', costPer1kTokens: 0.00035, isDefault: true },
+    { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro (Nâng cao - Suy luận sâu cho ngữ pháp & văn hóa)', provider: 'Google', costPer1kTokens: 0.0035, isDefault: false },
     { id: 'gpt-4o-mini', name: 'GPT-4o Mini (Đa ngôn ngữ phản xạ)', provider: 'OpenAI', costPer1kTokens: 0.0006, isDefault: false },
     { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet (Chính xác văn bản cao cấp)', provider: 'Anthropic', costPer1kTokens: 0.006, isDefault: false },
   ],

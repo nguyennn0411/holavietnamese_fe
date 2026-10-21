@@ -127,6 +127,43 @@ export const TUTOR_MODES = [
 
 const STORAGE_KEY = 'hola_ai_tutor_sessions_v1';
 const ACTIVE_SESSION_KEY = 'hola_ai_tutor_active_id_v1';
+const AI_PROVIDER = import.meta.env.VITE_AI_PROVIDER || 'openai';
+const AI_MODEL = import.meta.env.VITE_AI_MODEL || 'gpt-5-mini';
+const ALLOW_OFFLINE_AI_FALLBACK = import.meta.env.VITE_AI_ALLOW_OFFLINE_FALLBACK === 'true';
+
+// Backend deployments may wrap the payload in `result` or `data`, and older
+// AI handlers may call the generated text `content`, `answer`, or `reply`.
+// Normalize those shapes here so a valid BE response is not mistaken for a
+// failed request and replaced by the local demo engine.
+const unwrapAiPayload = (response) => response?.result ?? response?.data ?? response ?? {};
+
+const getAiText = (payload) => (
+  payload?.text
+  ?? payload?.content
+  ?? payload?.answer
+  ?? payload?.reply
+  ?? payload?.message?.text
+  ?? null
+);
+
+const normalizeAiPayload = (payload) => {
+  const rawText = payload?.text;
+  if (typeof rawText !== 'string') return payload;
+
+  const candidate = rawText.trim();
+  if (!(candidate.startsWith('{') && candidate.endsWith('}'))) return payload;
+
+  try {
+    const parsed = JSON.parse(candidate);
+    if (parsed && typeof parsed === 'object' && (parsed.text || parsed.content || parsed.answer || parsed.reply)) {
+      return { ...payload, ...parsed };
+    }
+  } catch {
+    // It is normal for a real text response to contain braces; keep it as-is.
+  }
+
+  return payload;
+};
 
 const normalizeText = (value = '') => value
   .toLocaleLowerCase('vi-VN')
@@ -352,14 +389,19 @@ export const aiTutorService = {
   async getAiStatus() {
     try {
       const res = await axiosClient.get('/api/ai/status', { timeout: 2500 });
-      return res?.result ?? res ?? { isLiveCall: false, activeModel: 'gemini-1.5-flash', apiKeyConfigured: false };
-    } catch {
-      return { isLiveCall: false, activeModel: 'gemini-1.5-flash', apiKeyConfigured: false };
+      return unwrapAiPayload(res);
+    } catch (error) {
+      console.warn('[AI Tutor] Không đọc được trạng thái AI từ backend:', error.message);
+      return { isLiveCall: false, provider: AI_PROVIDER, activeModel: AI_MODEL, apiKeyConfigured: false };
     }
   },
 
   async configureApiKey(apiKey) {
-    const res = await axiosClient.post('/api/ai/configure-key', { apiKey }, { timeout: 6000 });
+    const res = await axiosClient.post('/api/ai/configure-key', {
+      apiKey,
+      provider: AI_PROVIDER,
+      model: AI_MODEL,
+    }, { timeout: 6000 });
     return res?.result ?? res;
   },
 
@@ -492,17 +534,23 @@ export const aiTutorService = {
     try {
       const apiRes = await axiosClient.post(
         `/api/ai/sessions/${sessionId}/messages`,
-        { text: text.trim(), mode: currentMode },
-        { timeout: 12000 }
+        {
+          text: text.trim(),
+          mode: currentMode,
+          provider: AI_PROVIDER,
+          model: AI_MODEL,
+        },
+        { timeout: 30000 }
       );
 
-      const r = apiRes?.result ?? apiRes;
-      if (r?.text) {
+      const r = normalizeAiPayload(unwrapAiPayload(apiRes));
+      const aiText = getAiText(r);
+      if (aiText) {
         aiMsg = {
           id: r.id || `msg-${Date.now()}-ai`,
           sender: 'ai',
           mode: currentMode,
-          text: r.text,
+          text: aiText,
           translation: r.translation || null,
           explanation: r.explanation || null,
           nativeAlternative: r.nativeAlternative || null,
@@ -518,12 +566,22 @@ export const aiTutorService = {
         };
       }
     } catch (apiErr) {
-      // Fast and safe fallback to smart offline engine
-      console.info('Backend AI not responding in 3.5s or offline, using smart local engine:', apiErr.message);
+      // Keep the cause visible in DevTools instead of hiding a BE/API problem.
+      console.warn('[AI Tutor] Backend AI request failed:', {
+        status: apiErr.status,
+        code: apiErr.code,
+        message: apiErr.message,
+      });
     }
 
-    // 2. Intelligent local fallback if backend was unavailable
+    // 2. Do not silently present demo answers when the user has configured
+    // backend AI. The old behavior made Gemini failures look like a weak AI.
     if (!aiMsg) {
+      if (!ALLOW_OFFLINE_AI_FALLBACK) {
+        throw new Error('Backend AI không trả về câu trả lời hợp lệ. Hãy kiểm tra request /api/ai/sessions/{id}/messages trong DevTools.');
+      }
+
+      console.warn('[AI Tutor] Backend returned no usable text; using local engine because VITE_AI_ALLOW_OFFLINE_FALLBACK=true.');
       const aiResponseData = await this.generateResponse(text, currentMode, session.messages || []);
       aiMsg = {
         id: `msg-${Date.now()}-ai`,

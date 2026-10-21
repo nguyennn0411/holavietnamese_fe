@@ -32,7 +32,7 @@ export function AdminAiReviewsPage() {
     // Simulate backend test execution through admin evaluation pipeline
     setTimeout(() => {
       setIsTesting(false);
-      setTestOutput(`[AI Test Runner - v2.2.0-stable | Model: Gemini 1.5 Flash]
+      setTestOutput(`[AI Test Runner - v2.2.0-stable | Model: Gemini 2.5 Flash]
 ✓ Nhận diện vai trò: Cô Mai (Chủ quán phở Hà Nội)
 ✓ Phân tích câu thoại người học: "Dạ cho cháu một bát phở tái lăn, không cho hành lá nhé cô!"
 ✓ Kính ngữ: Rất chuẩn xác (Dạ... nhé cô)

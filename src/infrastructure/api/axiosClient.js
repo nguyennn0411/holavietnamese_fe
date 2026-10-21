@@ -52,9 +52,36 @@ const clearAuthStorage = () => {
 // RESPONSE interceptor: unwrap ApiResponse and centralize authentication failures
 axiosClient.interceptors.response.use(
   (response) => response.data,
-  (error) => {
+  async (error) => {
     const status = error.response?.status;
     const responseBody = error.response?.data;
+    const originalRequest = error.config;
+    const isPublic = PUBLIC_API_PREFIXES.some(prefix => originalRequest?.url?.startsWith(prefix));
+
+    // Access tokens may expire while the user is studying. Try the existing
+    // refresh endpoint once before forcing a logout. Without this, AI calls
+    // immediately became 401 even though the session could be refreshed.
+    if (status === 401 && !isPublic && !originalRequest?._retry) {
+      const currentToken = localStorage.getItem('token');
+      if (currentToken) {
+        originalRequest._retry = true;
+        try {
+          const refreshResponse = await axiosClient.post('/api/auth/refresh', { token: currentToken });
+          const refreshPayload = refreshResponse?.result ?? refreshResponse?.data ?? refreshResponse;
+          const refreshedToken = refreshPayload?.token ?? refreshPayload?.accessToken;
+
+          if (refreshedToken) {
+            localStorage.setItem('token', refreshedToken);
+            originalRequest.headers = originalRequest.headers || {};
+            originalRequest.headers.Authorization = `Bearer ${refreshedToken}`;
+            return axiosClient(originalRequest);
+          }
+        } catch (refreshError) {
+          console.warn('[Auth] Token refresh failed:', refreshError.message);
+        }
+      }
+    }
+
     if (status === 401) {
       const path = window.location.pathname;
       clearAuthStorage();

@@ -119,7 +119,7 @@ export function AiTutorPage() {
   const [speakingMessageId, setSpeakingMessageId] = useState(null);
   const [speechRate, setSpeechRate] = useState(0.95);
   const [copiedId, setCopiedId] = useState(null);
-  const [aiStatus, setAiStatus] = useState({ isLiveCall: false, activeModel: 'gemini-1.5-flash', apiKeyConfigured: false, apiKeyMasked: '' });
+  const [aiStatus, setAiStatus] = useState({ isLiveCall: false, provider: 'openai', activeModel: 'gpt-5-mini', apiKeyConfigured: false, apiKeyMasked: '' });
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [isConfiguringKey, setIsConfiguringKey] = useState(false);
@@ -157,7 +157,7 @@ export function AiTutorPage() {
     setIsConfiguringKey(true);
     try {
       const res = await aiTutorService.configureApiKey(apiKeyInput.trim());
-      showToast(res?.message || 'Đã lưu cấu hình Google Gemini API Key!');
+      showToast(res?.message || 'Đã lưu cấu hình OpenAI API Key!');
       const newStatus = await aiTutorService.getAiStatus();
       setAiStatus(newStatus);
       setShowKeyModal(false);
@@ -324,7 +324,7 @@ export function AiTutorPage() {
       audioFeedback.playPopSound(1.2);
     } catch (error) {
       console.error(error);
-      showToast('Không thể gửi tin nhắn. Vui lòng thử lại!');
+      showToast(error?.message || 'Không thể gửi tin nhắn. Vui lòng kiểm tra kết nối AI backend!');
     } finally {
       setIsSending(false);
     }
@@ -439,7 +439,7 @@ export function AiTutorPage() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {confirmationDialog}
 
-        {/* Modal cấu hình Google Gemini API Key */}
+        {/* Modal cấu hình OpenAI API Key */}
         <AnimatePresence>
           {showKeyModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
@@ -455,7 +455,7 @@ export function AiTutorPage() {
                       🤖
                     </span>
                     <div>
-                      <h3 className="text-sm font-black text-[#253044]">Cấu hình Google Gemini API</h3>
+                      <h3 className="text-sm font-black text-[#253044]">Cấu hình OpenAI API</h3>
                       <p className="text-[11px] text-[#64748B]">Kích hoạt LLM trực tiếp cho AI Tutor</p>
                     </div>
                   </div>
@@ -475,7 +475,7 @@ export function AiTutorPage() {
                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${
                         aiStatus.isLiveCall ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                       }`}>
-                        {aiStatus.isLiveCall ? '🟢 Live Gemini 1.5' : '⚡ Smart NLP Engine'}
+                        {aiStatus.isLiveCall ? `🟢 Live ${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : '⚡ Smart NLP Engine'}
                       </span>
                     </div>
                     {aiStatus.apiKeyMasked && (
@@ -488,17 +488,17 @@ export function AiTutorPage() {
                   <form onSubmit={handleSaveApiKey} className="space-y-3">
                     <div>
                       <label className="block text-xs font-bold text-[#253044] mb-1">
-                        Nhập Google Gemini API Key mới:
+                        Nhập OpenAI API Key mới:
                       </label>
                       <input
                         type="password"
-                        placeholder="AIzaSy..."
+                        placeholder="sk-..."
                         value={apiKeyInput}
                         onChange={(e) => setApiKeyInput(e.target.value)}
                         className="w-full px-3 py-2 rounded-xl bg-[#FFFCF7] border border-[#E8E5DF] text-xs font-mono text-[#253044] focus:outline-none focus:border-[#FF7A00]"
                       />
                       <p className="text-[10px] text-stone-400 mt-1">
-                        Khóa API được lưu an toàn trong database backend và kiểm tra trực tiếp với Google Gemini endpoint.
+                        Khóa API được lưu an toàn trong database backend và kiểm tra trực tiếp với OpenAI endpoint.
                       </p>
                     </div>
 
@@ -727,10 +727,10 @@ export function AiTutorPage() {
                       ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
                       : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
                   }`}
-                  title="Cấu hình Google Gemini API Key để kích hoạt Live AI trực tiếp"
+                  title="Cấu hình OpenAI API Key để kích hoạt Live AI trực tiếp"
                 >
                   <span className={`w-2 h-2 rounded-full ${aiStatus.isLiveCall ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-                  <span>{aiStatus.isLiveCall ? 'Gemini 1.5 Live' : 'Smart NLP Engine'}</span>
+                  <span>{aiStatus.isLiveCall ? `${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : 'Smart NLP Engine'}</span>
                   <Zap size={12} className={aiStatus.isLiveCall ? 'text-emerald-600' : 'text-amber-600'} />
                 </button>
 

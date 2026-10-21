@@ -124,7 +124,7 @@ export function AdminAiUsagePage() {
               />
             </div>
             <div style={{ marginTop: '12px', fontSize: '12.5px', color: 'var(--color-red-hover)', lineHeight: 1.5 }}>
-              💡 <em><BilingualText>{"Mẹo tối ưu:"}</BilingualText></em><BilingualText>{"Chế độ"}</BilingualText><strong>Gemini 1.5 Flash</strong><BilingualText>{"đang giúp giảm hơn 78% chi phí so với các mô hình tiêu chuẩn mà vẫn duy trì tốc độ phản hồi dưới 350ms."}</BilingualText></div>
+              💡 <em><BilingualText>{"Mẹo tối ưu:"}</BilingualText></em><BilingualText>{"Chế độ"}</BilingualText><strong>Gemini 2.5 Flash</strong><BilingualText>{"đang giúp giảm chi phí và duy trì tốc độ phản hồi thấp cho các cuộc hội thoại."}</BilingualText></div>
           </div>
 
           <div className="admin-card">
