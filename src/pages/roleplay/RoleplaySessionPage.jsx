@@ -40,7 +40,7 @@ export function RoleplaySessionPage() {
   const [playingMsgId, setPlayingMsgId] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
 
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const speechRecognitionRef = useRef(null);
 
   useEffect(() => {
@@ -51,7 +51,13 @@ export function RoleplaySessionPage() {
   }, [id]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: 'smooth',
+    });
   }, [session?.messages, isSending]);
 
   // Speech Recognition Setup
@@ -300,7 +306,10 @@ export function RoleplaySessionPage() {
           </div>
 
           {/* Messages Flow Area */}
-          <div className="flex-1 p-5 sm:p-6 overflow-y-auto max-h-[500px] min-h-[380px] space-y-4 bg-gradient-to-b from-[#FFFDF9] to-white">
+          <div
+            ref={messagesContainerRef}
+            className="flex-1 p-5 sm:p-6 overflow-y-auto max-h-[500px] min-h-[380px] space-y-4 bg-gradient-to-b from-[#FFFDF9] to-white"
+          >
             {session?.messages?.map((msg) => {
               const isAi = msg.sender === 'ai';
               const isTranslating = !!showTranslations[msg.id];
@@ -477,7 +486,6 @@ export function RoleplaySessionPage() {
               </div>
             )}
 
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Suggested Hints for User */}
@@ -519,14 +527,14 @@ export function RoleplaySessionPage() {
           </AnimatePresence>
 
           {/* User Input Console */}
-          <div className="p-4 sm:p-5 bg-white border-t border-[#EADCC7]">
-            <div className="flex items-end gap-2.5">
+          <div className="roleplay-input-console p-3 sm:p-4 bg-white border-t border-[#EADCC7]">
+            <div className="flex items-center gap-2.5">
               {/* Mic Speech Button */}
               <button
                 type="button"
                 onClick={handleToggleVoiceInput}
                 disabled={isSending}
-                className={`relative p-3 rounded-2xl transition-all shrink-0 ${
+                className={`relative h-11 w-11 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all shrink-0 ${
                   isListening
                     ? 'bg-[#DA251D] text-white shadow-lg ring-4 ring-[#DA251D]/25 animate-pulse'
                     : 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] hover:text-[#DA251D] border border-[#DECBB4]'
@@ -550,10 +558,10 @@ export function RoleplaySessionPage() {
                       handleSendMessage();
                     }
                   }}
-                  rows={2}
+                  rows={1}
                   disabled={isSending}
                   placeholder={`Nhập câu thoại tiếng Việt của bạn với ${scenario.aiRole.name}...`}
-                  className="w-full resize-none px-4 py-2.5 bg-[#FFF9EE] border border-[#DECBB4] focus:border-[#DA251D] focus:ring-2 focus:ring-[#DA251D]/10 rounded-2xl text-xs sm:text-sm text-[#202124] placeholder-[#78685B]/60 transition-all outline-hidden leading-relaxed"
+                  className="h-11 min-h-0 max-h-11 w-full resize-none px-4 py-2 bg-[#FFF9EE] border border-[#DECBB4] focus:border-[#DA251D] focus:ring-2 focus:ring-[#DA251D]/10 rounded-xl text-xs sm:text-sm text-[#202124] placeholder-[#78685B]/60 transition-all outline-hidden leading-relaxed"
                 />
                 <span className="absolute right-3 bottom-2 text-[10px] text-[#78685B]/70 hidden sm:inline">
                   Enter ↵ để gửi
@@ -565,7 +573,7 @@ export function RoleplaySessionPage() {
                 type="button"
                 onClick={() => handleSendMessage()}
                 disabled={!inputText.trim() || isSending}
-                className={`inline-flex items-center gap-1.5 px-4 sm:px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm shrink-0 transition-all ${
+                className={`inline-flex items-center justify-center gap-1.5 h-11 min-h-0 px-4 sm:px-5 rounded-xl font-bold text-xs sm:text-sm shrink-0 transition-all ${
                   inputText.trim() && !isSending
                     ? 'bg-[#DA251D] hover:bg-[#B71C1C] text-white shadow-md hover:shadow-lg'
                     : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'

@@ -33,14 +33,30 @@ import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { audioFeedback } from '@/utils/audioFeedback';
 import { TutorMascotAvatar } from '@/components/mascot';
 
+function getDisplayMessageText(value) {
+  if (typeof value !== 'string') return '';
+
+  const text = value.trim();
+  if (!(text.startsWith('{') && text.endsWith('}'))) return value;
+
+  try {
+    const parsed = JSON.parse(text);
+    const nestedText = parsed?.text ?? parsed?.content ?? parsed?.answer ?? parsed?.reply;
+    return typeof nestedText === 'string' ? nestedText : value;
+  } catch {
+    return value;
+  }
+}
+
 /**
  * FormattedMessageText - Renders markdown bold keywords, bullet points,
  * and code tags with rich EdTech styling.
  */
 function FormattedMessageText({ text, isAi }) {
-  if (!text) return null;
+  const displayText = getDisplayMessageText(text);
+  if (!displayText) return null;
 
-  const lines = text.split('\n');
+  const lines = displayText.split('\n');
 
   return (
     <div className="space-y-1.5 leading-relaxed text-xs sm:text-sm">
@@ -119,7 +135,7 @@ export function AiTutorPage() {
   const [speakingMessageId, setSpeakingMessageId] = useState(null);
   const [speechRate, setSpeechRate] = useState(0.95);
   const [copiedId, setCopiedId] = useState(null);
-  const [aiStatus, setAiStatus] = useState({ isLiveCall: false, provider: 'openrouter', activeModel: 'openrouter/free', apiKeyConfigured: false, apiKeyMasked: '' });
+  const [aiStatus, setAiStatus] = useState({ isLiveCall: false, provider: 'openai', activeModel: 'gpt-5-mini', apiKeyConfigured: false, apiKeyMasked: '' });
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [isConfiguringKey, setIsConfiguringKey] = useState(false);
@@ -136,15 +152,11 @@ export function AiTutorPage() {
   // Load sessions and AI status on mount
   useEffect(() => {
     const loadedSessions = aiTutorService.getAllSessions();
-    const activeId = aiTutorService.getActiveSessionId();
     setSessions(loadedSessions);
-    setActiveSessionId(activeId);
-
-    const active = loadedSessions.find((s) => s.id === activeId) || loadedSessions[0];
-    if (active) {
-      setCurrentSession(active);
-      setCurrentMode(active.mode || 'tutor');
-    }
+    // Start on the history picker instead of reopening the last conversation.
+    // The service still keeps the persisted active id for explicit selection.
+    setActiveSessionId('');
+    setCurrentSession(null);
 
     aiTutorService.getAiStatus().then((st) => {
       if (st) setAiStatus(st);
@@ -271,9 +283,8 @@ export function AiTutorPage() {
       audioFeedback.playPopSound(0.8);
       const remaining = aiTutorService.deleteSession(id);
       setSessions(remaining);
-      const newActiveId = aiTutorService.getActiveSessionId();
-      setActiveSessionId(newActiveId);
-      setCurrentSession(aiTutorService.getSession(newActiveId));
+      setActiveSessionId('');
+      setCurrentSession(null);
       showToast('Đã xóa hội thoại thành công.');
     }
   };
@@ -721,7 +732,7 @@ export function AiTutorPage() {
               <div className="flex items-center gap-2 shrink-0 self-end sm:self-center flex-wrap">
                 <button
                   type="button"
-                  onClick={() => setShowKeyModal(true)}
+                  onClick={() => showToast('AI Tutor đang dùng cấu hình API hệ thống từ backend.')}
                   className={`px-3 py-1 rounded-xl border text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer ${
                     aiStatus.isLiveCall
                       ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
@@ -750,27 +761,32 @@ export function AiTutorPage() {
               </div>
             </div>
 
-            {/* 7 Modes Horizontal Pill Carousel */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 scrollbar-none">
-              {modes.map((mode) => {
-                const isSelected = mode.id === currentMode;
-                return (
-                  <button
-                    key={mode.id}
-                    type="button"
-                    onClick={() => handleSwitchMode(mode.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#DA251D] text-white shadow-xs scale-102'
-                        : 'bg-white hover:bg-[#FAF8F5] text-[#202124] border border-[#DECBB4]/60'
-                    }`}
-                    title={bilingualLabel(mode.description)}
-                  >
-                    <span>{mode.icon}</span>
-                    <span>{mode.name}</span>
-                  </button>
-                );
-              })}
+            {/* Compact mode dropdown */}
+            <div className="tutor-mode-select-row">
+              <label className="tutor-mode-select-label" htmlFor="tutor-mode-select">
+                Chế độ học
+              </label>
+              <div className="tutor-mode-select-wrap">
+                <span className="tutor-mode-select-icon" aria-hidden="true">
+                  {activeModeConfig.icon}
+                </span>
+                <select
+                  id="tutor-mode-select"
+                  className="tutor-mode-select"
+                  value={currentMode}
+                  onChange={(event) => handleSwitchMode(event.target.value)}
+                  aria-label="Chọn chế độ AI Tutor"
+                >
+                  {modes.map((mode) => (
+                    <option key={mode.id} value={mode.id}>
+                      {mode.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <span className="tutor-mode-select-description">
+                {activeModeConfig.description}
+              </span>
             </div>
           </div>
 
@@ -779,7 +795,27 @@ export function AiTutorPage() {
             ref={chatContainerRef}
             className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-5 max-h-[520px] bg-gradient-to-b from-[#FAF8F5]/40 via-white to-[#FAF8F5]/40"
           >
-            {currentSession?.messages?.map((msg) => {
+            {!currentSession ? (
+              <div className="h-full min-h-[470px] flex flex-col items-center justify-center text-center px-6">
+                <div className="w-20 h-20 rounded-3xl bg-[#F5E1D8] border border-[#E7B59D] flex items-center justify-center text-4xl shadow-sm mb-4">
+                  💬
+                </div>
+                <h2 className="text-xl font-black text-[#202124] mb-2">
+                  Chọn một cuộc trò chuyện để bắt đầu
+                </h2>
+                <p className="max-w-md text-sm text-[#78685B] leading-relaxed mb-5">
+                  Chọn một phiên trong lịch sử bên trái hoặc tạo cuộc trò chuyện mới để luyện tiếng Việt cùng Hola AI Tutor.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => handleCreateNewChat(currentMode)}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#DA251D] hover:bg-[#89221E] text-white text-xs font-black shadow-sm transition-all cursor-pointer"
+                >
+                  <Plus size={15} strokeWidth={3} />
+                  Cuộc trò chuyện mới
+                </button>
+              </div>
+            ) : currentSession.messages?.map((msg) => {
               const isAi = msg.sender === 'ai';
               const isSpeaking = speakingMessageId === msg.id;
               const isCopied = copiedId === msg.id;
@@ -803,12 +839,21 @@ export function AiTutorPage() {
 
                   {/* Message Bubble Card */}
                   <div
-                    className={`max-w-[85%] sm:max-w-[78%] rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs text-xs sm:text-sm leading-relaxed ${
+                    className={`ai-tutor-message max-w-[85%] sm:max-w-[78%] rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs text-xs sm:text-sm leading-relaxed ${
                       isAi
-                        ? 'bg-white border border-[#DECBB4]/80 text-[#202124] rounded-tl-sm'
-                        : 'bg-gradient-to-r from-[#DA251D] to-[#89221E] text-white rounded-tr-sm shadow-md'
+                        ? 'ai-tutor-message--ai bg-white border border-[#DECBB4]/80 text-[#202124] rounded-tl-sm'
+                        : 'ai-tutor-message--user bg-gradient-to-r from-[#DA251D] to-[#89221E] text-white rounded-tr-sm shadow-md'
                     }`}
                   >
+                    {isAi && (
+                      <div className="ai-tutor-message__label">
+                        <Sparkles size={12} aria-hidden="true" />
+                        <span>Hola AI Tutor</span>
+                        <span className="ai-tutor-message__dot" aria-hidden="true" />
+                        <span>Trợ giảng tiếng Việt</span>
+                      </div>
+                    )}
+
                     {/* Message Body with rich Markdown formatting */}
                     <FormattedMessageText text={msg.text} isAi={isAi} />
 
@@ -897,7 +942,7 @@ export function AiTutorPage() {
                           {/* Speak Button */}
                           <button
                             type="button"
-                            onClick={() => handleSpeak(msg.id, msg.text)}
+                            onClick={() => handleSpeak(msg.id, getDisplayMessageText(msg.text))}
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                               isSpeaking
                                 ? 'bg-amber-100 text-amber-800 border border-amber-300'
@@ -936,7 +981,7 @@ export function AiTutorPage() {
                         {/* Copy Button */}
                         <button
                           type="button"
-                          onClick={() => handleCopy(msg.id, msg.text)}
+                          onClick={() => handleCopy(msg.id, getDisplayMessageText(msg.text))}
                           className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[#78685B] hover:text-[#202124] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
                           title="Sao chép nội dung tin nhắn"
                         >
@@ -1022,7 +1067,7 @@ export function AiTutorPage() {
               type="button"
               onClick={handleToggleVoiceInput}
               disabled={isSending}
-              className={`p-3 rounded-2xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+              className={`h-10 w-10 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
                 isListening
                   ? 'bg-red-600 text-white animate-pulse ring-4 ring-red-200'
                   : 'bg-[#FAF8F5] hover:bg-[#F5E1D8] text-[#DA251D] border border-[#DECBB4]'
@@ -1049,14 +1094,14 @@ export function AiTutorPage() {
               placeholder={bilingualLabel(activeModeConfig.placeholder)}
               rows={1}
               disabled={isSending || !currentSession}
-              className="flex-1 py-3 px-4 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4]/80 text-xs sm:text-sm text-[#202124] placeholder:text-[#78685B]/60 focus:outline-none focus:border-[#DA251D] focus:bg-white resize-none transition-all"
+              className="h-10 min-h-0 max-h-10 flex-1 py-2 px-4 rounded-xl bg-[#FAF8F5] border border-[#DECBB4]/80 text-xs sm:text-sm text-[#202124] placeholder:text-[#78685B]/60 focus:outline-none focus:border-[#DA251D] focus:bg-white resize-none transition-all"
             />
 
             {/* Send Button */}
             <button
               type="submit"
               disabled={!inputText.trim() || isSending || !currentSession}
-              className={`p-3 rounded-2xl flex items-center justify-center transition-all shrink-0 cursor-pointer ${
+              className={`h-10 w-10 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all shrink-0 cursor-pointer ${
                 inputText.trim() && !isSending && currentSession
                   ? 'bg-[#DA251D] hover:bg-[#89221E] text-white shadow-[0_3px_0_#89221E] active:translate-y-0.5 active:shadow-none'
                   : 'bg-stone-200 text-stone-400 cursor-not-allowed'

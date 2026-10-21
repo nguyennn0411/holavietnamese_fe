@@ -141,6 +141,20 @@ const AI_REQUEST_TIMEOUT_MS = Math.max(
 // failed request and replaced by the local demo engine.
 const unwrapAiPayload = (response) => response?.result ?? response?.data ?? response ?? {};
 
+const parseJsonTextPayload = (value) => {
+  if (typeof value !== 'string') return null;
+
+  const candidate = value.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  if (!(candidate.startsWith('{') && candidate.endsWith('}'))) return null;
+
+  try {
+    const parsed = JSON.parse(candidate);
+    return parsed && typeof parsed === 'object' ? parsed : null;
+  } catch {
+    return null;
+  }
+};
+
 const getAiText = (payload) => (
   payload?.text
   ?? payload?.content
@@ -155,19 +169,22 @@ const getAiText = (payload) => (
 );
 
 const normalizeAiPayload = (payload) => {
+  const directPayload = parseJsonTextPayload(payload);
+  if (directPayload) return normalizeAiPayload(directPayload);
+
   const rawText = getAiText(payload);
   if (typeof rawText !== 'string') return payload;
 
-  const candidate = rawText.trim();
-  if (!(candidate.startsWith('{') && candidate.endsWith('}'))) return payload;
-
-  try {
-    const parsed = JSON.parse(candidate);
-    if (parsed && typeof parsed === 'object' && (parsed.text || parsed.content || parsed.answer || parsed.reply)) {
-      return { ...payload, ...parsed };
-    }
-  } catch {
-    // It is normal for a real text response to contain braces; keep it as-is.
+  const parsedTextPayload = parseJsonTextPayload(rawText);
+  if (parsedTextPayload && (parsedTextPayload.text || parsedTextPayload.content || parsedTextPayload.answer || parsedTextPayload.reply)) {
+    return {
+      ...payload,
+      ...parsedTextPayload,
+      text: parsedTextPayload.text
+        || parsedTextPayload.content
+        || parsedTextPayload.answer
+        || parsedTextPayload.reply,
+    };
   }
 
   return payload;
