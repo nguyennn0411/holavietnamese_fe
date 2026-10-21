@@ -119,7 +119,7 @@ export function AiTutorPage() {
   const [speakingMessageId, setSpeakingMessageId] = useState(null);
   const [speechRate, setSpeechRate] = useState(0.95);
   const [copiedId, setCopiedId] = useState(null);
-  const [aiStatus, setAiStatus] = useState({ isLiveCall: false, provider: 'openai', activeModel: 'gpt-5-mini', apiKeyConfigured: false, apiKeyMasked: '' });
+  const [aiStatus, setAiStatus] = useState({ isLiveCall: false, provider: 'openrouter', activeModel: 'openrouter/free', apiKeyConfigured: false, apiKeyMasked: '' });
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [isConfiguringKey, setIsConfiguringKey] = useState(false);

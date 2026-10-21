@@ -130,6 +130,10 @@ const ACTIVE_SESSION_KEY = 'hola_ai_tutor_active_id_v1';
 const AI_PROVIDER = import.meta.env.VITE_AI_PROVIDER || 'openai';
 const AI_MODEL = import.meta.env.VITE_AI_MODEL || 'gpt-5-mini';
 const ALLOW_OFFLINE_AI_FALLBACK = import.meta.env.VITE_AI_ALLOW_OFFLINE_FALLBACK === 'true';
+const AI_REQUEST_TIMEOUT_MS = Math.max(
+  5000,
+  Number(import.meta.env.VITE_AI_REQUEST_TIMEOUT_MS) || 60000,
+);
 
 // Backend deployments may wrap the payload in `result` or `data`, and older
 // AI handlers may call the generated text `content`, `answer`, or `reply`.
@@ -143,11 +147,15 @@ const getAiText = (payload) => (
   ?? payload?.answer
   ?? payload?.reply
   ?? payload?.message?.text
+  ?? payload?.choices?.[0]?.message?.content
+  ?? payload?.choices?.[0]?.text
+  ?? payload?.output_text
+  ?? payload?.output?.[0]?.content?.[0]?.text
   ?? null
 );
 
 const normalizeAiPayload = (payload) => {
-  const rawText = payload?.text;
+  const rawText = getAiText(payload);
   if (typeof rawText !== 'string') return payload;
 
   const candidate = rawText.trim();
@@ -529,8 +537,10 @@ export const aiTutorService = {
     }
 
     let aiMsg = null;
+    let backendError = null;
 
-    // 1. Try real Backend AI API with fast timeout (3.5s)
+    // 1. Try the real Backend AI API. OpenRouter free models can take longer
+    // than a normal API request, so keep this configurable per environment.
     try {
       const apiRes = await axiosClient.post(
         `/api/ai/sessions/${sessionId}/messages`,
@@ -540,7 +550,7 @@ export const aiTutorService = {
           provider: AI_PROVIDER,
           model: AI_MODEL,
         },
-        { timeout: 30000 }
+        { timeout: AI_REQUEST_TIMEOUT_MS }
       );
 
       const r = normalizeAiPayload(unwrapAiPayload(apiRes));
@@ -566,11 +576,13 @@ export const aiTutorService = {
         };
       }
     } catch (apiErr) {
+      backendError = apiErr;
       // Keep the cause visible in DevTools instead of hiding a BE/API problem.
       console.warn('[AI Tutor] Backend AI request failed:', {
         status: apiErr.status,
         code: apiErr.code,
         message: apiErr.message,
+        details: apiErr.details,
       });
     }
 
@@ -578,6 +590,17 @@ export const aiTutorService = {
     // backend AI. The old behavior made Gemini failures look like a weak AI.
     if (!aiMsg) {
       if (!ALLOW_OFFLINE_AI_FALLBACK) {
+        if (backendError?.code === 'ECONNABORTED' || backendError?.message?.includes('timeout')) {
+          throw new Error(`Backend AI không phản hồi trong ${Math.round(AI_REQUEST_TIMEOUT_MS / 1000)} giây. Hãy kiểm tra log backend/OpenRouter hoặc thử lại sau.`);
+        }
+        if (backendError?.status) {
+          const statusLabel = backendError.status === 401
+            ? 'Bạn cần đăng nhập lại để sử dụng AI Tutor.'
+            : backendError.status === 403
+              ? 'Tài khoản hiện không có quyền sử dụng AI Tutor.'
+              : `Backend AI trả về HTTP ${backendError.status}.`;
+          throw new Error(`${statusLabel}${backendError.message ? ` ${backendError.message}` : ''}`);
+        }
         throw new Error('Backend AI không trả về câu trả lời hợp lệ. Hãy kiểm tra request /api/ai/sessions/{id}/messages trong DevTools.');
       }
 
