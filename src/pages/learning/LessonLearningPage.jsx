@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { learningService } from '@/services/learningService';
@@ -67,16 +67,16 @@ function LessonScreen({ courseId, lessonId }) {
         return (
           <div className="lesson-learning-screen w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
             {/* ===================== TOP HEADER BAR ===================== */}
-            <header className="relative sticky top-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-[#DECBB4] p-3.5 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden">
+            <header className="relative sticky top-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-3.5 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden">
               {/* Subtle top indicator during lesson transitions */}
               {isSwitchingLesson && (
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#DA251D] via-[#FFCD00] to-[#DA251D] animate-pulse z-50" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7A00] via-[#FFCD00] to-[#FF7A00] animate-pulse z-50" />
               )}
               {/* Bên trái: Nút quay lại & Tiêu đề bài học */}
               <div className="flex items-center gap-3 min-w-0">
                 <Link
                   to={`/courses/${courseId}`}
-                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#FFF9EE] hover:bg-[#FFF2D6] text-[#DA251D] text-xs font-bold border border-[#DECBB4]/60 transition-colors shrink-0 no-underline"
+                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF2D6] text-[#FF7A00] text-xs font-bold border border-[#E8E5DF]/60 transition-colors shrink-0 no-underline"
                   title="Quay lại khóa học"
                 >
                   <ArrowLeft size={14} />
@@ -87,10 +87,10 @@ function LessonScreen({ courseId, lessonId }) {
 
                 <div className="truncate">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#A62A24] font-bold text-[10px] uppercase shrink-0">
+                    <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-bold text-[10px] uppercase shrink-0">
                       Bài {lesson.lessonOrder || 1}
                     </span>
-                    <h1 className="text-sm sm:text-base font-black text-[#431914] truncate m-0">
+                    <h1 className="text-sm sm:text-base font-black text-[#253044] truncate m-0">
                       <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
                     </h1>
                   </div>
@@ -100,12 +100,12 @@ function LessonScreen({ courseId, lessonId }) {
               {/* Ở giữa / Phải: Tiến độ & Nút chức năng */}
               <div className="flex items-center justify-between md:justify-end gap-3 shrink-0">
                 {/* Thanh tiến độ tóm tắt */}
-                <div className="flex items-center gap-2 bg-[#FFF9EE] py-1.5 px-3 rounded-xl border border-[#DECBB4]/60 text-xs font-bold text-[#78685B]">
+                <div className="flex items-center gap-2 bg-[#FFF7E8] py-1.5 px-3 rounded-xl border border-[#E8E5DF]/60 text-xs font-bold text-[#64748B]">
                   <CheckCircle2 size={13} className="text-emerald-600" />
                   <span>{completedCount}/{totalCount} bài</span>
                   <div className="w-16 h-2 rounded-full bg-stone-200 overflow-hidden ml-1">
                     <div
-                      className="h-full bg-[#DA251D] rounded-full transition-all duration-300"
+                      className="h-full bg-[#FF7A00] rounded-full transition-all duration-300"
                       style={{ width: `${progressPercentage}%` }}
                     />
                   </div>
@@ -115,10 +115,10 @@ function LessonScreen({ courseId, lessonId }) {
                 <button
                   type="button"
                   onClick={() => setSavingWord(true)}
-                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 text-[#431914] border border-[#DECBB4] text-xs font-bold shadow-2xs transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 text-[#253044] border border-[#E8E5DF] text-xs font-bold shadow-2xs transition-colors cursor-pointer"
                   title="Thêm từ vựng mới vào sổ tay"
                 >
-                  <Bookmark size={13} className="text-[#DA251D]" />
+                  <Bookmark size={13} className="text-[#FF7A00]" />
                   <span className="hidden sm:inline">Lưu từ vựng</span>
                 </button>
 
@@ -129,7 +129,7 @@ function LessonScreen({ courseId, lessonId }) {
                   className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
                     sidebarOpen
                       ? 'bg-[#24382B] text-white border-[#24382B]'
-                      : 'bg-white hover:bg-stone-50 text-stone-700 border-[#DECBB4]'
+                      : 'bg-white hover:bg-stone-50 text-stone-700 border-[#E8E5DF]'
                   }`}
                   title={sidebarOpen ? 'Ẩn danh sách bài' : 'Hiện danh sách bài'}
                 >

@@ -1,19 +1,14 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
+﻿import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { motion } from 'motion/react';
 import {
   Search,
   X,
   Sparkles,
-  BookOpen,
-  ArrowRight,
   Play,
   Compass,
-  CheckCircle2,
   GraduationCap,
-  Layers,
-  Filter
 } from 'lucide-react';
 import { useCourses } from '@/hooks/useCourses';
 import { CourseCard } from '@/components/course/CourseCard';
@@ -27,14 +22,19 @@ const LEVEL_COLORS = {
   A2: 'bg-teal-500',
   B1: 'bg-amber-500',
   B2: 'bg-purple-500',
-  C1: 'bg-[#DA251D]',
+  C1: 'bg-[#FF7A00]',
 };
 
 export function CourseListPage() {
   const resource = useCourses();
+  const [searchParams] = useSearchParams();
+  const requestedLevel = searchParams.get('level')?.toUpperCase();
   const [search, setSearch] = useState('');
-  const [level, setLevel] = useState('all');
+  const [level, setLevel] = useState(() => (
+    requestedLevel && Object.hasOwn(LEVEL_COLORS, requestedLevel) ? requestedLevel : 'all'
+  ));
   const [statusFilter, setStatusFilter] = useState('all');
+  const isPlacementRecommendation = searchParams.get('recommended') === '1' && level !== 'all';
 
   const levelOptions = [
     { id: 'all', label: 'Tất cả trình độ', desc: 'Toàn bộ khóa học' },
@@ -49,22 +49,22 @@ export function CourseListPage() {
   return (
     <div className="courses-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Hero Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF9EE] via-[#F7F0E3] to-[#EEE3D1] border border-[#DECBB4] p-6 sm:p-10 shadow-sm">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none overflow-hidden hidden md:block select-none">
           <Artwork kind="dong-son" className="w-full h-full object-contain object-right" />
         </div>
 
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#A62A24] text-xs font-extrabold uppercase tracking-wider shadow-2xs">
-            <Sparkles size={14} className="text-[#DA251D]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-extrabold uppercase tracking-wider shadow-2xs">
+            <Sparkles size={14} className="text-[#FF7A00]" />
             <BilingualText>{"Lộ trình toàn diện • Standard Vietnamese Curriculum"}</BilingualText>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#431914] tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#253044] tracking-tight leading-tight">
             <BilingualText>{"Học tiếng Việt theo lộ trình bài bản"}</BilingualText>
           </h1>
 
-          <p className="text-sm sm:text-base text-[#78685B] leading-relaxed max-w-2xl">
+          <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
             <BilingualText>
               {"Tìm điểm bắt đầu của bạn. Từng bài học được thiết kế bám sát thực tế đời sống, ngữ pháp tự nhiên và văn hóa Việt Nam."}
             </BilingualText>
@@ -73,41 +73,54 @@ export function CourseListPage() {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
               to="/my-learning"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-black text-xs shadow-md hover:shadow-lg transition-all no-underline active:scale-95"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-xs shadow-md hover:shadow-lg transition-all no-underline active:scale-95"
             >
               <BilingualText>{"Góc học tập của tôi →"}</BilingualText>
             </Link>
 
             <Link
               to="/edtech/dashboard"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/90 hover:bg-white text-[#431914] border border-[#DECBB4] font-bold text-xs shadow-2xs transition-all hover:border-[#DA251D] no-underline active:scale-95"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/90 hover:bg-white text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-all hover:border-[#FF7A00] no-underline active:scale-95"
             >
-              <Compass size={15} className="text-[#DA251D]" />
+              <Compass size={15} className="text-[#FF7A00]" />
               <BilingualText>{"Lộ trình học tương tác (EdTech) →"}</BilingualText>
             </Link>
           </div>
         </div>
       </section>
 
+      {isPlacementRecommendation && (
+        <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/90 px-5 py-4 shadow-xs" role="status">
+          <div className="flex items-start gap-3">
+            <span className="grid place-items-center w-10 h-10 shrink-0 rounded-xl bg-emerald-700 text-white"><GraduationCap size={20} /></span>
+            <div>
+              <strong className="block text-sm text-emerald-950">Khóa học phù hợp với kết quả Entry Test</strong>
+              <span className="text-xs text-emerald-800">Kết quả của bạn phù hợp với trình độ {level}. Danh sách bên dưới đã được lọc tự động.</span>
+            </div>
+          </div>
+          <button type="button" className="inline-flex min-h-9 shrink-0 items-center justify-center rounded-xl border border-emerald-300 bg-white px-4 text-xs font-bold text-emerald-900 hover:bg-emerald-100" onClick={() => setLevel('all')}>Xem tất cả trình độ</button>
+        </section>
+      )}
+
       {/* Alphabet Entry Banner */}
       <Link
         to="/alphabet"
-        className="card alphabet-course-entry flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FFF9EE] to-[#F5E1D8] border border-[#DECBB4] hover:border-[#DA251D] shadow-2xs hover:shadow-md transition-all text-decoration-none group"
+        className="card alphabet-course-entry flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FFF7E8] to-[#FFF0DC] border border-[#E8E5DF] hover:border-[#FF7A00] shadow-2xs hover:shadow-md transition-all text-decoration-none group"
       >
         <div className="flex items-center gap-3.5">
-          <span className="w-11 h-11 rounded-2xl bg-[#DA251D] text-white flex items-center justify-center font-black text-lg shadow-sm group-hover:scale-105 transition-transform">
+          <span className="w-11 h-11 rounded-2xl bg-[#FF7A00] text-white flex items-center justify-center font-black text-lg shadow-sm group-hover:scale-105 transition-transform">
             Aa
           </span>
           <div>
-            <strong className="block text-sm sm:text-base font-black text-[#A62A24] group-hover:text-[#DA251D] transition-colors">
+            <strong className="block text-sm sm:text-base font-black text-[#EA580C] group-hover:text-[#FF7A00] transition-colors">
               Bảng chữ cái tiếng Việt & 6 Thanh điệu →
             </strong>
-            <span className="text-xs text-[#78685B] font-medium">
+            <span className="text-xs text-[#64748B] font-medium">
               29 chữ cái, ghép âm, thanh điệu đặc trưng · Tích hợp phát âm chuẩn giọng Bắc - Nam
             </span>
           </div>
         </div>
-        <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-black text-[#DA251D] group-hover:translate-x-1 transition-transform">
+        <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-black text-[#FF7A00] group-hover:translate-x-1 transition-transform">
           Học phát âm ngay →
         </span>
       </Link>
@@ -184,13 +197,13 @@ export function CourseListPage() {
           return (
             <div className="space-y-8">
               {/* Modern Filter Toolbar */}
-              <section className="bg-white/85 backdrop-blur-md rounded-2xl border border-[#DECBB4] p-4 sm:p-5 shadow-xs space-y-4">
+              <section className="bg-white/85 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-4 sm:p-5 shadow-xs space-y-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   {/* Search Bar */}
                   <div className="relative flex-1 max-w-md">
                     <Search
                       size={17}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78685B]"
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]"
                     />
                     <input
                       type="text"
@@ -198,13 +211,13 @@ export function CourseListPage() {
                       placeholder={bilingualLabel("Tìm khóa học theo tên hoặc nội dung…")}
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      className="w-full pl-10 pr-9 py-2.5 bg-[#FFF9EE] border border-[#DECBB4] focus:border-[#DA251D] focus:ring-2 focus:ring-[#DA251D]/10 rounded-xl text-xs sm:text-sm text-[#431914] placeholder-[#78685B]/60 transition-all outline-hidden"
+                      className="w-full pl-10 pr-9 py-2.5 bg-[#FFF7E8] border border-[#E8E5DF] focus:border-[#FF7A00] focus:ring-2 focus:ring-[#FF7A00]/10 rounded-xl text-xs sm:text-sm text-[#253044] placeholder-[#64748B]/60 transition-all outline-hidden"
                     />
                     {search && (
                       <button
                         type="button"
                         onClick={() => setSearch('')}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#78685B] hover:text-[#431914] p-1 cursor-pointer"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#253044] p-1 cursor-pointer"
                         aria-label="Xóa tìm kiếm"
                       >
                         <X size={15} />
@@ -212,8 +225,8 @@ export function CourseListPage() {
                     )}
                   </div>
 
-                  <div className="text-xs font-semibold text-[#78685B] flex items-center gap-1.5 self-end md:self-center">
-                    <GraduationCap size={15} className="text-[#DA251D]" />
+                  <div className="text-xs font-semibold text-[#64748B] flex items-center gap-1.5 self-end md:self-center">
+                    <GraduationCap size={15} className="text-[#FF7A00]" />
                     <span>
                       <BilingualText>{"Khám phá kho khóa học chuẩn CEFR"}</BilingualText>
                     </span>
@@ -222,7 +235,7 @@ export function CourseListPage() {
 
                 {/* Status Filter Tabs with Counts */}
                 <div
-                  className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-[#DECBB4]/40"
+                  className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-[#E8E5DF]/40"
                   role="tablist"
                   aria-label="Trạng thái học tập"
                 >
@@ -237,8 +250,8 @@ export function CourseListPage() {
                         onClick={() => setStatusFilter(opt.id)}
                         className={`flex-shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
                           isActive
-                            ? 'bg-[#431914] text-[#FFF9EE] shadow-xs'
-                            : 'text-[#78685B] hover:text-[#431914] hover:bg-[#F7F0E3]/70'
+                            ? 'bg-[#253044] text-[#FFF7E8] shadow-xs'
+                            : 'text-[#64748B] hover:text-[#253044] hover:bg-[#F7F0E3]/70'
                         }`}
                       >
                         <span>{opt.label}</span>
@@ -275,8 +288,8 @@ export function CourseListPage() {
                         onClick={() => setLevel(opt.id)}
                         className={`flex-shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 flex items-center gap-2 cursor-pointer ${
                           isActive
-                            ? 'bg-[#DA251D] text-white shadow-sm ring-1 ring-[#B71C1C]'
-                            : 'bg-[#FFF9EE] text-[#78685B] hover:text-[#431914] hover:bg-[#F7F0E3] border border-[#DECBB4]/70'
+                            ? 'bg-[#FF7A00] text-white shadow-sm ring-1 ring-[#EA580C]'
+                            : 'bg-[#FFF7E8] text-[#64748B] hover:text-[#253044] hover:bg-[#F7F0E3] border border-[#E8E5DF]/70'
                         }`}
                       >
                         {opt.id !== 'all' && (
@@ -298,7 +311,7 @@ export function CourseListPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="rounded-3xl bg-gradient-to-r from-[#24382B] via-[#2F4A39] to-[#3B5B47] text-[#FFF9EE] p-5 sm:p-7 shadow-md border border-[#24382B] flex flex-col sm:flex-row sm:items-center justify-between gap-5"
+                  className="rounded-3xl bg-gradient-to-r from-[#24382B] via-[#2F4A39] to-[#3B5B47] text-[#FFF7E8] p-5 sm:p-7 shadow-md border border-[#24382B] flex flex-col sm:flex-row sm:items-center justify-between gap-5"
                 >
                   <div className="space-y-1.5">
                     <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-[#EDF0E5] text-[#24382B] font-extrabold text-[11px] uppercase tracking-wider">
@@ -317,7 +330,7 @@ export function CourseListPage() {
 
                   <Link
                     to={`/learn/${enrolled[0].course.id}`}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#431914] font-black text-xs shadow-md transition-all self-start sm:self-center shrink-0 no-underline"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#253044] font-black text-xs shadow-md transition-all self-start sm:self-center shrink-0 no-underline"
                   >
                     <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>
                   </Link>
@@ -327,14 +340,14 @@ export function CourseListPage() {
               {/* Section Heading with Counter */}
               <div className="flex items-center justify-between pt-2">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-[#431914] tracking-tight m-0">
+                  <h2 className="text-xl sm:text-2xl font-black text-[#253044] tracking-tight m-0">
                     <BilingualText>{"Một thế giới để khám phá"}</BilingualText>
                   </h2>
-                  <p className="text-xs text-[#78685B] mt-0.5 m-0">
+                  <p className="text-xs text-[#64748B] mt-0.5 m-0">
                     <BilingualText>{"Danh sách các khóa học được biên soạn chuẩn khung năng lực"}</BilingualText>
                   </p>
                 </div>
-                <span className="px-3.5 py-1 rounded-full bg-[#FFF9EE] border border-[#DECBB4] text-xs font-black text-[#DA251D] shadow-2xs">
+                <span className="px-3.5 py-1 rounded-full bg-[#FFF7E8] border border-[#E8E5DF] text-xs font-black text-[#FF7A00] shadow-2xs">
                   {filtered.length} <BilingualText>{"khóa học"}</BilingualText>
                 </span>
               </div>
@@ -365,7 +378,7 @@ export function CourseListPage() {
                           setLevel('all');
                           setStatusFilter('all');
                         }}
-                        className="px-5 py-2.5 rounded-2xl bg-[#DA251D] text-white font-bold text-xs shadow-xs hover:bg-[#B71C1C] transition-all cursor-pointer"
+                        className="px-5 py-2.5 rounded-2xl bg-[#FF7A00] text-white font-bold text-xs shadow-xs hover:bg-[#EA580C] transition-all cursor-pointer"
                       >
                         <BilingualText>{"Đặt lại tất cả bộ lọc"}</BilingualText>
                       </button>

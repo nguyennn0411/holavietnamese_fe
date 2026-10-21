@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+﻿import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { moveItem } from './answerUtils';
 import { ContentImage } from '@/components/common/ContentImage';
 import { MediaPlayer } from './MediaPlayer';
@@ -44,8 +44,8 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
               }}
               className={`question-option group relative flex items-center gap-3.5 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 select-none ${
                 selected
-                  ? 'bg-[#FFF9EE] border-[#DA251D] shadow-md ring-2 ring-[#DA251D]/15 translate-y-[-1px]'
-                  : 'bg-white border-[#DECBB4]/80 hover:border-[#DA251D]/60 hover:bg-[#FFFDF9] shadow-2xs hover:shadow-xs'
+                  ? 'bg-[#FFF7E8] border-[#FF7A00] shadow-md ring-2 ring-[#FF7A00]/15 translate-y-[-1px]'
+                  : 'bg-white border-[#E8E5DF]/80 hover:border-[#FF7A00]/60 hover:bg-[#FFFDF9] shadow-2xs hover:shadow-xs'
               } ${disabled ? 'opacity-60 cursor-not-allowed' : 'active:scale-[0.99]'}`}
             >
               <input
@@ -61,8 +61,8 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
               <span
                 className={`option-letter w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm shrink-0 transition-all duration-200 ${
                   selected
-                    ? 'bg-[#DA251D] text-white shadow-2xs scale-105'
-                    : 'bg-[#FFF2D6] text-[#A62A24] border border-[#FFCD00]/40 group-hover:bg-[#DA251D]/10'
+                    ? 'bg-[#FF7A00] text-white shadow-2xs scale-105'
+                    : 'bg-[#FFF2D6] text-[#EA580C] border border-[#FFCD00]/40 group-hover:bg-[#FF7A00]/10'
                 }`}
               >
                 {selected ? (
@@ -79,7 +79,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
               {/* Option Text and Media */}
               <div className="question-option-content flex-1 min-w-0 space-y-2">
                 {option.imageUrl && (
-                  <div className="rounded-xl overflow-hidden border border-[#DECBB4]/60 max-h-40 bg-[#FFFDF9] flex items-center justify-center p-1.5 shadow-2xs">
+                  <div className="rounded-xl overflow-hidden border border-[#E8E5DF]/60 max-h-40 bg-[#FFFDF9] flex items-center justify-center p-1.5 shadow-2xs">
                     <ContentImage
                       className="option-image max-h-36 w-auto object-contain rounded-lg"
                       src={option.imageUrl}
@@ -88,7 +88,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
                   </div>
                 )}
 
-                <div className="text-sm sm:text-base font-bold text-[#431914] group-hover:text-[#DA251D] transition-colors leading-snug">
+                <div className="text-sm sm:text-base font-bold text-[#253044] group-hover:text-[#FF7A00] transition-colors leading-snug">
                   <BilingualText vi={option.textVi || option.text || option.textEn} en={option.textEn} />
                 </div>
 
@@ -103,7 +103,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
               {!isMulti && (
                 <span
                   className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-                    selected ? 'border-[#DA251D] bg-[#DA251D]' : 'border-stone-300 bg-white'
+                    selected ? 'border-[#FF7A00] bg-[#FF7A00]' : 'border-stone-300 bg-white'
                   }`}
                 >
                   {selected && <span className="w-2 h-2 rounded-full bg-white" />}
@@ -138,10 +138,10 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
       <div className="reorder-question space-y-5 my-4 max-w-3xl mx-auto">
         {/* Selected Word Sequence Tray */}
         <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-[#78685B] block">
+          <label className="text-xs font-bold uppercase tracking-wider text-[#64748B] block">
             <BilingualText>{"Câu của bạn (bấm vào từ để bỏ chọn):"}</BilingualText>
           </label>
-          <div className="reorder-answer min-h-[90px] p-4 rounded-2xl bg-[#FFF9EE] border-2 border-dashed border-[#DECBB4] flex flex-wrap gap-2.5 items-center transition-all">
+          <div className="reorder-answer min-h-[90px] p-4 rounded-2xl bg-[#FFF7E8] border-2 border-dashed border-[#E8E5DF] flex flex-wrap gap-2.5 items-center transition-all">
             {sequence.length > 0 ? (
               sequence.map((id, index) => {
                 const opt = options.find((o) => String(o.id) === String(id));
@@ -152,16 +152,16 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
                     type="button"
                     disabled={disabled}
                     onClick={() => handleRemoveWord(id)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white text-[#431914] font-bold text-sm shadow-xs border border-[#DECBB4] hover:border-[#DA251D] hover:bg-rose-50 hover:text-[#DA251D] transition-all cursor-pointer group active:scale-95"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white text-[#253044] font-bold text-sm shadow-xs border border-[#E8E5DF] hover:border-[#FF7A00] hover:bg-rose-50 hover:text-[#FF7A00] transition-all cursor-pointer group active:scale-95"
                     title="Bấm để loại bỏ"
                   >
                     <span>{text}</span>
-                    <X size={13} className="text-stone-400 group-hover:text-[#DA251D] transition-colors" />
+                    <X size={13} className="text-stone-400 group-hover:text-[#FF7A00] transition-colors" />
                   </button>
                 );
               })
             ) : (
-              <p className="text-xs text-[#78685B] italic m-auto text-center py-2">
+              <p className="text-xs text-[#64748B] italic m-auto text-center py-2">
                 <BilingualText>{"Chọn các từ bên dưới theo thứ tự đúng để ghép thành câu hoàn chỉnh."}</BilingualText>
               </p>
             )}
@@ -170,10 +170,10 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
 
         {/* Available Word Bank */}
         <div className="space-y-2">
-          <label className="text-xs font-bold uppercase tracking-wider text-[#78685B] block">
+          <label className="text-xs font-bold uppercase tracking-wider text-[#64748B] block">
             <BilingualText>{"Kho từ vựng có sẵn:"}</BilingualText>
           </label>
-          <div className="actions flex flex-wrap gap-2.5 p-3 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-2xs">
+          <div className="actions flex flex-wrap gap-2.5 p-3 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs">
             {unusedOptions.length > 0 ? (
               unusedOptions.map((opt) => (
                 <button
@@ -181,7 +181,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
                   type="button"
                   disabled={disabled}
                   onClick={() => handleAddWord(opt.id)}
-                  className="px-4 py-2.5 rounded-xl bg-[#FFF9EE] text-[#431914] hover:bg-[#FFF2D6] font-bold text-sm border border-[#DECBB4] hover:border-[#FFCD00] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
+                  className="px-4 py-2.5 rounded-xl bg-[#FFF7E8] text-[#253044] hover:bg-[#FFF2D6] font-bold text-sm border border-[#E8E5DF] hover:border-[#FFCD00] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
                 >
                   <BilingualText vi={opt.textVi || opt.text || opt.textEn} en={opt.textEn} />
                 </button>
@@ -206,7 +206,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
                   key={`ctrl-${id}-${index}`}
                   className="inline-flex items-center gap-1 bg-stone-100 px-2 py-1 rounded-lg border border-stone-200"
                 >
-                  <span className="font-bold text-[#A62A24] text-[11px] truncate max-w-[80px]">
+                  <span className="font-bold text-[#EA580C] text-[11px] truncate max-w-[80px]">
                     {index + 1}. {text}
                   </span>
                   <button
@@ -248,8 +248,8 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
         {targets.some((option) => option.imageUrl || option.audioUrl) && (
           <div className="matching-media-options grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
             {targets.map((option, index) => (
-              <div key={option.id} className="p-3.5 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4] space-y-2 shadow-2xs">
-                <strong className="block text-xs font-bold text-[#431914]">
+              <div key={option.id} className="p-3.5 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF] space-y-2 shadow-2xs">
+                <strong className="block text-xs font-bold text-[#253044]">
                   <BilingualText vi={option.textVi || option.text || option.textEn || `Lựa chọn ${index + 1}`} en={option.textEn} />
                 </strong>
                 <OptionMedia option={option} index={index} />
@@ -262,10 +262,10 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
           {sourceItems.map((option, index) => (
             <div
               key={option.id}
-              className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-white border border-[#DECBB4] shadow-2xs hover:border-[#FFCD00] transition-colors"
+              className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-white border border-[#E8E5DF] shadow-2xs hover:border-[#FFCD00] transition-colors"
             >
               <div className="space-y-1 min-w-0">
-                <span className="font-bold text-sm text-[#431914] block">
+                <span className="font-bold text-sm text-[#253044] block">
                   <BilingualText vi={option.textVi || option.text || option.textEn || `Mục ${index + 1}`} en={option.textEn} />
                 </span>
                 <OptionMedia option={option} index={index} />
@@ -280,7 +280,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
                       pairs: { ...(answer?.pairs || {}), [option.id]: event.target.value },
                     })
                   }
-                  className="w-full sm:w-60 py-2.5 px-3.5 rounded-xl bg-[#FFF9EE] border border-[#DECBB4] focus:border-[#DA251D] text-xs font-semibold text-[#431914] outline-none transition-all cursor-pointer"
+                  className="w-full sm:w-60 py-2.5 px-3.5 rounded-xl bg-[#FFF7E8] border border-[#E8E5DF] focus:border-[#FF7A00] text-xs font-semibold text-[#253044] outline-none transition-all cursor-pointer"
                 >
                   <option value="">{bilingualLabel("— Chọn cặp tương ứng —")}</option>
                   {targets
@@ -302,7 +302,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
   // 4. ĐIỀN TỪ / TỰ LUẬN (Fill in the blank / Free text answer)
   return (
     <div className="text-answer space-y-3 my-4 max-w-3xl mx-auto">
-      <label className="text-xs font-bold uppercase tracking-wider text-[#78685B] block">
+      <label className="text-xs font-bold uppercase tracking-wider text-[#64748B] block">
         <BilingualText>{"Nhập câu trả lời của bạn:"}</BilingualText>
       </label>
       <div className="relative">
@@ -312,10 +312,10 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
           value={typeof answer === 'string' ? answer : answer?.text || ''}
           onChange={(event) => onChange({ text: event.target.value })}
           placeholder={bilingualLabel("Gõ câu trả lời bằng tiếng Việt tại đây…")}
-          className="w-full p-4 rounded-2xl bg-[#FFFDF9] border border-[#DECBB4] focus:border-[#DA251D] focus:ring-2 focus:ring-[#DA251D]/15 text-sm sm:text-base font-semibold text-[#431914] placeholder-stone-400 outline-none transition-all vn-diacritic-safe"
+          className="w-full p-4 rounded-2xl bg-[#FFFDF9] border border-[#E8E5DF] focus:border-[#FF7A00] focus:ring-2 focus:ring-[#FF7A00]/15 text-sm sm:text-base font-semibold text-[#253044] placeholder-stone-400 outline-none transition-all vn-diacritic-safe"
         />
       </div>
-      <p className="text-[11px] text-[#78685B] italic">
+      <p className="text-[11px] text-[#64748B] italic">
         <BilingualText>{"Gợi ý: Chú ý dấu câu và thanh điệu tiếng Việt (Sắc, Huyền, Hỏi, Ngã, Nặng)."}</BilingualText>
       </p>
     </div>
@@ -327,7 +327,7 @@ function OptionMedia({ option, index }) {
   return (
     <div className="pt-1 space-y-1.5">
       {option.imageUrl && (
-        <div className="rounded-xl overflow-hidden border border-[#DECBB4]/60 max-h-36 bg-[#FFFDF9] p-1 flex items-center justify-center shadow-2xs">
+        <div className="rounded-xl overflow-hidden border border-[#E8E5DF]/60 max-h-36 bg-[#FFFDF9] p-1 flex items-center justify-center shadow-2xs">
           <ContentImage
             className="option-image max-h-32 w-auto object-contain rounded-lg"
             src={option.imageUrl}

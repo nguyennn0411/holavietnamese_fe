@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
@@ -165,7 +165,7 @@ export function RoleplaySessionPage() {
   const progressPercent = Math.round((completedCount / totalTasks) * 100);
 
   return (
-    <div className="relative min-h-screen bg-[#FFF9ED] text-[#202124] px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+    <div className="relative min-h-screen bg-[#FFF9ED] text-[#253044] px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
       {confirmationDialog}
 
       {/* Toast Notification */}
@@ -175,9 +175,9 @@ export function RoleplaySessionPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-[#202124] text-white text-xs sm:text-sm font-semibold rounded-2xl shadow-xl border border-white/10"
+            className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-white text-[#253044] text-xs sm:text-sm font-bold rounded-2xl shadow-xl border border-[#E8E5DF]"
           >
-            <Sparkles size={16} className="text-[#FFCD00]" />
+            <Sparkles size={16} className="text-[#F97316]" />
             <span>{toastMessage}</span>
           </motion.div>
         )}
@@ -189,7 +189,7 @@ export function RoleplaySessionPage() {
           <nav className="flex items-center gap-2 text-xs text-[#715A4F] mb-1.5">
             <Link
               to="/ai-scenarios"
-              className="inline-flex items-center gap-1 font-semibold text-[#DA251D] hover:underline transition-colors"
+              className="inline-flex items-center gap-1 font-semibold text-[#FF7A00] hover:underline transition-colors"
             >
               <ArrowLeft size={13} />
               <BilingualText>{"Thoát kịch bản"}</BilingualText>
@@ -201,13 +201,13 @@ export function RoleplaySessionPage() {
           </nav>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <h1 className="text-xl sm:text-2xl font-black text-[#202124] tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black text-[#253044] tracking-tight">
               <BilingualText
                 vi={<>Phiên Roleplay: {scenario.titleVi || scenario.title}</>}
                 en={<>Roleplay session: {scenario.title}</>}
               />
             </h1>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#DA251D]/10 text-[#DA251D] text-[11px] font-bold">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FF7A00]/10 text-[#FF7A00] text-[11px] font-bold">
               {scenario.level || 'A1 - A2'}
             </span>
           </div>
@@ -216,15 +216,15 @@ export function RoleplaySessionPage() {
         {/* Speed & Global Actions */}
         <div className="flex flex-wrap items-center gap-2.5 self-start md:self-auto">
           {/* Audio speed pill */}
-          <div className="flex items-center bg-white border border-[#DECBB4] rounded-xl p-1 shadow-xs text-xs font-semibold">
-            <span className="px-2 text-[#78685B] text-[11px]">Tốc độ đọc:</span>
+          <div className="flex items-center bg-white border border-[#E8E5DF] rounded-xl p-1 shadow-xs text-xs font-semibold">
+            <span className="px-2 text-[#64748B] text-[11px]">Tốc độ đọc:</span>
             <button
               type="button"
               onClick={() => setSpeechRate(0.7)}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 speechRate === 0.7
-                  ? 'bg-[#DA251D] text-white font-bold shadow-xs'
-                  : 'text-[#431914] hover:bg-[#FFF9ED]'
+                  ? 'bg-[#FF7A00] text-white font-bold shadow-xs'
+                  : 'text-[#253044] hover:bg-[#FFF9ED]'
               }`}
             >
               0.7x Chậm
@@ -234,8 +234,8 @@ export function RoleplaySessionPage() {
               onClick={() => setSpeechRate(0.95)}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 speechRate >= 0.9
-                  ? 'bg-[#DA251D] text-white font-bold shadow-xs'
-                  : 'text-[#431914] hover:bg-[#FFF9ED]'
+                  ? 'bg-[#FF7A00] text-white font-bold shadow-xs'
+                  : 'text-[#253044] hover:bg-[#FFF9ED]'
               }`}
             >
               1.0x Chuẩn
@@ -244,7 +244,7 @@ export function RoleplaySessionPage() {
 
           <button
             onClick={handleResetSession}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF4E0] text-[#715A4F] hover:text-[#202124] border border-[#DECBB4] font-semibold text-xs shadow-xs transition-all"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF4E0] text-[#715A4F] hover:text-[#253044] border border-[#E8E5DF] font-semibold text-xs shadow-xs transition-all"
           >
             <RotateCcw size={13} />
             <BilingualText>{"Bắt đầu lại"}</BilingualText>
@@ -252,9 +252,9 @@ export function RoleplaySessionPage() {
 
           <button
             onClick={handleFinishSession}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#202124] hover:bg-[#333] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#F97316] hover:bg-[#C2410C] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all"
           >
-            <Award size={14} className="text-[#FFCD00]" />
+            <Award size={14} className="text-[#FDE1B3]" />
             <BilingualText>{"Kết thúc & Xem kết quả"}</BilingualText>
           </button>
         </div>
@@ -263,9 +263,9 @@ export function RoleplaySessionPage() {
       {/* 2-Column Live Roleplay Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Main Dialogue Chat Window (Col 8) */}
-        <main className="lg:col-span-8 flex flex-col bg-white rounded-3xl border border-[#DECBB4] shadow-md overflow-hidden min-h-[620px]">
+        <main className="lg:col-span-8 flex flex-col bg-white rounded-3xl border border-[#E8E5DF] shadow-md overflow-hidden min-h-[620px]">
           {/* Partner Status Header */}
-          <div className="px-5 py-4 bg-gradient-to-r from-[#FFF9EE] to-white border-b border-[#EADCC7] flex items-center justify-between gap-4">
+          <div className="px-5 py-4 bg-gradient-to-r from-[#FFF7E8] to-white border-b border-[#EADCC7] flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="relative w-11 h-11 rounded-2xl bg-[#FFF2D6] border-2 border-[#FFCD00] flex items-center justify-center text-2xl shadow-xs">
                 {scenario.aiRole.avatar}
@@ -273,10 +273,10 @@ export function RoleplaySessionPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-black text-[#202124] leading-tight">
+                  <h3 className="text-sm font-black text-[#253044] leading-tight">
                     {scenario.aiRole.name}
                   </h3>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#DA251D]/10 text-[#DA251D]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#FF7A00]/10 text-[#FF7A00]">
                     AI Partner
                   </span>
                 </div>
@@ -290,11 +290,11 @@ export function RoleplaySessionPage() {
               onClick={() => setShowHints(!showHints)}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
                 showHints
-                  ? 'bg-[#FFF2D6] text-[#A62A24] border-[#FFCD00]'
-                  : 'bg-white text-[#715A4F] border-[#DECBB4] hover:bg-[#FFF9EE]'
+                  ? 'bg-[#FFF2D6] text-[#EA580C] border-[#FFCD00]'
+                  : 'bg-white text-[#715A4F] border-[#E8E5DF] hover:bg-[#FFF7E8]'
               }`}
             >
-              <Lightbulb size={14} className={showHints ? 'text-[#DA251D]' : 'text-[#715A4F]'} />
+              <Lightbulb size={14} className={showHints ? 'text-[#FF7A00]' : 'text-[#715A4F]'} />
               <BilingualText>{showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'}</BilingualText>
             </button>
           </div>
@@ -321,24 +321,24 @@ export function RoleplaySessionPage() {
                   <div
                     className={`max-w-[85%] sm:max-w-[78%] rounded-2xl p-4 shadow-xs transition-all ${
                       isAi
-                        ? 'bg-white border border-[#E8DCCF] text-[#202124]'
-                        : 'bg-gradient-to-br from-[#DA251D] to-[#B71C1C] text-white shadow-sm'
+                        ? 'bg-white border border-[#E8DCCF] text-[#253044]'
+                        : 'bg-gradient-to-br from-[#FF7A00] to-[#EA580C] text-white shadow-sm'
                     }`}
                   >
                     {/* Header sender label */}
                     <div
                       className={`text-[11px] font-bold mb-1.5 flex items-center justify-between gap-2 ${
-                        isAi ? 'text-[#DA251D]' : 'text-white/80'
+                        isAi ? 'text-[#FF7A00]' : 'text-white/80'
                       }`}
                     >
                       <span>
                         <BilingualText>{isAi ? scenario.aiRole.name : 'Bạn (Learner)'}</BilingualText>
                       </span>
                       {isPlayingThis && (
-                        <span className="flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-[#DA251D]/10 text-[#DA251D] text-[10px] font-bold animate-pulse">
-                          <span className="w-1 h-2 bg-[#DA251D] rounded-full animate-bounce" />
-                          <span className="w-1 h-3.5 bg-[#DA251D] rounded-full animate-bounce delay-100" />
-                          <span className="w-1 h-2 bg-[#DA251D] rounded-full animate-bounce delay-200" />
+                        <span className="flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-[#FF7A00]/10 text-[#FF7A00] text-[10px] font-bold animate-pulse">
+                          <span className="w-1 h-2 bg-[#FF7A00] rounded-full animate-bounce" />
+                          <span className="w-1 h-3.5 bg-[#FF7A00] rounded-full animate-bounce delay-100" />
+                          <span className="w-1 h-2 bg-[#FF7A00] rounded-full animate-bounce delay-200" />
                           <span className="ml-1">Đang đọc</span>
                         </span>
                       )}
@@ -356,7 +356,7 @@ export function RoleplaySessionPage() {
                         animate={{ opacity: 1, height: 'auto' }}
                         className={`mt-2.5 p-2.5 rounded-xl text-xs sm:text-sm border ${
                           isAi
-                            ? 'bg-[#FFF9EE] border-[#FFCD00]/50 text-[#5B3E31]'
+                            ? 'bg-[#FFF7E8] border-[#FFCD00]/50 text-[#5B3E31]'
                             : 'bg-white/15 border-white/20 text-white'
                         }`}
                       >
@@ -398,12 +398,12 @@ export function RoleplaySessionPage() {
                         onClick={() => handleSpeak(msg.text, msg.id)}
                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                           isAi
-                            ? 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] hover:text-[#DA251D] border border-[#E8DCCF]'
+                            ? 'bg-[#FFF7E8] hover:bg-[#FFEEC9] text-[#715A4F] hover:text-[#FF7A00] border border-[#E8DCCF]'
                             : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
                         }`}
                         title="Nghe phát âm chuẩn"
                       >
-                        <Volume2 size={13} className={isPlayingThis ? 'text-[#DA251D] animate-spin' : ''} />
+                        <Volume2 size={13} className={isPlayingThis ? 'text-[#FF7A00] animate-spin' : ''} />
                         <BilingualText>{"Nghe"}</BilingualText>
                       </button>
 
@@ -414,10 +414,10 @@ export function RoleplaySessionPage() {
                           className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                             isAi
                               ? isTranslating
-                                ? 'bg-[#DA251D] text-white'
-                                : 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] border border-[#E8DCCF]'
+                                ? 'bg-[#FF7A00] text-white'
+                                : 'bg-[#FFF7E8] hover:bg-[#FFEEC9] text-[#715A4F] border border-[#E8DCCF]'
                               : isTranslating
-                              ? 'bg-white text-[#DA251D]'
+                              ? 'bg-white text-[#FF7A00]'
                               : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
                           }`}
                           title="Dịch câu nói sang tiếng Anh"
@@ -435,7 +435,7 @@ export function RoleplaySessionPage() {
                             isAi
                               ? isExplaining
                                 ? 'bg-[#24382B] text-white'
-                                : 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] border border-[#E8DCCF]'
+                                : 'bg-[#FFF7E8] hover:bg-[#FFEEC9] text-[#715A4F] border border-[#E8DCCF]'
                               : isExplaining
                               ? 'bg-white text-[#24382B]'
                               : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
@@ -450,7 +450,7 @@ export function RoleplaySessionPage() {
                   </div>
 
                   {!isAi && (
-                    <div className="w-9 h-9 rounded-xl bg-[#DA251D] text-white flex items-center justify-center text-sm font-bold shrink-0 shadow-xs">
+                    <div className="w-9 h-9 rounded-xl bg-[#FF7A00] text-white flex items-center justify-center text-sm font-bold shrink-0 shadow-xs">
                       👤
                     </div>
                   )}
@@ -467,9 +467,9 @@ export function RoleplaySessionPage() {
                 <div className="bg-white border border-[#E8DCCF] rounded-2xl px-4 py-3 shadow-xs">
                   <div className="flex items-center gap-2 text-xs font-semibold text-[#715A4F]">
                     <div className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-[#DA251D] animate-ping" />
-                      <span className="w-2 h-2 rounded-full bg-[#DA251D] animate-ping delay-150" />
-                      <span className="w-2 h-2 rounded-full bg-[#DA251D] animate-ping delay-300" />
+                      <span className="w-2 h-2 rounded-full bg-[#FF7A00] animate-ping" />
+                      <span className="w-2 h-2 rounded-full bg-[#FF7A00] animate-ping delay-150" />
+                      <span className="w-2 h-2 rounded-full bg-[#FF7A00] animate-ping delay-300" />
                     </div>
                     <span>{scenario.aiRole.name} đang suy nghĩ câu trả lời...</span>
                   </div>
@@ -487,14 +487,14 @@ export function RoleplaySessionPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="px-5 py-3.5 bg-[#FFF9EE] border-t border-[#EADCC7] space-y-2"
+                className="px-5 py-3.5 bg-[#FFF7E8] border-t border-[#EADCC7] space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#A62A24] uppercase tracking-wider">
-                    <Lightbulb size={13} className="text-[#DA251D]" />
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#EA580C] uppercase tracking-wider">
+                    <Lightbulb size={13} className="text-[#FF7A00]" />
                     <BilingualText>{"Gợi ý câu trả lời tự nhiên (Bấm để gửi ngay):"}</BilingualText>
                   </div>
-                  <span className="text-[10px] text-[#78685B]">Chạm 1 lần để nói</span>
+                  <span className="text-[10px] text-[#64748B]">Chạm 1 lần để nói</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -503,9 +503,9 @@ export function RoleplaySessionPage() {
                       key={idx}
                       onClick={() => handleSendMessage(sug.text)}
                       disabled={isSending}
-                      className="group flex flex-col text-left p-2.5 rounded-xl bg-white hover:bg-[#FFF2D6] border border-[#DECBB4] hover:border-[#FFCD00] shadow-xs hover:shadow-sm transition-all"
+                      className="group flex flex-col text-left p-2.5 rounded-xl bg-white hover:bg-[#FFF2D6] border border-[#E8E5DF] hover:border-[#FFCD00] shadow-xs hover:shadow-sm transition-all"
                     >
-                      <span className="text-xs font-bold text-[#202124] group-hover:text-[#DA251D] transition-colors leading-tight">
+                      <span className="text-xs font-bold text-[#253044] group-hover:text-[#FF7A00] transition-colors leading-tight">
                         "{sug.text}"
                       </span>
                       <span className="text-[11px] text-[#715A4F] italic mt-0.5 line-clamp-1">
@@ -528,8 +528,8 @@ export function RoleplaySessionPage() {
                 disabled={isSending}
                 className={`relative p-3 rounded-2xl transition-all shrink-0 ${
                   isListening
-                    ? 'bg-[#DA251D] text-white shadow-lg ring-4 ring-[#DA251D]/25 animate-pulse'
-                    : 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] hover:text-[#DA251D] border border-[#DECBB4]'
+                    ? 'bg-[#FF7A00] text-white shadow-lg ring-4 ring-[#FF7A00]/25 animate-pulse'
+                    : 'bg-[#FFF7E8] hover:bg-[#FFEEC9] text-[#715A4F] hover:text-[#FF7A00] border border-[#E8E5DF]'
                 }`}
                 title={isListening ? 'Đang nghe giọng nói... Bấm để dừng' : 'Bấm để nói tiếng Việt (Microphone)'}
               >
@@ -553,9 +553,9 @@ export function RoleplaySessionPage() {
                   rows={2}
                   disabled={isSending}
                   placeholder={`Nhập câu thoại tiếng Việt của bạn với ${scenario.aiRole.name}...`}
-                  className="w-full resize-none px-4 py-2.5 bg-[#FFF9EE] border border-[#DECBB4] focus:border-[#DA251D] focus:ring-2 focus:ring-[#DA251D]/10 rounded-2xl text-xs sm:text-sm text-[#202124] placeholder-[#78685B]/60 transition-all outline-hidden leading-relaxed"
+                  className="w-full resize-none px-4 py-2.5 bg-[#FFF7E8] border border-[#E8E5DF] focus:border-[#FF7A00] focus:ring-2 focus:ring-[#FF7A00]/10 rounded-2xl text-xs sm:text-sm text-[#253044] placeholder-[#64748B]/60 transition-all outline-hidden leading-relaxed"
                 />
-                <span className="absolute right-3 bottom-2 text-[10px] text-[#78685B]/70 hidden sm:inline">
+                <span className="absolute right-3 bottom-2 text-[10px] text-[#64748B]/70 hidden sm:inline">
                   Enter ↵ để gửi
                 </span>
               </div>
@@ -567,7 +567,7 @@ export function RoleplaySessionPage() {
                 disabled={!inputText.trim() || isSending}
                 className={`inline-flex items-center gap-1.5 px-4 sm:px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm shrink-0 transition-all ${
                   inputText.trim() && !isSending
-                    ? 'bg-[#DA251D] hover:bg-[#B71C1C] text-white shadow-md hover:shadow-lg'
+                    ? 'bg-[#FF7A00] hover:bg-[#EA580C] text-white shadow-md hover:shadow-lg'
                     : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
                 }`}
               >
@@ -581,24 +581,24 @@ export function RoleplaySessionPage() {
         {/* Right Mission Sidebar (Col 4) */}
         <aside className="lg:col-span-4 space-y-4">
           {/* Mission Progress Card */}
-          <div className="bg-white rounded-3xl border border-[#DECBB4] p-5 sm:p-6 shadow-sm space-y-4">
+          <div className="bg-white rounded-3xl border border-[#E8E5DF] p-5 sm:p-6 shadow-sm space-y-4">
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-[#DA251D] uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-[#FF7A00] uppercase tracking-wider">
                   <BilingualText>{"Tiến độ kịch bản"}</BilingualText>
                 </span>
-                <span className="text-xs font-bold text-[#202124]">
+                <span className="text-xs font-bold text-[#253044]">
                   {completedCount}/{totalTasks} mục tiêu ({progressPercent}%)
                 </span>
               </div>
-              <h3 className="text-base font-black text-[#202124] tracking-tight">
+              <h3 className="text-base font-black text-[#253044] tracking-tight">
                 <BilingualText>{"Mục tiêu đối thoại"}</BilingualText>
               </h3>
 
               {/* Progress bar */}
               <div className="w-full h-2 rounded-full bg-[#EADCC7] overflow-hidden mt-2.5">
                 <div
-                  className="h-full bg-gradient-to-r from-[#DA251D] to-[#FFCD00] rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-[#FF7A00] to-[#FFCD00] rounded-full transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -614,14 +614,14 @@ export function RoleplaySessionPage() {
                     className={`flex items-start gap-3 p-3 rounded-2xl border transition-all ${
                       isDone
                         ? 'bg-[#F2F7F2] border-[#C3DEC3] text-[#24382B]'
-                        : 'bg-[#FFF9EE] border-[#DECBB4] text-[#4A3B32]'
+                        : 'bg-[#FFF7E8] border-[#E8E5DF] text-[#4A3B32]'
                     }`}
                   >
                     <span
                       className={`w-6 h-6 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${
                         isDone
                           ? 'bg-emerald-600 text-white shadow-xs'
-                          : 'bg-white border border-[#DECBB4] text-[#715A4F]'
+                          : 'bg-white border border-[#E8E5DF] text-[#715A4F]'
                       }`}
                     >
                       {isDone ? '✓' : idx + 1}
@@ -644,15 +644,15 @@ export function RoleplaySessionPage() {
           </div>
 
           {/* Roleplay Persona Card */}
-          <div className="bg-gradient-to-br from-[#FFF9EE] to-[#FFF2D6] rounded-3xl border border-[#FFCD00]/50 p-5 shadow-xs space-y-2.5">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#A62A24]">
+          <div className="bg-gradient-to-br from-[#FFF7E8] to-[#FFF2D6] rounded-3xl border border-[#FFCD00]/50 p-5 shadow-xs space-y-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#EA580C]">
               <span>🎭</span>
               <BilingualText>{"Nhắc nhở vai diễn của bạn:"}</BilingualText>
             </div>
 
             <div className="text-xs text-[#5B3E31] leading-relaxed">
               <BilingualText>{"Bạn đang đóng vai:"}</BilingualText>{' '}
-              <strong className="text-[#DA251D] font-bold">{scenario.learnerRole?.role || 'Du khách'}</strong>.
+              <strong className="text-[#FF7A00] font-bold">{scenario.learnerRole?.role || 'Du khách'}</strong>.
               <p className="mt-1">
                 <BilingualText>
                   {"Hãy xưng hô tự nhiên và dùng kính ngữ lịch sự như \"Dạ\", \"ạ\", \"cho em hỏi\" để ghi điểm tối đa nhé!"}
@@ -665,7 +665,7 @@ export function RoleplaySessionPage() {
           <button
             type="button"
             onClick={handleFinishSession}
-            className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#DA251D] to-[#B71C1C] hover:from-[#B71C1C] hover:to-[#8B1414] text-white font-black text-sm shadow-md hover:shadow-xl transition-all"
+            className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#EA580C] hover:from-[#EA580C] hover:to-[#8B1414] text-white font-black text-sm shadow-md hover:shadow-xl transition-all"
           >
             <Award size={16} className="text-[#FFCD00]" />
             <BilingualText>{"Hoàn tất & Nhận đánh giá ➔"}</BilingualText>

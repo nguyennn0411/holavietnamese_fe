@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, Check } from 'lucide-react';
 
@@ -6,12 +6,12 @@ export function LessonNavigation({ lesson, pending, onComplete }) {
   const path = (id) => `/learn/${lesson.courseId}/lesson/${id}`;
 
   return (
-    <div className="lesson-navigation flex items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-white border border-[#DECBB4] shadow-sm">
+    <div className="lesson-navigation flex items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E5DF] shadow-sm">
       {/* Nút Bài trước */}
       <div>
         {lesson.previousLessonId ? (
           <Link
-            className="button secondary inline-flex items-center gap-2 py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold text-[#431914] bg-[#FFF9EE] hover:bg-[#FFF2D6] border border-[#DECBB4] hover:border-[#A62A24] transition-all no-underline shadow-2xs active:scale-95"
+            className="button secondary inline-flex items-center gap-2 py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold text-[#253044] bg-[#FFF7E8] hover:bg-[#FFF2D6] border border-[#E8E5DF] hover:border-[#EA580C] transition-all no-underline shadow-2xs active:scale-95"
             to={path(lesson.previousLessonId)}
           >
             <ArrowLeft size={15} />
@@ -31,7 +31,7 @@ export function LessonNavigation({ lesson, pending, onComplete }) {
           className={`button inline-flex items-center justify-center gap-2 py-3 px-5 sm:px-7 rounded-2xl text-xs sm:text-sm font-black shadow-md transition-all cursor-pointer active:scale-95 ${
             lesson.isCompleted
               ? 'bg-emerald-600 text-white cursor-default opacity-95 shadow-emerald-900/10'
-              : 'bg-[#DA251D] hover:bg-[#B71C1C] text-white hover:shadow-lg'
+              : 'bg-[#FF7A00] hover:bg-[#EA580C] text-white hover:shadow-lg'
           }`}
         >
           {pending ? (

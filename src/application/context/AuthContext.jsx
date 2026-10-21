@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import authApi from '@/infrastructure/api/authApi';
 import { markHasAccount } from '@/utils/userState';
+import { getRegistrationVerificationState } from '@/features/auth/emailVerificationFlow';
 
 const AuthContext = createContext(null);
 
@@ -103,38 +104,31 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: data?.message || 'Invalid credentials' };
     } catch (error) {
-      return { success: false, message: error?.message || 'Login failed. Please try again.' };
+      return {
+        success: false,
+        status: error?.status,
+        code: error?.code,
+        data: error?.result,
+        message: error?.message || 'Login failed. Please try again.',
+      };
     }
   };
 
-  // REGISTER: call API and auto-login if token is returned
+  // REGISTER: create an unverified account. Authentication only happens after
+  // email verification and a separate login request.
   const register = async (payload) => {
     try {
       const data = await authApi.register(payload);
-      if (data && data.code === 1000) {
-        if (data.result?.token) {
-          const { token, id, userId, username: uname, email, fullName, nativeLanguage, targetLevel, roles } = data.result;
-          localStorage.setItem('token', token);
-          markHasAccount();
-          setAccessToken(token);
-          setIsAuthenticated(true);
-          const normalizedRoles = normalizeRoles(roles);
-          const userInfo = {
-            id: id ?? userId,
-            userId: userId ?? id,
-            username: uname,
-            email,
-            fullName: fullName || uname,
-            nativeLanguage,
-            targetLevel,
-            roles: normalizedRoles,
-          };
-          persistUser(userInfo);
-          setUser(userInfo);
-          fetchProfile();
-          return { success: true, user: userInfo, data: data.result, message: data.message };
-        }
-        return { success: true, data: data.result, message: data.message };
+      const registration = getRegistrationVerificationState(data, import.meta.env.DEV);
+      if (registration.success) {
+        markHasAccount();
+        return {
+          success: true,
+          data: data.result,
+          email: registration.email,
+          developmentOtp: registration.developmentOtp,
+          message: registration.message,
+        };
       }
       return {
         success: false,

@@ -3,7 +3,7 @@ import { Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 /**
- * AnimatedMarquee - Infinite horizontal ticker inspired by the Vietnamese flag colors (#DA251D & #FFCD00).
+ * AnimatedMarquee - Infinite horizontal ticker inspired by the Vietnamese flag colors (#FF7A00 & #FFCD00).
  * Features seamless infinite loop, pauses on hover, and responsive typography.
  */
 export function AnimatedMarquee() {
@@ -12,7 +12,7 @@ export function AnimatedMarquee() {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-gradient-to-r from-[#89221E] via-[#DA251D] to-[#89221E] py-3.5 border-y border-[#FFCD00]/30 shadow-md select-none group"
+      className="relative w-full overflow-hidden bg-gradient-to-r from-[#C2410C] via-[#FF7A00] to-[#C2410C] py-3.5 border-y border-[#FFCD00]/30 shadow-md select-none group"
       aria-label="HolaVietnamese"
     >
       {/* Subtle background glow */}

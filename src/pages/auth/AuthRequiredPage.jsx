@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
@@ -117,7 +117,7 @@ const FEATURE_CONFIGS = {
     mascotBubbleEn: 'Keep going! Sign in to resume your lessons and maintain your streak!',
     icon: Sparkles,
     badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
-    iconBg: 'bg-gradient-to-br from-[#DA251D] to-[#89221E] text-white',
+    iconBg: 'bg-gradient-to-br from-[#FF7A00] to-[#C2410C] text-white',
     highlights: [
       { vi: 'Lộ trình EdTech cá nhân hóa theo trình độ khởi đầu và mục tiêu của bạn', en: 'Personalized EdTech curriculum matching your goal and initial level' },
       { vi: 'Thống kê chi tiết điểm kinh nghiệm (XP) và chuỗi học tập liên tục (Streak)', en: 'Real-time streak tracker, XP scorecards, and weekly milestones' },
@@ -137,7 +137,7 @@ const FEATURE_CONFIGS = {
     mascotBubbleEn: 'Oops! Please sign in so Nghé can guide you and unlock this content for you!',
     icon: Lock,
     badgeColor: 'bg-rose-100 text-rose-900 border-rose-300',
-    iconBg: 'bg-gradient-to-br from-[#DA251D] to-[#89221E] text-white',
+    iconBg: 'bg-gradient-to-br from-[#FF7A00] to-[#C2410C] text-white',
     highlights: [
       { vi: 'Hoàn toàn miễn phí đăng ký tài khoản với email hoặc Google', en: '100% free account creation via email or 1-tap Google login' },
       { vi: 'Lưu trữ toàn bộ tiến độ, từ vựng và bài tập đã hoàn thành', en: 'Cloud-save your lessons, notebooks, and completed practice sets' },
@@ -205,7 +205,7 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
   }
 
   return (
-    <div className="auth-required-page relative w-full min-h-[calc(100vh-120px)] flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FFF9EE] via-[#FAF8F5] to-[#FFF9EE] overflow-hidden">
+    <div className="auth-required-page relative w-full min-h-[calc(100vh-120px)] flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FFF7E8] via-[#FFFCF7] to-[#FFF7E8] overflow-hidden">
       {/* Background Dong Son Ambient Watermark */}
       <AmbientWatermark className="absolute -right-20 top-1/2 -translate-y-1/2 w-[520px] h-[520px] opacity-[0.05] pointer-events-none" />
       <AmbientWatermark className="absolute -left-24 -bottom-20 w-[420px] h-[420px] opacity-[0.04] pointer-events-none" />
@@ -217,9 +217,9 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
         className="relative z-10 w-full max-w-3xl"
       >
         {/* Main Card */}
-        <div className="bg-white/95 backdrop-blur-md border border-[#DECBB4]/80 rounded-3xl p-6 sm:p-10 shadow-[0_12px_40px_rgba(67,25,20,0.06)] relative overflow-hidden space-y-8">
+        <div className="bg-white/95 backdrop-blur-md border border-[#E8E5DF]/80 rounded-3xl p-6 sm:p-10 shadow-[0_12px_40px_rgba(67,25,20,0.06)] relative overflow-hidden space-y-8">
           {/* Top golden decorative line */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#DA251D] via-[#FFCD00] to-[#DA251D]" />
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#FF7A00] via-[#FFCD00] to-[#FF7A00]" />
 
           {/* Header row: Mascot & Speech Bubble */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 pt-2">
@@ -245,34 +245,34 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
                   <FeatureIcon size={14} />
                   <BilingualText vi={feature.badgeVi} en={feature.badgeEn} />
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#89221E] bg-[#F5E1D8]/60 px-2.5 py-0.5 rounded-full border border-[#E7B59D]/50">
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#C2410C] bg-[#FFF0DC]/60 px-2.5 py-0.5 rounded-full border border-[#E7B59D]/50">
                   <Lock size={11} />
                   <BilingualText vi="Cần tài khoản" en="Account required" />
                 </span>
               </div>
 
               {/* Title */}
-              <h1 className="text-2xl sm:text-3xl font-black text-[#431914] tracking-tight leading-snug">
+              <h1 className="text-2xl sm:text-3xl font-black text-[#253044] tracking-tight leading-snug">
                 <BilingualText vi={feature.titleVi} en={feature.titleEn} />
               </h1>
 
               {/* Description */}
-              <p className="text-sm sm:text-base text-[#78685B] leading-relaxed">
+              <p className="text-sm sm:text-base text-[#64748B] leading-relaxed">
                 <BilingualText vi={feature.descVi} en={feature.descEn} />
               </p>
             </div>
           </div>
 
           {/* Highlights Box */}
-          <div className="bg-[#FAF8F5] border border-[#DECBB4]/60 rounded-2xl p-5 space-y-3">
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#A62A24]">
+          <div className="bg-[#FFFCF7] border border-[#E8E5DF]/60 rounded-2xl p-5 space-y-3">
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#EA580C]">
               <Sparkles size={14} />
               <BilingualText
                 vi="Quyền lợi mở khóa khi bạn đăng nhập:"
                 en="Benefits unlocked upon signing in:"
               />
             </div>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-[#431914]">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-[#253044]">
               {feature.highlights.map((item, idx) => (
                 <li key={idx} className="flex items-start gap-2.5">
                   <CheckCircle2 size={16} className="text-emerald-700 shrink-0 mt-0.5" />
@@ -293,7 +293,7 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
                   <Link
                     to={ROUTES.LOGIN}
                     state={{ from: targetPath }}
-                    className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#DA251D] to-[#B31D16] hover:from-[#B31D16] hover:to-[#89221E] text-white font-black text-sm text-center shadow-[0_4px_12px_rgba(218,37,29,0.28)] hover:shadow-lg active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                    className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#B31D16] hover:from-[#B31D16] hover:to-[#C2410C] text-white font-black text-sm text-center shadow-[0_4px_12px_rgba(218,37,29,0.28)] hover:shadow-lg active:scale-[0.99] transition-all flex items-center justify-center gap-2"
                   >
                     <LogIn size={18} />
                     <BilingualText vi="Đăng nhập ngay" en="Sign In Now" />
@@ -302,9 +302,9 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
                   {/* Secondary for Existing User: Welcome */}
                   <Link
                     to={ROUTES.WELCOME}
-                    className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-[#FFF9EE] hover:bg-[#F5E1D8]/50 text-[#431914] border-2 border-[#E1B65B] font-black text-sm text-center shadow-xs hover:border-[#DA251D] active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                    className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-[#FFF7E8] hover:bg-[#FFF0DC]/50 text-[#253044] border-2 border-[#E1B65B] font-black text-sm text-center shadow-xs hover:border-[#FF7A00] active:scale-[0.99] transition-all flex items-center justify-center gap-2"
                   >
-                    <Sparkles size={18} className="text-[#A62A24]" />
+                    <Sparkles size={18} className="text-[#EA580C]" />
                     <BilingualText vi="Trải nghiệm trang Welcome" en="Explore Welcome" />
                   </Link>
                 </>
@@ -313,7 +313,7 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
                   {/* Primary for New User: Welcome */}
                   <Link
                     to={ROUTES.WELCOME}
-                    className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#DA251D] to-[#B31D16] hover:from-[#B31D16] hover:to-[#89221E] text-white font-black text-sm text-center shadow-[0_4px_12px_rgba(218,37,29,0.28)] hover:shadow-lg active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                    className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#B31D16] hover:from-[#B31D16] hover:to-[#C2410C] text-white font-black text-sm text-center shadow-[0_4px_12px_rgba(218,37,29,0.28)] hover:shadow-lg active:scale-[0.99] transition-all flex items-center justify-center gap-2"
                   >
                     <Sparkles size={18} />
                     <BilingualText vi="Bắt đầu tại Welcome (Cho bạn mới)" en="Get Started at Welcome (For New Learners)" />
@@ -323,9 +323,9 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
                   <Link
                     to={ROUTES.LOGIN}
                     state={{ from: targetPath }}
-                    className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-[#FFF9EE] hover:bg-[#F5E1D8]/50 text-[#431914] border-2 border-[#E1B65B] font-black text-sm text-center shadow-xs hover:border-[#DA251D] active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                    className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-[#FFF7E8] hover:bg-[#FFF0DC]/50 text-[#253044] border-2 border-[#E1B65B] font-black text-sm text-center shadow-xs hover:border-[#FF7A00] active:scale-[0.99] transition-all flex items-center justify-center gap-2"
                   >
-                    <LogIn size={18} className="text-[#A62A24]" />
+                    <LogIn size={18} className="text-[#EA580C]" />
                     <BilingualText vi="Tôi đã có tài khoản • Đăng nhập" en="Already have an account? Sign In" />
                   </Link>
                 </>
@@ -337,14 +337,14 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
               <Link
                 to={ROUTES.REGISTER}
                 state={{ from: targetPath }}
-                className="font-semibold text-[#89221E] hover:underline"
+                className="font-semibold text-[#C2410C] hover:underline"
               >
                 <BilingualText vi="Đăng ký tài khoản trực tiếp →" en="Direct Registration →" />
               </Link>
               <span className="text-stone-300">•</span>
               <Link
                 to="/"
-                className="inline-flex items-center gap-1.5 font-bold text-[#78685B] hover:text-[#A62A24] transition-colors py-1 px-2 rounded-lg hover:bg-[#F5E1D8]/30"
+                className="inline-flex items-center gap-1.5 font-bold text-[#64748B] hover:text-[#EA580C] transition-colors py-1 px-2 rounded-lg hover:bg-[#FFF0DC]/30"
               >
                 <ArrowLeft size={14} />
                 <BilingualText vi="Quay về Trang chủ" en="Back to Homepage" />
@@ -353,16 +353,16 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
           </div>
 
           {/* Bottom Security / Trust Badges */}
-          <div className="pt-4 border-t border-[#DECBB4]/50 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center sm:text-left">
-            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#78685B]">
+          <div className="pt-4 border-t border-[#E8E5DF]/50 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center sm:text-left">
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#64748B]">
               <ShieldCheck size={16} className="text-emerald-700 shrink-0" />
               <BilingualText vi="Hoàn toàn miễn phí" en="100% Free to join" />
             </div>
-            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#78685B]">
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#64748B]">
               <Zap size={16} className="text-amber-700 shrink-0" />
               <BilingualText vi="Đồng bộ tiến độ đám mây" en="Cloud progress sync" />
             </div>
-            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#78685B]">
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#64748B]">
               <Flame size={16} className="text-red-700 shrink-0" />
               <BilingualText vi="Tích lũy Streak & Điểm XP" en="Earn streaks & XP" />
             </div>

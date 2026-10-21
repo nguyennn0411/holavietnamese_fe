@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Volume2 } from 'lucide-react';
 import { speakVietnamese } from '@/utils/speech';
 import { WORD_OF_THE_DAY } from '@/components/home/data/homeData';
@@ -8,15 +8,15 @@ import { WORD_OF_THE_DAY } from '@/components/home/data/homeData';
  */
 export function WordOfTheDayCard({ wordData = WORD_OF_THE_DAY }) {
   return (
-    <section className="bg-[#FFF9EE]/92 backdrop-blur-xs border border-[#DECBB4] rounded-3xl p-6 shadow-2xs space-y-3 text-left">
+    <section className="bg-[#FFF7E8]/92 backdrop-blur-xs border border-[#E8E5DF] rounded-3xl p-6 shadow-2xs space-y-3 text-left">
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-black uppercase tracking-wider text-[#A62A24] bg-[#F5E1D8] px-2.5 py-0.5 rounded-md">
+        <span className="text-[10px] font-black uppercase tracking-wider text-[#EA580C] bg-[#FFF0DC] px-2.5 py-0.5 rounded-md">
           Word & Culture of the Day
         </span>
         <button
           type="button"
           onClick={() => speakVietnamese(wordData.speechText || wordData.word)}
-          className="!min-h-0 !min-w-0 !p-0 w-8 h-8 rounded-full bg-white border border-[#DECBB4] text-[#A62A24] flex items-center justify-center hover:bg-[#A62A24] hover:text-white transition-all shadow-2xs shrink-0 cursor-pointer group/wod audio-btn"
+          className="!min-h-0 !min-w-0 !p-0 w-8 h-8 rounded-full bg-white border border-[#E8E5DF] text-[#EA580C] flex items-center justify-center hover:bg-[#EA580C] hover:text-white transition-all shadow-2xs shrink-0 cursor-pointer group/wod audio-btn"
           title={`Listen to: ${wordData.speechText || wordData.word}`}
           aria-label={`Listen to pronunciation of ${wordData.word}`}
         >
@@ -25,13 +25,13 @@ export function WordOfTheDayCard({ wordData = WORD_OF_THE_DAY }) {
       </div>
 
       <div>
-        <h4 className="text-lg font-black text-[#431914]">{wordData.word}</h4>
-        <p className="text-xs text-[#78685B] leading-relaxed mt-1">
+        <h4 className="text-lg font-black text-[#253044]">{wordData.word}</h4>
+        <p className="text-xs text-[#64748B] leading-relaxed mt-1">
           {wordData.description}
         </p>
       </div>
 
-      <div className="p-2.5 rounded-xl bg-white/80 border border-[#DECBB4]/60 text-[11px] text-[#431914] italic">
+      <div className="p-2.5 rounded-xl bg-white/80 border border-[#E8E5DF]/60 text-[11px] text-[#253044] italic">
         {wordData.example}
       </div>
     </section>

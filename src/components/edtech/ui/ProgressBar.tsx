@@ -27,7 +27,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   }[height];
 
   const colorClasses = {
-    red: 'bg-[#A62A24] shadow-[inset_0_2px_0_rgba(255,255,255,0.35)]',
+    red: 'bg-[#EA580C] shadow-[inset_0_2px_0_rgba(255,255,255,0.35)]',
     emerald: 'bg-[#24382B] shadow-[inset_0_2px_0_rgba(255,255,255,0.35)]',
     amber: 'bg-[#E1B65B] shadow-[inset_0_2px_0_rgba(255,255,255,0.35)]',
     blue: 'bg-sky-500 shadow-[inset_0_2px_0_rgba(255,255,255,0.35)]',

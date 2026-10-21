@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Flame, CheckCircle, Gift, Shield } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,15 +13,15 @@ export function StreakTracker({
 }) {
   const { t } = useTranslation('learner');
   return (
-    <section className="bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgb(67,25,20,0.04)] flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <section className="bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/70 rounded-3xl p-5 sm:p-6 shadow-[0_8px_30px_rgb(67,25,20,0.04)] flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div className="space-y-1 text-left">
         <div className="flex items-center gap-2">
           <Flame size={18} className="text-[#ff7a00]" fill="currentColor" />
-          <h2 className="text-sm sm:text-base font-black text-[#431914]">
+          <h2 className="text-sm sm:text-base font-black text-[#253044]">
             {t('weeklyStreak')}
           </h2>
         </div>
-        <p className="text-xs text-[#78685B]">
+        <p className="text-xs text-[#64748B]">
           {t('streakHint')}
         </p>
       </div>
@@ -33,7 +33,7 @@ export function StreakTracker({
             key={idx}
             className={`flex flex-col items-center justify-center w-11 h-14 rounded-2xl border text-center transition-all ${
               item.isToday
-                ? 'bg-[#FFF9EE] border-2 border-[#A62A24] shadow-md ring-2 ring-[#A62A24]/10 scale-105'
+                ? 'bg-[#FFF7E8] border-2 border-[#EA580C] shadow-md ring-2 ring-[#EA580C]/10 scale-105'
                 : item.active
                 ? 'bg-amber-50/80 border-amber-200 text-amber-800'
                 : 'bg-stone-50 border-stone-200 text-stone-400'
@@ -60,7 +60,7 @@ export function StreakTracker({
           className={`px-4 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${
             hasCheckedInToday
               ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 cursor-default'
-              : 'bg-[#A62A24] hover:bg-[#89221E] text-white shadow-[0_3px_0_#89221E] active:translate-y-0.5'
+              : 'bg-[#EA580C] hover:bg-[#C2410C] text-white shadow-[0_3px_0_#C2410C] active:translate-y-0.5'
           }`}
         >
           {hasCheckedInToday ? (
@@ -76,7 +76,7 @@ export function StreakTracker({
           )}
         </button> : null}
 
-        {streakShieldCount != null ? <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4]/60 text-xs text-[#78685B]">
+        {streakShieldCount != null ? <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/60 text-xs text-[#64748B]">
           <Shield size={16} className="text-emerald-600 shrink-0" />
           <span>1 Khiên bảo vệ sẵn sàng</span>
         </div> : null}

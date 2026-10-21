@@ -4,7 +4,6 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-route
 import { AuthProvider } from '@/application/context/AuthContext';
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
-import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { RequireAuth } from '@/components/common/RequireAuth';
 import { AdminRoute } from '@/components/common/AdminRoute';
 import { ROUTES } from '@/constants/routes';
@@ -130,15 +129,17 @@ function App() {
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
             <Route path={ROUTES.SIGNUP} element={<RegisterPage />} />
             <Route path={ROUTES.WELCOME} element={<WelcomePage />} />
-            <Route path={ROUTES.ONBOARDING} element={<Navigate to="/onboarding/reason" replace />} />
-            <Route path="/onboarding/reason" element={<ReasonPage />} />
-            <Route path="/onboarding/level" element={<LevelPage />} />
-            <Route path="/onboarding/benefits" element={<BenefitsPage />} />
-            <Route path="/onboarding/daily-goal" element={<DailyGoalPage />} />
-            <Route path="/onboarding/learning-path" element={<LearningPathPage />} />
-            <Route path="/onboarding/first-lesson" element={<FirstLessonPage />} />
-            <Route path="/onboarding/placement-test" element={<PlacementTestPage />} />
-            <Route path="/onboarding/completed" element={<CompletionPage />} />
+            <Route element={<RequireAuth fallbackFeature="learning" />}>
+              <Route path={ROUTES.ONBOARDING} element={<Navigate to="/onboarding/reason" replace />} />
+              <Route path="/onboarding/reason" element={<ReasonPage />} />
+              <Route path="/onboarding/level" element={<LevelPage />} />
+              <Route path="/onboarding/benefits" element={<BenefitsPage />} />
+              <Route path="/onboarding/daily-goal" element={<DailyGoalPage />} />
+              <Route path="/onboarding/learning-path" element={<LearningPathPage />} />
+              <Route path="/onboarding/first-lesson" element={<FirstLessonPage />} />
+              <Route path="/onboarding/placement-test" element={<PlacementTestPage />} />
+              <Route path="/onboarding/completed" element={<CompletionPage />} />
+            </Route>
             <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
             <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
             <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />

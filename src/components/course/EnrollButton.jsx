@@ -28,7 +28,7 @@ export function EnrollButton({ courseId, enrollment, onEnrolled }) {
   if (enrollment?.isEnrolled) {
     return (
       <Link
-        className="button inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all no-underline"
+        className="button inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all no-underline"
         to={`/learn/${courseId}`}
       >
         <Play size={15} fill="white" />
@@ -44,7 +44,7 @@ export function EnrollButton({ courseId, enrollment, onEnrolled }) {
         disabled={pending}
         aria-busy={pending}
         onClick={enroll}
-        className="w-full inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] disabled:bg-[#DA251D]/60 text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95"
+        className="w-full inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] disabled:bg-[#FF7A00]/60 text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95"
       >
         {pending ? (
           <>
@@ -70,7 +70,7 @@ export function EnrollButton({ courseId, enrollment, onEnrolled }) {
             <Link
               to="/login"
               state={{ from: location.pathname }}
-              className="text-[#DA251D] underline ml-1 font-bold"
+              className="text-[#FF7A00] underline ml-1 font-bold"
             >
               <BilingualText>{"Đăng nhập"}</BilingualText>
             </Link>

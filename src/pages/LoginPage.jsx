@@ -1,11 +1,13 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Navigate, Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { AuthFooter } from '@/components/auth/AuthFooter';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
 import { onboardingService } from '@/features/onboarding/services/onboardingService';
+import { clearPostVerificationPath, getUnverifiedLoginEmail, savePendingVerificationEmail, savePostVerificationPath } from '@/features/auth/emailVerificationFlow';
 import { Eye, EyeOff } from 'lucide-react';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -14,6 +16,7 @@ export function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { i18n } = useTranslation();
   const { login, loginWithGoogle, isAuthenticated, user } = useAuth();
   const googleBtnRef = useRef(null);
 
@@ -43,6 +46,8 @@ export function LoginPage() {
       if (!result.success) {
         setError(result.message || 'Google sign-in failed.');
       } else {
+        const from = location.state?.from || searchParams.get('from');
+        clearPostVerificationPath();
         const loggedUser = result.user;
         const roles = loggedUser?.roles || [];
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
@@ -58,7 +63,6 @@ export function LoginPage() {
               // Progress stays local and can be retried when connectivity returns.
             }
           }
-          const from = location.state?.from || searchParams.get('from');
           navigate(from || (completedGuestOnboarding ? '/edtech/dashboard' : '/'), { replace: true });
         }
       }
@@ -96,6 +100,7 @@ export function LoginPage() {
               size: 'large',
               text: 'signin_with',
               shape: 'pill',
+              locale: (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('vi') ? 'vi' : 'en',
               width: 380,
             });
             requestAnimationFrame(() => setGoogleButtonReady(Boolean(googleBtnRef.current?.childElementCount)));
@@ -151,8 +156,24 @@ export function LoginPage() {
     try {
       const result = await login(email, password);
       if (!result.success) {
+        const verificationEmail = getUnverifiedLoginEmail(result, email);
+        if (verificationEmail !== null) {
+          savePendingVerificationEmail(verificationEmail);
+          const afterLogin = savePostVerificationPath(location.state?.from || searchParams.get('from') || '/onboarding/reason');
+          navigate('/verify-email', {
+            replace: true,
+            state: {
+              email: verificationEmail,
+              message: 'Email chưa được xác minh. Vui lòng nhập mã OTP đã được gửi đến email của bạn.',
+              afterLogin,
+            },
+          });
+          return;
+        }
         setError(result.message || 'Login failed. Please try again.');
       } else {
+        const from = location.state?.from || searchParams.get('from');
+        clearPostVerificationPath();
         const loggedUser = result.user;
         const roles = loggedUser?.roles || [];
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
@@ -168,7 +189,6 @@ export function LoginPage() {
               // Progress stays local and can be retried when connectivity returns.
             }
           }
-          const from = location.state?.from || searchParams.get('from');
           navigate(from || (completedGuestOnboarding ? '/edtech/dashboard' : '/'), { replace: true });
         }
       }

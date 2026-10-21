@@ -114,8 +114,8 @@ export function AdminCultureEditPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '14px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: 'var(--color-forest)', marginBottom: '6px' }}>
-            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Quay lại danh sách bài viết"}</BilingualText></Link>
+          <nav style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginBottom: '6px' }}>
+            <Link to="/admin/culture" style={{ color: 'var(--primary-orange, #F97316)', textDecoration: 'none', fontWeight: 600 }}><BilingualText>{"← Quay lại danh sách bài viết"}</BilingualText></Link>
           </nav>
           <h1 style={{ margin: 0, fontSize: '30px' }}>
             <BilingualText>{isNew ? 'Soạn thảo bài viết văn hóa mới' : `Biên tập: ${formData.title}`}</BilingualText>
@@ -194,7 +194,7 @@ export function AdminCultureEditPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <div>
                     <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Từ vựng & Cụm từ liên quan"}</BilingualText></h3>
-                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-forest)' }}><BilingualText>{"Học viên có thể nghe phát âm và lưu trực tiếp vào Sổ từ vựng khi đọc bài viết này."}</BilingualText></p>
+                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary, #64748B)' }}><BilingualText>{"Học viên có thể nghe phát âm và lưu trực tiếp vào Sổ từ vựng khi đọc bài viết này."}</BilingualText></p>
                   </div>
                   <button type="button" className="button secondary" onClick={handleAddPhrase} style={{ fontSize: '12px', padding: '6px 12px' }}><BilingualText>{"+ Thêm từ"}</BilingualText></button>
                 </div>

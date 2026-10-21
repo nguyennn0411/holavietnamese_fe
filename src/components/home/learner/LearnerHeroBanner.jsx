@@ -126,10 +126,10 @@ export function LearnerHeroBanner({
             <AnimatePresence mode="wait"><motion.h2 key={slide.meta} initial={{opacity:0,y:6}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}} className="text-lg sm:text-xl font-black text-white leading-snug truncate">{slide.meta}</motion.h2></AnimatePresence>
             <div className="space-y-1"><div className="flex justify-between text-[11px] text-white/65 font-semibold"><span>{currentSlide === 0 ? <>{t('hero.progress')}: <strong className="text-white">{progress}%</strong></> : t('hero.discovery')}</span><span>{currentSlide === 0 ? t('hero.momentum') : t('hero.madeForLevel')}</span></div><div className="w-full bg-white/15 h-2.5 rounded-full overflow-hidden"><motion.div initial={{width:0}} animate={{width:`${currentSlide === 0 ? progress : (currentSlide + 1) * 28}%`}} transition={{duration:1,delay:.4,ease:'easeOut'}} className="h-full rounded-full bg-gradient-to-r from-[#FFDE00] to-[#ff8c00]"/></div></div>
           </div>
-          <div className="flex flex-col sm:items-end gap-2.5 shrink-0"><Link to={slide.to} className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#FFDE00] hover:bg-[#f5d000] text-[#431914] font-black text-sm shadow-[0_4px_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all group"><SlideIcon size={16} fill={SlideIcon === Play ? 'currentColor' : 'none'}/><span>{slide.action}</span><ChevronRight size={16}/></Link><Link to="/courses" className="text-[11px] font-bold text-white/70 hover:text-white">{t('hero.exploreCourses')}</Link></div>
+          <div className="flex flex-col sm:items-end gap-2.5 shrink-0"><Link to={slide.to} className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#FFDE00] hover:bg-[#f5d000] text-[#253044] font-black text-sm shadow-[0_4px_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all group"><SlideIcon size={16} fill={SlideIcon === Play ? 'currentColor' : 'none'}/><span>{slide.action}</span><ChevronRight size={16}/></Link><Link to="/courses" className="text-[11px] font-bold text-white/70 hover:text-white">{t('hero.exploreCourses')}</Link></div>
         </div>
       </motion.div>
-      {onCheckIn && !hasCheckedInToday ? <motion.div initial={{opacity:0,scale:.95}} animate={{opacity:1,scale:1}} className="mt-4 flex items-center justify-between gap-4 p-3.5 rounded-xl bg-[#FFDE00]/15 border border-[#FFDE00]/30"><span className="text-white text-xs font-semibold">{t('hero.checkInReady')}</span><button type="button" onClick={onCheckIn} className="px-4 py-2 rounded-xl bg-[#FFDE00] text-[#431914] font-black text-xs">{t('hero.checkIn')}</button></motion.div> : null}
+      {onCheckIn && !hasCheckedInToday ? <motion.div initial={{opacity:0,scale:.95}} animate={{opacity:1,scale:1}} className="mt-4 flex items-center justify-between gap-4 p-3.5 rounded-xl bg-[#FFDE00]/15 border border-[#FFDE00]/30"><span className="text-white text-xs font-semibold">{t('hero.checkInReady')}</span><button type="button" onClick={onCheckIn} className="px-4 py-2 rounded-xl bg-[#FFDE00] text-[#253044] font-black text-xs">{t('hero.checkIn')}</button></motion.div> : null}
       <div className="learner-hero-controls" role="group" aria-label={t('hero.choose')}>
         <button type="button" onClick={() => setCurrentSlide((value) => (value - 1 + slides.length) % slides.length)} aria-label={t('hero.previous')}><ChevronLeft/></button>
         <div>{slides.map((item,index) => <button key={item.title} type="button" className={index === currentSlide ? 'is-active' : ''} onClick={() => setCurrentSlide(index)} aria-label={t('hero.show', { number: index + 1 })} aria-current={index === currentSlide ? 'true' : undefined}><span/></button>)}</div>
@@ -138,15 +138,15 @@ export function LearnerHeroBanner({
       </div>
     </div>
     <style>{`
-      .learner-hero-bg{background:linear-gradient(135deg,#A62A24 0%,#7a1d19 25%,#24382B 55%,#1a2b20 80%,#0f1d15 100%)}
+      .learner-hero-bg{background:linear-gradient(135deg,#F97316 0%,#EA580C 35%,#F59E0B 70%,#F5B942 100%)}
       .learner-hero-photo{background-size:cover;background-position:center;opacity:.42}
-      .learner-hero-overlay{background:linear-gradient(90deg,rgba(31,19,17,.96) 0%,rgba(92,27,23,.88) 45%,rgba(18,38,27,.68) 100%)}
-      .learner-hero-banner{min-height:440px;box-shadow:0 28px 65px rgba(67,25,20,.2)}
+      .learner-hero-overlay{background:linear-gradient(90deg,rgba(234,88,12,.94) 0%,rgba(245,158,11,.86) 50%,rgba(245,185,66,.72) 100%)}
+      .learner-hero-banner{min-height:440px;box-shadow:0 20px 50px rgba(249,115,22,.18)}
       .learner-hero-controls{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px}
       .learner-hero-controls>div{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:99px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px)}
       .learner-hero-controls button{min-width:0;min-height:0;width:31px;height:31px;padding:0;border:1px solid rgba(255,255,255,.2);border-radius:10px;background:rgba(255,255,255,.1);color:white;display:grid;place-items:center;cursor:pointer;transition:.2s}
       .learner-hero-controls>div button{width:25px;height:11px;border:0;background:transparent}.learner-hero-controls>div button span{display:block;width:8px;height:8px;border-radius:99px;background:rgba(255,255,255,.45);transition:.3s}.learner-hero-controls>div button.is-active span{width:22px;background:#FFDE00}.learner-hero-controls svg{width:15px;height:15px}
-      @media(max-width:640px){.learner-hero-photo{background-position:65% center}.learner-hero-overlay{background:linear-gradient(90deg,rgba(41,21,18,.95),rgba(41,21,18,.78))}.learner-hero-banner{min-height:520px;border-radius:20px}}
+      @media(max-width:640px){.learner-hero-photo{background-position:65% center}.learner-hero-overlay{background:linear-gradient(90deg,rgba(234,88,12,.96),rgba(245,158,11,.88))}.learner-hero-banner{min-height:520px;border-radius:20px}}
       @media(min-width:768px){.learner-hero-banner{min-height:380px}}
       @media(prefers-reduced-motion:reduce){.learner-hero-controls button{transition:none}}
     `}</style>

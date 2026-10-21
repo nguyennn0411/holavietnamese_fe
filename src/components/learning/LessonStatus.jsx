@@ -1,4 +1,4 @@
-import { bilingualLabel } from '@/components/common/BilingualText';
+﻿import { bilingualLabel } from '@/components/common/BilingualText';
 import { CheckCircle2, Play } from 'lucide-react';
 
 const labels = {
@@ -14,12 +14,12 @@ export function LessonStatus({ status, isCurrent = false, showLabel = false }) {
   if (isCurrent) {
     return (
       <span
-        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#FFF2D6] text-[#A62A24] border border-[#DECBB4]/80 text-[10px] font-black uppercase tracking-wider shrink-0"
+        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#FFF2D6] text-[#EA580C] border border-[#E8E5DF]/80 text-[10px] font-black uppercase tracking-wider shrink-0"
         title="Đang học bài này"
       >
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DA251D] opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DA251D]" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF7A00] opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF7A00]" />
         </span>
         {showLabel && <span>Đang học</span>}
       </span>
@@ -42,10 +42,10 @@ export function LessonStatus({ status, isCurrent = false, showLabel = false }) {
           )}
         </span>
       ) : isInProgress ? (
-        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#FFF2D6] text-[#A62A24] text-[10px] font-black">
+        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#FFF2D6] text-[#EA580C] text-[10px] font-black">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DA251D] opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DA251D]" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF7A00] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF7A00]" />
           </span>
           {showLabel && <span>Đang học</span>}
         </span>

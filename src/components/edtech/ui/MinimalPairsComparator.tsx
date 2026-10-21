@@ -156,7 +156,7 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
       {/* Side-by-Side Tone Comparison Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
         {/* VS Badge in Center */}
-        <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-slate-900 text-white font-black text-xs items-center justify-center shadow-lg border-2 border-white">
+        <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-[#F97316] text-white font-black text-xs items-center justify-center shadow-lg border-2 border-white">
           VS
         </div>
 

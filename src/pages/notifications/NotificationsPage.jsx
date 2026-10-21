@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -52,8 +52,8 @@ function getCategoryBadge(type) {
       return {
         label: 'Hệ thống',
         icon: Sparkles,
-        badgeClass: 'bg-[#F5E1D8] text-[#A62A24] border-[#DECBB4]',
-        cardAccent: 'hover:border-[#A62A24]',
+        badgeClass: 'bg-[#FFF0DC] text-[#EA580C] border-[#E8E5DF]',
+        cardAccent: 'hover:border-[#EA580C]',
       };
   }
 }
@@ -109,60 +109,60 @@ export function NotificationsPage() {
 
       <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 text-left">
         {/* Page Top Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#DECBB4]/60">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#E8E5DF]/60">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#A62A24] text-xs font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider">
               <Bell size={13} />
               <span>Trung tâm cập nhật • Notification Center</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-[#431914] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-[#253044] tracking-tight">
               Thông báo của bạn
             </h1>
-            <p className="text-xs sm:text-sm text-[#78685B]">
+            <p className="text-xs sm:text-sm text-[#64748B]">
               Theo dõi tiến độ, nhiệm vụ hôm nay và thành tích đạt được trên hành trình học tiếng Việt.
             </p>
           </div>
 
           {/* Quick Stats Ribbon */}
           <div className="flex items-center gap-3">
-            <div className="px-4 py-2.5 rounded-2xl bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 shadow-2xs text-center">
-              <span className="block text-base font-black text-[#431914] leading-tight">
+            <div className="px-4 py-2.5 rounded-2xl bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/70 shadow-2xs text-center">
+              <span className="block text-base font-black text-[#253044] leading-tight">
                 {notifications.length}
               </span>
-              <span className="text-[10px] text-[#78685B] font-semibold uppercase">Tổng cộng</span>
+              <span className="text-[10px] text-[#64748B] font-semibold uppercase">Tổng cộng</span>
             </div>
-            <div className="px-4 py-2.5 rounded-2xl bg-[#FFF9EE] border-2 border-[#A62A24] shadow-2xs text-center">
-              <span className="block text-base font-black text-[#A62A24] leading-tight">
+            <div className="px-4 py-2.5 rounded-2xl bg-[#FFF7E8] border-2 border-[#EA580C] shadow-2xs text-center">
+              <span className="block text-base font-black text-[#EA580C] leading-tight">
                 {unreadCount}
               </span>
-              <span className="text-[10px] text-[#A62A24] font-semibold uppercase">Chưa đọc</span>
+              <span className="text-[10px] text-[#EA580C] font-semibold uppercase">Chưa đọc</span>
             </div>
-            <div className="px-4 py-2.5 rounded-2xl bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 shadow-2xs text-center">
+            <div className="px-4 py-2.5 rounded-2xl bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/70 shadow-2xs text-center">
               <span className="block text-base font-black text-emerald-700 leading-tight">
                 {readCount}
               </span>
-              <span className="text-[10px] text-[#78685B] font-semibold uppercase">Đã xem</span>
+              <span className="text-[10px] text-[#64748B] font-semibold uppercase">Đã xem</span>
             </div>
           </div>
         </div>
 
         {/* Global Action Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 shadow-[0_4px_20px_rgba(67,25,20,0.02)]">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/70 shadow-[0_4px_20px_rgba(67,25,20,0.02)]">
           {/* Search Box */}
           <div className="relative flex-1 min-w-[240px]">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78685B]" />
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm kiếm nội dung thông báo…"
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#DECBB4]/60 text-xs text-[#431914] placeholder-[#78685B]/70 focus:outline-none focus:border-[#A62A24] focus:ring-1 focus:ring-[#A62A24] transition-all"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[#FFFCF7] border border-[#E8E5DF]/60 text-xs text-[#253044] placeholder-[#64748B]/70 focus:outline-none focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] transition-all"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#78685B] hover:text-[#A62A24]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#64748B] hover:text-[#EA580C]"
               >
                 ✕
               </button>
@@ -177,7 +177,7 @@ export function NotificationsPage() {
               onClick={markAllAsRead}
               className={`px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
                 unreadCount > 0
-                  ? 'bg-[#A62A24] hover:bg-[#89221E] text-white shadow-2xs active:translate-y-0.5'
+                  ? 'bg-[#EA580C] hover:bg-[#C2410C] text-white shadow-2xs active:translate-y-0.5'
                   : 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed'
               }`}
             >
@@ -191,7 +191,7 @@ export function NotificationsPage() {
               onClick={clearReadNotifications}
               className={`px-3 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
                 readCount > 0
-                  ? 'bg-[#FAF8F5] hover:bg-red-50 text-[#78685B] hover:text-red-700 border border-[#DECBB4]/60 hover:border-red-200'
+                  ? 'bg-[#FFFCF7] hover:bg-red-50 text-[#64748B] hover:text-red-700 border border-[#E8E5DF]/60 hover:border-red-200'
                   : 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed opacity-60'
               }`}
               title="Xóa tất cả thông báo đã đọc"
@@ -213,7 +213,7 @@ export function NotificationsPage() {
 
             <Link
               to="/settings"
-              className="px-3 py-2.5 rounded-xl bg-[#FAF8F5] hover:bg-[#FFF9EE] text-[#78685B] hover:text-[#431914] border border-[#DECBB4]/60 font-bold text-xs flex items-center gap-1.5 transition-all"
+              className="px-3 py-2.5 rounded-xl bg-[#FFFCF7] hover:bg-[#FFF7E8] text-[#64748B] hover:text-[#253044] border border-[#E8E5DF]/60 font-bold text-xs flex items-center gap-1.5 transition-all"
               title="Cài đặt thông báo"
             >
               <Settings size={15} />
@@ -241,8 +241,8 @@ export function NotificationsPage() {
                 onClick={() => setActiveTab(cat.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
                   isSelected
-                    ? 'bg-[#A62A24] text-white shadow-2xs scale-102'
-                    : 'bg-white/92 hover:bg-[#FFF9EE] text-[#78685B] hover:text-[#431914] border border-[#DECBB4]/60'
+                    ? 'bg-[#EA580C] text-white shadow-2xs scale-102'
+                    : 'bg-white/92 hover:bg-[#FFF7E8] text-[#64748B] hover:text-[#253044] border border-[#E8E5DF]/60'
                 }`}
               >
                 <span>{cat.label}</span>
@@ -250,7 +250,7 @@ export function NotificationsPage() {
                   className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
                     isSelected
                       ? 'bg-white/20 text-white'
-                      : 'bg-[#FAF8F5] text-[#78685B]'
+                      : 'bg-[#FFFCF7] text-[#64748B]'
                   }`}
                 >
                   {count}
@@ -269,14 +269,14 @@ export function NotificationsPage() {
         {/* Notification Cards List */}
         <div className="space-y-3">
           {loading ? (
-            <div className="py-20 text-center space-y-3 bg-white/92 rounded-3xl border border-[#DECBB4]/70">
-              <div className="w-10 h-10 rounded-full border-3 border-[#A62A24] border-t-transparent animate-spin mx-auto" />
-              <p className="text-xs text-[#78685B]">Đang tải thông báo của bạn…</p>
+            <div className="py-20 text-center space-y-3 bg-white/92 rounded-3xl border border-[#E8E5DF]/70">
+              <div className="w-10 h-10 rounded-full border-3 border-[#EA580C] border-t-transparent animate-spin mx-auto" />
+              <p className="text-xs text-[#64748B]">Đang tải thông báo của bạn…</p>
             </div>
           ) : filteredNotifications.length === 0 ? (
             /* Empty State */
-            <div className="py-16 sm:py-20 px-6 text-center space-y-4 bg-white/92 backdrop-blur-xs rounded-3xl border border-[#DECBB4]/70 shadow-2xs">
-              <div className="w-16 h-16 rounded-3xl bg-[#FFF9EE] border border-[#DECBB4] text-[#A62A24] flex items-center justify-center mx-auto shadow-xs">
+            <div className="py-16 sm:py-20 px-6 text-center space-y-4 bg-white/92 backdrop-blur-xs rounded-3xl border border-[#E8E5DF]/70 shadow-2xs">
+              <div className="w-16 h-16 rounded-3xl bg-[#FFF7E8] border border-[#E8E5DF] text-[#EA580C] flex items-center justify-center mx-auto shadow-xs">
                 {activeTab === 'unread' ? (
                   <CheckCircle2 size={30} className="text-emerald-600" />
                 ) : (
@@ -284,14 +284,14 @@ export function NotificationsPage() {
                 )}
               </div>
               <div className="space-y-1 max-w-md mx-auto">
-                <h3 className="text-base font-black text-[#431914]">
+                <h3 className="text-base font-black text-[#253044]">
                   {activeTab === 'unread'
                     ? 'Bạn đã xem hết tất cả thông báo!'
                     : searchQuery
                     ? `Không tìm thấy thông báo nào chứa "${searchQuery}"`
                     : 'Chưa có thông báo nào trong mục này'}
                 </h3>
-                <p className="text-xs text-[#78685B] leading-relaxed">
+                <p className="text-xs text-[#64748B] leading-relaxed">
                   {activeTab === 'unread'
                     ? 'Tuyệt vời! Không còn lời nhắc nào chưa xem. Hãy tiếp tục học bài mới để duy trì phong độ.'
                     : 'Các thông báo mới về bài học, sự kiện hoặc huy hiệu đạt được sẽ xuất hiện tại đây.'}
@@ -300,7 +300,7 @@ export function NotificationsPage() {
               <div className="pt-2 flex justify-center gap-3">
                 <Link
                   to="/edtech/dashboard"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white text-xs font-black shadow-2xs transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-black shadow-2xs transition-all"
                 >
                   <Compass size={15} />
                   <span>Vào Lộ Trình Học Ngay</span>
@@ -312,7 +312,7 @@ export function NotificationsPage() {
                       setActiveTab('all');
                       setSearchQuery('');
                     }}
-                    className="px-4 py-2.5 rounded-xl bg-[#FAF8F5] hover:bg-[#FFF9EE] border border-[#DECBB4]/60 text-xs font-bold text-[#431914] transition-all cursor-pointer"
+                    className="px-4 py-2.5 rounded-xl bg-[#FFFCF7] hover:bg-[#FFF7E8] border border-[#E8E5DF]/60 text-xs font-bold text-[#253044] transition-all cursor-pointer"
                   >
                     Xem tất cả thông báo
                   </button>
@@ -334,8 +334,8 @@ export function NotificationsPage() {
                     key={item.id}
                     className={`p-5 rounded-2xl border transition-all flex flex-col sm:flex-row items-start justify-between gap-4 shadow-2xs ${cardAccent} ${
                       item.read
-                        ? 'bg-white/92 border-[#DECBB4]/60'
-                        : 'bg-[#FFF9EE]/90 border-2 border-[#A62A24]/60 shadow-xs ring-2 ring-[#A62A24]/5'
+                        ? 'bg-white/92 border-[#E8E5DF]/60'
+                        : 'bg-[#FFF7E8]/90 border-2 border-[#EA580C]/60 shadow-xs ring-2 ring-[#EA580C]/5'
                     }`}
                   >
                     <div className="flex items-start gap-3.5 flex-1 min-w-0">
@@ -351,12 +351,12 @@ export function NotificationsPage() {
                             {typeLabel}
                           </span>
                           {!item.read && (
-                            <span className="px-2 py-0.5 rounded-md bg-[#A62A24] text-white text-[10px] font-bold">
+                            <span className="px-2 py-0.5 rounded-md bg-[#EA580C] text-white text-[10px] font-bold">
                               Mới
                             </span>
                           )}
                           {item.xpReward && (
-                            <span className="px-2 py-0.5 rounded-md bg-[#F5E1D8] text-[#A62A24] text-[10px] font-black">
+                            <span className="px-2 py-0.5 rounded-md bg-[#FFF0DC] text-[#EA580C] text-[10px] font-black">
                               {item.xpReward}
                             </span>
                           )}
@@ -366,18 +366,18 @@ export function NotificationsPage() {
                           </small>
                         </div>
 
-                        <h3 className={`text-sm sm:text-base leading-snug ${item.read ? 'font-bold text-[#431914]' : 'font-black text-[#A62A24]'}`}>
+                        <h3 className={`text-sm sm:text-base leading-snug ${item.read ? 'font-bold text-[#253044]' : 'font-black text-[#EA580C]'}`}>
                           <BilingualText vi={item.titleVi || item.title} en={item.title} />
                         </h3>
 
-                        <p className="text-xs sm:text-sm text-[#78685B] leading-relaxed">
+                        <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
                           {item.message}
                         </p>
                       </div>
                     </div>
 
                     {/* Right Action Buttons */}
-                    <div className="flex items-center sm:flex-col sm:items-end justify-between w-full sm:w-auto gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#DECBB4]/40 shrink-0">
+                    <div className="flex items-center sm:flex-col sm:items-end justify-between w-full sm:w-auto gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#E8E5DF]/40 shrink-0">
                       {(item.linkUrl || item.link) && (
                         <button
                           type="button"
@@ -385,7 +385,7 @@ export function NotificationsPage() {
                             if (!item.read) markAsRead(item.id);
                             navigate(item.linkUrl || item.link);
                           }}
-                          className="px-4 py-2 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs active:translate-y-0.5 transition-all cursor-pointer"
+                          className="px-4 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs active:translate-y-0.5 transition-all cursor-pointer"
                         >
                           <span>Xem chi tiết</span>
                           <ArrowRight size={13} />
@@ -398,7 +398,7 @@ export function NotificationsPage() {
                             type="button"
                             disabled={busy}
                             onClick={() => markAsRead(item.id)}
-                            className="px-3 py-1.5 rounded-lg bg-[#FAF8F5] hover:bg-[#F5E1D8] text-[#A62A24] font-bold text-xs transition-colors cursor-pointer"
+                            className="px-3 py-1.5 rounded-lg bg-[#FFFCF7] hover:bg-[#FFF0DC] text-[#EA580C] font-bold text-xs transition-colors cursor-pointer"
                             title="Đánh dấu đã đọc"
                           >
                             Đã đọc
@@ -414,7 +414,7 @@ export function NotificationsPage() {
                           type="button"
                           disabled={busy}
                           onClick={() => deleteNotification(item.id)}
-                          className="p-1.5 rounded-lg text-[#78685B] hover:text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-[#64748B] hover:text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
                           title="Xóa thông báo"
                         >
                           <Trash2 size={14} />

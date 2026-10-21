@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Check, Play, Star, Compass } from 'lucide-react';
@@ -14,18 +14,18 @@ export function GamifiedRoadmapTeaser() {
   return (
     <section className="roadmap-teaser py-8 space-y-8">
       <div className="text-center max-w-2xl mx-auto space-y-2">
-        <p className="eyebrow text-xs font-bold uppercase tracking-wider text-[#A62A24]">
+        <p className="eyebrow text-xs font-bold uppercase tracking-wider text-[#EA580C]">
           {t('roadmap.eyebrow')}
         </p>
-        <h2 className="text-3xl sm:text-4xl font-black text-[#431914] tracking-tight">
+        <h2 className="text-3xl sm:text-4xl font-black text-[#253044] tracking-tight">
           {t('roadmap.title')}
         </h2>
-        <p className="text-sm text-[#78685B]">
+        <p className="text-sm text-[#64748B]">
           {t('roadmap.description')}
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-6 sm:p-10 shadow-[0_10px_35px_-5px_rgba(67,25,20,0.05)] relative overflow-hidden">
+      <div className="max-w-4xl mx-auto bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/70 rounded-3xl p-6 sm:p-10 shadow-[0_10px_35px_-5px_rgba(67,25,20,0.05)] relative overflow-hidden">
         <div className="space-y-4 relative z-10">
           {ROADMAP_NODES.map((node) => (
             <motion.div
@@ -41,8 +41,8 @@ export function GamifiedRoadmapTeaser() {
                 node.status === 'completed'
                   ? 'bg-white border-emerald-300 shadow-2xs'
                   : node.status === 'current'
-                  ? 'bg-[#FFF9EE] border-2 border-[#A62A24] shadow-md ring-4 ring-[#A62A24]/10'
-                  : 'bg-[#FAF8F5] border-[#DECBB4]/50 opacity-60'
+                  ? 'bg-[#FFF7E8] border-2 border-[#EA580C] shadow-md ring-4 ring-[#EA580C]/10'
+                  : 'bg-[#FFFCF7] border-[#E8E5DF]/50 opacity-60'
               } ${node.status !== 'locked' ? 'cursor-pointer' : 'cursor-not-allowed'}`}
             >
               {/* Node Icon */}
@@ -51,7 +51,7 @@ export function GamifiedRoadmapTeaser() {
                   node.status === 'completed'
                     ? 'bg-emerald-700 text-white'
                     : node.status === 'current'
-                    ? 'bg-[#A62A24] text-white shadow-[0_4px_0_#89221E]'
+                    ? 'bg-[#EA580C] text-white shadow-[0_4px_0_#C2410C]'
                     : 'bg-stone-200 text-stone-500'
                 }`}
               >
@@ -71,12 +71,12 @@ export function GamifiedRoadmapTeaser() {
                     {node.level}
                   </span>
                   {node.status === 'current' && (
-                    <span className="text-[10px] font-bold text-[#A62A24] uppercase tracking-wider">
+                    <span className="text-[10px] font-bold text-[#EA580C] uppercase tracking-wider">
                       {t('roadmap.current')}
                     </span>
                   )}
                 </div>
-                <h3 className="text-sm sm:text-base font-bold text-[#431914] truncate mt-0.5">
+                <h3 className="text-sm sm:text-base font-bold text-[#253044] truncate mt-0.5">
                   {node.title}
                 </h3>
               </div>
@@ -96,7 +96,7 @@ export function GamifiedRoadmapTeaser() {
                     />
                   ))}
                 </div>
-                <span className="text-[11px] font-bold text-[#A62A24] bg-[#F5E1D8] px-2 py-0.5 rounded-md hidden sm:inline-block">
+                <span className="text-[11px] font-bold text-[#EA580C] bg-[#FFF0DC] px-2 py-0.5 rounded-md hidden sm:inline-block">
                   +{node.xp} XP
                 </span>
               </div>
@@ -107,7 +107,7 @@ export function GamifiedRoadmapTeaser() {
         <div className="pt-8 text-center">
           <Link
             to="/welcome"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#A62A24] hover:bg-[#89221E] text-white font-black text-xs shadow-[0_4px_0_#89221E] active:translate-y-1 active:shadow-none transition-all"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-black text-xs shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-none transition-all"
           >
             <Compass size={16} />
             <span>{t('roadmap.action')}</span>

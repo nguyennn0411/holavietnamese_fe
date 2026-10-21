@@ -140,13 +140,13 @@ export const VocabularyHubScreen: React.FC = () => {
   });
 
   return (
-    <div className="w-full antialiased selection:bg-[#F5E1D8] selection:text-[#A62A24] pb-20">
+    <div className="w-full antialiased selection:bg-[#FFF4EB] selection:text-[#EA580C] pb-20">
       {/* Breadcrumb Ribbon & Navigation */}
       <div className="bg-white/95 rounded-3xl p-4 md:p-5 border border-[#DECBB4]/70 shadow-card-soft mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-xs font-bold text-slate-500 w-full md:w-auto">
           <Link
             to="/"
-            className="flex items-center gap-1.5 text-[#431914] hover:text-[#A62A24] transition-colors px-2.5 py-1.5 rounded-xl hover:bg-[#FFF9EE]"
+            className="flex items-center gap-1.5 text-[#431914] hover:text-[#EA580C] transition-colors px-2.5 py-1.5 rounded-xl hover:bg-[#FFF9EE]"
           >
             <Home className="w-3.5 h-3.5" />
             <span>Trang chủ</span>
@@ -154,12 +154,12 @@ export const VocabularyHubScreen: React.FC = () => {
           <span className="text-slate-300">/</span>
           <Link
             to="/edtech/dashboard"
-            className="flex items-center gap-1.5 text-[#431914] hover:text-[#A62A24] transition-colors px-2.5 py-1.5 rounded-xl hover:bg-[#FFF9EE]"
+            className="flex items-center gap-1.5 text-[#431914] hover:text-[#EA580C] transition-colors px-2.5 py-1.5 rounded-xl hover:bg-[#FFF9EE]"
           >
             <span>Lộ trình học</span>
           </Link>
           <span className="text-slate-300">/</span>
-          <span className="text-[#A62A24] bg-[#F5E1D8] px-3 py-1 rounded-xl border border-[#E7B59D] font-bold">
+          <span className="text-[#EA580C] bg-[#FFF4EB] px-3 py-1 rounded-xl border border-[#E7B59D] font-bold">
             Kho Từ Vựng & 6 Thanh Điệu
           </span>
         </div>
@@ -255,7 +255,7 @@ export const VocabularyHubScreen: React.FC = () => {
                     onClick={() => setSelectedToneFilter('ALL')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                       selectedToneFilter === 'ALL'
-                        ? 'bg-slate-900 text-white shadow-sm'
+                        ? 'bg-[#F97316] text-white shadow-sm'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >

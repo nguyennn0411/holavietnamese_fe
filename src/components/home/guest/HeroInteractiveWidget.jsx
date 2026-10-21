@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, RotateCcw, Check, CheckCircle2 } from 'lucide-react';
@@ -81,12 +81,12 @@ export function HeroInteractiveWidget() {
   };
 
   return (
-    <div className="w-full max-w-lg bg-white/95 backdrop-blur-xl rounded-3xl border border-[#DECBB4]/80 shadow-[0_20px_50px_rgba(67,25,20,0.08)] p-6 sm:p-7 space-y-4 text-left transition-all">
+    <div className="w-full max-w-lg bg-white/95 backdrop-blur-xl rounded-3xl border border-[#E8E5DF]/80 shadow-[0_20px_50px_rgba(67,25,20,0.08)] p-6 sm:p-7 space-y-4 text-left transition-all">
       {/* Top Header Tag with Dual Speed Controls */}
-      <div className="flex items-center justify-between border-b border-[#DECBB4]/40 pb-3">
+      <div className="flex items-center justify-between border-b border-[#E8E5DF]/40 pb-3">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse motion-reduce:animate-none" />
-          <span className="text-[11px] font-black uppercase tracking-wider text-[#A62A24]">
+          <span className="text-[11px] font-black uppercase tracking-wider text-[#EA580C]">
             {t('widget.badge')}
           </span>
         </div>
@@ -94,7 +94,7 @@ export function HeroInteractiveWidget() {
           <button
             type="button"
             onClick={() => speakVietnamese(exercise.phrase, 0.9)}
-            className="!min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#F5E1D8] hover:bg-[#A62A24] text-[#A62A24] hover:text-white transition-all text-[11px] font-bold shadow-2xs cursor-pointer"
+            className="!min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFF0DC] hover:bg-[#EA580C] text-[#EA580C] hover:text-white transition-all text-[11px] font-bold shadow-2xs cursor-pointer"
             title={t('widget.normalAudio')}
             aria-label={t('widget.normalAudio')}
           >
@@ -104,7 +104,7 @@ export function HeroInteractiveWidget() {
           <button
             type="button"
             onClick={() => speakVietnamese(exercise.phrase, 0.6)}
-            className="!min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF8F5] hover:bg-[#DECBB4] text-[#78685B] hover:text-[#431914] transition-all text-[11px] font-bold border border-[#DECBB4]/60 cursor-pointer"
+            className="!min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFFCF7] hover:bg-[#E8E5DF] text-[#64748B] hover:text-[#253044] transition-all text-[11px] font-bold border border-[#E8E5DF]/60 cursor-pointer"
             title={t('widget.slowAudio')}
             aria-label={t('widget.slowAudio')}
           >
@@ -115,18 +115,18 @@ export function HeroInteractiveWidget() {
 
       {/* Target prompt */}
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-wider text-[#78685B]">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
           {t('widget.translate')}
         </p>
-        <p className="text-base sm:text-lg font-black text-[#431914] mt-0.5">
+        <p className="text-base sm:text-lg font-black text-[#253044] mt-0.5">
           “{exercise.prompt}”
         </p>
       </div>
 
       {/* Answer Drop Slot */}
-      <div className="min-h-[58px] p-2.5 rounded-2xl bg-[#FAF8F5] border-2 border-dashed border-[#DECBB4] flex flex-wrap items-center gap-2">
+      <div className="min-h-[58px] p-2.5 rounded-2xl bg-[#FFFCF7] border-2 border-dashed border-[#E8E5DF] flex flex-wrap items-center gap-2">
         {selectedTokens.length === 0 ? (
-          <span className="text-xs text-[#78685B]/60 italic select-none pl-1">
+          <span className="text-xs text-[#64748B]/60 italic select-none pl-1">
             {t('widget.empty')}
           </span>
         ) : (
@@ -138,7 +138,7 @@ export function HeroInteractiveWidget() {
               key={`${token}-${idx}`}
               type="button"
               onClick={() => handleRemoveToken(token)}
-              className="px-3.5 py-1.5 rounded-xl bg-white border-2 border-[#A62A24] text-[#A62A24] font-black text-xs shadow-[0_2px_0_#A62A24] hover:bg-[#F5E1D8] active:translate-y-0.5 transition-all"
+              className="px-3.5 py-1.5 rounded-xl bg-white border-2 border-[#EA580C] text-[#EA580C] font-black text-xs shadow-[0_2px_0_#EA580C] hover:bg-[#FFF0DC] active:translate-y-0.5 transition-all"
             >
               {token}
             </motion.button>
@@ -154,7 +154,7 @@ export function HeroInteractiveWidget() {
             key={`${token}-${idx}`}
             type="button"
             onClick={() => handleSelectToken(token)}
-            className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF9EE] border border-[#DECBB4] hover:border-[#A62A24] text-[#431914] font-bold text-xs shadow-[0_2px_0_#DECBB4] hover:shadow-[0_2px_0_#A62A24] active:translate-y-0.5 transition-all"
+            className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] hover:border-[#EA580C] text-[#253044] font-bold text-xs shadow-[0_2px_0_#E8E5DF] hover:shadow-[0_2px_0_#EA580C] active:translate-y-0.5 transition-all"
           >
             {token}
           </motion.button>
@@ -207,7 +207,7 @@ export function HeroInteractiveWidget() {
         <button
           type="button"
           onClick={handleReset}
-          className="!min-h-0 !min-w-0 p-2.5 rounded-xl text-[#78685B] hover:text-[#431914] hover:bg-[#FFF9EE] transition-colors shrink-0 cursor-pointer"
+          className="!min-h-0 !min-w-0 p-2.5 rounded-xl text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8] transition-colors shrink-0 cursor-pointer"
           title={t('widget.reset')}
           aria-label={t('widget.reset')}
         >
@@ -222,7 +222,7 @@ export function HeroInteractiveWidget() {
             status === 'correct'
               ? 'bg-emerald-600 text-white shadow-[0_4px_0_#047857]'
               : selectedTokens.length > 0
-              ? 'bg-[#A62A24] hover:bg-[#89221E] text-white shadow-[0_4px_0_#89221E] active:translate-y-1 active:shadow-none'
+              ? 'bg-[#EA580C] hover:bg-[#C2410C] text-white shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-none'
               : 'bg-stone-200 text-stone-400 cursor-not-allowed shadow-none'
           }`}
         >

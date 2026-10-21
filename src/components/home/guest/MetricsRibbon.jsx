@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,8 +22,8 @@ function AnimatedMetric({ target, suffix, label, detail }) {
   }, [inView, reducedMotion, target]);
 
   return <motion.div ref={ref} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="space-y-1 px-4">
-    <strong className="block text-2xl sm:text-4xl font-black text-[#B42318]">{value}{suffix}</strong>
-    <span className="block text-xs sm:text-sm text-[#251B18] font-bold">{label}</span>
+    <strong className="block text-2xl sm:text-4xl font-black text-[#FF7A00]">{value}{suffix}</strong>
+    <span className="block text-xs sm:text-sm text-[#253044] font-bold">{label}</span>
     <small className="block text-[10px] text-[#887568]">{detail}</small>
   </motion.div>;
 }
@@ -41,8 +41,8 @@ export function MetricsRibbon() {
   ];
 
   return (
-    <section className="w-full bg-white/95 backdrop-blur-md border-b border-[#DECBB4]/70 py-10 px-4 sm:px-8 lg:px-14 shadow-[0_4px_20px_rgba(67,25,20,0.02)]">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x md:divide-[#DECBB4]/60">
+    <section className="w-full bg-white/95 backdrop-blur-md border-b border-[#E8E5DF]/70 py-10 px-4 sm:px-8 lg:px-14 shadow-[0_4px_20px_rgba(67,25,20,0.02)]">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x md:divide-[#E8E5DF]/60">
         {metrics.map((item) => <AnimatedMetric key={item.label} {...item} />)}
       </div>
     </section>

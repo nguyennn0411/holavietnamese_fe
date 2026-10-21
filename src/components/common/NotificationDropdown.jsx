@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
@@ -38,7 +38,7 @@ function getCategoryIcon(type) {
     default:
       return {
         icon: Sparkles,
-        colorClass: 'text-[#A62A24] bg-[#F5E1D8] border-[#DECBB4]',
+        colorClass: 'text-[#EA580C] bg-[#FFF0DC] border-[#E8E5DF]',
       };
   }
 }
@@ -100,17 +100,17 @@ export function NotificationDropdown() {
     <div className="notification-menu relative" ref={dropdownRef}>
       {/* Bell Trigger Button */}
       <button
-        className="notification-menu__trigger relative p-2 rounded-xl text-[#431914] hover:bg-[#F5E1D8]/60 transition-colors cursor-pointer flex items-center justify-center"
+        className="notification-menu__trigger relative p-2 rounded-xl text-[#253044] hover:bg-[#FFF0DC]/60 transition-colors cursor-pointer flex items-center justify-center"
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         aria-label="Thông báo"
         aria-expanded={open}
         aria-haspopup="dialog"
       >
-        <Bell size={19} aria-hidden="true" className={unreadCount > 0 ? 'text-[#A62A24]' : ''} />
+        <Bell size={19} aria-hidden="true" className={unreadCount > 0 ? 'text-[#EA580C]' : ''} />
         {unreadCount > 0 && (
           <span
-            className="notification-menu__count absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#A62A24] text-white text-[10px] font-black flex items-center justify-center shadow-xs border-2 border-white animate-pulse"
+            className="notification-menu__count absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#EA580C] text-white text-[10px] font-black flex items-center justify-center shadow-xs border-2 border-white animate-pulse"
             aria-label={`${unreadCount} thông báo chưa đọc`}
           >
             {Math.min(unreadCount, 99)}
@@ -122,7 +122,7 @@ export function NotificationDropdown() {
       <AnimatePresence>
         {open && (
           <motion.section
-            className="notification-menu__panel absolute right-0 top-[calc(100%+10px)] w-[min(380px,calc(100vw-24px))] z-50 bg-white/95 backdrop-blur-md rounded-2xl border border-[#DECBB4]/80 shadow-[0_20px_50px_rgba(67,25,20,0.14)] overflow-hidden text-left"
+            className="notification-menu__panel absolute right-0 top-[calc(100%+10px)] w-[min(380px,calc(100vw-24px))] z-50 bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF]/80 shadow-[0_20px_50px_rgba(67,25,20,0.14)] overflow-hidden text-left"
             role="dialog"
             aria-label="Thông báo gần đây"
             initial={reduceMotion ? false : { opacity: 0, y: -10, scale: 0.98 }}
@@ -131,13 +131,13 @@ export function NotificationDropdown() {
             transition={{ duration: reduceMotion ? 0 : 0.18 }}
           >
             {/* Header */}
-            <header className="p-3.5 bg-[#FFF9EE] border-b border-[#DECBB4]/60 flex items-center justify-between">
+            <header className="p-3.5 bg-[#FFF7E8] border-b border-[#E8E5DF]/60 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <strong className="text-sm font-black text-[#431914]">
+                <strong className="text-sm font-black text-[#253044]">
                   <BilingualText>Thông báo</BilingualText>
                 </strong>
                 {unreadCount > 0 ? (
-                  <span className="px-2 py-0.5 rounded-full bg-[#A62A24] text-white text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-full bg-[#EA580C] text-white text-[10px] font-bold">
                     {unreadCount} mới
                   </span>
                 ) : (
@@ -152,7 +152,7 @@ export function NotificationDropdown() {
                   type="button"
                   disabled={busy}
                   onClick={markAllAsRead}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-[#A62A24] hover:bg-[#F5E1D8] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-[#EA580C] hover:bg-[#FFF0DC] transition-colors cursor-pointer"
                   title="Đánh dấu tất cả đã đọc"
                 >
                   <CheckCheck size={14} />
@@ -162,14 +162,14 @@ export function NotificationDropdown() {
             </header>
 
             {/* Quick Filter Tabs */}
-            <div className="flex items-center gap-1.5 px-3 py-2 bg-[#FAF8F5] border-b border-[#DECBB4]/40 text-xs">
+            <div className="flex items-center gap-1.5 px-3 py-2 bg-[#FFFCF7] border-b border-[#E8E5DF]/40 text-xs">
               <button
                 type="button"
                 onClick={() => setFilter('all')}
                 className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                   filter === 'all'
-                    ? 'bg-[#A62A24] text-white shadow-2xs'
-                    : 'text-[#78685B] hover:text-[#431914] hover:bg-white'
+                    ? 'bg-[#EA580C] text-white shadow-2xs'
+                    : 'text-[#64748B] hover:text-[#253044] hover:bg-white'
                 }`}
               >
                 Tất cả ({notifications.length})
@@ -179,8 +179,8 @@ export function NotificationDropdown() {
                 onClick={() => setFilter('unread')}
                 className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                   filter === 'unread'
-                    ? 'bg-[#A62A24] text-white shadow-2xs'
-                    : 'text-[#78685B] hover:text-[#431914] hover:bg-white'
+                    ? 'bg-[#EA580C] text-white shadow-2xs'
+                    : 'text-[#64748B] hover:text-[#253044] hover:bg-white'
                 }`}
               >
                 Chưa đọc ({unreadCount})
@@ -194,16 +194,16 @@ export function NotificationDropdown() {
             )}
 
             {/* Notification List */}
-            <div className="max-h-[380px] overflow-y-auto divide-y divide-[#DECBB4]/40 overscroll-contain">
+            <div className="max-h-[380px] overflow-y-auto divide-y divide-[#E8E5DF]/40 overscroll-contain">
               {filteredItems.length === 0 ? (
                 <div className="py-12 px-6 text-center space-y-2">
-                  <div className="w-12 h-12 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4] text-[#78685B] flex items-center justify-center mx-auto">
+                  <div className="w-12 h-12 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF] text-[#64748B] flex items-center justify-center mx-auto">
                     <Bell size={22} className="opacity-60" />
                   </div>
-                  <h4 className="text-xs font-bold text-[#431914]">
+                  <h4 className="text-xs font-bold text-[#253044]">
                     {filter === 'unread' ? 'Tuyệt vời! Không còn thông báo chưa đọc' : 'Chưa có thông báo nào'}
                   </h4>
-                  <p className="text-[11px] text-[#78685B]">
+                  <p className="text-[11px] text-[#64748B]">
                     Các cập nhật bài học, huy hiệu và sự kiện sẽ hiển thị tại đây.
                   </p>
                 </div>
@@ -216,13 +216,13 @@ export function NotificationDropdown() {
                       onClick={() => handleItemClick(item)}
                       className={`p-3.5 transition-all cursor-pointer flex items-start gap-3 relative group ${
                         item.read
-                          ? 'bg-white hover:bg-[#FAF8F5]'
-                          : 'bg-[#FFF9EE]/70 hover:bg-[#FFF9EE]'
+                          ? 'bg-white hover:bg-[#FFFCF7]'
+                          : 'bg-[#FFF7E8]/70 hover:bg-[#FFF7E8]'
                       }`}
                     >
                       {/* Unread indicator dot */}
                       {!item.read && (
-                        <span className="absolute top-4 right-3 w-2 h-2 rounded-full bg-[#A62A24] ring-2 ring-white" />
+                        <span className="absolute top-4 right-3 w-2 h-2 rounded-full bg-[#EA580C] ring-2 ring-white" />
                       )}
 
                       {/* Icon Pill */}
@@ -233,12 +233,12 @@ export function NotificationDropdown() {
                       {/* Content */}
                       <div className="flex-1 min-w-0 space-y-1">
                         <div className="flex items-center justify-between gap-2 pr-3">
-                          <h4 className={`text-xs truncate ${item.read ? 'font-medium text-[#431914]' : 'font-black text-[#A62A24]'}`}>
+                          <h4 className={`text-xs truncate ${item.read ? 'font-medium text-[#253044]' : 'font-black text-[#EA580C]'}`}>
                             <BilingualText vi={item.titleVi || item.title} en={item.title} />
                           </h4>
                         </div>
 
-                        <p className="text-[11px] text-[#78685B] line-clamp-2 leading-relaxed">
+                        <p className="text-[11px] text-[#64748B] line-clamp-2 leading-relaxed">
                           {item.message}
                         </p>
 
@@ -248,12 +248,12 @@ export function NotificationDropdown() {
                             {item.time}
                           </span>
                           {item.xpReward && (
-                            <span className="px-1.5 py-0.2 rounded font-black text-[#A62A24] bg-[#F5E1D8]">
+                            <span className="px-1.5 py-0.2 rounded font-black text-[#EA580C] bg-[#FFF0DC]">
                               {item.xpReward}
                             </span>
                           )}
                           {item.link && (
-                            <span className="text-[#A62A24] font-bold inline-flex items-center gap-0.5 ml-auto group-hover:underline">
+                            <span className="text-[#EA580C] font-bold inline-flex items-center gap-0.5 ml-auto group-hover:underline">
                               <span>Xem</span>
                               <ArrowUpRight size={10} />
                             </span>
@@ -267,7 +267,7 @@ export function NotificationDropdown() {
             </div>
 
             {/* Footer */}
-            <footer className="p-2.5 bg-[#FFF9EE] border-t border-[#DECBB4]/60 flex items-center justify-between text-xs font-bold text-[#A62A24]">
+            <footer className="p-2.5 bg-[#FFF7E8] border-t border-[#E8E5DF]/60 flex items-center justify-between text-xs font-bold text-[#EA580C]">
               <Link
                 to="/notifications"
                 onClick={() => setOpen(false)}
@@ -279,7 +279,7 @@ export function NotificationDropdown() {
               <Link
                 to="/settings"
                 onClick={() => setOpen(false)}
-                className="text-[#78685B] hover:text-[#431914] p-1.5 rounded-lg hover:bg-white/60 transition-colors"
+                className="text-[#64748B] hover:text-[#253044] p-1.5 rounded-lg hover:bg-white/60 transition-colors"
                 title="Cài đặt thông báo"
               >
                 <Settings size={15} />

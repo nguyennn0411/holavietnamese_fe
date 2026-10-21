@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { HeroBannerSlider, AnimatedMarquee } from '@/components/home/hero';
 import { GuestCulturalStrip } from './GuestCulturalStrip';
 import { AmbientWatermark } from '../common/HeritageWatermark';
@@ -76,16 +76,16 @@ export function GuestHome() {
       </section>
 
       {/* 3. Interactive Quick 10-Second Trial Mini-Lesson */}
-      <section id="mini-lesson" className="w-full scroll-mt-24 py-12 px-4 sm:px-8 lg:px-14 bg-gradient-to-b from-[#FFF9ED] via-white to-[#FFF9ED] border-b border-[#DECBB4]/60">
+      <section id="mini-lesson" className="w-full scroll-mt-24 py-12 px-4 sm:px-8 lg:px-14 bg-gradient-to-b from-[#FBF8F3] via-white to-[#FBF8F3] border-b border-[#EBDED0]">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="space-y-3 text-left max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#DA251D] text-xs font-black uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#FED7AA] text-[#FF7A00] text-xs font-black uppercase tracking-wider">
               <span>☕ {t('miniLesson.badge')}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#202124] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-[#253044] tracking-tight">
               {t('miniLesson.title')}
             </h2>
-            <p className="text-sm text-[#78685B] leading-relaxed">
+            <p className="text-sm text-[#64748B] leading-relaxed">
               {t('miniLesson.description')}
             </p>
           </div>
@@ -99,21 +99,21 @@ export function GuestHome() {
       <MetricsRibbon />
 
       {/* 5. Bento Grid Showcase: Full-Width Section */}
-      <section id="features" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-gradient-to-b from-[#FFF9EE] via-[#FAF8F5]/60 to-[#FFF9EE]">
+      <section id="features" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#EBDED0] bg-gradient-to-b from-white via-[#FBF8F3]/80 to-white">
         <div className="max-w-7xl mx-auto">
           <BentoGridSection />
         </div>
       </section>
 
       {/* 6. Gamified Roadmap Teaser: Full-Width Section */}
-      <section id="learning-path" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-[#FAF8F5]/60">
+      <section id="learning-path" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#EBDED0] bg-[#F6EFE6]/50">
         <div className="max-w-7xl mx-auto">
           <GamifiedRoadmapTeaser />
         </div>
       </section>
 
       {/* 7. Expat Testimonials: Full-Width Section */}
-      <section id="testimonials" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#DECBB4]/60 bg-gradient-to-b from-[#FFF9EE] to-[#FAF8F5]/60">
+      <section id="testimonials" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#EBDED0] bg-gradient-to-b from-white to-[#FBF8F3]">
         <div className="max-w-7xl mx-auto">
           <ExpatTestimonials />
         </div>

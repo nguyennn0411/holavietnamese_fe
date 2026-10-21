@@ -123,7 +123,7 @@ const UNITS_DATA: UnitConfig[] = [
     unitNumber: 1,
     title: 'Bước Đầu Làm Quen & Nền Tảng Âm Tiết',
     description: 'Làm quen cách chào hỏi lịch sự, giải mã 6 thanh điệu tiếng Việt và số đếm mua sắm.',
-    gradient: 'linear-gradient(135deg, #B42318 0%, #E11D48 100%)',
+    gradient: 'linear-gradient(135deg, #FF7A00 0%, #E11D48 100%)',
     depthColor: '#7A170F',
     lessonRange: [0, 2], // Lessons 1, 2, 3
     guidebook: {
@@ -351,7 +351,7 @@ export const DashboardScreen: React.FC = () => {
       <div className="duo-page-container flex items-center justify-center" aria-busy="true">
         <div className="text-center">
           <BuffaloMascot variant="thinking" size="large" animated />
-          <h2 className="mt-4 text-xl font-black text-[#581C17]">Đang chuẩn bị bản đồ học tập...</h2>
+          <h2 className="mt-4 text-xl font-black text-[#EA580C]">Đang chuẩn bị bản đồ học tập...</h2>
           <p className="mt-1 text-sm text-[#8a7565]">Nghé đang sắp xếp bài học theo cấp độ của bạn.</p>
         </div>
       </div>
@@ -367,7 +367,7 @@ export const DashboardScreen: React.FC = () => {
             <span className="font-extrabold text-sm text-[#8a7565]">KHÓA ĐANG HỌC:</span>
             {courseList.length > 1 ? (
               <select
-                className="cursor-pointer rounded-xl border border-[#E8DCCB] bg-[#FFF8EE] px-3 py-1 text-sm font-black text-[#581C17] outline-none hover:bg-white"
+                className="cursor-pointer rounded-xl border border-[#E8DCCB] bg-[#FFF8EE] px-3 py-1 text-sm font-black text-[#EA580C] outline-none hover:bg-white"
                 value={courseIdOf(course) ?? ''}
                 onChange={(e) => {
                   const next = courseList.find((c) => String(courseIdOf(c)) === e.target.value);
@@ -381,7 +381,7 @@ export const DashboardScreen: React.FC = () => {
                 ))}
               </select>
             ) : (
-              <span className="text-sm font-black text-[#581C17]">
+              <span className="text-sm font-black text-[#EA580C]">
                 {course?.titleVi ?? course?.title ?? 'Tiếng Việt Sơ Cấp A1'}
               </span>
             )}
@@ -670,7 +670,7 @@ export const DashboardScreen: React.FC = () => {
                 </div>
 
                 <div className="duo-quest-item">
-                  <span className="w-10 h-10 rounded-xl bg-[#FEE2E2] text-[#DC2626] flex items-center justify-center font-black">
+                  <span className="w-10 h-10 rounded-xl bg-[#FFF4EB] text-[#FF7A00] flex items-center justify-center font-black">
                     <Zap size={20} />
                   </span>
                   <div className="flex-1">
@@ -679,7 +679,7 @@ export const DashboardScreen: React.FC = () => {
                       <span>0 / 1</span>
                     </div>
                     <div className="h-2 w-full bg-[#E5E7EB] rounded-full overflow-hidden">
-                      <div className="h-full bg-[#DC2626] rounded-full" style={{ width: '0%' }} />
+                      <div className="h-full bg-[#FF7A00] rounded-full" style={{ width: '0%' }} />
                     </div>
                   </div>
                 </div>
@@ -711,7 +711,7 @@ export const DashboardScreen: React.FC = () => {
                   >
                     <div className="flex items-center gap-2.5">
                       <span className="text-base">{item.medal}</span>
-                      <span className={item.isUser ? 'text-[#B42318]' : 'text-[#374151]'}>
+                      <span className={item.isUser ? 'text-[#FF7A00]' : 'text-[#374151]'}>
                         {item.name}
                       </span>
                     </div>
@@ -723,7 +723,7 @@ export const DashboardScreen: React.FC = () => {
               <div className="mt-4 pt-3 border-t border-[#F3EDE3] text-center">
                 <Link
                   to="/progress"
-                  className="text-xs font-black text-[#B42318] hover:underline"
+                  className="text-xs font-black text-[#FF7A00] hover:underline"
                 >
                   Xem bảng xếp hạng đầy đủ →
                 </Link>
@@ -735,7 +735,7 @@ export const DashboardScreen: React.FC = () => {
               <div className="flex items-start gap-3">
                 <BuffaloMascot variant="teaching" size="small" animated />
                 <div>
-                  <h4 className="font-black text-sm text-[#581C17]">Mẹo học từ Nghé:</h4>
+                  <h4 className="font-black text-sm text-[#EA580C]">Mẹo học từ Nghé:</h4>
                   <p className="mt-1 text-xs text-[#78685B] leading-relaxed">
                     "Luyện nghe thanh điệu 5 phút mỗi sáng sẽ giúp bạn phản xạ tự nhiên như người bản xứ!"
                   </p>
@@ -783,7 +783,7 @@ export const DashboardScreen: React.FC = () => {
                   {selectedLesson.description}
                 </p>
 
-                <div className="mt-4 flex items-center justify-center gap-4 text-xs font-bold text-[#581C17]">
+                <div className="mt-4 flex items-center justify-center gap-4 text-xs font-bold text-[#EA580C]">
                   <span className="flex items-center gap-1.5 bg-[#FAF5EB] px-3 py-1.5 rounded-full">
                     <Clock3 size={15} /> {selectedLesson.estimatedDuration || 12} phút
                   </span>
@@ -859,7 +859,7 @@ export const DashboardScreen: React.FC = () => {
               </button>
 
               <div className="pt-2">
-                <div className="flex items-center gap-2 text-xs font-black text-[#B42318] uppercase tracking-wider mb-2">
+                <div className="flex items-center gap-2 text-xs font-black text-[#FF7A00] uppercase tracking-wider mb-2">
                   <BookMarked size={18} /> Sổ tay ngữ pháp & phát âm
                 </div>
                 <h3 className="text-xl font-black text-[#251B18]">
@@ -883,7 +883,7 @@ export const DashboardScreen: React.FC = () => {
                   <div className="grid grid-cols-2 gap-2">
                     {activeGuidebook.vocabulary.map((vocab, i) => (
                       <div key={i} className="bg-[#FFF8EE] border border-[#EADBC8] p-2 rounded-xl text-xs">
-                        <strong className="block text-[#B42318]">{vocab.vi}</strong>
+                        <strong className="block text-[#FF7A00]">{vocab.vi}</strong>
                         <span className="text-[#8a7565]">{vocab.en}</span>
                       </div>
                     ))}
@@ -892,7 +892,7 @@ export const DashboardScreen: React.FC = () => {
 
                 <button
                   type="button"
-                  className="mt-6 w-full py-3 rounded-xl bg-[#251B18] text-white text-xs font-black hover:bg-black transition-colors"
+                  className="mt-6 w-full py-3 rounded-xl bg-[#F97316] text-white text-xs font-black hover:bg-[#C2410C] shadow-sm transition-colors"
                   onClick={() => setActiveGuidebook(null)}
                 >
                   ĐÃ HIỂU! TIẾP TỤC HỌC

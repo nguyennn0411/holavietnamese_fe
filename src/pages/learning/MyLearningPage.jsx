@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
@@ -108,18 +108,18 @@ export function MyLearningPage({ initialTab = 'courses' }) {
   return (
     <div className="mylearning-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Hero Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF9EE] via-[#F7F0E3] to-[#EEE3D1] border border-[#DECBB4] p-6 sm:p-10 shadow-sm">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#A62A24] text-xs font-bold uppercase tracking-wider shadow-xs">
-            <Sparkles size={14} className="text-[#A62A24]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
+            <Sparkles size={14} className="text-[#EA580C]" />
             <BilingualText>{"Hành trình của riêng bạn • Personal Learning Space"}</BilingualText>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-black text-[#431914] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-black text-[#253044] tracking-tight">
             <BilingualText>{"Góc học tập của tôi"}</BilingualText>
           </h1>
 
-          <p className="text-sm sm:text-base text-[#78685B] leading-relaxed max-w-2xl">
+          <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
             <BilingualText>
               {"Từng bài học, từng từ mới. Một chút tiến bộ mỗi ngày tích lũy thành phản xạ tiếng Việt tự nhiên."}
             </BilingualText>
@@ -128,16 +128,16 @@ export function MyLearningPage({ initialTab = 'courses' }) {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
               to="/courses"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-xs transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-xs transition-all"
             >
               <BilingualText>{"Khám phá thêm khóa học →"}</BilingualText>
             </Link>
 
             <Link
               to="/edtech/dashboard"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 hover:bg-white text-[#431914] border border-[#DECBB4] font-semibold text-xs shadow-xs transition-all hover:border-[#A62A24]"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 hover:bg-white text-[#253044] border border-[#E8E5DF] font-semibold text-xs shadow-xs transition-all hover:border-[#EA580C]"
             >
-              <Compass size={15} className="text-[#A62A24]" />
+              <Compass size={15} className="text-[#EA580C]" />
               <BilingualText>{"Đến Lộ trình học tương tác (EdTech) →"}</BilingualText>
             </Link>
           </div>
@@ -145,7 +145,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
       </section>
 
       {/* Modern Tabs Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-[#DECBB4] scrollbar-none" role="tablist" aria-label="Góc học tập">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-[#E8E5DF] scrollbar-none" role="tablist" aria-label="Góc học tập">
         {tabItems.map((item) => {
           const Icon = item.icon;
           const isActive = tab === item.id;
@@ -158,11 +158,11 @@ export function MyLearningPage({ initialTab = 'courses' }) {
               onClick={() => setTab(item.id)}
               className={`flex-shrink-0 px-4 py-3 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all duration-200 cursor-pointer ${
                 isActive
-                  ? 'border-[#A62A24] text-[#A62A24] bg-[#FFF9EE]'
-                  : 'border-transparent text-[#78685B] hover:text-[#431914] hover:bg-[#FFF9EE]/50'
+                  ? 'border-[#EA580C] text-[#EA580C] bg-[#FFF7E8]'
+                  : 'border-transparent text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8]/50'
               }`}
             >
-              <Icon size={16} className={isActive ? 'text-[#A62A24]' : 'text-[#78685B]'} />
+              <Icon size={16} className={isActive ? 'text-[#EA580C]' : 'text-[#64748B]'} />
               <BilingualText>{item.label}</BilingualText>
             </button>
           );
@@ -187,57 +187,57 @@ export function MyLearningPage({ initialTab = 'courses' }) {
             <div className="space-y-8">
               {/* Stat Summary Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-[#FFF9EE] border border-[#DECBB4] text-[#A62A24] flex items-center justify-center shrink-0">
+                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-xs flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-[#FFF7E8] border border-[#E8E5DF] text-[#EA580C] flex items-center justify-center shrink-0">
                     <BookOpen size={20} />
                   </div>
                   <div>
-                    <span className="text-[11px] font-bold text-[#78685B] block uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
                       Bài đã học
                     </span>
-                    <strong className="text-lg sm:text-xl font-black text-[#431914]">
+                    <strong className="text-lg sm:text-xl font-black text-[#253044]">
                       {data.completedLessons ?? data.completedLessonsCount ?? 0}
                     </strong>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3.5">
+                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-xs flex items-center gap-3.5">
                   <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
                     <Languages size={20} />
                   </div>
                   <div>
-                    <span className="text-[11px] font-bold text-[#78685B] block uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
                       Từ đã lưu
                     </span>
-                    <strong className="text-lg sm:text-xl font-black text-[#431914]">
+                    <strong className="text-lg sm:text-xl font-black text-[#253044]">
                       {data.savedVocabCount ?? 0}
                     </strong>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3.5">
+                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-xs flex items-center gap-3.5">
                   <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 text-orange-600 flex items-center justify-center shrink-0">
                     <Flame size={20} />
                   </div>
                   <div>
-                    <span className="text-[11px] font-bold text-[#78685B] block uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
                       Chuỗi học tập
                     </span>
-                    <strong className="text-lg sm:text-xl font-black text-[#431914]">
+                    <strong className="text-lg sm:text-xl font-black text-[#253044]">
                       {data.currentStreak ?? data.streakCount ?? 1} ngày
                     </strong>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3.5">
+                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-xs flex items-center gap-3.5">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
                     <Clock size={20} />
                   </div>
                   <div>
-                    <span className="text-[11px] font-bold text-[#78685B] block uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
                       Thời gian học
                     </span>
-                    <strong className="text-lg sm:text-xl font-black text-[#431914]">
+                    <strong className="text-lg sm:text-xl font-black text-[#253044]">
                       {data.totalTimeMinutes ?? 45} phút
                     </strong>
                   </div>
@@ -252,7 +252,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="rounded-3xl bg-gradient-to-r from-[#24382B] via-[#2F4A39] to-[#3B5B47] text-[#FFF9EE] p-6 sm:p-8 shadow-md border border-[#24382B] flex flex-col md:flex-row md:items-center justify-between gap-6"
+                      className="rounded-3xl bg-gradient-to-r from-[#24382B] via-[#2F4A39] to-[#3B5B47] text-[#FFF7E8] p-6 sm:p-8 shadow-md border border-[#24382B] flex flex-col md:flex-row md:items-center justify-between gap-6"
                     >
                       <div className="space-y-2 max-w-xl">
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EDF0E5] text-[#24382B] font-extrabold text-[11px] uppercase tracking-wider">
@@ -284,7 +284,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                               ? `/learn/${activeCourse.id}/lesson/${activeCourse.lastAccessedLessonId}`
                               : `/learn/${activeCourse.id}`
                           }
-                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#431914] font-black text-xs shadow-md transition-all"
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#253044] font-black text-xs shadow-md transition-all"
                         >
                           <Play size={15} fill="currentColor" />
                           <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>
@@ -300,7 +300,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   )}
 
                   {/* Course Filter Controls (All, In Progress, Completed) */}
-                  <div className="flex items-center justify-between border-b border-[#DECBB4]/60 pb-3 flex-wrap gap-3">
+                  <div className="flex items-center justify-between border-b border-[#E8E5DF]/60 pb-3 flex-wrap gap-3">
                     <div className="flex items-center gap-2" role="tablist" aria-label="Bộ lọc khóa học">
                       <button
                         type="button"
@@ -309,8 +309,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         onClick={() => setCourseFilter('all')}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           courseFilter === 'all'
-                            ? 'bg-[#A62A24] text-white shadow-xs'
-                            : 'bg-white text-[#78685B] hover:text-[#431914] border border-[#DECBB4]'
+                            ? 'bg-[#EA580C] text-white shadow-xs'
+                            : 'bg-white text-[#64748B] hover:text-[#253044] border border-[#E8E5DF]'
                         }`}
                       >
                         <BilingualText>{"Tất cả"}</BilingualText> ({allCourses.length})
@@ -323,8 +323,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         onClick={() => setCourseFilter('in_progress')}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           courseFilter === 'in_progress'
-                            ? 'bg-[#A62A24] text-white shadow-xs'
-                            : 'bg-white text-[#78685B] hover:text-[#431914] border border-[#DECBB4]'
+                            ? 'bg-[#EA580C] text-white shadow-xs'
+                            : 'bg-white text-[#64748B] hover:text-[#253044] border border-[#E8E5DF]'
                         }`}
                       >
                         <BilingualText>{"Đang học"}</BilingualText> ({data.inProgressCoursesCount ?? 0})
@@ -337,8 +337,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         onClick={() => setCourseFilter('completed')}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           courseFilter === 'completed'
-                            ? 'bg-[#A62A24] text-white shadow-xs'
-                            : 'bg-white text-[#78685B] hover:text-[#431914] border border-[#DECBB4]'
+                            ? 'bg-[#EA580C] text-white shadow-xs'
+                            : 'bg-white text-[#64748B] hover:text-[#253044] border border-[#E8E5DF]'
                         }`}
                       >
                         <BilingualText>{"Đã hoàn thành"}</BilingualText> ({data.completedCoursesCount ?? 0})
@@ -347,7 +347,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
                     <Link
                       to="/courses"
-                      className="text-xs font-bold text-[#A62A24] hover:text-[#89221E] inline-flex items-center gap-1"
+                      className="text-xs font-bold text-[#EA580C] hover:text-[#C2410C] inline-flex items-center gap-1"
                     >
                       <span>+ <BilingualText>{"Khám phá khóa học mới"}</BilingualText></span>
                     </Link>
@@ -366,7 +366,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                           <motion.article
                             whileHover={{ y: -4 }}
                             key={course.id}
-                            className="card learning-course group relative flex flex-col bg-[#FFF9EE] border border-[#DECBB4] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                            className="card learning-course group relative flex flex-col bg-[#FFF7E8] border border-[#E8E5DF] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
                           >
                             <div className="relative overflow-hidden aspect-[16/10] bg-[#EEE3D1]">
                               <ContentImage
@@ -382,7 +382,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                                 }
                               />
                               <div className="absolute top-3 left-3 z-10">
-                                <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#24382B] text-[#FFF9EE] shadow-sm tracking-wide">
+                                <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#24382B] text-[#FFF7E8] shadow-sm tracking-wide">
                                   {course.level}
                                 </span>
                               </div>
@@ -391,7 +391,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                                   className={`badge px-2.5 py-1 text-xs font-bold rounded-lg shadow-sm flex items-center gap-1 ${
                                     isCompleted
                                       ? 'bg-emerald-800 text-emerald-100 border border-emerald-700'
-                                      : 'bg-[#A62A24] text-white border border-[#89221E]'
+                                      : 'bg-[#EA580C] text-white border border-[#C2410C]'
                                   }`}
                                 >
                                   {isCompleted ? <CheckCircle2 size={12} /> : null}
@@ -402,7 +402,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
                             <div className="learning-course-body p-5 flex flex-col flex-1 justify-between gap-4">
                               <div className="space-y-2">
-                                <h2 className="text-lg font-bold text-[#431914] group-hover:text-[#A62A24] transition-colors leading-snug line-clamp-2">
+                                <h2 className="text-lg font-bold text-[#253044] group-hover:text-[#EA580C] transition-colors leading-snug line-clamp-2">
                                   <Link to={`/courses/${course.id}`} className="hover:underline">
                                     <BilingualText vi={course.titleVi || course.title} en={course.title} />
                                   </Link>
@@ -420,9 +420,9 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                                 </div>
                               </div>
 
-                              <div className="pt-2 border-t border-[#DECBB4]/40 flex items-center gap-2">
+                              <div className="pt-2 border-t border-[#E8E5DF]/40 flex items-center gap-2">
                                 <Link
-                                  className="button flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
+                                  className="button flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-sm transition-all"
                                   to={continueUrl}
                                 >
                                   <BilingualText>{isCompleted ? 'Xem lại khóa học' : 'Tiếp tục học →'}</BilingualText>
@@ -430,7 +430,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                                 </Link>
 
                                 <Link
-                                  className="px-3 py-2.5 rounded-xl border border-[#DECBB4] bg-white hover:bg-[#F7F0E3] text-[#431914] text-xs font-bold transition-all"
+                                  className="px-3 py-2.5 rounded-xl border border-[#E8E5DF] bg-white hover:bg-[#F7F0E3] text-[#253044] text-xs font-bold transition-all"
                                   to={`/courses/${course.id}`}
                                   title="Chi tiết khóa học"
                                 >
@@ -445,19 +445,19 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                       {/* Add New Course Card */}
                       <motion.div
                         whileHover={{ y: -4 }}
-                        className="card learning-course-add group flex flex-col items-center justify-center text-center p-8 bg-[#FFF9EE]/70 border-2 border-dashed border-[#DECBB4] hover:border-[#A62A24] rounded-2xl transition-all"
+                        className="card learning-course-add group flex flex-col items-center justify-center text-center p-8 bg-[#FFF7E8]/70 border-2 border-dashed border-[#E8E5DF] hover:border-[#EA580C] rounded-2xl transition-all"
                       >
-                        <span className="w-12 h-12 rounded-2xl bg-[#F5E1D8] text-[#A62A24] flex items-center justify-center mb-3 shadow-xs group-hover:scale-110 transition-transform">
+                        <span className="w-12 h-12 rounded-2xl bg-[#FFF0DC] text-[#EA580C] flex items-center justify-center mb-3 shadow-xs group-hover:scale-110 transition-transform">
                           <Plus size={24} />
                         </span>
-                        <h2 className="text-lg font-bold text-[#431914] mb-1">
+                        <h2 className="text-lg font-bold text-[#253044] mb-1">
                           <BilingualText>{"Khám phá khóa học mới?"}</BilingualText>
                         </h2>
-                        <p className="text-xs text-[#78685B] max-w-xs mb-4">
+                        <p className="text-xs text-[#64748B] max-w-xs mb-4">
                           <BilingualText>{"Mở rộng hành trình học tập tiếng Việt theo chủ đề bạn yêu thích."}</BilingualText>
                         </p>
                         <Link
-                          className="button secondary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
+                          className="button secondary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-[#E8E5DF] text-[#253044] font-bold text-xs hover:border-[#EA580C] transition-all"
                           to="/courses"
                         >
                           <BilingualText>{"Khám phá khóa học"}</BilingualText>
@@ -480,14 +480,14 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                           <button
                             type="button"
                             onClick={() => setCourseFilter('all')}
-                            className="px-4 py-2 rounded-xl bg-[#A62A24] text-white font-bold text-xs shadow-xs hover:bg-[#89221E] cursor-pointer"
+                            className="px-4 py-2 rounded-xl bg-[#EA580C] text-white font-bold text-xs shadow-xs hover:bg-[#C2410C] cursor-pointer"
                           >
                             <BilingualText>{"Xem tất cả khóa học"}</BilingualText>
                           </button>
                         ) : (
                           <Link
                             to="/courses"
-                            className="px-5 py-2.5 rounded-xl bg-[#A62A24] text-white font-bold text-xs shadow-md hover:bg-[#89221E]"
+                            className="px-5 py-2.5 rounded-xl bg-[#EA580C] text-white font-bold text-xs shadow-md hover:bg-[#C2410C]"
                           >
                             <BilingualText>{"Khám phá khóa học ngay →"}</BilingualText>
                           </Link>
@@ -500,26 +500,26 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
               {/* TAB 2: Saved Vocabulary */}
               {tab === 'vocabulary' && (
-                <section className="card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
-                  <div className="builder-heading flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DECBB4]/60 pb-5">
+                <section className="card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+                  <div className="builder-heading flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E5DF]/60 pb-5">
                     <div>
-                      <h2 className="text-xl sm:text-2xl font-black text-[#431914]">
+                      <h2 className="text-xl sm:text-2xl font-black text-[#253044]">
                         <BilingualText>{"Từ vựng đã lưu ("}</BilingualText>
                         {data.savedVocabCount ?? 0})
                       </h2>
-                      <p className="text-xs text-[#78685B] mt-1">
+                      <p className="text-xs text-[#64748B] mt-1">
                         <BilingualText>{"Những từ quen thuộc trên hành trình học của bạn."}</BilingualText>
                       </p>
                     </div>
                     <div className="actions flex items-center gap-3">
                       <Link
-                        className="button secondary px-4 py-2 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
+                        className="button secondary px-4 py-2 rounded-xl bg-white border border-[#E8E5DF] text-[#253044] font-bold text-xs hover:border-[#EA580C] transition-all"
                         to={ROUTES.VOCABULARY_NOTEBOOK}
                       >
                         <BilingualText>{"Mở sổ tay"}</BilingualText>
                       </Link>
                       <Link
-                        className="button px-5 py-2 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
+                        className="button px-5 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-sm transition-all"
                         to={ROUTES.VOCABULARY_REVIEW}
                       >
                         <BilingualText>{"Ôn tập →"}</BilingualText>
@@ -531,7 +531,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                     <div className="mylearning-vocab-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {data.recentVocab.map((word, index) => (
                         <div
-                          className="mylearning-word-chip bg-white/90 border border-[#DECBB4] rounded-2xl p-4 shadow-xs hover:shadow-md transition-all space-y-2"
+                          className="mylearning-word-chip bg-white/90 border border-[#E8E5DF] rounded-2xl p-4 shadow-xs hover:shadow-md transition-all space-y-2"
                           key={index}
                         >
                           <div className="flex items-center justify-between">
@@ -539,15 +539,15 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                               className={`badge px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
                                 word.mastered
                                   ? 'bg-[#EDF0E5] text-[#24382B]'
-                                  : 'bg-[#F8E6B7] text-[#431914]'
+                                  : 'bg-[#F8E6B7] text-[#253044]'
                               }`}
                             >
                               <BilingualText>{word.mastered ? 'Đã thuộc' : 'Đang ôn tập'}</BilingualText>
                             </span>
                             <SpeakButton text={word.vi} />
                           </div>
-                          <h3 className="text-base font-bold text-[#431914]">{word.vi}</h3>
-                          <p className="text-xs text-[#78685B]">{word.en}</p>
+                          <h3 className="text-base font-bold text-[#253044]">{word.vi}</h3>
+                          <p className="text-xs text-[#64748B]">{word.en}</p>
                         </div>
                       ))}
                     </div>
@@ -562,16 +562,16 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
               {/* TAB 3: Cultural Journey */}
               {tab === 'journey' && (
-                <div className="journey-learning card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col md:flex-row items-center gap-8">
-                  <div className="w-48 h-48 shrink-0 rounded-2xl overflow-hidden border border-[#DECBB4] shadow-sm bg-white p-2">
+                <div className="journey-learning card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col md:flex-row items-center gap-8">
+                  <div className="w-48 h-48 shrink-0 rounded-2xl overflow-hidden border border-[#E8E5DF] shadow-sm bg-white p-2">
                     <Artwork kind="lanterns" className="w-full h-full object-cover rounded-xl" />
                   </div>
                   <div className="space-y-4 flex-1">
                     <div>
-                      <span className="eyebrow text-xs font-bold uppercase tracking-wider text-[#A62A24]">
+                      <span className="eyebrow text-xs font-bold uppercase tracking-wider text-[#EA580C]">
                         <BilingualText>{"Hành trình văn hóa"}</BilingualText>
                       </span>
-                      <h2 className="text-2xl sm:text-3xl font-black text-[#431914] mt-1">
+                      <h2 className="text-2xl sm:text-3xl font-black text-[#253044] mt-1">
                         <BilingualText>{data.journeyCity || 'Khám phá Việt Nam'}</BilingualText>
                       </h2>
                     </div>
@@ -581,20 +581,20 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         <ProgressBar value={data.journeyProgress} label="Tiến độ hành trình" />
                       </div>
                     ) : (
-                      <p className="text-xs text-[#78685B]">
+                      <p className="text-xs text-[#64748B]">
                         <BilingualText>{"Chưa có dữ liệu tiến độ hành trình."}</BilingualText>
                       </p>
                     )}
 
                     <div className="actions flex flex-wrap items-center gap-3 pt-2">
                       <Link
-                        className="button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#A62A24] hover:bg-[#89221E] text-white font-bold text-xs shadow-sm transition-all"
+                        className="button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-sm transition-all"
                         to="/explore"
                       >
                         <BilingualText>{"Xem các điểm đến →"}</BilingualText>
                       </Link>
                       <Link
-                        className="button secondary px-5 py-2.5 rounded-xl bg-white border border-[#DECBB4] text-[#431914] font-bold text-xs hover:border-[#A62A24] transition-all"
+                        className="button secondary px-5 py-2.5 rounded-xl bg-white border border-[#E8E5DF] text-[#253044] font-bold text-xs hover:border-[#EA580C] transition-all"
                         to="/achievements"
                       >
                         <BilingualText>{"Hộ chiếu & thành tích"}</BilingualText>
@@ -606,12 +606,12 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
               {/* TAB 4: Quiz History */}
               {tab === 'quiz' && (
-                <section className="card bg-[#FFF9EE] border border-[#DECBB4] rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
-                  <div className="border-b border-[#DECBB4]/60 pb-4">
-                    <h2 className="text-xl sm:text-2xl font-black text-[#431914]">
+                <section className="card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+                  <div className="border-b border-[#E8E5DF]/60 pb-4">
+                    <h2 className="text-xl sm:text-2xl font-black text-[#253044]">
                       <BilingualText>{"Nhìn lại những điều đã học"}</BilingualText>
                     </h2>
-                    <p className="text-xs text-[#78685B] mt-0.5">
+                    <p className="text-xs text-[#64748B] mt-0.5">
                       <BilingualText>{"Lịch sử làm bài kiểm tra và đánh giá năng lực tiếng Việt của bạn."}</BilingualText>
                     </p>
                   </div>
@@ -620,12 +620,12 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                     <div className="space-y-3">
                       {data.quizHistory.map((quiz) => (
                         <div
-                          className="list-row flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/80 border border-[#DECBB4] gap-3"
+                          className="list-row flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/80 border border-[#E8E5DF] gap-3"
                           key={quiz.id}
                         >
                           <div className="space-y-1">
-                            <strong className="block text-sm font-bold text-[#431914]">{quiz.quizName}</strong>
-                            <p className="text-[11px] text-[#78685B] flex items-center gap-1">
+                            <strong className="block text-sm font-bold text-[#253044]">{quiz.quizName}</strong>
+                            <p className="text-[11px] text-[#64748B] flex items-center gap-1">
                               <Calendar size={12} />
                               {quiz.date}
                             </p>
@@ -633,13 +633,13 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                           <div className="actions flex items-center gap-3 self-end sm:self-auto">
                             <span
                               className={`badge px-2.5 py-1 rounded-lg text-xs font-bold ${
-                                quiz.passed ? 'bg-[#EDF0E5] text-[#24382B]' : 'bg-[#F5E1D8] text-[#A62A24]'
+                                quiz.passed ? 'bg-[#EDF0E5] text-[#24382B]' : 'bg-[#FFF0DC] text-[#EA580C]'
                               }`}
                             >
                               {quiz.score}/100 · <BilingualText>{quiz.passed ? 'Đạt' : 'Cần ôn tập'}</BilingualText>
                             </span>
                             <Link
-                              className="text-link text-xs font-bold text-[#A62A24] hover:underline"
+                              className="text-link text-xs font-bold text-[#EA580C] hover:underline"
                               to={`/quiz-attempts/${quiz.id}/result`}
                             >
                               <BilingualText>{"Xem kết quả →"}</BilingualText>

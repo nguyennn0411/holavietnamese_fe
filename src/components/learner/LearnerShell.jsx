@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
-  Award, BarChart3, Bell, BookOpen, Bot, ChevronLeft, ChevronRight, Compass, Flame,
-  GraduationCap, Headphones, Home, Languages, LockKeyhole, Mic2, Settings,
-  Newspaper, Palette, Sparkles, Trophy, UserRound, Zap,
+  Bell, BookOpen, Bot, ChevronLeft, Compass, Flame,
+  GraduationCap, Headphones, Home, Languages, Mic2,
+  Newspaper, Palette, Sparkles, Zap,
 } from 'lucide-react';
 import { Brand } from '@/components/layout/Brand';
 import { UserMenu } from '@/components/layout/UserMenu';
@@ -24,12 +24,6 @@ const learnerItems = [
   { label: 'listening', icon: Headphones, status: 'insideLessons' },
   { to: '/ai-scenarios', label: 'speaking', icon: GraduationCap },
   { to: '/ai-tutor', label: 'aiConversation', icon: Bot },
-  { label: 'quizzes', icon: Award, status: 'insideCourses' },
-  { label: 'leaderboard', icon: Trophy, status: 'comingSoon' },
-  { to: '/achievements', label: 'achievements', icon: Trophy },
-  { to: '/progress', label: 'progress', icon: BarChart3 },
-  { to: '/profile', label: 'profile', icon: UserRound },
-  { to: '/settings', label: 'settings', icon: Settings },
 ];
 
 export function LearnerSidebar({ collapsed, onToggle }) {

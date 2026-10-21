@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { mediaSource } from '@/components/common/mediaSource';
 import { Volume2, Video, AlertCircle } from 'lucide-react';
@@ -34,7 +34,7 @@ function MediaAttempt({ value, type }) {
 
   if (type === 'video') {
     return (
-      <div className="video-player-frame rounded-2xl overflow-hidden bg-black/90 shadow-sm border border-[#DECBB4]/60">
+      <div className="video-player-frame rounded-2xl overflow-hidden bg-black/90 shadow-sm border border-[#E8E5DF]/60">
         <Player
           src={src}
           controls
@@ -51,9 +51,9 @@ function MediaAttempt({ value, type }) {
   }
 
   return (
-    <div className="audio-player-wrapper p-3 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4] flex flex-col sm:flex-row items-center gap-3 shadow-2xs">
-      <div className="flex items-center gap-2 text-xs font-bold text-[#A62A24] shrink-0">
-        <span className="w-8 h-8 rounded-xl bg-white border border-[#DECBB4]/60 flex items-center justify-center text-[#DA251D] shadow-2xs">
+    <div className="audio-player-wrapper p-3 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF] flex flex-col sm:flex-row items-center gap-3 shadow-2xs">
+      <div className="flex items-center gap-2 text-xs font-bold text-[#EA580C] shrink-0">
+        <span className="w-8 h-8 rounded-xl bg-white border border-[#E8E5DF]/60 flex items-center justify-center text-[#FF7A00] shadow-2xs">
           <Volume2 size={16} />
         </span>
         <span className="hidden sm:inline">Phát âm bài học</span>

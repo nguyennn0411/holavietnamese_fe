@@ -12,7 +12,7 @@ export function RequireAuth({ fallbackFeature }) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
         <span className="loading-spinner" aria-hidden="true" />
-        <p className="text-sm font-semibold text-[#89221E]">
+        <p className="text-sm font-semibold text-[#C2410C]">
           <BilingualText vi="Đang kiểm tra trạng thái đăng nhập…" en="Checking authentication status…" />
         </p>
       </div>

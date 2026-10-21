@@ -1,5 +1,25 @@
 // Static presentation labels only. API values and user content are not translated.
 export const UI_TRANSLATIONS = {
+  "Nhập email hoặc tên đăng nhập": [
+    "Nhập email hoặc tên đăng nhập",
+    "Enter your email or username"
+  ],
+  "Nhập lại mật khẩu": [
+    "Nhập lại mật khẩu",
+    "Confirm your password"
+  ],
+  "Đăng nhập bằng Google": [
+    "Đăng nhập bằng Google",
+    "Sign in with Google"
+  ],
+  "Bắt đầu học tiếng Việt cùng HolaVietnamese.": [
+    "Bắt đầu học tiếng Việt cùng HolaVietnamese.",
+    "Start learning Vietnamese with HolaVietnamese."
+  ],
+  "Tiếp tục hành trình học tiếng Việt của bạn.": [
+    "Tiếp tục hành trình học tiếng Việt của bạn.",
+    "Continue your Vietnamese learning journey."
+  ],
   "Đang tải trang…": [
     "Đang tải trang…",
     "Loading page…"

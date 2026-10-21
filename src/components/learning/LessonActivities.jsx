@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -440,45 +440,45 @@ function ActivityWorkspace({
 
       {/* Thông tin giới thiệu & Mục tiêu bài học (nếu có) */}
       {(lesson.objectiveVi || lesson.objectiveEn || lesson.descriptionVi || lesson.description || lesson.introduction?.textVi || lesson.content) && (
-        <details className="lesson-overview-banner group rounded-2xl border border-[#DECBB4] bg-gradient-to-r from-[#FFFDF9] to-[#FFF9EE] p-4 text-xs shadow-2xs open:shadow-xs transition-all">
-          <summary className="flex items-center justify-between cursor-pointer list-none font-bold text-[#431914] select-none">
+        <details className="lesson-overview-banner group rounded-2xl border border-[#E8E5DF] bg-gradient-to-r from-[#FFFDF9] to-[#FFF7E8] p-4 text-xs shadow-2xs open:shadow-xs transition-all">
+          <summary className="flex items-center justify-between cursor-pointer list-none font-bold text-[#253044] select-none">
             <span className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-[#FFF2D6] text-[#A62A24] flex items-center justify-center">
+              <span className="w-6 h-6 rounded-lg bg-[#FFF2D6] text-[#EA580C] flex items-center justify-center">
                 <BookOpen size={13} />
               </span>
               <span>
                 <BilingualText>{"Mục tiêu & Giới thiệu bài học"}</BilingualText>
               </span>
             </span>
-            <span className="text-[11px] font-semibold text-[#A62A24] group-open:rotate-180 transition-transform">
+            <span className="text-[11px] font-semibold text-[#EA580C] group-open:rotate-180 transition-transform">
               ▼
             </span>
           </summary>
 
-          <div className="pt-3.5 mt-2 border-t border-[#DECBB4]/40 space-y-2 text-stone-700 leading-relaxed">
+          <div className="pt-3.5 mt-2 border-t border-[#E8E5DF]/40 space-y-2 text-stone-700 leading-relaxed">
             {(lesson.objectiveVi || lesson.objectiveEn) && (
               <div className="flex items-start gap-2">
-                <span className="font-bold text-[#A62A24] shrink-0">🎯 <BilingualText>{"Mục tiêu:"}</BilingualText></span>
-                <span className="font-medium text-[#431914]">
+                <span className="font-bold text-[#EA580C] shrink-0">🎯 <BilingualText>{"Mục tiêu:"}</BilingualText></span>
+                <span className="font-medium text-[#253044]">
                   <BilingualText vi={lesson.objectiveVi} en={lesson.objectiveEn} />
                 </span>
               </div>
             )}
 
             {(lesson.descriptionVi || lesson.description) && (
-              <p className="m-0 text-[#78685B]">
+              <p className="m-0 text-[#64748B]">
                 <BilingualText vi={lesson.descriptionVi || lesson.description} en={lesson.description} />
               </p>
             )}
 
             {lesson.introduction && (
-              <div className="p-3 rounded-xl bg-white/80 border border-[#DECBB4]/40 text-stone-800 space-y-1">
+              <div className="p-3 rounded-xl bg-white/80 border border-[#E8E5DF]/40 text-stone-800 space-y-1">
                 <BilingualText vi={lesson.introduction.textVi} en={lesson.introduction.textEn} />
               </div>
             )}
 
             {lesson.content && (
-              <p className="m-0 text-stone-700 whitespace-pre-line bg-white/60 p-3 rounded-xl border border-[#DECBB4]/30">
+              <p className="m-0 text-stone-700 whitespace-pre-line bg-white/60 p-3 rounded-xl border border-[#E8E5DF]/30">
                 {lesson.content}
               </p>
             )}
@@ -487,18 +487,18 @@ function ActivityWorkspace({
       )}
 
       {/* Thanh tiến độ hoạt động trong bài */}
-      <div className="bg-white rounded-2xl border border-[#DECBB4] p-4 shadow-xs space-y-3">
-        <div className="flex items-center justify-between text-xs font-bold text-[#78685B]">
-          <span className="flex items-center gap-1.5 text-[#431914]">
-            <Sparkles size={14} className="text-[#DA251D]" />
+      <div className="bg-white rounded-2xl border border-[#E8E5DF] p-4 shadow-xs space-y-3">
+        <div className="flex items-center justify-between text-xs font-bold text-[#64748B]">
+          <span className="flex items-center gap-1.5 text-[#253044]">
+            <Sparkles size={14} className="text-[#FF7A00]" />
             <span>Hoạt động {index + 1} / {activities.length}</span>
           </span>
-          <span className="text-[#DA251D] font-extrabold">{progress?.progressPercent ?? 0}%</span>
+          <span className="text-[#FF7A00] font-extrabold">{progress?.progressPercent ?? 0}%</span>
         </div>
 
         <div className="w-full h-2 rounded-full bg-stone-100 overflow-hidden">
           <div
-            className="h-full rounded-full bg-[#DA251D] transition-all duration-300"
+            className="h-full rounded-full bg-[#FF7A00] transition-all duration-300"
             style={{ width: `${progress?.progressPercent ?? 0}%` }}
           />
         </div>
@@ -523,10 +523,10 @@ function ActivityWorkspace({
                 aria-current={isCurrent ? 'step' : undefined}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                   isCurrent
-                    ? 'bg-[#DA251D] text-white shadow-md'
+                    ? 'bg-[#FF7A00] text-white shadow-md'
                     : isDone
                     ? 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200'
-                    : 'bg-[#FFF9EE] hover:bg-[#FFF2D6] text-[#431914] border border-[#DECBB4]/60'
+                    : 'bg-[#FFF7E8] hover:bg-[#FFF2D6] text-[#253044] border border-[#E8E5DF]/60'
                 }`}
               >
                 {isDone ? (
@@ -542,11 +542,11 @@ function ActivityWorkspace({
       </div>
 
       {/* Khung nội dung chính của hoạt động */}
-      <article key={activity.id} className={`activity-card bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-sm space-y-6 activity-${activity.activityType.toLowerCase()} transition-all duration-300 ease-out animate-fade-in`}>
+      <article key={activity.id} className={`activity-card bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-sm space-y-6 activity-${activity.activityType.toLowerCase()} transition-all duration-300 ease-out animate-fade-in`}>
         {/* Header hoạt động */}
-        <div className="border-b border-[#DECBB4]/40 pb-5 space-y-2">
+        <div className="border-b border-[#E8E5DF]/40 pb-5 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#FFF2D6] text-[#A62A24] font-black text-xs uppercase tracking-wider border border-[#FFCD00]/50">
+            <span className="px-3 py-1 rounded-full bg-[#FFF2D6] text-[#EA580C] font-black text-xs uppercase tracking-wider border border-[#FFCD00]/50">
               Hoạt động {index + 1} · {activity.activityType.replaceAll('_', ' ')}
             </span>
             {completed && (
@@ -557,12 +557,12 @@ function ActivityWorkspace({
             )}
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-black text-[#431914] tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-black text-[#253044] tracking-tight">
             <BilingualText vi={activity.titleVi || activity.title} en={activity.title} />
           </h2>
 
           {(activity.instructionVi || activity.instruction) && (
-            <p className="lead text-sm sm:text-base text-[#78685B] leading-relaxed">
+            <p className="lead text-sm sm:text-base text-[#64748B] leading-relaxed">
               <BilingualText vi={activity.instructionVi || activity.instruction} en={activity.instruction} />
             </p>
           )}
@@ -594,10 +594,10 @@ function ActivityWorkspace({
       </article>
 
       {/* Điều hướng hoạt động ở đáy thẻ */}
-      <div className="lesson-navigation flex items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-[#DECBB4] shadow-xs">
+      <div className="lesson-navigation flex items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-[#E8E5DF] shadow-xs">
         <button
           type="button"
-          className="button secondary inline-flex items-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-[#431914] bg-[#FFF9EE] hover:bg-[#FFF2D6] border border-[#DECBB4] disabled:opacity-40 transition-all cursor-pointer"
+          className="button secondary inline-flex items-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-[#253044] bg-[#FFF7E8] hover:bg-[#FFF2D6] border border-[#E8E5DF] disabled:opacity-40 transition-all cursor-pointer"
           disabled={index === 0 || busy}
           onClick={() => change(index - 1)}
         >
@@ -605,7 +605,7 @@ function ActivityWorkspace({
           <BilingualText>{"Trước"}</BilingualText>
         </button>
 
-        <span className="text-xs text-[#78685B] font-medium hidden sm:inline-block">
+        <span className="text-xs text-[#64748B] font-medium hidden sm:inline-block">
           <BilingualText>
             {preview ? 'Chế độ xem trước bài học' : 'Tiến độ được tự động lưu khi hoàn thành'}
           </BilingualText>
@@ -614,7 +614,7 @@ function ActivityWorkspace({
         {preview ? (
           <button
             type="button"
-            className="button inline-flex items-center gap-2 py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#DA251D] hover:bg-[#B71C1C] transition-all cursor-pointer"
+            className="button inline-flex items-center gap-2 py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#FF7A00] hover:bg-[#EA580C] transition-all cursor-pointer"
             disabled={index + 1 >= activities.length}
             onClick={() => change(index + 1)}
           >
@@ -656,7 +656,7 @@ function ActivityWorkspace({
             <button
               type="button"
               onClick={() => change(index + 1)}
-              className="button inline-flex items-center gap-2 py-2.5 px-6 rounded-xl text-xs sm:text-sm font-black text-white bg-[#DA251D] hover:bg-[#B71C1C] shadow-md hover:shadow-lg transition-all cursor-pointer"
+              className="button inline-flex items-center gap-2 py-2.5 px-6 rounded-xl text-xs sm:text-sm font-black text-white bg-[#FF7A00] hover:bg-[#EA580C] shadow-md hover:shadow-lg transition-all cursor-pointer"
             >
               <BilingualText>{"Hoạt động tiếp theo"}</BilingualText>
               <ArrowRight size={14} />
@@ -670,7 +670,7 @@ function ActivityWorkspace({
             className={`button inline-flex items-center gap-2 py-2.5 px-6 rounded-xl text-xs sm:text-sm font-black text-white shadow-md transition-all cursor-pointer ${
               busy || (exercise && !answerPresent(answer))
                 ? 'opacity-50 cursor-not-allowed bg-stone-400'
-                : 'bg-[#DA251D] hover:bg-[#B71C1C] hover:shadow-lg'
+                : 'bg-[#FF7A00] hover:bg-[#EA580C] hover:shadow-lg'
             }`}
           >
             {busy ? (
@@ -743,20 +743,20 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
   // 1. RENDERER CHO QUIZ
   if (type === 'QUIZ') {
     return (
-      <div className="quiz-gate text-center py-10 px-4 space-y-4 bg-gradient-to-br from-[#FFF9EE] to-white rounded-2xl border border-[#DECBB4]">
-        <span className="w-14 h-14 rounded-full bg-[#FFF2D6] text-[#DA251D] inline-flex items-center justify-center mx-auto shadow-xs">
+      <div className="quiz-gate text-center py-10 px-4 space-y-4 bg-gradient-to-br from-[#FFF7E8] to-white rounded-2xl border border-[#E8E5DF]">
+        <span className="w-14 h-14 rounded-full bg-[#FFF2D6] text-[#FF7A00] inline-flex items-center justify-center mx-auto shadow-xs">
           <Award size={28} />
         </span>
-        <h2 className="text-xl sm:text-2xl font-black text-[#431914]">
+        <h2 className="text-xl sm:text-2xl font-black text-[#253044]">
           <BilingualText>{"Nhìn xem bạn đã nói được gì!"}</BilingualText>
         </h2>
-        <p className="lead text-sm sm:text-base text-[#78685B] max-w-md mx-auto">
+        <p className="lead text-sm sm:text-base text-[#64748B] max-w-md mx-auto">
           <BilingualText>{"Củng cố kiến thức bằng một bài kiểm tra ngắn để kiểm tra độ hiểu bài."}</BilingualText>
         </p>
         <div className="pt-2">
           {activity.quizId ? (
             <Link
-              className="button inline-flex items-center gap-2 py-3 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-black text-sm shadow-md"
+              className="button inline-flex items-center gap-2 py-3 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-sm shadow-md"
               to={preview ? `/admin/quizzes/${activity.quizId}/preview` : `/quizzes/${activity.quizId}`}
             >
               <BilingualText>{"Bắt đầu quiz ngay →"}</BilingualText>
@@ -776,10 +776,10 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
         <span className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-800 inline-flex items-center justify-center mx-auto">
           <Sparkles size={28} />
         </span>
-        <h2 className="text-xl sm:text-2xl font-black text-[#431914]">
+        <h2 className="text-xl sm:text-2xl font-black text-[#253044]">
           <BilingualText>{"Đến lượt bạn luyện nói & trò chuyện"}</BilingualText>
         </h2>
-        <p className="text-sm text-[#78685B] max-w-md mx-auto">
+        <p className="text-sm text-[#64748B] max-w-md mx-auto">
           <BilingualText>{"Thực hành cùng AI Tutor trong môi trường đàm thoại trực tiếp."}</BilingualText>
         </p>
         <div className="pt-2">
@@ -846,7 +846,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                 <span>{content.accent || 'Bản ghi âm giọng chuẩn'}</span>
               </span>
               {content.sourceLesson && (
-                <span className="text-xs text-[#78685B]">
+                <span className="text-xs text-[#64748B]">
                   Nguồn: {content.sourceLesson}
                 </span>
               )}
@@ -861,13 +861,13 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
           )}
 
           {content.textVi && (
-            <div className="editorial-phrase text-xl sm:text-2xl font-bold text-[#431914] leading-relaxed whitespace-pre-line">
+            <div className="editorial-phrase text-xl sm:text-2xl font-bold text-[#253044] leading-relaxed whitespace-pre-line">
               {content.textVi}
             </div>
           )}
 
           {(content.promptVi || content.prompt || content.promptEn) && (
-            <h3 className="editorial-phrase text-lg sm:text-xl font-bold text-[#431914]">
+            <h3 className="editorial-phrase text-lg sm:text-xl font-bold text-[#253044]">
               {content.promptVi || content.prompt || content.promptEn}
             </h3>
           )}
@@ -880,7 +880,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
             <div className="space-y-2 my-4">
               <div
                 onClick={() => setZoomedImage(content.imageUrl)}
-                className="group relative rounded-2xl border border-[#DECBB4]/80 overflow-hidden bg-gradient-to-b from-[#FFFDF9] to-[#FFF9EE] p-3 flex justify-center shadow-xs hover:shadow-md transition-all cursor-pointer max-w-3xl mx-auto"
+                className="group relative rounded-2xl border border-[#E8E5DF]/80 overflow-hidden bg-gradient-to-b from-[#FFFDF9] to-[#FFF7E8] p-3 flex justify-center shadow-xs hover:shadow-md transition-all cursor-pointer max-w-3xl mx-auto"
                 title="Bấm để phóng to hình ảnh"
               >
                 <ContentImage
@@ -889,16 +889,16 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                   alt={content.captionVi || content.caption || content.captionEn || activity.titleVi || activity.title || 'Nội dung bài học'}
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#431914] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
-                    <ZoomIn size={14} className="text-[#DA251D]" />
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#253044] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
+                    <ZoomIn size={14} className="text-[#FF7A00]" />
                     <span>Bấm để phóng to</span>
                   </span>
                 </div>
               </div>
               {(content.captionVi || content.caption || content.captionEn || content.sourcePage) && (
-                <div className="flex flex-wrap items-center justify-between text-xs text-[#78685B] px-1 max-w-3xl mx-auto">
+                <div className="flex flex-wrap items-center justify-between text-xs text-[#64748B] px-1 max-w-3xl mx-auto">
                   <span className="italic flex items-center gap-1.5">
-                    <Sparkles size={12} className="text-[#DA251D] shrink-0" />
+                    <Sparkles size={12} className="text-[#FF7A00] shrink-0" />
                     <BilingualText
                       vi={content.captionVi || content.caption}
                       en={content.captionEn}
@@ -915,24 +915,24 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
           )}
 
           {(content.captionVi || content.caption || content.captionEn) && !content.imageUrl && (
-            <p className="text-xs text-[#78685B] italic text-center">
+            <p className="text-xs text-[#64748B] italic text-center">
               {content.captionVi || content.caption || content.captionEn}
             </p>
           )}
 
           {/* Hình minh họa giáo trình */}
           {content.illustrations?.length > 0 && (
-            <section className="textbook-illustrations space-y-4 pt-5 border-t border-[#DECBB4]/50" aria-label="Hình minh họa trong giáo trình">
+            <section className="textbook-illustrations space-y-4 pt-5 border-t border-[#E8E5DF]/50" aria-label="Hình minh họa trong giáo trình">
               <div className="flex items-center justify-between gap-3 flex-wrap">
                 <div className="flex items-center gap-2.5">
-                  <span className="w-7 h-7 rounded-xl bg-[#FFF2D6] text-[#A62A24] border border-[#FFCD00]/40 flex items-center justify-center shrink-0 shadow-2xs">
+                  <span className="w-7 h-7 rounded-xl bg-[#FFF2D6] text-[#EA580C] border border-[#FFCD00]/40 flex items-center justify-center shrink-0 shadow-2xs">
                     <BookOpen size={14} />
                   </span>
                   <div>
-                    <strong className="text-sm font-bold text-[#431914] block">
+                    <strong className="text-sm font-bold text-[#253044] block">
                       <BilingualText vi="Trang minh họa giáo trình Tiếng Việt" en="Textbook Illustrated Pages" />
                     </strong>
-                    <small className="text-xs text-[#78685B]">
+                    <small className="text-xs text-[#64748B]">
                       <BilingualText vi="Bấm vào từng trang để phóng to và đọc rõ bài học" en="Click any page to zoom in and read clearly" />
                     </small>
                   </div>
@@ -947,7 +947,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                   <figure
                     key={`${illustration.imageUrl}-${index}`}
                     onClick={() => setZoomedImage(illustration.imageUrl)}
-                    className="group rounded-2xl border border-[#DECBB4] overflow-hidden bg-[#FFFDF9] hover:bg-white p-2.5 space-y-2 shadow-2xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                    className="group rounded-2xl border border-[#E8E5DF] overflow-hidden bg-[#FFFDF9] hover:bg-white p-2.5 space-y-2 shadow-2xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
                   >
                     <div className="relative w-full overflow-hidden rounded-xl bg-stone-50/80 flex items-center justify-center min-h-[220px] max-h-[360px]">
                       <ContentImage
@@ -956,18 +956,18 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                         alt={illustration.captionVi || illustration.captionEn || `Hình minh họa ${index + 1}`}
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#431914] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
-                          <ZoomIn size={14} className="text-[#DA251D]" />
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#253044] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
+                          <ZoomIn size={14} className="text-[#FF7A00]" />
                           <span>Bấm để phóng to</span>
                         </span>
                       </div>
                     </div>
-                    <figcaption className="text-xs text-[#78685B] px-1 pt-1 flex items-center justify-between border-t border-[#DECBB4]/30">
-                      <span className="font-semibold text-[#431914] truncate mr-2">
+                    <figcaption className="text-xs text-[#64748B] px-1 pt-1 flex items-center justify-between border-t border-[#E8E5DF]/30">
+                      <span className="font-semibold text-[#253044] truncate mr-2">
                         <BilingualText vi={illustration.captionVi} en={illustration.captionEn} />
                       </span>
                       {illustration.sourcePage && (
-                        <span className="font-bold text-[#A62A24] bg-[#FFF2D6] px-2 py-0.5 rounded-md text-[10px] shrink-0">
+                        <span className="font-bold text-[#EA580C] bg-[#FFF2D6] px-2 py-0.5 rounded-md text-[10px] shrink-0">
                           Trang {illustration.sourcePage}
                         </span>
                       )}
@@ -980,11 +980,11 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
 
           {/* Lời thoại transcript */}
           {(content.transcriptVi || content.transcript || content.transcriptEn) && (
-            <details className="group rounded-2xl border border-[#DECBB4] bg-[#FFFDF9] p-4 text-xs open:bg-white transition-all">
-              <summary className="font-bold text-[#A62A24] cursor-pointer select-none">
+            <details className="group rounded-2xl border border-[#E8E5DF] bg-[#FFFDF9] p-4 text-xs open:bg-white transition-all">
+              <summary className="font-bold text-[#EA580C] cursor-pointer select-none">
                 <BilingualText>{"Xem lời thoại (Transcript)"}</BilingualText>
               </summary>
-              <p className="mt-3 text-stone-700 leading-relaxed border-t border-[#DECBB4]/30 pt-2">
+              <p className="mt-3 text-stone-700 leading-relaxed border-t border-[#E8E5DF]/30 pt-2">
                 {content.transcriptVi || content.transcript || content.transcriptEn}
               </p>
             </details>
@@ -1001,7 +1001,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                 <div className="space-y-2 my-3">
                   <div
                     onClick={() => setZoomedImage(contextual.src)}
-                    className="group relative rounded-2xl border border-[#DECBB4]/80 overflow-hidden bg-gradient-to-b from-[#FFFDF9] to-[#FFF9EE] p-3 flex justify-center shadow-xs cursor-pointer hover:shadow-md transition-all max-w-2xl mx-auto"
+                    className="group relative rounded-2xl border border-[#E8E5DF]/80 overflow-hidden bg-gradient-to-b from-[#FFFDF9] to-[#FFF7E8] p-3 flex justify-center shadow-xs cursor-pointer hover:shadow-md transition-all max-w-2xl mx-auto"
                     title="Bấm để xem phóng to hình ảnh"
                   >
                     <ContentImage
@@ -1010,14 +1010,14 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                       alt={contextual.alt}
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
-                      <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#431914] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
-                        <ZoomIn size={14} className="text-[#DA251D]" />
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#253044] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
+                        <ZoomIn size={14} className="text-[#FF7A00]" />
                         <span>Bấm để phóng to</span>
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-center gap-1.5 text-xs text-[#78685B] italic text-center">
-                    <Sparkles size={12} className="text-[#DA251D] shrink-0" />
+                  <div className="flex items-center justify-center gap-1.5 text-xs text-[#64748B] italic text-center">
+                    <Sparkles size={12} className="text-[#FF7A00] shrink-0" />
                     <span>{contextual.caption}</span>
                   </div>
                 </div>
@@ -1029,7 +1029,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
 
       {/* Bài tập QuestionInput */}
       {isPractice && (
-        <div className="pt-4 border-t border-[#DECBB4]/40">
+        <div className="pt-4 border-t border-[#E8E5DF]/40">
           <QuestionInput
             question={{ id: activity.id, questionType, options: content.options || [] }}
             answer={answer}
@@ -1051,7 +1051,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
           >
             <div className="flex items-center justify-between pb-3 px-2 border-b border-stone-100 shrink-0">
               <span className="text-xs font-bold text-stone-600 flex items-center gap-1.5">
-                <BookOpen size={14} className="text-[#DA251D]" />
+                <BookOpen size={14} className="text-[#FF7A00]" />
                 <span>Hình ảnh minh họa bài học</span>
               </span>
               <button
@@ -1180,12 +1180,12 @@ function DialogueRenderer({ content = {}, activity = {} }) {
   return (
     <div className="dialogue-renderer space-y-6">
       {/* Thanh công cụ hội thoại */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4] text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF] text-xs">
         <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-white border border-[#DECBB4]/80 text-[#DA251D] flex items-center justify-center">
+          <span className="w-7 h-7 rounded-lg bg-white border border-[#E8E5DF]/80 text-[#FF7A00] flex items-center justify-center">
             <MessageCircle size={15} />
           </span>
-          <span className="font-bold text-[#431914]">
+          <span className="font-bold text-[#253044]">
             Hội thoại thực tế ({lines.length} lượt thoại)
           </span>
         </div>
@@ -1197,8 +1197,8 @@ function DialogueRenderer({ content = {}, activity = {} }) {
             onClick={togglePlayAll}
             className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl font-bold transition-all cursor-pointer ${
               isPlayingAll
-                ? 'bg-[#DA251D] text-white shadow-xs animate-pulse'
-                : 'bg-white hover:bg-stone-50 text-[#A62A24] border border-[#DECBB4]'
+                ? 'bg-[#FF7A00] text-white shadow-xs animate-pulse'
+                : 'bg-white hover:bg-stone-50 text-[#EA580C] border border-[#E8E5DF]'
             }`}
           >
             {isPlayingAll ? <Pause size={13} /> : <Play size={13} fill="currentColor" />}
@@ -1209,7 +1209,7 @@ function DialogueRenderer({ content = {}, activity = {} }) {
           <button
             type="button"
             onClick={() => setTranslations((v) => !v)}
-            className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl font-bold bg-white hover:bg-stone-50 text-stone-700 border border-[#DECBB4] transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl font-bold bg-white hover:bg-stone-50 text-stone-700 border border-[#E8E5DF] transition-all cursor-pointer"
           >
             <Languages size={13} />
             <span>{translations ? 'Ẩn bản dịch' : 'Hiện bản dịch'}</span>
@@ -1236,7 +1236,7 @@ function DialogueRenderer({ content = {}, activity = {} }) {
                 className={`w-9 h-9 rounded-2xl flex items-center justify-center font-black text-xs shrink-0 shadow-xs border ${
                   isSecondSpeaker
                     ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                    : 'bg-[#FFF2D6] text-[#A62A24] border-[#FFCD00]/60'
+                    : 'bg-[#FFF2D6] text-[#EA580C] border-[#FFCD00]/60'
                 }`}
                 title={speakerName}
               >
@@ -1247,15 +1247,15 @@ function DialogueRenderer({ content = {}, activity = {} }) {
               <div
                 className={`max-w-[85%] sm:max-w-[75%] rounded-3xl p-4 sm:p-5 space-y-2 border transition-all ${
                   isActive
-                    ? 'ring-2 ring-[#DA251D] shadow-md'
+                    ? 'ring-2 ring-[#FF7A00] shadow-md'
                     : isSecondSpeaker
                     ? 'bg-[#F0FDF4] border-emerald-200 text-emerald-950 rounded-tr-xs'
-                    : 'bg-[#FFFDF9] border-[#DECBB4] text-[#431914] rounded-tl-xs shadow-2xs'
+                    : 'bg-[#FFFDF9] border-[#E8E5DF] text-[#253044] rounded-tl-xs shadow-2xs'
                 }`}
               >
                 {/* Tên người nói */}
                 <div className="flex items-center justify-between gap-3 text-xs">
-                  <span className={`font-extrabold ${isSecondSpeaker ? 'text-emerald-800' : 'text-[#A62A24]'}`}>
+                  <span className={`font-extrabold ${isSecondSpeaker ? 'text-emerald-800' : 'text-[#EA580C]'}`}>
                     {speakerName}
                   </span>
 
@@ -1274,7 +1274,7 @@ function DialogueRenderer({ content = {}, activity = {} }) {
 
                 {/* Bản dịch tiếng Anh */}
                 {translations && (line.textEn || line.translation || line.meaningEn) && (
-                  <p className="text-xs sm:text-sm text-[#78685B] italic pt-1.5 border-t border-black/5 m-0 leading-normal">
+                  <p className="text-xs sm:text-sm text-[#64748B] italic pt-1.5 border-t border-black/5 m-0 leading-normal">
                     {line.textEn || line.translation || line.meaningEn}
                   </p>
                 )}
@@ -1342,21 +1342,21 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
   return (
     <div className="vocabulary-renderer space-y-6">
       {/* Thanh điều khiển chế độ xem */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4]">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF]">
         <div className="flex items-center gap-2">
-          <BookOpen size={16} className="text-[#DA251D]" />
-          <span className="text-xs font-bold text-[#431914]">
+          <BookOpen size={16} className="text-[#FF7A00]" />
+          <span className="text-xs font-bold text-[#253044]">
             Học {items.length} từ vựng trọng tâm
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white border border-[#DECBB4]/80">
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white border border-[#E8E5DF]/80">
           <button
             type="button"
             onClick={() => setViewMode('flashcard')}
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'flashcard'
-                ? 'bg-[#DA251D] text-white shadow-xs'
+                ? 'bg-[#FF7A00] text-white shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -1369,7 +1369,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
             onClick={() => setViewMode('grid')}
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'grid'
-                ? 'bg-[#DA251D] text-white shadow-xs'
+                ? 'bg-[#FF7A00] text-white shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -1400,11 +1400,11 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
           {/* Thẻ Flashcard chính */}
           <div
             onClick={() => setIsFlipped((v) => !v)}
-            className="group relative w-full min-h-[340px] p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#FFFDF9] via-white to-[#FFF9EE] border-2 border-[#DECBB4] hover:border-[#DA251D]/60 shadow-lg cursor-pointer transition-all flex flex-col justify-between select-none"
+            className="group relative w-full min-h-[340px] p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#FFFDF9] via-white to-[#FFF7E8] border-2 border-[#E8E5DF] hover:border-[#FF7A00]/60 shadow-lg cursor-pointer transition-all flex flex-col justify-between select-none"
           >
             {/* Header Thẻ: Loại từ & Thanh điệu */}
             <div className="flex items-center justify-between">
-              <span className="px-3 py-1 rounded-full bg-[#FFF2D6] text-[#A62A24] font-bold text-xs border border-[#FFCD00]/50">
+              <span className="px-3 py-1 rounded-full bg-[#FFF2D6] text-[#EA580C] font-bold text-xs border border-[#FFCD00]/50">
                 {wordType}
               </span>
 
@@ -1418,7 +1418,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
               // MẶT TRƯỚC: Tiếng Việt, Phát âm, Âm thanh
               <div className="text-center py-6 space-y-3">
                 {imageUrl ? (
-                  <div className="w-32 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-[#DECBB4]/80 shadow-xs mb-3 bg-[#FFFDF9] flex items-center justify-center p-1.5">
+                  <div className="w-32 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-[#E8E5DF]/80 shadow-xs mb-3 bg-[#FFFDF9] flex items-center justify-center p-1.5">
                     <ContentImage
                       className="w-full h-full object-contain rounded-xl"
                       src={imageUrl}
@@ -1426,22 +1426,22 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                     />
                   </div>
                 ) : (
-                  <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-[#FFF9EE] via-[#FFF2D6] to-[#FFE8BD] border border-[#DECBB4] flex flex-col items-center justify-center shadow-inner mb-3">
-                    <span className="font-serif text-3xl font-black text-[#A62A24]">
+                  <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-[#FFF7E8] via-[#FFF2D6] to-[#FFE8BD] border border-[#E8E5DF] flex flex-col items-center justify-center shadow-inner mb-3">
+                    <span className="font-serif text-3xl font-black text-[#EA580C]">
                       {wordVi?.charAt(0)?.toUpperCase() || 'A'}
                     </span>
-                    <span className="text-[10px] font-bold text-[#78685B] uppercase tracking-wider mt-0.5">
+                    <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider mt-0.5">
                       {currentTone.nameVi}
                     </span>
                   </div>
                 )}
 
-                <h3 className="text-3xl sm:text-4xl font-black text-[#431914] tracking-tight">
+                <h3 className="text-3xl sm:text-4xl font-black text-[#253044] tracking-tight">
                   {wordVi}
                 </h3>
 
                 {pronunciation && (
-                  <p className="text-sm font-mono text-[#78685B] bg-stone-100 inline-block px-3 py-1 rounded-lg">
+                  <p className="text-sm font-mono text-[#64748B] bg-stone-100 inline-block px-3 py-1 rounded-lg">
                     {pronunciation}
                   </p>
                 )}
@@ -1452,7 +1452,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                       text={wordVi}
                       audioUrl={audioUrl}
                       fallbackToSpeech={true}
-                      className="w-12 h-12 rounded-full bg-[#DA251D] hover:bg-[#B71C1C] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform"
+                      className="w-12 h-12 rounded-full bg-[#FF7A00] hover:bg-[#EA580C] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform"
                     />
                   </div>
                 </div>
@@ -1460,18 +1460,18 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
             ) : (
               // MẶT SAU: Nghĩa tiếng Anh, Câu ví dụ
               <div className="text-center py-6 space-y-4">
-                <span className="text-[11px] font-bold text-[#A62A24] uppercase tracking-wider block">
+                <span className="text-[11px] font-bold text-[#EA580C] uppercase tracking-wider block">
                   Ý nghĩa & Ví dụ
                 </span>
 
-                <h3 className="text-2xl sm:text-3xl font-black text-[#431914]">
+                <h3 className="text-2xl sm:text-3xl font-black text-[#253044]">
                   {meaningEn}
                 </h3>
 
                 {exampleVi && (
-                  <div className="bg-[#FFF9EE] rounded-2xl p-4 border border-[#DECBB4]/60 text-left space-y-1">
+                  <div className="bg-[#FFF7E8] rounded-2xl p-4 border border-[#E8E5DF]/60 text-left space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#A62A24]">Ví dụ thực tế:</span>
+                      <span className="text-xs font-bold text-[#EA580C]">Ví dụ thực tế:</span>
                       <div onClick={(e) => e.stopPropagation()}>
                         <SpeakButton
                           text={exampleVi}
@@ -1480,11 +1480,11 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                         />
                       </div>
                     </div>
-                    <p className="text-sm font-bold text-[#431914] m-0">
+                    <p className="text-sm font-bold text-[#253044] m-0">
                       {exampleVi}
                     </p>
                     {exampleEn && (
-                      <p className="text-xs text-[#78685B] italic m-0">
+                      <p className="text-xs text-[#64748B] italic m-0">
                         {exampleEn}
                       </p>
                     )}
@@ -1494,8 +1494,8 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
             )}
 
             {/* Footer thẻ: Hướng dẫn lật & Nút lưu */}
-            <div className="flex items-center justify-between pt-4 border-t border-[#DECBB4]/40 text-xs text-[#78685B]">
-              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#A62A24]">
+            <div className="flex items-center justify-between pt-4 border-t border-[#E8E5DF]/40 text-xs text-[#64748B]">
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#EA580C]">
                 <RotateCcw size={12} />
                 <span>{isFlipped ? 'Bấm để xem lại mặt trước' : 'Bấm để lật xem nghĩa'}</span>
               </span>
@@ -1507,9 +1507,9 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                     e.stopPropagation();
                     onSaveWord(currentItem);
                   }}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-[#431914] border border-[#DECBB4] font-bold text-xs shadow-2xs transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-colors cursor-pointer"
                 >
-                  <Bookmark size={12} className="text-[#DA251D]" />
+                  <Bookmark size={12} className="text-[#FF7A00]" />
                   <span>Lưu từ</span>
                 </button>
               )}
@@ -1523,20 +1523,20 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
             <button
               type="button"
               onClick={prevCard}
-              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl text-xs font-bold text-[#431914] bg-white hover:bg-[#FFF9EE] border border-[#DECBB4] shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl text-xs font-bold text-[#253044] bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] shadow-xs cursor-pointer"
             >
               <ArrowLeft size={14} />
               <span>Từ trước</span>
             </button>
 
-            <span className="text-xs font-extrabold text-[#78685B]">
+            <span className="text-xs font-extrabold text-[#64748B]">
               Thẻ {cardIndex + 1} / {items.length}
             </span>
 
             <button
               type="button"
               onClick={nextCard}
-              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl text-xs font-bold text-white bg-[#DA251D] hover:bg-[#B71C1C] shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl text-xs font-bold text-white bg-[#FF7A00] hover:bg-[#EA580C] shadow-xs cursor-pointer"
             >
               <span>Từ tiếp theo</span>
               <ArrowRight size={14} />
@@ -1562,11 +1562,11 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
             return (
               <div
                 key={index}
-                className="card activity-word bg-white rounded-2xl border border-[#DECBB4] p-5 shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
+                className="card activity-word bg-white rounded-2xl border border-[#E8E5DF] p-5 shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="badge px-2.5 py-0.5 rounded-md bg-[#FFF2D6] text-[#A62A24] font-bold text-[10px] border border-[#FFCD00]/50">
+                    <span className="badge px-2.5 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-bold text-[10px] border border-[#FFCD00]/50">
                       {itemWordType}
                     </span>
                     <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${itemTone.badgeClass}`}>
@@ -1575,7 +1575,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                   </div>
 
                   {itemImageUrl ? (
-                    <div className="w-full h-32 rounded-xl overflow-hidden border border-[#DECBB4]/60 bg-[#FFFDF9] flex items-center justify-center p-1">
+                    <div className="w-full h-32 rounded-xl overflow-hidden border border-[#E8E5DF]/60 bg-[#FFFDF9] flex items-center justify-center p-1">
                       <ContentImage
                         className="activity-word-image w-full h-full object-contain rounded-lg"
                         src={itemImageUrl}
@@ -1583,24 +1583,24 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                       />
                     </div>
                   ) : (
-                    <div className="w-full h-20 rounded-xl bg-gradient-to-r from-[#FFFDF9] via-[#FFF8EC] to-[#FFFDF9] border border-[#DECBB4]/40 flex items-center justify-center gap-3 px-4">
-                      <div className="w-10 h-10 rounded-xl bg-white border border-[#DECBB4]/80 shadow-2xs flex items-center justify-center font-serif text-xl font-black text-[#A62A24] shrink-0">
+                    <div className="w-full h-20 rounded-xl bg-gradient-to-r from-[#FFFDF9] via-[#FFF8EC] to-[#FFFDF9] border border-[#E8E5DF]/40 flex items-center justify-center gap-3 px-4">
+                      <div className="w-10 h-10 rounded-xl bg-white border border-[#E8E5DF]/80 shadow-2xs flex items-center justify-center font-serif text-xl font-black text-[#EA580C] shrink-0">
                         {itemWord?.charAt(0)?.toUpperCase() || 'A'}
                       </div>
                       <div className="text-left">
-                        <span className="text-xs font-bold text-[#431914] block">{itemTone.nameVi}</span>
-                        <span className="text-[10px] text-[#78685B] block">{itemTone.symbol ? `Dấu ${itemTone.symbol}` : 'Thanh ngang (không dấu)'}</span>
+                        <span className="text-xs font-bold text-[#253044] block">{itemTone.nameVi}</span>
+                        <span className="text-[10px] text-[#64748B] block">{itemTone.symbol ? `Dấu ${itemTone.symbol}` : 'Thanh ngang (không dấu)'}</span>
                       </div>
                     </div>
                   )}
 
                   <div className="flex items-center justify-between pt-1">
                     <div>
-                      <h3 className="text-xl font-black text-[#431914] m-0">
+                      <h3 className="text-xl font-black text-[#253044] m-0">
                         {itemWord}
                       </h3>
                       {itemPronunciation && (
-                        <small className="text-xs font-mono text-[#78685B]">
+                        <small className="text-xs font-mono text-[#64748B]">
                           {itemPronunciation}
                         </small>
                       )}
@@ -1618,21 +1618,21 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                   </p>
 
                   {itemExampleVi && (
-                    <div className="bg-[#FFF9EE] rounded-xl p-2.5 text-xs text-[#78685B] border border-[#DECBB4]/40 mt-1">
-                      <p className="font-semibold text-[#431914] m-0">{itemExampleVi}</p>
+                    <div className="bg-[#FFF7E8] rounded-xl p-2.5 text-xs text-[#64748B] border border-[#E8E5DF]/40 mt-1">
+                      <p className="font-semibold text-[#253044] m-0">{itemExampleVi}</p>
                       {itemExampleEn && <p className="italic m-0 text-stone-500">{itemExampleEn}</p>}
                     </div>
                   )}
                 </div>
 
                 {!preview && (
-                  <div className="pt-3 border-t border-[#DECBB4]/30">
+                  <div className="pt-3 border-t border-[#E8E5DF]/30">
                     <button
                       type="button"
                       onClick={() => onSaveWord(item)}
-                      className="w-full inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#FFF9EE] hover:bg-[#FFF2D6] text-[#431914] border border-[#DECBB4] font-bold text-xs shadow-2xs transition-colors cursor-pointer"
+                      className="w-full inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF2D6] text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-colors cursor-pointer"
                     >
-                      <Bookmark size={13} className="text-[#DA251D]" />
+                      <Bookmark size={13} className="text-[#FF7A00]" />
                       <span>Lưu vào sổ tay</span>
                     </button>
                   </div>
@@ -1689,20 +1689,20 @@ function GrammarRenderer({ activity = {}, content = {} }) {
         return (
           <section
             key={topic.id || topicIdx}
-            className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-6"
+            className="bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-6"
           >
             {/* Header Điểm Ngữ Pháp */}
-            <div className="border-b border-[#DECBB4]/40 pb-4 space-y-2">
+            <div className="border-b border-[#E8E5DF]/40 pb-4 space-y-2">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-lg bg-[#FFF2D6] text-[#DA251D] flex items-center justify-center">
+                <span className="w-7 h-7 rounded-lg bg-[#FFF2D6] text-[#FF7A00] flex items-center justify-center">
                   <FileText size={15} />
                 </span>
-                <span className="text-xs font-bold text-[#A62A24] uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider">
                   Điểm ngữ pháp trọng tâm {grammarTopics.length > 1 ? `#${topicIdx + 1}` : ''}
                 </span>
               </div>
 
-              <h3 className="text-xl sm:text-2xl font-black text-[#431914] tracking-tight">
+              <h3 className="text-xl sm:text-2xl font-black text-[#253044] tracking-tight">
                 <BilingualText vi={titleVi} en={titleEn} />
               </h3>
             </div>
@@ -1710,12 +1710,12 @@ function GrammarRenderer({ activity = {}, content = {} }) {
             {/* Công thức / Mẫu cấu trúc (Formula Banner) */}
             {pattern && (
               <div className="space-y-2">
-                <span className="text-[11px] font-bold text-[#78685B] uppercase tracking-wide block">
+                <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wide block">
                   Công thức cấu trúc:
                 </span>
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FFF9EE] to-[#FFF2D6] border-2 border-[#FFCD00]/70 shadow-xs flex items-center gap-3">
-                  <Sparkles size={18} className="text-[#DA251D] shrink-0" />
-                  <span className="text-base sm:text-lg font-black text-[#431914] font-mono leading-snug">
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FFF7E8] to-[#FFF2D6] border-2 border-[#FFCD00]/70 shadow-xs flex items-center gap-3">
+                  <Sparkles size={18} className="text-[#FF7A00] shrink-0" />
+                  <span className="text-base sm:text-lg font-black text-[#253044] font-mono leading-snug">
                     {pattern}
                   </span>
                 </div>
@@ -1725,13 +1725,13 @@ function GrammarRenderer({ activity = {}, content = {} }) {
             {/* Giải thích chi tiết cách dùng */}
             {(explanation || explanationEn) && (
               <div className="space-y-2">
-                <span className="text-[11px] font-bold text-[#78685B] uppercase tracking-wide block">
+                <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wide block">
                   Giải thích và cách dùng:
                 </span>
-                <div className="text-sm sm:text-base text-[#431914] leading-relaxed bg-[#FFFDF9] p-4 rounded-2xl border border-[#DECBB4]/40 space-y-1">
+                <div className="text-sm sm:text-base text-[#253044] leading-relaxed bg-[#FFFDF9] p-4 rounded-2xl border border-[#E8E5DF]/40 space-y-1">
                   <RichText text={explanation} />
                   {explanationEn && explanationEn !== explanation && (
-                    <p className="text-xs text-[#78685B] italic pt-1 border-t border-stone-200/50 m-0">
+                    <p className="text-xs text-[#64748B] italic pt-1 border-t border-stone-200/50 m-0">
                       {explanationEn}
                     </p>
                   )}
@@ -1764,7 +1764,7 @@ function GrammarRenderer({ activity = {}, content = {} }) {
             {/* Ví dụ thực tế trong câu giao tiếp */}
             {examples.length > 0 && (
               <div className="space-y-3 pt-2">
-                <span className="text-[11px] font-bold text-[#78685B] uppercase tracking-wide block">
+                <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wide block">
                   Ví dụ thực tế trong hội thoại:
                 </span>
 
@@ -1778,14 +1778,14 @@ function GrammarRenderer({ activity = {}, content = {} }) {
                     return (
                       <div
                         key={i}
-                        className="flex items-start justify-between gap-3 p-4 rounded-2xl bg-stone-50/80 hover:bg-[#FFF9EE]/70 border border-stone-200 hover:border-[#DECBB4] transition-colors"
+                        className="flex items-start justify-between gap-3 p-4 rounded-2xl bg-stone-50/80 hover:bg-[#FFF7E8]/70 border border-stone-200 hover:border-[#E8E5DF] transition-colors"
                       >
                         <div className="space-y-1">
-                          <p className="text-base font-bold text-[#431914] m-0">
+                          <p className="text-base font-bold text-[#253044] m-0">
                             {exVi}
                           </p>
                           {exEn && (
-                            <p className="text-xs sm:text-sm text-[#78685B] italic m-0">
+                            <p className="text-xs sm:text-sm text-[#64748B] italic m-0">
                               {exEn}
                             </p>
                           )}

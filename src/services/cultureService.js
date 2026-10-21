@@ -2,11 +2,11 @@
 
 export const CULTURE_CATEGORIES = [
   { id: 'all', label: 'Tất cả danh mục' },
-  { id: 'culinary', label: '🍜 Ẩm thực' },
-  { id: 'tradition', label: '🏮 Lễ hội & Phong tục' },
-  { id: 'daily-life', label: '☕ Đời sống thường nhật' },
-  { id: 'art', label: '🎭 Nghệ thuật & Di sản' },
-  { id: 'travel-spots', label: '🏞️ Danh lam & Điểm đến' },
+  { id: 'culinary', label: 'Ẩm thực' },
+  { id: 'tradition', label: 'Lễ hội & Phong tục' },
+  { id: 'daily-life', label: 'Đời sống thường nhật' },
+  { id: 'art', label: 'Nghệ thuật & Di sản' },
+  { id: 'travel-spots', label: 'Danh lam & Điểm đến' },
 ];
 
 export const CULTURE_DESTINATIONS = [

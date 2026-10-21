@@ -59,7 +59,10 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
       <AnimatePresence>
       {open && (
         <motion.div className="user-menu__panel" role="menu" initial={reduceMotion ? false : { opacity: 0, y: -8, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={reduceMotion ? undefined : { opacity: 0, y: -6, scale: .98 }} transition={{ duration: reduceMotion ? 0 : .18 }}>
-          <div className="user-menu__identity"><strong>{displayName}</strong><span>@{user?.username || 'learner'} · <BilingualText>{isAdmin ? 'Quản trị viên' : isContentManager ? 'Quản lý nội dung' : 'Học viên'}</BilingualText></span></div>
+          <div className="user-menu__identity">
+            <strong>{displayName}</strong>
+            <span>{user?.email || `@${user?.username || 'learner'}`} · <BilingualText>{isAdmin ? 'Quản trị viên' : isContentManager ? 'Quản lý nội dung' : 'Học viên'}</BilingualText></span>
+          </div>
           <Link to={ROUTES.EDTECH_DASHBOARD} onClick={closeMenu} role="menuitem"><Sparkles size={16}/><BilingualText>{"Lộ trình học EdTech"}</BilingualText></Link>
           <Link to="/profile" onClick={closeMenu} role="menuitem"><UserRound size={16}/><BilingualText>{"Hồ sơ cá nhân"}</BilingualText></Link>
           <Link to="/settings" onClick={closeMenu} role="menuitem"><Settings size={16}/><BilingualText>{"Cài đặt học tập"}</BilingualText></Link>

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'motion/react';
 import { Volume2 } from 'lucide-react';
 import { audioFeedback } from '@/utils/audioFeedback';
@@ -63,13 +63,13 @@ export function SpeechBubble({
       {/* Bubble Content */}
       <div className="flex-1 min-w-0 pr-1">
         <div className="flex items-center justify-between gap-1">
-          <p className="text-xs sm:text-sm font-black text-[#202124] leading-snug truncate">
+          <p className="text-xs sm:text-sm font-black text-[#253044] leading-snug truncate">
             {textVi}
           </p>
           <button
             type="button"
             onClick={handlePlayAudio}
-            className="!min-h-0 !min-w-0 !p-0 w-6 h-6 rounded-lg bg-[#FFF9ED] hover:bg-[#DA251D] text-[#DA251D] hover:text-white flex items-center justify-center transition-colors shrink-0 shadow-2xs cursor-pointer group/audio"
+            className="!min-h-0 !min-w-0 !p-0 w-6 h-6 rounded-lg bg-[#FFF9ED] hover:bg-[#FF7A00] text-[#FF7A00] hover:text-white flex items-center justify-center transition-colors shrink-0 shadow-2xs cursor-pointer group/audio"
             title={`Phát âm: "${textVi}"`}
             aria-label={`Phát âm ${textVi}`}
           >
@@ -77,7 +77,7 @@ export function SpeechBubble({
           </button>
         </div>
 
-        <p className="text-[10px] sm:text-[11px] font-semibold text-[#78685B] leading-tight mt-0.5">
+        <p className="text-[10px] sm:text-[11px] font-semibold text-[#64748B] leading-tight mt-0.5">
           {textEn}
         </p>
         {ipa && (

@@ -406,7 +406,7 @@ export const InteractiveLessonScreen: React.FC = () => {
   );
 
   return (
-    <div className="edtech-lesson min-h-screen bg-[#FFF9EE] flex flex-col justify-between antialiased selection:bg-[#F5E1D8] selection:text-[#A62A24] pb-28">
+    <div className="edtech-lesson min-h-screen bg-[#FFF9EE] flex flex-col justify-between antialiased selection:bg-[#FFF4EB] selection:text-[#EA580C] pb-28">
       {/* Top Header */}
       <LessonHeader
         currentIndex={currentIndex}

@@ -116,14 +116,14 @@ export function LearnerDashboard({ user }) {
               </>
             ) : (
               <div className="ld-empty">
-                <Sparkles size={32} style={{ color: '#B42318' }} />
+                <Sparkles size={32} style={{ color: '#FF7A00' }} />
                 <h2>Lộ trình học tập cá nhân hóa</h2>
                 <p>Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo.</p>
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.25rem' }}>
                   <Link to="/edtech/dashboard" className="ld-button ld-button--primary">
                     <Sparkles size={16} />Vào lộ trình học<ArrowRight size={16} />
                   </Link>
-                  <Link to="/courses" className="ld-button" style={{ background: '#f5efe6', color: '#581C17', border: '1px solid #ebdccb' }}>
+                  <Link to="/courses" className="ld-button" style={{ background: '#f5efe6', color: '#EA580C', border: '1px solid #ebdccb' }}>
                     {t('dashboard.exploreCourses')}<ArrowRight size={16} />
                   </Link>
                 </div>

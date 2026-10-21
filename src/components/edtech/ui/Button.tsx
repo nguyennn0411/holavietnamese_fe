@@ -42,8 +42,8 @@ export const Button: React.FC<ButtonProps> = ({
   switch (variant) {
     case 'primary':
       variantClasses = is3D
-        ? 'bg-[#A62A24] text-white shadow-[0_4px_0_#89221E] hover:bg-[#89221E] hover:shadow-[0_4px_0_#89221E] active:translate-y-1 active:shadow-[0_0_0_#89221E] focus-visible:ring-[#A62A24]/30'
-        : 'bg-[#A62A24] text-white hover:bg-[#89221E] shadow-sm focus-visible:ring-[#A62A24]/30';
+        ? 'bg-[#EA580C] text-white shadow-[0_4px_0_#C2410C] hover:bg-[#C2410C] hover:shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-[0_0_0_#C2410C] focus-visible:ring-[#EA580C]/30'
+        : 'bg-[#EA580C] text-white hover:bg-[#C2410C] shadow-sm focus-visible:ring-[#EA580C]/30';
       break;
     case 'accent':
       variantClasses = is3D

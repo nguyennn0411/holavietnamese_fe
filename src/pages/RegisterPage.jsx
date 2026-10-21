@@ -3,9 +3,9 @@ import { AuthHeader } from '@/components/auth/AuthHeader';
 import { AuthFooter } from '@/components/auth/AuthFooter';
 import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
 import { useState } from 'react';
-import { useNavigate, Navigate, Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
-import { onboardingService } from '@/features/onboarding/services/onboardingService';
+import { savePendingVerificationEmail, savePostVerificationPath, startResendCooldown } from '@/features/auth/emailVerificationFlow';
 import { Eye, EyeOff } from 'lucide-react';
 
 const LANGUAGE_OPTIONS = [
@@ -20,6 +20,7 @@ const LANGUAGE_OPTIONS = [
 ];
 
 const GOAL_OPTIONS = [
+  { value: 'daily_communication', label: '🗣️ Giao tiếp hằng ngày (Daily communication)' },
   { value: 'travel', label: '🛵 Du lịch & Khám phá (Travel)' },
   { value: 'work', label: '💼 Công việc & Định cư (Work & Career)' },
   { value: 'exam_vsl', label: '🎓 Thi chứng chỉ VSL (Exam / VSL)' },
@@ -35,8 +36,7 @@ const LEVEL_OPTIONS = [
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const fromOnboarding = searchParams.get('source') === 'onboarding';
+  const location = useLocation();
   const { register, isAuthenticated } = useAuth();
 
   const [step, setStep] = useState(1);
@@ -55,7 +55,7 @@ export function RegisterPage() {
 
   // Step 2 fields
   const [nativeLanguage, setNativeLanguage] = useState('en');
-  const [learningGoal, setLearningGoal] = useState('travel');
+  const [learningGoal, setLearningGoal] = useState('daily_communication');
   const [targetLevel, setTargetLevel] = useState('A1');
 
   // Field-specific validation and backend error state
@@ -134,28 +134,26 @@ export function RegisterPage() {
         password: password,
         email: email.trim(),
         fullName: fullName.trim() || username.trim(),
-        phoneNumber: phoneNumber.trim() || undefined,
+        phoneNumber: phoneNumber.trim(),
         nativeLanguage: isQuickMode ? 'en' : nativeLanguage,
-        learningGoal: isQuickMode ? 'travel' : learningGoal,
+        learningGoal: isQuickMode ? 'daily_communication' : learningGoal,
         targetLevel: isQuickMode ? 'A1' : targetLevel,
       };
 
       const result = await register(payload);
 
       if (result.success) {
-        const completedGuestOnboarding = onboardingService.hasCompletedExperience();
-        if (result.user && completedGuestOnboarding) {
-          try {
-            await onboardingService.syncGuestProgress();
-          } catch {
-            // Progress stays local and can be retried when connectivity returns.
-          }
-        }
-        navigate(result.user ? (completedGuestOnboarding ? '/edtech/dashboard' : '/onboarding/reason') : '/verify-email', {
+        const verificationEmail = savePendingVerificationEmail(result.email || email);
+        const afterLogin = savePostVerificationPath(location.state?.from || '/onboarding/reason');
+        startResendCooldown(60);
+        navigate('/verify-email', {
           replace: true,
           state: {
-            email: email.trim(),
-            message: 'Đăng ký thành công! Hãy hoàn tất thiết lập tài khoản.',
+            email: verificationEmail,
+            message: result.message || 'Đăng ký thành công. Vui lòng kiểm tra email để lấy mã OTP.',
+            developmentOtp: result.developmentOtp,
+            fromRegistration: true,
+            afterLogin,
           },
         });
       } else {

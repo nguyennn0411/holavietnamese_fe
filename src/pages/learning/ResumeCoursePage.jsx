@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useMemo } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -328,7 +328,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#431914] text-[#FFF9EE] px-5 py-3.5 rounded-2xl shadow-2xl border border-amber-400/50 max-w-md animate-bounce-subtle"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#253044] text-[#FFF7E8] px-5 py-3.5 rounded-2xl shadow-2xl border border-amber-400/50 max-w-md animate-bounce-subtle"
         >
           <Lock size={18} className="text-amber-400 shrink-0" />
           <span className="text-xs sm:text-sm font-semibold">{lockedToast}</span>
@@ -339,7 +339,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
       <div className="flex items-center justify-between">
         <Link
           to={`/courses/${course.id}`}
-          className="inline-flex items-center gap-2 text-xs font-bold text-[#78685B] hover:text-[#431914] transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-bold text-[#64748B] hover:text-[#253044] transition-colors"
         >
           <ArrowLeft size={15} />
           <span><BilingualText>{"Trở lại thông tin khóa học"}</BilingualText></span>
@@ -347,17 +347,17 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
 
         <Link
           to="/my-learning"
-          className="text-xs font-bold text-[#A62A24] hover:underline"
+          className="text-xs font-bold text-[#EA580C] hover:underline"
         >
           <BilingualText>{"Góc học tập của tôi →"}</BilingualText>
         </Link>
       </div>
 
       {/* Hero Overview Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF9EE] via-[#F7F0E3] to-[#EEE3D1] border border-[#DECBB4] p-6 sm:p-10 shadow-sm">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
         <div className="relative z-10 space-y-4">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-3 py-1 rounded-full bg-[#DA251D] text-white font-extrabold text-xs uppercase tracking-wider shadow-xs">
+            <span className="px-3 py-1 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs uppercase tracking-wider shadow-xs">
               {course.level}
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-xs">
@@ -366,33 +366,33 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-black text-[#431914] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-black text-[#253044] tracking-tight">
             <BilingualText vi={course.titleVi || course.title} en={course.title} />
           </h1>
 
-          <p className="text-xs sm:text-sm text-[#78685B] leading-relaxed max-w-3xl">
+          <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed max-w-3xl">
             <BilingualText vi={course.descriptionVi || course.description} en={course.description} />
           </p>
 
           {/* Progress summary banner */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-[#DECBB4]/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5 mt-4">
+          <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-[#E8E5DF]/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5 mt-4">
             <div className="space-y-2 flex-1 max-w-lg">
-              <div className="flex items-center justify-between text-xs font-bold text-[#431914]">
+              <div className="flex items-center justify-between text-xs font-bold text-[#253044]">
                 <span className="flex items-center gap-1.5">
-                  <Award size={15} className="text-[#DA251D]" />
+                  <Award size={15} className="text-[#FF7A00]" />
                   <span>Tiến độ tổng thể</span>
                 </span>
-                <span className="text-[#DA251D]">{progressPercent}%</span>
+                <span className="text-[#FF7A00]">{progressPercent}%</span>
               </div>
-              <div className="w-full h-2.5 rounded-full bg-[#DECBB4]/40 overflow-hidden">
+              <div className="w-full h-2.5 rounded-full bg-[#E8E5DF]/40 overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
-                    isFullyCompleted ? 'bg-emerald-600' : 'bg-[#DA251D]'
+                    isFullyCompleted ? 'bg-emerald-600' : 'bg-[#FF7A00]'
                   }`}
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <p className="text-[11px] text-[#78685B]">
+              <p className="text-[11px] text-[#64748B]">
                 Đã hoàn thành <strong>{completedCount}</strong> trên tổng số <strong>{totalLessons}</strong> bài học
               </p>
             </div>
@@ -402,7 +402,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
               <div className="shrink-0">
                 <Link
                   to={resumeUrl}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all"
                 >
                   <Play size={16} fill="white" />
                   <BilingualText>
@@ -421,12 +421,12 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
 
       {/* Curriculum Roadmap Header with Expand/Collapse All */}
       <section className="space-y-4">
-        <div className="flex items-center justify-between pb-2 border-b border-[#DECBB4]/60">
+        <div className="flex items-center justify-between pb-2 border-b border-[#E8E5DF]/60">
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-[#431914] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-[#253044] tracking-tight">
               <BilingualText>{"Lộ trình bài học chi tiết"}</BilingualText>
             </h2>
-            <p className="text-xs text-[#78685B] mt-0.5">
+            <p className="text-xs text-[#64748B] mt-0.5">
               <BilingualText>{"Hoàn thành từng bài để mở khóa các bài tiếp theo trong chương."}</BilingualText>
             </p>
           </div>
@@ -434,7 +434,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
           <button
             type="button"
             onClick={toggleAll}
-            className="text-xs font-bold text-[#A62A24] hover:underline px-3 py-1.5 rounded-lg bg-[#FFF9EE] border border-[#DECBB4] cursor-pointer"
+            className="text-xs font-bold text-[#EA580C] hover:underline px-3 py-1.5 rounded-lg bg-[#FFF7E8] border border-[#E8E5DF] cursor-pointer"
           >
             {isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
           </button>
@@ -456,8 +456,8 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                 key={mId}
                 className={`module-card rounded-2xl border transition-all duration-200 overflow-hidden ${
                   isExpanded
-                    ? 'border-[#DECBB4] bg-white shadow-xs'
-                    : 'border-[#DECBB4]/70 bg-white/70 hover:bg-white'
+                    ? 'border-[#E8E5DF] bg-white shadow-xs'
+                    : 'border-[#E8E5DF]/70 bg-white/70 hover:bg-white'
                 }`}
               >
                 {/* Module Header Bar */}
@@ -471,25 +471,25 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                       className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 ${
                         isModuleDone
                           ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                          : 'bg-[#FFF9EE] text-[#431914] border border-[#DECBB4]'
+                          : 'bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]'
                       }`}
                     >
                       {isModuleDone ? <CheckCircle2 size={16} /> : mIdx + 1}
                     </span>
 
                     <div>
-                      <h3 className="text-sm sm:text-base font-black text-[#431914]">
+                      <h3 className="text-sm sm:text-base font-black text-[#253044]">
                         <BilingualText vi={module.titleVi || module.title} en={module.title} />
                       </h3>
                       {(module.descriptionVi || module.description || module.metadata?.descriptionVi) && (
-                        <p className="text-xs text-[#78685B] line-clamp-2 mt-0.5 font-normal">
+                        <p className="text-xs text-[#64748B] line-clamp-2 mt-0.5 font-normal">
                           <BilingualText
                             vi={module.descriptionVi || module.metadata?.descriptionVi || module.description}
                             en={module.description || module.metadata?.descriptionEn}
                           />
                         </p>
                       )}
-                      <p className="text-[11px] text-[#78685B] flex items-center gap-2 mt-1">
+                      <p className="text-[11px] text-[#64748B] flex items-center gap-2 mt-1">
                         <span>{moduleLessons.length} bài học</span>
                         <span>•</span>
                         <span className={isModuleDone ? 'text-emerald-700 font-bold' : ''}>
@@ -499,14 +499,14 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 text-[#78685B]">
+                  <div className="flex items-center gap-2 text-[#64748B]">
                     {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                   </div>
                 </button>
 
                 {/* Module Lessons List */}
                 {isExpanded && (
-                  <div className="border-t border-[#DECBB4]/40 bg-[#FFF9EE]/20 p-3 sm:p-4 space-y-2">
+                  <div className="border-t border-[#E8E5DF]/40 bg-[#FFF7E8]/20 p-3 sm:p-4 space-y-2">
                     {moduleLessons.map((lesson, lIdx) => {
                       const uKey = lesson.id ?? `les-${mIdx}-${lIdx}`;
                       const status = lessonStateMap[uKey] || 'LOCKED';
@@ -526,7 +526,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                               ? 'bg-white border-emerald-200/80 hover:border-emerald-300'
                               : isLocked
                               ? 'bg-stone-50/60 border-stone-200/60 opacity-60'
-                              : 'bg-white border-[#DECBB4]/70 hover:border-[#A62A24]'
+                              : 'bg-white border-[#E8E5DF]/70 hover:border-[#EA580C]'
                           }`}
                         >
                           <div className="flex items-center gap-3">
@@ -536,10 +536,10 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                                 isCompleted
                                   ? 'bg-emerald-100 text-emerald-800'
                                   : isCurrent
-                                  ? 'bg-[#DA251D] text-white shadow-xs animate-pulse-subtle'
+                                  ? 'bg-[#FF7A00] text-white shadow-xs animate-pulse-subtle'
                                   : isLocked
                                   ? 'bg-stone-200/70 text-stone-500'
-                                  : 'bg-[#FFF9EE] text-[#431914] border border-[#DECBB4]'
+                                  : 'bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]'
                               }`}
                             >
                               {isCompleted ? (
@@ -562,18 +562,18 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                                   <span>{typeInfo.labelVi}</span>
                                 </span>
                                 {isCurrent && (
-                                  <span className="px-2 py-0.5 rounded-md bg-[#DA251D] text-white text-[10px] font-bold uppercase tracking-wider">
+                                  <span className="px-2 py-0.5 rounded-md bg-[#FF7A00] text-white text-[10px] font-bold uppercase tracking-wider">
                                     Đang học
                                   </span>
                                 )}
                               </div>
 
-                              <h4 className="text-xs sm:text-sm font-bold text-[#431914]">
+                              <h4 className="text-xs sm:text-sm font-bold text-[#253044]">
                                 <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
                               </h4>
 
                               {(lesson.descriptionVi || lesson.description || lesson.objectiveVi || lesson.objectiveEn) && (
-                                <p className="text-xs text-[#78685B] line-clamp-1 mt-0.5 font-normal">
+                                <p className="text-xs text-[#64748B] line-clamp-1 mt-0.5 font-normal">
                                   <BilingualText
                                     vi={lesson.descriptionVi || lesson.objectiveVi || lesson.description}
                                     en={lesson.description || lesson.objectiveEn}
@@ -584,7 +584,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                           </div>
 
                           <div className="flex items-center gap-3 shrink-0">
-                            <span className="text-[11px] text-[#78685B] flex items-center gap-1 hidden sm:inline-flex">
+                            <span className="text-[11px] text-[#64748B] flex items-center gap-1 hidden sm:inline-flex">
                               <Clock size={12} />
                               <span>{formatDuration(lesson.estimatedMinutes)}</span>
                             </span>
@@ -599,7 +599,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                                 <Lock size={15} />
                               </button>
                             ) : (
-                              <span className="w-7 h-7 rounded-lg bg-[#F5E1D8] text-[#A62A24] flex items-center justify-center text-xs font-bold group-hover:bg-[#A62A24] group-hover:text-white transition-all">
+                              <span className="w-7 h-7 rounded-lg bg-[#FFF0DC] text-[#EA580C] flex items-center justify-center text-xs font-bold group-hover:bg-[#EA580C] group-hover:text-white transition-all">
                                 <Play size={12} fill="currentColor" />
                               </span>
                             )}

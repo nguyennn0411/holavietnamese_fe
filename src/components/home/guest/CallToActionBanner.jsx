@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 export function CallToActionBanner() {
   const { t } = useTranslation('home');
   return (
-    <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#431914] via-[#61211b] to-[#A62A24] text-white py-20 sm:py-28 px-4 sm:px-8 lg:px-16 text-center shadow-xl">
+    <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#253044] via-[#61211b] to-[#EA580C] text-white py-20 sm:py-28 px-4 sm:px-8 lg:px-16 text-center shadow-xl">
       {/* Dong Son Bronze Drum Inlay */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] sm:w-[720px] sm:h-[720px] lg:w-[900px] lg:h-[900px] select-none opacity-[0.14] mix-blend-screen"
@@ -34,7 +34,7 @@ export function CallToActionBanner() {
         <div className="pt-4 flex flex-wrap justify-center gap-4">
           <Link
             to="/welcome"
-            className="inline-flex items-center gap-2 px-9 py-4 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#431914] font-black text-sm shadow-[0_4px_0_#b88d36] active:translate-y-1 active:shadow-none transition-all hover:scale-102"
+            className="inline-flex items-center gap-2 px-9 py-4 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#253044] font-black text-sm shadow-[0_4px_0_#b88d36] active:translate-y-1 active:shadow-none transition-all hover:scale-102"
           >
             <span>{t('cta.primary')}</span>
             <ArrowRight size={18} />

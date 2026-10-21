@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { BookOpen, Check, ChevronRight, Compass, Headphones, LockKeyhole, Medal, Play, ShieldCheck, Sparkles, Sprout, Target, Volume2 } from 'lucide-react';
+import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Sparkles, Sprout, Target, Volume2 } from 'lucide-react';
 import { benefits, dailyGoals, firstLessonQuestions, learningReasons, levelOptions, placementBands, placementQuestions } from '../data/onboardingData';
 import { useOnboarding } from '../context/OnboardingContext';
 import { Brand, Confetti, LessonHeader, Mascot, OnboardingLayout, PrimaryButton, SelectionCard } from '../components/OnboardingUI';
+import { onboardingService } from '../services/onboardingService';
+import { toast } from 'sonner';
 
 const speak = (text) => {
   if (!('speechSynthesis' in window)) return false;
@@ -42,8 +44,8 @@ export function WelcomePage() {
         <span className="ob-kicker"><Sparkles size={17} /> YOUR VIETNAMESE ADVENTURE STARTS HERE</span>
         <h1>Learn Vietnamese<br /><em>the fun way!</em></h1>
         <p>Discover Vietnam, speak confidently, and connect with millions of Vietnamese speakers through fun, interactive lessons.</p>
-        <PrimaryButton onClick={() => navigate('/onboarding/reason')}>GET STARTED</PrimaryButton>
-        <button className="ob-outline" type="button" onClick={() => navigate('/login')}>I ALREADY HAVE AN ACCOUNT</button>
+        <PrimaryButton onClick={() => navigate('/register', { state: { from: '/onboarding/reason' } })}>CREATE ACCOUNT TO START</PrimaryButton>
+        <button className="ob-outline" type="button" onClick={() => navigate('/login', { state: { from: '/onboarding/reason' } })}>I ALREADY HAVE AN ACCOUNT</button>
         <button className="ob-text-link" type="button" onClick={() => navigate('/')}>Explore as guest <ChevronRight size={16} /></button>
         <div className="ob-trust"><span><ShieldCheck /> Free first lesson</span><span><Play /> Learn by doing</span><span><Medal /> Built for real progress</span></div>
       </motion.div>
@@ -119,7 +121,7 @@ function ExerciseRunner({ mode }) {
     if (index === questions.length - 1) {
       const score = nextAnswers.filter((item) => item?.correct).length; const accuracy = Math.round(score / questions.length * 100);
       if (mode === 'lesson') update({ firstLessonCompleted: true, firstLessonResult: { correct: score, total: questions.length, accuracy, xp: 20 }, guestExperienceCompleted: true, lessonAnswers: nextAnswers });
-      else { const band = [...placementBands].reverse().find((item) => score >= item.min); update({ placementTestCompleted: true, placementResult: { correct: score, total: questions.length, accuracy, level: band.label, recommendation: band.recommendation, xp: 30 }, guestExperienceCompleted: true, placementAnswers: nextAnswers }); }
+      else { const band = [...placementBands].reverse().find((item) => score >= item.min); update({ placementTestCompleted: true, placementResult: { correct: score, total: questions.length, accuracy, level: band.label, targetLevel: band.targetLevel, recommendation: band.recommendation, xp: 30 }, guestExperienceCompleted: true, placementAnswers: nextAnswers }); }
       navigate('/onboarding/completed', { state: { mode } }); return;
     }
     const next = index + 1; setIndex(next); setSelected(''); setTokens([]); setChecked(false);
@@ -144,39 +146,34 @@ function ExerciseRunner({ mode }) {
 }
 
 export const FirstLessonPage = () => { const { data } = useOnboarding(); return data.learningPath !== 'beginner' ? <Navigate to="/onboarding/learning-path" replace /> : <ExerciseRunner mode="lesson" />; };
-export const PlacementTestPage = () => { const { data } = useOnboarding(); return data.learningPath !== 'placement' ? <Navigate to="/onboarding/learning-path" replace /> : <ExerciseRunner mode="placement" />; };
+export const PlacementTestPage = () => <ExerciseRunner mode="placement" />;
 
 export function CompletionPage() {
   const { data } = useOnboarding(); const location = useLocation(); const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
   const mode = location.state?.mode || (data.placementTestCompleted ? 'placement' : 'lesson');
   const result = mode === 'placement' ? data.placementResult : data.firstLessonResult;
   if (!result) return <Navigate to="/onboarding/learning-path" replace />;
 
-  const handleContinueToLogin = () => {
-    navigate('/login', {
-      state: {
-        from: '/edtech/dashboard',
-        message: 'Hoàn thành trải nghiệm khởi đầu! Đăng nhập để lưu tiến độ và bắt đầu lộ trình học.',
-      },
-    });
+  const handleShowRecommendations = async () => {
+    if (saving) return;
+    setSaving(true);
+    try {
+      await onboardingService.syncGuestProgress();
+      toast.success('Đã lưu kết quả kiểm tra và cá nhân hóa gợi ý khóa học.');
+    } catch {
+      toast.error('Chưa thể đồng bộ kết quả, nhưng bạn vẫn có thể xem khóa học được gợi ý.');
+    } finally {
+      const targetLevel = result.targetLevel || 'A1';
+      navigate(`/courses?level=${encodeURIComponent(targetLevel)}&recommended=1`, { replace: true });
+    }
   };
 
-  const handleRegister = () => {
-    navigate('/register', {
-      state: {
-        from: '/edtech/dashboard',
-      },
-    });
-  };
-
-  return <div className="ob-complete"><Confetti /><Brand /><main><div className="ob-celebrate"><Mascot celebration /></div><span className="ob-complete-kicker"><Medal /> {mode === 'lesson' ? 'FIRST LESSON COMPLETE' : 'STARTING POINT FOUND'}</span><h1>{mode === 'lesson' ? "Fantastic! You've completed your first Vietnamese lesson!" : "Great job! We've found a starting point for you!"}</h1><p>Tiến độ của bạn đã được ghi nhận. Hãy đăng nhập bằng Google hoặc tài khoản sẵn có để lưu kết quả và bắt đầu học nhé.</p>
+  return <div className="ob-complete"><Confetti /><Brand /><main><div className="ob-celebrate"><Mascot celebration /></div><span className="ob-complete-kicker"><Medal /> {mode === 'lesson' ? 'FIRST LESSON COMPLETE' : 'STARTING POINT FOUND'}</span><h1>{mode === 'lesson' ? "Fantastic! You've completed your first Vietnamese lesson!" : "Great job! We've found a starting point for you!"}</h1><p>Kết quả đã sẵn sàng. HolaVietnamese sẽ dùng trình độ này để gợi ý các khóa học phù hợp với bạn.</p>
     <div className="ob-stats"><article><Sparkles /><strong>+{result.xp}</strong><span>XP EARNED</span></article><article><Check /><strong>{result.correct}/{result.total}</strong><span>CORRECT</span></article><article><Target /><strong>{result.accuracy}%</strong><span>ACCURACY</span></article></div>
     <div className="ob-recommend"><BookOpen /><div><span>YOUR RECOMMENDED START</span><strong>{result.recommendation || 'Vietnamese Foundations · Lesson 2'}</strong>{result.level && <small>Suggested group: {result.level}. This is a preliminary result, not an official CEFR certification.</small>}</div></div>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
-      <PrimaryButton onClick={handleContinueToLogin}>ĐĂNG NHẬP ĐỂ LƯU TIẾN ĐỘ</PrimaryButton>
-      <button type="button" className="ob-text-link" onClick={handleRegister} style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-primary-dark, #89221E)', cursor: 'pointer' }}>
-        Chưa có tài khoản? Tạo tài khoản mới →
-      </button>
+      <PrimaryButton disabled={saving} onClick={handleShowRecommendations}>{saving ? 'ĐANG LƯU KẾT QUẢ…' : 'XEM KHÓA HỌC ĐƯỢC GỢI Ý'}</PrimaryButton>
     </div>
   </main></div>;
 }

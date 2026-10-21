@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useCourse } from '@/hooks/useCourses';
@@ -498,7 +498,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 flex items-center justify-between gap-4 bg-[#431914] text-[#FFF9EE] px-5 py-3.5 rounded-2xl shadow-2xl border border-[#FFCD00]/50 max-w-lg transition-all animate-bounce-subtle"
+          className="fixed bottom-6 right-6 z-50 flex items-center justify-between gap-4 bg-[#253044] text-[#FFF7E8] px-5 py-3.5 rounded-2xl shadow-2xl border border-[#FFCD00]/50 max-w-lg transition-all animate-bounce-subtle"
         >
           <div className="flex items-center gap-3">
             <Lock size={18} className="text-[#FFCD00] shrink-0" />
@@ -511,7 +511,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 type="button"
                 onClick={handleEnroll}
                 disabled={enrollPending}
-                className="px-3 py-1.5 rounded-xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
               >
                 Đăng ký ngay
               </button>
@@ -519,7 +519,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
               <Link
                 to={continueLearnUrl}
                 onClick={closeToast}
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-bold text-xs shadow-xs transition-colors"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-bold text-xs shadow-xs transition-colors"
               >
                 <span>Học tiếp</span>
                 <ArrowRight size={12} />
@@ -530,7 +530,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
               type="button"
               onClick={closeToast}
               aria-label="Đóng thông báo"
-              className="p-1 rounded-lg text-[#FFF9EE]/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              className="p-1 rounded-lg text-[#FFF7E8]/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <X size={15} />
             </button>
@@ -543,14 +543,14 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
         {/* ===================== CỘT TRÁI (65%): GIỚI THIỆU, CHUẨN ĐẦU RA, DANH SÁCH MODULE ===================== */}
         <div className="w-full space-y-8">
           {/* 1. Phần Giới Thiệu Khóa Học */}
-          <section className="bg-gradient-to-br from-[#FFF9EE] via-[#FDFBF7] to-[#F7F0E3] rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-5">
+          <section className="bg-gradient-to-br from-[#FFF7E8] via-[#FDFBF7] to-[#F7F0E3] rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-5">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-3.5 py-1 rounded-full bg-[#DA251D] text-white font-extrabold text-xs uppercase tracking-wider shadow-xs">
+              <span className="px-3.5 py-1 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs uppercase tracking-wider shadow-xs">
                 {course.level}
               </span>
 
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF2D6] text-[#A62A24] border border-[#FFCD00]/50 font-bold text-xs">
-                <Sparkles size={13} className="text-[#DA251D]" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF2D6] text-[#EA580C] border border-[#FFCD00]/50 font-bold text-xs">
+                <Sparkles size={13} className="text-[#FF7A00]" />
                 <BilingualText>{course.isFree ? 'Khóa học miễn phí' : 'Khóa học chính thức'}</BilingualText>
               </span>
 
@@ -562,26 +562,26 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
               )}
             </div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#431914] tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#253044] tracking-tight leading-tight">
               <BilingualText vi={course.titleVi || course.title} en={course.title} />
             </h1>
 
-            <p className="text-sm sm:text-base text-[#78685B] leading-relaxed preserve-lines">
+            <p className="text-sm sm:text-base text-[#64748B] leading-relaxed preserve-lines">
               <BilingualText vi={course.descriptionVi || course.description} en={course.description} />
             </p>
 
             {/* Các điểm nổi bật */}
             <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#DECBB4]/50 text-xs font-semibold text-[#431914]">
-                <GraduationCap size={16} className="text-[#DA251D] shrink-0" />
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
+                <GraduationCap size={16} className="text-[#FF7A00] shrink-0" />
                 <span>Lộ trình theo chuẩn CEFR</span>
               </div>
-              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#DECBB4]/50 text-xs font-semibold text-[#431914]">
-                <MessageCircle size={16} className="text-[#DA251D] shrink-0" />
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
+                <MessageCircle size={16} className="text-[#FF7A00] shrink-0" />
                 <span>Hội thoại thực tế & AI Tutor</span>
               </div>
-              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#DECBB4]/50 text-xs font-semibold text-[#431914]">
-                <CheckSquare size={16} className="text-[#DA251D] shrink-0" />
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
+                <CheckSquare size={16} className="text-[#FF7A00] shrink-0" />
                 <span>Luyện tập & Đánh giá tức thì</span>
               </div>
             </div>
@@ -589,14 +589,14 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
           {/* 2. Phần Chuẩn Đầu Ra (Learning Outcomes) */}
           {outcomes.length > 0 && (
-            <section className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-5">
+            <section className="bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-5">
               <div className="flex items-center gap-2.5">
-                <Award size={22} className="text-[#DA251D] shrink-0" />
+                <Award size={22} className="text-[#FF7A00] shrink-0" />
                 <div>
-                  <h2 className="text-lg sm:text-xl font-black text-[#431914] tracking-tight">
+                  <h2 className="text-lg sm:text-xl font-black text-[#253044] tracking-tight">
                     <BilingualText>{"Bạn sẽ học được gì từ khóa học này"}</BilingualText>
                   </h2>
-                  <p className="text-xs text-[#78685B] mt-0.5">
+                  <p className="text-xs text-[#64748B] mt-0.5">
                     <BilingualText>{"Chuẩn đầu ra và các kỹ năng ngôn ngữ cốt lõi sau khóa học."}</BilingualText>
                   </p>
                 </div>
@@ -606,12 +606,12 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 {outcomes.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex items-start gap-3 p-3.5 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4]/60 hover:border-[#FFCD00] transition-colors"
+                    className="flex items-start gap-3 p-3.5 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF]/60 hover:border-[#FFCD00] transition-colors"
                   >
                     <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
                       ✓
                     </span>
-                    <span className="text-xs sm:text-sm font-semibold text-[#431914] leading-snug">
+                    <span className="text-xs sm:text-sm font-semibold text-[#253044] leading-snug">
                       <BilingualText vi={item.vi} en={item.en || undefined} />
                     </span>
                   </div>
@@ -622,20 +622,20 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
           {/* Điều kiện tiên quyết & Yêu cầu khóa học (nếu có) */}
           {(course.requirementsVi || course.requirements || course.prerequisitesVi || course.prerequisites || course.targetAudienceVi || course.targetAudience) && (
-            <section className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-4">
+            <section className="bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-4">
               <div className="flex items-center gap-2.5">
-                <ShieldCheck size={22} className="text-[#DA251D] shrink-0" />
+                <ShieldCheck size={22} className="text-[#FF7A00] shrink-0" />
                 <div>
-                  <h2 className="text-lg sm:text-xl font-black text-[#431914] tracking-tight">
+                  <h2 className="text-lg sm:text-xl font-black text-[#253044] tracking-tight">
                     <BilingualText>{"Yêu cầu & Đối tượng phù hợp"}</BilingualText>
                   </h2>
-                  <p className="text-xs text-[#78685B] mt-0.5">
+                  <p className="text-xs text-[#64748B] mt-0.5">
                     <BilingualText>{"Thông tin chuẩn bị trước khi tham gia khóa học."}</BilingualText>
                   </p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4]/60 text-xs sm:text-sm text-[#431914] leading-relaxed">
+              <div className="p-4 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF]/60 text-xs sm:text-sm text-[#253044] leading-relaxed">
                 <BilingualText
                   vi={course.requirementsVi || course.prerequisitesVi || course.targetAudienceVi || course.requirements || course.prerequisites}
                   en={course.requirements || course.prerequisites || course.targetAudience}
@@ -645,16 +645,16 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
           )}
 
           {/* 3. Phần Danh Sách Module & Bài Học (Accordion) */}
-          <section className="bg-white rounded-3xl border border-[#DECBB4] p-6 sm:p-8 shadow-xs space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#DECBB4]/40 pb-4">
+          <section className="bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E5DF]/40 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <BookOpen size={22} className="text-[#DA251D]" />
-                  <h2 className="text-lg sm:text-xl font-black text-[#431914] tracking-tight">
+                  <BookOpen size={22} className="text-[#FF7A00]" />
+                  <h2 className="text-lg sm:text-xl font-black text-[#253044] tracking-tight">
                     <BilingualText>{"Nội dung khóa học"}</BilingualText>
                   </h2>
                 </div>
-                <p className="text-xs text-[#78685B] mt-1">
+                <p className="text-xs text-[#64748B] mt-1">
                   <span>{modules.length} modules</span>
                   <span className="mx-1.5">•</span>
                   <span>{totalLessons} bài học</span>
@@ -667,7 +667,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 <button
                   type="button"
                   onClick={toggleAllModules}
-                  className="self-start sm:self-center text-xs font-bold text-[#A62A24] hover:text-[#DA251D] hover:underline transition-colors py-1.5 px-3 rounded-xl bg-[#FFF2D6]/70 hover:bg-[#FFF2D6] border border-[#FFCD00]/50 cursor-pointer shadow-2xs"
+                  className="self-start sm:self-center text-xs font-bold text-[#EA580C] hover:text-[#FF7A00] hover:underline transition-colors py-1.5 px-3 rounded-xl bg-[#FFF2D6]/70 hover:bg-[#FFF2D6] border border-[#FFCD00]/50 cursor-pointer shadow-2xs"
                 >
                   {isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
                 </button>
@@ -676,7 +676,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
             {/* Danh sách các Module */}
             {modules.length === 0 ? (
-              <p className="text-xs text-[#78685B] italic py-4">
+              <p className="text-xs text-[#64748B] italic py-4">
                 <BilingualText>{"Chưa có nội dung bài học nào được công bố."}</BilingualText>
               </p>
             ) : (
@@ -700,22 +700,22 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                   return (
                     <div
                       key={moduleKey}
-                      className="rounded-2xl border border-[#DECBB4] overflow-hidden bg-[#FFFDF9] transition-all shadow-xs"
+                      className="rounded-2xl border border-[#E8E5DF] overflow-hidden bg-[#FFFDF9] transition-all shadow-xs"
                     >
                       {/* Nút Accordion Header của Module */}
                       <button
                         type="button"
                         onClick={() => toggleModule(moduleKey)}
-                        className="w-full flex items-center justify-between p-4 sm:p-5 text-left cursor-pointer hover:bg-[#FFF9EE]/70 transition-colors select-none focus:outline-none"
+                        className="w-full flex items-center justify-between p-4 sm:p-5 text-left cursor-pointer hover:bg-[#FFF7E8]/70 transition-colors select-none focus:outline-none"
                         aria-expanded={isExpanded}
                       >
                         <div className="flex items-center gap-3.5 pr-2">
-                          <span className="w-8 h-8 rounded-xl bg-[#FFF2D6] text-[#A62A24] font-black text-xs flex items-center justify-center shrink-0 border border-[#FFCD00]/40 shadow-2xs">
+                          <span className="w-8 h-8 rounded-xl bg-[#FFF2D6] text-[#EA580C] font-black text-xs flex items-center justify-center shrink-0 border border-[#FFCD00]/40 shadow-2xs">
                             {mIdx + 1}
                           </span>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-[#A62A24] uppercase tracking-wide">
+                              <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wide">
                                 Module {mIdx + 1}
                               </span>
                               {isModuleFinished && (
@@ -725,11 +725,11 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                 </span>
                               )}
                             </div>
-                            <h3 className="text-sm sm:text-base font-bold text-[#431914] leading-snug">
+                            <h3 className="text-sm sm:text-base font-bold text-[#253044] leading-snug">
                               <BilingualText vi={module.titleVi || module.title} en={module.title} />
                             </h3>
                             {(module.descriptionVi || module.description || module.metadata?.descriptionVi) && (
-                              <p className="text-xs text-[#78685B] line-clamp-2 mt-1 font-normal">
+                              <p className="text-xs text-[#64748B] line-clamp-2 mt-1 font-normal">
                                 <BilingualText
                                   vi={module.descriptionVi || module.metadata?.descriptionVi || module.description}
                                   en={module.description || module.metadata?.descriptionEn}
@@ -739,16 +739,16 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 text-xs text-[#78685B] shrink-0">
+                        <div className="flex items-center gap-3 text-xs text-[#64748B] shrink-0">
                           <span className="hidden sm:inline-block">
                             {moduleLessons.length} bài học
                           </span>
-                          <span className="hidden md:inline-block text-[#A62A24] font-medium">
+                          <span className="hidden md:inline-block text-[#EA580C] font-medium">
                             • {formatDuration(moduleMinutes)}
                           </span>
                           <ChevronDown
                             size={18}
-                            className={`text-[#A62A24] transition-transform duration-200 ${
+                            className={`text-[#EA580C] transition-transform duration-200 ${
                               isExpanded ? 'rotate-180' : ''
                             }`}
                           />
@@ -757,9 +757,9 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
                       {/* Danh sách Lesson khi Accordion mở */}
                       {isExpanded && (
-                        <div className="p-4 sm:p-5 pt-0 space-y-2.5 border-t border-[#DECBB4]/40 bg-white">
+                        <div className="p-4 sm:p-5 pt-0 space-y-2.5 border-t border-[#E8E5DF]/40 bg-white">
                           {moduleLessons.length === 0 ? (
-                            <p className="text-xs text-[#78685B] italic py-2">
+                            <p className="text-xs text-[#64748B] italic py-2">
                               <BilingualText>{"Module này chưa có bài học."}</BilingualText>
                             </p>
                           ) : (
@@ -844,7 +844,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                 <Link
                                   key={lessonUniqueKey}
                                   to={`/learn/${targetCourseId}/lesson/${lesson.id}`}
-                                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#FFFDF9] hover:bg-white border border-[#DECBB4]/60 hover:border-[#DA251D] text-xs sm:text-sm cursor-pointer transition-all shadow-2xs hover:shadow-sm group"
+                                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#FFFDF9] hover:bg-white border border-[#E8E5DF]/60 hover:border-[#FF7A00] text-xs sm:text-sm cursor-pointer transition-all shadow-2xs hover:shadow-sm group"
                                 >
                                   <div className="flex items-center gap-3 min-w-0">
                                     <div
@@ -852,8 +852,8 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                         lessonLockInfo.isCompleted
                                           ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
                                           : lessonLockInfo.isNext
-                                          ? 'bg-[#DA251D] text-white border-[#DA251D] animate-pulse'
-                                          : 'bg-[#FFF2D6] text-[#A62A24] border-[#FFCD00]/50'
+                                          ? 'bg-[#FF7A00] text-white border-[#FF7A00] animate-pulse'
+                                          : 'bg-[#FFF2D6] text-[#EA580C] border-[#FFCD00]/50'
                                       }`}
                                     >
                                       {lessonLockInfo.isCompleted ? (
@@ -867,7 +867,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
                                     <div className="truncate">
                                       <div className="flex items-center gap-2">
-                                        <span className="font-bold text-[#431914] group-hover:text-[#DA251D] transition-colors truncate">
+                                        <span className="font-bold text-[#253044] group-hover:text-[#FF7A00] transition-colors truncate">
                                           {lIdx + 1}.{' '}
                                           <BilingualText
                                             vi={lesson.titleVi || lesson.title}
@@ -881,7 +881,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                         </span>
                                       </div>
                                       {(lesson.descriptionVi || lesson.description || lesson.objectiveVi || lesson.objectiveEn) && (
-                                        <p className="text-xs text-[#78685B] line-clamp-1 mt-0.5 font-normal truncate">
+                                        <p className="text-xs text-[#64748B] line-clamp-1 mt-0.5 font-normal truncate">
                                           <BilingualText
                                             vi={lesson.descriptionVi || lesson.objectiveVi || lesson.description}
                                             en={lesson.description || lesson.objectiveEn}
@@ -891,9 +891,9 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                     </div>
                                   </div>
 
-                                  <div className="flex items-center gap-2.5 text-[11px] text-[#78685B] shrink-0 ml-2">
+                                  <div className="flex items-center gap-2.5 text-[11px] text-[#64748B] shrink-0 ml-2">
                                     <span className="inline-flex items-center gap-1 font-medium">
-                                      <Clock size={12} className="text-[#A62A24]" />
+                                      <Clock size={12} className="text-[#EA580C]" />
                                       {lessonDuration} phút
                                     </span>
 
@@ -902,12 +902,12 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                         Đã học
                                       </span>
                                     ) : lessonLockInfo.isNext ? (
-                                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#DA251D] text-white font-extrabold text-[10px] shadow-xs">
+                                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#FF7A00] text-white font-extrabold text-[10px] shadow-xs">
                                         <Play size={10} fill="white" />
                                         Học ngay
                                       </span>
                                     ) : (
-                                      <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#A62A24] font-bold text-[10px]">
+                                      <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-bold text-[10px]">
                                         Vào bài
                                       </span>
                                     )}
@@ -928,40 +928,40 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
         {/* ===================== CỘT PHẢI (35%): CARD ĐĂNG KÝ STICKY ===================== */}
         <aside className="w-full lg:sticky lg:top-24 space-y-6 self-start">
-          <div className="bg-white rounded-3xl border border-[#DECBB4] p-5 sm:p-6 shadow-md hover:shadow-lg transition-all space-y-6">
+          <div className="bg-white rounded-3xl border border-[#E8E5DF] p-5 sm:p-6 shadow-md hover:shadow-lg transition-all space-y-6">
             {/* Ảnh Course */}
-            <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-sm border border-[#DECBB4]/60 relative group bg-[#FFF9EE]">
+            <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-sm border border-[#E8E5DF]/60 relative group bg-[#FFF7E8]">
               <CourseThumbnail course={course} />
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-[#431914]/85 backdrop-blur-xs text-[#FFF9EE] text-[11px] font-black uppercase tracking-wider">
+              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-[#253044]/85 backdrop-blur-xs text-[#FFF7E8] text-[11px] font-black uppercase tracking-wider">
                 {course.level}
               </div>
             </div>
 
             {/* Thông tin số bài, thời lượng */}
-            <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[#FFF9EE]/70 border border-[#DECBB4]/50">
+            <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[#FFF7E8]/70 border border-[#E8E5DF]/50">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-white border border-[#DECBB4]/60 text-[#A62A24] flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#E8E5DF]/60 text-[#EA580C] flex items-center justify-center shrink-0">
                   <BookOpen size={16} />
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-[#78685B] uppercase block">
+                  <span className="text-[10px] font-bold text-[#64748B] uppercase block">
                     Số bài học
                   </span>
-                  <span className="text-sm font-black text-[#431914]">
+                  <span className="text-sm font-black text-[#253044]">
                     {totalLessons} bài học
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-white border border-[#DECBB4]/60 text-[#A62A24] flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#E8E5DF]/60 text-[#EA580C] flex items-center justify-center shrink-0">
                   <Clock size={16} />
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-[#78685B] uppercase block">
+                  <span className="text-[10px] font-bold text-[#64748B] uppercase block">
                     Thời lượng
                   </span>
-                  <span className="text-sm font-black text-[#431914]">
+                  <span className="text-sm font-black text-[#253044]">
                     {formatDuration(totalDurationMinutes)}
                   </span>
                 </div>
@@ -995,7 +995,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
               {isEnrolled ? (
                 <Link
                   to={continueLearnUrl}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all"
                 >
                   <Play size={16} fill="white" />
                   <BilingualText>
@@ -1012,7 +1012,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                   onClick={handleEnroll}
                   disabled={enrollPending}
                   aria-busy={enrollPending}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#DA251D] hover:bg-[#B71C1C] disabled:bg-[#DA251D]/60 text-white font-black text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] disabled:bg-[#FF7A00]/60 text-white font-black text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
                   {enrollPending ? (
                     <>
@@ -1039,13 +1039,13 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
             </div>
 
             {/* Danh sách quyền lợi và tiện ích đi kèm */}
-            <div className="border-t border-[#DECBB4]/40 pt-4 space-y-2.5 text-xs text-[#78685B]">
+            <div className="border-t border-[#E8E5DF]/40 pt-4 space-y-2.5 text-xs text-[#64748B]">
               <div className="flex items-center gap-2">
                 <ShieldCheck size={15} className="text-emerald-600 shrink-0" />
                 <span>Truy cập trọn đời trên máy tính & điện thoại</span>
               </div>
               <div className="flex items-center gap-2">
-                <Sparkles size={15} className="text-[#DA251D] shrink-0" />
+                <Sparkles size={15} className="text-[#FF7A00] shrink-0" />
                 <span>Tương tác AI Tutor luyện nói & sửa phát âm 24/7</span>
               </div>
               <div className="flex items-center gap-2">
@@ -1070,16 +1070,16 @@ export function CourseDetailPage() {
   return (
     <section className="course-detail-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center gap-2 text-xs font-semibold text-[#78685B]">
+      <nav className="flex items-center gap-2 text-xs font-semibold text-[#64748B]">
         <Link
-          className="inline-flex items-center gap-1.5 text-[#DA251D] hover:underline transition-colors"
+          className="inline-flex items-center gap-1.5 text-[#FF7A00] hover:underline transition-colors"
           to="/courses"
         >
           <ArrowLeft size={13} />
           <BilingualText>{"Tất cả khóa học"}</BilingualText>
         </Link>
         <span>/</span>
-        <span className="text-[#431914] truncate max-w-xs sm:max-w-md">
+        <span className="text-[#253044] truncate max-w-xs sm:max-w-md">
           {resource.data?.course?.titleVi || resource.data?.course?.title || 'Chi tiết khóa học'}
         </span>
       </nav>

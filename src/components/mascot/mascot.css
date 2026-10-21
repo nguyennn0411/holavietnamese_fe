@@ -197,7 +197,7 @@
 }
 
 .nghe-tutor-avatar.is-speaking > i {
-  background: #da251d;
+  background: #FF7A00;
   animation: nghe-pulse 0.7s infinite;
 }
 
@@ -249,7 +249,7 @@
 }
 
 .nghe-guide__card > div > span:first-child {
-  color: #b42318;
+  color: #FF7A00;
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.1em;

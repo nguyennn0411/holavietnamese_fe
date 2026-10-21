@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { BookOpen, Clock } from 'lucide-react';
 
@@ -8,7 +8,7 @@ const LEVEL_BADGES = {
   A2: 'bg-teal-700 text-teal-100',
   B1: 'bg-amber-700 text-amber-100',
   B2: 'bg-purple-700 text-purple-100',
-  C1: 'bg-[#A62A24] text-white',
+  C1: 'bg-[#EA580C] text-white',
 };
 
 const DEFAULT_COVERS = [
@@ -50,21 +50,21 @@ export function getCourseCover(course) {
 }
 
 export function CourseInfo({ course }) {
-  const levelClass = LEVEL_BADGES[course.level] || 'bg-[#24382B] text-[#FFF9EE]';
+  const levelClass = LEVEL_BADGES[course.level] || 'bg-[#24382B] text-[#FFF7E8]';
 
   return (
-    <div className="course-meta flex items-center gap-2.5 text-xs text-[#78685B] font-medium">
+    <div className="course-meta flex items-center gap-2.5 text-xs text-[#64748B] font-medium">
       <span className={`badge px-2.5 py-0.5 rounded-md font-extrabold text-[10px] tracking-wider shadow-2xs ${levelClass}`}>
         {course.level}
       </span>
       <span className="inline-flex items-center gap-1">
-        <BookOpen size={13} className="text-[#DA251D]" />
+        <BookOpen size={13} className="text-[#FF7A00]" />
         <span>{course.totalLessons ?? course.lessonCount ?? 0}</span>
         <BilingualText>{"bài học"}</BilingualText>
       </span>
       <span>•</span>
       <span className="inline-flex items-center gap-1">
-        <Clock size={13} className="text-[#DA251D]" />
+        <Clock size={13} className="text-[#FF7A00]" />
         <BilingualText>{course.durationLabel || `${course.estimatedMinutes ?? course.estimatedDuration ?? 0} phút`}</BilingualText>
       </span>
     </div>

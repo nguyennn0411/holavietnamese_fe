@@ -29,7 +29,7 @@ export function FloatingLetters({ className = '' }) {
       name: 'Á trăng khuyết (Short A)',
       sound: 'á',
       pos: 'top-[-16px] left-[10%]',
-      color: 'from-[#FF6B6B] via-[#DA251D] to-[#991B1B]',
+      color: 'from-[#FF8008] via-[#FF7A00] to-[#C2410C]',
       shadow: 'rgba(218,37,29,0.3)',
       delay: 0,
       duration: 4.2,
@@ -74,8 +74,8 @@ export function FloatingLetters({ className = '' }) {
       name: 'O có râu (Unrounded back vowel)',
       sound: 'ơ',
       pos: 'bottom-[22%] left-[-16px]',
-      color: 'from-[#F87171] via-[#DC2626] to-[#991B1B]',
-      shadow: 'rgba(220,38,38,0.3)',
+      color: 'from-[#FDBA74] via-[#FF7A00] to-[#EA580C]',
+      shadow: 'rgba(255,122,0,0.3)',
       delay: 1.5,
       duration: 5.4,
       rotate: -8,
@@ -152,7 +152,7 @@ export function FloatingLetters({ className = '' }) {
           </div>
 
           {/* Mini Sound Wave Badge on Hover */}
-          <span className="absolute -bottom-2 -right-1.5 w-4 h-4 rounded-full bg-white text-[#DA251D] text-[9px] font-bold flex items-center justify-center shadow-xs opacity-0 group-hover/letter:opacity-100 transition-opacity">
+          <span className="absolute -bottom-2 -right-1.5 w-4 h-4 rounded-full bg-white text-[#FF7A00] text-[9px] font-bold flex items-center justify-center shadow-xs opacity-0 group-hover/letter:opacity-100 transition-opacity">
             🔊
           </span>
         </motion.button>
