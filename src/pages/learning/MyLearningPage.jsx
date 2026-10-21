@@ -101,7 +101,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
   const tabItems = [
     { id: 'courses', label: 'Khóa học của tôi', icon: BookOpen },
     { id: 'vocabulary', label: 'Từ vựng đã lưu', icon: Languages },
-    { id: 'journey', label: 'Hành trình văn hóa', icon: MapPin },
+    { id: 'journey', label: 'Khám phá Việt Nam', icon: MapPin },
     { id: 'quiz', label: 'Lịch sử quiz', icon: Award },
   ];
 
@@ -560,44 +560,35 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                 </section>
               )}
 
-              {/* TAB 3: Cultural Journey */}
+              {/* TAB 3: Free destination discovery */}
               {tab === 'journey' && (
-                <div className="journey-learning card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col md:flex-row items-center gap-8">
+                <div className="explore-learning card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col md:flex-row items-center gap-8">
                   <div className="w-48 h-48 shrink-0 rounded-2xl overflow-hidden border border-[#E8E5DF] shadow-sm bg-white p-2">
                     <Artwork kind="lanterns" className="w-full h-full object-cover rounded-xl" />
                   </div>
                   <div className="space-y-4 flex-1">
                     <div>
                       <span className="eyebrow text-xs font-bold uppercase tracking-wider text-[#EA580C]">
-                        <BilingualText>{"Hành trình văn hóa"}</BilingualText>
+                        <BilingualText vi="Khám phá điểm đến" en="Discover destinations" />
                       </span>
                       <h2 className="text-2xl sm:text-3xl font-black text-[#253044] mt-1">
-                        <BilingualText>{data.journeyCity || 'Khám phá Việt Nam'}</BilingualText>
+                        <BilingualText vi="Khám phá Việt Nam" en="Explore Vietnam" />
                       </h2>
                     </div>
 
-                    {data.journeyProgress != null ? (
-                      <div className="max-w-md">
-                        <ProgressBar value={data.journeyProgress} label="Tiến độ hành trình" />
-                      </div>
-                    ) : (
-                      <p className="text-xs text-[#64748B]">
-                        <BilingualText>{"Chưa có dữ liệu tiến độ hành trình."}</BilingualText>
-                      </p>
-                    )}
+                    <p className="text-sm text-[#64748B]">
+                      <BilingualText
+                        vi="Chọn điểm đến bạn quan tâm để tìm hiểu văn hóa, cách nói vùng miền và thực hành giao tiếp theo kịch bản. Bạn có thể khám phá tự do bất cứ lúc nào."
+                        en="Choose a destination to discover its culture, regional language and conversation scenarios. Explore freely at any time."
+                      />
+                    </p>
 
                     <div className="actions flex flex-wrap items-center gap-3 pt-2">
                       <Link
                         className="button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-sm transition-all"
-                        to="/explore"
+                        to={ROUTES.EXPLORE}
                       >
                         <BilingualText>{"Xem các điểm đến →"}</BilingualText>
-                      </Link>
-                      <Link
-                        className="button secondary px-5 py-2.5 rounded-xl bg-white border border-[#E8E5DF] text-[#253044] font-bold text-xs hover:border-[#EA580C] transition-all"
-                        to="/achievements"
-                      >
-                        <BilingualText>{"Hộ chiếu & thành tích"}</BilingualText>
                       </Link>
                     </div>
                   </div>

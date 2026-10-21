@@ -46,7 +46,7 @@ async function request(path,body,options={}){
  if(/^\/api\/admin\/vocabulary\/\d+$/.test(path)){const item=adminWords.find(word=>String(word.id)===path.split('/').at(-1));if(body)Object.assign(item,body,{topics:vocabularyTopics.filter(topic=>body.topicIds?.includes(topic.id))});return response(item);}
  if(path==='/api/users/me'){if(body)Object.assign(profile,body);return response(profile);}
  if(path==='/api/users/progress')return response(progress);
- if(path==='/api/users/achievements')return response({badges,passportStamps:[]});
+ if(path==='/api/users/achievements')return response({badges});
  if(path==='/api/users/settings')return response({audioSpeed:1,pronunciationHintsEnabled:true,autoTranslateEnabled:false,notificationsEnabled:true,dailyLearningGoalMinutes:15,...body});
  if(path==='/api/users/notifications')return response(notifications);
  if(path.includes('/notifications/')&&path.endsWith('/read'))notifications.find(n=>String(n.id)===path.split('/').at(-2)).read=true;
