@@ -78,51 +78,31 @@ export function ForgotPasswordPage() {
 
         <main className="auth-left-content">
           {/* Heading */}
-          <h1 className="auth-heading">
-            {step === 1 && <BilingualText vi="Quên mật khẩu?" en="Forgot Password?" />}
+          <h1 className="auth-heading" style={step === 1 ? { marginBottom: 'clamp(16px, 2.5vh, 24px)' } : undefined}>
+            {step === 1 && <BilingualText vi="Quên mật khẩu" en="Forgot Password" />}
             {step === 2 && <BilingualText vi="Xác thực mã OTP" en="Verify OTP Code" />}
             {step === 3 && <BilingualText vi="Đặt lại mật khẩu" en="Reset Password" />}
           </h1>
 
           {/* Subtitle */}
-          <p className="auth-subtitle">
-            {step === 1 && (
-              <BilingualText
-                vi="Nhập email để nhận hướng dẫn đặt lại mật khẩu."
-                en="Enter your email to receive password reset instructions."
-              />
-            )}
-            {step === 2 && (
-              <BilingualText
-                vi={`Mã xác nhận 6 số đã được gửi tới ${email}.`}
-                en={`A 6-digit verification code was sent to ${email}.`}
-              />
-            )}
-            {step === 3 && (
-              <BilingualText
-                vi="Tạo mật khẩu an toàn mới cho tài khoản của bạn."
-                en="Create a new secure password for your account."
-              />
-            )}
-          </p>
+          {step !== 1 && (
+            <p className="auth-subtitle">
+              {step === 2 && (
+                <BilingualText
+                  vi={`Mã xác nhận 6 số đã được gửi tới ${email}.`}
+                  en={`A 6-digit verification code was sent to ${email}.`}
+                />
+              )}
+              {step === 3 && (
+                <BilingualText
+                  vi="Tạo mật khẩu an toàn mới cho tài khoản của bạn."
+                  en="Create a new secure password for your account."
+                />
+              )}
+            </p>
+          )}
 
-          {/* Step indicator */}
-          <div className="auth-step-indicator">
-            <div className={`auth-step-item ${step >= 1 ? 'auth-step-item-active' : ''}`}>
-              <span>1</span>
-              <small><BilingualText vi="Email" en="Email" /></small>
-            </div>
-            <i className={step >= 2 ? 'active' : ''} />
-            <div className={`auth-step-item ${step >= 2 ? 'auth-step-item-active' : ''}`}>
-              <span>2</span>
-              <small><BilingualText vi="Mã OTP" en="OTP" /></small>
-            </div>
-            <i className={step >= 3 ? 'active' : ''} />
-            <div className={`auth-step-item ${step >= 3 ? 'auth-step-item-active' : ''}`}>
-              <span>3</span>
-              <small><BilingualText vi="Mật khẩu" en="Password" /></small>
-            </div>
-          </div>
+          
 
           {/* Messages */}
           {status.error && (
