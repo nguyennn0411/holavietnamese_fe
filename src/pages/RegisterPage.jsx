@@ -217,41 +217,25 @@ export function RegisterPage() {
 
         <main className="auth-left-content">
           {/* Heading */}
-          <h1 className="auth-heading">
+          <h1 className="auth-heading" style={step === 1 ? { marginBottom: 'clamp(16px, 2.5vh, 24px)' } : undefined}>
             {step === 1 ? (
-              <BilingualText vi="Tạo tài khoản" en="Create Account" />
+              <BilingualText vi="Đăng ký" en="Register" />
             ) : (
               <BilingualText vi="Cá nhân hóa lộ trình" en="Personalize Your Path" />
             )}
           </h1>
 
           {/* Subtitle */}
-          <p className="auth-subtitle">
-            {step === 1 ? (
-              <BilingualText
-                vi="Bắt đầu học tiếng Việt cùng HolaVietnamese."
-                en="Start learning Vietnamese with HolaVietnamese."
-              />
-            ) : (
+          {step === 2 && (
+            <p className="auth-subtitle">
               <BilingualText
                 vi="Chọn ngôn ngữ và mục tiêu để Hola cá nhân hóa bài học cho bạn."
                 en="Select your language and goals so Hola can tailor your lessons."
               />
-            )}
-          </p>
+            </p>
+          )}
 
-          {/* Step indicator */}
-          <div className="auth-step-indicator">
-            <div className={`auth-step-item ${step >= 1 ? 'auth-step-item-active' : ''}`}>
-              <span>1</span>
-              <small><BilingualText vi="Tài khoản" en="Account" /></small>
-            </div>
-            <i className={step >= 2 ? 'active' : ''} />
-            <div className={`auth-step-item ${step >= 2 ? 'auth-step-item-active' : ''}`}>
-              <span>2</span>
-              <small><BilingualText vi="Lộ trình" en="Path" /></small>
-            </div>
-          </div>
+          
 
           {/* General Error Banner */}
           {error && (
