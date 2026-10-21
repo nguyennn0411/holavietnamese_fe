@@ -11,7 +11,7 @@ import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { destinationDate, DESTINATION_REGIONS, DESTINATION_STATUSES } from '@/models/Destination';
 import { adminDestinationService } from '@/services/destinationService';
 import { ROUTES } from '@/constants/routes';
-import { Plus, Route } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import '@/components/destinations/destinations.css';
 
 const emptyFilters = { keyword: '', status: '', region: '' };
@@ -34,7 +34,6 @@ export function AdminDestinationsPage() {
   return <div className="admin-destinations-page">
     <Breadcrumb items={[{ label: 'Quản trị', to: ROUTES.ADMIN }, { label: 'Điểm đến' }]} />
     <PageHeader eyebrow="Khám phá Việt Nam" title="Quản lý điểm đến" description="Quản lý nội dung điểm đến Việt Nam." actions={<>
-      <Link className="button secondary" to={ROUTES.ADMIN_JOURNEY}><Route size={16} aria-hidden="true" /><BilingualText vi="Thiết lập hành trình" en="Configure journey" /></Link>
       <button type="button" onClick={() => { setMessage(''); setCreating(true); }}><Plus size={16} aria-hidden="true" /><BilingualText vi="Thêm điểm đến" en="Add destination" /></button>
     </>} />
     {message && <Notice kind="success"><BilingualText vi={message} en="Destination created." /></Notice>}

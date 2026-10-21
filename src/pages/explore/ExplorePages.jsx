@@ -6,22 +6,15 @@ import { Breadcrumb, EmptyState, Artwork } from '@/components/common/Ui';
 import { ContentImage } from '@/components/common/ContentImage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { DestinationRegion } from '@/components/destinations/DestinationMetadata';
-import { DestinationJourneyContent } from '@/components/destinations/DestinationJourneyContent';
+import { DestinationExploreContent } from '@/components/destinations/DestinationExploreContent';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { DESTINATION_REGIONS } from '@/models/Destination';
 import { destinationService } from '@/services/destinationService';
-import { journeyService } from '@/services/journeyService';
 import { ROUTES } from '@/constants/routes';
 import '@/components/destinations/destinations.css';
 import { Search, X, Compass, ArrowLeft, Sparkles } from 'lucide-react';
 
 const emptyFilters = { keyword: '', region: '' };
-function stopLabel(stop) {
-  if (stop?.status === 'COMPLETED') return <BilingualText vi="Đã hoàn thành" en="Completed" />;
-  if (stop?.status === 'LOCKED') return <BilingualText vi="Đang khóa" en="Locked" />;
-  if (stop?.status === 'CURRENT') return <BilingualText vi="Hiện tại" en="Current" />;
-  return <BilingualText vi="Đã mở khóa" en="Unlocked" />;
-}
 
 export function ExploreVietnamPage() {
   const { isAuthenticated, user } = useAuth();
@@ -31,9 +24,8 @@ export function ExploreVietnamPage() {
   const location = useLocation();
   const detailRoute = location.pathname === ROUTES.EXPLORE ? ROUTES.DESTINATION_DETAIL : ROUTES.LEARNER_DESTINATION_DETAIL;
   const resource = useAsyncResource(useCallback(async signal => {
-    if (!isAuthenticated) throw Object.assign(new Error('Đăng nhập để xem hành trình.'), { status: 401 });
-    const [items, journey] = await Promise.all([destinationService.list(query, { signal }), journeyService.get(query, { signal })]);
-    return { items, journey };
+    if (!isAuthenticated) throw Object.assign(new Error('Đăng nhập để khám phá điểm đến.'), { status: 401 });
+    return destinationService.list(query, { signal });
   }, [query, viewerId, isAuthenticated]));
 
   const handleRegionClick = (val) => {
@@ -160,9 +152,9 @@ export function ExploreVietnamPage() {
       </form>
 
       {/* Destinations Board */}
-      {!isAuthenticated ? <EmptyState title="Đăng nhập để xem hành trình"><Link className="button" to={ROUTES.LOGIN}><BilingualText>Đăng nhập</BilingualText></Link></EmptyState> : <ResourceState resource={resource}>
-        {({ items, journey }) => {
-          const destinations = journey.totalStops > 0 ? journey.stops.map(stop => stop.destination) : items.filter(item => item.status === 'PUBLISHED');
+      {!isAuthenticated ? <EmptyState title="Đăng nhập để khám phá"><Link className="button" to={ROUTES.LOGIN}><BilingualText>Đăng nhập</BilingualText></Link></EmptyState> : <ResourceState resource={resource}>
+        {items => {
+          const destinations = items.filter(item => item.status === 'PUBLISHED');
           return destinations.length === 0
             ? (
               <EmptyState
@@ -174,7 +166,7 @@ export function ExploreVietnamPage() {
               <div className="journey-board card bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-sm">
                 <aside className="journey-map">
                   <p className="eyebrow text-xs font-bold text-[#EA580C] tracking-widest uppercase mb-2">
-                    {journey.totalStops > 0 ? <BilingualText vi={`VIỆT NAM · ${journey.completedStops}/${journey.totalStops} điểm đến`} en={`VIETNAM · ${journey.progressPercent}% complete`} /> : <BilingualText>VIỆT NAM · VIET NAM</BilingualText>}
+                    <BilingualText vi={`VIỆT NAM · ${destinations.length} điểm đến`} en={`VIETNAM · ${destinations.length} destinations`} />
                   </p>
                   <img
                     src="/design/vietnam-map.svg"
@@ -195,16 +187,10 @@ export function ExploreVietnamPage() {
 
                 <div className="journey-stops space-y-4">
                   {destinations.map(destination => {
-                    const stop = journey.stops.find(item => item.destination.id === destination.id);
                     return <Link
                       className="journey-stop group relative block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E8E5DF] hover:border-[#EA580C] shadow-xs hover:shadow-md transition-all text-decoration-none"
                       key={destination.id}
                       to={generatePath(detailRoute, { id: String(destination.id) })}
-                      aria-disabled={stop ? !stop.accessible : undefined}
-                      aria-current={stop?.status === 'CURRENT' ? 'step' : undefined}
-                      data-journey-status={stop?.status}
-                      title={stop && !stop.accessible ? 'Hoàn thành điểm đến trước để mở khóa.' : undefined}
-                      onClick={event => { if (stop && !stop.accessible) event.preventDefault(); }}
                     >
                       <span className="journey-dot" aria-hidden="true" />
                       <div className="journey-thumbnail rounded-xl overflow-hidden shadow-xs">
@@ -216,7 +202,7 @@ export function ExploreVietnamPage() {
                       </div>
                       <div>
                         <p className="eyebrow text-[11px] font-bold text-[#EA580C] uppercase tracking-wider mb-1">
-                          <DestinationRegion value={destination.region} />{stop && <> · {stopLabel(stop)}</>}
+                          <DestinationRegion value={destination.region} />
                         </p>
                         <h2 className="text-lg sm:text-xl font-black text-[#253044] group-hover:text-[#EA580C] transition-colors leading-snug">
                           <BilingualText vi={destination.nameVi} en={destination.nameEn} />
@@ -227,7 +213,7 @@ export function ExploreVietnamPage() {
                           </p>
                         )}
                         <small className="inline-flex items-center gap-1 text-xs font-bold text-[#EA580C] mt-2 group-hover:underline">
-                          {stop ? <BilingualText vi={`${stop.progressPercent}% · ${stop.completedLessons}/${stop.requiredLessons} bài học`} en={`${stop.progressPercent}% · ${stop.completedLessons}/${stop.requiredLessons} lessons`} /> : <BilingualText>Chi tiết</BilingualText>} →
+                          <BilingualText>Chi tiết</BilingualText> →
                         </small>
                       </div>
                       <span className="journey-number text-[#64748B] group-hover:text-[#EA580C] group-hover:translate-x-1 transition-all" aria-hidden="true">
@@ -322,7 +308,7 @@ export function DestinationDetailPage() {
               </div>
             )}
 
-            <DestinationJourneyContent key={destination.id} destinationId={destination.id} />
+            <DestinationExploreContent key={destination.id} destinationId={destination.id} />
             <div className="actions pt-4">
               <Link
                 className="button secondary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF] font-semibold text-xs shadow-xs transition-all"
