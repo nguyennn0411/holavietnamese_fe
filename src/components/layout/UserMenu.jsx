@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { ContentImage } from '@/components/common/ContentImage';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, Sparkles } from 'lucide-react';
+import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, Compass } from 'lucide-react';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
@@ -63,7 +63,7 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
             <strong>{displayName}</strong>
             <span>{user?.email || `@${user?.username || 'learner'}`} · <BilingualText>{isAdmin ? 'Quản trị viên' : isContentManager ? 'Quản lý nội dung' : 'Học viên'}</BilingualText></span>
           </div>
-          <Link to={ROUTES.EDTECH_DASHBOARD} onClick={closeMenu} role="menuitem"><Sparkles size={16}/><BilingualText>{"Lộ trình học EdTech"}</BilingualText></Link>
+          <Link to={ROUTES.EDTECH_DASHBOARD} onClick={closeMenu} role="menuitem"><Compass size={16}/><BilingualText>{"Lộ trình học EdTech"}</BilingualText></Link>
           <Link to="/profile" onClick={closeMenu} role="menuitem"><UserRound size={16}/><BilingualText>{"Hồ sơ cá nhân"}</BilingualText></Link>
           <Link to="/settings" onClick={closeMenu} role="menuitem"><Settings size={16}/><BilingualText>{"Cài đặt học tập"}</BilingualText></Link>
           <Link to="/achievements" onClick={closeMenu} role="menuitem"><Trophy size={16}/><BilingualText>{"Thành tích"}</BilingualText></Link>

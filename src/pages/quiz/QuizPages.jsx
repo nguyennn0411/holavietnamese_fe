@@ -21,7 +21,6 @@ import {
   HelpCircle,
   ArrowRight,
   ArrowLeft,
-  Sparkles,
   Check,
   AlertCircle,
   Lightbulb,
@@ -87,8 +86,7 @@ export function QuizPage() {
 
               {/* Title & Badge */}
               <div className="text-center space-y-3 max-w-2xl mx-auto relative z-10">
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF0DC] text-[#C2410C] border border-[#FFCD00]/50 font-extrabold text-xs uppercase tracking-wider shadow-2xs">
-                  <Sparkles size={14} className="text-[#F97316]" />
+                <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] text-[#C2410C] border border-[#FFCD00]/50 font-extrabold text-xs uppercase tracking-wider shadow-2xs">
                   <BilingualText>{"Kiểm tra năng lực • Knowledge Check"}</BilingualText>
                 </div>
 

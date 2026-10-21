@@ -16,7 +16,6 @@ import {
   Bookmark,
   PanelLeftClose,
   PanelLeft,
-  Sparkles,
   Check
 } from 'lucide-react';
 

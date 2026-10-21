@@ -2,7 +2,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { Brand } from './Brand';
-import { BookOpen, Mail, MessageCircle, Sparkles, Globe, Shield, HelpCircle, Heart } from 'lucide-react';
+import { BookOpen, Mail, MessageCircle, Globe, Shield, HelpCircle, Heart, GraduationCap } from 'lucide-react';
 
 export function AppFooter() {
   const currentYear = new Date().getFullYear();
@@ -29,7 +29,7 @@ export function AppFooter() {
               <span>English · Tiếng Việt</span>
             </span>
             <span className="site-footer__pill-badge">
-              <Sparkles size={13} aria-hidden="true" />
+              <GraduationCap size={13} aria-hidden="true" />
               <span>EdTech for Vietnam</span>
             </span>
           </div>

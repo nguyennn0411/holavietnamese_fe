@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { HeroBannerSlider, AnimatedMarquee } from '@/components/home/hero';
 import { GuestCulturalStrip } from './GuestCulturalStrip';
 import { AmbientWatermark } from '../common/HeritageWatermark';
@@ -10,7 +10,7 @@ import { ExpatTestimonials } from './ExpatTestimonials';
 import { CallToActionBanner } from './CallToActionBanner';
 import { useTranslation } from 'react-i18next';
 import { BuffaloMascot, MascotSpeechBubble } from '@/components/mascot';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 /**
  * Guest Home Landing Page for Unauthenticated Visitors
@@ -60,7 +60,6 @@ export function GuestHome() {
 
           <div className="nghe-guest-intro__content">
             <div className="nghe-guest-intro__eyebrow">
-              <Sparkles size={14} />
               <span>{t('mascot.kicker', 'BẠN ĐỒNG HÀNH TIẾNG VIỆT • LEARNING BUDDY')}</span>
             </div>
             <h2 id="nghe-guest-title">{t('mascot.title')}</h2>
@@ -79,8 +78,8 @@ export function GuestHome() {
       <section id="mini-lesson" className="w-full scroll-mt-24 py-12 px-4 sm:px-8 lg:px-14 bg-gradient-to-b from-[#FBF8F3] via-white to-[#FBF8F3] border-b border-[#EBDED0]">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="space-y-3 text-left max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#FED7AA] text-[#FF7A00] text-xs font-black uppercase tracking-wider">
-              <span>☕ {t('miniLesson.badge')}</span>
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#FED7AA] text-[#FF7A00] text-xs font-black uppercase tracking-wider">
+              <span>{t('miniLesson.badge')}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-[#253044] tracking-tight">
               {t('miniLesson.title')}

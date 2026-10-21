@@ -10,7 +10,7 @@ import { PageHeader, SpeakButton, EmptyState } from '@/components/common/Ui';
 import { ProgressBar } from '@/components/common/ProgressBar';
 import { VocabularyNavigation } from '@/components/vocabulary/VocabularyNavigation';
 import '@/components/vocabulary/vocabulary.css';
-import { CircleCheck, RotateCcw, Gauge, Check, Sparkles } from 'lucide-react';
+import { CircleCheck, RotateCcw, Gauge, Check, CheckCheck } from 'lucide-react';
 
 export function VocabularyReviewPage() {
   const { user } = useAuth();
@@ -31,7 +31,7 @@ function ReviewDeck({ session, onRestart }) {
   const goodCount = results.filter(result => result.rating === 'GOOD' || result.rating === 'EASY').length;
   const moreCount = results.length - goodCount;
   const labels = { AGAIN: 'Ôn lại', HARD: 'Khó', GOOD: 'Nhớ được', EASY: 'Dễ' };
-  const ratingIcons = { AGAIN: RotateCcw, HARD: Gauge, GOOD: Check, EASY: Sparkles };
+  const ratingIcons = { AGAIN: RotateCcw, HARD: Gauge, GOOD: Check, EASY: CheckCheck };
   if (index >= entries.length) return <div className="review-summary card">
     <span className="state-symbol" aria-hidden="true"><CircleCheck size={36} /></span>
     <p className="eyebrow"><BilingualText>{"Hoàn thành ôn tập"}</BilingualText></p><h2><BilingualText>{"Một chút tiến bộ hôm nay."}</BilingualText></h2>

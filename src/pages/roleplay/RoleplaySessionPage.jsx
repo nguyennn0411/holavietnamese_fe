@@ -10,7 +10,6 @@ import {
   Mic,
   Send,
   RotateCcw,
-  Sparkles,
   Languages,
   HelpCircle,
   CheckCircle2,
@@ -177,7 +176,7 @@ export function RoleplaySessionPage() {
             exit={{ opacity: 0, y: -20 }}
             className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-white text-[#253044] text-xs sm:text-sm font-bold rounded-2xl shadow-xl border border-[#E8E5DF]"
           >
-            <Sparkles size={16} className="text-[#F97316]" />
+            <CheckCircle2 size={16} className="text-emerald-600" />
             <span>{toastMessage}</span>
           </motion.div>
         )}
@@ -633,7 +632,7 @@ export function RoleplaySessionPage() {
                       </div>
                       {isDone && (
                         <span className="inline-block mt-1 text-[10px] font-bold text-emerald-700">
-                          ✨ <BilingualText>{"Đã hoàn thành!"}</BilingualText>
+                          <BilingualText>{"Đã hoàn thành!"}</BilingualText>
                         </span>
                       )}
                     </div>
@@ -646,7 +645,7 @@ export function RoleplaySessionPage() {
           {/* Roleplay Persona Card */}
           <div className="bg-gradient-to-br from-[#FFF7E8] to-[#FFF2D6] rounded-3xl border border-[#FFCD00]/50 p-5 shadow-xs space-y-2.5">
             <div className="flex items-center gap-2 text-xs font-bold text-[#EA580C]">
-              <span>🎭</span>
+              
               <BilingualText>{"Nhắc nhở vai diễn của bạn:"}</BilingualText>
             </div>
 
@@ -668,7 +667,7 @@ export function RoleplaySessionPage() {
             className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#EA580C] hover:from-[#EA580C] hover:to-[#8B1414] text-white font-black text-sm shadow-md hover:shadow-xl transition-all"
           >
             <Award size={16} className="text-[#FFCD00]" />
-            <BilingualText>{"Hoàn tất & Nhận đánh giá ➔"}</BilingualText>
+            <BilingualText>{"Hoàn tất & Nhận đánh giá"}</BilingualText>
           </button>
         </aside>
       </div>

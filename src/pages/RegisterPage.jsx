@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useNavigate, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { savePendingVerificationEmail, savePostVerificationPath, startResendCooldown } from '@/features/auth/emailVerificationFlow';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 const LANGUAGE_OPTIONS = [
   { value: 'en', label: '🇬🇧 English' },
@@ -20,18 +20,18 @@ const LANGUAGE_OPTIONS = [
 ];
 
 const GOAL_OPTIONS = [
-  { value: 'daily_communication', label: '🗣️ Giao tiếp hằng ngày (Daily communication)' },
-  { value: 'travel', label: '🛵 Du lịch & Khám phá (Travel)' },
-  { value: 'work', label: '💼 Công việc & Định cư (Work & Career)' },
-  { value: 'exam_vsl', label: '🎓 Thi chứng chỉ VSL (Exam / VSL)' },
-  { value: 'culture', label: '🏮 Văn hóa & Đời sống (Culture)' },
+  { value: 'daily_communication', label: 'Giao tiếp hằng ngày (Daily communication)' },
+  { value: 'travel', label: 'Du lịch & Khám phá (Travel)' },
+  { value: 'work', label: 'Công việc & Định cư (Work & Career)' },
+  { value: 'exam_vsl', label: 'Thi chứng chỉ VSL (Exam / VSL)' },
+  { value: 'culture', label: 'Văn hóa & Đời sống (Culture)' },
 ];
 
 const LEVEL_OPTIONS = [
-  { value: 'A1', label: '🌱 A1 – Người mới bắt đầu (Beginner)' },
-  { value: 'A2', label: '🌿 A2 – Sơ cấp (Elementary)' },
-  { value: 'B1', label: '🌳 B1 – Trung cấp (Intermediate)' },
-  { value: 'B2', label: '🚀 B2 – Trung cấp nâng cao (Upper Intermediate)' },
+  { value: 'A1', label: 'A1 – Người mới bắt đầu (Beginner)' },
+  { value: 'A2', label: 'A2 – Sơ cấp (Elementary)' },
+  { value: 'B1', label: 'B1 – Trung cấp (Intermediate)' },
+  { value: 'B2', label: 'B2 – Trung cấp nâng cao (Upper Intermediate)' },
 ];
 
 export function RegisterPage() {
@@ -282,7 +282,7 @@ export function RegisterPage() {
                     required
                   />
                   {fieldErrors.username && (
-                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.username}</BilingualText></span>
+                    <span className="auth-field-error"><AlertCircle size={13} className="shrink-0 inline mr-1" /><BilingualText>{fieldErrors.username}</BilingualText></span>
                   )}
                 </div>
 
@@ -304,7 +304,7 @@ export function RegisterPage() {
                     required
                   />
                   {fieldErrors.fullName && (
-                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.fullName}</BilingualText></span>
+                    <span className="auth-field-error"><AlertCircle size={13} className="shrink-0 inline mr-1" /><BilingualText>{fieldErrors.fullName}</BilingualText></span>
                   )}
                 </div>
 
@@ -326,7 +326,7 @@ export function RegisterPage() {
                     required
                   />
                   {fieldErrors.email && (
-                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.email}</BilingualText></span>
+                    <span className="auth-field-error"><AlertCircle size={13} className="shrink-0 inline mr-1" /><BilingualText>{fieldErrors.email}</BilingualText></span>
                   )}
                 </div>
 
@@ -375,7 +375,7 @@ export function RegisterPage() {
                     </button>
                   </div>
                   {fieldErrors.password && (
-                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.password}</BilingualText></span>
+                    <span className="auth-field-error"><AlertCircle size={13} className="shrink-0 inline mr-1" /><BilingualText>{fieldErrors.password}</BilingualText></span>
                   )}
                 </div>
 
@@ -409,7 +409,7 @@ export function RegisterPage() {
                     </button>
                   </div>
                   {fieldErrors.confirmPassword && (
-                    <span className="auth-field-error">⚠️ <BilingualText>{fieldErrors.confirmPassword}</BilingualText></span>
+                    <span className="auth-field-error"><AlertCircle size={13} className="shrink-0 inline mr-1" /><BilingualText>{fieldErrors.confirmPassword}</BilingualText></span>
                   )}
                 </div>
               </div>

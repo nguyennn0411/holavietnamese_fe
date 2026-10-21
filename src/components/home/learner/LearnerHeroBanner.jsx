@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { BookOpen, ChevronLeft, ChevronRight, Heart, MessageCircle, Pause, Play, Sparkles } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight, Heart, MessageCircle, Pause, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 /** Cinematic learner carousel shown at the top of the authenticated dashboard. */
@@ -113,7 +113,7 @@ export function LearnerHeroBanner({
     <div className="relative z-10 p-6 sm:p-8 lg:p-10 xl:p-12">
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-8">
         <div className="space-y-3">
-          <motion.div key={`eyebrow-${currentSlide}`} initial={{opacity:0,y:-12}} animate={{opacity:1,y:0}} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-white text-xs font-bold uppercase tracking-wider"><Sparkles size={13} className="text-[#FFDE00]"/><span>{slide.eyebrow}</span></motion.div>
+          <motion.div key={`eyebrow-${currentSlide}`} initial={{opacity:0,y:-12}} animate={{opacity:1,y:0}} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-white text-xs font-bold uppercase tracking-wider"><span>{slide.eyebrow}</span></motion.div>
           <motion.h1 key={`title-${currentSlide}`} initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.08}} className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">{slide.title}</motion.h1>
           <motion.p key={`description-${currentSlide}`} initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.16}} className="text-sm sm:text-base text-white/75 max-w-lg leading-relaxed">{slide.description}</motion.p>
         </div>

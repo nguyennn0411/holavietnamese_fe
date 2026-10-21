@@ -1,6 +1,6 @@
 ﻿import { BilingualText } from '@/components/common/BilingualText';
 import { MediaPlayer } from './MediaPlayer';
-import { BookOpen, Clock, Sparkles, Target, Layers } from 'lucide-react';
+import { BookOpen, Clock, Target, Layers } from 'lucide-react';
 
 export function LessonContent({ lesson }) {
   const duration = lesson.estimatedDuration || lesson.estimatedMinutes || 15;

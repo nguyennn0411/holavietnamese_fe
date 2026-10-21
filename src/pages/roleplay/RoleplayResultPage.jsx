@@ -40,7 +40,7 @@ export function RoleplayResultPage() {
     <div className="p4-container">
       {toastMessage && (
         <div className="p4-toast">
-          <span>✨</span>
+          
           <span>{toastMessage}</span>
         </div>
       )}
@@ -77,7 +77,7 @@ export function RoleplayResultPage() {
           <div className="score-breakdown-grid">
             <div className="score-bar-item">
               <div className="score-bar-header">
-                <span><BilingualText>{"🗣️ Độ lưu loát (Fluency)"}</BilingualText></span>
+                <span><BilingualText>{"Độ lưu loát (Fluency)"}</BilingualText></span>
                 <span>{result.stats.fluency}%</span>
               </div>
               <div className="score-progress-track">
@@ -87,7 +87,7 @@ export function RoleplayResultPage() {
 
             <div className="score-bar-item">
               <div className="score-bar-header">
-                <span><BilingualText>{"📚 Vốn từ vựng (Vocabulary)"}</BilingualText></span>
+                <span><BilingualText>{"Vốn từ vựng (Vocabulary)"}</BilingualText></span>
                 <span>{result.stats.vocabulary}%</span>
               </div>
               <div className="score-progress-track">
@@ -97,7 +97,7 @@ export function RoleplayResultPage() {
 
             <div className="score-bar-item">
               <div className="score-bar-header">
-                <span><BilingualText>{"📝 Ngữ pháp (Grammar)"}</BilingualText></span>
+                <span><BilingualText>{"Ngữ pháp (Grammar)"}</BilingualText></span>
                 <span>{result.stats.grammar}%</span>
               </div>
               <div className="score-progress-track">
@@ -107,7 +107,7 @@ export function RoleplayResultPage() {
 
             <div className="score-bar-item">
               <div className="score-bar-header">
-                <span><BilingualText>{"🏮 Phù hợp văn hóa (Culture)"}</BilingualText></span>
+                <span><BilingualText>{"Phù hợp văn hóa (Culture)"}</BilingualText></span>
                 <span>{result.stats.culture}%</span>
               </div>
               <div className="score-progress-track">
@@ -117,7 +117,7 @@ export function RoleplayResultPage() {
           </div>
 
           <div style={{ marginTop: '16px', padding: '14px 18px', background: 'var(--color-surface)', borderRadius: '14px', border: '1px solid var(--color-border)', fontSize: '13.5px', color: 'var(--color-ink)', lineHeight: 1.6 }}>
-            <strong><BilingualText>{"🤖 Nhận xét từ AI Tutor:"}</BilingualText></strong> {result.aiFeedback}
+            <strong><BilingualText>{"Nhận xét từ AI Tutor:"}</BilingualText></strong> {result.aiFeedback}
           </div>
         </div>
       </div>
@@ -127,14 +127,14 @@ export function RoleplayResultPage() {
         {/* Errors & Native Suggestions */}
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '20px', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-red-hover)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>🔍</span><BilingualText>{"Lỗi cần sửa & Cách nói tự nhiên hơn"}</BilingualText></h2>
+            <BilingualText>{"Lỗi cần sửa & Cách nói tự nhiên hơn"}</BilingualText></h2>
 
           <div>
             {result.corrections?.map((cor, idx) => (
               <div key={idx} className="correction-card">
                 <div className="correction-original"><BilingualText>{"✕ Bạn đã nói: \""}</BilingualText>{cor.original}"</div>
                 <div className="correction-native"><BilingualText>{"✓ Người bản xứ nói: \""}</BilingualText>{cor.nativeSuggestion}"</div>
-                <div className="correction-reason">💡 <em><BilingualText>{"Lý do:"}</BilingualText></em> {cor.reason}</div>
+                <div className="correction-reason"><span className="font-bold text-amber-800 mr-1"><BilingualText vi="Lý do:" en="Reason:" /></span> {cor.reason}</div>
               </div>
             ))}
           </div>
@@ -143,7 +143,7 @@ export function RoleplayResultPage() {
         {/* Practiced Key Expressions */}
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '20px', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-ink)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>📖</span><BilingualText>{"Biểu thức & Cấu trúc đã luyện tập"}</BilingualText></h2>
+            <BilingualText>{"Biểu thức & Cấu trúc đã luyện tập"}</BilingualText></h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {result.practicedExpressions?.map((expr, idx) => (
@@ -161,7 +161,7 @@ export function RoleplayResultPage() {
                   onClick={() => handleSaveExpression(expr)}
                   style={{ background: 'var(--color-surface)', borderColor: 'var(--color-gold)', color: 'var(--color-red-hover)' }}
                 >
-                  <span>⭐</span><BilingualText>{"Lưu từ"}</BilingualText></button>
+                  <BilingualText vi="Lưu từ" en="Save word" /></button>
               </div>
             ))}
           </div>
@@ -170,7 +170,7 @@ export function RoleplayResultPage() {
 
       {/* Action Footer: Retry & Next Scenario */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--color-cream)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '20px 24px', flexWrap: 'wrap', gap: '16px' }}>
-        <button className="button secondary" onClick={handleRetry} style={{ fontSize: '14px', padding: '12px 20px' }}><BilingualText>{"🔄 Thử lại kịch bản này"}</BilingualText></button>
+        <button className="button secondary" onClick={handleRetry} style={{ fontSize: '14px', padding: '12px 20px' }}><BilingualText>{"Thử lại kịch bản này"}</BilingualText></button>
 
         {result.nextScenario && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -180,7 +180,7 @@ export function RoleplayResultPage() {
               to={`/ai-roleplay/${result.nextScenario.id}`}
               className="button"
               style={{ background: 'var(--color-red-hover)', borderColor: 'var(--color-red-hover)', fontSize: '14px', padding: '12px 22px' }}
-            ><BilingualText>{"Tiếp tục kịch bản mới ➔"}</BilingualText></Link>
+            ><BilingualText>{"Tiếp tục kịch bản mới"}</BilingualText></Link>
           </div>
         )}
       </div>

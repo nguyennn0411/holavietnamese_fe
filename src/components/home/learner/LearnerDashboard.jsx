@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import {
-  ArrowRight, BookOpen, Check, CircleAlert, Clock3, Flame, Headphones,
-  Languages, MessageCircle, Play, RefreshCw, Sparkles, Target, Trophy, Volume2, Zap,
+  ArrowRight, BookOpen, Check, CircleAlert, Clock3, Compass, Flame, Headphones,
+  Languages, MessageCircle, Play, RefreshCw, Target, Trophy, Volume2, Zap,
 } from 'lucide-react';
 import { learnerService } from '@/services/learnerService';
 import { WORD_OF_THE_DAY } from '@/components/home/data/homeData';
@@ -63,7 +63,7 @@ export function LearnerDashboard({ user }) {
   const leaderboard = Array.isArray(progress?.weeklyLeaderboard) ? progress.weeklyLeaderboard : [];
 
   const modules = useMemo(() => [
-    { to: '/edtech/dashboard', icon: Sparkles, title: 'Lộ trình học', text: 'Bản đồ bài học tương tác từng bước', tone: 'red' },
+    { to: '/edtech/dashboard', icon: Compass, title: 'Lộ trình học', text: 'Bản đồ bài học tương tác từng bước', tone: 'red' },
     { to: '/vocabulary', icon: Languages, title: t('dashboard.modules.vocabulary'), text: t('dashboard.modules.vocabularyText'), tone: 'gold' },
     { to: '/courses', icon: BookOpen, title: t('dashboard.modules.courses', { defaultValue: 'Khóa học' }), text: t('dashboard.modules.coursesText', { defaultValue: 'Danh mục khóa học đa dạng theo chủ đề' }), tone: 'blue' },
     { to: '/ai-tutor', icon: MessageCircle, title: t('dashboard.modules.practice'), text: t('dashboard.modules.practiceText'), tone: 'green' },
@@ -84,7 +84,7 @@ export function LearnerDashboard({ user }) {
 
       <motion.header className="ld-welcome" {...entrance}>
         <div>
-          <span className="ld-eyebrow"><Sparkles size={14} />{t('dashboard.welcome')}</span>
+          <span className="ld-eyebrow">{t('dashboard.welcome')}</span>
           <h1>{t('dashboard.welcomeName', { name: displayName })}</h1>
           <p>{t('dashboard.welcomeSubtitle')}</p>
         </div>
@@ -102,7 +102,7 @@ export function LearnerDashboard({ user }) {
       <div className="ld-layout">
         <main className="ld-main-column">
           <motion.section className="ld-continue" {...entrance} transition={{ delay: reduceMotion ? 0 : .1 }}>
-            <div className="ld-section-label"><span><Sparkles size={15} />{t('dashboard.continueSection')}</span><small>{currentLesson?.courseTitle || 'Lộ trình học của bạn'}</small></div>
+            <div className="ld-section-label"><span>{t('dashboard.continueSection')}</span><small>{currentLesson?.courseTitle || 'Lộ trình học của bạn'}</small></div>
             {currentLesson ? (
               <>
                 <h2>{currentLesson.titleVi || currentLesson.title}</h2>
@@ -116,12 +116,12 @@ export function LearnerDashboard({ user }) {
               </>
             ) : (
               <div className="ld-empty">
-                <Sparkles size={32} style={{ color: '#FF7A00' }} />
+                <Compass size={32} style={{ color: '#EA580C' }} />
                 <h2>Lộ trình học tập cá nhân hóa</h2>
                 <p>Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo.</p>
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.25rem' }}>
                   <Link to="/edtech/dashboard" className="ld-button ld-button--primary">
-                    <Sparkles size={16} />Vào lộ trình học<ArrowRight size={16} />
+                    Vào lộ trình học<ArrowRight size={16} />
                   </Link>
                   <Link to="/courses" className="ld-button" style={{ background: '#f5efe6', color: '#EA580C', border: '1px solid #ebdccb' }}>
                     {t('dashboard.exploreCourses')}<ArrowRight size={16} />

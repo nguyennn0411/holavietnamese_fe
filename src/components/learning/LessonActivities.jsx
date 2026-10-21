@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -20,7 +20,6 @@ import {
   BookOpen,
   FileText,
   CheckSquare,
-  Sparkles,
   Award,
   Layers,
   LayoutGrid,
@@ -91,7 +90,7 @@ function getActivityTypeIcon(type) {
   if (type === 'GRAMMAR') return FileText;
   if (practiceTypes.includes(type)) return CheckSquare;
   if (type === 'QUIZ') return Award;
-  if (externalTypes.includes(type)) return Sparkles;
+  if (externalTypes.includes(type)) return MessageCircle;
   return BookOpen;
 }
 
@@ -490,7 +489,6 @@ function ActivityWorkspace({
       <div className="bg-white rounded-2xl border border-[#E8E5DF] p-4 shadow-xs space-y-3">
         <div className="flex items-center justify-between text-xs font-bold text-[#64748B]">
           <span className="flex items-center gap-1.5 text-[#253044]">
-            <Sparkles size={14} className="text-[#FF7A00]" />
             <span>Hoạt động {index + 1} / {activities.length}</span>
           </span>
           <span className="text-[#FF7A00] font-extrabold">{progress?.progressPercent ?? 0}%</span>
@@ -774,7 +772,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
     return (
       <div className="quiz-gate text-center py-10 px-4 space-y-4 bg-gradient-to-br from-emerald-50 to-white rounded-2xl border border-emerald-200">
         <span className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-800 inline-flex items-center justify-center mx-auto">
-          <Sparkles size={28} />
+          <MessageCircle size={28} />
         </span>
         <h2 className="text-xl sm:text-2xl font-black text-[#253044]">
           <BilingualText>{"Đến lượt bạn luyện nói & trò chuyện"}</BilingualText>
@@ -855,7 +853,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
 
           {type === 'SOUND_PATTERN' && (
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold">
-              <Sparkles size={13} />
+              <BookOpen size={13} />
               <span>Mẫu vần & Quy tắc ghép âm</span>
             </div>
           )}
@@ -898,7 +896,6 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
               {(content.captionVi || content.caption || content.captionEn || content.sourcePage) && (
                 <div className="flex flex-wrap items-center justify-between text-xs text-[#64748B] px-1 max-w-3xl mx-auto">
                   <span className="italic flex items-center gap-1.5">
-                    <Sparkles size={12} className="text-[#FF7A00] shrink-0" />
                     <BilingualText
                       vi={content.captionVi || content.caption}
                       en={content.captionEn}
@@ -1017,7 +1014,6 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                     </div>
                   </div>
                   <div className="flex items-center justify-center gap-1.5 text-xs text-[#64748B] italic text-center">
-                    <Sparkles size={12} className="text-[#FF7A00] shrink-0" />
                     <span>{contextual.caption}</span>
                   </div>
                 </div>
@@ -1714,7 +1710,7 @@ function GrammarRenderer({ activity = {}, content = {} }) {
                   Công thức cấu trúc:
                 </span>
                 <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FFF7E8] to-[#FFF2D6] border-2 border-[#FFCD00]/70 shadow-xs flex items-center gap-3">
-                  <Sparkles size={18} className="text-[#FF7A00] shrink-0" />
+                  <BookOpen size={18} className="text-[#FF7A00] shrink-0" />
                   <span className="text-base sm:text-lg font-black text-[#253044] font-mono leading-snug">
                     {pattern}
                   </span>
@@ -1791,7 +1787,7 @@ function GrammarRenderer({ activity = {}, content = {} }) {
                           )}
                           {exNote && (
                             <p className="text-[11px] text-amber-800 m-0 pt-0.5">
-                              💡 {exNote}
+                              <span className="font-semibold text-amber-900 mr-1">Gợi ý:</span>{exNote}
                             </p>
                           )}
                         </div>

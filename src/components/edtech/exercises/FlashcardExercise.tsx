@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Volume2, RotateCcw, Sparkles } from 'lucide-react';
+import { Volume2, RotateCcw } from 'lucide-react';
 import { FlashcardDataDTO } from '@/types/edtech';
 import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { audioFeedback } from '@/utils/audioFeedback';
@@ -35,7 +35,6 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col items-center">
       <div className="text-center mb-5">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
           Thẻ Từ Vựng Mới • Flashcard
         </span>
         <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 mt-2">
@@ -129,7 +128,7 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
 
               {data.notesForForeigners && (
                 <p className="text-xs text-[#7C2D12] bg-[#FFF0DC] border border-[#fed7aa] rounded-xl px-3 py-1.5 mb-4">
-                  💡 {data.notesForForeigners}
+                  <span className="font-bold mr-1">Gợi ý:</span>{data.notesForForeigners}
                 </p>
               )}
 

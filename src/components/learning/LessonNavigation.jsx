@@ -1,6 +1,6 @@
 ﻿import { BilingualText } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Check } from 'lucide-react';
 
 export function LessonNavigation({ lesson, pending, onComplete }) {
   const path = (id) => `/learn/${lesson.courseId}/lesson/${id}`;
@@ -46,7 +46,7 @@ export function LessonNavigation({ lesson, pending, onComplete }) {
             </>
           ) : (
             <>
-              <Sparkles size={16} />
+              <CheckCircle2 size={16} />
               <BilingualText>{"Hoàn thành bài học"}</BilingualText>
             </>
           )}

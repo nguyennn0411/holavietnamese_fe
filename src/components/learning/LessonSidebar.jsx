@@ -259,7 +259,7 @@ export function LessonSidebar({
       <div className="shrink-0 p-3 bg-stone-50 border-t border-[#E8E5DF]/40 text-center text-[11px] font-semibold text-stone-500">
         {completedCount === totalCount && totalCount > 0 ? (
           <span className="text-emerald-700 font-bold">
-            🎉 Bạn đã hoàn thành toàn bộ khóa học!
+            Bạn đã hoàn thành toàn bộ khóa học!
           </span>
         ) : (
           <span>

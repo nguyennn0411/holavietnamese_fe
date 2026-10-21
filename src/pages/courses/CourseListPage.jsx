@@ -5,7 +5,6 @@ import { motion } from 'motion/react';
 import {
   Search,
   X,
-  Sparkles,
   Play,
   Compass,
   GraduationCap,
@@ -55,8 +54,7 @@ export function CourseListPage() {
         </div>
 
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-extrabold uppercase tracking-wider shadow-2xs">
-            <Sparkles size={14} className="text-[#FF7A00]" />
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-extrabold uppercase tracking-wider shadow-2xs">
             <BilingualText>{"Lộ trình toàn diện • Standard Vietnamese Curriculum"}</BilingualText>
           </div>
 

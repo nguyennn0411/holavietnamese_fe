@@ -13,7 +13,7 @@ import { destinationService } from '@/services/destinationService';
 import { journeyService } from '@/services/journeyService';
 import { ROUTES } from '@/constants/routes';
 import '@/components/destinations/destinations.css';
-import { Search, X, Compass, ArrowLeft, Sparkles } from 'lucide-react';
+import { Search, X, Compass, ArrowLeft } from 'lucide-react';
 
 const emptyFilters = { keyword: '', region: '' };
 function stopLabel(stop) {
@@ -49,8 +49,7 @@ export function ExploreVietnamPage() {
         </div>
 
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
-            <Sparkles size={14} className="text-[#EA580C]" />
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
             <BilingualText>{"Ngôn ngữ chỉ là điểm bắt đầu • Culture & Destinations"}</BilingualText>
           </div>
 
@@ -300,7 +299,7 @@ export function DestinationDetailPage() {
                 {destination.descriptionVi && (
                   <section className="card bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-4">
                     <h2 className="text-lg sm:text-xl font-black text-[#253044] flex items-center gap-2">
-                      <Sparkles size={18} className="text-[#FF7A00]" />
+                      <Compass size={18} className="text-[#FF7A00]" />
                       <BilingualText vi="Khám phá điểm đến" en="Explore the destination" />
                     </h2>
                     <div className="rich-text text-sm sm:text-base text-[#253044] leading-relaxed" lang="vi" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>

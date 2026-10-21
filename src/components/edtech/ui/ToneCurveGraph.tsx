@@ -199,7 +199,7 @@ export const ToneCurveGraph: React.FC<ToneCurveGraphProps> = ({
       {/* Mnemonic tip for foreign learners */}
       {!compact && tone.mnemonicTip && (
         <p className="mt-2 text-[11px] text-slate-500 italic bg-amber-50/60 text-amber-900/90 rounded-lg p-2 border border-amber-200/50">
-          💡 <strong>Tip:</strong> {tone.mnemonicTip}
+          <strong>Gợi ý:</strong> {tone.mnemonicTip}
         </p>
       )}
     </div>

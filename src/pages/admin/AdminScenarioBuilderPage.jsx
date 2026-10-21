@@ -170,19 +170,19 @@ export function AdminScenarioBuilderPage() {
             className={`button ${activeTab === 'builder' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('builder')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"⚙️ Cấu hình kịch bản"}</BilingualText></button>
+          ><BilingualText>{"Cấu hình kịch bản"}</BilingualText></button>
           <button
             type="button"
             className={`button ${activeTab === 'simulation' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('simulation')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"🧪 Thử nghiệm giả lập"}</BilingualText></button>
+          ><BilingualText>{"Thử nghiệm giả lập"}</BilingualText></button>
           <button
             type="button"
             className="button"
             onClick={handleSubmit}
             style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
-          ><BilingualText>{"💾 Lưu kịch bản"}</BilingualText></button>
+          ><BilingualText>{"Lưu kịch bản"}</BilingualText></button>
         </div>
       </div>
 
@@ -350,12 +350,12 @@ export function AdminScenarioBuilderPage() {
                 </label>
 
                 <label style={{ marginTop: '12px' }}><BilingualText>{"Chủ đề kịch bản:"}</BilingualText><select value={formData.topic} onChange={e => setFormData({ ...formData, topic: e.target.value })}>
-                    <option value="dining">{vietnameseLabel("🍜 Ẩm thực & Quán xá")}</option>
-                    <option value="shopping">{vietnameseLabel("🛍️ Mua sắm & Mặc cả")}</option>
-                    <option value="travel">{vietnameseLabel("🛵 Di chuyển & Du lịch")}</option>
-                    <option value="hospitality">{vietnameseLabel("🏨 Khách sạn & Nghỉ dưỡng")}</option>
-                    <option value="social">{vietnameseLabel("🏡 Gia đình & Bạn bè")}</option>
-                    <option value="work">{vietnameseLabel("💼 Giao tiếp công sở")}</option>
+                    <option value="dining">{vietnameseLabel("Ẩm thực & Quán xá")}</option>
+                    <option value="shopping">{vietnameseLabel("Mua sắm & Mặc cả")}</option>
+                    <option value="travel">{vietnameseLabel("Di chuyển & Du lịch")}</option>
+                    <option value="hospitality">{vietnameseLabel("Khách sạn & Nghỉ dưỡng")}</option>
+                    <option value="social">{vietnameseLabel("Gia đình & Bạn bè")}</option>
+                    <option value="work">{vietnameseLabel("Giao tiếp công sở")}</option>
                   </select>
                 </label>
 

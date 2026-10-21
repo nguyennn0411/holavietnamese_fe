@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import { Sparkles } from 'lucide-react';
+import React from 'react';
 import { TonePitchCard } from './bento/TonePitchCard';
 import { AiTutorPreviewCard } from './bento/AiTutorPreviewCard';
 import { DiacriticKeyboardCard } from './bento/DiacriticKeyboardCard';
@@ -14,8 +13,7 @@ export function BentoGridSection() {
   return (
     <section className="bento-showcase space-y-8">
       <div className="text-center max-w-2xl mx-auto space-y-2">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider">
-          <Sparkles size={14} />
+        <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider">
           <span>{t('features.eyebrow')}</span>
         </div>
         <h2 className="text-3xl sm:text-4xl font-black text-[#253044] tracking-tight">

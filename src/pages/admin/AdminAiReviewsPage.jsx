@@ -65,7 +65,7 @@ export function AdminAiReviewsPage() {
 
       {/* Privacy Notice */}
       <div style={{ background: 'var(--color-red-soft)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <span style={{ fontSize: '20px' }}>🔒</span>
+        <Lock size={18} />
         <div style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
           <strong><BilingualText>{"Chính sách quyền riêng tư lịch sử hội thoại:"}</BilingualText></strong><BilingualText>{"Chỉ hiển thị các phiên được người học cấp quyền gửi đánh giá, phản hồi báo lỗi, hoặc các phiên thuộc tập kiểm thử (Test Bench). Dữ liệu cá nhân nhạy cảm đã được ẩn danh hóa."}</BilingualText></div>
       </div>
@@ -154,7 +154,7 @@ export function AdminAiReviewsPage() {
                 <div><strong><BilingualText>{"Mã phiên:"}</BilingualText></strong> <code>{selectedReview.sessionId}</code></div>
                 <div><strong><BilingualText>{"Đánh giá:"}</BilingualText></strong> {selectedReview.rating}<BilingualText>{"/5 sao"}</BilingualText></div>
                 <div style={{ marginTop: '8px', padding: '10px 12px', background: 'var(--color-cream)', borderRadius: '8px' }}>
-                  💬 <em>"{selectedReview.userFeedback}"</em>
+                  <em>"{selectedReview.userFeedback}"</em>
                 </div>
 
                 <div style={{ marginTop: '14px' }}>
@@ -165,13 +165,13 @@ export function AdminAiReviewsPage() {
                       className="button secondary"
                       style={{ fontSize: '12px', padding: '6px 12px', color: 'var(--color-ink)' }}
                       onClick={() => handleUpdateStatus(selectedReview.id, 'APPROVED')}
-                    ><BilingualText>{"✓ Duyệt đạt chuẩn"}</BilingualText></button>
+                    ><BilingualText>{"Duyệt đạt chuẩn"}</BilingualText></button>
                     <button
                       type="button"
                       className="button secondary"
                       style={{ fontSize: '12px', padding: '6px 12px', color: 'var(--color-red)' }}
                       onClick={() => handleUpdateStatus(selectedReview.id, 'NEEDS_PROMPT_TUNING')}
-                    ><BilingualText>{"⚠️ Cần chỉnh Prompt"}</BilingualText></button>
+                    ><BilingualText>{"Cần chỉnh Prompt"}</BilingualText></button>
                   </div>
                 </div>
               </div>
@@ -183,7 +183,7 @@ export function AdminAiReviewsPage() {
           {/* Test Sandbox (Kiểm thử kịch bản) */}
           <div className="admin-card" style={{ background: 'var(--color-surface)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <span style={{ fontSize: '20px' }}>🧪</span>
+              <FlaskConical size={18} />
               <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Kiểm thử kịch bản AI"}</BilingualText></h3>
             </div>
             <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: 'var(--color-forest)' }}><BilingualText>{"Kiểm tra trực tiếp phản hồi của mô hình với phiên bản hướng dẫn hệ thống hiện hành trước khi xuất bản rộng rãi."}</BilingualText></p>

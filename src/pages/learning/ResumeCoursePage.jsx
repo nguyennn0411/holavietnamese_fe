@@ -12,7 +12,6 @@ import {
   Lock,
   ChevronDown,
   ChevronUp,
-  Sparkles,
   MessageCircle,
   FileText,
   Headphones,

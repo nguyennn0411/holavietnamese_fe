@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   BookOpen,
   Clock,
-  Sparkles,
   ChevronDown,
   Play,
   PlayCircle,
@@ -549,8 +548,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 {course.level}
               </span>
 
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF2D6] text-[#EA580C] border border-[#FFCD00]/50 font-bold text-xs">
-                <Sparkles size={13} className="text-[#FF7A00]" />
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#FFF2D6] text-[#EA580C] border border-[#FFCD00]/50 font-bold text-xs">
                 <BilingualText>{course.isFree ? 'Khóa học miễn phí' : 'Khóa học chính thức'}</BilingualText>
               </span>
 
@@ -1021,7 +1019,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                     </>
                   ) : (
                     <>
-                      <Sparkles size={16} />
+                      <Play size={16} fill="currentColor" />
                       <BilingualText>
                         {course.isFree ? 'Đăng ký học miễn phí' : 'Đăng ký học ngay'}
                       </BilingualText>
@@ -1045,7 +1043,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 <span>Truy cập trọn đời trên máy tính & điện thoại</span>
               </div>
               <div className="flex items-center gap-2">
-                <Sparkles size={15} className="text-[#FF7A00] shrink-0" />
+                <MessageCircle size={15} className="text-[#EA580C] shrink-0" />
                 <span>Tương tác AI Tutor luyện nói & sửa phát âm 24/7</span>
               </div>
               <div className="flex items-center gap-2">

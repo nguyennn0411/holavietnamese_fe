@@ -7,7 +7,6 @@ import {
   Languages,
   MapPin,
   Award,
-  Sparkles,
   ArrowRight,
   Plus,
   Compass,
@@ -110,8 +109,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
       {/* Hero Header */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
-            <Sparkles size={14} className="text-[#EA580C]" />
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
             <BilingualText>{"Hành trình của riêng bạn • Personal Learning Space"}</BilingualText>
           </div>
 

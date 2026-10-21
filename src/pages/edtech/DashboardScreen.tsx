@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowRight, Award, BookMarked, BookOpen, Check, ChevronDown, Clock3,
-  Flame, Gift, Heart, Lock, Map, Play, RefreshCw, Sparkles, Star, Trophy, X, Zap
+  Flame, Gift, Heart, Lock, Map, Play, RefreshCw, Star, Trophy, X, Zap
 } from 'lucide-react';
 import { courseService } from '@/services/courseService';
 import { learnerService } from '@/services/learnerService';
@@ -641,7 +641,7 @@ export const DashboardScreen: React.FC = () => {
               <div className="space-y-3.5">
                 <div className="duo-quest-item">
                   <span className="w-10 h-10 rounded-xl bg-[#FEF3C7] text-[#D97706] flex items-center justify-center font-black">
-                    <Sparkles size={20} />
+                    <Trophy size={20} />
                   </span>
                   <div className="flex-1">
                     <div className="flex justify-between text-xs font-extrabold text-[#251B18] mb-1">
@@ -788,7 +788,7 @@ export const DashboardScreen: React.FC = () => {
                     <Clock3 size={15} /> {selectedLesson.estimatedDuration || 12} phút
                   </span>
                   <span className="flex items-center gap-1.5 bg-[#FEF3C7] text-[#B45309] px-3 py-1.5 rounded-full">
-                    <Sparkles size={15} /> +{selectedLesson.xpReward || 25} XP
+                    <Award size={15} /> +{selectedLesson.xpReward || 25} XP
                   </span>
                 </div>
 

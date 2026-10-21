@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
   Bell, BookOpen, Bot, ChevronLeft, Compass, Flame,
   GraduationCap, Headphones, Home, Languages, Mic2,
-  Newspaper, Palette, Sparkles, Zap,
+  Newspaper, Palette, Zap,
 } from 'lucide-react';
 import { Brand } from '@/components/layout/Brand';
 import { UserMenu } from '@/components/layout/UserMenu';
@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const learnerItems = [
   { to: '/', label: 'learn', icon: Home, end: true, mobile: true },
-  { to: '/edtech/dashboard', label: 'learningPath', icon: Sparkles, mobile: true },
+  { to: '/edtech/dashboard', label: 'learningPath', icon: Compass, mobile: true },
   { to: '/courses', label: 'courses', icon: BookOpen, mobile: true },
   { to: '/my-learning', label: 'myLearning', icon: GraduationCap },
   { to: '/vocabulary', label: 'vocabulary', icon: Languages, mobile: true },

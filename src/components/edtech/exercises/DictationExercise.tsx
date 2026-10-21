@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { Volume2, Turtle, Headphones, Sparkles, HelpCircle, Check, X } from 'lucide-react';
+import { Volume2, Turtle, Headphones, HelpCircle, Check, X } from 'lucide-react';
 import { DictationDataDTO } from '@/types/edtech';
 import { DiacriticKeyboardBar } from '@/components/edtech/ui/DiacriticKeyboardBar';
 import { audioFeedback } from '@/utils/audioFeedback';
@@ -135,7 +135,7 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
           className="w-full mb-4 bg-amber-50/80 border border-amber-200 rounded-2xl p-3 text-xs text-amber-900 flex items-center justify-between"
         >
           <span>
-            💡 <strong>Gợi ý nghĩa:</strong> "{data.translationEn}" ({data.wordCount} từ)
+            <HelpCircle size={13} className="inline mr-1 text-amber-600" /><strong>Gợi ý:</strong> "{data.translationEn}" ({data.wordCount} từ)
           </span>
           {data.hint && <span className="text-amber-700 italic">{data.hint}</span>}
         </motion.div>

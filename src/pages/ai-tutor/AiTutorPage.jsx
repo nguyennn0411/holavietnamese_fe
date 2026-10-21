@@ -2,7 +2,6 @@
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Sparkles,
   Send,
   Mic,
   MicOff,
@@ -408,7 +407,7 @@ export function AiTutorPage() {
         notes: `Chế độ AI: ${aiTutorService.getMode(currentMode).name}`,
       });
       audioFeedback.playSuccessChime();
-      showToast(`⭐ Đã lưu "${word}" vào Sổ từ vựng (+5 XP)!`);
+      showToast(`Đã lưu "${word}" vào Sổ từ vựng (+5 XP)!`);
     } catch (err) {
       showToast(`Lưu từ vựng: ${err.message || 'Thành công!'}`);
     }
@@ -451,9 +450,7 @@ export function AiTutorPage() {
               >
                 <div className="flex items-center justify-between border-b border-[#E8E5DF]/60 pb-3">
                   <div className="flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-xl bg-[#FFF7E8] border border-[#E8E5DF] flex items-center justify-center text-base">
-                      🤖
-                    </span>
+                    <span className="w-8 h-8 rounded-xl bg-[#FFF7E8] border border-[#E8E5DF] flex items-center justify-center text-[#EA580C]"><Key size={16} /></span>
                     <div>
                       <h3 className="text-sm font-black text-[#253044]">Cấu hình OpenAI API</h3>
                       <p className="text-[11px] text-[#64748B]">Kích hoạt LLM trực tiếp cho AI Tutor</p>
@@ -475,7 +472,7 @@ export function AiTutorPage() {
                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${
                         aiStatus.isLiveCall ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                       }`}>
-                        {aiStatus.isLiveCall ? `🟢 Live ${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : '⚡ Smart NLP Engine'}
+                        {aiStatus.isLiveCall ? `Live · ${aiStatus.provider || 'OpenAI'} (${aiStatus.activeModel || 'gpt-5-mini'})` : 'Smart NLP Engine'}
                       </span>
                     </div>
                     {aiStatus.apiKeyMasked && (
@@ -534,7 +531,7 @@ export function AiTutorPage() {
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             className="fixed top-20 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#253044] text-white text-xs font-bold shadow-xl border border-[#E8E5DF]/40"
           >
-            <Sparkles size={15} className="text-[#FFCD00] animate-pulse" />
+            <CheckCircle2 size={15} className="text-emerald-400" />
             <span>{toastMessage}</span>
           </motion.div>
         )}
@@ -745,7 +742,7 @@ export function AiTutorPage() {
                   className="px-2.5 py-1 rounded-xl bg-white border border-[#E8E5DF] text-[#FF7A00] text-xs font-bold hover:bg-[#FFF7E8] transition-colors shadow-2xs cursor-pointer"
                   title="Chuyển đổi tốc độ phát âm (1.0x Chuẩn / 0.65x Chậm)"
                 >
-                  {speechRate === 0.95 ? '⚡ 1.0x Chuẩn' : '🐢 0.65x Chậm'}
+                  {speechRate === 0.95 ? '1.0x Chuẩn' : '0.65x Chậm'}
                 </button>
               </div>
             </div>
@@ -829,7 +826,7 @@ export function AiTutorPage() {
                     {isAi && (msg.nativeAlternative || (msg.grammarCheck?.corrected && msg.grammarCheck.corrected !== msg.grammarCheck.original)) && (
                       <div className="mt-2.5 p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-emerald-950 text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-emerald-800">
-                          <Sparkles size={13} className="text-emerald-600 shrink-0" />
+                          <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
                           <span>Cách diễn đạt tự nhiên hơn của người bản xứ:</span>
                         </div>
                         <p className="font-semibold text-emerald-900 leading-relaxed italic">
@@ -842,7 +839,7 @@ export function AiTutorPage() {
                     {isAi && msg.culturalNote && (
                       <div className="mt-2.5 p-3 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-[#FF7A00]">
-                          <span>🏮</span>
+                          <Compass size={13} className="text-[#EA580C] shrink-0" />
                           <span>Lưu ý văn hóa & Ngữ cảnh ứng xử:</span>
                         </div>
                         <p className="text-[#253044]/90 leading-relaxed">
@@ -999,7 +996,6 @@ export function AiTutorPage() {
           {/* Quick Prompts Chips Carousel */}
           <div className="p-3 bg-[#FFFCF7] border-t border-[#E8E5DF]/60 flex items-center gap-2 overflow-x-auto scrollbar-none">
             <span className="text-[11px] font-black uppercase text-[#FF7A00] shrink-0 pl-1 flex items-center gap-1">
-              <Sparkles size={12} />
               <span>Gợi ý:</span>
             </span>
             {activeModeConfig.quickPrompts.map((prompt, idx) => (

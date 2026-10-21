@@ -7,7 +7,6 @@ import {
   BookOpen,
   Compass,
   Palette,
-  Sparkles,
   LogIn,
   UserPlus,
   ArrowLeft,
@@ -115,7 +114,7 @@ const FEATURE_CONFIGS = {
     mascotVariant: 'encouraging',
     mascotBubbleVi: 'Cố lên nào! Đăng nhập để tiếp tục bài học dang dở và không bị ngắt quãng chuỗi ngày Streak nhé!',
     mascotBubbleEn: 'Keep going! Sign in to resume your lessons and maintain your streak!',
-    icon: Sparkles,
+    icon: Compass,
     badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
     iconBg: 'bg-gradient-to-br from-[#FF7A00] to-[#C2410C] text-white',
     highlights: [
@@ -266,7 +265,7 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
           {/* Highlights Box */}
           <div className="bg-[#FFFCF7] border border-[#E8E5DF]/60 rounded-2xl p-5 space-y-3">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#EA580C]">
-              <Sparkles size={14} />
+              
               <BilingualText
                 vi="Quyền lợi mở khóa khi bạn đăng nhập:"
                 en="Benefits unlocked upon signing in:"
@@ -304,7 +303,7 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
                     to={ROUTES.WELCOME}
                     className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-[#FFF7E8] hover:bg-[#FFF0DC]/50 text-[#253044] border-2 border-[#E1B65B] font-black text-sm text-center shadow-xs hover:border-[#FF7A00] active:scale-[0.99] transition-all flex items-center justify-center gap-2"
                   >
-                    <Sparkles size={18} className="text-[#EA580C]" />
+                    
                     <BilingualText vi="Trải nghiệm trang Welcome" en="Explore Welcome" />
                   </Link>
                 </>
@@ -315,7 +314,7 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
                     to={ROUTES.WELCOME}
                     className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#B31D16] hover:from-[#B31D16] hover:to-[#C2410C] text-white font-black text-sm text-center shadow-[0_4px_12px_rgba(218,37,29,0.28)] hover:shadow-lg active:scale-[0.99] transition-all flex items-center justify-center gap-2"
                   >
-                    <Sparkles size={18} />
+                    <ArrowRight size={18} />
                     <BilingualText vi="Bắt đầu tại Welcome (Cho bạn mới)" en="Get Started at Welcome (For New Learners)" />
                   </Link>
 

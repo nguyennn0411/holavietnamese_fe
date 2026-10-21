@@ -8,7 +8,6 @@ import { aiTutorService } from '@/services/aiTutorService';
 import { Breadcrumb, SpeakButton, Notice, EmptyState, Artwork } from '@/components/common/Ui';
 import { RichText } from '@/components/common/RichText';
 import {
-  Sparkles,
   Clock,
   MapPin,
   Bookmark,
@@ -184,7 +183,7 @@ export function CultureDetailPage() {
           <div className="story-callout rounded-3xl bg-gradient-to-r from-[#FFF2D6] via-[#FFEEC9] to-[#FFF7E8] border border-[#FFCD00] p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="space-y-1 text-center sm:text-left">
               <h3 className="text-base sm:text-lg font-black text-[#253044] flex items-center justify-center sm:justify-start gap-2">
-                <Sparkles size={18} className="text-[#FF7A00]" />
+                <BookOpen size={18} className="text-[#EA580C]" />
                 <BilingualText>{"Muốn tìm hiểu sâu hơn về câu chuyện này?"}</BilingualText>
               </h3>
               <p className="muted text-xs sm:text-sm text-[#64748B]">
@@ -242,7 +241,7 @@ export function CultureDetailPage() {
           {relatedArticles.length > 0 && (
             <section className="card bg-white rounded-3xl border border-[#E8E5DF] p-6 shadow-xs space-y-4">
               <h2 className="text-base font-black text-[#253044] flex items-center gap-2">
-                <Sparkles size={16} className="text-[#FFCD00]" />
+                <Compass size={16} className="text-[#EA580C]" />
                 <BilingualText>{"Câu chuyện liên quan"}</BilingualText>
               </h2>
               <div className="space-y-2.5">

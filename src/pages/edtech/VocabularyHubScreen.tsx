@@ -6,7 +6,6 @@ import {
   Volume2,
   Bookmark,
   BookmarkCheck,
-  Sparkles,
   ArrowLeft,
   Filter,
   Keyboard,

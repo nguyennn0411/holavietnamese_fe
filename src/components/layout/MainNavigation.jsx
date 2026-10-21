@@ -1,11 +1,11 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
-import { Home, BookOpen, Map, Languages, Landmark, Newspaper, Sparkles, GraduationCap, Type } from 'lucide-react';
+import { Home, BookOpen, Map, Languages, Landmark, Newspaper, Compass, GraduationCap, Type } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ', en: 'Home', icon: Home, end: true },
-  { to: ROUTES.EDTECH_DASHBOARD, label: 'Lộ trình học', en: 'Learning path', icon: Sparkles, badge: 'EdTech' },
+  { to: ROUTES.EDTECH_DASHBOARD, label: 'Lộ trình học', en: 'Learning path', icon: Compass, badge: 'EdTech' },
   { to: '/courses', label: 'Khóa học', en: 'Courses', icon: BookOpen },
   { to: ROUTES.ALPHABET, label: 'Bảng chữ cái', en: 'Alphabet', icon: Type },
   { to: '/explore', label: 'Khám phá Việt Nam', en: 'Explore Vietnam', icon: Map },

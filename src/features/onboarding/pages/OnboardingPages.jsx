@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Sparkles, Sprout, Target, Volume2 } from 'lucide-react';
+import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Sprout, Target, Volume2, Award } from 'lucide-react';
 import { benefits, dailyGoals, firstLessonQuestions, learningReasons, levelOptions, placementBands, placementQuestions } from '../data/onboardingData';
 import { useOnboarding } from '../context/OnboardingContext';
 import { Brand, Confetti, LessonHeader, Mascot, OnboardingLayout, PrimaryButton, SelectionCard } from '../components/OnboardingUI';
@@ -41,7 +41,7 @@ export function WelcomePage() {
     <main>
       <motion.div className="ob-welcome-art" initial={{ opacity: 0, scale: .9 }} animate={{ opacity: 1, scale: 1 }}><div className="ob-sun" /><Mascot message="Xin chào! Ready for an adventure?" /></motion.div>
       <motion.div className="ob-welcome-copy" initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .12 }}>
-        <span className="ob-kicker"><Sparkles size={17} /> YOUR VIETNAMESE ADVENTURE STARTS HERE</span>
+        <span className="ob-kicker">YOUR VIETNAMESE ADVENTURE STARTS HERE</span>
         <h1>Learn Vietnamese<br /><em>the fun way!</em></h1>
         <p>Discover Vietnam, speak confidently, and connect with millions of Vietnamese speakers through fun, interactive lessons.</p>
         <PrimaryButton onClick={() => navigate('/register', { state: { from: '/onboarding/reason' } })}>CREATE ACCOUNT TO START</PrimaryButton>
@@ -77,7 +77,7 @@ export function BenefitsPage() {
   if (!data.currentLevel) return <Navigate to="/onboarding/level" replace />;
   return <OnboardingLayout eyebrow="A LITTLE EVERY DAY" title="Here's what you'll be able to do!" mascotMessage="Small steps every day can lead to amazing progress!" wide>
     <div className="ob-benefits">{benefits.map(({ icon: Icon, title, detail }, index) => <motion.article key={title} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * .06 }}><Icon /><div><strong>{title}</strong><span>{detail}</span></div><Check /></motion.article>)}</div>
-    <div className="ob-quote"><Sparkles /> Your results will grow with your level, consistency, and practice — no unrealistic promises, just a clear path forward.</div>
+    <div className="ob-quote">Your results will grow with your level, consistency, and practice — no unrealistic promises, just a clear path forward.</div>
     <div className="ob-actions"><PrimaryButton onClick={() => navigate('/onboarding/daily-goal')} /></div>
   </OnboardingLayout>;
 }
@@ -170,7 +170,7 @@ export function CompletionPage() {
   };
 
   return <div className="ob-complete"><Confetti /><Brand /><main><div className="ob-celebrate"><Mascot celebration /></div><span className="ob-complete-kicker"><Medal /> {mode === 'lesson' ? 'FIRST LESSON COMPLETE' : 'STARTING POINT FOUND'}</span><h1>{mode === 'lesson' ? "Fantastic! You've completed your first Vietnamese lesson!" : "Great job! We've found a starting point for you!"}</h1><p>Kết quả đã sẵn sàng. HolaVietnamese sẽ dùng trình độ này để gợi ý các khóa học phù hợp với bạn.</p>
-    <div className="ob-stats"><article><Sparkles /><strong>+{result.xp}</strong><span>XP EARNED</span></article><article><Check /><strong>{result.correct}/{result.total}</strong><span>CORRECT</span></article><article><Target /><strong>{result.accuracy}%</strong><span>ACCURACY</span></article></div>
+    <div className="ob-stats"><article><Award size={18} /><strong>+{result.xp}</strong><span>XP EARNED</span></article><article><Check /><strong>{result.correct}/{result.total}</strong><span>CORRECT</span></article><article><Target /><strong>{result.accuracy}%</strong><span>ACCURACY</span></article></div>
     <div className="ob-recommend"><BookOpen /><div><span>YOUR RECOMMENDED START</span><strong>{result.recommendation || 'Vietnamese Foundations · Lesson 2'}</strong>{result.level && <small>Suggested group: {result.level}. This is a preliminary result, not an official CEFR certification.</small>}</div></div>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
       <PrimaryButton disabled={saving} onClick={handleShowRecommendations}>{saving ? 'ĐANG LƯU KẾT QUẢ…' : 'XEM KHÓA HỌC ĐƯỢC GỢI Ý'}</PrimaryButton>
