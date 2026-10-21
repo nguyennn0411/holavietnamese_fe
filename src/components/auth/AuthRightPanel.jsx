@@ -1,27 +1,20 @@
 import React from 'react';
-import dongSonDrum from '/design/auth/dong-son-drum.webp';
+import dongsonHeritage from '@/assets/images/dongson_heritage.png';
 import { BilingualText } from '@/components/common/BilingualText';
 
 /**
- * AuthRightPanel - Premium Vietnamese Dong Son Cultural Heritage Showcase
- * Renders complete authentic Dong Son drum circle with ambient cultural geometry
- * and bilingual heritage framing.
- * Used across Login, Register, Forgot Password, Reset Password, and Verify Email.
+ * AuthRightPanel - Authentic Vietnamese Dong Son Cultural Heritage Showcase
+ * Showcases the authentic Half Dong Son drum motif from dongson_heritage.png
+ * on an inviting light cream background with balanced cultural typography.
+ * Shared across Login, Register, Forgot Password, Reset Password, and Verify Email.
  */
 export function AuthRightPanel({
-  imageSrc = dongSonDrum,
-  alt = 'Hoa văn Trống đồng Đông Sơn - Tinh hoa di sản văn hóa Việt Nam',
+  imageSrc = dongsonHeritage,
+  alt = 'Họa tiết Nửa Trống đồng Đông Sơn - Tinh hoa di sản văn hóa Việt Nam',
   showCaption = true,
 }) {
   return (
     <aside className="auth-right-panel" aria-label={alt}>
-      {/* Decorative ambient background with concentric circular motifs */}
-      <div className="auth-right-ambient" aria-hidden="true">
-        <span className="auth-ambient-ring auth-ambient-ring-1" />
-        <span className="auth-ambient-ring auth-ambient-ring-2" />
-        <span className="auth-ambient-ring auth-ambient-ring-3" />
-      </div>
-
       <div className="auth-right-content">
         <div className="auth-drum-frame">
           <img
