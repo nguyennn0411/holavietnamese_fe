@@ -1,22 +1,62 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, Mic, MicOff, Volume2, Copy, Check, Trash2, Edit3, Plus, Search, User, BookOpen, Compass, ArrowRight, BookmarkPlus, Globe } from 'lucide-react';
+import {
+  Sparkles,
+  Send,
+  Mic,
+  MicOff,
+  Volume2,
+  Copy,
+  Check,
+  Trash2,
+  Edit3,
+  Plus,
+  Search,
+  Bot,
+  User,
+  BookOpen,
+  MessageSquare,
+  Compass,
+  ArrowRight,
+  BookmarkPlus,
+  Globe,
+  Award,
+  Flame,
+  Zap,
+  VolumeX,
+} from 'lucide-react';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { aiTutorService } from '@/services/aiTutorService';
 import { vocabularyService } from '@/services/vocabularyService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { audioFeedback } from '@/utils/audioFeedback';
 import { TutorMascotAvatar } from '@/components/mascot';
-import { CheckCircle2 } from "lucide-react";
+
+function getDisplayMessageText(value) {
+  if (typeof value !== 'string') return '';
+
+  const text = value.trim();
+  if (!(text.startsWith('{') && text.endsWith('}'))) return value;
+
+  try {
+    const parsed = JSON.parse(text);
+    const nestedText = parsed?.text ?? parsed?.content ?? parsed?.answer ?? parsed?.reply;
+    return typeof nestedText === 'string' ? nestedText : value;
+  } catch {
+    return value;
+  }
+}
+
 /**
  * FormattedMessageText - Renders markdown bold keywords, bullet points,
  * and code tags with rich EdTech styling.
  */
 function FormattedMessageText({ text, isAi }) {
-  if (!text) return null;
+  const displayText = getDisplayMessageText(text);
+  if (!displayText) return null;
 
-  const lines = text.split('\n');
+  const lines = displayText.split('\n');
 
   return (
     <div className="space-y-1.5 leading-relaxed text-xs sm:text-sm">
@@ -37,7 +77,7 @@ function FormattedMessageText({ text, isAi }) {
             return (
               <strong
                 key={pIdx}
-                className={isAi ? 'font-black text-[#FF7A00]' : 'font-black text-[#FFCD00]'}
+                className={isAi ? 'font-black text-[#DA251D]' : 'font-black text-[#FFCD00]'}
               >
                 {inner}
               </strong>
@@ -50,7 +90,7 @@ function FormattedMessageText({ text, isAi }) {
                 key={pIdx}
                 className={`px-1.5 py-0.5 rounded-md font-mono text-[11px] ${
                   isAi
-                    ? 'bg-[#FFF9ED] text-[#FF7A00] border border-[#E8E5DF]/70'
+                    ? 'bg-[#FFF9ED] text-[#DA251D] border border-[#DECBB4]/70'
                     : 'bg-white/20 text-[#FFF9ED] border border-white/30'
                 }`}
               >
@@ -64,7 +104,7 @@ function FormattedMessageText({ text, isAi }) {
         if (isBullet) {
           return (
             <div key={lIdx} className="flex items-start gap-2 pl-1">
-              <span className={`text-xs mt-0.5 shrink-0 ${isAi ? 'text-[#FF7A00]' : 'text-[#FFCD00]'}`}>
+              <span className={`text-xs mt-0.5 shrink-0 ${isAi ? 'text-[#DA251D]' : 'text-[#FFCD00]'}`}>
                 ✦
               </span>
               <span className="flex-1">{content}</span>
@@ -112,15 +152,11 @@ export function AiTutorPage() {
   // Load sessions and AI status on mount
   useEffect(() => {
     const loadedSessions = aiTutorService.getAllSessions();
-    const activeId = aiTutorService.getActiveSessionId();
     setSessions(loadedSessions);
-    setActiveSessionId(activeId);
-
-    const active = loadedSessions.find((s) => s.id === activeId) || loadedSessions[0];
-    if (active) {
-      setCurrentSession(active);
-      setCurrentMode(active.mode || 'tutor');
-    }
+    // Start on the history picker instead of reopening the last conversation.
+    // The service still keeps the persisted active id for explicit selection.
+    setActiveSessionId('');
+    setCurrentSession(null);
 
     aiTutorService.getAiStatus().then((st) => {
       if (st) setAiStatus(st);
@@ -247,9 +283,8 @@ export function AiTutorPage() {
       audioFeedback.playPopSound(0.8);
       const remaining = aiTutorService.deleteSession(id);
       setSessions(remaining);
-      const newActiveId = aiTutorService.getActiveSessionId();
-      setActiveSessionId(newActiveId);
-      setCurrentSession(aiTutorService.getSession(newActiveId));
+      setActiveSessionId('');
+      setCurrentSession(null);
       showToast('Đã xóa hội thoại thành công.');
     }
   };
@@ -384,7 +419,7 @@ export function AiTutorPage() {
         notes: `Chế độ AI: ${aiTutorService.getMode(currentMode).name}`,
       });
       audioFeedback.playSuccessChime();
-      showToast(`Đã lưu "${word}" vào Sổ từ vựng (+5 XP)!`);
+      showToast(`⭐ Đã lưu "${word}" vào Sổ từ vựng (+5 XP)!`);
     } catch (err) {
       showToast(`Lưu từ vựng: ${err.message || 'Thành công!'}`);
     }
@@ -423,14 +458,16 @@ export function AiTutorPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="w-full max-w-md bg-white rounded-3xl border border-[#E8E5DF] p-6 shadow-2xl space-y-4 text-left"
+                className="w-full max-w-md bg-white rounded-3xl border border-[#DECBB4] p-6 shadow-2xl space-y-4 text-left"
               >
-                <div className="flex items-center justify-between border-b border-[#E8E5DF]/60 pb-3">
+                <div className="flex items-center justify-between border-b border-[#DECBB4]/60 pb-3">
                   <div className="flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-xl bg-[#FFF7E8] border border-[#E8E5DF] flex items-center justify-center text-[#EA580C]"><Key size={16} /></span>
+                    <span className="w-8 h-8 rounded-xl bg-[#FFF9EE] border border-[#DECBB4] flex items-center justify-center text-base">
+                      🤖
+                    </span>
                     <div>
-                      <h3 className="text-sm font-black text-[#253044]">Cấu hình OpenAI API</h3>
-                      <p className="text-[11px] text-[#64748B]">Kích hoạt LLM trực tiếp cho AI Tutor</p>
+                      <h3 className="text-sm font-black text-[#202124]">Cấu hình OpenAI API</h3>
+                      <p className="text-[11px] text-[#78685B]">Kích hoạt LLM trực tiếp cho AI Tutor</p>
                     </div>
                   </div>
                   <button
@@ -442,14 +479,14 @@ export function AiTutorPage() {
                   </button>
                 </div>
 
-                <div className="space-y-3 text-xs text-[#64748B]">
-                  <div className="p-3 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/60 space-y-1">
+                <div className="space-y-3 text-xs text-[#78685B]">
+                  <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4]/60 space-y-1">
                     <div className="flex items-center justify-between font-bold">
                       <span>Trạng thái hiện tại:</span>
                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${
                         aiStatus.isLiveCall ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                       }`}>
-                        {aiStatus.isLiveCall ? `Live · ${aiStatus.provider || 'OpenAI'} (${aiStatus.activeModel || 'gpt-5-mini'})` : 'Smart NLP Engine'}
+                        {aiStatus.isLiveCall ? `🟢 Live ${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : '⚡ Smart NLP Engine'}
                       </span>
                     </div>
                     {aiStatus.apiKeyMasked && (
@@ -461,15 +498,15 @@ export function AiTutorPage() {
 
                   <form onSubmit={handleSaveApiKey} className="space-y-3">
                     <div>
-                      <label className="block text-xs font-bold text-[#253044] mb-1">
+                      <label className="block text-xs font-bold text-[#202124] mb-1">
                         Nhập OpenAI API Key mới:
                       </label>
                       <input
                         type="password"
-                        placeholder="sk-..."
+                        placeholder="AIzaSy..."
                         value={apiKeyInput}
                         onChange={(e) => setApiKeyInput(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-[#FFFCF7] border border-[#E8E5DF] text-xs font-mono text-[#253044] focus:outline-none focus:border-[#FF7A00]"
+                        className="w-full px-3 py-2 rounded-xl bg-[#FAF8F5] border border-[#DECBB4] text-xs font-mono text-[#202124] focus:outline-none focus:border-[#DA251D]"
                       />
                       <p className="text-[10px] text-stone-400 mt-1">
                         Khóa API được lưu an toàn trong database backend và kiểm tra trực tiếp với OpenAI endpoint.
@@ -487,7 +524,7 @@ export function AiTutorPage() {
                       <button
                         type="submit"
                         disabled={!apiKeyInput.trim() || isConfiguringKey}
-                        className="px-4 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#C2410C] text-white text-xs font-bold disabled:opacity-50 transition-colors shadow-xs cursor-pointer flex items-center gap-1.5"
+                        className="px-4 py-2 rounded-xl bg-[#DA251D] hover:bg-[#89221E] text-white text-xs font-bold disabled:opacity-50 transition-colors shadow-xs cursor-pointer flex items-center gap-1.5"
                       >
                         {isConfiguringKey ? 'Đang kiểm tra...' : 'Lưu & Kích hoạt'}
                       </button>
@@ -506,24 +543,25 @@ export function AiTutorPage() {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="fixed top-20 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#253044] text-white text-xs font-bold shadow-xl border border-[#E8E5DF]/40"
+            className="fixed top-20 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#431914] text-white text-xs font-bold shadow-xl border border-[#DECBB4]/40"
           >
-            <CheckCircle2 size={15} className="text-emerald-400" />
+            <Sparkles size={15} className="text-[#FFCD00] animate-pulse" />
             <span>{toastMessage}</span>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E8E5DF]/60 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#DECBB4]/60 pb-5">
         <div className="space-y-1 text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#FF7A00] text-xs font-black uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#DA251D] text-xs font-black uppercase tracking-wider">
+            <Bot size={14} className="text-[#DA251D]" />
             <span>AI Speaking Partner • 7 Chế Độ Học</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-black text-[#253044] tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-black text-[#202124] tracking-tight">
             Gia Sư AI Tiếng Việt Thông Minh
           </h1>
-          <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#78685B] max-w-2xl">
             Luyện đàm thoại, giải đáp ngữ pháp, trau chuốt câu văn và học văn hóa 3 miền cùng gia sư AI bản xứ 24/7.
           </p>
         </div>
@@ -532,8 +570,9 @@ export function AiTutorPage() {
         <div className="flex items-center gap-3">
           <Link
             to="/ai-scenarios"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] hover:text-[#FF7A00] text-xs font-bold shadow-2xs transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#FFF9EE] border border-[#DECBB4] text-[#202124] hover:text-[#DA251D] text-xs font-bold shadow-2xs transition-all"
           >
+            <Compass size={15} className="text-[#DA251D]" />
             <span>Kịch bản nhập vai tình huống</span>
             <ArrowRight size={13} />
           </Link>
@@ -543,12 +582,12 @@ export function AiTutorPage() {
       {/* Main 2-Column AI Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Sidebar (4 cols on lg ~ 30%): Chat History & Sessions */}
-        <aside className="lg:col-span-4 bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-4 sm:p-5 shadow-sm space-y-4 text-left">
+        <aside className="lg:col-span-4 bg-white/95 backdrop-blur-md rounded-3xl border border-[#DECBB4]/80 p-4 sm:p-5 shadow-sm space-y-4 text-left">
           {/* Top Button: New Chat */}
           <button
             type="button"
             onClick={() => handleCreateNewChat(currentMode)}
-            className="w-full py-3 px-4 rounded-2xl bg-[#FF7A00] hover:bg-[#C2410C] text-white font-black text-xs shadow-[0_3px_0_#C2410C] active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="w-full py-3 px-4 rounded-2xl bg-[#DA251D] hover:bg-[#89221E] text-white font-black text-xs shadow-[0_3px_0_#89221E] active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <Plus size={16} strokeWidth={3} />
             <span>Cuộc trò chuyện mới</span>
@@ -558,21 +597,21 @@ export function AiTutorPage() {
           <div className="relative">
             <Search
               size={15}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B]"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#78685B]"
             />
             <input
               type="text"
               placeholder="Tìm kiếm hội thoại..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#FFFCF7] border border-[#E8E5DF]/70 text-xs text-[#253044] placeholder:text-[#64748B]/60 focus:outline-none focus:border-[#FF7A00] transition-colors"
+              className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#FAF8F5] border border-[#DECBB4]/70 text-xs text-[#202124] placeholder:text-[#78685B]/60 focus:outline-none focus:border-[#DA251D] transition-colors"
             />
           </div>
 
           {/* Sessions List Header */}
-          <div className="flex items-center justify-between text-[11px] font-bold text-[#64748B] px-1 pt-1">
+          <div className="flex items-center justify-between text-[11px] font-bold text-[#78685B] px-1 pt-1">
             <span className="uppercase tracking-wider">Lịch sử hội thoại</span>
-            <span className="bg-[#FFFCF7] px-2 py-0.5 rounded-md border border-[#E8E5DF]/60">
+            <span className="bg-[#FAF8F5] px-2 py-0.5 rounded-md border border-[#DECBB4]/60">
               {sessions.length} phiên
             </span>
           </div>
@@ -590,12 +629,12 @@ export function AiTutorPage() {
                   onClick={() => handleSelectSession(s.id)}
                   className={`group relative p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2 ${
                     isActive
-                      ? 'bg-[#FFF7E8] border-2 border-[#FF7A00] shadow-xs'
-                      : 'bg-[#FFFCF7] border-[#E8E5DF]/60 hover:border-[#FF7A00]/60 hover:bg-white'
+                      ? 'bg-[#FFF9EE] border-2 border-[#DA251D] shadow-xs'
+                      : 'bg-[#FAF8F5] border-[#DECBB4]/60 hover:border-[#DA251D]/60 hover:bg-white'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="w-8 h-8 rounded-xl bg-white border border-[#E8E5DF]/60 flex items-center justify-center text-base shrink-0 shadow-2xs">
+                    <span className="w-8 h-8 rounded-xl bg-white border border-[#DECBB4]/60 flex items-center justify-center text-base shrink-0 shadow-2xs">
                       {sessionMode?.icon || '💬'}
                     </span>
                     <div className="min-w-0">
@@ -609,16 +648,16 @@ export function AiTutorPage() {
                             e.key === 'Enter' && handleSaveRename(e, s.id)
                           }
                           autoFocus
-                          className="px-2 py-0.5 text-xs font-bold bg-white border border-[#FF7A00] rounded-md focus:outline-none w-full"
+                          className="px-2 py-0.5 text-xs font-bold bg-white border border-[#DA251D] rounded-md focus:outline-none w-full"
                           onClick={(e) => e.stopPropagation()}
                         />
                       ) : (
-                        <h4 className="text-xs font-bold text-[#253044] truncate">
+                        <h4 className="text-xs font-bold text-[#202124] truncate">
                           {s.titleVi || s.title}
                         </h4>
                       )}
-                      <div className="flex items-center gap-1.5 text-[10px] text-[#64748B] mt-0.5">
-                        <span className="font-semibold text-[#FF7A00]">
+                      <div className="flex items-center gap-1.5 text-[10px] text-[#78685B] mt-0.5">
+                        <span className="font-semibold text-[#DA251D]">
                           {sessionMode?.name}
                         </span>
                         <span>•</span>
@@ -632,7 +671,7 @@ export function AiTutorPage() {
                     <button
                       type="button"
                       onClick={(e) => handleStartRename(e, s)}
-                      className="p-1.5 rounded-lg text-[#64748B] hover:text-[#253044] hover:bg-white transition-colors"
+                      className="p-1.5 rounded-lg text-[#78685B] hover:text-[#202124] hover:bg-white transition-colors"
                       title="Đổi tên hội thoại"
                     >
                       <Edit3 size={13} />
@@ -641,7 +680,7 @@ export function AiTutorPage() {
                       <button
                         type="button"
                         onClick={(e) => handleDeleteSession(e, s.id)}
-                        className="p-1.5 rounded-lg text-[#64748B] hover:text-red-600 hover:bg-red-50 transition-colors"
+                        className="p-1.5 rounded-lg text-[#78685B] hover:text-red-600 hover:bg-red-50 transition-colors"
                         title="Xóa hội thoại"
                       >
                         <Trash2 size={13} />
@@ -655,9 +694,9 @@ export function AiTutorPage() {
         </aside>
 
         {/* Right Main Column (8 cols on lg ~ 70%): Studio Chat Console */}
-        <main className="lg:col-span-8 bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 shadow-[0_10px_30px_rgba(67,25,20,0.04)] overflow-hidden flex flex-col min-h-[640px] text-left">
+        <main className="lg:col-span-8 bg-white/95 backdrop-blur-md rounded-3xl border border-[#DECBB4]/80 shadow-[0_10px_30px_rgba(67,25,20,0.04)] overflow-hidden flex flex-col min-h-[640px] text-left">
           {/* Top Console Bar with Mode Info & Speed Toggle */}
-          <div className="p-4 sm:p-5 border-b border-[#E8E5DF]/60 bg-gradient-to-r from-[#FFF7E8] via-white to-[#FFF7E8] space-y-3">
+          <div className="p-4 sm:p-5 border-b border-[#DECBB4]/60 bg-gradient-to-r from-[#FFF9EE] via-white to-[#FFF9EE] space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               {/* Mascot Status */}
               <div className="flex items-center gap-3">
@@ -670,7 +709,7 @@ export function AiTutorPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-base font-black text-[#253044]">
+                    <h3 className="text-base font-black text-[#202124]">
                       Hola AI Tutor
                     </h3>
                     <span
@@ -683,7 +722,7 @@ export function AiTutorPage() {
                       {activeModeConfig.badge}
                     </span>
                   </div>
-                  <p className="text-xs text-[#64748B] leading-tight mt-0.5">
+                  <p className="text-xs text-[#78685B] leading-tight mt-0.5">
                     {activeModeConfig.title} — {activeModeConfig.description}
                   </p>
                 </div>
@@ -693,7 +732,7 @@ export function AiTutorPage() {
               <div className="flex items-center gap-2 shrink-0 self-end sm:self-center flex-wrap">
                 <button
                   type="button"
-                  onClick={() => setShowKeyModal(true)}
+                  onClick={() => showToast('AI Tutor đang dùng cấu hình API hệ thống từ backend.')}
                   className={`px-3 py-1 rounded-xl border text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer ${
                     aiStatus.isLiveCall
                       ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
@@ -703,7 +742,7 @@ export function AiTutorPage() {
                 >
                   <span className={`w-2 h-2 rounded-full ${aiStatus.isLiveCall ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
                   <span>{aiStatus.isLiveCall ? `${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : 'Smart NLP Engine'}</span>
-                  
+                  <Zap size={12} className={aiStatus.isLiveCall ? 'text-emerald-600' : 'text-amber-600'} />
                 </button>
 
                 <button
@@ -714,44 +753,69 @@ export function AiTutorPage() {
                     audioFeedback.playTap();
                     showToast(`Tốc độ phát âm: ${newRate}x`);
                   }}
-                  className="px-2.5 py-1 rounded-xl bg-white border border-[#E8E5DF] text-[#FF7A00] text-xs font-bold hover:bg-[#FFF7E8] transition-colors shadow-2xs cursor-pointer"
+                  className="px-2.5 py-1 rounded-xl bg-white border border-[#DECBB4] text-[#DA251D] text-xs font-bold hover:bg-[#FFF9EE] transition-colors shadow-2xs cursor-pointer"
                   title="Chuyển đổi tốc độ phát âm (1.0x Chuẩn / 0.65x Chậm)"
                 >
-                  {speechRate === 0.95 ? '1.0x Chuẩn' : '0.65x Chậm'}
+                  {speechRate === 0.95 ? '⚡ 1.0x Chuẩn' : '🐢 0.65x Chậm'}
                 </button>
               </div>
             </div>
 
-            {/* 7 Modes Horizontal Pill Carousel */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 scrollbar-none">
-              {modes.map((mode) => {
-                const isSelected = mode.id === currentMode;
-                return (
-                  <button
-                    key={mode.id}
-                    type="button"
-                    onClick={() => handleSwitchMode(mode.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#FF7A00] text-white shadow-xs scale-102'
-                        : 'bg-white hover:bg-[#FFFCF7] text-[#253044] border border-[#E8E5DF]/60'
-                    }`}
-                    title={bilingualLabel(mode.description)}
-                  >
-                    <span>{mode.icon}</span>
-                    <span>{mode.name}</span>
-                  </button>
-                );
-              })}
+            {/* Compact mode dropdown */}
+            <div className="tutor-mode-select-row">
+              <label className="tutor-mode-select-label" htmlFor="tutor-mode-select">
+                Chế độ học
+              </label>
+              <div className="tutor-mode-select-wrap">
+                <span className="tutor-mode-select-icon" aria-hidden="true">
+                  {activeModeConfig.icon}
+                </span>
+                <select
+                  id="tutor-mode-select"
+                  className="tutor-mode-select"
+                  value={currentMode}
+                  onChange={(event) => handleSwitchMode(event.target.value)}
+                  aria-label="Chọn chế độ AI Tutor"
+                >
+                  {modes.map((mode) => (
+                    <option key={mode.id} value={mode.id}>
+                      {mode.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <span className="tutor-mode-select-description">
+                {activeModeConfig.description}
+              </span>
             </div>
           </div>
 
           {/* Chat Messages Stream */}
           <div
             ref={chatContainerRef}
-            className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-5 max-h-[520px] bg-gradient-to-b from-[#FFFCF7]/40 via-white to-[#FFFCF7]/40"
+            className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-5 max-h-[520px] bg-gradient-to-b from-[#FAF8F5]/40 via-white to-[#FAF8F5]/40"
           >
-            {currentSession?.messages?.map((msg) => {
+            {!currentSession ? (
+              <div className="h-full min-h-[470px] flex flex-col items-center justify-center text-center px-6">
+                <div className="w-20 h-20 rounded-3xl bg-[#F5E1D8] border border-[#E7B59D] flex items-center justify-center text-4xl shadow-sm mb-4">
+                  💬
+                </div>
+                <h2 className="text-xl font-black text-[#202124] mb-2">
+                  Chọn một cuộc trò chuyện để bắt đầu
+                </h2>
+                <p className="max-w-md text-sm text-[#78685B] leading-relaxed mb-5">
+                  Chọn một phiên trong lịch sử bên trái hoặc tạo cuộc trò chuyện mới để luyện tiếng Việt cùng Hola AI Tutor.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => handleCreateNewChat(currentMode)}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#DA251D] hover:bg-[#89221E] text-white text-xs font-black shadow-sm transition-all cursor-pointer"
+                >
+                  <Plus size={15} strokeWidth={3} />
+                  Cuộc trò chuyện mới
+                </button>
+              </div>
+            ) : currentSession.messages?.map((msg) => {
               const isAi = msg.sender === 'ai';
               const isSpeaking = speakingMessageId === msg.id;
               const isCopied = copiedId === msg.id;
@@ -768,19 +832,28 @@ export function AiTutorPage() {
                 >
                   {/* Left AI Avatar */}
                   {isAi && (
-                    <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-2xs border border-[#E8E5DF]">
+                    <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-2xs border border-[#DECBB4]">
                       <TutorMascotAvatar state={isSpeaking ? 'speaking' : 'idle'} size="tiny" />
                     </div>
                   )}
 
                   {/* Message Bubble Card */}
                   <div
-                    className={`max-w-[85%] sm:max-w-[78%] rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs text-xs sm:text-sm leading-relaxed ${
+                    className={`ai-tutor-message max-w-[85%] sm:max-w-[78%] rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs text-xs sm:text-sm leading-relaxed ${
                       isAi
-                        ? 'bg-white border border-[#E8E5DF]/80 text-[#253044] rounded-tl-sm'
-                        : 'bg-gradient-to-r from-[#FF7A00] to-[#C2410C] text-white rounded-tr-sm shadow-md'
+                        ? 'ai-tutor-message--ai bg-white border border-[#DECBB4]/80 text-[#202124] rounded-tl-sm'
+                        : 'ai-tutor-message--user bg-gradient-to-r from-[#DA251D] to-[#89221E] text-white rounded-tr-sm shadow-md'
                     }`}
                   >
+                    {isAi && (
+                      <div className="ai-tutor-message__label">
+                        <Sparkles size={12} aria-hidden="true" />
+                        <span>Hola AI Tutor</span>
+                        <span className="ai-tutor-message__dot" aria-hidden="true" />
+                        <span>Trợ giảng tiếng Việt</span>
+                      </div>
+                    )}
+
                     {/* Message Body with rich Markdown formatting */}
                     <FormattedMessageText text={msg.text} isAi={isAi} />
 
@@ -801,7 +874,7 @@ export function AiTutorPage() {
                     {isAi && (msg.nativeAlternative || (msg.grammarCheck?.corrected && msg.grammarCheck.corrected !== msg.grammarCheck.original)) && (
                       <div className="mt-2.5 p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-emerald-950 text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-emerald-800">
-                          <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
+                          <Sparkles size={13} className="text-emerald-600 shrink-0" />
                           <span>Cách diễn đạt tự nhiên hơn của người bản xứ:</span>
                         </div>
                         <p className="font-semibold text-emerald-900 leading-relaxed italic">
@@ -812,12 +885,12 @@ export function AiTutorPage() {
 
                     {/* Cultural Nuance Note */}
                     {isAi && msg.culturalNote && (
-                      <div className="mt-2.5 p-3 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] text-xs space-y-1 shadow-2xs">
-                        <div className="flex items-center gap-1.5 font-bold text-[#FF7A00]">
-                          <Compass size={13} className="text-[#EA580C] shrink-0" />
+                      <div className="mt-2.5 p-3 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4] text-[#431914] text-xs space-y-1 shadow-2xs">
+                        <div className="flex items-center gap-1.5 font-bold text-[#DA251D]">
+                          <span>🏮</span>
                           <span>Lưu ý văn hóa & Ngữ cảnh ứng xử:</span>
                         </div>
-                        <p className="text-[#253044]/90 leading-relaxed">
+                        <p className="text-[#431914]/90 leading-relaxed">
                           {msg.culturalNote}
                         </p>
                       </div>
@@ -833,8 +906,8 @@ export function AiTutorPage() {
 
                     {/* Useful Vocabulary Cards extracted from message */}
                     {msg.savedWords && msg.savedWords.length > 0 && (
-                      <div className="mt-3 pt-3 border-t border-[#E8E5DF]/40 space-y-2">
-                        <div className="flex items-center gap-1.5 text-[11px] font-black text-[#FF7A00]">
+                      <div className="mt-3 pt-3 border-t border-[#DECBB4]/40 space-y-2">
+                        <div className="flex items-center gap-1.5 text-[11px] font-black text-[#DA251D]">
                           <BookOpen size={13} />
                           <span>Từ vựng hữu ích gợi ý:</span>
                         </div>
@@ -846,12 +919,12 @@ export function AiTutorPage() {
                               onClick={() =>
                                 handleSaveWordToVocabulary(item.word, item.meaning)
                               }
-                              className="px-2.5 py-1 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF0DC] border border-[#E8E5DF] text-[#253044] text-[11px] font-bold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer group/vocab"
+                              className="px-2.5 py-1 rounded-xl bg-[#FFF9EE] hover:bg-[#F5E1D8] border border-[#DECBB4] text-[#431914] text-[11px] font-bold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer group/vocab"
                               title={`Lưu từ "${item.word}" vào sổ từ vựng`}
                             >
                               <BookmarkPlus
                                 size={12}
-                                className="text-[#FF7A00] group-hover/vocab:scale-115 transition-transform"
+                                className="text-[#DA251D] group-hover/vocab:scale-115 transition-transform"
                               />
                               <span>
                                 <strong>{item.word}</strong>: {item.meaning}
@@ -864,16 +937,16 @@ export function AiTutorPage() {
 
                     {/* Action Bar for AI Messages */}
                     {isAi && (
-                      <div className="mt-3 pt-2.5 border-t border-[#E8E5DF]/40 flex items-center justify-between gap-2 text-[11px]">
+                      <div className="mt-3 pt-2.5 border-t border-[#DECBB4]/40 flex items-center justify-between gap-2 text-[11px]">
                         <div className="flex items-center gap-2">
                           {/* Speak Button */}
                           <button
                             type="button"
-                            onClick={() => handleSpeak(msg.id, msg.text)}
+                            onClick={() => handleSpeak(msg.id, getDisplayMessageText(msg.text))}
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                               isSpeaking
                                 ? 'bg-amber-100 text-amber-800 border border-amber-300'
-                                : 'bg-[#FFFCF7] hover:bg-[#FFF0DC] text-[#FF7A00] border border-[#E8E5DF]/60'
+                                : 'bg-[#FAF8F5] hover:bg-[#F5E1D8] text-[#DA251D] border border-[#DECBB4]/60'
                             }`}
                             title={isSpeaking ? 'Dừng phát âm' : 'Nghe giọng đọc tiếng Việt'}
                           >
@@ -898,7 +971,7 @@ export function AiTutorPage() {
                                     repeat: Infinity,
                                     delay: i * 0.1,
                                   }}
-                                  className="w-1 bg-[#FF7A00] rounded-full"
+                                  className="w-1 bg-[#DA251D] rounded-full"
                                 />
                               ))}
                             </div>
@@ -908,8 +981,8 @@ export function AiTutorPage() {
                         {/* Copy Button */}
                         <button
                           type="button"
-                          onClick={() => handleCopy(msg.id, msg.text)}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[#64748B] hover:text-[#253044] hover:bg-[#FFFCF7] transition-colors cursor-pointer"
+                          onClick={() => handleCopy(msg.id, getDisplayMessageText(msg.text))}
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[#78685B] hover:text-[#202124] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
                           title="Sao chép nội dung tin nhắn"
                         >
                           {isCopied ? (
@@ -930,7 +1003,7 @@ export function AiTutorPage() {
 
                   {/* Right User Avatar */}
                   {!isAi && (
-                    <div className="w-9 h-9 rounded-xl bg-[#253044] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
+                    <div className="w-9 h-9 rounded-xl bg-[#431914] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
                       <User size={16} />
                     </div>
                   )}
@@ -945,22 +1018,22 @@ export function AiTutorPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex items-start gap-3"
               >
-                <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-2xs border border-[#E8E5DF]">
+                <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-2xs border border-[#DECBB4]">
                   <TutorMascotAvatar state="thinking" size="tiny" />
                 </div>
-                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-xs flex items-center gap-3">
+                <div className="p-4 rounded-2xl bg-white border border-[#DECBB4]/80 shadow-xs flex items-center gap-3">
                   <div className="flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-[#FF7A00] animate-bounce" />
+                    <span className="w-2 h-2 rounded-full bg-[#DA251D] animate-bounce" />
                     <span
-                      className="w-2 h-2 rounded-full bg-[#FF7A00] animate-bounce"
+                      className="w-2 h-2 rounded-full bg-[#DA251D] animate-bounce"
                       style={{ animationDelay: '0.15s' }}
                     />
                     <span
-                      className="w-2 h-2 rounded-full bg-[#FF7A00] animate-bounce"
+                      className="w-2 h-2 rounded-full bg-[#DA251D] animate-bounce"
                       style={{ animationDelay: '0.3s' }}
                     />
                   </div>
-                  <span className="text-xs font-bold text-[#64748B]">
+                  <span className="text-xs font-bold text-[#78685B]">
                     Hola AI đang suy nghĩ và chuẩn bị câu trả lời...
                   </span>
                 </div>
@@ -969,8 +1042,9 @@ export function AiTutorPage() {
           </div>
 
           {/* Quick Prompts Chips Carousel */}
-          <div className="p-3 bg-[#FFFCF7] border-t border-[#E8E5DF]/60 flex items-center gap-2 overflow-x-auto scrollbar-none">
-            <span className="text-[11px] font-black uppercase text-[#FF7A00] shrink-0 pl-1 flex items-center gap-1">
+          <div className="p-3 bg-[#FAF8F5] border-t border-[#DECBB4]/60 flex items-center gap-2 overflow-x-auto scrollbar-none">
+            <span className="text-[11px] font-black uppercase text-[#DA251D] shrink-0 pl-1 flex items-center gap-1">
+              <Sparkles size={12} />
               <span>Gợi ý:</span>
             </span>
             {activeModeConfig.quickPrompts.map((prompt, idx) => (
@@ -979,7 +1053,7 @@ export function AiTutorPage() {
                 type="button"
                 onClick={() => handleSendMessage(prompt)}
                 disabled={isSending}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF]/70 hover:border-[#FF7A00] text-xs font-semibold text-[#253044] shrink-0 transition-all shadow-2xs disabled:opacity-50 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#FFF9EE] border border-[#DECBB4]/70 hover:border-[#DA251D] text-xs font-semibold text-[#202124] shrink-0 transition-all shadow-2xs disabled:opacity-50 cursor-pointer"
               >
                 {prompt}
               </button>
@@ -987,16 +1061,16 @@ export function AiTutorPage() {
           </div>
 
           {/* Input Area Bar */}
-          <form onSubmit={handleSubmit} className="p-3 sm:p-4 bg-white border-t border-[#E8E5DF]/60 flex items-center gap-2 sm:gap-3">
+          <form onSubmit={handleSubmit} className="p-3 sm:p-4 bg-white border-t border-[#DECBB4]/60 flex items-center gap-2 sm:gap-3">
             {/* Voice Input Mic Button */}
             <button
               type="button"
               onClick={handleToggleVoiceInput}
               disabled={isSending}
-              className={`p-3 rounded-2xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+              className={`h-10 w-10 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
                 isListening
                   ? 'bg-red-600 text-white animate-pulse ring-4 ring-red-200'
-                  : 'bg-[#FFFCF7] hover:bg-[#FFF0DC] text-[#FF7A00] border border-[#E8E5DF]'
+                  : 'bg-[#FAF8F5] hover:bg-[#F5E1D8] text-[#DA251D] border border-[#DECBB4]'
               }`}
               title={
                 isListening
@@ -1020,16 +1094,16 @@ export function AiTutorPage() {
               placeholder={bilingualLabel(activeModeConfig.placeholder)}
               rows={1}
               disabled={isSending || !currentSession}
-              className="flex-1 py-3 px-4 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/80 text-xs sm:text-sm text-[#253044] placeholder:text-[#64748B]/60 focus:outline-none focus:border-[#FF7A00] focus:bg-white resize-none transition-all"
+              className="h-10 min-h-0 max-h-10 flex-1 py-2 px-4 rounded-xl bg-[#FAF8F5] border border-[#DECBB4]/80 text-xs sm:text-sm text-[#202124] placeholder:text-[#78685B]/60 focus:outline-none focus:border-[#DA251D] focus:bg-white resize-none transition-all"
             />
 
             {/* Send Button */}
             <button
               type="submit"
               disabled={!inputText.trim() || isSending || !currentSession}
-              className={`p-3 rounded-2xl flex items-center justify-center transition-all shrink-0 cursor-pointer ${
+              className={`h-10 w-10 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all shrink-0 cursor-pointer ${
                 inputText.trim() && !isSending && currentSession
-                  ? 'bg-[#FF7A00] hover:bg-[#C2410C] text-white shadow-[0_3px_0_#C2410C] active:translate-y-0.5 active:shadow-none'
+                  ? 'bg-[#DA251D] hover:bg-[#89221E] text-white shadow-[0_3px_0_#89221E] active:translate-y-0.5 active:shadow-none'
                   : 'bg-stone-200 text-stone-400 cursor-not-allowed'
               }`}
               title="Gửi tin nhắn (Enter)"
