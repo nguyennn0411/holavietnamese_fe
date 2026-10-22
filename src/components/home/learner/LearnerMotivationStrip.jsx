@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 /**
  * Compact learning motivation strip for Authenticated Learner Dashboard.
@@ -18,9 +18,6 @@ export function LearnerMotivationStrip({ continueTo }) {
       aria-label={t('motivationStrip.ariaLabel', { defaultValue: 'Daily learning focus' })}
     >
       <div className="ld-motivation-strip__main">
-        <span className="ld-motivation-strip__icon" aria-hidden="true">
-          <BookOpen size={16} strokeWidth={2.4} />
-        </span>
         <div className="ld-motivation-strip__text">
           <strong className="ld-motivation-strip__title">
             {t('motivationStrip.title', { defaultValue: 'Ready for your next Vietnamese lesson?' })}

@@ -4,7 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-route
 import { AuthProvider } from '@/application/context/AuthContext';
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
-import { ProtectedRoute } from '@/components/common/ProtectedRoute';
+import { RequireAuth } from '@/components/common/RequireAuth';
 import { AdminRoute } from '@/components/common/AdminRoute';
 import { ROUTES } from '@/constants/routes';
 const AppToaster = lazy(() => import('@/components/common/AppToaster'));
@@ -17,6 +17,7 @@ import { AdminLayout } from '@/layouts/AdminLayout';
 const HomePage = lazy(() => import('@/pages/HomePage').then(module => ({ default: module.HomePage })));
 const LoginPage = lazy(() => import('@/pages/LoginPage').then(module => ({ default: module.LoginPage })));
 const RegisterPage = lazy(() => import('@/pages/RegisterPage').then(module => ({ default: module.RegisterPage })));
+import { AuthRequiredPage } from '@/pages/auth/AuthRequiredPage';
 const VerifyEmailPage = lazy(() => import('@/pages/auth/VerifyEmailPage').then(module => ({ default: module.VerifyEmailPage })));
 const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage').then(module => ({ default: module.ForgotPasswordPage })));
 const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })));
@@ -79,11 +80,6 @@ const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage').t
 const AdminVocabularyPage = lazy(() => import('@/pages/admin/AdminVocabularyPage').then(module => ({ default: module.AdminVocabularyPage })));
 const AdminDestinationsPage = lazy(() => import('@/pages/admin/AdminDestinationsPage').then(module => ({ default: module.AdminDestinationsPage })));
 const AdminDestinationDetailPage = lazy(() => import('@/pages/admin/AdminDestinationDetailPage').then(module => ({ default: module.AdminDestinationDetailPage })));
-const AdminJourneyPage = lazy(() => import('@/pages/admin/AdminJourneyPage').then(module => ({ default: module.AdminJourneyPage })));
-const AdminVocabularyTopicsPage = lazy(() =>
-  import('@/pages/admin/AdminVocabularyTopicsPage')
-    .then((module) => ({ default: module.AdminVocabularyTopicsPage }))
-);
 // Admin Pages (Người 4: Văn hóa & AI)
 const AdminCultureListPage = lazy(() => import('@/pages/admin/AdminCultureListPage').then(module => ({ default: module.AdminCultureListPage })));
 const AdminCultureEditPage = lazy(() => import('@/pages/admin/AdminCultureEditPage').then(module => ({ default: module.AdminCultureEditPage })));
@@ -103,6 +99,7 @@ const QuizAttemptPage = lazy(() => import('@/pages/quiz/QuizPages').then(module 
 const QuizResultPage = lazy(() => import('@/pages/quiz/QuizPages').then(module => ({ default: module.QuizResultPage })));
 const AdminContentListPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminContentListPage })));
 const AdminCourseBuilderPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminCourseBuilderPage })));
+const AdminCourseCreatePage = lazy(() => import('@/components/admin/CourseStudio').then(module => ({ default: module.AdminCourseCreatePage })));
 const AdminLessonBuilderPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminLessonBuilderPage })));
 const AdminCoursePreviewPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminCoursePreviewPage })));
 const AdminLessonPreviewPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminLessonPreviewPage })));
@@ -128,15 +125,17 @@ function App() {
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
             <Route path={ROUTES.SIGNUP} element={<RegisterPage />} />
             <Route path={ROUTES.WELCOME} element={<WelcomePage />} />
-            <Route path={ROUTES.ONBOARDING} element={<Navigate to="/onboarding/reason" replace />} />
-            <Route path="/onboarding/reason" element={<ReasonPage />} />
-            <Route path="/onboarding/level" element={<LevelPage />} />
-            <Route path="/onboarding/benefits" element={<BenefitsPage />} />
-            <Route path="/onboarding/daily-goal" element={<DailyGoalPage />} />
-            <Route path="/onboarding/learning-path" element={<LearningPathPage />} />
-            <Route path="/onboarding/first-lesson" element={<FirstLessonPage />} />
-            <Route path="/onboarding/placement-test" element={<PlacementTestPage />} />
-            <Route path="/onboarding/completed" element={<CompletionPage />} />
+            <Route element={<RequireAuth fallbackFeature="learning" />}>
+              <Route path={ROUTES.ONBOARDING} element={<Navigate to="/onboarding/reason" replace />} />
+              <Route path="/onboarding/reason" element={<ReasonPage />} />
+              <Route path="/onboarding/level" element={<LevelPage />} />
+              <Route path="/onboarding/benefits" element={<BenefitsPage />} />
+              <Route path="/onboarding/daily-goal" element={<DailyGoalPage />} />
+              <Route path="/onboarding/learning-path" element={<LearningPathPage />} />
+              <Route path="/onboarding/first-lesson" element={<FirstLessonPage />} />
+              <Route path="/onboarding/placement-test" element={<PlacementTestPage />} />
+              <Route path="/onboarding/completed" element={<CompletionPage />} />
+            </Route>
             <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
             <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
             <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
@@ -147,37 +146,41 @@ function App() {
             {/* Learner Main Layout */}
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<HomePage />} />
-              <Route path={ROUTES.EDTECH_DASHBOARD} element={<DashboardScreen />} />
-              <Route path={ROUTES.EDTECH_VOCABULARY} element={<Navigate to={ROUTES.VOCABULARY} replace />} />
-              <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
               <Route path={ROUTES.COURSES} element={<CourseListPage />} />
               <Route path={ROUTES.ALPHABET} element={<AlphabetPage />} />
               <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
-              <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
-              <Route path={ROUTES.VOCABULARY} element={<VocabularyCatalogPage />} />
-              <Route path={ROUTES.VOCABULARY_CATALOG_DETAIL} element={<VocabularyDetailPage />} />
-              <Route path={ROUTES.VOCABULARY_NOTEBOOK} element={<VocabularyNotebookPage />} />
-              <Route path={ROUTES.VOCABULARY_NOTEBOOK_DETAIL} element={<VocabularyNotebookDetailPage />} />
-              <Route path={ROUTES.VOCABULARY_REVIEW} element={<VocabularyReviewPage />} />
-              <Route path={ROUTES.REGIONAL_VIETNAMESE} element={<RegionalVietnamesePage />} />
-              <Route path={ROUTES.EXPLORE} element={<ExploreVietnamPage />} />
-              <Route path={ROUTES.DESTINATION_DETAIL} element={<DestinationDetailPage />} />
-              <Route path={ROUTES.EXPLORE_VIETNAM} element={<ExploreVietnamPage />} />
-              <Route path={ROUTES.LEARNER_DESTINATION_DETAIL} element={<DestinationDetailPage />} />
               <Route path={ROUTES.BLOG} element={<BlogHomePage />} />
               <Route path={ROUTES.BLOG_DETAIL} element={<BlogDetailPage />} />
+              <Route path={ROUTES.LOGIN_REQUIRED} element={<AuthRequiredPage />} />
+              <Route path={ROUTES.AUTH_REQUIRED} element={<AuthRequiredPage />} />
 
-              {/* Văn hóa & AI Tutor & Roleplay (Người 4) */}
-              <Route path={ROUTES.CULTURE} element={<CultureExplorePage />} />
-              <Route path={ROUTES.CULTURE_DETAIL} element={<CultureDetailPage />} />
-              <Route path={ROUTES.AI_TUTOR} element={<AiTutorPage />} />
-              <Route path={ROUTES.AI_SCENARIOS} element={<ScenarioListPage />} />
-              <Route path={ROUTES.AI_SCENARIO_DETAIL} element={<ScenarioDetailPage />} />
-              <Route path={ROUTES.AI_ROLEPLAY} element={<RoleplaySessionPage />} />
-              <Route path={ROUTES.AI_SESSION_RESULT} element={<RoleplayResultPage />} />
+              {/* Protected Features: AI Tutor, Từ vựng, Khám phá Việt Nam, Văn hóa & Học viên */}
+              <Route element={<RequireAuth />}>
+                <Route path={ROUTES.EDTECH_DASHBOARD} element={<DashboardScreen />} />
+                <Route path={ROUTES.EDTECH_VOCABULARY} element={<Navigate to={ROUTES.VOCABULARY} replace />} />
+                <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
+                <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
+                <Route path={ROUTES.VOCABULARY} element={<VocabularyCatalogPage />} />
+                <Route path={ROUTES.VOCABULARY_CATALOG_DETAIL} element={<VocabularyDetailPage />} />
+                <Route path={ROUTES.VOCABULARY_NOTEBOOK} element={<VocabularyNotebookPage />} />
+                <Route path={ROUTES.VOCABULARY_NOTEBOOK_DETAIL} element={<VocabularyNotebookDetailPage />} />
+                <Route path={ROUTES.VOCABULARY_REVIEW} element={<VocabularyReviewPage />} />
+                <Route path={ROUTES.REGIONAL_VIETNAMESE} element={<RegionalVietnamesePage />} />
+                <Route path={ROUTES.EXPLORE} element={<ExploreVietnamPage />} />
+                <Route path={ROUTES.DESTINATION_DETAIL} element={<DestinationDetailPage />} />
+                <Route path={ROUTES.EXPLORE_VIETNAM} element={<ExploreVietnamPage />} />
+                <Route path={ROUTES.LEARNER_DESTINATION_DETAIL} element={<DestinationDetailPage />} />
 
-              {/* Protected Learner Routes */}
-              <Route element={<ProtectedRoute />}>
+                {/* Văn hóa & AI Tutor & Roleplay (Người 4) */}
+                <Route path={ROUTES.CULTURE} element={<CultureExplorePage />} />
+                <Route path={ROUTES.CULTURE_DETAIL} element={<CultureDetailPage />} />
+                <Route path={ROUTES.AI_TUTOR} element={<AiTutorPage />} />
+                <Route path={ROUTES.AI_SCENARIOS} element={<ScenarioListPage />} />
+                <Route path={ROUTES.AI_SCENARIO_DETAIL} element={<ScenarioDetailPage />} />
+                <Route path={ROUTES.AI_ROLEPLAY} element={<RoleplaySessionPage />} />
+                <Route path={ROUTES.AI_SESSION_RESULT} element={<RoleplayResultPage />} />
+
+                {/* Protected Learner Routes */}
                 <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
                 <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
                 <Route path={ROUTES.PROGRESS} element={<LearningProgressPage />} />
@@ -197,6 +200,7 @@ function App() {
             <Route element={<AdminRoute />}>
               <Route element={<AdminLayout />}>
                 <Route path={ROUTES.ADMIN_COURSES} element={<AdminContentListPage kind="courses" />} />
+                <Route path={ROUTES.ADMIN_COURSE_CREATE} element={<AdminCourseCreatePage />} />
                 <Route path={ROUTES.ADMIN_COURSE_BUILDER} element={<AdminCourseBuilderPage />} />
                 <Route path={ROUTES.ADMIN_COURSE_PREVIEW} element={<AdminCoursePreviewPage />} />
                 <Route path={ROUTES.ADMIN_LESSONS} element={<AdminContentListPage kind="lessons" />} />
@@ -212,7 +216,7 @@ function App() {
                 <Route path={ROUTES.ADMIN_IMPORT_HISTORY} element={<AdminImportHistoryPage />} />
                 <Route path={ROUTES.ADMIN_DESTINATIONS} element={<AdminDestinationsPage />} />
                 <Route path={ROUTES.ADMIN_DESTINATION_DETAIL} element={<AdminDestinationDetailPage />} />
-                <Route path={ROUTES.ADMIN_JOURNEY} element={<AdminJourneyPage />} />
+                <Route path={ROUTES.ADMIN_JOURNEY} element={<Navigate to={ROUTES.ADMIN_DESTINATIONS} replace />} />
                 <Route path={ROUTES.ADMIN} element={<AdminDashboardPage />} />
                 <Route path={ROUTES.ADMIN_USERS} element={<AdminUsersPage />} />
                 <Route path={ROUTES.ADMIN_USER_DETAIL} element={<AdminUserDetailPage />} />
@@ -221,7 +225,6 @@ function App() {
                 <Route path={ROUTES.ADMIN_XP_RULES} element={<AdminXpRulesPage />} />
                 <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<AdminAuditLogsPage />} />
                 <Route path={ROUTES.ADMIN_SETTINGS} element={<AdminSettingsPage />} />
-                <Route path={ROUTES.ADMIN_VOCABULARY_TOPICS} element={<AdminVocabularyTopicsPage />} />
 
                 {/* Admin Văn hóa & AI (Người 4) */}
                 <Route path={ROUTES.ADMIN_CULTURE} element={<AdminCultureListPage />} />

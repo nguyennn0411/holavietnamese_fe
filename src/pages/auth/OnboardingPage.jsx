@@ -176,7 +176,7 @@ export function OnboardingPage() {
           {step === 4 && (
             <div>
               <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '0 0 8px 0' }}><BilingualText>{"Mục tiêu thời gian mỗi ngày?"}</BilingualText></h2>
-              <p style={{ color: 'var(--color-forest)', marginBottom: '20px' }}><BilingualText>{"Chỉ cần vài phút kiên trì mỗi ngày để tích lũy XP và duy trì chuỗi Streak rực cháy 🔥."}</BilingualText></p>
+              <p style={{ color: 'var(--color-forest)', marginBottom: '20px' }}><BilingualText>{"Chỉ cần vài phút kiên trì mỗi ngày để tích lũy XP và duy trì chuỗi Streak rực cháy."}</BilingualText></p>
 
               <label className="auth-field" style={{ marginBottom: 18 }}>
                 <span className="auth-label"><BilingualText>{"Quốc gia"}</BilingualText></span>
@@ -210,7 +210,7 @@ export function OnboardingPage() {
                   onClick={handleFinish}
                   disabled={loading}
                 >
-                  <BilingualText>{loading ? 'Đang tạo lộ trình…' : 'Bắt đầu học ngay 🚀'}</BilingualText>
+                  <BilingualText>{loading ? 'Đang tạo lộ trình…' : 'Bắt đầu học ngay'}</BilingualText>
                 </button>
               </div>
             </div>

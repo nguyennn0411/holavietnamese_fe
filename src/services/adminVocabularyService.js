@@ -1,20 +1,18 @@
 import axiosClient from '@/infrastructure/api/axiosClient';
 
 const resultOf = (response) => response?.result ?? response;
+const paramsOf = filters => Object.fromEntries(['keyword', 'status', 'partOfSpeech', 'page', 'size']
+  .filter(key => filters[key] !== '' && filters[key] != null).map(key => [key, filters[key]]));
 
 export const adminVocabularyService = {
   async search(filters = {}, options = {}) {
-    return resultOf(await axiosClient.get('/api/admin/vocabulary/search', { ...options, params: Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== '' && value != null)) }));
+    return resultOf(await axiosClient.get('/api/admin/vocabulary/search', { ...options, params: paramsOf(filters) }));
   },
   async list(filters = {}, options = {}) {
     return resultOf(
       await axiosClient.get('/api/admin/vocabulary', {
         ...options,
-        params: Object.fromEntries(
-          Object.entries(filters).filter(
-            ([, value]) => value !== '' && value != null
-          )
-        ),
+        params: paramsOf(filters),
       })
     );
   },
@@ -43,35 +41,4 @@ export const adminVocabularyService = {
     );
   },
 
-  async getTopics(options = {}) {
-    return resultOf(
-      await axiosClient.get('/api/admin/vocabulary-topics', {
-        ...options,
-      })
-    );
-  },
-
-  async getTopic(id, options = {}) {
-  return resultOf(
-    await axiosClient.get(`/api/admin/vocabulary-topics/${id}`, {
-      ...options,
-    })
-  );
-},
-
-async createTopic(data, options = {}) {
-  return resultOf(
-    await axiosClient.post('/api/admin/vocabulary-topics', data, {
-      ...options,
-    })
-  );
-},
-
-async updateTopic(id, data, options = {}) {
-  return resultOf(
-    await axiosClient.put(`/api/admin/vocabulary-topics/${id}`, data, {
-      ...options,
-    })
-  );
-},
 };

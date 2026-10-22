@@ -58,7 +58,7 @@ export function AdminAiScenariosPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-          <Link to="/admin/ai-settings" className="button secondary" style={{ fontSize: '13px' }}><BilingualText>{"🤖 Cấu hình mô hình AI"}</BilingualText></Link>
+          <Link to="/admin/ai-settings" className="button secondary" style={{ fontSize: '13px' }}><BilingualText>{"Cấu hình mô hình AI"}</BilingualText></Link>
           <Link to="/admin/ai-scenarios/new" className="button" style={{ fontSize: '13px' }}><BilingualText>{"+ Tạo kịch bản mới"}</BilingualText></Link>
         </div>
       </div>
@@ -75,12 +75,12 @@ export function AdminAiScenariosPage() {
 
           <select value={topicFilter} onChange={e => setTopicFilter(e.target.value)}>
             <option value="all">{vietnameseLabel("Tất cả chủ đề")}</option>
-            <option value="dining">{vietnameseLabel("🍜 Ẩm thực & Quán xá")}</option>
-            <option value="shopping">{vietnameseLabel("🛍️ Mua sắm & Mặc cả")}</option>
-            <option value="travel">{vietnameseLabel("🛵 Di chuyển & Du lịch")}</option>
-            <option value="hospitality">{vietnameseLabel("🏨 Khách sạn & Nghỉ dưỡng")}</option>
-            <option value="social">{vietnameseLabel("🏡 Gia đình & Bạn bè")}</option>
-            <option value="work">{vietnameseLabel("💼 Giao tiếp công sở")}</option>
+            <option value="dining">{vietnameseLabel("Ẩm thực & Quán xá")}</option>
+            <option value="shopping">{vietnameseLabel("Mua sắm & Mặc cả")}</option>
+            <option value="travel">{vietnameseLabel("Di chuyển & Du lịch")}</option>
+            <option value="hospitality">{vietnameseLabel("Khách sạn & Nghỉ dưỡng")}</option>
+            <option value="social">{vietnameseLabel("Gia đình & Bạn bè")}</option>
+            <option value="work">{vietnameseLabel("Giao tiếp công sở")}</option>
           </select>
 
           <select value={levelFilter} onChange={e => setLevelFilter(e.target.value)}>

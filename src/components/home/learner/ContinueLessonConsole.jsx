@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Volume2, Play, CheckCircle2, ArrowRight } from 'lucide-react';
@@ -15,7 +15,7 @@ export function ContinueLessonConsole({ currentLesson }) {
   return (
     <motion.section
       whileHover={{ y: -2 }}
-      className="relative overflow-hidden rounded-3xl bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 p-6 sm:p-8 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-6 text-left"
+      className="relative overflow-hidden rounded-3xl bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/70 p-6 sm:p-8 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-6 text-left"
     >
       {/* Subtle Heritage Dong Son Watermark Inlay */}
       <div
@@ -32,14 +32,14 @@ export function ContinueLessonConsole({ currentLesson }) {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#24382B] text-[#FFF9EE] text-[10px] font-black uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-md bg-[#24382B] text-[#FFF7E8] text-[10px] font-black uppercase tracking-wider">
               {courseTitle}
             </span>
-            <span className="text-[11px] font-bold text-[#A62A24]">
+            <span className="text-[11px] font-bold text-[#EA580C]">
               Chương 1 • Bài 3
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-[#431914] leading-snug">
+          <h2 className="text-xl sm:text-2xl font-black text-[#253044] leading-snug">
             {lessonTitle}
           </h2>
         </div>
@@ -47,7 +47,7 @@ export function ContinueLessonConsole({ currentLesson }) {
         <button
           type="button"
           onClick={() => speakVietnamese('Cho tôi một ly cà phê sữa đá ít đường nhé')}
-          className="!min-h-0 !min-w-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F5E1D8] text-[#A62A24] hover:bg-[#A62A24] hover:text-white transition-all text-xs font-bold shrink-0 cursor-pointer"
+          className="!min-h-0 !min-w-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFF0DC] text-[#EA580C] hover:bg-[#EA580C] hover:text-white transition-all text-xs font-bold shrink-0 cursor-pointer"
         >
           <Volume2 className="w-4 h-4 shrink-0" strokeWidth={2.2} />
           <span>Nghe câu mẫu</span>
@@ -55,24 +55,24 @@ export function ContinueLessonConsole({ currentLesson }) {
       </div>
 
       {/* Focal Sentence Card */}
-      <div className="p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#DECBB4]/50 flex items-center justify-between text-xs sm:text-sm">
-        <p className="text-[#431914] font-medium italic">
+      <div className="p-3.5 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/50 flex items-center justify-between text-xs sm:text-sm">
+        <p className="text-[#253044] font-medium italic">
           “Cho tôi một ly cà phê sữa đá ít đường nhé!”
         </p>
-        <span className="text-[11px] text-[#78685B] shrink-0 ml-2">
+        <span className="text-[11px] text-[#64748B] shrink-0 ml-2">
           Iced milk coffee with less sugar
         </span>
       </div>
 
       {/* Progress Bar with Milestones */}
       <div className="space-y-1.5">
-        <div className="flex justify-between text-xs text-[#78685B] font-semibold">
+        <div className="flex justify-between text-xs text-[#64748B] font-semibold">
           <span>Tiến độ bài học: <strong>{progressPercent}%</strong></span>
           <span>Còn 2 câu hỏi để hoàn thành</span>
         </div>
         <div className="w-full bg-[#EEE3D1] h-3 rounded-full overflow-hidden p-0.5">
           <div
-            className="bg-[#A62A24] h-full rounded-full transition-all duration-500 shadow-xs"
+            className="bg-[#EA580C] h-full rounded-full transition-all duration-500 shadow-xs"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -84,7 +84,7 @@ export function ContinueLessonConsole({ currentLesson }) {
           <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
           <span className="truncate font-semibold">1. Flashcard Phở</span>
         </div>
-        <div className="p-2.5 rounded-xl bg-[#FFF9EE] border-2 border-[#A62A24] text-[#A62A24] text-xs flex items-center gap-2 shadow-xs">
+        <div className="p-2.5 rounded-xl bg-[#FFF7E8] border-2 border-[#EA580C] text-[#EA580C] text-xs flex items-center gap-2 shadow-xs">
           <Play size={14} fill="currentColor" className="shrink-0" />
           <span className="truncate font-bold">2. Ghép Cà Phê</span>
         </div>
@@ -95,16 +95,16 @@ export function ContinueLessonConsole({ currentLesson }) {
       </div>
 
       {/* Action Bar */}
-      <div className="pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-[#DECBB4]/40">
+      <div className="pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-[#E8E5DF]/40">
         <Link
           to="/edtech/lesson"
-          className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-[#A62A24] hover:bg-[#89221E] text-white font-black text-sm shadow-[0_4px_0_#89221E] active:translate-y-1 active:shadow-none transition-all hover:scale-102"
+          className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-black text-sm shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-none transition-all hover:scale-102"
         >
           <Play size={16} fill="currentColor" />
           <span>HỌC TIẾP NGAY (5 PHÚT)</span>
           <ArrowRight size={16} />
         </Link>
-        <Link to="/courses" className="text-xs font-bold text-[#A62A24] hover:underline">
+        <Link to="/courses" className="text-xs font-bold text-[#EA580C] hover:underline">
           Xem toàn bộ giáo trình →
         </Link>
       </div>

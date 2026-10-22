@@ -23,9 +23,9 @@ export function LearnerHeroCarousel({ continueTo }) {
   const unlockTimer = useRef(null);
 
   const slides = [
-    { key: 'buncha', image: bunChaImage, to: continueTo || '/courses' },
+    { key: 'buncha', image: bunChaImage, to: continueTo || '/edtech/dashboard' },
     { key: 'mausoleum', image: mausoleumImage, to: '/culture' },
-    { key: 'tet', image: tetImage, to: '/courses' },
+    { key: 'tet', image: tetImage, to: continueTo || '/edtech/dashboard' },
     { key: 'midAutumn', image: midAutumnImage, to: '/ai-tutor' },
   ];
 

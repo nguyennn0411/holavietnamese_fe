@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'motion/react';
 import { audioFeedback } from '@/utils/audioFeedback';
 
@@ -160,10 +160,10 @@ export function Culture3DElements({ slideIndex = 0 }) {
             {item.icon}
           </span>
           <div className="text-left">
-            <span className="block text-xs font-black text-[#202124] leading-tight">
+            <span className="block text-xs font-black text-[#253044] leading-tight">
               {item.label}
             </span>
-            <span className="block text-[10px] text-[#78685B] font-semibold leading-none">
+            <span className="block text-[10px] text-[#64748B] font-semibold leading-none">
               {item.sub}
             </span>
           </div>

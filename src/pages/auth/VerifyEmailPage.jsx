@@ -1,104 +1,246 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { AuthHeader } from '@/components/auth/AuthHeader';
-import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { learnerService } from '@/services/learnerService';
-import dongSonBg from '@/assets/images/dongson_heritage.png';
+import { AuthFooter } from '@/components/auth/AuthFooter';
+import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { MailCheck, RefreshCw, ShieldCheck } from 'lucide-react';
+import authApi from '@/infrastructure/api/authApi';
+import {
+  clearPendingVerification,
+  getDevelopmentOtp,
+  getRemainingCooldown,
+  getVerificationErrorMessage,
+  isSuccessfulAuthResponse,
+  isValidOtp,
+  loadPostVerificationPath,
+  loadPendingVerificationEmail,
+  sanitizeOtp,
+  savePendingVerificationEmail,
+  startResendCooldown,
+} from '@/features/auth/emailVerificationFlow';
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function VerifyEmailPage() {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
   const location = useLocation();
-  const [email, setEmail] = useState(location.state?.email || '');
-  const [status, setStatus] = useState({ loading: false, success: false, message: '', error: '' });
   const navigate = useNavigate();
+  const redirectTimerRef = useRef(null);
+  const [email, setEmail] = useState(() => location.state?.email || loadPendingVerificationEmail());
+  const [otp, setOtp] = useState('');
+  const [otpError, setOtpError] = useState('');
+  const [formError, setFormError] = useState('');
+  const [message, setMessage] = useState(location.state?.message || '');
+  const [developmentOtp, setDevelopmentOtp] = useState(() => (
+    import.meta.env.DEV ? location.state?.developmentOtp || '' : ''
+  ));
+  const [verifying, setVerifying] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [cooldown, setCooldown] = useState(() => getRemainingCooldown());
+  const afterLogin = location.state?.afterLogin || loadPostVerificationPath();
 
-  // Automatically verify if ?token=xxx is in URL
   useEffect(() => {
-    if (token) {
-      setStatus({ loading: true, success: false, message: '', error: '' });
-      learnerService.verifyEmailByToken(token)
-        .then((res) => {
-          setStatus({ loading: false, success: true, message: res.message || 'Xác minh email thành công!', error: '' });
-          setTimeout(() => navigate('/onboarding'), 2000);
-        })
-        .catch((err) => {
-          setStatus({ loading: false, success: false, message: '', error: err.message || 'Liên kết xác minh không hợp lệ hoặc đã hết hạn.' });
-        });
-    }
-  }, [token, navigate]);
+    if (cooldown <= 0) return undefined;
+    const interval = window.setInterval(() => setCooldown(getRemainingCooldown()), 1000);
+    return () => window.clearInterval(interval);
+  }, [cooldown > 0]);
 
-  const handleResend = async () => {
-    if (!email) {
-      setStatus(s => ({ ...s, error: 'Vui lòng nhập email để gửi lại mã.' }));
+  useEffect(() => () => {
+    if (redirectTimerRef.current) window.clearTimeout(redirectTimerRef.current);
+  }, []);
+
+  const normalizedEmail = email.trim();
+  const emailIsValid = EMAIL_PATTERN.test(normalizedEmail);
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+    setFormError('');
+  };
+
+  const handleOtpChange = (event) => {
+    setOtp(sanitizeOtp(event.target.value));
+    setOtpError('');
+  };
+
+  const handleVerify = async (event) => {
+    event.preventDefault();
+    if (verifying || verified) return;
+    if (!emailIsValid) {
+      setFormError('Vui lòng nhập đúng email đã dùng để đăng ký.');
       return;
     }
+    if (!isValidOtp(otp)) {
+      setOtpError('Mã OTP phải gồm đúng 6 chữ số.');
+      return;
+    }
+
+    setVerifying(true);
+    setOtpError('');
+    setFormError('');
     try {
-      const res = await learnerService.resendVerificationEmail(email);
-      setStatus(s => ({ ...s, message: res.message, error: '' }));
-    } catch (err) {
-      setStatus(s => ({ ...s, error: err.message }));
+      const response = await authApi.verifyEmailOtp(normalizedEmail, otp);
+      if (!isSuccessfulAuthResponse(response)) {
+        const error = new Error(response?.message || 'Không thể xác minh email.');
+        error.code = response?.code;
+        throw error;
+      }
+      clearPendingVerification();
+      setVerified(true);
+      setMessage(response.message || 'Xác minh email thành công');
+      toast.success(response.message || 'Xác minh email thành công');
+      redirectTimerRef.current = window.setTimeout(() => {
+        navigate('/login', {
+          replace: true,
+          state: {
+            from: afterLogin,
+            message: 'Xác minh email thành công. Hãy đăng nhập để bắt đầu bài kiểm tra đầu vào.',
+          },
+        });
+      }, 1500);
+    } catch (error) {
+      setOtpError(getVerificationErrorMessage(error));
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (resending || cooldown > 0) return;
+    if (!emailIsValid) {
+      setFormError('Vui lòng nhập đúng email đã dùng để đăng ký.');
+      return;
+    }
+
+    setResending(true);
+    setFormError('');
+    try {
+      const response = await authApi.resendVerificationOtp(normalizedEmail);
+      if (!isSuccessfulAuthResponse(response)) throw new Error(response?.message || 'Không thể gửi lại mã OTP.');
+      savePendingVerificationEmail(normalizedEmail);
+      setOtp('');
+      setOtpError('');
+      setMessage('Mã OTP mới đã được gửi. Vui lòng kiểm tra Gmail của bạn.');
+      setDevelopmentOtp(getDevelopmentOtp(response, import.meta.env.DEV));
+      startResendCooldown(60);
+      setCooldown(60);
+      toast.success('Đã gửi mã OTP mới. Vui lòng kiểm tra Gmail.');
+    } catch (error) {
+      setFormError(error?.message || 'Không thể gửi lại mã OTP. Vui lòng thử lại.');
+    } finally {
+      setResending(false);
     }
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-container auth-verify-page">
       <div className="auth-left-panel">
-        <div className="auth-left-content">
-          <AuthHeader />
+        <AuthHeader />
 
-          <div className="auth-welcome-pill">
-            <span className="auth-welcome-code">✉️</span>
-            <span className="auth-welcome-text"><BilingualText>{"Xác minh tài khoản"}</BilingualText></span>
-          </div>
-
-          <h1 className="auth-heading"><BilingualText vi={<>Kiểm tra<br />hộp thư của bạn</>} en="Check your inbox" /></h1>
+        <main className="auth-left-content">
+          <div className="auth-verify-icon" aria-hidden="true"><MailCheck size={26} /></div>
+          <h1 className="auth-heading"><BilingualText vi="Xác minh email" en="Verify your email" /></h1>
           <p className="auth-subtitle">
-            <BilingualText>{token
-              ? 'Đang kiểm tra liên kết xác minh tài khoản của bạn…'
-              : 'Mở liên kết trong email để kích hoạt tài khoản. Bạn có thể gửi lại email xác minh bên dưới.'}</BilingualText>
+            <BilingualText
+              vi="Nhập mã OTP 6 chữ số được gửi đến email đăng ký. Mã có hiệu lực trong 10 phút."
+              en="Enter the 6-digit OTP sent to your registered email. The code is valid for 10 minutes."
+            />
           </p>
 
-          {status.error && <div className="auth-message auth-message-error"><BilingualText>{status.error}</BilingualText></div>}
-          {status.message && <div className="auth-message auth-message-success"><BilingualText>{status.message}</BilingualText></div>}
-
-          <div style={{ marginTop: '24px', padding: '16px', background: 'var(--color-cream)', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-            <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', color: 'var(--color-forest)', fontWeight: '600' }}><BilingualText>{"Chưa nhận được mã hoặc mã đã hết hạn?"}</BilingualText></p>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <input
-                className="auth-input"
-                type="email"
-                placeholder={bilingualLabel("Nhập email của bạn")}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{ height: '40px', fontSize: '0.85rem', flex: 1, minWidth: 0 }}
-              />
-              <button
-                type="button"
-                className="secondary"
-                onClick={handleResend}
-                disabled={status.loading}
-                style={{ height: '40px', minHeight: '40px', padding: '8px 12px', flexShrink: 0 }}
-              ><BilingualText>{"Gửi lại"}</BilingualText></button>
+          {message && (
+            <div className="auth-message auth-message-success" role="status" aria-live="polite">
+              <BilingualText>{message}</BilingualText>
             </div>
-          </div>
+          )}
 
-          <p className="auth-footer-text"><BilingualText>{"Đã có tài khoản sẵn sàng?"}</BilingualText><Link to="/login" className="auth-footer-link"><BilingualText>{"Đăng nhập"}</BilingualText></Link>
+          {developmentOtp && import.meta.env.DEV && (
+            <div className="auth-dev-otp" role="status">
+              <span>Development OTP</span>
+              <strong>{developmentOtp}</strong>
+            </div>
+          )}
+
+          <form className="auth-form" onSubmit={handleVerify} aria-busy={verifying}>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="verification-email">
+                <BilingualText vi="Email đăng ký" en="Registered email" />
+              </label>
+              <input
+                id="verification-email"
+                className={`auth-input ${formError ? 'auth-input-error' : ''}`}
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={() => emailIsValid && savePendingVerificationEmail(normalizedEmail)}
+                placeholder={bilingualLabel('Nhập email đã đăng ký')}
+                autoComplete="email"
+                disabled={verifying || verified}
+                required
+              />
+              {formError && <span className="auth-field-error" role="alert">{formError}</span>}
+            </div>
+
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="verification-otp">
+                <BilingualText vi="Mã OTP" en="OTP code" />
+                <span className="auth-otp-count">{otp.length}/6</span>
+              </label>
+              <input
+                id="verification-otp"
+                className={`auth-input auth-otp-input ${otpError ? 'auth-input-error' : ''}`}
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                value={otp}
+                onChange={handleOtpChange}
+                placeholder="000000"
+                autoComplete="one-time-code"
+                aria-describedby={otpError ? 'verification-otp-error' : undefined}
+                disabled={verifying || verified}
+              />
+              {otpError && <span id="verification-otp-error" className="auth-field-error" role="alert">{otpError}</span>}
+            </div>
+
+            <button
+              type="submit"
+              className="auth-btn auth-btn-primary"
+              disabled={!emailIsValid || !isValidOtp(otp) || verifying || resending || verified}
+            >
+              <ShieldCheck size={18} />
+              <BilingualText
+                vi={verified ? 'Đã xác minh' : verifying ? 'Đang xác minh…' : 'Xác minh'}
+                en={verified ? 'Verified' : verifying ? 'Verifying…' : 'Verify'}
+              />
+            </button>
+
+            <button
+              type="button"
+              className="auth-btn auth-btn-secondary"
+              onClick={handleResend}
+              disabled={!emailIsValid || resending || verifying || verified || cooldown > 0}
+            >
+              <RefreshCw size={17} className={resending ? 'auth-spin' : ''} />
+              <BilingualText
+                vi={resending ? 'Đang gửi…' : cooldown > 0 ? `Gửi lại mã (${cooldown}s)` : 'Gửi lại mã'}
+                en={resending ? 'Sending…' : cooldown > 0 ? `Resend code (${cooldown}s)` : 'Resend code'}
+              />
+            </button>
+          </form>
+
+          <p className="auth-footer-text">
+            {!loadPendingVerificationEmail() && (
+              <><BilingualText vi="Chưa đăng ký?" en="Not registered?" />{' '}<Link to="/register" className="auth-footer-link"><BilingualText vi="Tạo tài khoản" en="Create account" /></Link><span className="auth-footer-dot"> · </span></>
+            )}
+            <Link to="/login" className="auth-footer-link"><BilingualText vi="Quay lại đăng nhập" en="Back to sign in" /></Link>
           </p>
-        </div>
+        </main>
+
+        <AuthFooter />
       </div>
 
-      <aside className="auth-right-panel" aria-label="Bảo mật & xác thực">
-        <div className="auth-drum-bg">
-          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
-        </div>
-        <div className="auth-visual-topline"><span /><BilingualText>{"Bảo mật & xác thực · HolaVietnamese"}</BilingualText></div>
-        <div className="auth-hero-card">
-          <div className="auth-hero-tag"><BilingualText>{"BẢO MẬT & XÁC THỰC"}</BilingualText></div>
-          <h2 className="auth-hero-title"><BilingualText>{"Bảo vệ tiến trình học của bạn."}</BilingualText></h2>
-          <p className="auth-hero-desc"><BilingualText>{"Xác minh email giúp bạn không bao giờ mất chuỗi streak, huy hiệu thành tích và sổ tay từ vựng yêu thích."}</BilingualText></p>
-        </div>
-      </aside>
+      <AuthRightPanel />
     </div>
   );
 }

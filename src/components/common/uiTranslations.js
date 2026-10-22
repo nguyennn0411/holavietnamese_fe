@@ -1,5 +1,78 @@
 // Static presentation labels only. API values and user content are not translated.
 export const UI_TRANSLATIONS = {
+  "Danh từ": ["Danh từ", "Noun"],
+  "Động từ": ["Động từ", "Verb"],
+  "Tính từ": ["Tính từ", "Adjective"],
+  "Phó từ": ["Phó từ", "Adverb"],
+  "Đại từ": ["Đại từ", "Pronoun"],
+  "Số từ": ["Số từ", "Numeral"],
+  "Trợ từ": ["Trợ từ", "Particle"],
+  "Liên từ": ["Liên từ", "Conjunction"],
+  "Giới từ": ["Giới từ", "Preposition"],
+  "Thán từ": ["Thán từ", "Interjection"],
+  "Cụm từ": ["Cụm từ", "Phrase"],
+  "Tục ngữ": ["Tục ngữ", "Proverb"],
+  "Tên riêng": ["Tên riêng", "Proper noun"],
+  "Viết tắt": ["Viết tắt", "Abbreviation"],
+  "Định từ": ["Định từ", "Determiner"],
+  "Tiền tố": ["Tiền tố", "Prefix"],
+  "Hậu tố": ["Hậu tố", "Suffix"],
+  "Loại từ": ["Loại từ", "Classifier"],
+  "Bạn đã ôn hết các từ đến hạn": ["Bạn đã ôn hết các từ đến hạn", "You have reviewed all due words"],
+  "Lịch ôn tiếp theo đã được lưu trong sổ tay.": ["Lịch ôn tiếp theo đã được lưu trong sổ tay.", "Your next review schedule is saved in your notebook."],
+  "Tra cứu mục từ · Dictionary entry": ["Tra cứu mục từ · Dictionary entry", "Dictionary entry"],
+  "Về từ điển": ["Về từ điển", "Back to dictionary"],
+  "MỤC TỪ TIẾNG VIỆT": ["MỤC TỪ TIẾNG VIỆT", "VIETNAMESE DICTIONARY ENTRY"],
+  "Phát âm theo dữ liệu nguồn": ["Phát âm theo dữ liệu nguồn", "Recorded pronunciations"],
+  "Mang từ này vào sổ tay": ["Mang từ này vào sổ tay", "Save this word to your notebook"],
+  "Một mục từ được lưu một lần. Bạn có thể chọn nghĩa trước khi lưu.": ["Một mục từ được lưu một lần. Bạn có thể chọn nghĩa trước khi lưu.", "Each entry is saved once. Choose a meaning before saving."],
+  "Nghĩa để ôn": ["Nghĩa để ôn", "Meaning to review"],
+  "Nghĩa đang lưu:": ["Nghĩa đang lưu:", "Saved meaning:"],
+  "Nghĩa & cách dùng": ["Nghĩa & cách dùng", "Meanings & usage"],
+  "Trong câu": ["Trong câu", "In a sentence"],
+  "Cùng cách viết, khác từ loại": ["Cùng cách viết, khác từ loại", "Same spelling, different parts of speech"],
+  "Từ liên quan trong nguồn": ["Từ liên quan trong nguồn", "Related words"],
+  "Đồng nghĩa": ["Đồng nghĩa", "Synonyms"],
+  "Trái nghĩa": ["Trái nghĩa", "Antonyms"],
+  "Liên quan": ["Liên quan", "Related"],
+  "Từ phái sinh": ["Từ phái sinh", "Derived words"],
+  "Cách nói vùng miền": ["Cách nói vùng miền", "Regional expressions"],
+  "Khám phá thêm →": ["Khám phá thêm →", "Explore more →"],
+  "Nguồn gốc từ theo dữ liệu nguồn": ["Nguồn gốc từ theo dữ liệu nguồn", "Word origins"],
+  "Ghi chú từ nguồn": ["Ghi chú từ nguồn", "Source notes"],
+  "Audio mục từ": ["Audio mục từ", "Word audio"],
+  "Giọng đọc tổng hợp": ["Giọng đọc tổng hợp", "Text-to-speech"],
+  "(trình duyệt)": ["(trình duyệt)", "(browser)"],
+  "Audio ví dụ": ["Audio ví dụ", "Example audio"],
+  "Mục từ gốc": ["Mục từ gốc", "Original entry"],
+  "Lịch sử và người đóng góp": ["Lịch sử và người đóng góp", "History and contributors"],
+  "Dữ liệu trích xuất": ["Dữ liệu trích xuất", "Extracted data"],
+  "Chuẩn hóa và thay đổi": ["Chuẩn hóa và thay đổi", "Normalization and changes"],
+  "Chưa có bài văn hóa liên kết": ["Chưa có bài văn hóa liên kết", "No linked culture articles yet"],
+  "Chưa có nội dung ngôn ngữ liên kết": ["Chưa có nội dung ngôn ngữ liên kết", "No linked language content yet"],
+  "Chưa có kịch bản thực hành khả dụng": ["Chưa có kịch bản thực hành khả dụng", "No practice scenarios available yet"],
+  "Từ tương đương:": ["Từ tương đương:", "Equivalent word:"],
+  "Trình độ gợi ý:": ["Trình độ gợi ý:", "Suggested level:"],
+  "Nhập email hoặc tên đăng nhập": [
+    "Nhập email hoặc tên đăng nhập",
+    "Enter your email or username"
+  ],
+  "Nhập lại mật khẩu": [
+    "Nhập lại mật khẩu",
+    "Confirm your password"
+  ],
+  "Đăng nhập bằng Google": [
+    "Đăng nhập bằng Google",
+    "Sign in with Google"
+  ],
+  "Bắt đầu học tiếng Việt cùng HolaVietnamese.": [
+    "Bắt đầu học tiếng Việt cùng HolaVietnamese.",
+    "Start learning Vietnamese with HolaVietnamese."
+  ],
+  "Tiếp tục hành trình học tiếng Việt của bạn.": [
+    "Tiếp tục hành trình học tiếng Việt của bạn.",
+    "Continue your Vietnamese learning journey."
+  ],
   "Đang tải trang…": [
     "Đang tải trang…",
     "Loading page…"
@@ -6283,5 +6356,137 @@ export const UI_TRANSLATIONS = {
   "Español 🇪🇸": [
     "Tiếng Tây Ban Nha 🇪🇸",
     "Spanish · Español"
-  ]
+  ],
+  "Quản lý danh mục": [
+    "Quản lý danh mục",
+    "Manage categories",
+  ],
+  "Duyệt": [
+    "Duyệt",
+    "Approve",
+  ],
+  "Xem": [
+    "Xem",
+    "View",
+  ],
+  "Trình biên tập": [
+    "Trình biên tập",
+    "Editor",
+  ],
+  "Xem trước": [
+    "Xem trước",
+    "Preview",
+  ],
+  "Xem trước (Preview)": [
+    "Xem trước (Preview)",
+    "Preview",
+  ],
+  "Lưu bài viết": [
+    "Lưu bài viết",
+    "Save article",
+  ],
+  "Cụm từ hữu ích kèm theo bài viết:": [
+    "Cụm từ hữu ích kèm theo bài viết:",
+    "Useful phrases with this article:",
+  ],
+  "Cấu hình kịch bản": [
+    "Cấu hình kịch bản",
+    "Scenario settings",
+  ],
+  "Thử nghiệm giả lập": [
+    "Thử nghiệm giả lập",
+    "Simulation test",
+  ],
+  "Lưu kịch bản": [
+    "Lưu kịch bản",
+    "Save scenario",
+  ],
+  "Duyệt đạt chuẩn": [
+    "Duyệt đạt chuẩn",
+    "Approved",
+  ],
+  "Cần chỉnh Prompt": [
+    "Cần chỉnh Prompt",
+    "Needs prompt tuning",
+  ],
+  "Ẩm thực & Quán xá": [
+    "Ẩm thực & Quán xá",
+    "Food and dining",
+  ],
+  "Mua sắm & Mặc cả": [
+    "Mua sắm & Mặc cả",
+    "Shopping and bargaining",
+  ],
+  "Di chuyển & Du lịch": [
+    "Di chuyển & Du lịch",
+    "Travel and transport",
+  ],
+  "Khách sạn & Nghỉ dưỡng": [
+    "Khách sạn & Nghỉ dưỡng",
+    "Hotels and resorts",
+  ],
+  "Gia đình & Bạn bè": [
+    "Gia đình & Bạn bè",
+    "Family and friends",
+  ],
+  "Giao tiếp công sở": [
+    "Giao tiếp công sở",
+    "Workplace communication",
+  ],
+  "Phù hợp văn hóa (Culture)": [
+    "Phù hợp văn hóa (Culture)",
+    "Cultural appropriateness",
+  ],
+  "Nhận xét từ AI Tutor:": [
+    "Nhận xét từ AI Tutor:",
+    "AI Tutor feedback:",
+  ],
+  "Bạn đã nói: \"": [
+    "Bạn đã nói: \"",
+    "You said: \"",
+  ],
+  "Người bản xứ nói: \"": [
+    "Người bản xứ nói: \"",
+    "Native speaker: \"",
+  ],
+  "Tiếp tục kịch bản mới": [
+    "Tiếp tục kịch bản mới",
+    "Continue to next scenario",
+  ],
+  "Hoàn tất & Nhận đánh giá": [
+    "Hoàn tất & Nhận đánh giá",
+    "Complete & get feedback",
+  ],
+  "Bộ sưu tập danh hiệu": [
+    "Bộ sưu tập danh hiệu",
+    "Badge collection",
+  ],
+  "Tùy biến trải nghiệm": [
+    "Tùy biến trải nghiệm",
+    "Customize experience",
+  ],
+  "Công việc & Định cư": [
+    "Công việc & Định cư",
+    "Work & Career",
+  ],
+  "Thi chứng chỉ VSL": [
+    "Thi chứng chỉ VSL",
+    "Exam / VSL certification",
+  ],
+  "Văn hóa & Đời sống": [
+    "Văn hóa & Đời sống",
+    "Culture & lifestyle",
+  ],
+  "A1 – Mới bắt đầu": [
+    "A1 – Mới bắt đầu",
+    "A1 – Beginner",
+  ],
+  "A2 – Sơ cấp": [
+    "A2 – Sơ cấp",
+    "A2 – Elementary",
+  ],
+  "B1 – Trung cấp": [
+    "B1 – Trung cấp",
+    "B1 – Intermediate",
+  ],
 };

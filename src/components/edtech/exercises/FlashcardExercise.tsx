@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Volume2, RotateCcw, Sparkles } from 'lucide-react';
+import { Volume2, RotateCcw } from 'lucide-react';
 import { FlashcardDataDTO } from '@/types/edtech';
 import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { audioFeedback } from '@/utils/audioFeedback';
@@ -35,7 +35,6 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col items-center">
       <div className="text-center mb-5">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
           Thẻ Từ Vựng Mới • Flashcard
         </span>
         <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 mt-2">
@@ -110,10 +109,10 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
           </div>
 
           {/* BACK OF CARD */}
-          <div className="absolute inset-0 w-full h-full rounded-3xl bg-slate-900 text-white border-2 border-slate-800 p-8 flex flex-col justify-between items-center text-center [transform:rotateY(180deg)] [backface-visibility:hidden]">
+          <div className="absolute inset-0 w-full h-full rounded-3xl bg-gradient-to-br from-[#FFFDF9] to-[#FFF7E8] text-[#253044] border-2 border-[#E8E5DF] p-8 flex flex-col justify-between items-center text-center [transform:rotateY(180deg)] [backface-visibility:hidden] shadow-md">
             {/* Header */}
             <div className="w-full flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+              <span className="text-xs font-bold text-[#F97316] uppercase tracking-wider">
                 English Meaning
               </span>
               <span className="text-xs text-slate-400">
@@ -123,22 +122,22 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
 
             {/* English Meaning & Examples */}
             <div className="my-auto flex flex-col items-center max-w-md">
-              <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-2">
+              <h3 className="text-3xl md:text-4xl font-extrabold text-[#253044] mb-2">
                 {data.englishMeaning}
               </h3>
 
               {data.notesForForeigners && (
-                <p className="text-xs text-amber-300 bg-amber-950/40 border border-amber-800/60 rounded-xl px-3 py-1.5 mb-4">
-                  💡 {data.notesForForeigners}
+                <p className="text-xs text-[#7C2D12] bg-[#FFF0DC] border border-[#fed7aa] rounded-xl px-3 py-1.5 mb-4">
+                  <span className="font-bold mr-1">Gợi ý:</span>{data.notesForForeigners}
                 </p>
               )}
 
               {/* Context Example */}
-              <div className="bg-slate-800/90 rounded-2xl p-3.5 text-left border border-slate-700/80 w-full mt-2">
-                <p className="text-sm font-semibold text-emerald-300 vn-diacritic-safe">
+              <div className="bg-white rounded-2xl p-3.5 text-left border border-[#E8E5DF] shadow-2xs w-full mt-2">
+                <p className="text-sm font-bold text-[#253044] vn-diacritic-safe">
                   "{data.exampleSentenceVi}"
                 </p>
-                <p className="text-xs text-slate-400 italic mt-1">
+                <p className="text-xs text-[#64748B] italic mt-1">
                   "{data.exampleSentenceEn}"
                 </p>
               </div>

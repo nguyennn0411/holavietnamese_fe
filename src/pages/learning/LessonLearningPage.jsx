@@ -1,36 +1,250 @@
-import { BilingualText } from '@/components/common/BilingualText';
-import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { learningService } from '@/services/learningService'
-import { useLearning } from '@/hooks/useLearning'
-import { ResourceState } from '@/components/common/ResourceState'
-import { LessonSidebar } from '@/components/learning/LessonSidebar'
-import { LessonContent } from '@/components/learning/LessonContent'
-import { LessonNavigation } from '@/components/learning/LessonNavigation'
-import { ProgressBar } from '@/components/common/ProgressBar'
-import { VocabularyForm } from '@/components/vocabulary/VocabularyForm'
-import { LessonActivities } from '@/components/learning/LessonActivities'
+﻿import { BilingualText } from '@/components/common/BilingualText';
+import { useState, useEffect } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { learningService } from '@/services/learningService';
+import { useLearning } from '@/hooks/useLearning';
+import { ResourceState } from '@/components/common/ResourceState';
+import { LessonSidebar } from '@/components/learning/LessonSidebar';
+import { LessonContent } from '@/components/learning/LessonContent';
+import { LessonNavigation } from '@/components/learning/LessonNavigation';
+import { VocabularyForm } from '@/components/vocabulary/VocabularyForm';
+import { LessonActivities } from '@/components/learning/LessonActivities';
+import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check } from 'lucide-react';
+
 export function LessonLearningPage() {
-  const { courseId, lessonId } = useParams()
-  return <LessonScreen key={`${courseId}:${lessonId}`} courseId={courseId} lessonId={lessonId} />
+  const { courseId, lessonId } = useParams();
+  return <LessonScreen key={courseId} courseId={courseId} lessonId={lessonId} />;
 }
+
 function LessonScreen({ courseId, lessonId }) {
-  const resource = useLearning(courseId, lessonId)
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState('')
-  const [savingWord, setSavingWord] = useState(false)
-  const [message, setMessage] = useState('')
+  const navigate = useNavigate();
+  const resource = useLearning(courseId, lessonId);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState('');
+  const [savingWord, setSavingWord] = useState(false);
+  const [message, setMessage] = useState('');
+  const [contentLesson, setContentLesson] = useState(null);
+
+  // Trạng thái mở/đóng thanh bên (Sidebar)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Mặc định mở thanh bên trên màn hình lớn
+  useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setSidebarOpen(true);
+    }
+  }, []);
+
   async function complete() {
-    setPending(true); setError('')
-    try { await learningService.complete(lessonId); resource.reload() }
-    catch (e) { setError(e.message) } finally { setPending(false) }
+    setPending(true);
+    setError('');
+    try {
+      await learningService.complete(lessonId);
+      resource.reload();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setPending(false);
+    }
   }
-  return <ResourceState resource={resource}>{({ course, lesson, lessons, progress }) => <section>
-    <Link className="text-link" to={`/courses/${courseId}`}>← <BilingualText vi={course.titleVi || course.title} en={course.title} /></Link>
-    <ProgressBar value={progress.progressPercentage} label={`${progress.completedLessons} / ${progress.totalLessons} bài học đã hoàn thành`} />
-    <div className="learning-grid"><LessonSidebar lessons={lessons} courseId={courseId} currentId={lesson.id} />
-    <div className="lesson-panel"><LessonActivities onProgress={result=>{if(result.completed)resource.reload();}} lessonId={lesson.id} fallback={<div className="card"><LessonContent lesson={lesson} /></div>} />
-    <section className="vocabulary-prompt"><h2><BilingualText>{"Thêm một từ mới"}</BilingualText></h2><p><BilingualText>{"Gặp một từ hữu ích? Lưu lại để ôn tập sau."}</BilingualText></p><button className="secondary" onClick={() => setSavingWord(true)}><BilingualText>{"Lưu từ vựng"}</BilingualText></button>{message && <p className="success" role="status"><BilingualText>{message}</BilingualText></p>}</section>
-    {savingWord && <VocabularyForm lessonId={lesson.id} onClose={() => setSavingWord(false)} onSaved={() => { setSavingWord(false); setMessage('Đã lưu vào sổ tay từ vựng.'); }} />}
-    {error && <p role="alert"><BilingualText>{error}</BilingualText></p>}<LessonNavigation lesson={lesson} pending={pending} onComplete={complete} /></div></div></section>}</ResourceState>
+
+  return (
+    <ResourceState resource={resource}>
+      {({ course, lesson, lessons, progress }) => {
+        const completedCount = progress?.completedLessons ?? 0;
+        const totalCount = progress?.totalLessons ?? lessons.length;
+        const progressPercentage = progress?.progressPercentage ?? 0;
+        const isSwitchingLesson = resource.isValidating || String(lesson.id) !== String(lessonId);
+
+        return (
+          <div className="lesson-learning-screen w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+            {/* ===================== TOP HEADER BAR ===================== */}
+            <header className="relative sticky top-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-3.5 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden">
+              {/* Subtle top indicator during lesson transitions */}
+              {isSwitchingLesson && (
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7A00] via-[#FFCD00] to-[#FF7A00] animate-pulse z-50" />
+              )}
+              {/* Bên trái: Nút quay lại & Tiêu đề bài học */}
+              <div className="flex items-center gap-3 min-w-0">
+                <Link
+                  to={`/courses/${courseId}`}
+                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF2D6] text-[#FF7A00] text-xs font-bold border border-[#E8E5DF]/60 transition-colors shrink-0 no-underline"
+                  title="Quay lại khóa học"
+                >
+                  <ArrowLeft size={14} />
+                  <span className="hidden sm:inline">Khóa học</span>
+                </Link>
+
+                <div className="h-5 w-[1px] bg-stone-200 hidden sm:block" />
+
+                <div className="truncate">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-bold text-[10px] uppercase shrink-0">
+                      Bài {lesson.lessonOrder || 1}
+                    </span>
+                    <h1 className="text-sm sm:text-base font-black text-[#253044] truncate m-0">
+                      <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
+                    </h1>
+                  </div>
+                </div>
+              </div>
+
+              {/* Ở giữa / Phải: Tiến độ & Nút chức năng */}
+              <div className="flex items-center justify-between md:justify-end gap-3 shrink-0">
+                {/* Thanh tiến độ tóm tắt */}
+                <div className="flex items-center gap-2 bg-[#FFF7E8] py-1.5 px-3 rounded-xl border border-[#E8E5DF]/60 text-xs font-bold text-[#64748B]">
+                  <CheckCircle2 size={13} className="text-emerald-600" />
+                  <span>{completedCount}/{totalCount} bài</span>
+                  <div className="w-16 h-2 rounded-full bg-stone-200 overflow-hidden ml-1">
+                    <div
+                      className="h-full bg-[#FF7A00] rounded-full transition-all duration-300"
+                      style={{ width: `${progressPercentage}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Nút lưu nhanh từ vựng */}
+                <button
+                  type="button"
+                  onClick={() => setSavingWord(true)}
+                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 text-[#253044] border border-[#E8E5DF] text-xs font-bold shadow-2xs transition-colors cursor-pointer"
+                  title="Thêm từ vựng mới vào sổ tay"
+                >
+                  <Bookmark size={13} className="text-[#FF7A00]" />
+                  <span className="hidden sm:inline">Lưu từ vựng</span>
+                </button>
+
+                {/* Nút bật/tắt Sidebar */}
+                <button
+                  type="button"
+                  onClick={() => setSidebarOpen((v) => !v)}
+                  className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
+                    sidebarOpen
+                      ? 'bg-[#24382B] text-white border-[#24382B]'
+                      : 'bg-white hover:bg-stone-50 text-stone-700 border-[#E8E5DF]'
+                  }`}
+                  title={sidebarOpen ? 'Ẩn danh sách bài' : 'Hiện danh sách bài'}
+                >
+                  {sidebarOpen ? <PanelLeftClose size={14} /> : <PanelLeft size={14} />}
+                  <span className="hidden sm:inline">
+                    {sidebarOpen ? 'Thu gọn' : 'Bài học'}
+                  </span>
+                </button>
+              </div>
+            </header>
+
+            {/* Thông báo thành công khi lưu từ */}
+            {message && (
+              <div
+                role="status"
+                className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold flex items-center gap-2 animate-bounce-subtle"
+              >
+                <Check size={16} className="text-emerald-600 shrink-0" />
+                <span>{message}</span>
+              </div>
+            )}
+
+            {/* Thông báo lỗi nếu có */}
+            {error && (
+              <p role="alert" className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm font-semibold">
+                <BilingualText>{error}</BilingualText>
+              </p>
+            )}
+
+            {/* ===================== MAIN LAYOUT ===================== */}
+            <div className="relative">
+              {/* Bố cục có Sidebar hoặc Full-width */}
+              <div
+                className={`transition-all ${
+                  sidebarOpen
+                    ? 'grid grid-cols-1 lg:grid-cols-[330px_1fr] xl:grid-cols-[360px_1fr] gap-8 items-start'
+                    : 'max-w-4xl mx-auto space-y-6'
+                }`}
+              >
+                {/* 1. Sidebar trên Desktop */}
+                {sidebarOpen && (
+                  <aside className="hidden lg:block sticky top-24 self-start w-full">
+                    <LessonSidebar
+                      lessons={lessons}
+                      courseId={courseId}
+                      currentId={lesson.id}
+                      courseTitle={course?.titleVi || course?.title}
+                    />
+                  </aside>
+                )}
+
+                {/* 2. Main Lesson Content Panel */}
+                <main className={`lesson-panel space-y-6 min-w-0 transition-opacity duration-300 ${isSwitchingLesson ? 'opacity-85' : 'opacity-100'}`}>
+                  <LessonActivities
+                    onLessonLoaded={setContentLesson}
+                    onProgress={(result) => {
+                      if (result.completed) resource.reload();
+                    }}
+                    lessonId={lesson.id}
+                    courseId={courseId}
+                    nextLessonId={lesson.nextLessonId}
+                    onNextLesson={() => {
+                      if (lesson.nextLessonId) {
+                        navigate(`/learn/${courseId}/lesson/${lesson.nextLessonId}`);
+                      }
+                    }}
+                    fallback={
+                      <div className="card">
+                        <LessonContent lesson={lesson} />
+                      </div>
+                    }
+                  />
+
+                  {/* Bài có hoạt động được tự hoàn thành từ tiến độ hoạt động và quiz. */}
+                  <LessonNavigation
+                    lesson={lesson}
+                    pending={pending}
+                    onComplete={complete}
+                    showComplete={String(contentLesson?.id) === String(lesson.id) && !contentLesson.activities?.length}
+                  />
+                </main>
+              </div>
+
+              {/* 3. Mobile / Tablet Drawer cho Sidebar */}
+              {sidebarOpen && (
+                <div className="lg:hidden fixed inset-0 z-50 flex">
+                  {/* Backdrop */}
+                  <div
+                    className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"
+                    onClick={() => setSidebarOpen(false)}
+                  />
+
+                  {/* Drawer Content */}
+                  <div className="relative w-full max-w-xs sm:max-w-sm bg-white h-full shadow-2xl z-10 flex flex-col">
+                    <LessonSidebar
+                      lessons={lessons}
+                      courseId={courseId}
+                      currentId={lesson.id}
+                      onClose={() => setSidebarOpen(false)}
+                      courseTitle={course?.titleVi || course?.title}
+                      isDrawer
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal lưu từ vựng */}
+            {savingWord && (
+              <VocabularyForm
+                lessonId={lesson.id}
+                onClose={() => setSavingWord(false)}
+                onSaved={() => {
+                  setSavingWord(false);
+                  setMessage('Đã lưu thành công vào sổ tay từ vựng.');
+                  setTimeout(() => setMessage(''), 4000);
+                }}
+              />
+            )}
+          </div>
+        );
+      }}
+    </ResourceState>
+  );
 }
+export default LessonLearningPage;

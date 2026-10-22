@@ -25,7 +25,7 @@ export function AdminScenarioBuilderPage() {
     learnerRole: '',
     aiRole: {
       name: '',
-      avatar: '👩‍🍳',
+      avatar: '',
       role: '',
       tone: '',
       initialGreeting: '',
@@ -170,19 +170,19 @@ export function AdminScenarioBuilderPage() {
             className={`button ${activeTab === 'builder' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('builder')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"⚙️ Cấu hình kịch bản"}</BilingualText></button>
+          ><BilingualText>{"Cấu hình kịch bản"}</BilingualText></button>
           <button
             type="button"
             className={`button ${activeTab === 'simulation' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('simulation')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"🧪 Thử nghiệm giả lập"}</BilingualText></button>
+          ><BilingualText>{"Thử nghiệm giả lập"}</BilingualText></button>
           <button
             type="button"
             className="button"
             onClick={handleSubmit}
             style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
-          ><BilingualText>{"💾 Lưu kịch bản"}</BilingualText></button>
+          ><BilingualText>{"Lưu kịch bản"}</BilingualText></button>
         </div>
       </div>
 
@@ -350,12 +350,12 @@ export function AdminScenarioBuilderPage() {
                 </label>
 
                 <label style={{ marginTop: '12px' }}><BilingualText>{"Chủ đề kịch bản:"}</BilingualText><select value={formData.topic} onChange={e => setFormData({ ...formData, topic: e.target.value })}>
-                    <option value="dining">{vietnameseLabel("🍜 Ẩm thực & Quán xá")}</option>
-                    <option value="shopping">{vietnameseLabel("🛍️ Mua sắm & Mặc cả")}</option>
-                    <option value="travel">{vietnameseLabel("🛵 Di chuyển & Du lịch")}</option>
-                    <option value="hospitality">{vietnameseLabel("🏨 Khách sạn & Nghỉ dưỡng")}</option>
-                    <option value="social">{vietnameseLabel("🏡 Gia đình & Bạn bè")}</option>
-                    <option value="work">{vietnameseLabel("💼 Giao tiếp công sở")}</option>
+                    <option value="dining">{vietnameseLabel("Ẩm thực & Quán xá")}</option>
+                    <option value="shopping">{vietnameseLabel("Mua sắm & Mặc cả")}</option>
+                    <option value="travel">{vietnameseLabel("Di chuyển & Du lịch")}</option>
+                    <option value="hospitality">{vietnameseLabel("Khách sạn & Nghỉ dưỡng")}</option>
+                    <option value="social">{vietnameseLabel("Gia đình & Bạn bè")}</option>
+                    <option value="work">{vietnameseLabel("Giao tiếp công sở")}</option>
                   </select>
                 </label>
 
@@ -398,13 +398,13 @@ export function AdminScenarioBuilderPage() {
                 <p style={{ fontSize: '12.5px', color: 'var(--color-red-hover)', margin: '0 0 12px' }}><BilingualText>{"Hệ thống phân tích 4 thang điểm cốt lõi dựa trên tương tác thực tế:"}</BilingualText></p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Độ lưu loát"}</BilingualText></strong><BilingualText>{": Khả năng phản xạ và nhịp đối thoại."}</BilingualText></div>
+                    <strong><BilingualText>{"Độ lưu loát"}</BilingualText></strong><BilingualText>{": Khả năng phản xạ và nhịp đối thoại."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Vốn từ vựng"}</BilingualText></strong><BilingualText>{": Từ ngữ chính xác theo chủ đề."}</BilingualText></div>
+                    <strong><BilingualText>{"Vốn từ vựng"}</BilingualText></strong><BilingualText>{": Từ ngữ chính xác theo chủ đề."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Ngữ pháp"}</BilingualText></strong><BilingualText>{": Trật tự từ và hư từ biểu cảm."}</BilingualText></div>
+                    <strong><BilingualText>{"Ngữ pháp"}</BilingualText></strong><BilingualText>{": Trật tự từ và hư từ biểu cảm."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Văn hóa & Ngữ cảnh"}</BilingualText></strong><BilingualText>{": Kính ngữ, thái độ lịch thiệp."}</BilingualText></div>
+                    <strong><BilingualText>{"Văn hóa & Ngữ cảnh"}</BilingualText></strong><BilingualText>{": Kính ngữ, thái độ lịch thiệp."}</BilingualText></div>
                 </div>
               </div>
             </div>

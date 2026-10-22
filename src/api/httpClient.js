@@ -1,24 +1,13 @@
 const rawBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '')
+const apiBase = rawBase.endsWith('/api') ? rawBase : rawBase ? `${rawBase}/api` : '/api'
 
 export function resolveApiUrl(path) {
-  if (!path) return rawBase ? `${rawBase}/api` : '/api'
+  if (!path) return apiBase
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path
   }
-  const cleanPath = path.startsWith('/') ? path : `/${path}`
-
-  // If path already starts with /api/ or is /api
-  if (cleanPath.startsWith('/api/') || cleanPath === '/api') {
-    return rawBase ? `${rawBase}${cleanPath}` : cleanPath
-  }
-
-  // If rawBase ends with /api
-  if (rawBase.endsWith('/api')) {
-    return `${rawBase}${cleanPath}`
-  }
-
-  // Otherwise ensure /api prefix is included
-  return rawBase ? `${rawBase}/api${cleanPath}` : `/api${cleanPath}`
+  const cleanPath = (path.startsWith('/') ? path : `/${path}`).replace(/^\/api(?=\/|$)/, '')
+  return `${apiBase}${cleanPath}`
 }
 
 let csrfPromise

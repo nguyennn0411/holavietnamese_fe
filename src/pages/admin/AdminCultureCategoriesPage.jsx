@@ -60,11 +60,11 @@ export function AdminCultureCategoriesPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: 'var(--color-forest)', marginBottom: '6px' }}>
-            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Quản lý bài viết văn hóa"}</BilingualText></Link>
+          <nav style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginBottom: '6px' }}>
+            <Link to="/admin/culture" style={{ color: 'var(--primary-orange, #F97316)', textDecoration: 'none', fontWeight: 600 }}><BilingualText>{"← Quản lý bài viết văn hóa"}</BilingualText></Link>
           </nav>
-          <h1 style={{ margin: 0, fontSize: '32px' }}><BilingualText>{"Danh mục văn hóa"}</BilingualText></h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-forest)', fontSize: '14px' }}><BilingualText>{"Quản lý các chủ đề lớn: Food, Festivals, History, Etiquette, Family, Lifestyle và sắp xếp thứ tự hiển thị cho học viên."}</BilingualText></p>
+          <h1 style={{ margin: 0, fontSize: '30px', fontWeight: 800, color: 'var(--text-primary, #253044)' }}><BilingualText>{"Danh mục văn hóa"}</BilingualText></h1>
+          <p style={{ margin: '4px 0 0', color: 'var(--text-secondary, #64748B)', fontSize: '14px' }}><BilingualText>{"Quản lý các chủ đề lớn: Food, Festivals, History, Etiquette, Family, Lifestyle và sắp xếp thứ tự hiển thị cho học viên."}</BilingualText></p>
         </div>
 
         <button
@@ -118,7 +118,7 @@ export function AdminCultureCategoriesPage() {
 
                 <td>
                   <strong style={{ fontSize: '14px', color: 'var(--color-ink)', display: 'block' }}>{cat.name}</strong>
-                  <code style={{ fontSize: '11px', color: 'var(--color-forest)', background: 'var(--color-red-soft)', padding: '2px 6px', borderRadius: '4px' }}>
+                  <code style={{ fontSize: '11px', color: 'var(--primary-orange, #F97316)', background: 'var(--bg-peach, #FFF0DC)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>
                     /{cat.slug}
                   </code>
                 </td>
@@ -126,8 +126,8 @@ export function AdminCultureCategoriesPage() {
                 <td style={{ fontSize: '13px', color: 'var(--color-ink)' }}><BilingualText vi={cat.descriptionVi || cat.description} en={cat.description} /></td>
 
                 <td>
-                  <span className="admin-badge admin-badge-info">
-                    {cat.articleCount || 0}<BilingualText>{"bài viết"}</BilingualText></span>
+                  <span className="admin-badge admin-badge-info" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px' }}>
+                    {cat.articleCount || 0} <BilingualText>{"bài viết"}</BilingualText></span>
                 </td>
 
                 <td style={{ textAlign: 'right' }}>

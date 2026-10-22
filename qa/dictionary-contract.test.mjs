@@ -4,9 +4,9 @@ import fs from 'node:fs/promises';
 import { dictionaryMeaning, definitionOf, dictionaryQuery, highlightedParts } from '../src/models/Dictionary.js';
 import { vocabularyDraft, vocabularyPayload } from '../src/models/AdminVocabulary.js';
 
-test('Dictionary search URL retains filters and server pagination without invalid page numbers', () => {
+test('Dictionary search URL keeps only bilingual keyword and pagination', () => {
   assert.deepEqual(dictionaryQuery(new URLSearchParams('keyword=bàn&partOfSpeech=noun&topicId=4&page=2')), {
-    keyword: 'bàn', partOfSpeech: 'noun', cefrLevel: '', topicId: '4', page: 2, size: 20,
+    keyword: 'bàn', page: 2, size: 20,
   });
   for (const value of ['-1', 'NaN', 'Infinity', '2.5']) assert.equal(dictionaryQuery(new URLSearchParams(`page=${value}`)).page, 0);
 });
@@ -28,18 +28,19 @@ test('Admin can edit Vietnamese definitions without inventing translations or CE
     { definitionVi: 'Một nghĩa khác.' },
   ] });
   const payload=vocabularyPayload(draft);
-  assert.equal(payload.cefrLevel, null);
+  assert.equal('cefrLevel' in payload, false);
+  assert.equal('topicIds' in payload, false);
   assert.equal(payload.meanings.length, 2);
   assert.equal(payload.meanings[0].translationEn, null);
   assert.equal(payload.meanings[0].examples[0].translationEn, null);
   assert.deepEqual(payload.meanings[0].labels, ['figuratively']);
   assert.deepEqual(vocabularyPayload({ ...draft, meanings: [{ ...draft.meanings[0], labelsInput: 'figuratively, colloquial' }] }).meanings[0].labels, ['figuratively', 'colloquial']);
   assert.equal('source' in payload, false);
-  assert.throws(() => vocabularyPayload({ ...draft, cefrLevel: 'Z9' }), /CEFR/);
+  assert.equal('cefrLevel' in vocabularyPayload({ ...draft, cefrLevel: 'Z9' }), false);
   assert.throws(() => vocabularyPayload({ ...draft, meanings: [{ ...draft.meanings[0], definitionVi: '' }] }), /Mỗi nghĩa/);
 });
 
-test('Dictionary service passes page and exact filters to API and import uses the existing JSONL adapter', async () => {
+test('Dictionary uses keyword and pagination; content import accepts Excel only', async () => {
   const calls=[];
   globalThis.__dictionaryClient={ get: async (path, options) => { calls.push([path,options]); return { result: { content: [], totalElements: 0 } }; },
     post: async (path, body) => { calls.push([path,body]); return { result: { canConfirm: false } }; } };
@@ -50,12 +51,18 @@ test('Dictionary service passes page and exact filters to API and import uses th
   };
   const { vocabularyCatalogService }=await load('vocabularyCatalogService');
   const signal=new AbortController().signal;
-  await vocabularyCatalogService.search({ keyword: 'ban', page: 3, size: 20, exact: false, cefrLevel: '' }, { signal });
+  await vocabularyCatalogService.search({ keyword: 'ban', page: 3, size: 20, exact: false,
+    cefrLevel: 'A1', topicId: 4, partOfSpeech: 'noun', status: 'DRAFT' }, { signal });
   assert.deepEqual(calls[0], ['/api/vocabulary/search', { signal, params: { keyword: 'ban', page: 3, size: 20, exact: false } }]);
   await vocabularyCatalogService.links(7); assert.equal(calls[1][0], '/api/vocabulary/7/links');
+  const { adminVocabularyService }=await load('adminVocabularyService');
+  await adminVocabularyService.search({ keyword: 'coffee', status: 'PUBLISHED', partOfSpeech: 'noun', page: 0, size: 20,
+    cefrLevel: 'A1', topicId: 4, source: 'retired-source', exact: true }, { signal });
+  assert.deepEqual(calls[2], ['/api/admin/vocabulary/search', { signal,
+    params: { keyword: 'coffee', status: 'PUBLISHED', partOfSpeech: 'noun', page: 0, size: 20 } }]);
   const { contentImportService }=await load('contentImportService');
-  await contentImportService.preview('DICTIONARY_JSONL',new File(['{}\n'],'pilot.jsonl'));
-  assert.equal(calls[2][0], '/api/admin/imports/preview');
-  assert.equal(calls[2][1].get('module'), 'DICTIONARY_JSONL');
-  await assert.rejects(() => contentImportService.preview('DICTIONARY_JSONL',new File(['x'],'wrong.xlsx')));
+  await contentImportService.preview('VOCABULARY',new File(['excel'],'vocabulary.xlsx'));
+  assert.equal(calls[3][0], '/api/admin/imports/preview');
+  assert.equal(calls[3][1].get('module'), 'VOCABULARY');
+  await assert.rejects(() => contentImportService.preview('VOCABULARY',new File(['x'],'wrong.jsonl')));
 });

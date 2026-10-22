@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
-  Award, BarChart3, Bell, BookOpen, Bot, ChevronLeft, ChevronRight, Compass, Flame,
-  GraduationCap, Headphones, Home, Languages, LockKeyhole, Mic2, Settings,
-  Newspaper, Palette, Sparkles, Trophy, UserRound, Zap,
+  Bell, BookOpen, Bot, ChevronLeft, Compass, Flame,
+  GraduationCap, Headphones, Home, Languages, Mic2,
+  Newspaper, Palette, Zap,
 } from 'lucide-react';
 import { Brand } from '@/components/layout/Brand';
 import { UserMenu } from '@/components/layout/UserMenu';
@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const learnerItems = [
   { to: '/', label: 'learn', icon: Home, end: true, mobile: true },
-  { to: '/edtech/dashboard', label: 'learningPath', icon: Sparkles, mobile: true },
+  { to: '/edtech/dashboard', label: 'learningPath', icon: Compass, mobile: true },
   { to: '/courses', label: 'courses', icon: BookOpen, mobile: true },
   { to: '/my-learning', label: 'myLearning', icon: GraduationCap },
   { to: '/vocabulary', label: 'vocabulary', icon: Languages, mobile: true },
@@ -24,16 +24,12 @@ const learnerItems = [
   { label: 'listening', icon: Headphones, status: 'insideLessons' },
   { to: '/ai-scenarios', label: 'speaking', icon: GraduationCap },
   { to: '/ai-tutor', label: 'aiConversation', icon: Bot },
-  { label: 'quizzes', icon: Award, status: 'insideCourses' },
-  { label: 'leaderboard', icon: Trophy, status: 'comingSoon' },
-  { to: '/achievements', label: 'achievements', icon: Trophy },
-  { to: '/progress', label: 'progress', icon: BarChart3 },
-  { to: '/profile', label: 'profile', icon: UserRound },
-  { to: '/settings', label: 'settings', icon: Settings },
 ];
 
 export function LearnerSidebar({ collapsed, onToggle }) {
   const { t } = useTranslation('navigation');
+  const { pathname } = useLocation();
+  const notebookRoute = pathname === '/vocabulary/review' || pathname === '/vocabulary/notebook' || pathname.startsWith('/vocabulary/notebook/');
   return <aside className="learner-sidebar" aria-label="Learner navigation">
     <button
       type="button"
@@ -48,7 +44,7 @@ export function LearnerSidebar({ collapsed, onToggle }) {
     <div className="learner-sidebar__brand"><Brand compact collapsed={collapsed} /></div>
     <nav className="learner-sidebar__nav">
       {learnerItems.map(({ to, label, icon: Icon, status, end, mobile }) => to ? (
-        <NavLink key={label} to={to} end={end} className={`learner-sidebar__link ${mobile ? 'is-mobile-primary' : ''}`} title={collapsed ? t(label) : undefined}>
+        <NavLink key={label} to={to} end={end} aria-current={notebookRoute ? (to === '/my-learning' ? 'page' : false) : undefined} className={({ isActive }) => `learner-sidebar__link ${mobile ? 'is-mobile-primary' : ''} ${(notebookRoute ? to === '/my-learning' : isActive) ? 'active' : ''}`} title={collapsed ? t(label) : undefined}>
           <span className="sidebar-link__icon"><Icon /></span>
           <b className="sidebar-link__label">{t(label)}</b>
         </NavLink>
@@ -71,7 +67,10 @@ export function LearnerTopbar({ user, stats, onLogout }) {
   const isVi = i18n.resolvedLanguage?.startsWith('vi');
   const greeting = isVi ? (hour < 12 ? 'Chào buổi sáng' : hour < 18 ? 'Chào buổi chiều' : 'Chào buổi tối') : (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening');
   const displayName = user?.fullName || user?.username || 'Learner';
-  const title = useMemo(() => learnerItems.find((item) => item.to && (item.end ? location.pathname === item.to : location.pathname.startsWith(item.to)))?.label || 'learn', [location.pathname]);
+  const title = useMemo(() => {
+    if (location.pathname === '/vocabulary/review' || location.pathname === '/vocabulary/notebook' || location.pathname.startsWith('/vocabulary/notebook/')) return 'myLearning';
+    return learnerItems.find((item) => item.to && (item.end ? location.pathname === item.to : location.pathname.startsWith(item.to)))?.label || 'learn';
+  }, [location.pathname]);
   const level = user?.targetLevel || user?.level || '—';
   const hasEnergy = stats?.hearts != null || stats?.energy != null;
   const isAdmin = user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_ADMIN');

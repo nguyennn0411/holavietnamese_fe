@@ -3,7 +3,7 @@ import { ContentImage } from '@/components/common/ContentImage';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Search, X, Sparkles, MapPin, Clock, ArrowRight, RotateCcw } from 'lucide-react';
+import { Search, X, RotateCcw } from 'lucide-react';
 import { cultureService } from '@/services/cultureService';
 import { EmptyState } from '@/components/common/Ui';
 
@@ -32,18 +32,21 @@ export function CultureExplorePage() {
   return (
     <div className="p4-container culture-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Hero Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF9EE] via-[#F7F0E3] to-[#EEE3D1] border border-[#DECBB4] p-6 sm:p-10 shadow-sm">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFFDF9] via-[#FFF7E8] to-[#FFF0DC] border border-[#E8E5DF] p-6 sm:p-10 shadow-xs">
+        <div
+          className="absolute -right-8 -bottom-8 w-64 h-64 opacity-10 pointer-events-none"
+          style={{ backgroundImage: "url('/design/dong-son.svg')", backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}
+        />
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5E1D8] border border-[#E7B59D] text-[#A62A24] text-xs font-bold uppercase tracking-wider shadow-xs">
-            <Sparkles size={14} className="text-[#A62A24]" />
-            <BilingualText>{"Nhiều hơn những từ ngữ • Culture & Stories"}</BilingualText>
+          <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-white/90 border border-[#FDBA74] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-2xs">
+            <BilingualText>{"Văn hóa & Đời sống • Culture & Stories"}</BilingualText>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#431914] tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#253044] tracking-tight leading-tight">
             <BilingualText>{"Khám phá văn hóa Việt Nam"}</BilingualText>
           </h1>
 
-          <p className="text-sm sm:text-base text-[#78685B] leading-relaxed max-w-2xl">
+          <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
             <BilingualText>
               {"Ngôn ngữ trở nên gần gũi và sống động khi bạn thấu hiểu những câu chuyện phong tục, ẩm thực và nơi chốn phía sau."}
             </BilingualText>
@@ -53,49 +56,53 @@ export function CultureExplorePage() {
 
       {/* Featured Article Banner (when not filtered) */}
       {!isFiltered && featured && (
-        <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.25 }} className="w-full">
+        <motion.div whileHover={{ y: -3 }} transition={{ duration: 0.25 }} className="w-full">
           <Link
-            className="culture-feature group relative block overflow-hidden rounded-3xl bg-[#FFF9EE] border border-[#DECBB4] shadow-md hover:shadow-xl transition-all"
+            className="culture-feature group relative block overflow-hidden rounded-3xl bg-white border border-[#E8E5DF] shadow-md hover:shadow-xl hover:border-[#FDBA74] transition-all"
             to={`/culture/${featured.id}`}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[320px]">
-              <div className="lg:col-span-7 relative overflow-hidden aspect-[16/10] lg:aspect-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[360px] w-full">
+              {/* Image side - spans 7 cols on desktop */}
+              <div className="lg:col-span-7 relative overflow-hidden aspect-[16/10] lg:aspect-auto min-h-[260px] lg:min-h-[380px] bg-[#FFF7E8]">
                 <ContentImage
                   src={featured.coverImage}
                   alt={featured.title}
-                  className="figma-art w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading="eager"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent lg:hidden" />
+                <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#DA251D] text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+                    <BilingualText>{"Nổi bật"}</BilingualText>
+                  </span>
+                </div>
               </div>
 
-              <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between gap-4 bg-[#FFF9EE]">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <span className="badge px-2.5 py-0.5 rounded-md bg-[#24382B] text-[#FFF9EE] text-[10px] font-bold uppercase tracking-wider">
+              {/* Content side - spans 5 cols on desktop */}
+              <div className="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6 bg-white">
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#FFF0DC] text-[#F97316] border border-[#F97316]/30 text-xs font-bold uppercase tracking-wider">
                       {featured.categoryName}
                     </span>
-                    <span className="text-xs text-[#78685B] font-medium flex items-center gap-1">
-                      <Clock size={12} className="text-[#A62A24]" />
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#F8FAFC] text-[#64748B] border border-[#E8E5DF] text-xs font-semibold ml-auto">
                       {featured.readTime}
                     </span>
                   </div>
 
-                  <h2 className="text-xl sm:text-2xl font-black text-[#431914] group-hover:text-[#A62A24] transition-colors leading-snug">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#253044] group-hover:text-[#F97316] transition-colors leading-snug">
                     <BilingualText vi={featured.titleVi || featured.title} en={featured.title} />
                   </h2>
 
-                  <p className="text-xs sm:text-sm text-[#78685B] line-clamp-3 leading-relaxed">
+                  <p className="text-sm text-[#64748B] line-clamp-3 leading-relaxed">
                     {featured.summary}
                   </p>
                 </div>
 
-                <div className="pt-2 flex items-center justify-between border-t border-[#DECBB4]/40">
-                  <span className="inline-flex items-center gap-2 text-xs font-bold text-[#A62A24] group-hover:underline">
+                <div className="pt-4 flex items-center justify-between border-t border-[#E8E5DF]">
+                  <span className="inline-flex items-center gap-2 text-sm font-bold text-[#F97316] group-hover:translate-x-1 transition-transform">
                     <BilingualText>{"Khám phá câu chuyện →"}</BilingualText>
-                    <ArrowRight size={15} />
                   </span>
-                  <span className="text-[11px] text-[#78685B]">
+                  <span className="text-xs font-semibold text-[#64748B] bg-[#F8FAFC] px-3 py-1 rounded-full border border-[#E8E5DF]">
                     {featured.destinationName}
                   </span>
                 </div>
@@ -106,7 +113,7 @@ export function CultureExplorePage() {
       )}
 
       {/* Filter and Search Bar */}
-      <section className="bg-white/80 backdrop-blur-md rounded-2xl border border-[#DECBB4] p-4 sm:p-5 shadow-xs space-y-4">
+      <section className="bg-white rounded-2xl border border-[#E8E5DF] p-5 sm:p-6 shadow-xs space-y-5">
         {/* Categories Bar */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label="Chủ đề văn hóa">
           {categories.map((category) => {
@@ -118,10 +125,10 @@ export function CultureExplorePage() {
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex-shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+                className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'bg-[#A62A24] text-white shadow-sm ring-1 ring-[#89221E]'
-                    : 'bg-[#FFF9EE] text-[#78685B] hover:text-[#431914] hover:bg-[#F7F0E3] border border-[#DECBB4]/70'
+                    ? 'bg-gradient-to-r from-[#FF8008] to-[#FF6A00] text-white shadow-sm'
+                    : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8] border border-[#E8E5DF]'
                 }`}
               >
                 <span>{category.label}</span>
@@ -131,22 +138,22 @@ export function CultureExplorePage() {
         </div>
 
         {/* Search & Destination Dropdown */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 border-t border-[#DECBB4]/40">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#E8E5DF]">
           <div className="relative flex-1 max-w-md">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78685B]" />
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
             <input
               type="text"
               aria-label="Tìm câu chuyện văn hóa"
               placeholder={bilingualLabel("Tìm câu chuyện theo chủ đề hoặc từ khóa…")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-9 py-2 bg-[#FFF9EE] border border-[#DECBB4] focus:border-[#A62A24] focus:ring-2 focus:ring-[#A62A24]/10 rounded-xl text-xs sm:text-sm text-[#431914] placeholder-[#78685B]/60 outline-hidden transition-all"
+              className="w-full pl-10 pr-9 py-2.5 bg-white border border-[#E8E5DF] focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 rounded-xl text-xs sm:text-sm text-[#253044] placeholder-[#94A3B8] outline-hidden transition-all"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#78685B] hover:text-[#431914]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#253044]"
                 aria-label="Xóa tìm kiếm"
               >
                 <X size={14} />
@@ -154,14 +161,16 @@ export function CultureExplorePage() {
             )}
           </div>
 
-          <div className="culture-destination-filter flex items-center gap-3">
-            <label className="flex items-center gap-2 text-xs font-semibold text-[#78685B]">
-              <MapPin size={15} className="text-[#A62A24]" />
-              <BilingualText>{"Điểm đến:"}</BilingualText>
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-[#64748B] whitespace-nowrap">
+                <BilingualText>{"Điểm đến:"}</BilingualText>
+              </span>
               <select
                 value={selectedDestination}
                 onChange={(e) => setSelectedDestination(e.target.value)}
-                className="bg-[#FFF9EE] border border-[#DECBB4] rounded-xl px-3 py-1.5 text-xs text-[#431914] font-medium outline-hidden focus:border-[#A62A24]"
+                className="bg-white border border-[#E8E5DF] rounded-xl px-3 py-2 text-xs text-[#253044] font-medium outline-hidden focus:border-[#F97316] transition-colors cursor-pointer"
+                aria-label="Lọc theo điểm đến"
               >
                 {destinations.map((destination) => (
                   <option key={destination.id} value={destination.id}>
@@ -169,16 +178,16 @@ export function CultureExplorePage() {
                   </option>
                 ))}
               </select>
-            </label>
+            </div>
 
-            <span className="text-xs font-bold text-[#A62A24] px-2.5 py-1 rounded-lg bg-[#F5E1D8]">
-              {articles.length} <BilingualText>{"câu chuyện"}</BilingualText>
+            <span className="text-xs font-semibold text-[#64748B] whitespace-nowrap bg-[#F8FAFC] px-3 py-1.5 rounded-lg border border-[#E8E5DF]">
+              {articles.length} <BilingualText>{"bài viết"}</BilingualText>
             </span>
 
             {isFiltered && (
               <button
                 type="button"
-                className="secondary flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white border border-[#DECBB4] hover:border-[#A62A24] text-xs font-semibold text-[#78685B] transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E8E5DF] hover:border-[#F97316] text-xs font-semibold text-[#64748B] hover:text-[#F97316] transition-all cursor-pointer"
                 onClick={handleClearFilters}
               >
                 <RotateCcw size={12} />
@@ -195,42 +204,42 @@ export function CultureExplorePage() {
           {articles.map((article) => (
             <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.25 }} key={article.id}>
               <Link
-                className="card culture-story-card group relative flex flex-col bg-[#FFF9EE] border border-[#DECBB4] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-[#cfb79d] transition-all duration-300 h-full"
+                className="culture-story-card group relative flex flex-col bg-white border border-[#E8E5DF] rounded-2xl overflow-hidden shadow-xs hover:shadow-xl hover:border-[#FDBA74] transition-all duration-300 h-full"
                 to={`/culture/${article.id}`}
               >
-                <div className="relative overflow-hidden aspect-[16/10] bg-[#EEE3D1]">
+                <div className="relative overflow-hidden aspect-[16/10] bg-[#FFF7E8]">
                   <ContentImage
                     src={article.coverImage}
                     alt={article.title}
-                    className="figma-art w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 z-10">
-                    <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#24382B] text-[#FFF9EE] shadow-sm tracking-wide">
+                    <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#FFF0DC] text-[#F97316] border border-[#F97316]/30 shadow-xs tracking-wide">
                       {article.categoryName}
                     </span>
                   </div>
                   <div className="absolute bottom-3 right-3 z-10">
-                    <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-black/60 backdrop-blur-xs text-white">
+                    <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-white/95 backdrop-blur-xs text-[#253044] border border-[#E8E5DF] shadow-xs">
                       {article.readTime}
                     </span>
                   </div>
                 </div>
 
-                <div className="p-5 flex flex-col flex-1 justify-between gap-4">
+                <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between gap-4 bg-white">
                   <div>
-                    <h3 className="text-base font-bold text-[#431914] group-hover:text-[#A62A24] transition-colors leading-snug line-clamp-2 mb-2">
+                    <h3 className="text-base sm:text-lg font-bold text-[#253044] group-hover:text-[#F97316] transition-colors leading-snug line-clamp-2 mb-2">
                       <BilingualText vi={article.titleVi || article.title} en={article.title} />
                     </h3>
-                    <p className="text-xs text-[#78685B] line-clamp-2 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#64748B] line-clamp-2 leading-relaxed">
                       {article.summary}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-[#DECBB4]/40 flex items-center justify-between text-xs">
-                    <span className="text-link font-bold text-[#A62A24] group-hover:underline inline-flex items-center gap-1">
+                  <div className="pt-3 border-t border-[#E8E5DF] flex items-center justify-between text-xs">
+                    <span className="font-bold text-[#F97316] group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-1">
                       <BilingualText>{"Khám phá câu chuyện →"}</BilingualText>
                     </span>
-                    <small className="text-[11px] text-[#78685B]">
+                    <small className="text-[11px] font-medium text-[#64748B]">
                       {article.destinationName}
                     </small>
                   </div>

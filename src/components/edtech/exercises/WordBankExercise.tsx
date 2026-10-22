@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Volume2, Sparkles, Undo2 } from 'lucide-react';
+import { Volume2, Undo2 } from 'lucide-react';
 import { WordBankDataDTO, WordBankToken } from '@/types/edtech';
 import { audioFeedback } from '@/utils/audioFeedback';
 
@@ -47,7 +47,6 @@ export const WordBankExercise: React.FC<WordBankExerciseProps> = ({
       {/* Exercise Header */}
       <div className="w-full text-left mb-6">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-sky-50 text-sky-700 border border-sky-200">
-          <Sparkles className="w-3.5 h-3.5 text-sky-600" />
           Ghép câu hoàn chỉnh • Sentence Builder
         </span>
         <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 mt-2">
@@ -76,7 +75,7 @@ export const WordBankExercise: React.FC<WordBankExerciseProps> = ({
           </p>
           {data.grammarNote && (
             <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-2.5 py-1 mt-2 inline-block border border-amber-200">
-              💡 {data.grammarNote}
+              <span className="font-bold mr-1">Lưu ý:</span>{data.grammarNote}
             </p>
           )}
         </div>

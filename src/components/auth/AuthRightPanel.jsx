@@ -1,22 +1,24 @@
 import React from 'react';
+import dongsonHeritage from '@/assets/images/dongson_heritage.png';
 
 /**
- * AuthRightPanel - Renders the exact Dong Son Heritage artwork uploaded by user
- * Used across Login, Register, Forgot Password, and Reset Password.
+ * AuthRightPanel - Authentic Vietnamese Dong Son Cultural Heritage Showcase
+ * Full-bleed edge-to-edge background display of dongson_heritage.png covering
+ * the entire right half of the screen. Zero text, zero frames, pure cultural immersion.
+ * Shared across Login, Register, Forgot Password, Reset Password, and Verify Email.
  */
 export function AuthRightPanel({
-  imageSrc = '/design/auth/dongson_auth_clean.png',
-  alt = 'Trống đồng Đông Sơn - Vietnamese for real life',
+  imageSrc = dongsonHeritage,
+  alt = 'Hoa văn Trống đồng Đông Sơn - Tinh hoa di sản văn hóa Việt Nam',
 }) {
   return (
-    <aside className="auth-right-panel" aria-label="HolaVietnamese Cultural Heritage">
-      <img
-        src={imageSrc}
-        alt={alt}
-        className="auth-right-hero-image"
-        loading="eager"
-        decoding="async"
-      />
-    </aside>
+    <aside
+      className="auth-right-panel"
+      role="img"
+      aria-label={alt}
+      style={{ backgroundImage: `url(${imageSrc})` }}
+    />
   );
 }
+
+export default AuthRightPanel;

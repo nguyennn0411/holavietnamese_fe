@@ -21,6 +21,8 @@ const PUBLIC_API_PREFIXES = [
   '/api/auth/forgot-password',
 ];
 
+const isPublicApiRequest = (url = '') => PUBLIC_API_PREFIXES.some((prefix) => url.startsWith(prefix));
+
 // REQUEST interceptor: auto-attach Bearer token
 axiosClient.interceptors.request.use(
   (config) => {
@@ -29,7 +31,7 @@ axiosClient.interceptors.request.use(
       if (typeof config.headers?.delete === 'function') config.headers.delete('Content-Type');
       else delete config.headers['Content-Type'];
     }
-    const isPublic = PUBLIC_API_PREFIXES.some(prefix => config.url?.startsWith(prefix));
+    const isPublic = isPublicApiRequest(config.url);
     if (!isPublic) {
       const token = localStorage.getItem('token');
       if (token) {
@@ -83,11 +85,11 @@ axiosClient.interceptors.response.use(
     if (status === 401) {
       const path = window.location.pathname;
       clearAuthStorage();
-      if (!isPublic && path !== '/login') {
+      if (!isPublicApiRequest(error.config?.url) && path !== '/login') {
         const returnTo = `${path}${window.location.search}`;
         window.location.assign(`/login?from=${encodeURIComponent(returnTo)}`);
       }
-    } else if (status === 403 && window.location.pathname !== '/forbidden') {
+    } else if (status === 403 && !isPublicApiRequest(error.config?.url) && window.location.pathname !== '/forbidden') {
       window.location.assign('/forbidden');
     }
 
@@ -95,6 +97,7 @@ axiosClient.interceptors.response.use(
     normalizedError.status = status;
     normalizedError.code = responseBody?.code;
     normalizedError.details = responseBody?.error ?? responseBody?.details ?? responseBody;
+    normalizedError.result = responseBody?.result;
     return Promise.reject(normalizedError);
   },
 );

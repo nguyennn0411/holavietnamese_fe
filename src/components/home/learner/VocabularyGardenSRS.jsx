@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Volume2 } from 'lucide-react';
 import { speakVietnamese } from '@/utils/speech';
 import { QUICK_SRS_WORDS } from '@/components/home/data/homeData';
@@ -13,17 +13,17 @@ export function VocabularyGardenSRS({
   onWaterAll,
 }) {
   return (
-    <section className="bg-white/92 backdrop-blur-xs border border-[#DECBB4]/70 rounded-3xl p-6 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-4 text-left" aria-label="Vocabulary warm-up review">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#DECBB4]/40 pb-3">
+    <section className="bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/70 rounded-3xl p-6 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-4 text-left" aria-label="Vocabulary warm-up review">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E8E5DF]/40 pb-3">
         <div className="flex items-center gap-2">
-          <span className="w-8 h-8 rounded-xl bg-[#F8E6B7] text-[#431914] flex items-center justify-center font-bold">
+          <span className="w-8 h-8 rounded-xl bg-[#F8E6B7] text-[#253044] flex items-center justify-center font-bold">
             🌱
           </span>
           <div>
-            <h3 className="text-sm sm:text-base font-black text-[#431914]">
+            <h3 className="text-sm sm:text-base font-black text-[#253044]">
               Vườn từ vựng • 2-Minute Memory Warm-up
             </h3>
-            <p className="text-[11px] text-[#78685B]">
+            <p className="text-[11px] text-[#64748B]">
               Thuật toán nhắc lại ngắt quãng (SRS): 3 từ vựng này sắp rơi khỏi trí nhớ của bạn!
             </p>
           </div>
@@ -31,7 +31,7 @@ export function VocabularyGardenSRS({
         <button
           type="button"
           onClick={onWaterAll}
-          className="px-4 py-2 rounded-xl bg-[#FFF9EE] hover:bg-[#F5E1D8] border border-[#DECBB4] text-[#A62A24] font-bold text-xs shrink-0 transition-colors cursor-pointer"
+          className="px-4 py-2 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF0DC] border border-[#E8E5DF] text-[#EA580C] font-bold text-xs shrink-0 transition-colors cursor-pointer"
         >
           Tưới nước tất cả (+15 XP) →
         </button>
@@ -47,19 +47,19 @@ export function VocabularyGardenSRS({
               className={`p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-2 shadow-2xs ${
                 isWatered
                   ? 'bg-emerald-50/60 border-emerald-300'
-                  : 'bg-[#FAF8F5] border-[#DECBB4]/70 hover:border-[#A62A24]'
+                  : 'bg-[#FFFCF7] border-[#E8E5DF]/70 hover:border-[#EA580C]'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h4 className="text-base font-black text-[#431914]">{item.vi}</h4>
-                  <p className="text-[11px] text-[#78685B]">{item.en}</p>
+                  <h4 className="text-base font-black text-[#253044]">{item.vi}</h4>
+                  <p className="text-[11px] text-[#64748B]">{item.en}</p>
                   <span className="text-[10px] text-stone-400 font-mono">{item.ipa}</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => speakVietnamese(item.vi)}
-                  className="!min-h-0 !min-w-0 !p-0 w-8 h-8 rounded-lg bg-white border border-[#DECBB4] hover:bg-[#A62A24] text-[#A62A24] hover:text-white flex items-center justify-center transition-all shadow-2xs shrink-0 cursor-pointer group/audio audio-btn"
+                  className="!min-h-0 !min-w-0 !p-0 w-8 h-8 rounded-lg bg-white border border-[#E8E5DF] hover:bg-[#EA580C] text-[#EA580C] hover:text-white flex items-center justify-center transition-all shadow-2xs shrink-0 cursor-pointer group/audio audio-btn"
                   title={`Phát âm "${item.vi}"`}
                   aria-label={`Phát âm ${item.vi}`}
                 >
@@ -67,15 +67,15 @@ export function VocabularyGardenSRS({
                 </button>
               </div>
 
-              <div className="pt-2 border-t border-[#DECBB4]/40 flex items-center justify-between">
-                <span className="text-[10px] text-[#78685B] italic truncate">{item.tip}</span>
+              <div className="pt-2 border-t border-[#E8E5DF]/40 flex items-center justify-between">
+                <span className="text-[10px] text-[#64748B] italic truncate">{item.tip}</span>
                 <button
                   type="button"
                   onClick={() => onWaterWord(item.vi)}
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-md transition-colors cursor-pointer ${
                     isWatered
                       ? 'bg-emerald-200 text-emerald-800'
-                      : 'bg-[#F5E1D8] text-[#A62A24] hover:bg-[#A62A24] hover:text-white'
+                      : 'bg-[#FFF0DC] text-[#EA580C] hover:bg-[#EA580C] hover:text-white'
                   }`}
                 >
                   {isWatered ? '✓ Đã thuộc' : '+5 XP'}

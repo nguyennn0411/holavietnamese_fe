@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Volume2, ArrowLeftRight, Check, Sparkles, HelpCircle, AlertTriangle } from 'lucide-react';
+import { Volume2, ArrowLeftRight, HelpCircle } from 'lucide-react';
 import { MinimalPairDTO, VietnameseTone } from '@/types/edtech';
 import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { ToneCurveGraph } from '@/components/edtech/ui/ToneCurveGraph';
@@ -156,7 +156,7 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
       {/* Side-by-Side Tone Comparison Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
         {/* VS Badge in Center */}
-        <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-slate-900 text-white font-black text-xs items-center justify-center shadow-lg border-2 border-white">
+        <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-[#F97316] text-white font-black text-xs items-center justify-center shadow-lg border-2 border-white">
           VS
         </div>
 
@@ -283,7 +283,7 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
 
       {/* Linguistic Contrast Note */}
       <div className="mt-6 bg-purple-50/80 border border-purple-200 rounded-2xl p-4 flex items-start gap-3 text-xs text-purple-900">
-        <Sparkles className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+        <HelpCircle className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
         <div>
           <strong>Bí quyết phân biệt:</strong> {activePair.explanationEn}
         </div>

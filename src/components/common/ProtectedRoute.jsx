@@ -1,6 +1,7 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
+import { AuthRequiredPage } from '@/pages/auth/AuthRequiredPage';
 
 export function ProtectedRoute() {
   const { isAuthenticated, loading } = useAuth();
@@ -15,7 +16,7 @@ export function ProtectedRoute() {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+    return <AuthRequiredPage targetPath={location.pathname + location.search} />;
   }
 
   return <Outlet />;

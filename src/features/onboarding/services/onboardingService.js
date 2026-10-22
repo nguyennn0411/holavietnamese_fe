@@ -17,7 +17,7 @@ export const onboardingService = {
     await learnerService.saveOnboarding({
       nativeLanguage: 'en',
       learningGoal: data.learningReasons?.[0] || 'other',
-      targetLevel: levelMap[data.currentLevel] || 'A1',
+      targetLevel: data.placementResult?.targetLevel || levelMap[data.currentLevel] || 'A1',
       dailyLearningGoalMinutes: data.dailyGoalMinutes,
       country: '',
     });

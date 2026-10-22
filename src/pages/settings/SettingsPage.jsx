@@ -57,7 +57,7 @@ export function SettingsPage() {
   return (
     <div className="account-page">
       <div className="account-header">
-        <span className="account-pill"><BilingualText>{"⚙️ Tùy biến trải nghiệm"}</BilingualText></span>
+        <span className="account-pill"><BilingualText>{"Tùy biến trải nghiệm"}</BilingualText></span>
         <h1 className="account-title"><BilingualText>{"Cài đặt ứng dụng"}</BilingualText></h1>
         <p className="account-desc"><BilingualText>{"Tùy chỉnh tốc độ bài học, tính năng trợ giảng và thông báo nhắc nhở hàng ngày."}</BilingualText></p>
       </div>

@@ -9,6 +9,8 @@ export const ROUTES = {
   RESET_PASSWORD: '/reset-password',
   ONBOARDING: '/onboarding',
   WELCOME: '/welcome',
+  LOGIN_REQUIRED: '/login-required',
+  AUTH_REQUIRED: '/auth-required',
 
   // EdTech Next-Gen Experience
   EDTECH_DASHBOARD: '/edtech/dashboard',
@@ -34,7 +36,6 @@ export const ROUTES = {
   // Vocabulary (Người 3)
   VOCABULARY: '/vocabulary',
   VOCABULARY_CATALOG_DETAIL: '/vocabulary/:id',
-  ADMIN_VOCABULARY_TOPICS: '/admin/vocabulary-topics',
   VOCABULARY_NOTEBOOK: '/vocabulary/notebook',
   VOCABULARY_NOTEBOOK_DETAIL: '/vocabulary/notebook/:id',
   VOCABULARY_REVIEW: '/vocabulary/review',
@@ -65,6 +66,7 @@ export const ROUTES = {
   // Admin (Người 1)
   ADMIN: '/admin',
   ADMIN_COURSES: '/admin/courses',
+  ADMIN_COURSE_CREATE: '/admin/courses/new',
   ADMIN_COURSE_BUILDER: '/admin/courses/:courseId',
   ADMIN_COURSE_PREVIEW: '/admin/courses/:courseId/preview',
   ADMIN_LESSONS: '/admin/lessons',
