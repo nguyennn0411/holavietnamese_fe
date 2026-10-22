@@ -1,10 +1,9 @@
 import {profile,progress,badges,notifications,systemSettings,courses,lessons,words} from './fixtures';
 import {requestDestination} from './destinationFixtures';
 const response=result=>({code:1000,result,message:'Đã lưu trong dữ liệu kiểm thử.'});
-const vocabularyTopics=[{id:1,name:'Ẩm thực',slug:'food',description:'Món ăn và những cuộc trò chuyện ở quán.',displayOrder:0,status:'PUBLISHED'},{id:2,name:'Chào hỏi',slug:'greetings',description:'Bắt đầu với một lời chào.',displayOrder:1,status:'PUBLISHED'},{id:3,name:'Mua sắm',slug:'shopping',description:'Hỏi giá và chọn món đồ phù hợp.',displayOrder:2,status:'DRAFT'}];
-const adminWords=words.map(word=>({...word,status:'PUBLISHED',topics:vocabularyTopics.filter(topic=>topic.name===word.topic),meanings:[{id:1,translationEn:word.meaning,definitionEn:'',usageNote:'',displayOrder:0,examples:[{id:1,exampleVi:word.example,translationEn:'An illustrative Vietnamese phrase.',displayOrder:0}]}]}));
+const adminWords=words.map(word=>({...word,status:'PUBLISHED',meanings:[{id:1,translationEn:word.meaning,definitionEn:'',usageNote:'',displayOrder:0,examples:[{id:1,exampleVi:word.example,translationEn:'An illustrative Vietnamese phrase.',displayOrder:0}]}]}));
 const catalogWords=adminWords.map(word=>({...word,id:word.id+1000}));
-catalogWords.push({id:1009,word:'tạm biệt',pronunciation:'/taːm ɓiət/',partOfSpeech:'PHRASE',cefrLevel:'A1',status:'PUBLISHED',topics:[vocabularyTopics[1]],meanings:[{id:10091,translationEn:'goodbye',definitionEn:'A phrase used when leaving.',usageNote:'Dùng khi kết thúc một cuộc trò chuyện.',displayOrder:0,examples:[{id:100911,exampleVi:'Tạm biệt, hẹn gặp lại!',translationEn:'Goodbye, see you again!',displayOrder:0},{id:100912,exampleVi:'Tạm biệt bạn nhé.',translationEn:'Goodbye, my friend.',displayOrder:1}]},{id:10092,translationEn:'farewell',definitionEn:'An expression of parting.',usageNote:'Cũng có thể dùng khi chia tay trong thời gian dài.',displayOrder:1,examples:[{id:100921,exampleVi:'Tôi đến để nói lời tạm biệt.',translationEn:'I came to say farewell.',displayOrder:0}]}]},{id:1010,word:'QA unpublished vocabulary',status:'DRAFT',topics:[],meanings:[]});
+catalogWords.push({id:1009,word:'tạm biệt',pronunciation:'/taːm ɓiət/',partOfSpeech:'PHRASE',status:'PUBLISHED',meanings:[{id:10091,translationEn:'goodbye',definitionEn:'A phrase used when leaving.',usageNote:'Dùng khi kết thúc một cuộc trò chuyện.',displayOrder:0,examples:[{id:100911,exampleVi:'Tạm biệt, hẹn gặp lại!',translationEn:'Goodbye, see you again!',displayOrder:0},{id:100912,exampleVi:'Tạm biệt bạn nhé.',translationEn:'Goodbye, my friend.',displayOrder:1}]},{id:10092,translationEn:'farewell',definitionEn:'An expression of parting.',usageNote:'Cũng có thể dùng khi chia tay trong thời gian dài.',displayOrder:1,examples:[{id:100921,exampleVi:'Tôi đến để nói lời tạm biệt.',translationEn:'I came to say farewell.',displayOrder:0}]}]},{id:1010,word:'QA unpublished vocabulary',status:'DRAFT',meanings:[]});
 const fixtureMode=new URLSearchParams(location.search).get('fixture');
 async function request(path,body,options={}){
  options.signal?.throwIfAborted();
@@ -27,23 +26,26 @@ async function request(path,body,options={}){
   if(options.method==='DELETE'){words.splice(words.indexOf(item),1);return null;}
   if(body)Object.assign(item,body);return item;
  }
- if(path==='/api/vocabulary'){
-  const filters=options.params||{},keyword=filters.keyword?.toLowerCase();
-  return response(fixtureMode==='empty'?[]:catalogWords.filter(word=>word.status==='PUBLISHED'&&(!keyword||word.word.toLowerCase().includes(keyword))&&(!filters.cefrLevel||word.cefrLevel===filters.cefrLevel)&&(!filters.partOfSpeech||word.partOfSpeech===filters.partOfSpeech)&&(!filters.topicId||word.topics.some(topic=>String(topic.id)===String(filters.topicId)))));
+ if(path==='/api/vocabulary/search'||path==='/api/admin/vocabulary/search'||path==='/api/vocabulary'){
+  const filters=options.params||{}, keyword=String(filters.keyword||'').toLowerCase();
+  let rows=(path.includes('/admin/')?adminWords:catalogWords.filter(w=>w.status==='PUBLISHED')).filter(w=>(!keyword||[w.word,...(w.meanings||[]).flatMap(m=>[m.translationEn,m.definitionEn])].join(' ').toLowerCase().includes(keyword))&&(!filters.status||w.status===filters.status)&&(!filters.partOfSpeech||w.partOfSpeech.toLowerCase()===filters.partOfSpeech.toLowerCase()));
+  if(fixtureMode==='empty')rows=[];
+  if(path==='/api/vocabulary')return response(rows);
+  const number=Number(filters.page||0),size=Number(filters.size||20);return response({content:rows.slice(number*size,(number+1)*size),number,size,totalElements:rows.length,totalPages:Math.ceil(rows.length/size)});
  }
+ if(/^\/api\/vocabulary\/\d+\/links$/.test(path))return response({otherPartsOfSpeech:[],relatedWords:[]});
+ if(path==='/api/admin/imports/types')return response([{id:'VOCABULARY',label:'Từ vựng · Excel',sheet:'VOCABULARY',requiredColumns:['word','part_of_speech'],format:'xlsx',description:'Gom các dòng cùng từ/từ loại thành mục từ nhiều nghĩa và nhiều ví dụ.'}]);
  if(/^\/api\/vocabulary\/\d+$/.test(path)){
   const word=catalogWords.find(item=>item.status==='PUBLISHED'&&String(item.id)===path.split('/').at(-1));
   if(!word){const error=new Error('Không tìm thấy từ vựng.');error.status=404;throw error;}
   return response(word);
  }
- if(path==='/api/admin/vocabulary-topics'){if(body){const topic={...body,id:vocabularyTopics.length+1};vocabularyTopics.push(topic);return response(topic);}return response(vocabularyTopics);}
- if(/^\/api\/admin\/vocabulary-topics\/\d+$/.test(path)){const topic=vocabularyTopics.find(item=>String(item.id)===path.split('/').at(-1));if(body)Object.assign(topic,body);return response(topic);}
  if(path==='/api/admin/vocabulary'){
-  if(body){const item={...body,id:adminWords.length+1,topics:vocabularyTopics.filter(topic=>body.topicIds?.includes(topic.id))};adminWords.push(item);return response(item);}
+  if(body){const item={...body,id:adminWords.length+1,};adminWords.push(item);return response(item);}
   const keyword=options.params?.keyword?.toLowerCase();
   return response(fixtureMode==='empty'?[]:adminWords.filter(word=>!keyword||word.word.toLowerCase().includes(keyword)));
  }
- if(/^\/api\/admin\/vocabulary\/\d+$/.test(path)){const item=adminWords.find(word=>String(word.id)===path.split('/').at(-1));if(body)Object.assign(item,body,{topics:vocabularyTopics.filter(topic=>body.topicIds?.includes(topic.id))});return response(item);}
+ if(/^\/api\/admin\/vocabulary\/\d+$/.test(path)){const item=adminWords.find(word=>String(word.id)===path.split('/').at(-1));if(body)Object.assign(item,body);return response(item);}
  if(path==='/api/users/me'){if(body)Object.assign(profile,body);return response(profile);}
  if(path==='/api/users/progress')return response(progress);
  if(path==='/api/users/achievements')return response({badges});

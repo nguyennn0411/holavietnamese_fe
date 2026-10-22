@@ -36,7 +36,6 @@ export const ROUTES = {
   // Vocabulary (Người 3)
   VOCABULARY: '/vocabulary',
   VOCABULARY_CATALOG_DETAIL: '/vocabulary/:id',
-  ADMIN_VOCABULARY_TOPICS: '/admin/vocabulary-topics',
   VOCABULARY_NOTEBOOK: '/vocabulary/notebook',
   VOCABULARY_NOTEBOOK_DETAIL: '/vocabulary/notebook/:id',
   VOCABULARY_REVIEW: '/vocabulary/review',

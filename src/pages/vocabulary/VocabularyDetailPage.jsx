@@ -44,11 +44,10 @@ function DictionaryEntry({ entry, links, regional, onNotebookChanged }) {
   function changed() { notebook.reload(); onNotebookChanged(); }
   return <article className="dictionary-entry-detail">
     <header className="dictionary-word-header"><p className="eyebrow"><BookOpen size={15} /> MỤC TỪ TIẾNG VIỆT</p>
-      <div className="dictionary-word-title"><h1 lang="vi">{entry.word}</h1><span className="dictionary-pos">{partOfSpeechLabel(entry.partOfSpeech)}</span>{entry.cefrLevel && <span className="dictionary-level">{entry.cefrLevel}</span>}</div>
+      <div className="dictionary-word-title"><h1 lang="vi">{entry.word}</h1><span className="dictionary-pos">{partOfSpeechLabel(entry.partOfSpeech)}</span></div>
       {entry.pronunciation && <p className="dictionary-ipa">{entry.pronunciation}</p>}
       {entry.lexical?.pronunciations?.length > 0 && <details className="dictionary-pronunciations"><summary>Phát âm theo dữ liệu nguồn</summary><ul>{entry.lexical.pronunciations.map((item, index) => <li key={index}><span>{item.labels?.join(', ') || 'IPA'}</span><span>{item.ipa}</span></li>)}</ul></details>}
       <DictionaryAudio entry={entry} />
-      {entry.topics?.length > 0 && <p className="dictionary-topics">{entry.topics.map(topic => <span key={topic.id}>{topic.name}</span>)}</p>}
     </header>
     <div className="dictionary-save-panel"><div><strong>Mang từ này vào sổ tay</strong><p>Một mục từ được lưu một lần. Bạn có thể chọn nghĩa trước khi lưu.</p>
       {!saved && entry.meanings?.length > 1 && <label>Nghĩa để ôn<select value={meaningIndex} onChange={event => setMeaningIndex(Number(event.target.value))}>{entry.meanings.map((item, index) => <option key={item.id ?? index} value={index}>{index + 1}. {dictionaryMeaning(item).slice(0, 100)}</option>)}</select></label>}

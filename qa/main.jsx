@@ -1,6 +1,7 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import App from '../src/App';
+import '../src/tailwind.css';
 import { MediaCheck } from './MediaCheck';
 import '../src/styles.css';
 import '../src/presentation/styles/layout.css';

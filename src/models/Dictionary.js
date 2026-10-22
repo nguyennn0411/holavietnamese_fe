@@ -4,8 +4,7 @@ export const partOfSpeechLabel = value => ({ noun: 'Danh từ', verb: 'Động t
 
 export function dictionaryQuery(params) {
   const rawPage = Number(params.get('page') || 0);
-  return { keyword: params.get('keyword') || '', cefrLevel: params.get('cefrLevel') || '', partOfSpeech: params.get('partOfSpeech') || '',
-    topicId: params.get('topicId') || '', page: Number.isSafeInteger(rawPage) && rawPage >= 0 ? rawPage : 0, size: 20 };
+  return { keyword: params.get('keyword') || '', page: Number.isSafeInteger(rawPage) && rawPage >= 0 ? rawPage : 0, size: 20 };
 }
 
 export function highlightedParts(text, word) {

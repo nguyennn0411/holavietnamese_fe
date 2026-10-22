@@ -80,10 +80,6 @@ const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage').t
 const AdminVocabularyPage = lazy(() => import('@/pages/admin/AdminVocabularyPage').then(module => ({ default: module.AdminVocabularyPage })));
 const AdminDestinationsPage = lazy(() => import('@/pages/admin/AdminDestinationsPage').then(module => ({ default: module.AdminDestinationsPage })));
 const AdminDestinationDetailPage = lazy(() => import('@/pages/admin/AdminDestinationDetailPage').then(module => ({ default: module.AdminDestinationDetailPage })));
-const AdminVocabularyTopicsPage = lazy(() =>
-  import('@/pages/admin/AdminVocabularyTopicsPage')
-    .then((module) => ({ default: module.AdminVocabularyTopicsPage }))
-);
 // Admin Pages (Người 4: Văn hóa & AI)
 const AdminCultureListPage = lazy(() => import('@/pages/admin/AdminCultureListPage').then(module => ({ default: module.AdminCultureListPage })));
 const AdminCultureEditPage = lazy(() => import('@/pages/admin/AdminCultureEditPage').then(module => ({ default: module.AdminCultureEditPage })));
@@ -229,7 +225,6 @@ function App() {
                 <Route path={ROUTES.ADMIN_XP_RULES} element={<AdminXpRulesPage />} />
                 <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<AdminAuditLogsPage />} />
                 <Route path={ROUTES.ADMIN_SETTINGS} element={<AdminSettingsPage />} />
-                <Route path={ROUTES.ADMIN_VOCABULARY_TOPICS} element={<AdminVocabularyTopicsPage />} />
 
                 {/* Admin Văn hóa & AI (Người 4) */}
                 <Route path={ROUTES.ADMIN_CULTURE} element={<AdminCultureListPage />} />

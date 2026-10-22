@@ -11,9 +11,9 @@ const jobPath = id => {
 export const contentImportService = {
   async types(options = {}) { return resultOf(await axiosClient.get('/api/admin/imports/types', options)); },
   async preview(module, file, options = {}) {
-    const format = module === 'DICTIONARY_JSONL' ? 'jsonl' : 'xlsx';
+    const format = 'xlsx';
     if (!file || !file.size || !file.name.toLowerCase().endsWith('.' + format)) throw new Error('Chọn file .' + format + ' không rỗng.');
-    if (file.size > 10 * 1024 * 1024) throw new Error('File tối đa 10 MiB. Với dump lớn, dùng pipeline streaming để chuẩn bị tập nhập đã xác minh.');
+    if (file.size > 10 * 1024 * 1024) throw new Error('File Excel tối đa 10 MiB.');
     const form = new FormData(); form.append('module', module); form.append('file', file);
     return resultOf(await axiosClient.post('/api/admin/imports/preview', form, options));
   },
