@@ -96,7 +96,7 @@ axiosClient.interceptors.response.use(
     const normalizedError = new Error(responseBody?.message || error.message || 'Không thể kết nối đến máy chủ.');
     normalizedError.status = status;
     normalizedError.code = responseBody?.code;
-    normalizedError.details = responseBody?.error;
+    normalizedError.details = responseBody?.error ?? responseBody?.details ?? responseBody;
     normalizedError.result = responseBody?.result;
     return Promise.reject(normalizedError);
   },

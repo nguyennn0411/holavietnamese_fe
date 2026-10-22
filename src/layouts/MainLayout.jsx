@@ -8,6 +8,7 @@ import { learnerService } from '@/services/learnerService';
 import { PageTransition } from '@/components/common/PageTransition';
 import { LearnerSidebar, LearnerTopbar } from '@/components/learner/LearnerShell';
 import { GuestMobileDrawer, GuestSidebar, GuestTopbar } from '@/components/guest/GuestShell';
+import { AiTutorFloatingButton } from '@/components/common/AiTutorFloatingButton';
 
 export function MainLayout() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -97,6 +98,7 @@ export function MainLayout() {
           </div>
         )}
       </div>
+      <AiTutorFloatingButton />
     </div>
   );
 }

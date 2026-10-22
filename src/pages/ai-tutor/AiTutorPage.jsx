@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, Mic, MicOff, Volume2, Copy, Check, Trash2, Edit3, Plus, Search, User, BookOpen, Compass, ArrowRight, BookmarkPlus, Globe } from 'lucide-react';
