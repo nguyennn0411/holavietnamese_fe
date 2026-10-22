@@ -9,7 +9,7 @@ import { LessonContent } from '@/components/learning/LessonContent';
 import { LessonNavigation } from '@/components/learning/LessonNavigation';
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm';
 import { LessonActivities } from '@/components/learning/LessonActivities';
-import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check, Bot } from 'lucide-react';
 
 export function LessonLearningPage() {
   const { courseId, lessonId } = useParams();
@@ -130,6 +130,15 @@ function LessonScreen({ courseId, lessonId }) {
                     {sidebarOpen ? 'Thu gọn' : 'Bài học'}
                   </span>
                 </button>
+
+                <Link
+                  to={`/ai-tutor?lessonId=${encodeURIComponent(lesson.id)}&lessonTitle=${encodeURIComponent(lesson.titleVi || lesson.title || '')}&courseTitle=${encodeURIComponent(course?.titleVi || course?.title || '')}`}
+                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#24382B] hover:bg-[#1a291f] text-white text-xs font-bold border border-[#24382B] shadow-2xs transition-colors no-underline"
+                  title="Hỏi AI Tutor về bài học này"
+                >
+                  <Bot size={14} />
+                  <span className="hidden sm:inline">Hỏi AI</span>
+                </Link>
               </div>
             </header>
 

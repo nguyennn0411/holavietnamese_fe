@@ -16,6 +16,11 @@
   font-family: var(--font-editorial);
 }
 
+/* Lesson quiz gate: keep the AI helper out of assessment context. */
+body.ai-quiz-active .ai-tutor-widget {
+  display: none !important;
+}
+
 .ai-tutor-fab {
   display: inline-flex;
   align-items: center;
@@ -220,6 +225,62 @@
 }
 
 .ai-tutor-chat__form button:disabled { cursor: not-allowed; opacity: 0.45; }
+
+/* Keep the floating mini chat compact and independent from page-level tutor layouts. */
+.ai-tutor-widget {
+  z-index: 900;
+}
+
+.ai-tutor-widget .ai-tutor-chat {
+  display: block;
+  width: min(382px, calc(100vw - 28px));
+  height: auto;
+  min-height: 0;
+  max-height: min(70vh, 560px);
+  grid-column: auto;
+}
+
+.ai-tutor-widget .ai-tutor-chat__messages {
+  min-height: 130px;
+  max-height: 290px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-clay) transparent;
+}
+
+.ai-tutor-widget .ai-tutor-chat__form {
+  height: auto;
+  min-height: 0;
+  align-items: center;
+}
+
+.ai-tutor-widget .ai-tutor-chat__form input {
+  width: auto;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  flex: 1 1 auto;
+}
+
+.ai-tutor-widget .ai-tutor-fab {
+  width: 58px;
+  height: 58px;
+  min-height: 58px;
+  justify-content: center;
+  gap: 0;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.ai-tutor-widget .ai-tutor-fab__content {
+  display: none;
+}
+
+.ai-tutor-widget .ai-tutor-fab img {
+  width: 46px;
+  height: 46px;
+}
 
 @keyframes ai-tutor-chat-in {
   from { opacity: 0; transform: translateY(10px) scale(.98); }
@@ -740,7 +801,14 @@
 }
 
 .ai-tutor-message--user {
-  box-shadow: 0 8px 18px rgba(159, 45, 32, .16);
+  width: fit-content;
+  max-width: min(65%, 520px);
+  padding: 8px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  border-radius: 16px 4px 16px 16px;
+  box-shadow: 0 4px 14px rgba(159, 45, 32, .16);
+  overflow-wrap: anywhere;
 }
 
 .ai-tutor-message__label {
@@ -1458,6 +1526,43 @@
 .roleplay-input-console textarea {
   min-height: 44px;
   line-height: 1.35;
+}
+
+/* Keep the AI workspace fluid with the application sidebar. */
+.layout-shell--ai-tutor .layout-main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  padding-inline: clamp(14px, 2.4vw, 36px);
+  box-sizing: border-box;
+}
+
+.layout-shell--ai-tutor .ai-tutor-page-shell,
+.layout-shell--ai-tutor .ai-tutor-workspace,
+.layout-shell--ai-tutor .ai-tutor-chat-panel {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.layout-shell--ai-tutor .ai-tutor-workspace {
+  min-height: calc(100vh - 150px);
+}
+
+.layout-shell--ai-tutor .ai-tutor-chat-panel {
+  position: relative;
+  transition: width var(--sidebar-duration) var(--sidebar-easing), transform var(--sidebar-duration) var(--sidebar-easing);
+}
+
+@media (max-width: 900px) {
+  .layout-shell--ai-tutor .layout-main {
+    padding-inline: 10px;
+  }
+
+  .layout-shell--ai-tutor .ai-tutor-workspace {
+    min-height: calc(100vh - 130px);
+  }
+
 }
 
 .roleplay-input-console button {

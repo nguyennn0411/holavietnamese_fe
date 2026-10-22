@@ -1,10 +1,38 @@
 // Admin Service for Culture, AI Scenarios, AI Settings, Usage & Reviews (Người 4 Admin)
 
+import axiosClient from '@/infrastructure/api/axiosClient';
+
 const STORAGE_ADMIN_CULTURE = 'hola_admin_culture_articles_v1';
 const STORAGE_ADMIN_CATEGORIES = 'hola_admin_culture_categories_v1';
 const STORAGE_ADMIN_SCENARIOS = 'hola_admin_ai_scenarios_v1';
 const STORAGE_ADMIN_AI_SETTINGS = 'hola_admin_ai_settings_v1';
 const STORAGE_ADMIN_REVIEWS = 'hola_admin_ai_reviews_v1';
+
+export function scenarioToApiPayload(data) {
+  return {
+    id: data.id || undefined, title: data.title, level: data.level, topic: data.topic,
+    destination: data.destination, difficulty: data.difficulty, duration: data.duration,
+    thumbnail: data.thumbnail, coverImage: data.coverImage, overview: data.overview,
+    aiRoleName: data.aiRoleName || data.aiRole?.name,
+    aiRoleTitle: data.aiRoleTitle || data.aiRole?.role,
+    aiRoleAvatar: data.aiRoleAvatar || data.aiRole?.avatar,
+    aiRoleTone: data.aiRoleTone || data.aiRole?.tone,
+    aiRoleInitialGreeting: data.aiRoleInitialGreeting || data.aiRole?.initialGreeting,
+    learnerRoleTitle: data.learnerRoleTitle || data.learnerRole?.role || data.learnerRole,
+    learnerRoleContext: data.learnerRoleContext || data.learnerRole?.context || data.contextStory,
+    objectives: data.objectives || [], vocabularyHints: data.vocabularyHints || [],
+    culturalTip: data.culturalTip, sampleHints: data.sampleHints || [],
+    maxTurns: data.maxTurns || data.endCondition?.maxTurns || 10, status: data.status || 'DRAFT',
+  };
+}
+
+export function scenarioFromApi(data) {
+  return { ...data,
+    aiRole: data.aiRole || { name: data.aiRoleName, role: data.aiRoleTitle, avatar: data.aiRoleAvatar, tone: data.aiRoleTone, initialGreeting: data.aiRoleInitialGreeting },
+    learnerRole: data.learnerRole || { role: data.learnerRoleTitle, context: data.learnerRoleContext },
+    endCondition: { maxTurns: data.maxTurns || 10, requireAllObjectives: true },
+  };
+}
 
 // Initial Mock Categories
 const INITIAL_CATEGORIES = [
@@ -221,9 +249,9 @@ const INITIAL_SCENARIOS = [
 
 // Initial AI Settings
 const INITIAL_AI_SETTINGS = {
-  activeModel: 'gpt-5-mini',
+  activeModel: 'openrouter/free',
   allowedModels: [
-    { id: 'gpt-5-mini', name: 'GPT-5 mini (Nhanh, phù hợp hội thoại)', provider: 'OpenAI', costPer1kTokens: 0.00225, isDefault: true },
+    { id: 'openrouter/free', name: 'OpenRouter Free (Đang dùng - miễn phí)', provider: 'OpenRouter', costPer1kTokens: 0, isDefault: true },
     { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash (Khuyên dùng - Nhanh, ổn định)', provider: 'Google', costPer1kTokens: 0.00035, isDefault: true },
     { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro (Nâng cao - Suy luận sâu cho ngữ pháp & văn hóa)', provider: 'Google', costPer1kTokens: 0.0035, isDefault: false },
     { id: 'gpt-4o-mini', name: 'GPT-4o Mini (Đa ngôn ngữ phản xạ)', provider: 'OpenAI', costPer1kTokens: 0.0006, isDefault: false },
@@ -299,6 +327,80 @@ const INITIAL_REVIEWS = [
 ];
 
 export const adminCultureAiService = {
+  async loadAiSettings() {
+    const response = await axiosClient.get('/api/admin/ai/settings');
+    return response?.result ?? response;
+  },
+
+  async updateAiSettings(settings) {
+    const limits = settings?.limits || {};
+    const response = await axiosClient.put('/api/admin/ai/settings', {
+      activeModel: settings.activeModel,
+      systemPromptVersion: settings.systemPromptVersion,
+      maxTurnsPerSession: Number(limits.maxTurnsPerSession),
+      maxTokensPerResponse: Number(limits.maxTokensPerResponse),
+      rateLimitPerMinute: Number(limits.rateLimitPerMinute),
+      dailySessionsPerUser: Number(limits.dailySessionsPerUser),
+      monthlyBudgetCapUsd: Number(limits.monthlyBudgetCapUsd),
+      costAlertThresholdPercent: Number(limits.costAlertThresholdPercent),
+      enabledModes: Array.isArray(settings.enabledModes) ? settings.enabledModes.join(',') : settings.enabledModes,
+    });
+    return response?.result ?? response;
+  },
+
+  async loadUsageStats() {
+    const response = await axiosClient.get('/api/admin/ai/usage');
+    return response?.result ?? response;
+  },
+
+  async listReviewRecords() {
+    const response = await axiosClient.get('/api/admin/ai/reviews');
+    const records = response?.result ?? response;
+    return Array.isArray(records) ? records.map(review => ({
+      ...review,
+      userIdentifier: review.userEmail || review.userFullName || `user-${review.userId || 'anonymous'}`,
+      taggedIssues: review.taggedIssues || [],
+    })) : [];
+  },
+
+  async updateReviewRecordStatus(id, status, adminNote = '') {
+    const response = await axiosClient.patch(`/api/admin/ai/reviews/${encodeURIComponent(id)}`, { status, adminNote });
+    return response?.result ?? response;
+  },
+
+  async listScenarioRecords() {
+    const response = await axiosClient.get('/api/admin/ai/scenarios');
+    const records = response?.result ?? response;
+    if (!Array.isArray(records)) return [];
+
+    const backendRecords = records.map(scenarioFromApi);
+    const backendIds = new Set(backendRecords.map(record => record.id));
+
+    // Keep the backend catalog aligned with the six learner scenarios. This
+    // also repairs installations where the Flyway seed was not applied yet.
+    const { SCENARIOS } = await import('@/services/aiRoleplayService');
+    const missingScenarios = SCENARIOS.filter(scenario => !backendIds.has(scenario.id));
+    if (missingScenarios.length === 0) return backendRecords;
+
+    const created = await Promise.all(
+      missingScenarios.map(scenario =>
+        axiosClient.post('/api/admin/ai/scenarios', scenarioToApiPayload({ ...scenario, status: 'ACTIVE' }))
+          .then(result => scenarioFromApi(result?.result ?? result))
+      )
+    );
+    return [...backendRecords, ...created];
+  },
+  async saveScenarioRecord(data) {
+    const response = await axiosClient.post('/api/admin/ai/scenarios', scenarioToApiPayload(data));
+    return scenarioFromApi(response?.result ?? response);
+  },
+  async deleteScenarioRecord(id) {
+    await axiosClient.delete(`/api/admin/ai/scenarios/${encodeURIComponent(id)}`);
+  },
+  async updateScenarioRecordStatus(id, status) {
+    const response = await axiosClient.patch(`/api/admin/ai/scenarios/${encodeURIComponent(id)}/status`, { status });
+    return scenarioFromApi(response?.result ?? response);
+  },
   // --- CULTURE ARTICLES ---
   getArticles(filters = {}) {
     let items = [];

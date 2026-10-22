@@ -316,6 +316,31 @@ const buildRoleplayContext = (scenario, session) => {
   ].join('\\n');
 };
 
+let dynamicScenarios = [...SCENARIOS];
+
+if (typeof window !== 'undefined') {
+  axiosClient.get('/api/ai/scenarios')
+    .then(res => {
+      const list = res?.result ?? res;
+      if (Array.isArray(list) && list.length > 0) {
+        const map = new Map();
+        list.forEach(item => {
+          const existing = SCENARIOS.find(s => s.id === item.id) || {};
+          map.set(item.id, {
+            ...existing,
+            ...item,
+            aiRole: item.aiRole || existing.aiRole,
+            learnerRole: item.learnerRole || existing.learnerRole,
+            objectives: item.objectives || existing.objectives || [],
+            vocabularyHints: item.vocabularyHints || existing.vocabularyHints || [],
+          });
+        });
+        dynamicScenarios = Array.from(map.values()).filter(s => s.status === 'ACTIVE');
+      }
+    })
+    .catch(() => {});
+}
+
 export const aiRoleplayService = {
   getLevels() {
     return SCENARIO_LEVELS;
@@ -326,7 +351,7 @@ export const aiRoleplayService = {
   },
 
   listScenarios({ search = '', level = 'all', topic = 'all' } = {}) {
-    let result = [...SCENARIOS];
+    let result = [...dynamicScenarios];
 
     if (search.trim()) {
       const q = search.trim().toLowerCase();
@@ -350,7 +375,32 @@ export const aiRoleplayService = {
   },
 
   getScenario(id) {
-    return SCENARIOS.find(s => s.id === id) || SCENARIOS[0];
+    return dynamicScenarios.find(s => s.id === id) || SCENARIOS.find(s => s.id === id) || SCENARIOS[0];
+  },
+
+  async fetchActiveScenarios() {
+    try {
+      const res = await axiosClient.get('/api/ai/scenarios');
+      const list = res?.result ?? res;
+      if (Array.isArray(list) && list.length > 0) {
+        const map = new Map();
+        list.forEach(item => {
+          const existing = SCENARIOS.find(s => s.id === item.id) || {};
+          map.set(item.id, {
+            ...existing,
+            ...item,
+            aiRole: item.aiRole || existing.aiRole,
+            learnerRole: item.learnerRole || existing.learnerRole,
+            objectives: item.objectives || existing.objectives || [],
+            vocabularyHints: item.vocabularyHints || existing.vocabularyHints || [],
+          });
+        });
+        dynamicScenarios = Array.from(map.values()).filter(s => s.status === 'ACTIVE');
+      }
+    } catch {
+      // fallback
+    }
+    return dynamicScenarios;
   },
 
   getRoleplaySession(scenarioId) {
@@ -391,6 +441,23 @@ export const aiRoleplayService = {
     } catch (e) {
       console.error('Failed to save roleplay session', e);
     }
+  },
+
+  async initRoleplaySession(scenarioId) {
+    const session = this.getRoleplaySession(scenarioId);
+    if (!session.backendSessionId && localStorage.getItem('token')) {
+      try {
+        const res = await axiosClient.post(`/api/ai/roleplay/start/${scenarioId}`);
+        const newId = res?.result?.id || res?.id;
+        if (newId) {
+          session.backendSessionId = newId;
+          this.saveRoleplaySession(scenarioId, session);
+        }
+      } catch (err) {
+        console.warn('[AI Roleplay] Could not init backend session:', err.message);
+      }
+    }
+    return session;
   },
 
   resetRoleplaySession(scenarioId) {
@@ -455,44 +522,59 @@ export const aiRoleplayService = {
     // AI response and the axios client can refresh an expired token.
     if (localStorage.getItem('token')) {
       try {
-        const backendSessionId = session.backendSessionId || `roleplay-${scenarioId}`;
-        const apiRes = await axiosClient.post(
-          `/api/ai/sessions/${backendSessionId}/messages`,
-          {
-            text: userMsg.text,
-            mode: 'roleplay',
-            provider: AI_PROVIDER,
-            model: AI_MODEL,
-            scenarioId,
-            scenarioContext: buildRoleplayContext(scenario, session),
-          },
-          { timeout: AI_REQUEST_TIMEOUT_MS },
-        );
-        const response = normalizeAiPayload(unwrapAiPayload(apiRes));
-        const responseText = getAiText(response);
+        let backendSessionId = session.backendSessionId;
+        if (!backendSessionId) {
+          try {
+            const startRes = await axiosClient.post(`/api/ai/roleplay/start/${scenarioId}`);
+            backendSessionId = startRes?.result?.id || startRes?.id;
+            if (backendSessionId) {
+              session.backendSessionId = backendSessionId;
+              this.saveRoleplaySession(scenarioId, session);
+            }
+          } catch (initErr) {
+            console.warn('[AI Roleplay] Could not start backend session before message:', initErr.message);
+          }
+        }
 
-        if (responseText) {
-          const updatedSession = {
-            ...session,
-            backendSessionId,
-            messages: [...(session.messages || []), userMsg, {
-              id: response.id || `rp-${Date.now()}-ai`,
-              sender: 'ai',
-              name: scenario.aiRole.name,
-              avatar: scenario.aiRole.avatar,
-              text: responseText,
-              translation: response.translation || '',
-              explanation: response.explanation || '',
-              timestamp: response.timestamp || new Date().toISOString(),
-            }],
-            completedTasks: response.completedTasks || session.completedTasks || [],
-          };
-          this.saveRoleplaySession(scenarioId, updatedSession);
-          return {
-            userMsg,
-            aiMsg: updatedSession.messages[updatedSession.messages.length - 1],
-            session: updatedSession,
-          };
+        if (backendSessionId) {
+          const apiRes = await axiosClient.post(
+            `/api/ai/roleplay/sessions/${backendSessionId}/messages`,
+            {
+              text: userMsg.text,
+              mode: 'roleplay',
+              provider: AI_PROVIDER,
+              model: AI_MODEL,
+              scenarioId,
+              scenarioContext: buildRoleplayContext(scenario, session),
+            },
+            { timeout: AI_REQUEST_TIMEOUT_MS },
+          );
+          const response = normalizeAiPayload(unwrapAiPayload(apiRes));
+          const responseText = getAiText(response);
+
+          if (responseText) {
+            const updatedSession = {
+              ...session,
+              backendSessionId,
+              messages: [...(session.messages || []), userMsg, {
+                id: response.id || `rp-${Date.now()}-ai`,
+                sender: 'ai',
+                name: scenario.aiRole.name,
+                avatar: scenario.aiRole.avatar,
+                text: responseText,
+                translation: response.translation || '',
+                explanation: response.explanation || '',
+                timestamp: response.timestamp || new Date().toISOString(),
+              }],
+              completedTasks: response.completedTasks || session.completedTasks || [],
+            };
+            this.saveRoleplaySession(scenarioId, updatedSession);
+            return {
+              userMsg,
+              aiMsg: updatedSession.messages[updatedSession.messages.length - 1],
+              session: updatedSession,
+            };
+          }
         }
       } catch (error) {
         console.warn('[AI Roleplay] Backend AI unavailable; using local scenario fallback:', error.message);
@@ -556,7 +638,7 @@ export const aiRoleplayService = {
     return { userMsg, aiMsg, session };
   },
 
-  finishRoleplayAndGetResult(scenarioId) {
+  async finishRoleplayAndGetResult(scenarioId) {
     const session = this.getRoleplaySession(scenarioId);
     const scenario = this.getScenario(scenarioId);
 
@@ -607,6 +689,22 @@ export const aiRoleplayService = {
       nextScenario: SCENARIOS.find(s => s.id !== scenarioId) || SCENARIOS[1],
     };
 
+    // Synchronize completion with backend to update completionsCount and admin stats
+    try {
+      const backendSessionId = session.backendSessionId;
+      if (backendSessionId) {
+        await axiosClient.post(`/api/ai/roleplay/sessions/${backendSessionId}/finish`, { score: totalScore });
+      } else {
+        await axiosClient.post(`/api/ai/roleplay/scenarios/${scenarioId}/complete`, { score: totalScore });
+      }
+    } catch (e) {
+      try {
+        await axiosClient.post(`/api/ai/roleplay/scenarios/${scenarioId}/complete`, { score: totalScore });
+      } catch (err2) {
+        console.warn('[AI Roleplay] Could not sync completion to backend:', err2.message);
+      }
+    }
+
     localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
     return result;
   },
@@ -619,6 +717,24 @@ export const aiRoleplayService = {
       // fallback
     }
     return this.finishRoleplayAndGetResult(scenarioId);
+  },
+
+  async syncCompletion(scenarioId, score = 85) {
+    try {
+      const session = this.getRoleplaySession(scenarioId);
+      const backendSessionId = session?.backendSessionId;
+      if (backendSessionId) {
+        await axiosClient.post(`/api/ai/roleplay/sessions/${backendSessionId}/finish`, { score });
+      } else {
+        await axiosClient.post(`/api/ai/roleplay/scenarios/${scenarioId}/complete`, { score });
+      }
+    } catch {
+      try {
+        await axiosClient.post(`/api/ai/roleplay/scenarios/${scenarioId}/complete`, { score });
+      } catch (err) {
+        console.warn('[AI Roleplay] syncCompletion error:', err);
+      }
+    }
   },
 };
 

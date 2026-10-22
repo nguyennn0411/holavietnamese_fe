@@ -128,12 +128,23 @@ export const TUTOR_MODES = [
 const STORAGE_KEY = 'hola_ai_tutor_sessions_v1';
 const ACTIVE_SESSION_KEY = 'hola_ai_tutor_active_id_v1';
 const AI_PROVIDER = import.meta.env.VITE_AI_PROVIDER || 'openai';
-const AI_MODEL = import.meta.env.VITE_AI_MODEL || 'gpt-5-mini';
+const AI_MODEL = import.meta.env.VITE_AI_MODEL || 'openrouter/free';
 const ALLOW_OFFLINE_AI_FALLBACK = import.meta.env.VITE_AI_ALLOW_OFFLINE_FALLBACK === 'true';
 const AI_REQUEST_TIMEOUT_MS = Math.max(
   5000,
   Number(import.meta.env.VITE_AI_REQUEST_TIMEOUT_MS) || 60000,
 );
+const AI_SETTINGS_STORAGE_KEY = 'hola_admin_ai_settings_v1';
+const pendingSessionCreations = new Map();
+
+const getMaxTurnsPerSession = () => {
+  try {
+    const settings = JSON.parse(localStorage.getItem(AI_SETTINGS_STORAGE_KEY) || '{}');
+    return Math.max(1, Number(settings?.limits?.maxTurnsPerSession) || 25);
+  } catch {
+    return 25;
+  }
+};
 
 // Backend deployments may wrap the payload in `result` or `data`, and older
 // AI handlers may call the generated text `content`, `answer`, or `reply`.
@@ -188,6 +199,31 @@ const normalizeAiPayload = (payload) => {
   }
 
   return payload;
+};
+
+const isSessionLimitError = (error) => {
+  const message = String(error?.message || '').toLowerCase();
+  return message.includes('số lượt trao đổi tối đa')
+    || message.includes('so luot trao doi toi da')
+    || message.includes('maximum number of turns')
+    || message.includes('maximum turns')
+    || message.includes('conversation limit');
+};
+
+const requestAiResponse = async (sessionId, text, mode, language = 'vi') => {
+  const apiRes = await axiosClient.post(
+    `/api/ai/sessions/${sessionId}/messages`,
+    {
+      text: text.trim(),
+      mode,
+      language,
+      provider: AI_PROVIDER,
+      model: AI_MODEL,
+    },
+    { timeout: AI_REQUEST_TIMEOUT_MS },
+  );
+
+  return normalizeAiPayload(unwrapAiPayload(apiRes));
 };
 
 const normalizeText = (value = '') => value
@@ -449,8 +485,20 @@ export const aiTutorService = {
       ],
     };
 
-    // Optionally sync session creation to backend asynchronously if backend is up
-    axiosClient.post('/api/ai/sessions', { id: newSession.id, mode, title: newSession.title }, { timeout: 3000 }).catch(() => {});
+    // Keep the creation request available so the first message cannot race it.
+    const creationRequest = axiosClient.post(
+      '/api/ai/sessions',
+      { id: newSession.id, mode, title: newSession.title },
+      { timeout: 3000 },
+    ).catch((error) => {
+      // A pre-existing backend record is safe; the message request can continue.
+      if (error?.response?.status !== 409 && error?.status !== 409) {
+        console.warn('[AI Tutor] Không đồng bộ được phiên mới lên backend:', error?.message || error);
+      }
+    }).finally(() => {
+      pendingSessionCreations.delete(newSession.id);
+    });
+    pendingSessionCreations.set(newSession.id, creationRequest);
 
     const sessions = [newSession, ...this.getAllSessions()];
     this.saveSessions(sessions);
@@ -530,7 +578,7 @@ export const aiTutorService = {
     return sessions.find(s => s.id === id);
   },
 
-  async sendMessage(sessionId, text, currentMode = 'tutor') {
+  async sendMessage(sessionId, text, currentMode = 'tutor', language = 'vi') {
     const sessions = this.getAllSessions();
     let session = sessions.find(s => s.id === sessionId);
     if (!session) {
@@ -538,6 +586,16 @@ export const aiTutorService = {
       session = this.createSession(currentMode);
       sessionId = session.id;
     }
+
+    // Avoid making a request that the backend will reject when the local
+    // history already reached the configured turn limit.
+    const userTurnCount = (session.messages || []).filter(message => message.sender === 'user').length;
+    if (userTurnCount >= getMaxTurnsPerSession()) {
+      session = this.createSession(currentMode);
+      sessionId = session.id;
+    }
+
+    await pendingSessionCreations.get(sessionId);
 
     const userMsg = {
       id: `msg-${Date.now()}-u`,
@@ -556,51 +614,48 @@ export const aiTutorService = {
     let aiMsg = null;
     let backendError = null;
 
-    // 1. Try the real Backend AI API. OpenRouter free models can take longer
-    // than a normal API request, so keep this configurable per environment.
-    try {
-      const apiRes = await axiosClient.post(
-        `/api/ai/sessions/${sessionId}/messages`,
-        {
-          text: text.trim(),
-          mode: currentMode,
-          provider: AI_PROVIDER,
-          model: AI_MODEL,
-        },
-        { timeout: AI_REQUEST_TIMEOUT_MS }
-      );
+    // 1. Try the real Backend AI API. If the backend has exhausted this
+    // session, rotate once and retry the same user message in a fresh session.
+    for (let attempt = 0; attempt < 2 && !aiMsg; attempt += 1) {
+      try {
+        const r = await requestAiResponse(sessionId, text, currentMode, language);
+        const aiText = getAiText(r);
+        if (aiText) {
+          aiMsg = {
+            id: r.id || `msg-${Date.now()}-ai`,
+            sender: 'ai',
+            mode: currentMode,
+            text: aiText,
+            translation: r.translation || null,
+            explanation: r.explanation || null,
+            nativeAlternative: r.nativeAlternative || null,
+            culturalNote: r.culturalNote || null,
+            grammarCorrection: r.grammarCorrection || null,
+            grammarCheck: r.grammarCorrection ? {
+              original: text.trim(),
+              corrected: r.nativeAlternative || text.trim(),
+              explanation: r.grammarCorrection,
+            } : null,
+            savedWords: r.savedWords || [],
+            timestamp: r.timestamp || new Date().toISOString(),
+          };
+        }
+      } catch (apiErr) {
+        backendError = apiErr;
+        console.warn('[AI Tutor] Backend AI request failed:', {
+          status: apiErr.status,
+          code: apiErr.code,
+          message: apiErr.message,
+          details: apiErr.details,
+        });
 
-      const r = normalizeAiPayload(unwrapAiPayload(apiRes));
-      const aiText = getAiText(r);
-      if (aiText) {
-        aiMsg = {
-          id: r.id || `msg-${Date.now()}-ai`,
-          sender: 'ai',
-          mode: currentMode,
-          text: aiText,
-          translation: r.translation || null,
-          explanation: r.explanation || null,
-          nativeAlternative: r.nativeAlternative || null,
-          culturalNote: r.culturalNote || null,
-          grammarCorrection: r.grammarCorrection || null,
-          grammarCheck: r.grammarCorrection ? {
-            original: text.trim(),
-            corrected: r.nativeAlternative || text.trim(),
-            explanation: r.grammarCorrection,
-          } : null,
-          savedWords: r.savedWords || [],
-          timestamp: r.timestamp || new Date().toISOString(),
-        };
+        if (attempt === 0 && isSessionLimitError(apiErr)) {
+          session = this.createSession(currentMode);
+          sessionId = session.id;
+          newTitle = text.length > 28 ? `${text.slice(0, 28)}...` : text;
+          backendError = null;
+        }
       }
-    } catch (apiErr) {
-      backendError = apiErr;
-      // Keep the cause visible in DevTools instead of hiding a BE/API problem.
-      console.warn('[AI Tutor] Backend AI request failed:', {
-        status: apiErr.status,
-        code: apiErr.code,
-        message: apiErr.message,
-        details: apiErr.details,
-      });
     }
 
     // 2. Do not silently present demo answers when the user has configured

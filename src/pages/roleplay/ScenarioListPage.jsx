@@ -10,14 +10,19 @@ export function ScenarioListPage() {
   const [search, setSearch] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');
+  const [scenarioCatalog, setScenarioCatalog] = useState(() => aiRoleplayService.listScenarios());
+  React.useEffect(() => {
+    aiRoleplayService.fetchActiveScenarios().then(setScenarioCatalog);
+  }, []);
 
   const levels = aiRoleplayService.getLevels();
   const topics = aiRoleplayService.getTopics();
-  const scenarios = aiRoleplayService.listScenarios({
-    search,
-    level: selectedLevel,
-    topic: selectedTopic,
-  });
+  const query = search.trim().toLowerCase();
+  const scenarios = scenarioCatalog.filter(scenario => (
+    (!query || scenario.title.toLowerCase().includes(query) || scenario.overview.toLowerCase().includes(query) || scenario.destination.toLowerCase().includes(query))
+    && (selectedLevel === 'all' || scenario.level === selectedLevel)
+    && (selectedTopic === 'all' || scenario.topic === selectedTopic)
+  ));
 
   const handleResetFilters = () => {
     setSearch('');

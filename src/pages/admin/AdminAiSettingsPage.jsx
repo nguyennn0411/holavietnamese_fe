@@ -1,10 +1,37 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
 
 export function AdminAiSettingsPage() {
-  const [settings, setSettings] = useState(() => adminCultureAiService.getAiSettings());
+  const [settings, setSettings] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState('');
+
+  useEffect(() => {
+    adminCultureAiService.loadAiSettings()
+      .then(data => {
+        setSettings({
+          activeModel: 'openrouter/free',
+          allowedModels: [],
+          systemPromptVersion: 'v2.2.0-stable',
+          promptVersionsHistory: [],
+          enabledModes: [],
+          ...data,
+          limits: {
+            maxTurnsPerSession: 25,
+            maxTokensPerResponse: 1024,
+            rateLimitPerMinute: 30,
+            dailySessionsPerUser: 40,
+            monthlyBudgetCapUsd: 150,
+            costAlertThresholdPercent: 80,
+            currentMonthSpendUsd: 0,
+            ...(data?.limits || {}),
+          },
+        });
+      })
+      .catch(() => setToast('Không tải được cấu hình AI từ backend.'))
+      .finally(() => setLoading(false));
+  }, []);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -13,9 +40,32 @@ export function AdminAiSettingsPage() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    adminCultureAiService.saveAiSettings(settings);
-    showToast('Đã lưu cấu hình mô hình & giới hạn AI thành công!');
+    adminCultureAiService.updateAiSettings(settings)
+      .then(data => {
+        setSettings({
+          activeModel: 'openrouter/free',
+          allowedModels: [],
+          systemPromptVersion: 'v2.2.0-stable',
+          promptVersionsHistory: [],
+          enabledModes: [],
+          ...data,
+          limits: {
+            maxTurnsPerSession: 25,
+            maxTokensPerResponse: 1024,
+            rateLimitPerMinute: 30,
+            dailySessionsPerUser: 40,
+            monthlyBudgetCapUsd: 150,
+            costAlertThresholdPercent: 80,
+            currentMonthSpendUsd: 0,
+            ...(data?.limits || {}),
+          },
+        });
+      })
+      .then(() => showToast('Đã lưu cấu hình mô hình & giới hạn AI thành công!'))
+      .catch(() => showToast('Không thể lưu cấu hình AI.'));
   };
+
+  if (loading || !settings) return <div className="admin-content">Đang tải cấu hình AI...</div>;
 
   return (
     <div className="admin-content">

@@ -47,6 +47,9 @@ export function RoleplaySessionPage() {
     if (id) {
       const currentSession = aiRoleplayService.getRoleplaySession(id);
       setSession(currentSession);
+      aiRoleplayService.initRoleplaySession(id).then(updated => {
+        if (updated) setSession(updated);
+      }).catch(() => {});
     }
   }, [id]);
 
@@ -137,8 +140,12 @@ export function RoleplaySessionPage() {
     }
   };
 
-  const handleFinishSession = () => {
-    aiRoleplayService.finishRoleplayAndGetResult(id);
+  const handleFinishSession = async () => {
+    try {
+      await aiRoleplayService.finishRoleplayAndGetResult(id);
+    } catch (e) {
+      console.error('Error completing roleplay:', e);
+    }
     navigate(`/ai-sessions/${id}/result`);
   };
 

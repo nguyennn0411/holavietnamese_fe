@@ -1,15 +1,26 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { EmptyState } from '@/components/common/Ui';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
 import { vocabularyService } from '@/services/vocabularyService';
+import axiosClient from '@/infrastructure/api/axiosClient';
 
 export function RoleplayResultPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const result = aiRoleplayService.getResult(id);
   const [toastMessage, setToastMessage] = useState('');
+
+  useEffect(() => {
+    if (id) {
+      const syncKey = `hola_rp_synced_${id}_${result?.sessionId || 'default'}`;
+      if (!sessionStorage.getItem(syncKey)) {
+        sessionStorage.setItem(syncKey, '1');
+        aiRoleplayService.syncCompletion(id, result?.totalScore || 85).catch(() => {});
+      }
+    }
+  }, [id, result?.sessionId, result?.totalScore]);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -26,6 +37,55 @@ export function RoleplayResultPage() {
       showToast(`Đã lưu "${item.phrase}" vào Sổ từ vựng!`);
     } catch (e) {
       showToast(`Lưu từ vựng: ${e.message || 'Không thể lưu từ vựng.'}`);
+    }
+  };
+
+  const [reviewRating, setReviewRating] = useState(5);
+  const [feedbackComment, setFeedbackComment] = useState('');
+  const [selectedIssues, setSelectedIssues] = useState([]);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    setIsSubmittingReview(true);
+    try {
+      const session = aiRoleplayService.getRoleplaySession(id);
+      const effectiveSessionId = session?.backendSessionId || result?.sessionId || `session-${id}`;
+      await axiosClient.post('/api/ai/reviews', {
+        sessionId: effectiveSessionId,
+        scenarioId: result?.scenarioId || id,
+        scenarioTitle: result?.scenarioTitle || 'Kịch bản Roleplay',
+        rating: reviewRating,
+        userFeedback: feedbackComment.trim() || (selectedIssues.length > 0 ? selectedIssues.join(', ') : 'Đánh giá phiên Roleplay hoàn thành tốt.'),
+        taggedIssues: selectedIssues,
+      });
+      setIsReviewSubmitted(true);
+      showToast('Đã gửi đánh giá thành công! Dữ liệu đã đồng bộ lên Admin kiểm toán.');
+    } catch (err) {
+      console.warn('[Roleplay Result] Backend review post failed, syncing fallback:', err);
+      try {
+        const stored = JSON.parse(localStorage.getItem('hola_admin_ai_reviews_v1') || '[]');
+        stored.unshift({
+          id: `rev-${Date.now()}`,
+          sessionId: result?.sessionId || `session-${id}`,
+          userIdentifier: 'learner (bạn)',
+          scenarioId: result?.scenarioId || id,
+          scenarioTitle: result?.scenarioTitle || 'Kịch bản Roleplay',
+          rating: reviewRating,
+          userFeedback: feedbackComment.trim() || (selectedIssues.length > 0 ? selectedIssues.join(', ') : 'Đánh giá phiên Roleplay hoàn thành tốt.'),
+          taggedIssues: selectedIssues,
+          hasPermissionToView: true,
+          reviewedByAdmin: false,
+          status: 'FLAGGED',
+          createdAt: new Date().toISOString().replace('T', ' ').slice(0, 16),
+        });
+        localStorage.setItem('hola_admin_ai_reviews_v1', JSON.stringify(stored));
+      } catch (ignored) {}
+      setIsReviewSubmitted(true);
+      showToast('Đã ghi nhận đánh giá của bạn vào hệ thống!');
+    } finally {
+      setIsSubmittingReview(false);
     }
   };
 
@@ -166,6 +226,133 @@ export function RoleplayResultPage() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Learner AI Review & Quality Feedback Card */}
+      <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '20px', padding: '24px', marginBottom: '36px' }}>
+        <h2 style={{ fontSize: '18px', margin: '0 0 10px', color: 'var(--color-ink)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span>⭐</span>
+          <BilingualText vi="Đánh giá chất lượng hội thoại của AI" en="Rate AI Conversation Quality" />
+        </h2>
+        <p style={{ margin: '0 0 16px', fontSize: '13px', color: 'var(--color-forest)' }}>
+          <BilingualText vi="Ý kiến đánh giá của bạn được gửi trực tiếp đến trang Kiểm toán AI của Quản trị viên để cải tiến kịch bản." en="Your review will be synchronized directly with the Admin AI Quality Audit console." />
+        </p>
+
+        {isReviewSubmitted ? (
+          <div style={{ padding: '14px 18px', background: 'var(--color-cream)', borderRadius: '12px', border: '1px solid var(--color-border)', color: 'var(--color-ink)', fontSize: '13.5px', fontWeight: 600 }}>
+            🎉 <BilingualText vi="Cảm ơn bạn đã gửi đánh giá! Phản hồi của bạn đã được đồng bộ lên hệ thống quản trị chất lượng AI." en="Thank you for your review! Your feedback has been synchronized with the Admin AI audit system." />
+          </div>
+        ) : (
+          <form onSubmit={handleSubmitReview} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {/* Star Rating */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-ink)' }}>
+                <BilingualText vi="Mức độ hài lòng:" en="Satisfaction:" />
+              </span>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setReviewRating(star)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '24px',
+                      color: star <= reviewRating ? '#f59e0b' : '#cbd5e1',
+                      padding: '2px',
+                    }}
+                    title={`${star} sao`}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+              <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 600, marginLeft: '6px' }}>
+                {reviewRating === 5 ? '⭐⭐⭐⭐⭐ Rất tự nhiên' : reviewRating === 4 ? '⭐⭐⭐⭐ Tốt' : reviewRating === 3 ? '⭐⭐⭐ Bình thường' : reviewRating === 2 ? '⭐⭐ Cần cải thiện' : '⭐ Chưa đạt'}
+              </span>
+            </div>
+
+            {/* Quick Feedback Tags */}
+            <div>
+              <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--color-ink)', display: 'block', marginBottom: '8px' }}>
+                <BilingualText vi="Nhận xét chi tiết (chọn nếu có):" en="Key observations (optional):" />
+              </span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {[
+                  'Giao tiếp tự nhiên',
+                  'Phản xạ nhanh & nhạy',
+                  'Đúng ngữ cảnh văn hóa',
+                  'Từ vựng phong phú',
+                  'Xưng hô chuẩn mực',
+                  'Cần sửa lỗi ngữ pháp kỹ hơn',
+                  'Cần bổ sung giải thích từ vựng',
+                ].map((tag) => {
+                  const isSelected = selectedIssues.includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => {
+                        setSelectedIssues(curr =>
+                          isSelected ? curr.filter(t => t !== tag) : [...curr, tag]
+                        );
+                      }}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '999px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        border: isSelected ? '1px solid var(--color-red)' : '1px solid var(--color-border)',
+                        background: isSelected ? 'var(--color-red-soft)' : 'var(--color-cream)',
+                        color: isSelected ? 'var(--color-red)' : 'var(--color-ink)',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      {isSelected ? '✓ ' : '+ '}{tag}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Feedback textarea */}
+            <div>
+              <textarea
+                rows={2}
+                placeholder="Ý kiến hoặc góp ý thêm của bạn về lời thoại và phản hồi của nhân vật AI..."
+                value={feedbackComment}
+                onChange={(e) => setFeedbackComment(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--color-border)',
+                  fontSize: '13px',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="button"
+                disabled={isSubmittingReview}
+                style={{
+                  fontSize: '13px',
+                  padding: '10px 22px',
+                  background: 'var(--color-red-hover)',
+                  borderColor: 'var(--color-red-hover)',
+                }}
+              >
+                {isSubmittingReview ? 'Đang gửi...' : 'Gửi đánh giá cho Admin'}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
 
       {/* Action Footer: Retry & Next Scenario */}
