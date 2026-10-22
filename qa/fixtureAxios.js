@@ -5,9 +5,16 @@ const adminWords=words.map(word=>({...word,status:'PUBLISHED',meanings:[{id:1,tr
 const catalogWords=adminWords.map(word=>({...word,id:word.id+1000}));
 catalogWords.push({id:1009,word:'tạm biệt',pronunciation:'/taːm ɓiət/',partOfSpeech:'PHRASE',status:'PUBLISHED',meanings:[{id:10091,translationEn:'goodbye',definitionEn:'A phrase used when leaving.',usageNote:'Dùng khi kết thúc một cuộc trò chuyện.',displayOrder:0,examples:[{id:100911,exampleVi:'Tạm biệt, hẹn gặp lại!',translationEn:'Goodbye, see you again!',displayOrder:0},{id:100912,exampleVi:'Tạm biệt bạn nhé.',translationEn:'Goodbye, my friend.',displayOrder:1}]},{id:10092,translationEn:'farewell',definitionEn:'An expression of parting.',usageNote:'Cũng có thể dùng khi chia tay trong thời gian dài.',displayOrder:1,examples:[{id:100921,exampleVi:'Tôi đến để nói lời tạm biệt.',translationEn:'I came to say farewell.',displayOrder:0}]}]},{id:1010,word:'QA unpublished vocabulary',status:'DRAFT',meanings:[]});
 const fixtureMode=new URLSearchParams(location.search).get('fixture');
+const reviewSession={sessionId:'qa-vocabulary-review',notebookCount:words.length,entries:words.slice(0,3),results:[]};
 async function request(path,body,options={}){
  options.signal?.throwIfAborted();
  if(fixtureMode==='error')throw new Error('Không thể tải dữ liệu kiểm thử. Vui lòng thử lại.');
+ if(path==='/api/me/vocabulary/review')return fixtureMode==='empty'?{...reviewSession,notebookCount:0,entries:[],results:[]}:{...reviewSession,entries:[...reviewSession.entries],results:[...reviewSession.results]};
+ if(/^\/api\/me\/vocabulary\/\d+\/review$/.test(path)){
+  const entryId=Number(path.split('/').at(-2)),word=words.find(item=>item.id===entryId);
+  const result={entryId,word:word?.word,rating:body.rating,nextReviewAt:'2026-10-24T09:00:00Z'};
+  reviewSession.results.push(result);reviewSession.entries=reviewSession.entries.filter(item=>item.id!==entryId);return result;
+ }
  if(/^\/api\/(?:admin\/)?destinations(?:\/|$)/.test(path))return requestDestination(path,body,options,fixtureMode);
  if(path==='/api/me/courses')return fixtureMode==='empty'?[]:courses.slice(0,2).map(course=>({...course,courseId:course.id,courseTitle:course.title,enrollmentId:course.id,completedLessons:2,totalLessons:course.totalLessons,progressPercentage:45,lastAccessedLessonId:101,enrolledAt:'2026-10-08',status:'ACTIVE'}));
  if(/^\/api\/me\/courses\/\d+\/progress$/.test(path))return {progressPercentage:45,completedLessons:2,totalLessons:6,nextLessonId:101};

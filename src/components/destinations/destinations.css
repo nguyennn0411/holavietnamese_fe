@@ -1,7 +1,7 @@
 /* Destination and Explore presentation. */
 .explore-page, .destination-detail-page { min-width: 0; }
 .explore-page .explore-keyword-filter { flex: 1 1 260px; }
-.explore-page .explore-region-filter { flex: 0 1 200px; }
+
 .explore-page .journey-board { display: grid; grid-template-columns: minmax(240px,.8fr) minmax(0,1.2fr); gap: 32px; align-items: start; border-radius: 24px; background: var(--color-surface); }
 .explore-page .journey-map { min-width: 0; padding: 20px; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-paper); }
 .explore-page .journey-map h2 { font-family: inherit; font-weight: 800; }
@@ -95,7 +95,7 @@
 .explore-related-grid p { margin-bottom: 16px; }
 @media(max-width:1000px) { .explore-page .journey-board { grid-template-columns: minmax(0,1fr); } .explore-page .journey-map { position: static; } }
 @media(max-width:639px) {
-  .explore-page :is(.explore-keyword-filter,.explore-region-filter) { flex: 0 0 auto; width: 100%; }
+  .explore-page .explore-keyword-filter { flex: 0 0 auto; width: 100%; }
 }
 @media(max-width:767px) {
   .explore-page .journey-board { padding: 20px; gap: 24px; }
@@ -112,4 +112,20 @@
   .admin-destination-detail-page dl { grid-template-columns: minmax(0,1fr); gap: 6px; }
   .admin-destination-detail-page dd { margin-bottom: 12px; }
   .destination-content-selector { padding: 16px; }
+}
+
+/* One shared toolbar for region chips and destination search. */
+.explore-page .explore-toolbar { display: flex; align-items: center; gap: 12px; }
+.explore-page .explore-region-buttons { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+.explore-page .explore-region-buttons button, .explore-page .explore-region-buttons > span { white-space: nowrap; }
+.explore-page .explore-keyword-filter { flex: 1 1 240px; min-width: 170px; margin: 0; }
+.explore-page .explore-toolbar > .actions { flex-wrap: nowrap; margin: 0; }
+@media (max-width: 1100px) {
+  .explore-page .explore-toolbar { flex-wrap: wrap; }
+  .explore-page .explore-region-buttons { width: 100%; overflow-x: auto; padding-bottom: 4px; }
+}
+@media (max-width: 639px) {
+  .explore-page .explore-keyword-filter { flex-basis: 100%; }
+  .explore-page .explore-toolbar > .actions { width: 100%; }
+  .explore-page .explore-toolbar > .actions button { flex: 1; }
 }
