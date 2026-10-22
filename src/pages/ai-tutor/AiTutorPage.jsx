@@ -8,7 +8,7 @@ import { vocabularyService } from '@/services/vocabularyService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { audioFeedback } from '@/utils/audioFeedback';
 import { TutorMascotAvatar } from '@/components/mascot';
-
+import { CheckCircle2 } from "lucide-react";
 /**
  * FormattedMessageText - Renders markdown bold keywords, bullet points,
  * and code tags with rich EdTech styling.
