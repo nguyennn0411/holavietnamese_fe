@@ -34,15 +34,19 @@ export function AdminLayout() {
     return () => { document.removeEventListener('keydown', keydown); previous?.focus(); };
   }, [open]);
   const visibleGroups = isContentManager && !isAdmin
-    ? [{ title: 'Nội dung học tập', links: [['/admin/courses', 'Khóa học'], ['/admin/lessons', 'Bài học'], ['/admin/questions', 'Ngân hàng câu hỏi'], ['/admin/quizzes', 'Quiz']] }]
+    ? [{ title: 'Nội dung học tập', links: [['/admin/courses', 'Biên soạn khóa học']] }]
     : groups;
   const location = useLocation();
-  const current = visibleGroups.flatMap(group => group.links).find(([to]) => location.pathname === to || (to !== '/admin' && location.pathname.startsWith(to + '/')))?.[1] || 'Quản trị nội dung';
+  const contentFlowPrefixes = ['/admin/courses', '/admin/lessons', '/admin/questions', '/admin/quizzes'];
+  const inContentFlow = contentFlowPrefixes.some(prefix => location.pathname === prefix || location.pathname.startsWith(prefix + '/'));
+  const current = isContentManager && !isAdmin && inContentFlow
+    ? 'Biên soạn khóa học'
+    : visibleGroups.flatMap(group => group.links).find(([to]) => location.pathname === to || (to !== '/admin' && location.pathname.startsWith(to + '/')))?.[1] || 'Quản trị nội dung';
   return <div className={`admin-wrapper ${open ? 'admin-menu-open' : ''}`}>
     <a className="skip-link" href="#admin-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
     <aside ref={sidebar} id="admin-navigation" className="admin-sidebar">
       <Link to={isAdmin ? '/admin' : '/admin/courses'} className="admin-sidebar-header">hola admin<span><BilingualText>{"CONTENT & LEARNING"}</BilingualText></span></Link>
-      <nav className="admin-nav" aria-label="Điều hướng quản trị">{visibleGroups.map(group => <div className="admin-nav-group" key={group.title}><p><BilingualText>{group.title}</BilingualText></p>{group.links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/admin'} onClick={() => setOpen(false)} className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}><BilingualText>{label}</BilingualText></NavLink>)}</div>)}</nav>
+      <nav className="admin-nav" aria-label="Điều hướng quản trị">{visibleGroups.map(group => <div className="admin-nav-group" key={group.title}><p><BilingualText>{group.title}</BilingualText></p>{group.links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/admin'} onClick={() => setOpen(false)} className={({ isActive }) => `admin-nav-item ${isActive || (isContentManager && !isAdmin && to === '/admin/courses' && inContentFlow) ? 'active' : ''}`}><BilingualText>{label}</BilingualText></NavLink>)}</div>)}</nav>
       <div className="admin-sidebar-footer"><Link to="/"><ArrowLeft size={16} aria-hidden="true"/><BilingualText>{"Giao diện học viên"}</BilingualText></Link><button className="admin-logout" onClick={logout}><LogOut size={16} aria-hidden="true"/><BilingualText>{"Đăng xuất"}</BilingualText></button></div>
     </aside>
     {open && <button className="admin-menu-backdrop" aria-label="Đóng menu" onClick={() => setOpen(false)} />}

@@ -103,6 +103,7 @@ const QuizAttemptPage = lazy(() => import('@/pages/quiz/QuizPages').then(module 
 const QuizResultPage = lazy(() => import('@/pages/quiz/QuizPages').then(module => ({ default: module.QuizResultPage })));
 const AdminContentListPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminContentListPage })));
 const AdminCourseBuilderPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminCourseBuilderPage })));
+const AdminCourseCreatePage = lazy(() => import('@/components/admin/CourseStudio').then(module => ({ default: module.AdminCourseCreatePage })));
 const AdminLessonBuilderPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminLessonBuilderPage })));
 const AdminCoursePreviewPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminCoursePreviewPage })));
 const AdminLessonPreviewPage = lazy(() => import('@/pages/admin/AdminContentPages').then(module => ({ default: module.AdminLessonPreviewPage })));
@@ -203,6 +204,7 @@ function App() {
             <Route element={<AdminRoute />}>
               <Route element={<AdminLayout />}>
                 <Route path={ROUTES.ADMIN_COURSES} element={<AdminContentListPage kind="courses" />} />
+                <Route path={ROUTES.ADMIN_COURSE_CREATE} element={<AdminCourseCreatePage />} />
                 <Route path={ROUTES.ADMIN_COURSE_BUILDER} element={<AdminCourseBuilderPage />} />
                 <Route path={ROUTES.ADMIN_COURSE_PREVIEW} element={<AdminCoursePreviewPage />} />
                 <Route path={ROUTES.ADMIN_LESSONS} element={<AdminContentListPage kind="lessons" />} />

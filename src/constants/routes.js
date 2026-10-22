@@ -67,6 +67,7 @@ export const ROUTES = {
   // Admin (Người 1)
   ADMIN: '/admin',
   ADMIN_COURSES: '/admin/courses',
+  ADMIN_COURSE_CREATE: '/admin/courses/new',
   ADMIN_COURSE_BUILDER: '/admin/courses/:courseId',
   ADMIN_COURSE_PREVIEW: '/admin/courses/:courseId/preview',
   ADMIN_LESSONS: '/admin/lessons',

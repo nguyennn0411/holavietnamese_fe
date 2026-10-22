@@ -24,7 +24,7 @@ function slugFromTitle(title) {
     .replace(/-+$/g, '');
 }
 
-export function ContentForm({ kind, initial = {}, fixedFields = [], onSave, onCancel }) {
+export function ContentForm({ kind, initial = {}, fixedFields = [], onSave, onCancel, onBusyChange }) {
   const [form,setForm] = useState({ ...defaults[kind], ...initial, estimatedMinutes:initial.estimatedMinutes ?? initial.estimatedDuration ?? defaults[kind]?.estimatedMinutes });
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(Boolean(initial.slug));
   const [busy,setBusy] = useState(false), [error,setError] = useState('');
@@ -74,6 +74,7 @@ export function ContentForm({ kind, initial = {}, fixedFields = [], onSave, onCa
   async function submit(event) {
     event.preventDefault();
     setBusy(true);
+    onBusyChange?.(true);
     setError('');
     try {
       const payload = Object.fromEntries(definitions[kind].map(([key,,type]) => [key, type === 'number' ? form[key] == null || form[key] === '' ? null : Number(form[key]) : form[key] || '']));
@@ -89,6 +90,7 @@ export function ContentForm({ kind, initial = {}, fixedFields = [], onSave, onCa
       setError(err.message || 'Không thể lưu nội dung.');
     } finally {
       setBusy(false);
+      onBusyChange?.(false);
     }
   }
 

@@ -23,6 +23,7 @@ function LessonScreen({ courseId, lessonId }) {
   const [error, setError] = useState('');
   const [savingWord, setSavingWord] = useState(false);
   const [message, setMessage] = useState('');
+  const [contentLesson, setContentLesson] = useState(null);
 
   // Trạng thái mở/đóng thanh bên (Sidebar)
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -175,6 +176,7 @@ function LessonScreen({ courseId, lessonId }) {
                 {/* 2. Main Lesson Content Panel */}
                 <main className={`lesson-panel space-y-6 min-w-0 transition-opacity duration-300 ${isSwitchingLesson ? 'opacity-85' : 'opacity-100'}`}>
                   <LessonActivities
+                    onLessonLoaded={setContentLesson}
                     onProgress={(result) => {
                       if (result.completed) resource.reload();
                     }}
@@ -193,11 +195,12 @@ function LessonScreen({ courseId, lessonId }) {
                     }
                   />
 
-                  {/* Thanh điều hướng bài học (Previous / Complete / Next) */}
+                  {/* Bài có hoạt động được tự hoàn thành từ tiến độ hoạt động và quiz. */}
                   <LessonNavigation
                     lesson={lesson}
                     pending={pending}
                     onComplete={complete}
+                    showComplete={String(contentLesson?.id) === String(lesson.id) && !contentLesson.activities?.length}
                   />
                 </main>
               </div>

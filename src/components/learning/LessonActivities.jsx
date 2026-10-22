@@ -73,6 +73,8 @@ function getActivityTypeIcon(type) {
  * Tự động chọn hình ảnh minh họa chân thực, chuẩn văn hóa và phù hợp ngữ cảnh bài học
  */
 export function getLessonContextualIllustration(activity, lesson) {
+  // This source-backed course already includes every original page and its extracted pictures.
+  if (lesson?.code?.startsWith('TV1-T1-')) return null;
   const code = (lesson?.code || lesson?.slug || '').toLowerCase();
   const title = `${lesson?.title || ''} ${lesson?.titleVi || ''} ${lesson?.titleEn || ''}`.toLowerCase();
   const actText = `${activity?.title || ''} ${activity?.titleVi || ''} ${activity?.instructionVi || ''} ${activity?.instruction || ''} ${activity?.contentJson?.textVi || ''}`.toLowerCase();
@@ -286,6 +288,7 @@ export function LessonActivities({
   courseId,
   nextLessonId,
   onNextLesson,
+  onLessonLoaded,
 }) {
   const resource = useAsyncResource(
     useCallback(
@@ -296,6 +299,12 @@ export function LessonActivities({
       [lessonId, previewLesson]
     )
   );
+
+  useEffect(() => {
+    if (resource.data && String(resource.data.id) === String(lessonId)) {
+      onLessonLoaded?.(resource.data);
+    }
+  }, [resource.data, lessonId, onLessonLoaded]);
 
   return (
     <ResourceState resource={resource}>
@@ -903,7 +912,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                   </div>
                 </div>
                 <span className="px-2.5 py-1 rounded-full bg-stone-100 text-stone-600 text-[11px] font-bold">
-                  {content.illustrations.length} trang
+                  {content.illustrations.length} hình
                 </span>
               </div>
 

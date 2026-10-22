@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCircle2, Check } from 'lucide-react';
 
-export function LessonNavigation({ lesson, pending, onComplete }) {
+export function LessonNavigation({ lesson, pending, onComplete, showComplete = true }) {
   const path = (id) => `/learn/${lesson.courseId}/lesson/${id}`;
 
   return (
@@ -24,6 +24,12 @@ export function LessonNavigation({ lesson, pending, onComplete }) {
 
       {/* Nút Hoàn thành bài học / Đã hoàn thành */}
       <div className="flex items-center gap-3">
+        {lesson.isCompleted ? (
+          <span role="status" className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-emerald-700">
+            <Check size={16} strokeWidth={3} />
+            <BilingualText>{"Đã hoàn thành bài học"}</BilingualText>
+          </span>
+        ) : showComplete ? (
         <button
           type="button"
           disabled={pending || lesson.isCompleted}
@@ -51,6 +57,7 @@ export function LessonNavigation({ lesson, pending, onComplete }) {
             </>
           )}
         </button>
+        ) : null}
       </div>
 
       {/* Nút Bài tiếp theo */}

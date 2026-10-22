@@ -14,8 +14,8 @@ export function ActivityEditor({ initial, lessonId, onSaved }) {
   const [mediaPreview,setMediaPreview] = useState('');
   let content; try {content=JSON.parse(raw);} catch {content=null;}
   const update = values => setRaw(JSON.stringify({...content,...values},null,2));
-  const mediaType = form.activityType === 'IMAGE' ? 'image' : form.activityType === 'VIDEO' ? 'video' : null;
-  const mediaKey = mediaType === 'image' ? 'imageUrl' : 'videoUrl';
+  const mediaType = form.activityType === 'IMAGE' ? 'image' : form.activityType === 'VIDEO' ? 'video' : form.activityType === 'AUDIO' ? 'audio' : null;
+  const mediaKey = mediaType === 'image' ? 'imageUrl' : mediaType === 'audio' ? 'audioUrl' : 'videoUrl';
   useEffect(() => {
     if (!mediaFile) { setMediaPreview(''); return undefined; }
     const url = URL.createObjectURL(mediaFile);
@@ -25,10 +25,10 @@ export function ActivityEditor({ initial, lessonId, onSaved }) {
   function chooseMedia(event) {
     const file = event.target.files?.[0];
     if (!file) return;
-    const allowed = mediaType === 'image' ? ['image/jpeg','image/png','image/webp'] : ['video/mp4','video/webm'];
-    const limit = mediaType === 'image' ? 5 : 100;
+    const allowed = mediaType === 'image' ? ['image/jpeg','image/png','image/webp'] : mediaType === 'audio' ? ['audio/mpeg','audio/mp3','audio/wav','audio/x-wav','audio/ogg','audio/mp4'] : ['video/mp4','video/webm'];
+    const limit = mediaType === 'image' ? 5 : mediaType === 'audio' ? 20 : 100;
     if (!allowed.includes(file.type) || file.size > limit * 1024 * 1024) {
-      setError(`Chọn ${mediaType === 'image' ? 'ảnh JPG, PNG, WebP (tối đa 5 MB)' : 'video MP4, WebM (tối đa 100 MB)'}.`);
+      setError(`Chọn ${mediaType === 'image' ? 'ảnh JPG, PNG, WebP (tối đa 5 MB)' : mediaType === 'audio' ? 'âm thanh MP3, WAV, OGG, M4A (tối đa 20 MB)' : 'video MP4, WebM (tối đa 100 MB)'}.`);
       setMediaFile(null);
       event.target.value = '';
       return;
@@ -44,8 +44,8 @@ export function ActivityEditor({ initial, lessonId, onSaved }) {
       const payload = Object.fromEntries(['activityType','title','titleVi','instruction','instructionVi','isRequired','status'].map(key=>[key,form[key]]));
       const contentJson = JSON.parse(raw);
       if (mediaType) {
-        if (!mediaFile && !contentJson[mediaKey]) throw new Error(`Chọn tệp hoặc nhập URL ${mediaType === 'image' ? 'ảnh' : 'video'}.`);
-        if (mediaFile) contentJson[mediaKey] = await contentService.uploadLessonMedia(mediaFile, mediaType);
+        if (form.status === 'PUBLISHED' && !mediaFile && !contentJson[mediaKey]) throw new Error(`Chọn tệp hoặc nhập URL ${mediaType === 'image' ? 'ảnh' : mediaType === 'audio' ? 'âm thanh' : 'video'}.`);
+        if (mediaFile) { contentJson[mediaKey] = await contentService.uploadLessonMedia(mediaFile, mediaType); delete contentJson.pendingFile; }
       }
       Object.assign(payload,{maxScore:Number(form.maxScore),quizId:form.quizId?Number(form.quizId):null,grammarTopicIds:form.grammarTopicIds,contentJson});
       if(initial.id) await contentService.updateActivity(initial.id,payload);else await contentService.addActivity(lessonId,payload);
@@ -61,18 +61,18 @@ export function ActivityEditor({ initial, lessonId, onSaved }) {
     {content ? <>
       {form.activityType==='TEXT' && field('body','Nội dung bài học',true)}
       {mediaType && <>
-        <label><BilingualText>{mediaType === 'image' ? 'Tải ảnh lên' : 'Tải video lên'}</BilingualText>
-          <input type="file" accept={mediaType === 'image' ? 'image/jpeg,image/png,image/webp' : 'video/mp4,video/webm'} disabled={busy} onChange={chooseMedia}/>
-          <small>{mediaType === 'image' ? 'JPG, PNG, WebP · tối đa 5 MB' : 'MP4, WebM · tối đa 100 MB'} · lưu trên Cloudinary khi lưu hoạt động.</small>
+        <label><BilingualText>{mediaType === 'image' ? 'Tải ảnh lên' : mediaType === 'audio' ? 'Tải âm thanh lên' : 'Tải video lên'}</BilingualText>
+          <input type="file" accept={mediaType === 'image' ? 'image/jpeg,image/png,image/webp' : mediaType === 'audio' ? 'audio/mpeg,audio/mp3,audio/wav,audio/x-wav,audio/ogg,audio/mp4' : 'video/mp4,video/webm'} disabled={busy} onChange={chooseMedia}/>
+          <small>{mediaType === 'image' ? 'JPG, PNG, WebP · tối đa 5 MB' : mediaType === 'audio' ? 'MP3, WAV, OGG, M4A · tối đa 20 MB' : 'MP4, WebM · tối đa 100 MB'} · lưu trên Cloudinary khi lưu hoạt động.{content?.pendingFile ? ` File cần bổ sung: ${content.pendingFile}.` : ''}</small>
         </label>
-        <label><BilingualText>{mediaType === 'image' ? 'Hoặc URL ảnh' : 'Hoặc URL video'}</BilingualText>
+        <label><BilingualText>{mediaType === 'image' ? 'Hoặc URL ảnh' : mediaType === 'audio' ? 'Hoặc URL âm thanh' : 'Hoặc URL video'}</BilingualText>
           <input disabled={busy} value={content?.[mediaKey] || ''} onChange={event=>update({[mediaKey]:event.target.value})}/>
         </label>
         {mediaPreview && (mediaType === 'image'
           ? <img className="lesson-media-upload-preview" src={mediaPreview} alt="Xem trước ảnh bài học"/>
-          : <video className="lesson-media-upload-preview" src={mediaPreview} controls preload="metadata"/>)}
+          : mediaType === 'audio' ? <audio className="lesson-media-upload-preview" src={mediaPreview} controls preload="metadata"/> : <video className="lesson-media-upload-preview" src={mediaPreview} controls preload="metadata"/>)}
       </>}
-      {['AUDIO','SOUND_PATTERN','LISTENING','LISTEN_AND_CHOOSE','LISTEN_AND_TYPE'].includes(form.activityType) && <>{field('audioUrl','Đường dẫn âm thanh')}{field('transcriptVi','Lời thoại tiếng Việt',true)}</>}
+      {['AUDIO','SOUND_PATTERN','LISTENING','LISTEN_AND_CHOOSE','LISTEN_AND_TYPE'].includes(form.activityType) && <>{form.activityType !== 'AUDIO' && field('audioUrl','Đường dẫn âm thanh')}{field('transcriptVi','Lời thoại tiếng Việt',true)}</>}
       {['VOCABULARY','FLASHCARD'].includes(form.activityType) && rows('items',[['wordVi','Từ tiếng Việt'],['meaningEn','Nghĩa tiếng Anh'],['pronunciation','Phiên âm'],['exampleVi','Ví dụ'],['audioUrl','Âm thanh'],['imageUrl','Hình minh họa']],{wordVi:'',meaningEn:''})}
       {form.activityType==='DIALOGUE' && rows('lines',[['speaker','Người nói'],['textVi','Câu tiếng Việt'],['textEn','Bản dịch'],['audioUrl','Âm thanh']],{speaker:'',textVi:'',textEn:''})}
       {exercises.includes(form.activityType) && <>{field('prompt','Câu hỏi',true)}{field('promptVi','Câu hỏi tiếng Việt',true)}<p className="muted"><BilingualText>{"Lựa chọn và cấu hình đáp án nằm trong phần nâng cao bên dưới. Chấm điểm dùng kiểm tra hiện có của hệ thống."}</BilingualText></p></>}

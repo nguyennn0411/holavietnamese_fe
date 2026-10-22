@@ -30,10 +30,13 @@ async function uploadSignedMedia(file, endpoint, expectedType) {
 }
 
 export const contentService = {
+  async courseWorkbookTemplate() { return axiosClient.get('/api/admin/courses/workbook/template', { responseType: 'blob' }); },
+  async courseWorkbookValidate(file) { const form = new FormData(); form.append('file', file); return axiosClient.post('/api/admin/courses/workbook/validate', form); },
+  async courseWorkbookImport(file) { const form = new FormData(); form.append('file', file); return axiosClient.post('/api/admin/courses/workbook/import', form); },
   uploadCourseCover(file) { return uploadSignedMedia(file, '/api/media/courses/cover/signature', 'image'); },
   uploadLessonMedia(file, type) {
-    if (!['image', 'video'].includes(type)) throw new Error('Loại tệp bài học không hợp lệ.');
-    return uploadSignedMedia(file, `/api/media/lessons/signature?type=${type}`, type);
+    if (!['image', 'video', 'audio'].includes(type)) throw new Error('Loại tệp bài học không hợp lệ.');
+    return uploadSignedMedia(file, type === 'audio' ? '/api/media/audio/signature?prefix=lesson' : `/api/media/lessons/signature?type=${type}`, type === 'audio' ? 'video' : type);
   },
   uploadQuestionMedia(file, type) {
     if (!['image', 'audio'].includes(type)) throw new Error('Loại tệp câu hỏi không hợp lệ.');
