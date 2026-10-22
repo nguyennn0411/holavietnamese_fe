@@ -9,7 +9,6 @@ import { VocabularyCard } from '@/components/vocabulary/VocabularyCard'
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm'
 import { VocabularySearch } from '@/components/vocabulary/VocabularySearch'
 import { VocabularyFilter } from '@/components/vocabulary/VocabularyFilter'
-import { VocabularyOverview } from '@/components/vocabulary/VocabularyNavigation'
 import { ROUTES } from '@/constants/routes'
 import '@/components/vocabulary/vocabulary.css'
 export function VocabularyNotebookPage() {
@@ -19,8 +18,7 @@ export function VocabularyNotebookPage() {
   const [message, setMessage] = useState(location.state?.vocabularyMessage || '')
   const resource = useVocabulary({ search, courseId, lessonId })
   const options = useVocabularyOptions()
-  return <section className="vocabulary-page vocabulary-ui vocabulary-notebook-page"><PageHeader eyebrow="Những từ mở ra thế giới" title="Sổ tay từ vựng" description="Những từ nhỏ. Những kết nối đời thường. Biến chúng thành của bạn." actions={<><Link to="/vocabulary/review" className="button"><BilingualText>{"Ôn từ vựng →"}</BilingualText></Link><button className="secondary" onClick={() => setEditing({})}><BilingualText>{"+ Thêm từ"}</BilingualText></button></>} />
-    <VocabularyOverview key={resource.data?.length} active="notebook"><div className="actions"><Link className="button secondary" to={ROUTES.VOCABULARY}><BilingualText>{"Khám phá thêm từ"}</BilingualText></Link><Link className="text-link" to="/my-learning"><BilingualText>{"Góc học tập →"}</BilingualText></Link></div></VocabularyOverview>
+  return <section className="vocabulary-page vocabulary-ui vocabulary-notebook-page"><PageHeader eyebrow="Những từ mở ra thế giới" title="Sổ tay từ vựng" description="Những từ nhỏ. Những kết nối đời thường. Biến chúng thành của bạn." actions={<><Link to={`${ROUTES.MY_LEARNING}?tab=vocabulary`} className="button secondary"><BilingualText vi="← Góc học tập" en="← My learning" /></Link><Link to={ROUTES.VOCABULARY_REVIEW} className="button"><BilingualText vi="Ôn từ vựng →" en="Review vocabulary →" /></Link><button className="secondary" onClick={() => setEditing({})}><BilingualText vi="+ Thêm từ" en="+ Add word" /></button></>} />
     <div className="filters"><VocabularySearch value={search} onChange={setSearch} />
       {options.data && <VocabularyFilter {...options.data} courseId={courseId} lessonId={lessonId} onCourseChange={id => { setCourseId(id); setLessonId('') }} onLessonChange={setLessonId} />}
     </div>

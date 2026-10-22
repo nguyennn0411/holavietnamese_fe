@@ -8,7 +8,6 @@ import { vocabularyReviewService } from '@/services/vocabularyReviewService';
 import { ResourceState } from '@/components/common/ResourceState';
 import { PageHeader, SpeakButton, EmptyState } from '@/components/common/Ui';
 import { ProgressBar } from '@/components/common/ProgressBar';
-import { VocabularyNavigation } from '@/components/vocabulary/VocabularyNavigation';
 import '@/components/vocabulary/vocabulary.css';
 import { CircleCheck, RotateCcw, Gauge, Check, CheckCheck } from 'lucide-react';
 
@@ -21,7 +20,7 @@ export function VocabularyReviewPage() {
     return session;
   }, [storageKey]));
   const restart = () => { localStorage.removeItem(storageKey); sessionStorage.removeItem(storageKey); resource.reload(); };
-  return <section className="vocabulary-ui vocabulary-review-page"><PageHeader eyebrow="Ôn từng chút một" title="Ôn tập từ vựng" description="Một vài phút để những từ mới trở nên quen thuộc." actions={<Link to={ROUTES.VOCABULARY_NOTEBOOK} className="button secondary"><BilingualText>{"← Sổ từ vựng"}</BilingualText></Link>} /><VocabularyNavigation active="review" count={!resource.loading && !resource.error ? resource.data?.notebookCount : undefined} /><ResourceState resource={resource}>{session => session.entries.length || session.results.length ? <ReviewDeck key={session.sessionId} session={session} onRestart={restart} /> : <EmptyState title={session.notebookCount ? 'Bạn đã ôn hết các từ đến hạn' : 'Sổ tay của bạn đang chờ từ đầu tiên'} description={session.notebookCount ? 'Lịch ôn tiếp theo đã được lưu trong sổ tay.' : 'Thêm từ hoặc lưu từ trong khi học để bắt đầu ôn tập.'}><Link className="button" to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{session.notebookCount ? 'Về sổ tay' : 'Thêm từ vựng'}</BilingualText></Link></EmptyState>}</ResourceState></section>;
+  return <section className="vocabulary-ui vocabulary-review-page"><PageHeader eyebrow="Ôn từng chút một" title="Ôn tập từ vựng" description="Một vài phút để những từ mới trở nên quen thuộc." actions={<><Link to={`${ROUTES.MY_LEARNING}?tab=vocabulary`} className="button secondary"><BilingualText vi="← Góc học tập" en="← My learning" /></Link><Link to={ROUTES.VOCABULARY_NOTEBOOK} className="button secondary"><BilingualText vi="Sổ từ vựng" en="Vocabulary notebook" /></Link></>} /><ResourceState resource={resource}>{session => session.entries.length || session.results.length ? <ReviewDeck key={session.sessionId} session={session} onRestart={restart} /> : <EmptyState title={session.notebookCount ? 'Bạn đã ôn hết các từ đến hạn' : 'Sổ tay của bạn đang chờ từ đầu tiên'} description={session.notebookCount ? 'Lịch ôn tiếp theo đã được lưu trong sổ tay.' : 'Thêm từ hoặc lưu từ trong khi học để bắt đầu ôn tập.'}><Link className="button" to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{session.notebookCount ? 'Về sổ tay' : 'Thêm từ vựng'}</BilingualText></Link></EmptyState>}</ResourceState></section>;
 }
 function ReviewDeck({ session, onRestart }) {
   const entries = session.entries;
@@ -43,7 +42,7 @@ function ReviewDeck({ session, onRestart }) {
       <div><strong>{moreCount}</strong><span><BilingualText>{"Ôn lại"}</BilingualText></span></div>
     </div>
     <p className="muted"><BilingualText vi={<>{moreCount} từ cần ôn thêm. Kết quả và lịch ôn đã được lưu.</>} en={<>{moreCount} words need more practice. Results and review schedules have been saved.</>} /></p>
-    <div className="actions"><button onClick={onRestart}><BilingualText>{"Ôn lại"}</BilingualText></button><Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{"Về sổ tay"}</BilingualText></Link><Link className="text-link" to={ROUTES.VOCABULARY}><BilingualText>{"Về từ vựng"}</BilingualText></Link></div>
+    <div className="actions"><button onClick={onRestart}><BilingualText>{"Ôn lại"}</BilingualText></button><Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText>{"Về sổ tay"}</BilingualText></Link><Link className="text-link" to={`${ROUTES.MY_LEARNING}?tab=vocabulary`}><BilingualText vi="Về góc học tập" en="Back to my learning" /></Link></div>
     <ul className="vocabulary-review-results">{results.map(result => <li key={result.entryId}><span>{result.word}</span><span className={`vocabulary-rating vocabulary-rating--${result.rating.toLowerCase()}`}><BilingualText>{labels[result.rating]}</BilingualText><br /><time dateTime={result.nextReviewAt}>{new Date(result.nextReviewAt).toLocaleString()}</time></span></li>)}</ul>
   </div>;
   const word = entries[index];

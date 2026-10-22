@@ -1,6 +1,6 @@
 ﻿import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { BookOpen, Languages, MapPin, Award, ArrowRight, Plus, CheckCircle2, Calendar, Flame, Clock, Play } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
@@ -12,9 +12,22 @@ import { EmptyState, Artwork, SpeakButton } from '@/components/common/Ui';
 import { ProgressBar } from '@/components/common/ProgressBar';
 import { ContentImage } from '@/components/common/ContentImage';
 
+const LEARNING_TABS = new Set(['courses', 'vocabulary', 'journey', 'quiz']);
+
 export function MyLearningPage({ initialTab = 'courses' }) {
-  const [tab, setTab] = useState(initialTab);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const tab = LEARNING_TABS.has(requestedTab)
+    ? requestedTab
+    : (LEARNING_TABS.has(initialTab) ? initialTab : 'courses');
   const [courseFilter, setCourseFilter] = useState('all'); // 'all' | 'in_progress' | 'completed'
+
+  const selectTab = (id) => {
+    const next = new URLSearchParams(searchParams);
+    if (id === 'courses') next.delete('tab');
+    else next.set('tab', id);
+    setSearchParams(next);
+  };
 
   const resource = useAsyncResource(
     useCallback(async () => {
@@ -139,7 +152,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
               type="button"
               role="tab"
               aria-selected={isActive}
-              onClick={() => setTab(item.id)}
+              onClick={() => selectTab(item.id)}
               className={`flex-shrink-0 px-4 py-3 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all duration-200 cursor-pointer ${
                 isActive
                   ? 'border-[#EA580C] text-[#EA580C] bg-[#FFF7E8]'
