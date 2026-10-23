@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { BookOpen, ChevronLeft, ChevronRight, Heart, MessageCircle, Pause, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import bunChaImage from '@/assets/images/learner-carousel/bun-cha.webp';
+import mausoleumImage from '@/assets/images/learner-carousel/ho-chi-minh-mausoleum.webp';
+import hoiAnImage from '@/assets/images/guest-carousel/vietnam-hoi-an-banner.jpg';
 
 /** Cinematic learner carousel shown at the top of the authenticated dashboard. */
 export function LearnerHeroBanner({
@@ -34,7 +37,7 @@ export function LearnerHeroBanner({
       eyebrow: t('hero.continueEyebrow'),
       title: t('hero.continueTitle', { greeting, name: displayName }),
       description: t('hero.continueDescription'),
-      image: '/design/hero/slide1_welcome.jpg',
+      image: bunChaImage,
       action: t('hero.continueAction'),
       to: lessonRoute,
       icon: Play,
@@ -43,7 +46,7 @@ export function LearnerHeroBanner({
     {
       eyebrow: t('hero.reviewEyebrow'), title: t('hero.reviewTitle'),
       description: t('hero.reviewDescription'),
-      image: '/design/hero/slide2_speaking.jpg',
+      image: hoiAnImage,
       action: t('hero.reviewAction'),
       to: '/vocabulary',
       icon: BookOpen,
@@ -52,7 +55,7 @@ export function LearnerHeroBanner({
     {
       eyebrow: t('hero.tutorEyebrow'), title: t('hero.tutorTitle'),
       description: t('hero.tutorDescription'),
-      image: '/design/hero/slide5_aitutor.jpg',
+      image: mausoleumImage,
       action: t('hero.tutorAction'),
       to: '/ai-tutor',
       icon: MessageCircle,

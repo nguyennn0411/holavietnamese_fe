@@ -184,6 +184,29 @@ export const DEFAULT_BANNERS = Object.freeze([
   },
 ]);
 
-export const BUNDLED_BANNER_IMAGES = Object.freeze(
-  Object.fromEntries(DEFAULT_BANNERS.map((banner) => [banner.code, banner.imageUrl])),
-);
+export const BUNDLED_BANNER_IMAGES = Object.freeze({
+  ...Object.fromEntries(DEFAULT_BANNERS.map((banner) => [banner.code, banner.imageUrl])),
+  // Cultural alias fallbacks for Guest banners
+  GUEST_HERO_1: guestPhoImage,
+  GUEST_HERO_2: guestTetImage,
+  GUEST_HERO_3: guestMidAutumnImage,
+  GUEST_HERO_4: guestHoiAnImage,
+  GUEST_1: guestPhoImage,
+  GUEST_2: guestTetImage,
+  GUEST_3: guestMidAutumnImage,
+  GUEST_4: guestHoiAnImage,
+  SLIDE_1: guestPhoImage,
+  SLIDE_2: guestTetImage,
+  SLIDE_3: guestMidAutumnImage,
+  SLIDE_4: guestHoiAnImage,
+  SLIDE_5: learnerMidAutumnImage,
+  // Cultural alias fallbacks for Learner banners
+  LEARNER_HERO_1: learnerBunChaImage,
+  LEARNER_HERO_2: learnerMausoleumImage,
+  LEARNER_HERO_3: learnerTetImage,
+  LEARNER_HERO_4: learnerMidAutumnImage,
+  LEARNER_1: learnerBunChaImage,
+  LEARNER_2: learnerMausoleumImage,
+  LEARNER_3: learnerTetImage,
+  LEARNER_4: learnerMidAutumnImage,
+});

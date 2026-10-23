@@ -403,9 +403,25 @@
   cursor: not-allowed;
 }
 
-.ob-primary span {
+.ob-primary .ob-primary-arrow,
+.ob-primary > span[aria-hidden="true"] {
   font-size: 21px;
-  line-height: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ob-primary .ob-primary-text,
+.ob-primary .bilingual-text,
+.ob-primary .bilingual-text__current {
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: inherit;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
 }
 
 .ob-outline {

@@ -57,7 +57,7 @@ function LessonScreen({ courseId, lessonId }) {
         const isSwitchingLesson = resource.isValidating || String(lesson.id) !== String(lessonId);
 
         return (
-          <div className="lesson-learning-screen w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+          <div className="lesson-learning-screen w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-6 space-y-6">
             {/* ===================== TOP HEADER BAR ===================== */}
             <header className="relative sticky top-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-3.5 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden">
               {/* Subtle top indicator during lesson transitions */}

@@ -76,7 +76,7 @@ export function GuestHome() {
 
       {/* 3. Interactive Quick 10-Second Trial Mini-Lesson */}
       <section id="mini-lesson" className="w-full scroll-mt-24 py-12 px-4 sm:px-8 lg:px-14 bg-gradient-to-b from-[#FBF8F3] via-white to-[#FBF8F3] border-b border-[#EBDED0]">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div className="max-w-[1560px] 2xl:max-w-[1680px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="space-y-3 text-left max-w-xl">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#FED7AA] text-[#FF7A00] text-xs font-black uppercase tracking-wider">
               <span>{t('miniLesson.badge')}</span>
@@ -99,21 +99,21 @@ export function GuestHome() {
 
       {/* 5. Bento Grid Showcase: Full-Width Section */}
       <section id="features" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#EBDED0] bg-gradient-to-b from-white via-[#FBF8F3]/80 to-white">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1560px] 2xl:max-w-[1680px] mx-auto">
           <BentoGridSection />
         </div>
       </section>
 
       {/* 6. Gamified Roadmap Teaser: Full-Width Section */}
       <section id="learning-path" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#EBDED0] bg-[#F6EFE6]/50">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1560px] 2xl:max-w-[1680px] mx-auto">
           <GamifiedRoadmapTeaser />
         </div>
       </section>
 
       {/* 7. Expat Testimonials: Full-Width Section */}
       <section id="testimonials" className="w-full scroll-mt-24 py-16 sm:py-24 px-4 sm:px-8 lg:px-14 xl:px-20 border-b border-[#EBDED0] bg-gradient-to-b from-white to-[#FBF8F3]">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1560px] 2xl:max-w-[1680px] mx-auto">
           <ExpatTestimonials />
         </div>
       </section>

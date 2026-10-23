@@ -12,7 +12,14 @@ const byDisplayOrder = (left, right) => (
 
 const fallbackMenusByCode = new Map(DEFAULT_MENU_ITEMS.map((item) => [normalizedKey(item.code), item]));
 const fallbackBannersByCode = new Map(DEFAULT_BANNERS.map((item) => [normalizedKey(item.code), item]));
-const fallbackBannersBySlot = new Map(DEFAULT_BANNERS.map((item) => [`${item.placement}:${item.displayOrder}`, item]));
+const fallbackBannersBySlot = new Map();
+DEFAULT_BANNERS.forEach((item) => {
+  fallbackBannersBySlot.set(`${item.placement}:${item.displayOrder}`, item);
+  const normalizedOrder = Math.floor(Number(item.displayOrder) / 10);
+  if (normalizedOrder > 0) {
+    fallbackBannersBySlot.set(`${item.placement}:${normalizedOrder}`, item);
+  }
+});
 
 function normalizeFeatures(value) {
   const source = Array.isArray(value) ? value : (Array.isArray(value?.content) ? value.content : value);
@@ -42,11 +49,13 @@ function normalizeBanners(value, fallback = DEFAULT_BANNERS) {
   return value.map((item) => {
     const defaults = fallbackBannersByCode.get(normalizedKey(item?.code))
       || fallbackBannersBySlot.get(`${item?.placement}:${item?.displayOrder}`)
+      || fallbackBannersBySlot.get(`${item?.placement}:${Math.floor(Number(item?.displayOrder) / 10)}`)
       || {};
+    const bundledImageUrl = defaults.imageUrl || BUNDLED_BANNER_IMAGES[normalizedKey(item?.code)] || null;
     return {
       ...defaults,
       ...item,
-      bundledImageUrl: defaults.imageUrl || BUNDLED_BANNER_IMAGES[normalizedKey(item?.code)] || null,
+      bundledImageUrl,
     };
   }).sort(byDisplayOrder);
 }
@@ -96,12 +105,50 @@ export function safeExternalUrl(value) {
   }
 }
 
+export const isLegacyOrAiImage = (url) => {
+  if (!url || typeof url !== 'string') return false;
+  const lower = url.toLowerCase();
+  return lower.includes('/design/hero/slide')
+    || lower.includes('slide1_welcome')
+    || lower.includes('slide2_speaking')
+    || lower.includes('slide3_culture')
+    || lower.includes('slide4_journey')
+    || lower.includes('slide5_aitutor')
+    || lower.includes('gemini_generated')
+    || lower.includes('ai-generated');
+};
+
 export function resolveBannerImage(banner) {
+  const code = normalizedKey(banner?.code);
+  const slotKey = `${banner?.placement}:${banner?.displayOrder}`;
+  const slotFallback = fallbackBannersBySlot.get(slotKey)
+    || fallbackBannersBySlot.get(`${banner?.placement}:${Math.floor(Number(banner?.displayOrder) / 10)}`);
+
+  const bundled = banner?.bundledImageUrl
+    || BUNDLED_BANNER_IMAGES[code]
+    || slotFallback?.bundledImageUrl
+    || slotFallback?.imageUrl
+    || null;
+
   const source = typeof banner?.imageUrl === 'string' ? banner.imageUrl.trim() : '';
+
+  // Reject legacy AI artwork paths and force authentic cultural bundled photos
+  if (isLegacyOrAiImage(source)) {
+    return bundled || null;
+  }
+
+  // If source is a relative asset token that won't resolve at runtime in production
   const isSourceAssetToken = /^(?:\/?src\/|@\/)assets\//i.test(source)
     || /^\/assets\/images\/(?:guest|learner)-carousel\//i.test(source);
-  if (source && !isSourceAssetToken) return source;
-  return banner?.bundledImageUrl || BUNDLED_BANNER_IMAGES[normalizedKey(banner?.code)] || source || null;
+
+  // If it's a genuine remote upload (like Cloudinary) or custom public asset that isn't AI-generated
+  if (source && !isSourceAssetToken) {
+    if (/^https?:\/\//i.test(source) || /^\/uploads\//i.test(source)) {
+      return source;
+    }
+  }
+
+  return bundled || source || null;
 }
 
 const fallbackState = Object.freeze({

@@ -51,7 +51,7 @@ export function RoleplayResultPage() {
   if (!result) return <EmptyState title={bLabel("Chưa có kết quả phiên hội thoại", "No conversation session results")} description={bLabel("Hoàn thành một cuộc trò chuyện để xem đánh giá.", "Complete a conversation to view the evaluation.")}><Link className="button" to="/ai-scenarios"><BilingualText vi="Chọn kịch bản →" en="Choose scenario →" /></Link></EmptyState>;
 
   return (
-    <div className="p4-container">
+    <div className="p4-container roleplay-result-page w-full max-w-full px-0 py-6 space-y-8">
       {toastMessage && (
         <div className="p4-toast">
           
@@ -135,7 +135,7 @@ export function RoleplayResultPage() {
       </div>
 
       {/* 2-Column Section: Corrections & Practiced Expressions */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', marginBottom: '36px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-7 mb-9">
         {/* Errors & Native Suggestions */}
         <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '20px', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', margin: '0 0 16px', color: 'var(--color-red-hover)', display: 'flex', alignItems: 'center', gap: '8px' }}>

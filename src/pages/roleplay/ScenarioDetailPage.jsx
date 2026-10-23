@@ -48,7 +48,7 @@ export function ScenarioDetailPage() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left">
+      <div className="relative z-10 w-full max-w-full px-0 py-6 space-y-8 text-left">
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center gap-2 text-xs font-bold text-[#64748B]">
           <Link
@@ -67,7 +67,7 @@ export function ScenarioDetailPage() {
         </nav>
 
         {/* Hero Header Section */}
-        <section className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-6 sm:p-10 shadow-xs">
+        <section className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-8 sm:p-12 shadow-xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Info Column (7 cols) */}
             <div className="lg:col-span-7 space-y-4">
@@ -111,7 +111,7 @@ export function ScenarioDetailPage() {
             </div>
 
             {/* Right Media Preview (5 cols) */}
-            <div className="lg:col-span-5 aspect-[16/10] lg:aspect-auto h-full min-h-[240px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E8E5DF]/80 shadow-md">
+            <div className="lg:col-span-5 aspect-[16/10] lg:aspect-auto h-full min-h-[320px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E8E5DF]/80 shadow-md">
               <ContentImage
                 src={scenario.coverImage}
                 alt={isVi ? (scenario.titleVi || scenario.title) : (scenario.titleEn || scenario.title)}

@@ -76,7 +76,18 @@ export function SelectionCard({ selected, onClick, icon: Icon, title, titleVi, d
 }
 
 export function PrimaryButton({ children = <BilingualText vi="TIẾP TỤC" en="CONTINUE" />, disabled, onClick, type = 'button', className = '' }) {
-  return <motion.button type={type} className={`ob-primary ${className}`} disabled={disabled} onClick={onClick} whileTap={{ scale: 0.98 }}>{children}<span aria-hidden="true">→</span></motion.button>;
+  return (
+    <motion.button
+      type={type}
+      className={`ob-primary ${className}`}
+      disabled={disabled}
+      onClick={onClick}
+      whileTap={{ scale: 0.98 }}
+    >
+      <span className="ob-primary-text">{children}</span>
+      <span className="ob-primary-arrow" aria-hidden="true">→</span>
+    </motion.button>
+  );
 }
 
 export function LessonHeader({ current, total, onExit, sound, onSound }) {

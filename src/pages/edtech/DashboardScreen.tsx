@@ -490,7 +490,7 @@ export const DashboardScreen: React.FC = () => {
 
   return (
     <div className="duo-page-container">
-      <div className="mx-auto max-w-6xl">
+      <div className="w-full max-w-[1520px] 2xl:max-w-[1640px] mx-auto px-2 sm:px-4 lg:px-6">
         {/* Duolingo Top Cockpit Bar */}
         <div className="duo-stats-bar">
           <div className="flex items-center gap-2">
@@ -543,10 +543,10 @@ export const DashboardScreen: React.FC = () => {
         ) : null}
 
         {/* 2-Column Duolingo Layout: Winding Path on Left, Quests & Leaderboard on Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_380px] 2xl:grid-cols-[minmax(0,1fr)_400px] gap-6 lg:gap-8 xl:gap-10 items-start">
           
           {/* Main Learning Serpentine Path */}
-          <div className="w-full max-w-xl mx-auto">
+          <div className="w-full min-w-0 max-w-[940px] mx-auto">
             {UNITS_DATA.map((unit, unitIdx) => {
               const unitLessons = lessons.slice(unit.lessonRange[0], unit.lessonRange[1] + 1);
 
@@ -671,7 +671,7 @@ export const DashboardScreen: React.FC = () => {
                           {unit.unitNumber === 1 && idxInUnit === 1 && (
                             <div
                               className="duo-mascot-companion hidden md:flex"
-                              style={{ left: '-150px', top: '-15px' }}
+                              style={{ left: 'calc(50% - 220px)', top: '-15px' }}
                             >
                               <div className="duo-mascot-bubble">
                                 {isVi ? "Chỉ 5 phút mỗi ngày cùng Nghé nhé! 🎉" : "Just 5 minutes a day with Nghé! 🎉"}
@@ -683,7 +683,7 @@ export const DashboardScreen: React.FC = () => {
                           {unit.unitNumber === 2 && idxInUnit === 1 && (
                             <div
                               className="duo-mascot-companion hidden md:flex"
-                              style={{ right: '-150px', top: '-15px' }}
+                              style={{ left: 'calc(50% + 95px)', top: '-15px' }}
                             >
                               <div className="duo-mascot-bubble">
                                 {isVi ? "Phở & Bánh mì Việt Nam ngon tuyệt! 🍜" : "Vietnamese Pho & Banh Mi are delicious! 🍜"}

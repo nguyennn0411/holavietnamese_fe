@@ -181,7 +181,7 @@
 .admin-content {
   width: 100%;
   max-width: none;
-  padding: 40px;
+  padding: clamp(24px, 2.5vw, 44px);
   margin: 0;
   min-width: 0;
 }

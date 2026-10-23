@@ -235,7 +235,7 @@ export function RoleplaySessionPage() {
   const progressPercent = Math.round((completedCount / totalTasks) * 100);
 
   return (
-    <div className="relative min-h-screen bg-[#FFF9ED] text-[#202124] px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+    <div className="relative min-h-screen bg-[#FFF9ED] text-[#202124] w-full max-w-full px-0 py-6 space-y-6">
       {confirmationDialog}
 
       {/* Toast Notification */}
@@ -349,7 +349,7 @@ export function RoleplaySessionPage() {
       {/* 2-Column Live Roleplay Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Main Dialogue Chat Window (Col 8) */}
-        <main className="lg:col-span-8 flex flex-col bg-white rounded-3xl border border-[#DECBB4] shadow-md overflow-hidden min-h-[620px]">
+        <main className="lg:col-span-8 flex flex-col bg-white rounded-3xl border border-[#DECBB4] shadow-md overflow-hidden min-h-[720px]">
           {/* Partner Status Header */}
           <div className="px-5 py-4 bg-gradient-to-r from-[#FFF9EE] to-white border-b border-[#EADCC7] flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -389,7 +389,7 @@ export function RoleplaySessionPage() {
           {/* Messages Flow Area */}
           <div
             ref={messagesContainerRef}
-            className="flex-1 p-5 sm:p-6 overflow-y-auto max-h-[500px] min-h-[380px] space-y-4 bg-gradient-to-b from-[#FFFDF9] to-white"
+            className="flex-1 p-5 sm:p-6 overflow-y-auto max-h-[640px] min-h-[460px] space-y-4 bg-gradient-to-b from-[#FFFDF9] to-white"
           >
             {session?.messages?.map((msg) => {
               const isAi = msg.sender === 'ai';
@@ -409,7 +409,7 @@ export function RoleplaySessionPage() {
                   )}
 
                   <div
-                    className={`max-w-[85%] sm:max-w-[78%] rounded-2xl p-4 shadow-xs transition-all ${
+                    className={`max-w-[88%] sm:max-w-[82%] xl:max-w-[78%] rounded-3xl p-5 sm:p-6 shadow-xs text-sm sm:text-base leading-relaxed transition-all ${
                       isAi
                         ? 'bg-white border border-[#E8DCCF] text-[#202124]'
                         : 'bg-gradient-to-br from-[#DA251D] to-[#B71C1C] text-white shadow-sm'

@@ -60,23 +60,8 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 /* Keep the closed mini-chat unobtrusive while studying. */
-.ai-tutor-widget .ai-tutor-fab {
-  width: 58px !important;
-  height: 58px !important;
-  min-height: 58px !important;
-  justify-content: center;
-  gap: 0;
-  padding: 5px !important;
-  border-radius: 50% !important;
-}
-
-.ai-tutor-widget .ai-tutor-fab__content {
-  display: none !important;
-}
-
-.ai-tutor-widget .ai-tutor-fab img {
-  width: 46px;
-  height: 46px;
+.ai-tutor-widget .ai-tutor-chat__form {
+  margin-top: auto;
 }
 
 .ai-tutor-page-shell {

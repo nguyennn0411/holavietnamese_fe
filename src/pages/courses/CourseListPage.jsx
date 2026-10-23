@@ -44,14 +44,14 @@ export function CourseListPage() {
   ];
 
   return (
-    <div className="courses-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="courses-page w-full max-w-full px-0 py-6 space-y-8">
       {/* Hero Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-8 sm:p-12 shadow-sm">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none overflow-hidden hidden md:block select-none">
           <Artwork kind="dong-son" className="w-full h-full object-contain object-right" />
         </div>
 
-        <div className="relative z-10 max-w-3xl space-y-4">
+        <div className="relative z-10 max-w-4xl space-y-4">
           <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-extrabold uppercase tracking-wider shadow-2xs">
             <BilingualText>{"Lộ trình toàn diện • Standard Vietnamese Curriculum"}</BilingualText>
           </div>
@@ -60,7 +60,7 @@ export function CourseListPage() {
             <BilingualText>{"Học tiếng Việt theo lộ trình bài bản"}</BilingualText>
           </h1>
 
-          <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
+          <p className="text-base sm:text-lg text-[#64748B] leading-relaxed max-w-3xl">
             <BilingualText>
               {"Tìm điểm bắt đầu của bạn. Từng bài học được thiết kế bám sát thực tế đời sống, ngữ pháp tự nhiên và văn hóa Việt Nam."}
             </BilingualText>
@@ -347,7 +347,7 @@ export function CourseListPage() {
 
               {/* Grid of Course Cards */}
               {filtered.length > 0 ? (
-                <div className="card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 xl:gap-8">
                   {filtered.map(({ course, enrollment }) => (
                     <CourseCard key={course.id} course={course} enrollment={enrollment} />
                   ))}
