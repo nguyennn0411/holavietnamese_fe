@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { BookOpen, Clock } from 'lucide-react';
 
@@ -12,11 +12,11 @@ const LEVEL_BADGES = {
 };
 
 const DEFAULT_COVERS = [
-  `${import.meta.env.BASE_URL}design/hero/slide3_culture.jpg`,
-  `${import.meta.env.BASE_URL}design/hero/slide2_speaking.jpg`,
-  `${import.meta.env.BASE_URL}design/hero/slide1_welcome.jpg`,
-  `${import.meta.env.BASE_URL}design/hero/slide4_journey.jpg`,
-  `${import.meta.env.BASE_URL}design/hero/slide5_aitutor.jpg`,
+  `${import.meta.env.BASE_URL}design/hero/vietnam-pho-banner.jpg`,
+  `${import.meta.env.BASE_URL}design/hero/vietnam-hoi-an-banner.jpg`,
+  `${import.meta.env.BASE_URL}design/hero/vietnam-tet-banner.jpg`,
+  `${import.meta.env.BASE_URL}design/hero/vietnam-mid-autumn-banner.jpg`,
+  `${import.meta.env.BASE_URL}design/hero/ho-chi-minh-mausoleum.webp`,
 ];
 
 export function getCourseCover(course) {
@@ -29,19 +29,19 @@ export function getCourseCover(course) {
 
   // Pattern matching by topic & level
   if (/thực tế|giao tiếp thực tế|nhà hàng|khách sạn|ẩm thực|food|cuisine/i.test(title) || level === 'A2') {
-    return `${import.meta.env.BASE_URL}design/hero/slide3_culture.jpg`;
+    return `${import.meta.env.BASE_URL}design/hero/vietnam-pho-banner.jpg`;
   }
   if (/sinh hoạt|di chuyển|daily|life|travel/i.test(title)) {
-    return `${import.meta.env.BASE_URL}design/hero/slide2_speaking.jpg`;
+    return `${import.meta.env.BASE_URL}design/hero/vietnam-hoi-an-banner.jpg`;
   }
   if (/làm quen|giao tiếp 1|sơ cấp 1|phát âm|alphabet|a0/i.test(title) || level === 'A0') {
-    return `${import.meta.env.BASE_URL}design/hero/slide1_welcome.jpg`;
+    return `${import.meta.env.BASE_URL}design/hero/vietnam-pho-banner.jpg`;
   }
   if (/hành trình|khám phá|trung cấp|b1/i.test(title) || level === 'B1') {
-    return `${import.meta.env.BASE_URL}design/hero/slide4_journey.jpg`;
+    return `${import.meta.env.BASE_URL}design/hero/vietnam-tet-banner.jpg`;
   }
   if (/nâng cao|b2|c1|luyện nói/i.test(title) || level === 'B2' || level === 'C1') {
-    return `${import.meta.env.BASE_URL}design/hero/slide5_aitutor.jpg`;
+    return `${import.meta.env.BASE_URL}design/hero/ho-chi-minh-mausoleum.webp`;
   }
 
   // Deterministic fallback by id
@@ -82,7 +82,7 @@ export function CourseThumbnail({ course, className = '' }) {
         className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
         fallback={
           <img
-            src={`${import.meta.env.BASE_URL}design/hero/slide1_welcome.jpg`}
+            src={`${import.meta.env.BASE_URL}design/hero/vietnam-pho-banner.jpg`}
             alt={course?.title || 'Khóa học'}
             className="w-full h-full object-cover"
           />
