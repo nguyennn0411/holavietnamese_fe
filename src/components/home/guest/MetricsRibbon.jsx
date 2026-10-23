@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
@@ -42,7 +42,7 @@ export function MetricsRibbon() {
 
   return (
     <section className="w-full bg-white/95 backdrop-blur-md border-b border-[#E8E5DF]/70 py-10 px-4 sm:px-8 lg:px-14 shadow-[0_4px_20px_rgba(67,25,20,0.02)]">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x md:divide-[#E8E5DF]/60">
+      <div className="max-w-[1560px] 2xl:max-w-[1680px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x md:divide-[#E8E5DF]/60">
         {metrics.map((item) => <AnimatedMetric key={item.label} {...item} />)}
       </div>
     </section>

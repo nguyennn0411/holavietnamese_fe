@@ -44,7 +44,7 @@ export function AdminDashboardPage() {
       </div>
 
       {/* KPI Cards: 5 cards exactly as specified */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '20px', marginBottom: '28px' }}>
         <div className="admin-card">
           <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}><BilingualText>{"TỔNG NGƯỜI DÙNG"}</BilingualText></span>
           <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--color-ink)', margin: '8px 0 0 0' }}>{totalUsers}</h2>
@@ -77,7 +77,7 @@ export function AdminDashboardPage() {
       </div>
 
       {/* Grid 2 Columns: Growth Chart & Recent Activity */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: '24px' }}>
         {/* User Growth */}
         <div className="admin-card">
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}><BilingualText>{"Tăng trưởng người dùng (6 tháng qua)"}</BilingualText></h3>

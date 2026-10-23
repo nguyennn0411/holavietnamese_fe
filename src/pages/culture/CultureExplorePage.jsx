@@ -30,7 +30,7 @@ export function CultureExplorePage() {
   const isFiltered = search || selectedCategory !== 'all' || selectedDestination !== 'all';
 
   return (
-    <div className="p4-container culture-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="p4-container culture-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8">
       {/* Hero Header */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFFDF9] via-[#FFF7E8] to-[#FFF0DC] border border-[#E8E5DF] p-6 sm:p-10 shadow-xs">
         <div

@@ -1047,7 +1047,7 @@ export function CourseDetailPage() {
   const resource = useCourse(courseId);
 
   return (
-    <section className="course-detail-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <section className="course-detail-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-6">
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-2 text-xs font-semibold text-[#64748B]">
         <Link

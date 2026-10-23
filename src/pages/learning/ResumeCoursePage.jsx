@@ -304,7 +304,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
   const resumeUrl = activeLessonId ? `/learn/${course.id}/lesson/${activeLessonId}` : null;
 
   return (
-    <div className="course-overview-page w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="course-overview-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8">
       {/* Toast thông báo bài học bị khóa */}
       {lockedToast && (
         <div

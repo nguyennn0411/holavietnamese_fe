@@ -38,7 +38,7 @@ export function ExploreVietnamPage() {
   };
 
   return (
-    <section className="explore-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <section className="explore-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8">
       {/* Hero Header */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none overflow-hidden hidden md:block">
@@ -231,7 +231,7 @@ export function DestinationDetailPage() {
       {destination => {
         if (!destination || destination.status !== 'PUBLISHED') return missing;
         return (
-          <section className="destination-detail-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+          <section className="destination-detail-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-6">
             <Breadcrumb items={[{ label: <BilingualText vi="Khám phá Việt Nam" en="Explore Vietnam" />, to: backRoute }, { label: <BilingualText vi={destination.nameVi} en={destination.nameEn} /> }]} />
 
             {/* Destination Hero Banner */}

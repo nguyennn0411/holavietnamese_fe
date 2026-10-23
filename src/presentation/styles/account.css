@@ -19,10 +19,17 @@
 
 .account-page,
 .mylearning-page {
-  width: min(100%, 1200px);
+  width: min(100%, 1560px);
   margin: 0 auto;
   padding: 10px 0 60px;
   color: var(--acc-ink);
+}
+
+@media(min-width: 1600px) {
+  .account-page,
+  .mylearning-page {
+    width: min(100%, 1680px);
+  }
 }
 
 /* Page Header */
