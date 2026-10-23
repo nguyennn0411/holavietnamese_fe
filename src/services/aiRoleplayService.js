@@ -1,5 +1,7 @@
 // AI Roleplay & Scenarios Service (Người 4: /ai-scenarios, /ai-scenarios/:id, /ai-roleplay/:id, /ai-sessions/:id/result)
 
+import axiosClient from '@/infrastructure/api/axiosClient';
+
 export const SCENARIO_LEVELS = [
   { id: 'all', label: 'Tất cả trình độ' },
   { id: 'A1', label: 'A1 - Sơ cấp 1' },
@@ -253,6 +255,66 @@ export const SCENARIOS = [
 
 const ROLEPLAY_SESSION_STORAGE = 'hola_ai_roleplay_session_';
 const ROLEPLAY_RESULT_STORAGE = 'hola_ai_roleplay_result_';
+const AI_PROVIDER = import.meta.env.VITE_AI_PROVIDER || 'openrouter';
+const AI_MODEL = import.meta.env.VITE_AI_MODEL || 'openrouter/free';
+const AI_REQUEST_TIMEOUT_MS = Math.max(5000, Number(import.meta.env.VITE_AI_REQUEST_TIMEOUT_MS) || 30000);
+
+const unwrapAiPayload = (response) => response?.result ?? response?.data ?? response ?? {};
+
+const getAiText = (payload) => (
+  payload?.text
+  ?? payload?.content
+  ?? payload?.answer
+  ?? payload?.reply
+  ?? payload?.message?.text
+  ?? payload?.choices?.[0]?.message?.content
+  ?? payload?.choices?.[0]?.text
+  ?? payload?.output_text
+  ?? payload?.output?.[0]?.content?.[0]?.text
+  ?? null
+);
+
+const normalizeAiPayload = (payload) => {
+  const rawText = getAiText(payload);
+  if (typeof rawText !== 'string') return payload;
+  const candidate = rawText.trim();
+  if (!candidate.startsWith('{') || !candidate.endsWith('}')) return payload;
+  try {
+    const parsed = JSON.parse(candidate);
+    return parsed && typeof parsed === 'object' ? { ...payload, ...parsed } : payload;
+  } catch {
+    return payload;
+  }
+};
+
+const buildRoleplayContext = (scenario, session) => {
+  const completed = new Set(session.completedTasks || []);
+  const remainingObjectives = (scenario.objectives || [])
+    .filter(objective => !completed.has(objective.id))
+    .map(objective => `- ${objective.id}: ${objective.label}`)
+    .join('\\n');
+  const recentMessages = (session.messages || [])
+    .slice(-8)
+    .map(message => `${message.sender === 'user' ? 'HỌC VIÊN' : scenario.aiRole.name}: ${message.text}`)
+    .join('\\n');
+
+  return [
+    'Bạn đang tham gia roleplay học tiếng Việt theo kịch bản bắt buộc.',
+    `KỊCH BẢN: ${scenario.title}`,
+    `BỐI CẢNH: ${scenario.overview}`,
+    `VAI AI: ${scenario.aiRole.name} — ${scenario.aiRole.role}`,
+    `GIỌNG ĐIỆU: ${scenario.aiRole.tone}`,
+    `VAI HỌC VIÊN: ${scenario.learnerRole?.role}`,
+    `MỤC TIÊU: ${scenario.learnerRole?.context}`,
+    'MỤC TIÊU CHƯA HOÀN THÀNH:',
+    remainingObjectives || '- Không còn mục tiêu bắt buộc; hãy kết thúc tự nhiên.',
+    `TỪ/CỤM TỪ NÊN KHUYẾN KHÍCH: ${(scenario.vocabularyHints || []).map(item => item.word).join(', ')}`,
+    `LƯU Ý VĂN HÓA: ${scenario.culturalTip}`,
+    'LỊCH SỬ GẦN ĐÂY:',
+    recentMessages,
+    'QUY TẮC: Luôn ở trong vai và bám kịch bản. Nếu học viên nói lệch chủ đề, trả lời ngắn tối đa một câu rồi kéo họ về mục tiêu gần nhất bằng câu hỏi/gợi ý tiếng Việt. Không đổi vai, không mở chủ đề mới, không giảng dài. Trả JSON hợp lệ gồm text, translation, explanation, completedTasks; không bọc markdown.',
+  ].join('\\n');
+};
 
 let dynamicScenarios = [...SCENARIOS];
 if (typeof localStorage !== 'undefined') {
@@ -439,6 +501,55 @@ export const aiRoleplayService = {
       timestamp: new Date().toISOString(),
     };
 
+    // Roleplay pages can be opened by guests. Avoid sending an unauthenticated
+    // request to the protected backend; logged-in learners still get the real
+    // AI response and the axios client can refresh an expired token.
+    if (localStorage.getItem('token')) {
+      try {
+        const backendSessionId = session.backendSessionId || `roleplay-${scenarioId}`;
+        const apiRes = await axiosClient.post(
+          `/api/ai/sessions/${backendSessionId}/messages`,
+          {
+            text: userMsg.text,
+            mode: 'roleplay',
+            provider: AI_PROVIDER,
+            model: AI_MODEL,
+            scenarioId,
+            scenarioContext: buildRoleplayContext(scenario, session),
+          },
+          { timeout: AI_REQUEST_TIMEOUT_MS },
+        );
+        const response = normalizeAiPayload(unwrapAiPayload(apiRes));
+        const responseText = getAiText(response);
+
+        if (responseText) {
+          const updatedSession = {
+            ...session,
+            backendSessionId,
+            messages: [...(session.messages || []), userMsg, {
+              id: response.id || `rp-${Date.now()}-ai`,
+              sender: 'ai',
+              name: scenario.aiRole.name,
+              avatar: scenario.aiRole.avatar,
+              text: responseText,
+              translation: response.translation || '',
+              explanation: response.explanation || '',
+              timestamp: response.timestamp || new Date().toISOString(),
+            }],
+            completedTasks: response.completedTasks || session.completedTasks || [],
+          };
+          this.saveRoleplaySession(scenarioId, updatedSession);
+          return {
+            userMsg,
+            aiMsg: updatedSession.messages[updatedSession.messages.length - 1],
+            session: updatedSession,
+          };
+        }
+      } catch (error) {
+        console.warn('[AI Roleplay] Backend AI unavailable; using local scenario fallback:', error.message);
+      }
+    }
+
     // Simulate smart roleplay response
     await new Promise(r => setTimeout(r, 400));
 
@@ -561,3 +672,4 @@ export const aiRoleplayService = {
     return this.finishRoleplayAndGetResult(scenarioId);
   },
 };
+
