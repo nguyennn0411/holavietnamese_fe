@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
@@ -113,7 +113,7 @@ export function AdminScenarioBuilderPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
-      toast.error('Vui lòng nhập tên kịch bản.');
+      toast.error(bilingualLabel('Vui lòng nhập tên kịch bản.', 'Please enter a scenario name.'));
       return;
     }
 
@@ -312,7 +312,7 @@ export function AdminScenarioBuilderPage() {
                         type="text"
                         value={task}
                         onChange={e => handleObjectiveChange(idx, e.target.value)}
-                        placeholder={`Mục tiêu ${idx + 1}...`}
+                        placeholder={bilingualLabel(`Mục tiêu ${idx + 1}...`, `Objective ${idx + 1}...`)}
                         style={{ fontSize: '13px' }}
                       />
                       <button

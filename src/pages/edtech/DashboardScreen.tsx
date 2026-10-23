@@ -6,6 +6,8 @@ import { courseService } from '@/services/courseService';
 import { learnerService } from '@/services/learnerService';
 import { learningService } from '@/services/learningService';
 import { BuffaloMascot } from '@/components/mascot';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { useTranslation } from 'react-i18next';
 import '@/presentation/styles/duolingo-path.css';
 
 type AnyRecord = Record<string, any>;
@@ -197,6 +199,8 @@ const courseIdOf = (c: AnyRecord | null) => c?.courseId ?? c?.id;
 
 export const DashboardScreen: React.FC = () => {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const isVi = (i18n.resolvedLanguage || i18n.language || "en").startsWith("vi");
   const [progress, setProgress] = useState<AnyRecord>({});
   const [courseList, setCourseList] = useState<AnyRecord[]>([]);
   const [course, setCourse] = useState<AnyRecord | null>(null);
@@ -218,49 +222,61 @@ export const DashboardScreen: React.FC = () => {
 
     const loadRoadmap = async () => {
       try {
-        const [summary, enrolledResponse] = await Promise.all([
+        const [summary, enrolledResponse, catalogResponse] = await Promise.all([
           learnerService.getProgressData().catch(() => ({})),
           courseService.myCourses().catch(() => []),
+          courseService.list().catch(() => []),
         ]);
 
         if (!active) return;
         setProgress(summary ?? {});
 
-        let enrolled = asArray(enrolledResponse);
-        let current = enrolled.find((item) => item.status === 'ACTIVE') ?? enrolled[0] ?? null;
+        const enrolled = asArray(enrolledResponse);
+        const catalog = asArray(catalogResponse);
 
-        // Auto-select and auto-enroll if learner has no courses enrolled yet
-        if (!current) {
-          try {
-            const catalog = await courseService.list().catch(() => []);
-            const allCourses = asArray(catalog);
-            if (allCourses.length > 0) {
-              current = allCourses[0];
-              enrolled = allCourses;
-              const autoId = courseIdOf(current);
-              if (autoId) {
-                courseService.enroll(autoId).catch(() => {});
-              }
-            }
-          } catch {
-            // fallback
+        // Build combined course list: all catalog courses, with enrollment data merged
+        const combinedCourses: AnyRecord[] = [];
+        const seenIds = new Set<string>();
+
+        // First add catalog courses (from DB)
+        for (const item of catalog) {
+          const cid = String(courseIdOf(item));
+          if (cid && !seenIds.has(cid)) {
+            seenIds.add(cid);
+            const enrolledMatch = enrolled.find((e) => String(courseIdOf(e)) === cid);
+            combinedCourses.push({ ...item, ...enrolledMatch });
+          }
+        }
+        // Then add any remaining enrolled courses
+        for (const item of enrolled) {
+          const cid = String(courseIdOf(item));
+          if (cid && !seenIds.has(cid)) {
+            seenIds.add(cid);
+            combinedCourses.push(item);
           }
         }
 
-        if (!current) {
+        let current = combinedCourses.find((item) => item.status === 'ACTIVE' || item.isCurrent) ?? combinedCourses[0] ?? null;
+
+        if (current) {
+          const autoId = courseIdOf(current);
+          if (autoId) {
+            await courseService.enroll(autoId).catch(() => {});
+          }
+        } else {
           current = {
-            id: 1,
-            courseId: 1,
-            title: 'Tiếng Việt Sơ Cấp A1',
-            titleVi: 'Tiếng Việt Sơ Cấp A1',
-            courseTitle: 'Tiếng Việt Sơ Cấp A1',
+            id: 2,
+            courseId: 2,
+            title: 'Tiếng Việt cơ bản A1',
+            titleVi: 'Tiếng Việt cơ bản A1',
+            courseTitle: 'Tiếng Việt cơ bản A1',
             description: 'Lộ trình tiếng Việt tương tác từng bước từ phát âm, 6 thanh điệu đến phản xạ hội thoại thực tế.',
             progress: 0,
           };
-          enrolled = [current];
+          combinedCourses.push(current);
         }
 
-        setCourseList(enrolled);
+        setCourseList(combinedCourses);
         setCourse(current);
 
         const currentCid = courseIdOf(current);
@@ -288,10 +304,10 @@ export const DashboardScreen: React.FC = () => {
           setError(reason?.message || 'Không thể tải dữ liệu lộ trình học. Đang hiển thị bài học mặc định.');
           setLessons(DEFAULT_CURRICULUM_LESSONS);
           setCourse({
-            id: 1,
-            courseId: 1,
-            title: 'Tiếng Việt Sơ Cấp A1',
-            titleVi: 'Tiếng Việt Sơ Cấp A1',
+            id: 2,
+            courseId: 2,
+            title: 'Tiếng Việt cơ bản A1',
+            titleVi: 'Tiếng Việt cơ bản A1',
             description: 'Lộ trình học tập cá nhân hóa chuẩn A1.',
           });
         }
@@ -310,6 +326,7 @@ export const DashboardScreen: React.FC = () => {
     if (!cid) return;
     try {
       setLoading(true);
+      await courseService.enroll(cid).catch(() => {});
       const [rawLessons, rawProgress] = await Promise.all([
         learningService.lessons(cid).catch(() => []),
         learningService.progress(cid).catch(() => ({})),
@@ -348,8 +365,8 @@ export const DashboardScreen: React.FC = () => {
       <div className="duo-page-container flex items-center justify-center" aria-busy="true">
         <div className="text-center">
           <BuffaloMascot variant="thinking" size="large" animated />
-          <h2 className="mt-4 text-xl font-black text-[#EA580C]">Đang chuẩn bị bản đồ học tập...</h2>
-          <p className="mt-1 text-sm text-[#8a7565]">Nghé đang sắp xếp bài học theo cấp độ của bạn.</p>
+          <h2 className="mt-4 text-xl font-black text-[#EA580C]"><BilingualText vi="Đang chuẩn bị bản đồ học tập..." en="Preparing your learning roadmap..." /></h2>
+          <p className="mt-1 text-sm text-[#8a7565]"><BilingualText vi="Nghé đang sắp xếp bài học theo cấp độ của bạn." en="Nghé is organizing lessons for your level." /></p>
         </div>
       </div>
     );
@@ -361,7 +378,7 @@ export const DashboardScreen: React.FC = () => {
         {/* Duolingo Top Cockpit Bar */}
         <div className="duo-stats-bar">
           <div className="flex items-center gap-2">
-            <span className="font-extrabold text-sm text-[#8a7565]">KHÓA ĐANG HỌC:</span>
+            <span className="font-extrabold text-sm text-[#8a7565]"><BilingualText vi="KHÓA ĐANG HỌC:" en="CURRENT COURSE:" /></span>
             {courseList.length > 1 ? (
               <select
                 className="cursor-pointer rounded-xl border border-[#E8DCCB] bg-[#FFF8EE] px-3 py-1 text-sm font-black text-[#EA580C] outline-none hover:bg-white"
@@ -385,15 +402,15 @@ export const DashboardScreen: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="duo-stat-pill" title="Chuỗi ngày học liên tục">
+            <div className="duo-stat-pill" title={bilingualLabel("Chuỗi ngày học liên tục", "Day streak")}>
               <Flame size={20} className="text-[#FF7A00] fill-[#FF7A00]" />
               <span>{progress?.streakCount ?? progress?.currentStreak ?? 1}</span>
             </div>
-            <div className="duo-stat-pill" title="Tổng điểm kinh nghiệm XP">
+            <div className="duo-stat-pill" title={bilingualLabel("Tổng điểm kinh nghiệm XP", "Total XP")}>
               <Zap size={20} className="text-[#FFC800] fill-[#FFC800]" />
               <span>{progress?.totalXp ?? 120} XP</span>
             </div>
-            <div className="duo-stat-pill" title="Trái tim năng lượng">
+            <div className="duo-stat-pill" title={bilingualLabel("Trái tim năng lượng", "Energy hearts")}>
               <Heart size={20} className="text-[#EF4444] fill-[#EF4444]" />
               <span>5</span>
             </div>
@@ -404,7 +421,7 @@ export const DashboardScreen: React.FC = () => {
           <div role="alert" className="mb-6 flex items-center justify-between rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
             <span>{error}</span>
             <button onClick={() => setRevision((v) => v + 1)} className="inline-flex items-center gap-2 font-bold hover:underline">
-              <RefreshCw size={15} /> Thử lại
+              <RefreshCw size={15} /> <BilingualText vi="Thử lại" en="Retry" />
             </button>
           </div>
         ) : null}
@@ -427,10 +444,10 @@ export const DashboardScreen: React.FC = () => {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       <div>
                         <span className="duo-unit-tag">
-                          <BookOpen size={13} /> CHƯƠNG {unit.unitNumber}
+                          <BookOpen size={13} /> <BilingualText vi={`CHƯƠNG ${unit.unitNumber}`} en={`UNIT ${unit.unitNumber}`} />
                         </span>
-                        <h2 className="duo-unit-title">{unit.title}</h2>
-                        <p className="duo-unit-desc">{unit.description}</p>
+                        <h2 className="duo-unit-title"><BilingualText vi={unit.title} en={unit.titleEn || unit.title} /></h2>
+                        <p className="duo-unit-desc"><BilingualText vi={unit.description} en={unit.descriptionEn || unit.description} /></p>
                       </div>
                       <button
                         type="button"
@@ -438,7 +455,7 @@ export const DashboardScreen: React.FC = () => {
                         onClick={() => setActiveGuidebook(unit.guidebook)}
                       >
                         <BookMarked size={16} />
-                        <span>HƯỚNG DẪN</span>
+                        <span><BilingualText vi="HƯỚNG DẪN" en="GUIDEBOOK" /></span>
                       </button>
                     </div>
                   </div>
@@ -541,7 +558,7 @@ export const DashboardScreen: React.FC = () => {
                               style={{ left: '-150px', top: '-15px' }}
                             >
                               <div className="duo-mascot-bubble">
-                                "Chỉ 5 phút mỗi ngày cùng Nghé nhé! 🎉"
+                                {isVi ? "Chỉ 5 phút mỗi ngày cùng Nghé nhé! 🎉" : "Just 5 minutes a day with Nghé! 🎉"}
                               </div>
                               <BuffaloMascot variant="encouraging" size="medium" animated />
                             </div>
@@ -553,7 +570,7 @@ export const DashboardScreen: React.FC = () => {
                               style={{ right: '-150px', top: '-15px' }}
                             >
                               <div className="duo-mascot-bubble">
-                                "Phở & Bánh mì Việt Nam ngon tuyệt! 🍜"
+                                {isVi ? "Phở & Bánh mì Việt Nam ngon tuyệt! 🍜" : "Vietnamese Pho & Banh Mi are delicious! 🍜"}
                               </div>
                               <BuffaloMascot variant="happy" size="medium" animated />
                             </div>
@@ -564,9 +581,7 @@ export const DashboardScreen: React.FC = () => {
                             {isCurrent && (
                               <>
                                 <div className="duo-node-ring" />
-                                <div className="duo-floating-badge">
-                                  BẮT ĐẦU!
-                                </div>
+                                <div className="duo-floating-badge"><BilingualText vi="BẮT ĐẦU!" en="START!" /></div>
                               </>
                             )}
 
@@ -598,7 +613,7 @@ export const DashboardScreen: React.FC = () => {
                           type="button"
                           className="duo-chest-node"
                           onClick={() => setChestModalOpen(true)}
-                          title="Rương phần thưởng chặng"
+                          title={bilingualLabel("Rương phần thưởng chặng", "Milestone reward chest")}
                         >
                           <Gift size={34} strokeWidth={2.2} />
                           <span className="text-[10px] font-black tracking-wider uppercase mt-1">
@@ -606,7 +621,7 @@ export const DashboardScreen: React.FC = () => {
                           </span>
                         </button>
                         <span className="text-xs font-bold text-[#8a7565] mt-2">
-                          Rương quà chặng {unit.unitNumber}
+                          <BilingualText vi={`Rương quà chặng ${unit.unitNumber}`} en={`Unit ${unit.unitNumber} Chest`} />
                         </span>
                       </div>
                     )}
@@ -622,9 +637,9 @@ export const DashboardScreen: React.FC = () => {
             <div className="duo-sidebar-widget">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-black text-lg text-[#251B18] flex items-center gap-2">
-                  <TargetIcon size={20} className="text-[#FF7A00]" /> Nhiệm vụ hôm nay
+                  <TargetIcon size={20} className="text-[#FF7A00]" /> <BilingualText vi="Nhiệm vụ hôm nay" en="Daily Quests" />
                 </h3>
-                <span className="text-xs font-extrabold text-[#8a7565]">HẾT HẠN SAU 12H</span>
+                <span className="text-xs font-extrabold text-[#8a7565]"><BilingualText vi="HẾT HẠN SAU 12H" en="EXPIRES IN 12H" /></span>
               </div>
 
               <div className="space-y-3.5">
@@ -634,7 +649,7 @@ export const DashboardScreen: React.FC = () => {
                   </span>
                   <div className="flex-1">
                     <div className="flex justify-between text-xs font-extrabold text-[#251B18] mb-1">
-                      <span>Đạt 30 XP hôm nay</span>
+                      <span><BilingualText vi="Đạt 30 XP hôm nay" en="Earn 30 XP today" /></span>
                       <span>20 / 30 XP</span>
                     </div>
                     <div className="h-2 w-full bg-[#E5E7EB] rounded-full overflow-hidden">
@@ -649,7 +664,7 @@ export const DashboardScreen: React.FC = () => {
                   </span>
                   <div className="flex-1">
                     <div className="flex justify-between text-xs font-extrabold text-[#251B18] mb-1">
-                      <span>Hoàn thành 1 bài học</span>
+                      <span><BilingualText vi="Hoàn thành 1 bài học" en="Complete 1 lesson" /></span>
                       <span>1 / 1</span>
                     </div>
                     <div className="h-2 w-full bg-[#E5E7EB] rounded-full overflow-hidden">
@@ -664,7 +679,7 @@ export const DashboardScreen: React.FC = () => {
                   </span>
                   <div className="flex-1">
                     <div className="flex justify-between text-xs font-extrabold text-[#251B18] mb-1">
-                      <span>Luyện phản xạ với Gia sư AI</span>
+                      <span><BilingualText vi="Luyện phản xạ với Gia sư AI" en="Reflex practice with AI Tutor" /></span>
                       <span>0 / 1</span>
                     </div>
                     <div className="h-2 w-full bg-[#E5E7EB] rounded-full overflow-hidden">
@@ -678,18 +693,16 @@ export const DashboardScreen: React.FC = () => {
             {/* Weekly Leaderboard Widget */}
             <div className="duo-sidebar-widget">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-black text-lg text-[#251B18] flex items-center gap-2">
-                  Bảng xếp hạng tuần
-                </h3>
+                <h3 className="font-black text-lg text-[#251B18] flex items-center gap-2"><BilingualText vi="Bảng xếp hạng tuần" en="Weekly Leaderboard" /></h3>
                 <span className="text-xs font-black px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#B45309]">
-                  HẠNG VÀNG
+                  <BilingualText vi="HẠNG VÀNG" en="GOLD LEAGUE" />
                 </span>
               </div>
 
               <div className="space-y-2.5">
                 {[
                   { rank: 1, name: 'Alexandre (France)', xp: 420, medal: '🥇' },
-                  { rank: 2, name: 'Minh Tuấn (Bạn)', xp: 350, medal: '🥈', isUser: true },
+                  { rank: 2, name: isVi ? 'Minh Tuấn (Bạn)' : 'Minh Tuan (You)', xp: 350, medal: '🥈', isUser: true },
                   { rank: 3, name: 'Sarah Miller (USA)', xp: 290, medal: '🥉' },
                 ].map((item) => (
                   <div
@@ -714,7 +727,7 @@ export const DashboardScreen: React.FC = () => {
                   to="/progress"
                   className="text-xs font-black text-[#FF7A00] hover:underline"
                 >
-                  Xem bảng xếp hạng đầy đủ →
+                  <BilingualText vi="Xem bảng xếp hạng đầy đủ →" en="View full leaderboard →" />
                 </Link>
               </div>
             </div>
@@ -724,9 +737,9 @@ export const DashboardScreen: React.FC = () => {
               <div className="flex items-start gap-3">
                 <BuffaloMascot variant="teaching" size="small" animated />
                 <div>
-                  <h4 className="font-black text-sm text-[#EA580C]">Mẹo học từ Nghé:</h4>
+                  <h4 className="font-black text-sm text-[#EA580C]"><BilingualText vi="Mẹo học từ Nghé:" en="Tip from Nghé:" /></h4>
                   <p className="mt-1 text-xs text-[#78685B] leading-relaxed">
-                    "Luyện nghe thanh điệu 5 phút mỗi sáng sẽ giúp bạn phản xạ tự nhiên như người bản xứ!"
+                    <BilingualText vi="&ldquo;Luyện nghe thanh điệu 5 phút mỗi sáng sẽ giúp bạn phản xạ tự nhiên như người bản xứ!&rdquo;" en="&ldquo;Listening to tones for 5 minutes every morning builds natural reflexes!&rdquo;" />
                   </p>
                 </div>
               </div>
@@ -750,7 +763,7 @@ export const DashboardScreen: React.FC = () => {
                 type="button"
                 className="duo-modal-close"
                 onClick={() => setSelectedLesson(null)}
-                aria-label="Đóng"
+                aria-label={bilingualLabel("Đóng", "Close")}
               >
                 <X size={18} />
               </button>
@@ -758,23 +771,23 @@ export const DashboardScreen: React.FC = () => {
               <div className="text-center pt-2">
                 <span className="inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#FFF4D5] text-[#9A6700]">
                   {statusOf(selectedLesson) === 'completed'
-                    ? '✓ ĐÃ HOÀN THÀNH'
+                    ? (isVi ? '✓ ĐÃ HOÀN THÀNH' : '✓ COMPLETED')
                     : statusOf(selectedLesson) === 'current'
-                    ? '★ ĐANG HỌC'
-                    : '🔒 ĐANG KHÓA'}
+                    ? (isVi ? '★ ĐANG HỌC' : '★ CURRENT')
+                    : (isVi ? '🔒 ĐANG KHÓA' : '🔒 LOCKED')}
                 </span>
 
                 <h3 className="mt-3 text-2xl font-black text-[#251B18] leading-snug">
-                  {selectedLesson.titleVi || selectedLesson.title}
+                  {(isVi ? (selectedLesson.titleVi || selectedLesson.title) : (selectedLesson.titleEn || selectedLesson.title || selectedLesson.titleVi))}
                 </h3>
 
                 <p className="mt-2 text-sm text-[#78685B] leading-relaxed">
-                  {selectedLesson.description}
+                  {(isVi ? selectedLesson.description : (selectedLesson.descriptionEn || selectedLesson.description))}
                 </p>
 
                 <div className="mt-4 flex items-center justify-center gap-4 text-xs font-bold text-[#EA580C]">
                   <span className="flex items-center gap-1.5 bg-[#FAF5EB] px-3 py-1.5 rounded-full">
-                    <Clock3 size={15} /> {selectedLesson.estimatedDuration || 12} phút
+                    <Clock3 size={15} /> {selectedLesson.estimatedDuration || 12} <BilingualText vi="phút" en="min" />
                   </span>
                   <span className="flex items-center gap-1.5 bg-[#FEF3C7] text-[#B45309] px-3 py-1.5 rounded-full">
                     +{selectedLesson.xpReward || 25} XP
@@ -784,7 +797,7 @@ export const DashboardScreen: React.FC = () => {
                 {Array.isArray(selectedLesson.objectives) && selectedLesson.objectives.length > 0 && (
                   <div className="mt-5 text-left bg-[#FDFBF7] p-3.5 rounded-2xl border border-[#EADBC8]">
                     <span className="block text-xs font-black uppercase tracking-wider text-[#8a7565] mb-2">
-                      Mục tiêu bài học:
+                      <BilingualText vi="Mục tiêu bài học:" en="Lesson objectives:" />
                     </span>
                     <ul className="space-y-1.5">
                       {selectedLesson.objectives.map((obj: string, i: number) => (
@@ -808,15 +821,15 @@ export const DashboardScreen: React.FC = () => {
                   >
                     {statusOf(selectedLesson) === 'completed' ? (
                       <>
-                        <RefreshCw size={18} /> ÔN TẬP BÀI HỌC (+10 XP)
+                        <RefreshCw size={18} /> <BilingualText vi="ÔN TẬP BÀI HỌC (+10 XP)" en="REVIEW LESSON (+10 XP)" />
                       </>
                     ) : statusOf(selectedLesson) === 'locked' ? (
                       <>
-                        <Lock size={18} /> BÀI HỌC ĐANG KHÓA
+                        <Lock size={18} /> <BilingualText vi="BÀI HỌC ĐANG KHÓA" en="LESSON LOCKED" />
                       </>
                     ) : (
                       <>
-                        <Play size={18} fill="currentColor" /> BẮT ĐẦU (+{selectedLesson.xpReward || 25} XP)
+                        <Play size={18} fill="currentColor" /> <BilingualText vi={`BẮT ĐẦU (+${selectedLesson.xpReward || 25} XP)`} en={`START (+${selectedLesson.xpReward || 25} XP)`} />
                       </>
                     )}
                   </button>
@@ -849,17 +862,15 @@ export const DashboardScreen: React.FC = () => {
 
               <div className="pt-2">
                 <div className="flex items-center gap-2 text-xs font-black text-[#FF7A00] uppercase tracking-wider mb-2">
-                  <BookMarked size={18} /> Sổ tay ngữ pháp & phát âm
+                  <BookMarked size={18} /> <BilingualText vi="Sổ tay ngữ pháp & phát âm" en="Grammar & Pronunciation Guidebook" />
                 </div>
-                <h3 className="text-xl font-black text-[#251B18]">
-                  Điểm ngữ pháp & Từ vựng quan trọng
-                </h3>
+                <h3 className="text-xl font-black text-[#251B18]"><BilingualText vi="Điểm ngữ pháp & Từ vựng quan trọng" en="Key Grammar & Vocabulary" /></h3>
                 <p className="mt-2 text-xs text-[#78685B] leading-relaxed">
-                  {activeGuidebook.summary}
+                  {(isVi ? activeGuidebook.summary : (activeGuidebook.summaryEn || activeGuidebook.summary))}
                 </p>
 
                 <div className="mt-4 space-y-2">
-                  <h4 className="text-xs font-black uppercase text-[#8a7565]">Lời khuyên phát âm:</h4>
+                  <h4 className="text-xs font-black uppercase text-[#8a7565]"><BilingualText vi="Lời khuyên phát âm:" en="Pronunciation Tips:" /></h4>
                   {activeGuidebook.tips.map((tip, i) => (
                     <div key={i} className="text-xs bg-[#F9FAFB] p-2.5 rounded-xl border border-gray-200 text-[#374151]">
                       • {tip}
@@ -868,7 +879,7 @@ export const DashboardScreen: React.FC = () => {
                 </div>
 
                 <div className="mt-4">
-                  <h4 className="text-xs font-black uppercase text-[#8a7565] mb-2">Từ vựng then chốt:</h4>
+                  <h4 className="text-xs font-black uppercase text-[#8a7565] mb-2"><BilingualText vi="Từ vựng then chốt:" en="Key Vocabulary:" /></h4>
                   <div className="grid grid-cols-2 gap-2">
                     {activeGuidebook.vocabulary.map((vocab, i) => (
                       <div key={i} className="bg-[#FFF8EE] border border-[#EADBC8] p-2 rounded-xl text-xs">
@@ -884,7 +895,7 @@ export const DashboardScreen: React.FC = () => {
                   className="mt-6 w-full py-3 rounded-xl bg-[#F97316] text-white text-xs font-black hover:bg-[#C2410C] shadow-sm transition-colors"
                   onClick={() => setActiveGuidebook(null)}
                 >
-                  ĐÃ HIỂU! TIẾP TỤC HỌC
+                  <BilingualText vi="ĐÃ HIỂU! TIẾP TỤC HỌC" en="GOT IT! CONTINUE" />
                 </button>
               </div>
             </motion.div>
@@ -916,18 +927,14 @@ export const DashboardScreen: React.FC = () => {
                 <div className="w-20 h-20 mx-auto rounded-3xl bg-[#FEF3C7] border-4 border-[#F59E0B] flex items-center justify-center text-[#B45309] shadow-lg">
                   <Gift size={44} />
                 </div>
-                <h3 className="mt-4 text-2xl font-black text-[#251B18]">
-                  Rương Kho Báu Chặng!
-                </h3>
-                <p className="mt-2 text-sm text-[#78685B]">
-                  Hoàn thành toàn bộ các bài học trong chương để mở khóa rương kho báu và nhận <strong>+50 XP</strong> cùng danh hiệu danh dự!
-                </p>
+                <h3 className="mt-4 text-2xl font-black text-[#251B18]"><BilingualText vi="Rương Kho Báu Chặng!" en="Milestone Treasure Chest!" /></h3>
+                <p className="mt-2 text-sm text-[#78685B]"><BilingualText vi="Hoàn thành toàn bộ các bài học trong chương để mở khóa rương kho báu và nhận +50 XP cùng danh hiệu danh dự!" en="Complete all lessons in the unit to unlock this chest and earn +50 XP plus an honor badge!" /></p>
                 <button
                   type="button"
                   className="mt-6 duo-3d-button is-primary"
                   onClick={() => setChestModalOpen(false)}
                 >
-                  CỐ GẮNG HỌC TIẾP!
+                  <BilingualText vi="CỐ GẮNG HỌC TIẾP!" en="KEEP LEARNING!" />
                 </button>
               </div>
             </motion.div>

@@ -28,7 +28,9 @@ export function DestinationExploreContent({ destinationId }) {
       return <>
         {tab === 'culture' && (cultures.length ? <div className="explore-related-grid">{cultures.map(article => <article className="card" key={article.id}>
           {article.coverImage && <ContentImage src={article.coverImage} alt={article.title} className="explore-related-image" />}
-          <h3>{article.title}</h3><p>{article.summary}</p><Link className="text-link" to={generatePath(ROUTES.CULTURE_DETAIL, { id: article.id })}><BilingualText vi="Đọc bài văn hóa →" en="Read article →" /></Link>
+          <h3><BilingualText vi={article.titleVi || article.title} en={article.titleEn || article.title} /></h3>
+          <p><BilingualText vi={article.summaryVi || article.summary} en={article.summaryEn || article.summary} /></p>
+          <Link className="text-link" to={generatePath(ROUTES.CULTURE_DETAIL, { id: article.id })}><BilingualText vi="Đọc bài văn hóa →" en="Read article →" /></Link>
         </article>)}</div> : <EmptyState title={<BilingualText vi="Chưa có bài văn hóa liên kết" en="No linked culture articles yet" />} />)}
         {tab === 'language' && <>
           {data.regionalVariants?.length > 0 && <><p className="muted"><BilingualText vi="Cách dùng có thể thay đổi theo địa phương và ngữ cảnh. Bạn vẫn có thể sử dụng tiếng Việt phổ thông." en="Usage varies by place and context. Standard Vietnamese remains appropriate." /></p>
@@ -38,7 +40,9 @@ export function DestinationExploreContent({ destinationId }) {
           <Link className="text-link" to={ROUTES.REGIONAL_VIETNAMESE}><BilingualText vi="So sánh Bắc – Trung – Nam →" en="Compare regional expressions →" /></Link>
         </>}
         {tab === 'practice' && (scenarios.length ? <div className="explore-related-grid">{scenarios.map(scenario => <article className="card" key={scenario.id}>
-          <p className="eyebrow"><BilingualText vi="Trình độ gợi ý:" en="Suggested level:" /> {scenario.level}</p><h3>{scenario.title}</h3><p>{scenario.overview}</p>
+          <p className="eyebrow"><BilingualText vi="Trình độ gợi ý:" en="Suggested level:" /> {scenario.level}</p>
+          <h3><BilingualText vi={scenario.titleVi || scenario.title} en={scenario.titleEn || scenario.title} /></h3>
+          <p><BilingualText vi={scenario.overviewVi || scenario.overview} en={scenario.overviewEn || scenario.overview} /></p>
           <Link className="button" to={generatePath(ROUTES.AI_SCENARIO_DETAIL, { id: scenario.id })}><BilingualText vi="Xem tình huống và thực hành" en="View scenario and practise" /></Link>
         </article>)}</div> : <EmptyState title={<BilingualText vi="Chưa có kịch bản thực hành khả dụng" en="No practice scenarios available yet" />} />)}
       </>;

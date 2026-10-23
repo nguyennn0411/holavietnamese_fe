@@ -1,34 +1,36 @@
 import { useMemo } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
-  Bell, BookOpen, Bot, ChevronLeft, Compass, Flame,
-  GraduationCap, Headphones, Home, Languages, Mic2,
-  Newspaper, Palette, Zap,
+  Bell, ChevronLeft, Flame, GraduationCap, Zap,
 } from 'lucide-react';
 import { Brand } from '@/components/layout/Brand';
 import { UserMenu } from '@/components/layout/UserMenu';
 import { NotificationDropdown } from '@/components/common/NotificationDropdown';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import { localizedSiteField, safeInternalPath, useSiteContent } from '@/application/context/SiteContentContext';
+import { siteContentIcon } from '@/components/common/siteContentIcons';
+import { MENU_PLACEMENTS } from '@/config/siteContentDefaults';
 
-const learnerItems = [
-  { to: '/', label: 'learn', icon: Home, end: true, mobile: true },
-  { to: '/edtech/dashboard', label: 'learningPath', icon: Compass, mobile: true },
-  { to: '/courses', label: 'courses', icon: BookOpen, mobile: true },
-  { to: '/my-learning', label: 'myLearning', icon: GraduationCap },
-  { to: '/vocabulary', label: 'vocabulary', icon: Languages, mobile: true },
-  { to: '/explore', label: 'explore', icon: Compass },
-  { to: '/culture', label: 'culture', icon: Palette },
-  { to: '/blog', label: 'blog', icon: Newspaper },
-  { to: '/alphabet', label: 'pronunciation', icon: Mic2, mobile: true },
-  { label: 'listening', icon: Headphones, status: 'insideLessons' },
-  { to: '/ai-scenarios', label: 'speaking', icon: GraduationCap },
-  { to: '/ai-tutor', label: 'aiConversation', icon: Bot },
-];
+function useLearnerItems() {
+  const { i18n } = useTranslation();
+  const { getMenuItems } = useSiteContent();
+  const language = i18n.resolvedLanguage || i18n.language || 'en';
+  return useMemo(() => getMenuItems(MENU_PLACEMENTS.LEARNER).map((item) => ({
+    ...item,
+    to: safeInternalPath(item.path),
+    label: localizedSiteField(item, 'label', language),
+    icon: siteContentIcon(item.iconKey),
+    status: localizedSiteField(item, 'status', language),
+    end: item.path === '/',
+    mobile: item.mobilePrimary === true,
+  })), [getMenuItems, language]);
+}
 
 export function LearnerSidebar({ collapsed, onToggle }) {
   const { t } = useTranslation('navigation');
   const { pathname } = useLocation();
+  const learnerItems = useLearnerItems();
   const notebookRoute = pathname === '/vocabulary/review' || pathname === '/vocabulary/notebook' || pathname.startsWith('/vocabulary/notebook/');
   return <aside className="learner-sidebar" aria-label="Learner navigation">
     <button
@@ -43,16 +45,16 @@ export function LearnerSidebar({ collapsed, onToggle }) {
     </button>
     <div className="learner-sidebar__brand"><Brand compact collapsed={collapsed} /></div>
     <nav className="learner-sidebar__nav">
-      {learnerItems.map(({ to, label, icon: Icon, status, end, mobile }) => to ? (
-        <NavLink key={label} to={to} end={end} aria-current={notebookRoute ? (to === '/my-learning' ? 'page' : false) : undefined} className={({ isActive }) => `learner-sidebar__link ${mobile ? 'is-mobile-primary' : ''} ${(notebookRoute ? to === '/my-learning' : isActive) ? 'active' : ''}`} title={collapsed ? t(label) : undefined}>
+      {learnerItems.map(({ id, code, to, label, icon: Icon, status, end, mobile, available }) => to && available !== false ? (
+        <NavLink key={id ?? code} to={to} end={end} aria-current={notebookRoute ? (to === '/my-learning' ? 'page' : false) : undefined} className={({ isActive }) => `learner-sidebar__link ${mobile ? 'is-mobile-primary' : ''} ${(notebookRoute ? to === '/my-learning' : isActive) ? 'active' : ''}`} title={collapsed ? label : undefined}>
           <span className="sidebar-link__icon"><Icon /></span>
-          <b className="sidebar-link__label">{t(label)}</b>
+          <b className="sidebar-link__label">{label}</b>
         </NavLink>
       ) : (
-        <div key={label} className="learner-sidebar__link is-disabled" title={`${t(label)} — ${t(status)}`} aria-disabled="true">
+        <div key={id ?? code} className="learner-sidebar__link is-disabled" title={status ? `${label} — ${status}` : label} aria-disabled="true">
           <span className="sidebar-link__icon"><Icon /></span>
-          <b className="sidebar-link__label">{t(label)}</b>
-          <small className="learner-sidebar__status">{t(status)}</small>
+          <b className="sidebar-link__label">{label}</b>
+          {status && <small className="learner-sidebar__status">{status}</small>}
         </div>
       ))}
     </nav>
@@ -63,20 +65,21 @@ export function LearnerSidebar({ collapsed, onToggle }) {
 export function LearnerTopbar({ user, stats, onLogout }) {
   const { t, i18n } = useTranslation('navigation');
   const location = useLocation();
-  const hour = new Date().getHours();
-  const isVi = i18n.resolvedLanguage?.startsWith('vi');
-  const greeting = isVi ? (hour < 12 ? 'Chào buổi sáng' : hour < 18 ? 'Chào buổi chiều' : 'Chào buổi tối') : (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening');
-  const displayName = user?.fullName || user?.username || 'Learner';
+  const learnerItems = useLearnerItems();
+  const lang = i18n.resolvedLanguage || i18n.language || 'en';
+  const isVi = lang.startsWith('vi');
   const title = useMemo(() => {
-    if (location.pathname === '/vocabulary/review' || location.pathname === '/vocabulary/notebook' || location.pathname.startsWith('/vocabulary/notebook/')) return 'myLearning';
-    return learnerItems.find((item) => item.to && (item.end ? location.pathname === item.to : location.pathname.startsWith(item.to)))?.label || 'learn';
-  }, [location.pathname]);
+    if (location.pathname === '/vocabulary/review' || location.pathname === '/vocabulary/notebook' || location.pathname.startsWith('/vocabulary/notebook/')) {
+      return learnerItems.find((item) => item.code === 'LEARNER_MY_LEARNING')?.label || t('myLearning');
+    }
+    return learnerItems.find((item) => item.to && (item.end ? location.pathname === item.to : location.pathname.startsWith(item.to)))?.label || t('learn');
+  }, [learnerItems, location.pathname, t]);
   const level = user?.targetLevel || user?.level || '—';
   const hasEnergy = stats?.hearts != null || stats?.energy != null;
   const isAdmin = user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_ADMIN');
 
   return <header className="learner-topbar">
-    <div className="learner-topbar__welcome"><span>HOLAVIETNAMESE</span><strong>{t(title)} <em className="learner-topbar__level">{isVi ? 'Sơ cấp · A1' : 'Beginner · A1'}</em></strong></div>
+    <div className="learner-topbar__welcome"><span>HOLAVIETNAMESE</span><strong>{title} <em className="learner-topbar__level">{isVi ? 'Sơ cấp · A1' : 'Beginner · A1'}</em></strong></div>
     <div className="learner-topbar__stats" aria-label="Learning statistics">
       <Link to="/progress" title={isVi ? 'Trình độ hiện tại' : 'Current learning level'}><GraduationCap /><span><small>{isVi ? 'TRÌNH ĐỘ' : 'LEVEL'}</small><b>{level}</b></span></Link>
       <Link to="/progress" title={isVi ? 'Chuỗi ngày học' : 'Daily streak'}><Flame className="is-flame" /><span><small>{isVi ? 'CHUỖI' : 'STREAK'}</small><b>{stats?.streak ?? 0}</b></span></Link>

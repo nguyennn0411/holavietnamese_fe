@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Volume2, RotateCcw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { FlashcardDataDTO } from '@/types/edtech';
 import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { audioFeedback } from '@/utils/audioFeedback';
+import BilingualText, { bilingualLabel } from '@/components/common/BilingualText';
 
 interface FlashcardExerciseProps {
   data: FlashcardDataDTO;
@@ -14,6 +16,8 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
   data,
   onFlipped,
 }) => {
+  const { i18n } = useTranslation();
+  const isEn = (i18n.resolvedLanguage || i18n.language || 'vi').toLowerCase().startsWith('en');
   const [isFlipped, setIsFlipped] = useState(false);
   const toneInfo = VIETNAMESE_TONES[data.tone] || VIETNAMESE_TONES.NGANG;
   const toneColors = TONE_COLOR_MAP[data.tone] || TONE_COLOR_MAP.NGANG;
@@ -35,13 +39,16 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col items-center">
       <div className="text-center mb-5">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
-          Thẻ Từ Vựng Mới • Flashcard
+          <BilingualText vi="Thẻ Từ Vựng Mới • Flashcard" en="New Vocabulary Card • Flashcard" />
         </span>
         <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 mt-2">
-          Chạm vào thẻ để lật xem nghĩa
+          <BilingualText vi="Chạm vào thẻ để lật xem nghĩa" en="Tap card to flip and view meaning" />
         </h2>
         <p className="text-sm text-slate-500">
-          Tap card to flip • Press Spacebar or click
+          <BilingualText
+            vi="Chạm vào thẻ hoặc bấm phím Cách để lật"
+            en="Tap card to flip • Press Spacebar or click"
+          />
         </p>
       </div>
 
@@ -57,7 +64,10 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
             handleFlip();
           }
         }}
-        aria-label={`Thẻ từ vựng ${data.vietnameseWord}. Nhấn phím cách hoặc click để lật.`}
+        aria-label={bilingualLabel(
+          `Thẻ từ vựng ${data.vietnameseWord}. Nhấn phím cách hoặc click để lật.`,
+          `Vocabulary card for ${data.vietnameseWord}. Press space or click to flip.`
+        )}
       >
         <motion.div
           className="relative w-full h-full rounded-3xl [transform-style:preserve-3d] shadow-card-hover transition-shadow"
@@ -74,7 +84,7 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
               <span
                 className={`text-xs font-bold px-3 py-1 rounded-full border ${toneColors.bg} ${toneColors.text} ${toneColors.border}`}
               >
-                {toneInfo.nameVi} ({toneInfo.symbol})
+                {isEn ? toneInfo.nameEn : toneInfo.nameVi} ({toneInfo.symbol})
               </span>
             </div>
 
@@ -94,17 +104,17 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
                 type="button"
                 onClick={handlePronounce}
                 className="!min-h-0 !border-0 mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-[0_3px_0_#047857] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
-                aria-label="Phát âm từ này"
+                aria-label={bilingualLabel("Phát âm từ này", "Pronounce this word")}
               >
                 <Volume2 className="w-4 h-4 shrink-0" strokeWidth={2.5} />
-                <span>Nghe phát âm chuẩn</span>
+                <span><BilingualText vi="Nghe phát âm chuẩn" en="Listen to pronunciation" /></span>
               </button>
             </div>
 
             {/* Hint to flip */}
             <div className="flex items-center gap-1.5 text-xs text-slate-400 font-semibold">
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Chạm để lật xem nghĩa & ví dụ</span>
+              <span><BilingualText vi="Chạm để lật xem nghĩa & ví dụ" en="Tap to flip for meaning & examples" /></span>
             </div>
           </div>
 
@@ -113,7 +123,7 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
             {/* Header */}
             <div className="w-full flex items-center justify-between">
               <span className="text-xs font-bold text-[#F97316] uppercase tracking-wider">
-                English Meaning
+                <BilingualText vi="Nghĩa tiếng Anh" en="English Meaning" />
               </span>
               <span className="text-xs text-slate-400">
                 {data.vietnameseWord}
@@ -128,7 +138,7 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
 
               {data.notesForForeigners && (
                 <p className="text-xs text-[#7C2D12] bg-[#FFF0DC] border border-[#fed7aa] rounded-xl px-3 py-1.5 mb-4">
-                  <span className="font-bold mr-1">Gợi ý:</span>{data.notesForForeigners}
+                  <span className="font-bold mr-1"><BilingualText vi="Gợi ý: " en="Tip: " /></span>{data.notesForForeigners}
                 </p>
               )}
 
@@ -146,7 +156,7 @@ export const FlashcardExercise: React.FC<FlashcardExerciseProps> = ({
             {/* Flip back instruction */}
             <div className="flex items-center gap-1.5 text-xs text-slate-400 font-semibold">
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Chạm để quay lại mặt trước</span>
+              <span><BilingualText vi="Chạm để quay lại mặt trước" en="Tap to flip back to front" /></span>
             </div>
           </div>
         </motion.div>

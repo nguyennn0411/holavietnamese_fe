@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Trophy, ArrowRight, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/edtech/ui/Button';
 import { audioFeedback } from '@/utils/audioFeedback';
+import { BilingualText } from '@/components/common/BilingualText';
 
 interface LessonCompleteModalProps {
   xpEarned: number;
@@ -35,14 +36,14 @@ export const LessonCompleteModal: React.FC<LessonCompleteModalProps> = ({
       >
         {/* Animated Trophy Icon */}
         <span className="text-xs font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 mb-2">
-          Bài học hoàn thành • Lesson Complete!
+          <BilingualText vi="Bài học hoàn thành!" en="Lesson Complete!" />
         </span>
 
         <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-          Tuyệt vời lắm!
+          <BilingualText vi="Tuyệt vời lắm!" en="Awesome work!" />
         </h2>
         <p className="text-sm text-slate-500 mt-1 mb-6">
-          Bạn đã tiến thêm một bước trên hành trình chinh phục tiếng Việt.
+          <BilingualText vi="Bạn đã tiến thêm một bước trên hành trình chinh phục tiếng Việt." en="You've taken another step on your Vietnamese learning journey." />
         </p>
 
         {/* Stats Grid */}
@@ -50,19 +51,27 @@ export const LessonCompleteModal: React.FC<LessonCompleteModalProps> = ({
           {/* Total XP */}
           <div className="bg-amber-50 border border-amber-200/80 rounded-2xl p-3 flex flex-col items-center">
             <span className="text-xl font-black text-amber-900">+{xpEarned}</span>
-            <span className="text-[11px] font-semibold text-amber-700">Tổng XP</span>
+            <span className="text-[11px] font-semibold text-amber-700">
+              <BilingualText vi="Tổng XP" en="Total XP" />
+            </span>
           </div>
 
           {/* Accuracy */}
           <div className="bg-emerald-50 border border-emerald-200/80 rounded-2xl p-3 flex flex-col items-center">
             <span className="text-xl font-black text-emerald-900">{accuracy}%</span>
-            <span className="text-[11px] font-semibold text-emerald-700">Độ chính xác</span>
+            <span className="text-[11px] font-semibold text-emerald-700">
+              <BilingualText vi="Độ chính xác" en="Accuracy" />
+            </span>
           </div>
 
           {/* Streak */}
           <div className="bg-orange-50 border border-orange-200/80 rounded-2xl p-3 flex flex-col items-center">
-            <span className="text-xl font-black text-orange-900">{streakDays} ngày</span>
-            <span className="text-[11px] font-semibold text-orange-700">Streak</span>
+            <span className="text-xl font-black text-orange-900">
+              {streakDays} <BilingualText vi="ngày" en="days" />
+            </span>
+            <span className="text-[11px] font-semibold text-orange-700">
+              <BilingualText vi="Chuỗi ngày" en="Streak" />
+            </span>
           </div>
         </div>
 
@@ -77,7 +86,7 @@ export const LessonCompleteModal: React.FC<LessonCompleteModalProps> = ({
             iconPosition="right"
             is3D
           >
-            Tiếp tục lộ trình • Continue
+            <BilingualText vi="Tiếp tục lộ trình" en="Continue" />
           </Button>
 
           <Button
@@ -87,7 +96,7 @@ export const LessonCompleteModal: React.FC<LessonCompleteModalProps> = ({
             onClick={onRetry}
             icon={<RotateCcw className="w-4 h-4" />}
           >
-            Luyện tập lại bài này • Practice again
+            <BilingualText vi="Luyện tập lại bài này" en="Practice again" />
           </Button>
 
           {onGoHome && (
@@ -96,7 +105,7 @@ export const LessonCompleteModal: React.FC<LessonCompleteModalProps> = ({
               onClick={onGoHome}
               className="w-full py-2 text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors cursor-pointer text-center"
             >
-              Về Trang chủ • Back to Home
+              <BilingualText vi="Về Trang chủ" en="Back to Home" />
             </button>
           )}
         </div>

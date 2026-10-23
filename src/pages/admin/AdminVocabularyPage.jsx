@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
 import { ResourceState } from '@/components/common/ResourceState';
@@ -45,16 +45,16 @@ export function AdminVocabularyPage() {
 
   const filter = (field, value) => { setPage(0); setQuery((current) => ({ ...current, [field]: value })); };
   const saved = (response) => {
-    setMessage(response?.message || 'Đã lưu từ vựng.');
+    setMessage(response?.message || bilingualLabel('Đã lưu từ vựng.', 'Vocabulary saved.'));
     setModal(null);
     reload();
   };
 
   return <div className="admin-vocabulary-page">
-    <Breadcrumb items={[{ label: 'Quản trị', to: ROUTES.ADMIN }, { label: 'Từ vựng' }]} />
-    <PageHeader eyebrow="Từ vựng tiếng Việt" title="Quản lý từ vựng" description="Quản lý mục từ, nghĩa Việt–Anh và ví dụ song ngữ." actions={<>
-      <Link className="button secondary" to={ROUTES.ADMIN_REGIONAL_LANGUAGE}>Từ ngữ vùng miền</Link>
-      <Link className="button secondary" to={ROUTES.ADMIN_IMPORT}>Nhập dữ liệu</Link>
+    <Breadcrumb items={[{ label: bilingualLabel('Quản trị', 'Administration'), to: ROUTES.ADMIN }, { label: bilingualLabel('Từ vựng', 'Vocabulary') }]} />
+    <PageHeader eyebrow={<BilingualText vi="Từ vựng tiếng Việt" en="Vietnamese Vocabulary" />} title={<BilingualText vi="Quản lý từ vựng" en="Vocabulary Management" />} description={<BilingualText vi="Quản lý mục từ, nghĩa Việt–Anh và ví dụ song ngữ." en="Manage entries, Vietnamese–English definitions, and bilingual examples." />} actions={<>
+      <Link className="button secondary" to={ROUTES.ADMIN_REGIONAL_LANGUAGE}><BilingualText vi="Từ ngữ vùng miền" en="Regional language" /></Link>
+      <Link className="button secondary" to={ROUTES.ADMIN_IMPORT}><BilingualText vi="Nhập dữ liệu" en="Import data" /></Link>
       <button type="button" onClick={() => setModal({ mode: 'create' })}><Plus size={16} aria-hidden="true" /><BilingualText vi="Thêm từ vựng" en="Add vocabulary" /></button>
     </>} />
     {message && <div className="success state" role="status"><BilingualText>{message}</BilingualText></div>}
@@ -78,7 +78,7 @@ export function AdminVocabularyPage() {
         </tr>)}</tbody>
       </table></div>}
     </ResourceState>
-    {!resource.loading && !resource.error && pageInfo.totalPages > 0 && <><p className="muted">{pageInfo.totalElements} mục từ</p><Pagination page={page} totalPages={pageInfo.totalPages} onChange={setPage} /></>}
+    {!resource.loading && !resource.error && pageInfo.totalPages > 0 && <><p className="muted"><BilingualText vi={`${pageInfo.totalElements} mục từ`} en={`${pageInfo.totalElements} entries`} /></p><Pagination page={page} totalPages={pageInfo.totalPages} onChange={setPage} /></>}
     {modal && <AdminVocabularyModal key={`${modal.mode}-${modal.id ?? 'new'}`} {...modal} onClose={() => setModal(null)} onSaved={saved} onEdit={() => setModal({ mode: 'edit', id: modal.id })} />}
   </div>;
 }

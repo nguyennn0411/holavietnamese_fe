@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, Mic, MicOff, Volume2, Copy, Check, Trash2, Edit3, Plus, Search, User, BookOpen, Compass, ArrowRight, BookmarkPlus, Globe } from 'lucide-react';
@@ -239,9 +239,9 @@ export function AiTutorPage() {
     e.stopPropagation();
     if (
       await confirm({
-        title: 'Xóa cuộc trò chuyện?',
-        description: 'Lịch sử của phiên hội thoại này sẽ bị xóa vĩnh viễn.',
-        confirmLabel: 'Xóa cuộc trò chuyện',
+        title: bilingualLabel('Xóa cuộc trò chuyện?', 'Delete conversation?'),
+        description: bilingualLabel('Lịch sử của phiên hội thoại này sẽ bị xóa vĩnh viễn.', 'History of this conversation will be permanently deleted.'),
+        confirmLabel: bilingualLabel('Xóa cuộc trò chuyện', 'Delete conversation'),
       })
     ) {
       audioFeedback.playPopSound(0.8);
@@ -429,8 +429,8 @@ export function AiTutorPage() {
                   <div className="flex items-center gap-2">
                     <span className="w-8 h-8 rounded-xl bg-[#FFF7E8] border border-[#E8E5DF] flex items-center justify-center text-[#EA580C]"><Key size={16} /></span>
                     <div>
-                      <h3 className="text-sm font-black text-[#253044]">Cấu hình OpenAI API</h3>
-                      <p className="text-[11px] text-[#64748B]">Kích hoạt LLM trực tiếp cho AI Tutor</p>
+                      <h3 className="text-sm font-black text-[#253044]"><BilingualText vi="Cấu hình OpenAI API" en="Configure OpenAI API" /></h3>
+                      <p className="text-[11px] text-[#64748B]"><BilingualText vi="Kích hoạt LLM trực tiếp cho AI Tutor" en="Enable Live LLM for AI Tutor" /></p>
                     </div>
                   </div>
                   <button
@@ -445,7 +445,7 @@ export function AiTutorPage() {
                 <div className="space-y-3 text-xs text-[#64748B]">
                   <div className="p-3 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/60 space-y-1">
                     <div className="flex items-center justify-between font-bold">
-                      <span>Trạng thái hiện tại:</span>
+                      <span><BilingualText vi="Trạng thái hiện tại:" en="Current status:" /></span>
                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${
                         aiStatus.isLiveCall ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                       }`}>
@@ -454,7 +454,7 @@ export function AiTutorPage() {
                     </div>
                     {aiStatus.apiKeyMasked && (
                       <p className="text-[11px] text-stone-500 font-mono">
-                        Key đang dùng: {aiStatus.apiKeyMasked}
+                        <BilingualText vi="Key đang dùng:" en="Active Key:" /> {aiStatus.apiKeyMasked}
                       </p>
                     )}
                   </div>
@@ -462,7 +462,7 @@ export function AiTutorPage() {
                   <form onSubmit={handleSaveApiKey} className="space-y-3">
                     <div>
                       <label className="block text-xs font-bold text-[#253044] mb-1">
-                        Nhập OpenAI API Key mới:
+                        <BilingualText vi="Nhập OpenAI API Key mới:" en="Enter new OpenAI API Key:" />
                       </label>
                       <input
                         type="password"
@@ -472,7 +472,10 @@ export function AiTutorPage() {
                         className="w-full px-3 py-2 rounded-xl bg-[#FFFCF7] border border-[#E8E5DF] text-xs font-mono text-[#253044] focus:outline-none focus:border-[#FF7A00]"
                       />
                       <p className="text-[10px] text-stone-400 mt-1">
-                        Khóa API được lưu an toàn trong database backend và kiểm tra trực tiếp với OpenAI endpoint.
+                        <BilingualText
+                          vi="Khóa API được lưu an toàn trong database backend và kiểm tra trực tiếp với OpenAI endpoint."
+                          en="The API key is securely stored in the backend database and verified with OpenAI."
+                        />
                       </p>
                     </div>
 
@@ -482,14 +485,14 @@ export function AiTutorPage() {
                         onClick={() => setShowKeyModal(false)}
                         className="px-4 py-2 rounded-xl bg-stone-100 text-stone-700 hover:bg-stone-200 text-xs font-bold transition-colors cursor-pointer"
                       >
-                        Hủy
+                        <BilingualText vi="Hủy" en="Cancel" />
                       </button>
                       <button
                         type="submit"
                         disabled={!apiKeyInput.trim() || isConfiguringKey}
                         className="px-4 py-2 rounded-xl bg-[#FF7A00] hover:bg-[#C2410C] text-white text-xs font-bold disabled:opacity-50 transition-colors shadow-xs cursor-pointer flex items-center gap-1.5"
                       >
-                        {isConfiguringKey ? 'Đang kiểm tra...' : 'Lưu & Kích hoạt'}
+                        {isConfiguringKey ? <BilingualText vi="Đang kiểm tra..." en="Checking..." /> : <BilingualText vi="Lưu & Kích hoạt" en="Save & Activate" />}
                       </button>
                     </div>
                   </form>
@@ -518,13 +521,16 @@ export function AiTutorPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E8E5DF]/60 pb-5">
         <div className="space-y-1 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#FF7A00] text-xs font-black uppercase tracking-wider">
-            <span>AI Speaking Partner • 7 Chế Độ Học</span>
+            <span><BilingualText vi="AI Speaking Partner • 7 Chế Độ Học" en="AI Speaking Partner • 7 Learning Modes" /></span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-black text-[#253044] tracking-tight">
-            Gia Sư AI Tiếng Việt Thông Minh
+            <BilingualText vi="Gia Sư AI Tiếng Việt Thông Minh" en="Smart Vietnamese AI Tutor" />
           </h1>
           <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl">
-            Luyện đàm thoại, giải đáp ngữ pháp, trau chuốt câu văn và học văn hóa 3 miền cùng gia sư AI bản xứ 24/7.
+            <BilingualText
+              vi="Luyện đàm thoại, giải đáp ngữ pháp, trau chuốt câu văn và học văn hóa 3 miền cùng gia sư AI bản xứ 24/7."
+              en="Practice conversation, resolve grammar doubts, refine sentences, and explore culture with a 24/7 native AI tutor."
+            />
           </p>
         </div>
 
@@ -534,7 +540,7 @@ export function AiTutorPage() {
             to="/ai-scenarios"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] hover:text-[#FF7A00] text-xs font-bold shadow-2xs transition-all"
           >
-            <span>Kịch bản nhập vai tình huống</span>
+            <span><BilingualText vi="Kịch bản nhập vai tình huống" en="Roleplay Scenarios" /></span>
             <ArrowRight size={13} />
           </Link>
         </div>
@@ -551,7 +557,7 @@ export function AiTutorPage() {
             className="w-full py-3 px-4 rounded-2xl bg-[#FF7A00] hover:bg-[#C2410C] text-white font-black text-xs shadow-[0_3px_0_#C2410C] active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <Plus size={16} strokeWidth={3} />
-            <span>Cuộc trò chuyện mới</span>
+            <span><BilingualText vi="Cuộc trò chuyện mới" en="New conversation" /></span>
           </button>
 
           {/* Search Bar for Sessions */}
@@ -562,7 +568,7 @@ export function AiTutorPage() {
             />
             <input
               type="text"
-              placeholder="Tìm kiếm hội thoại..."
+              placeholder={bilingualLabel("Tìm kiếm hội thoại...", "Search conversations...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#FFFCF7] border border-[#E8E5DF]/70 text-xs text-[#253044] placeholder:text-[#64748B]/60 focus:outline-none focus:border-[#FF7A00] transition-colors"
@@ -571,9 +577,9 @@ export function AiTutorPage() {
 
           {/* Sessions List Header */}
           <div className="flex items-center justify-between text-[11px] font-bold text-[#64748B] px-1 pt-1">
-            <span className="uppercase tracking-wider">Lịch sử hội thoại</span>
+            <span className="uppercase tracking-wider"><BilingualText vi="Lịch sử hội thoại" en="Conversation history" /></span>
             <span className="bg-[#FFFCF7] px-2 py-0.5 rounded-md border border-[#E8E5DF]/60">
-              {sessions.length} phiên
+              <BilingualText vi={`${sessions.length} phiên`} en={`${sessions.length} sessions`} />
             </span>
           </div>
 
@@ -622,7 +628,9 @@ export function AiTutorPage() {
                           {sessionMode?.name}
                         </span>
                         <span>•</span>
-                        <span>{s.messages?.length || 0} tin nhắn</span>
+                        <span>
+                          <BilingualText vi={`${s.messages?.length || 0} tin nhắn`} en={`${s.messages?.length || 0} messages`} />
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -633,7 +641,7 @@ export function AiTutorPage() {
                       type="button"
                       onClick={(e) => handleStartRename(e, s)}
                       className="p-1.5 rounded-lg text-[#64748B] hover:text-[#253044] hover:bg-white transition-colors"
-                      title="Đổi tên hội thoại"
+                      title={bilingualLabel("Đổi tên hội thoại", "Rename conversation")}
                     >
                       <Edit3 size={13} />
                     </button>
@@ -642,7 +650,7 @@ export function AiTutorPage() {
                         type="button"
                         onClick={(e) => handleDeleteSession(e, s.id)}
                         className="p-1.5 rounded-lg text-[#64748B] hover:text-red-600 hover:bg-red-50 transition-colors"
-                        title="Xóa hội thoại"
+                        title={bilingualLabel("Xóa hội thoại", "Delete conversation")}
                       >
                         <Trash2 size={13} />
                       </button>
@@ -665,7 +673,7 @@ export function AiTutorPage() {
                   <TutorMascotAvatar state={isListening ? 'listening' : isSending ? 'thinking' : speakingMessageId ? 'speaking' : 'idle'} size="small" />
                   <span
                     className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white"
-                    title="Online • Sẵn sàng giải đáp"
+                    title={bilingualLabel("Online • Sẵn sàng giải đáp", "Online • Ready to assist")}
                   />
                 </div>
                 <div>
@@ -699,7 +707,7 @@ export function AiTutorPage() {
                       ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
                       : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
                   }`}
-                  title="Cấu hình OpenAI API Key để kích hoạt Live AI trực tiếp"
+                  title={bilingualLabel("Cấu hình OpenAI API Key để kích hoạt Live AI trực tiếp", "Configure OpenAI API Key to enable Live AI")}
                 >
                   <span className={`w-2 h-2 rounded-full ${aiStatus.isLiveCall ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
                   <span>{aiStatus.isLiveCall ? `${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : 'Smart NLP Engine'}</span>
@@ -715,9 +723,9 @@ export function AiTutorPage() {
                     showToast(`Tốc độ phát âm: ${newRate}x`);
                   }}
                   className="px-2.5 py-1 rounded-xl bg-white border border-[#E8E5DF] text-[#FF7A00] text-xs font-bold hover:bg-[#FFF7E8] transition-colors shadow-2xs cursor-pointer"
-                  title="Chuyển đổi tốc độ phát âm (1.0x Chuẩn / 0.65x Chậm)"
+                  title={bilingualLabel("Chuyển đổi tốc độ phát âm (1.0x Chuẩn / 0.65x Chậm)", "Toggle speech speed (1.0x Normal / 0.65x Slow)")}
                 >
-                  {speechRate === 0.95 ? '1.0x Chuẩn' : '0.65x Chậm'}
+                  {speechRate === 0.95 ? <BilingualText vi="1.0x Chuẩn" en="1.0x Normal" /> : <BilingualText vi="0.65x Chậm" en="0.65x Slow" />}
                 </button>
               </div>
             </div>
@@ -789,7 +797,7 @@ export function AiTutorPage() {
                       <div className="mt-3 p-3 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-amber-900 text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-amber-800">
                           <Edit3 size={13} className="text-amber-600 shrink-0" />
-                          <span>Nhận xét & Sửa lỗi ngữ pháp:</span>
+                          <span><BilingualText vi="Nhận xét & Sửa lỗi ngữ pháp:" en="Grammar Feedback & Corrections:" /></span>
                         </div>
                         <p className="text-amber-900/90 leading-relaxed">
                           {msg.grammarCorrection || msg.grammarCheck?.explanation}
@@ -802,7 +810,7 @@ export function AiTutorPage() {
                       <div className="mt-2.5 p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-emerald-950 text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-emerald-800">
                           <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
-                          <span>Cách diễn đạt tự nhiên hơn của người bản xứ:</span>
+                          <span><BilingualText vi="Cách diễn đạt tự nhiên hơn của người bản xứ:" en="More natural native expressions:" /></span>
                         </div>
                         <p className="font-semibold text-emerald-900 leading-relaxed italic">
                           "{msg.nativeAlternative || msg.grammarCheck?.corrected}"
@@ -815,7 +823,7 @@ export function AiTutorPage() {
                       <div className="mt-2.5 p-3 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-[#FF7A00]">
                           <Compass size={13} className="text-[#EA580C] shrink-0" />
-                          <span>Lưu ý văn hóa & Ngữ cảnh ứng xử:</span>
+                          <span><BilingualText vi="Lưu ý văn hóa & Ngữ cảnh ứng xử:" en="Cultural notes & Social context:" /></span>
                         </div>
                         <p className="text-[#253044]/90 leading-relaxed">
                           {msg.culturalNote}
@@ -836,7 +844,7 @@ export function AiTutorPage() {
                       <div className="mt-3 pt-3 border-t border-[#E8E5DF]/40 space-y-2">
                         <div className="flex items-center gap-1.5 text-[11px] font-black text-[#FF7A00]">
                           <BookOpen size={13} />
-                          <span>Từ vựng hữu ích gợi ý:</span>
+                          <span><BilingualText vi="Từ vựng hữu ích gợi ý:" en="Suggested useful vocabulary:" /></span>
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           {msg.savedWords.map((item, idx) => (
@@ -847,7 +855,7 @@ export function AiTutorPage() {
                                 handleSaveWordToVocabulary(item.word, item.meaning)
                               }
                               className="px-2.5 py-1 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF0DC] border border-[#E8E5DF] text-[#253044] text-[11px] font-bold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer group/vocab"
-                              title={`Lưu từ "${item.word}" vào sổ từ vựng`}
+                              title={bilingualLabel(`Lưu từ "${item.word}" vào sổ từ vựng`, `Save word "${item.word}" to vocabulary notebook`)}
                             >
                               <BookmarkPlus
                                 size={12}
@@ -875,13 +883,13 @@ export function AiTutorPage() {
                                 ? 'bg-amber-100 text-amber-800 border border-amber-300'
                                 : 'bg-[#FFFCF7] hover:bg-[#FFF0DC] text-[#FF7A00] border border-[#E8E5DF]/60'
                             }`}
-                            title={isSpeaking ? 'Dừng phát âm' : 'Nghe giọng đọc tiếng Việt'}
+                            title={isSpeaking ? bilingualLabel('Dừng phát âm', 'Stop speech') : bilingualLabel('Nghe giọng đọc tiếng Việt', 'Listen to Vietnamese speech')}
                           >
                             <Volume2
                               size={13}
                               className={isSpeaking ? 'animate-pulse' : ''}
                             />
-                            <span>{isSpeaking ? 'Đang đọc...' : 'Nghe phát âm'}</span>
+                            <span>{isSpeaking ? <BilingualText vi="Đang đọc..." en="Reading..." /> : <BilingualText vi="Nghe phát âm" en="Listen" />}</span>
                           </button>
 
                           {/* Sound wave bars animation while speaking */}
@@ -910,17 +918,17 @@ export function AiTutorPage() {
                           type="button"
                           onClick={() => handleCopy(msg.id, msg.text)}
                           className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[#64748B] hover:text-[#253044] hover:bg-[#FFFCF7] transition-colors cursor-pointer"
-                          title="Sao chép nội dung tin nhắn"
+                          title={bilingualLabel("Sao chép nội dung tin nhắn", "Copy message content")}
                         >
                           {isCopied ? (
                             <>
                               <Check size={12} className="text-emerald-600" />
-                              <span className="text-emerald-600 font-bold">Đã chép</span>
+                              <span className="text-emerald-600 font-bold"><BilingualText vi="Đã chép" en="Copied" /></span>
                             </>
                           ) : (
                             <>
                               <Copy size={12} />
-                              <span>Sao chép</span>
+                              <span><BilingualText vi="Sao chép" en="Copy" /></span>
                             </>
                           )}
                         </button>
@@ -961,7 +969,7 @@ export function AiTutorPage() {
                     />
                   </div>
                   <span className="text-xs font-bold text-[#64748B]">
-                    Hola AI đang suy nghĩ và chuẩn bị câu trả lời...
+                    <BilingualText vi="Hola AI đang suy nghĩ và chuẩn bị câu trả lời..." en="Hola AI is thinking and preparing a response..." />
                   </span>
                 </div>
               </motion.div>
@@ -971,7 +979,7 @@ export function AiTutorPage() {
           {/* Quick Prompts Chips Carousel */}
           <div className="p-3 bg-[#FFFCF7] border-t border-[#E8E5DF]/60 flex items-center gap-2 overflow-x-auto scrollbar-none">
             <span className="text-[11px] font-black uppercase text-[#FF7A00] shrink-0 pl-1 flex items-center gap-1">
-              <span>Gợi ý:</span>
+              <span><BilingualText vi="Gợi ý:" en="Suggestions:" /></span>
             </span>
             {activeModeConfig.quickPrompts.map((prompt, idx) => (
               <button
@@ -1000,10 +1008,10 @@ export function AiTutorPage() {
               }`}
               title={
                 isListening
-                  ? 'Đang lắng nghe... Bấm để dừng'
-                  : 'Nói tiếng Việt qua Micro'
+                  ? bilingualLabel('Đang lắng nghe... Bấm để dừng', 'Listening... Click to stop')
+                  : bilingualLabel('Nói tiếng Việt qua Micro', 'Speak Vietnamese via Microphone')
               }
-              aria-label="Thu âm giọng nói tiếng Việt"
+              aria-label={bilingualLabel("Thu âm giọng nói tiếng Việt", "Record Vietnamese voice")}
             >
               {isListening ? (
                 <MicOff size={18} strokeWidth={2.5} />
@@ -1032,8 +1040,8 @@ export function AiTutorPage() {
                   ? 'bg-[#FF7A00] hover:bg-[#C2410C] text-white shadow-[0_3px_0_#C2410C] active:translate-y-0.5 active:shadow-none'
                   : 'bg-stone-200 text-stone-400 cursor-not-allowed'
               }`}
-              title="Gửi tin nhắn (Enter)"
-              aria-label="Gửi tin nhắn"
+              title={bilingualLabel("Gửi tin nhắn (Enter)", "Send message (Enter)")}
+              aria-label={bilingualLabel("Gửi tin nhắn", "Send message")}
             >
               <Send size={18} strokeWidth={2.5} />
             </button>

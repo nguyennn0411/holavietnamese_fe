@@ -47,9 +47,10 @@ export function CultureExplorePage() {
           </h1>
 
           <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
-            <BilingualText>
-              {"Ngôn ngữ trở nên gần gũi và sống động khi bạn thấu hiểu những câu chuyện phong tục, ẩm thực và nơi chốn phía sau."}
-            </BilingualText>
+            <BilingualText
+              vi="Ngôn ngữ trở nên gần gũi và sống động khi bạn thấu hiểu những câu chuyện phong tục, ẩm thực và nơi chốn phía sau."
+              en="Language becomes intimate and vivid when you understand the stories, customs, cuisine, and places behind it."
+            />
           </p>
         </div>
       </section>
@@ -82,28 +83,28 @@ export function CultureExplorePage() {
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#FFF0DC] text-[#F97316] border border-[#F97316]/30 text-xs font-bold uppercase tracking-wider">
-                      {featured.categoryName}
+                      <BilingualText vi={featured.categoryNameVi || featured.categoryName} en={featured.categoryNameEn || featured.categoryName} />
                     </span>
                     <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#F8FAFC] text-[#64748B] border border-[#E8E5DF] text-xs font-semibold ml-auto">
-                      {featured.readTime}
+                      <BilingualText vi={featured.readTimeVi || featured.readTime} en={featured.readTimeEn || featured.readTime} />
                     </span>
                   </div>
 
                   <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#253044] group-hover:text-[#F97316] transition-colors leading-snug">
-                    <BilingualText vi={featured.titleVi || featured.title} en={featured.title} />
+                    <BilingualText vi={featured.titleVi || featured.title} en={featured.titleEn || featured.title} />
                   </h2>
 
                   <p className="text-sm text-[#64748B] line-clamp-3 leading-relaxed">
-                    {featured.summary}
+                    <BilingualText vi={featured.summaryVi || featured.summary} en={featured.summaryEn || featured.summary} />
                   </p>
                 </div>
 
                 <div className="pt-4 flex items-center justify-between border-t border-[#E8E5DF]">
                   <span className="inline-flex items-center gap-2 text-sm font-bold text-[#F97316] group-hover:translate-x-1 transition-transform">
-                    <BilingualText>{"Khám phá câu chuyện →"}</BilingualText>
+                    <BilingualText vi="Khám phá câu chuyện →" en="Explore story →" />
                   </span>
                   <span className="text-xs font-semibold text-[#64748B] bg-[#F8FAFC] px-3 py-1 rounded-full border border-[#E8E5DF]">
-                    {featured.destinationName}
+                    <BilingualText vi={featured.destinationNameVi || featured.destinationName} en={featured.destinationNameEn || featured.destinationName} />
                   </span>
                 </div>
               </div>
@@ -115,7 +116,7 @@ export function CultureExplorePage() {
       {/* Filter and Search Bar */}
       <section className="bg-white rounded-2xl border border-[#E8E5DF] p-5 sm:p-6 shadow-xs space-y-5">
         {/* Categories Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label="Chủ đề văn hóa">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label={bilingualLabel("Chủ đề văn hóa", "Culture topics")}>
           {categories.map((category) => {
             const isActive = selectedCategory === category.id;
             return (
@@ -131,7 +132,7 @@ export function CultureExplorePage() {
                     : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8] border border-[#E8E5DF]'
                 }`}
               >
-                <span>{category.label}</span>
+                <span><BilingualText vi={category.labelVi || category.label} en={category.labelEn || category.label} /></span>
               </button>
             );
           })}
@@ -143,8 +144,8 @@ export function CultureExplorePage() {
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
             <input
               type="text"
-              aria-label="Tìm câu chuyện văn hóa"
-              placeholder={bilingualLabel("Tìm câu chuyện theo chủ đề hoặc từ khóa…")}
+              aria-label={bilingualLabel("Tìm câu chuyện văn hóa", "Search cultural stories")}
+              placeholder={bilingualLabel("Tìm câu chuyện theo chủ đề hoặc từ khóa…", "Search stories by topic or keyword…")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-9 py-2.5 bg-white border border-[#E8E5DF] focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 rounded-xl text-xs sm:text-sm text-[#253044] placeholder-[#94A3B8] outline-hidden transition-all"
@@ -154,7 +155,7 @@ export function CultureExplorePage() {
                 type="button"
                 onClick={() => setSearch('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#253044]"
-                aria-label="Xóa tìm kiếm"
+                aria-label={bilingualLabel("Xóa tìm kiếm", "Clear search")}
               >
                 <X size={14} />
               </button>
@@ -164,24 +165,24 @@ export function CultureExplorePage() {
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold text-[#64748B] whitespace-nowrap">
-                <BilingualText>{"Điểm đến:"}</BilingualText>
+                <BilingualText vi="Điểm đến:" en="Destination:" />
               </span>
               <select
                 value={selectedDestination}
                 onChange={(e) => setSelectedDestination(e.target.value)}
                 className="bg-white border border-[#E8E5DF] rounded-xl px-3 py-2 text-xs text-[#253044] font-medium outline-hidden focus:border-[#F97316] transition-colors cursor-pointer"
-                aria-label="Lọc theo điểm đến"
+                aria-label={bilingualLabel("Lọc theo điểm đến", "Filter by destination")}
               >
                 {destinations.map((destination) => (
                   <option key={destination.id} value={destination.id}>
-                    {bilingualLabel(destination.label)}
+                    {bilingualLabel(destination.labelVi || destination.label, destination.labelEn || destination.label)}
                   </option>
                 ))}
               </select>
             </div>
 
             <span className="text-xs font-semibold text-[#64748B] whitespace-nowrap bg-[#F8FAFC] px-3 py-1.5 rounded-lg border border-[#E8E5DF]">
-              {articles.length} <BilingualText>{"bài viết"}</BilingualText>
+              {articles.length} <BilingualText vi="bài viết" en="articles" />
             </span>
 
             {isFiltered && (
@@ -191,7 +192,7 @@ export function CultureExplorePage() {
                 onClick={handleClearFilters}
               >
                 <RotateCcw size={12} />
-                <BilingualText>{"Xóa bộ lọc"}</BilingualText>
+                <BilingualText vi="Xóa bộ lọc" en="Clear filters" />
               </button>
             )}
           </div>
@@ -215,12 +216,12 @@ export function CultureExplorePage() {
                   />
                   <div className="absolute top-3 left-3 z-10">
                     <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#FFF0DC] text-[#F97316] border border-[#F97316]/30 shadow-xs tracking-wide">
-                      {article.categoryName}
+                      <BilingualText vi={article.categoryNameVi || article.categoryName} en={article.categoryNameEn || article.categoryName} />
                     </span>
                   </div>
                   <div className="absolute bottom-3 right-3 z-10">
                     <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-white/95 backdrop-blur-xs text-[#253044] border border-[#E8E5DF] shadow-xs">
-                      {article.readTime}
+                      <BilingualText vi={article.readTimeVi || article.readTime} en={article.readTimeEn || article.readTime} />
                     </span>
                   </div>
                 </div>
@@ -228,19 +229,19 @@ export function CultureExplorePage() {
                 <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between gap-4 bg-white">
                   <div>
                     <h3 className="text-base sm:text-lg font-bold text-[#253044] group-hover:text-[#F97316] transition-colors leading-snug line-clamp-2 mb-2">
-                      <BilingualText vi={article.titleVi || article.title} en={article.title} />
+                      <BilingualText vi={article.titleVi || article.title} en={article.titleEn || article.title} />
                     </h3>
                     <p className="text-xs sm:text-sm text-[#64748B] line-clamp-2 leading-relaxed">
-                      {article.summary}
+                      <BilingualText vi={article.summaryVi || article.summary} en={article.summaryEn || article.summary} />
                     </p>
                   </div>
 
                   <div className="pt-3 border-t border-[#E8E5DF] flex items-center justify-between text-xs">
                     <span className="font-bold text-[#F97316] group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-1">
-                      <BilingualText>{"Khám phá câu chuyện →"}</BilingualText>
+                      <BilingualText vi="Khám phá câu chuyện →" en="Explore story →" />
                     </span>
                     <small className="text-[11px] font-medium text-[#64748B]">
-                      {article.destinationName}
+                      <BilingualText vi={article.destinationNameVi || article.destinationName} en={article.destinationNameEn || article.destinationName} />
                     </small>
                   </div>
                 </div>
@@ -250,8 +251,8 @@ export function CultureExplorePage() {
         </div>
       ) : (
         <EmptyState
-          title="Không tìm thấy câu chuyện phù hợp"
-          description="Thử một từ khóa, chủ đề hoặc điểm đến khác để khám phá nét đẹp văn hóa Việt Nam."
+          title={bilingualLabel("Không tìm thấy câu chuyện phù hợp", "No matching stories found")}
+          description={bilingualLabel("Thử một từ khóa, chủ đề hoặc điểm đến khác để khám phá nét đẹp văn hóa Việt Nam.", "Try another keyword, topic, or destination to explore the beauty of Vietnamese culture.")}
         />
       )}
     </div>

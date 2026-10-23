@@ -4,6 +4,7 @@ import { Volume2, Turtle, Headphones, HelpCircle, Check, X } from 'lucide-react'
 import { DictationDataDTO } from '@/types/edtech';
 import { DiacriticKeyboardBar } from '@/components/edtech/ui/DiacriticKeyboardBar';
 import { audioFeedback } from '@/utils/audioFeedback';
+import BilingualText, { bilingualLabel } from '@/components/common/BilingualText';
 
 interface DictationExerciseProps {
   data: DictationDataDTO;
@@ -53,13 +54,16 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
       <div className="w-full text-left mb-6">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
           <Headphones className="w-3.5 h-3.5 text-emerald-600" />
-          Luyện Nghe & Gõ Chính Tả • Dictation Drill
+          <BilingualText vi="Luyện Nghe & Gõ Chính Tả • Dictation Drill" en="Listening & Dictation Drill" />
         </span>
         <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 mt-2">
-          Nghe và gõ lại câu tiếng Việt bạn nghe được:
+          <BilingualText vi="Nghe và gõ lại câu tiếng Việt bạn nghe được:" en="Listen and type the Vietnamese sentence you hear:" />
         </h2>
         <p className="text-xs text-slate-500 mt-0.5">
-          Listen carefully and type what you hear in Vietnamese.
+          <BilingualText
+            vi="Lắng nghe cẩn thận và gõ lại những gì bạn nghe được bằng tiếng Việt."
+            en="Listen carefully and type what you hear in Vietnamese."
+          />
         </p>
       </div>
 
@@ -75,8 +79,8 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
             className={`!min-h-0 !min-w-0 !p-0 !border-0 w-16 h-16 rounded-3xl flex items-center justify-center font-bold text-white transition-all shadow-[0_4px_0_#047857] active:translate-y-1 active:shadow-none cursor-pointer audio-btn ${
               isPlayingNormal ? 'bg-emerald-500 ring-4 ring-emerald-200' : 'bg-emerald-600 hover:bg-emerald-500'
             }`}
-            aria-label="Nghe ở tốc độ bình thường (1.0x)"
-            title="Tốc độ bình thường (1.0x)"
+            aria-label={bilingualLabel("Nghe ở tốc độ bình thường (1.0x)", "Listen at normal speed (1.0x)")}
+            title={bilingualLabel("Tốc độ bình thường (1.0x)", "Normal speed (1.0x)")}
           >
             <Volume2 className="w-8 h-8 shrink-0" strokeWidth={2.2} />
           </motion.button>
@@ -92,26 +96,29 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
                 ? 'bg-sky-400 text-white ring-4 ring-sky-200'
                 : 'bg-sky-500 hover:bg-sky-400 text-white'
             }`}
-            aria-label="Nghe ở tốc độ chậm (0.6x - Con rùa)"
-            title="Nghe phát âm chậm rãi (0.6x)"
+            aria-label={bilingualLabel("Nghe ở tốc độ chậm (0.6x - Con rùa)", "Listen at slow speed (0.6x - Turtle)")}
+            title={bilingualLabel("Nghe phát âm chậm rãi (0.6x)", "Slow pronunciation (0.6x)")}
           >
             <Turtle className="w-7 h-7 shrink-0" />
           </motion.button>
 
           <div className="text-left">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-              Điều khiển âm thanh:
+              <BilingualText vi="Điều khiển âm thanh:" en="Audio Controls:" />
             </span>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-sm font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">
-                1.0x Chuẩn
+                <BilingualText vi="1.0x Chuẩn" en="1.0x Normal" />
               </span>
               <span className="text-sm font-bold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-lg border border-sky-200 flex items-center gap-1">
-                <Turtle className="w-3.5 h-3.5" /> 0.6x Chậm
+                <Turtle className="w-3.5 h-3.5" /> <BilingualText vi="0.6x Chậm" en="0.6x Slow" />
               </span>
             </div>
             <p className="text-[11px] text-slate-400 mt-1">
-              Bấm biểu tượng rùa nếu bạn cần nghe rõ từng dấu thanh.
+              <BilingualText
+                vi="Bấm biểu tượng rùa nếu bạn cần nghe rõ từng dấu thanh."
+                en="Tap the turtle icon if you need to hear tones clearly."
+              />
             </p>
           </div>
         </div>
@@ -120,10 +127,16 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
         <button
           type="button"
           onClick={() => setShowHint(!showHint)}
-          className="text-xs font-bold text-slate-500 hover:text-emerald-700 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all shrink-0"
+          className="text-xs font-bold text-slate-500 hover:text-emerald-700 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all shrink-0 cursor-pointer"
         >
           <HelpCircle className="w-4 h-4 text-emerald-600" />
-          <span>{showHint ? 'Ẩn nghĩa gợi ý' : 'Gợi ý nghĩa tiếng Anh'}</span>
+          <span>
+            {showHint ? (
+              <BilingualText vi="Ẩn nghĩa gợi ý" en="Hide hint" />
+            ) : (
+              <BilingualText vi="Gợi ý nghĩa tiếng Anh" en="English meaning hint" />
+            )}
+          </span>
         </button>
       </div>
 
@@ -135,7 +148,8 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
           className="w-full mb-4 bg-amber-50/80 border border-amber-200 rounded-2xl p-3 text-xs text-amber-900 flex items-center justify-between"
         >
           <span>
-            <HelpCircle size={13} className="inline mr-1 text-amber-600" /><strong>Gợi ý:</strong> "{data.translationEn}" ({data.wordCount} từ)
+            <HelpCircle size={13} className="inline mr-1 text-amber-600" />
+            <strong><BilingualText vi="Gợi ý: " en="Hint: " /></strong>"{data.translationEn}" ({data.wordCount} <BilingualText vi="từ" en="words" />)
           </span>
           {data.hint && <span className="text-amber-700 italic">{data.hint}</span>}
         </motion.div>
@@ -150,7 +164,7 @@ export const DictationExercise: React.FC<DictationExerciseProps> = ({
             value={userInput}
             onChange={(e) => onInputChange(e.target.value)}
             disabled={isChecked}
-            placeholder="Gõ câu bạn nghe được tại đây..."
+            placeholder={bilingualLabel("Gõ câu bạn nghe được tại đây...", "Type what you hear here...")}
             className={`w-full text-lg md:text-xl font-bold px-5 py-4 rounded-3xl bg-white border-2 text-slate-900 placeholder:text-slate-300 placeholder:font-normal focus:outline-none focus:ring-4 focus:ring-emerald-100 shadow-sm transition-all vn-diacritic-safe ${
               isChecked
                 ? isCorrect

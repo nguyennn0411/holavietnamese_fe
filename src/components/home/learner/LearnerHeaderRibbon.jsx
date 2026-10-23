@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { Flame, Zap, Heart, Compass } from 'lucide-react';
@@ -23,10 +24,10 @@ export function LearnerHeaderRibbon({
           <span>{greeting}</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-[#253044] tracking-tight">
-          {user?.fullName || user?.username || 'Học viên'}!
+          {user?.fullName || user?.username || <BilingualText vi="Học viên" en="Learner" />}!
         </h1>
         <p className="text-xs sm:text-sm text-[#64748B]">
-          Cấp độ hiện tại: <strong className="text-[#253044]">Sơ cấp A1 • Trạm 3</strong> — Duy trì ngọn lửa học tập mỗi ngày.
+          <BilingualText vi="Cấp độ hiện tại:" en="Current Level:" /> <strong className="text-[#253044]"><BilingualText vi="Sơ cấp A1 • Trạm 3" en="Elementary A1 • Stop 3" /></strong> — <BilingualText vi="Duy trì ngọn lửa học tập mỗi ngày." en="Keep your learning streak burning every day." />
         </p>
       </div>
 
@@ -38,7 +39,7 @@ export function LearnerHeaderRibbon({
             <span className="block text-sm font-black text-[#253044] leading-tight">
               {effectiveStreak}
             </span>
-            <span className="block text-[10px] text-[#64748B] font-semibold uppercase">Ngày Streak</span>
+            <span className="block text-[10px] text-[#64748B] font-semibold uppercase"><BilingualText vi="Ngày Streak" en="Day Streak" /></span>
           </div>
         </div>
 
@@ -48,7 +49,7 @@ export function LearnerHeaderRibbon({
             <span className="block text-sm font-black text-[#253044] leading-tight">
               {effectiveXp}
             </span>
-            <span className="block text-[10px] text-[#64748B] font-semibold uppercase">Tổng XP</span>
+            <span className="block text-[10px] text-[#64748B] font-semibold uppercase"><BilingualText vi="Tổng XP" en="Total XP" /></span>
           </div>
         </div>
 
@@ -56,7 +57,7 @@ export function LearnerHeaderRibbon({
           <Heart size={22} className="text-[#ef4444] shrink-0" fill="currentColor" />
           <div>
             <span className="block text-sm font-black text-[#253044] leading-tight">{hearts}/5</span>
-            <span className="block text-[10px] text-[#64748B] font-semibold uppercase">Trái tim</span>
+            <span className="block text-[10px] text-[#64748B] font-semibold uppercase"><BilingualText vi="Trái tim" en="Hearts" /></span>
           </div>
         </div>
 
@@ -65,7 +66,7 @@ export function LearnerHeaderRibbon({
           className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-black text-xs shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-none transition-all"
         >
           <Compass size={16} />
-          <span>Vào Lộ trình EdTech →</span>
+          <span><BilingualText vi="Vào Lộ trình EdTech →" en="Open EdTech Path →" /></span>
         </Link>
       </div>
     </div>

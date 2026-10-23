@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useRef, useState } from 'react'
 import { vocabularyService } from '@/services/vocabularyService'
 import { Modal } from '@/components/common/Modal'
@@ -18,7 +18,7 @@ export function VocabularyDeleteModal({ entry, onClose, onDeleted }) {
     finally { submitting.current = false; setPending(false) }
   }
 
-  return <Modal title="Xóa từ vựng?" busy={pending} onClose={onClose}>
+  return <Modal title={bilingualLabel("Xóa từ vựng?", "Delete vocabulary?")} busy={pending} onClose={onClose}>
     <p><BilingualText>{"Xóa “"}</BilingualText>{entry.word}<BilingualText>{"” khỏi sổ tay của bạn?"}</BilingualText></p>
     {error && <p role="alert"><BilingualText>{error}</BilingualText></p>}
     <div className="actions">

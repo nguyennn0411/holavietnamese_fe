@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { EmptyState } from '@/components/common/Ui';
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
@@ -34,7 +34,7 @@ export function RoleplayResultPage() {
     navigate(`/ai-roleplay/${id}`);
   };
 
-  if (!result) return <EmptyState title="Chưa có kết quả phiên hội thoại" description="Hoàn thành một cuộc trò chuyện để xem đánh giá."><Link className="button" to="/ai-scenarios"><BilingualText>{"Chọn kịch bản →"}</BilingualText></Link></EmptyState>;
+  if (!result) return <EmptyState title={bilingualLabel("Chưa có kết quả phiên hội thoại", "No conversation session results")} description="Hoàn thành một cuộc trò chuyện để xem đánh giá."><Link className="button" to="/ai-scenarios"><BilingualText>{"Chọn kịch bản →"}</BilingualText></Link></EmptyState>;
 
   return (
     <div className="p4-container">
@@ -132,8 +132,8 @@ export function RoleplayResultPage() {
           <div>
             {result.corrections?.map((cor, idx) => (
               <div key={idx} className="correction-card">
-                <div className="correction-original"><BilingualText>{"✕ Bạn đã nói: \""}</BilingualText>{cor.original}"</div>
-                <div className="correction-native"><BilingualText>{"✓ Người bản xứ nói: \""}</BilingualText>{cor.nativeSuggestion}"</div>
+                <div className="correction-original"><BilingualText vi='✕ Bạn đã nói: "' en='✕ You said: "' />{cor.original}"</div>
+                <div className="correction-native"><BilingualText vi='✓ Người bản xứ nói: "' en='✓ Native speakers say: "' />{cor.nativeSuggestion}"</div>
                 <div className="correction-reason"><span className="font-bold text-amber-800 mr-1"><BilingualText vi="Lý do:" en="Reason:" /></span> {cor.reason}</div>
               </div>
             ))}

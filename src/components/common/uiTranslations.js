@@ -1,58 +1,217 @@
 // Static presentation labels only. API values and user content are not translated.
 export const UI_TRANSLATIONS = {
-  "Danh từ": ["Danh từ", "Noun"],
-  "Động từ": ["Động từ", "Verb"],
-  "Tính từ": ["Tính từ", "Adjective"],
-  "Phó từ": ["Phó từ", "Adverb"],
-  "Đại từ": ["Đại từ", "Pronoun"],
-  "Số từ": ["Số từ", "Numeral"],
-  "Trợ từ": ["Trợ từ", "Particle"],
-  "Liên từ": ["Liên từ", "Conjunction"],
-  "Giới từ": ["Giới từ", "Preposition"],
-  "Thán từ": ["Thán từ", "Interjection"],
-  "Cụm từ": ["Cụm từ", "Phrase"],
-  "Tục ngữ": ["Tục ngữ", "Proverb"],
-  "Tên riêng": ["Tên riêng", "Proper noun"],
-  "Viết tắt": ["Viết tắt", "Abbreviation"],
-  "Định từ": ["Định từ", "Determiner"],
-  "Tiền tố": ["Tiền tố", "Prefix"],
-  "Hậu tố": ["Hậu tố", "Suffix"],
-  "Loại từ": ["Loại từ", "Classifier"],
-  "Bạn đã ôn hết các từ đến hạn": ["Bạn đã ôn hết các từ đến hạn", "You have reviewed all due words"],
-  "Lịch ôn tiếp theo đã được lưu trong sổ tay.": ["Lịch ôn tiếp theo đã được lưu trong sổ tay.", "Your next review schedule is saved in your notebook."],
-  "Tra cứu mục từ · Dictionary entry": ["Tra cứu mục từ · Dictionary entry", "Dictionary entry"],
-  "Về từ điển": ["Về từ điển", "Back to dictionary"],
-  "MỤC TỪ TIẾNG VIỆT": ["MỤC TỪ TIẾNG VIỆT", "VIETNAMESE DICTIONARY ENTRY"],
-  "Phát âm theo dữ liệu nguồn": ["Phát âm theo dữ liệu nguồn", "Recorded pronunciations"],
-  "Mang từ này vào sổ tay": ["Mang từ này vào sổ tay", "Save this word to your notebook"],
-  "Một mục từ được lưu một lần. Bạn có thể chọn nghĩa trước khi lưu.": ["Một mục từ được lưu một lần. Bạn có thể chọn nghĩa trước khi lưu.", "Each entry is saved once. Choose a meaning before saving."],
-  "Nghĩa để ôn": ["Nghĩa để ôn", "Meaning to review"],
-  "Nghĩa đang lưu:": ["Nghĩa đang lưu:", "Saved meaning:"],
-  "Nghĩa & cách dùng": ["Nghĩa & cách dùng", "Meanings & usage"],
-  "Trong câu": ["Trong câu", "In a sentence"],
-  "Cùng cách viết, khác từ loại": ["Cùng cách viết, khác từ loại", "Same spelling, different parts of speech"],
-  "Từ liên quan trong nguồn": ["Từ liên quan trong nguồn", "Related words"],
-  "Đồng nghĩa": ["Đồng nghĩa", "Synonyms"],
-  "Trái nghĩa": ["Trái nghĩa", "Antonyms"],
-  "Liên quan": ["Liên quan", "Related"],
-  "Từ phái sinh": ["Từ phái sinh", "Derived words"],
-  "Cách nói vùng miền": ["Cách nói vùng miền", "Regional expressions"],
-  "Khám phá thêm →": ["Khám phá thêm →", "Explore more →"],
-  "Nguồn gốc từ theo dữ liệu nguồn": ["Nguồn gốc từ theo dữ liệu nguồn", "Word origins"],
-  "Ghi chú từ nguồn": ["Ghi chú từ nguồn", "Source notes"],
-  "Audio mục từ": ["Audio mục từ", "Word audio"],
-  "Giọng đọc tổng hợp": ["Giọng đọc tổng hợp", "Text-to-speech"],
-  "(trình duyệt)": ["(trình duyệt)", "(browser)"],
-  "Audio ví dụ": ["Audio ví dụ", "Example audio"],
-  "Mục từ gốc": ["Mục từ gốc", "Original entry"],
-  "Lịch sử và người đóng góp": ["Lịch sử và người đóng góp", "History and contributors"],
-  "Dữ liệu trích xuất": ["Dữ liệu trích xuất", "Extracted data"],
-  "Chuẩn hóa và thay đổi": ["Chuẩn hóa và thay đổi", "Normalization and changes"],
-  "Chưa có bài văn hóa liên kết": ["Chưa có bài văn hóa liên kết", "No linked culture articles yet"],
-  "Chưa có nội dung ngôn ngữ liên kết": ["Chưa có nội dung ngôn ngữ liên kết", "No linked language content yet"],
-  "Chưa có kịch bản thực hành khả dụng": ["Chưa có kịch bản thực hành khả dụng", "No practice scenarios available yet"],
-  "Từ tương đương:": ["Từ tương đương:", "Equivalent word:"],
-  "Trình độ gợi ý:": ["Trình độ gợi ý:", "Suggested level:"],
+  "Danh từ": [
+    "Danh từ",
+    "Noun"
+  ],
+  "Động từ": [
+    "Động từ",
+    "Verb"
+  ],
+  "Tính từ": [
+    "Tính từ",
+    "Adjective"
+  ],
+  "Phó từ": [
+    "Phó từ",
+    "Adverb"
+  ],
+  "Đại từ": [
+    "Đại từ",
+    "Pronoun"
+  ],
+  "Số từ": [
+    "Số từ",
+    "Numeral"
+  ],
+  "Trợ từ": [
+    "Trợ từ",
+    "Particle"
+  ],
+  "Liên từ": [
+    "Liên từ",
+    "Conjunction"
+  ],
+  "Giới từ": [
+    "Giới từ",
+    "Preposition"
+  ],
+  "Thán từ": [
+    "Thán từ",
+    "Interjection"
+  ],
+  "Cụm từ": [
+    "Cụm từ",
+    "Phrase"
+  ],
+  "Tục ngữ": [
+    "Tục ngữ",
+    "Proverb"
+  ],
+  "Tên riêng": [
+    "Tên riêng",
+    "Proper noun"
+  ],
+  "Viết tắt": [
+    "Viết tắt",
+    "Abbreviation"
+  ],
+  "Định từ": [
+    "Định từ",
+    "Determiner"
+  ],
+  "Tiền tố": [
+    "Tiền tố",
+    "Prefix"
+  ],
+  "Hậu tố": [
+    "Hậu tố",
+    "Suffix"
+  ],
+  "Loại từ": [
+    "Loại từ",
+    "Classifier"
+  ],
+  "Bạn đã ôn hết các từ đến hạn": [
+    "Bạn đã ôn hết các từ đến hạn",
+    "You have reviewed all due words"
+  ],
+  "Lịch ôn tiếp theo đã được lưu trong sổ tay.": [
+    "Lịch ôn tiếp theo đã được lưu trong sổ tay.",
+    "Your next review schedule is saved in your notebook."
+  ],
+  "Tra cứu mục từ · Dictionary entry": [
+    "Tra cứu mục từ · Dictionary entry",
+    "Dictionary entry"
+  ],
+  "Về từ điển": [
+    "Về từ điển",
+    "Back to dictionary"
+  ],
+  "MỤC TỪ TIẾNG VIỆT": [
+    "MỤC TỪ TIẾNG VIỆT",
+    "VIETNAMESE DICTIONARY ENTRY"
+  ],
+  "Phát âm theo dữ liệu nguồn": [
+    "Phát âm theo dữ liệu nguồn",
+    "Recorded pronunciations"
+  ],
+  "Mang từ này vào sổ tay": [
+    "Mang từ này vào sổ tay",
+    "Save this word to your notebook"
+  ],
+  "Một mục từ được lưu một lần. Bạn có thể chọn nghĩa trước khi lưu.": [
+    "Một mục từ được lưu một lần. Bạn có thể chọn nghĩa trước khi lưu.",
+    "Each entry is saved once. Choose a meaning before saving."
+  ],
+  "Nghĩa để ôn": [
+    "Nghĩa để ôn",
+    "Meaning to review"
+  ],
+  "Nghĩa đang lưu:": [
+    "Nghĩa đang lưu:",
+    "Saved meaning:"
+  ],
+  "Nghĩa & cách dùng": [
+    "Nghĩa & cách dùng",
+    "Meanings & usage"
+  ],
+  "Trong câu": [
+    "Trong câu",
+    "In a sentence"
+  ],
+  "Cùng cách viết, khác từ loại": [
+    "Cùng cách viết, khác từ loại",
+    "Same spelling, different parts of speech"
+  ],
+  "Từ liên quan trong nguồn": [
+    "Từ liên quan trong nguồn",
+    "Related words"
+  ],
+  "Đồng nghĩa": [
+    "Đồng nghĩa",
+    "Synonyms"
+  ],
+  "Trái nghĩa": [
+    "Trái nghĩa",
+    "Antonyms"
+  ],
+  "Liên quan": [
+    "Liên quan",
+    "Related"
+  ],
+  "Từ phái sinh": [
+    "Từ phái sinh",
+    "Derived words"
+  ],
+  "Cách nói vùng miền": [
+    "Cách nói vùng miền",
+    "Regional expressions"
+  ],
+  "Khám phá thêm →": [
+    "Khám phá thêm →",
+    "Explore more →"
+  ],
+  "Nguồn gốc từ theo dữ liệu nguồn": [
+    "Nguồn gốc từ theo dữ liệu nguồn",
+    "Word origins"
+  ],
+  "Ghi chú từ nguồn": [
+    "Ghi chú từ nguồn",
+    "Source notes"
+  ],
+  "Audio mục từ": [
+    "Audio mục từ",
+    "Word audio"
+  ],
+  "Giọng đọc tổng hợp": [
+    "Giọng đọc tổng hợp",
+    "Text-to-speech"
+  ],
+  "(trình duyệt)": [
+    "(trình duyệt)",
+    "(browser)"
+  ],
+  "Audio ví dụ": [
+    "Audio ví dụ",
+    "Example audio"
+  ],
+  "Mục từ gốc": [
+    "Mục từ gốc",
+    "Original entry"
+  ],
+  "Lịch sử và người đóng góp": [
+    "Lịch sử và người đóng góp",
+    "History and contributors"
+  ],
+  "Dữ liệu trích xuất": [
+    "Dữ liệu trích xuất",
+    "Extracted data"
+  ],
+  "Chuẩn hóa và thay đổi": [
+    "Chuẩn hóa và thay đổi",
+    "Normalization and changes"
+  ],
+  "Chưa có bài văn hóa liên kết": [
+    "Chưa có bài văn hóa liên kết",
+    "No linked culture articles yet"
+  ],
+  "Chưa có nội dung ngôn ngữ liên kết": [
+    "Chưa có nội dung ngôn ngữ liên kết",
+    "No linked language content yet"
+  ],
+  "Chưa có kịch bản thực hành khả dụng": [
+    "Chưa có kịch bản thực hành khả dụng",
+    "No practice scenarios available yet"
+  ],
+  "Từ tương đương:": [
+    "Từ tương đương:",
+    "Equivalent word:"
+  ],
+  "Trình độ gợi ý:": [
+    "Trình độ gợi ý:",
+    "Suggested level:"
+  ],
   "Nhập email hoặc tên đăng nhập": [
     "Nhập email hoặc tên đăng nhập",
     "Enter your email or username"
@@ -3897,13 +4056,13 @@ export const UI_TRANSLATIONS = {
     "Lỗi cần sửa & Cách nói tự nhiên hơn",
     "Corrections and more natural expressions"
   ],
-  "✕ Bạn đã nói: \"": [
-    "✕ Bạn đã nói: \"",
-    "You said: \""
+  "✕ Bạn đã nói: \\\"": [
+    "✕ Bạn đã nói: \\\"",
+    "You said: \\\""
   ],
-  "✓ Người bản xứ nói: \"": [
-    "✓ Người bản xứ nói: \"",
-    "A native speaker would say: \""
+  "✓ Người bản xứ nói: \\\"": [
+    "✓ Người bản xứ nói: \\\"",
+    "A native speaker would say: \\\""
   ],
   "Lý do:": [
     "Lý do:",
@@ -6041,12 +6200,12 @@ export const UI_TRANSLATIONS = {
     "Hỏi đáp mọi thắc mắc về tiếng Việt: giải thích từ vựng, ngữ pháp, ngữ cảnh và cách dùng tự nhiên.",
     "Ask about Vietnamese vocabulary, grammar, context and natural usage."
   ],
-  "Hỏi bất kỳ điều gì về tiếng Việt (ví dụ: \"Phân biệt từ 'được' và 'bị'\")": [
-    "Hỏi bất kỳ điều gì về tiếng Việt (ví dụ: \"Phân biệt từ 'được' và 'bị'\")",
+  "Hỏi bất kỳ điều gì về tiếng Việt (ví dụ: \\\"Phân biệt từ 'được' và 'bị'\\\")": [
+    "Hỏi bất kỳ điều gì về tiếng Việt (ví dụ: \\\"Phân biệt từ 'được' và 'bị'\\\")",
     "Ask about Vietnamese (e.g. the difference between “được” and “bị”)"
   ],
-  "Giải thích sự khác nhau giữa \"được\" và \"bị\"": [
-    "Giải thích sự khác nhau giữa \"được\" và \"bị\"",
+  "Giải thích sự khác nhau giữa \\\"được\\\" và \\\"bị\\\"": [
+    "Giải thích sự khác nhau giữa \\\"được\\\" và \\\"bị\\\"",
     "Explain the difference between “được” and “bị”"
   ],
   "Cách sử dụng hệ thống đại từ xưng hô tiếng Việt (anh, chị, em, cô, chú...)": [
@@ -6057,8 +6216,8 @@ export const UI_TRANSLATIONS = {
     "Làm thế nào để phân biệt dấu hỏi (?) và dấu ngã (~)?",
     "How can I distinguish the hỏi and ngã tones?"
   ],
-  "Cho tôi 5 cách chào hỏi thông dụng ngoài \"Xin chào\"": [
-    "Cho tôi 5 cách chào hỏi thông dụng ngoài \"Xin chào\"",
+  "Cho tôi 5 cách chào hỏi thông dụng ngoài \\\"Xin chào\\\"": [
+    "Cho tôi 5 cách chào hỏi thông dụng ngoài \\\"Xin chào\\\"",
     "Give me five common greetings besides “Xin chào”"
   ],
   "Chuyên sâu": [
@@ -6073,20 +6232,20 @@ export const UI_TRANSLATIONS = {
     "Nhập câu tiếng Việt của bạn để kiểm tra và sửa lỗi...",
     "Enter a Vietnamese sentence to check and correct..."
   ],
-  "Sửa giúp tôi câu: \"Hôm qua tôi đi mua hai quả chuối rất to và ăn nó ngon.\"": [
-    "Sửa giúp tôi câu: \"Hôm qua tôi đi mua hai quả chuối rất to và ăn nó ngon.\"",
+  "Sửa giúp tôi câu: \\\"Hôm qua tôi đi mua hai quả chuối rất to và ăn nó ngon.\\\"": [
+    "Sửa giúp tôi câu: \\\"Hôm qua tôi đi mua hai quả chuối rất to và ăn nó ngon.\\\"",
     "Help correct: “Hôm qua tôi đi mua hai quả chuối rất to và ăn nó ngon.”"
   ],
   "Cấu trúc so sánh hơn và so sánh nhất trong tiếng Việt": [
     "Cấu trúc so sánh hơn và so sánh nhất trong tiếng Việt",
     "Comparatives and superlatives in Vietnamese"
   ],
-  "Cách dùng đúng các từ nối: \"tuy... nhưng\", \"vì... nên\", \"nếu... thì\"": [
-    "Cách dùng đúng các từ nối: \"tuy... nhưng\", \"vì... nên\", \"nếu... thì\"",
+  "Cách dùng đúng các từ nối: \\\"tuy... nhưng\\\", \\\"vì... nên\\\", \\\"nếu... thì\\\"": [
+    "Cách dùng đúng các từ nối: \\\"tuy... nhưng\\\", \\\"vì... nên\\\", \\\"nếu... thì\\\"",
     "How to use “tuy... nhưng”, “vì... nên”, and “nếu... thì” correctly"
   ],
-  "Tại sao người Việt nói \"nhà tôi có 3 người\" mà không dùng từ \"tồn tại\"?": [
-    "Tại sao người Việt nói \"nhà tôi có 3 người\" mà không dùng từ \"tồn tại\"?",
+  "Tại sao người Việt nói \\\"nhà tôi có 3 người\\\" mà không dùng từ \\\"tồn tại\\\"?": [
+    "Tại sao người Việt nói \\\"nhà tôi có 3 người\\\" mà không dùng từ \\\"tồn tại\\\"?",
     "Why do Vietnamese people say “nhà tôi có 3 người” instead of using “exist”?"
   ],
   "Dịch thuật ngữ cảnh": [
@@ -6101,20 +6260,20 @@ export const UI_TRANSLATIONS = {
     "Nhập câu hoặc đoạn văn cần dịch (tiếng Việt hoặc tiếng Anh)...",
     "Enter a sentence or passage to translate (Vietnamese or English)..."
   ],
-  "Dịch sang tiếng Việt tự nhiên: \"Could you please make it less spicy for me?\"": [
-    "Dịch sang tiếng Việt tự nhiên: \"Could you please make it less spicy for me?\"",
+  "Dịch sang tiếng Việt tự nhiên: \\\"Could you please make it less spicy for me?\\\"": [
+    "Dịch sang tiếng Việt tự nhiên: \\\"Could you please make it less spicy for me?\\\"",
     "Translate naturally into Vietnamese: “Could you please make it less spicy for me?”"
   ],
-  "Từ \"duyên\" trong tiếng Việt dịch sang tiếng Anh thế nào cho trọn nghĩa?": [
-    "Từ \"duyên\" trong tiếng Việt dịch sang tiếng Anh thế nào cho trọn nghĩa?",
+  "Từ \\\"duyên\\\" trong tiếng Việt dịch sang tiếng Anh thế nào cho trọn nghĩa?": [
+    "Từ \\\"duyên\\\" trong tiếng Việt dịch sang tiếng Anh thế nào cho trọn nghĩa?",
     "How can the Vietnamese word “duyên” be fully conveyed in English?"
   ],
-  "Dịch lịch sự câu từ chối lời mời ăn tối: \"Cảm ơn bạn, nhưng tối nay tôi có việc bận mất rồi.\"": [
-    "Dịch lịch sự câu từ chối lời mời ăn tối: \"Cảm ơn bạn, nhưng tối nay tôi có việc bận mất rồi.\"",
+  "Dịch lịch sự câu từ chối lời mời ăn tối: \\\"Cảm ơn bạn, nhưng tối nay tôi có việc bận mất rồi.\\\"": [
+    "Dịch lịch sự câu từ chối lời mời ăn tối: \\\"Cảm ơn bạn, nhưng tối nay tôi có việc bận mất rồi.\\\"",
     "Translate a polite refusal: “Cảm ơn bạn, nhưng tối nay tôi có việc bận mất rồi.”"
   ],
-  "Cách nói \"I feel at home here\" bằng tiếng Việt mộc mạc nhất": [
-    "Cách nói \"I feel at home here\" bằng tiếng Việt mộc mạc nhất",
+  "Cách nói \\\"I feel at home here\\\" bằng tiếng Việt mộc mạc nhất": [
+    "Cách nói \\\"I feel at home here\\\" bằng tiếng Việt mộc mạc nhất",
     "How to say “I feel at home here” in natural Vietnamese"
   ],
   "Luyện hội thoại phản xạ": [
@@ -6165,8 +6324,8 @@ export const UI_TRANSLATIONS = {
     "Ý nghĩa của mâm ngũ quả và tục xông đất ngày Tết Nguyên Đán",
     "The meaning of the five-fruit tray and the first visitor tradition at Tết"
   ],
-  "Tại sao người Việt hay hỏi \"Ăn cơm chưa?\" khi chào nhau?": [
-    "Tại sao người Việt hay hỏi \"Ăn cơm chưa?\" khi chào nhau?",
+  "Tại sao người Việt hay hỏi \\\"Ăn cơm chưa?\\\" khi chào nhau?": [
+    "Tại sao người Việt hay hỏi \\\"Ăn cơm chưa?\\\" khi chào nhau?",
     "Why do Vietnamese people ask “Ăn cơm chưa?” when greeting someone?"
   ],
   "Những điều nên và không nên làm khi vào thăm chùa chiền ở Việt Nam": [
@@ -6221,16 +6380,16 @@ export const UI_TRANSLATIONS = {
     "So sánh từ vựng hàng ngày giữa miền Bắc và miền Nam (muỗng - thìa, heo - lợn...)",
     "Compare everyday Northern and Southern vocabulary (muỗng – thìa, heo – lợn...)"
   ],
-  "Giải thích các từ địa phương miền Trung đặc trưng: \"mô, tê, răng, rứa\"": [
-    "Giải thích các từ địa phương miền Trung đặc trưng: \"mô, tê, răng, rứa\"",
+  "Giải thích các từ địa phương miền Trung đặc trưng: \\\"mô, tê, răng, rứa\\\"": [
+    "Giải thích các từ địa phương miền Trung đặc trưng: \\\"mô, tê, răng, rứa\\\"",
     "Explain Central Vietnamese words: “mô, tê, răng, rứa”"
   ],
-  "Đại từ nhân xưng thân mật ở miền Tây Nam Bộ: \"chế\", \"hai\", \"út\", \"tía\"": [
-    "Đại từ nhân xưng thân mật ở miền Tây Nam Bộ: \"chế\", \"hai\", \"út\", \"tía\"",
+  "Đại từ nhân xưng thân mật ở miền Tây Nam Bộ: \\\"chế\\\", \\\"hai\\\", \\\"út\\\", \\\"tía\\\"": [
+    "Đại từ nhân xưng thân mật ở miền Tây Nam Bộ: \\\"chế\\\", \\\"hai\\\", \\\"út\\\", \\\"tía\\\"",
     "Friendly Southern forms of address: “chế”, “hai”, “út”, “tía”"
   ],
-  "Khác biệt giữa từ \"chè\" ở miền Bắc (uống) và miền Nam (món tráng miệng)": [
-    "Khác biệt giữa từ \"chè\" ở miền Bắc (uống) và miền Nam (món tráng miệng)",
+  "Khác biệt giữa từ \\\"chè\\\" ở miền Bắc (uống) và miền Nam (món tráng miệng)": [
+    "Khác biệt giữa từ \\\"chè\\\" ở miền Bắc (uống) và miền Nam (món tráng miệng)",
     "How “chè” differs in the North (tea) and South (dessert)"
   ],
   "🍜 Ẩm thực": [
@@ -6357,136 +6516,2032 @@ export const UI_TRANSLATIONS = {
     "Tiếng Tây Ban Nha 🇪🇸",
     "Spanish · Español"
   ],
-  "Quản lý danh mục": [
-    "Quản lý danh mục",
-    "Manage categories",
+  "Ảnh bìa khóa học": [
+    "Ảnh bìa khóa học",
+    "Course cover image"
   ],
-  "Duyệt": [
-    "Duyệt",
-    "Approve",
+  "Tải âm thanh câu hỏi": [
+    "Tải âm thanh câu hỏi",
+    "Upload question audio"
   ],
-  "Xem": [
-    "Xem",
-    "View",
+  "Tải hình ảnh câu hỏi": [
+    "Tải hình ảnh câu hỏi",
+    "Upload question image"
   ],
-  "Trình biên tập": [
-    "Trình biên tập",
-    "Editor",
+  "Hoặc URL âm thanh": [
+    "Hoặc URL âm thanh",
+    "Or audio URL"
   ],
-  "Xem trước": [
-    "Xem trước",
-    "Preview",
+  "Hoặc URL hình ảnh": [
+    "Hoặc URL hình ảnh",
+    "Or image URL"
   ],
-  "Xem trước (Preview)": [
-    "Xem trước (Preview)",
-    "Preview",
+  "Đáp án đúng": [
+    "Đáp án đúng",
+    "Correct answer"
   ],
-  "Lưu bài viết": [
-    "Lưu bài viết",
-    "Save article",
+  "Tải hình ảnh": [
+    "Tải hình ảnh",
+    "Upload image"
   ],
-  "Cụm từ hữu ích kèm theo bài viết:": [
-    "Cụm từ hữu ích kèm theo bài viết:",
-    "Useful phrases with this article:",
+  "Tải âm thanh": [
+    "Tải âm thanh",
+    "Upload audio"
   ],
-  "Cấu hình kịch bản": [
-    "Cấu hình kịch bản",
-    "Scenario settings",
+  "Tải lại trang": [
+    "Tải lại trang",
+    "Reload page"
   ],
-  "Thử nghiệm giả lập": [
-    "Thử nghiệm giả lập",
-    "Simulation test",
+  "Không thể tải nội dung": [
+    "Không thể tải nội dung",
+    "Could not load content"
   ],
-  "Lưu kịch bản": [
-    "Lưu kịch bản",
-    "Save scenario",
+  "Trước": [
+    "Trước",
+    "Previous"
   ],
-  "Duyệt đạt chuẩn": [
-    "Duyệt đạt chuẩn",
-    "Approved",
+  "Sau": [
+    "Sau",
+    "Next"
   ],
-  "Cần chỉnh Prompt": [
-    "Cần chỉnh Prompt",
-    "Needs prompt tuning",
+  "Đăng ký học ngay": [
+    "Đăng ký học ngay",
+    "Enroll now"
   ],
-  "Ẩm thực & Quán xá": [
-    "Ẩm thực & Quán xá",
-    "Food and dining",
+  "Lộ trình học EdTech": [
+    "Lộ trình học EdTech",
+    "EdTech learning path"
   ],
-  "Mua sắm & Mặc cả": [
-    "Mua sắm & Mặc cả",
-    "Shopping and bargaining",
+  "Quản lý khóa học": [
+    "Quản lý khóa học",
+    "Course management"
   ],
-  "Di chuyển & Du lịch": [
-    "Di chuyển & Du lịch",
-    "Travel and transport",
+  "Mục tiêu & Giới thiệu bài học": [
+    "Mục tiêu & Giới thiệu bài học",
+    "Lesson objectives & introduction"
   ],
-  "Khách sạn & Nghỉ dưỡng": [
-    "Khách sạn & Nghỉ dưỡng",
-    "Hotels and resorts",
+  "Mục tiêu:": [
+    "Mục tiêu:",
+    "Objectives:"
   ],
-  "Gia đình & Bạn bè": [
-    "Gia đình & Bạn bè",
-    "Family and friends",
+  "Hoạt động tiếp theo": [
+    "Hoạt động tiếp theo",
+    "Next activity"
   ],
-  "Giao tiếp công sở": [
-    "Giao tiếp công sở",
-    "Workplace communication",
+  "Bài tiếp theo": [
+    "Bài tiếp theo",
+    "Next lesson"
   ],
-  "Phù hợp văn hóa (Culture)": [
-    "Phù hợp văn hóa (Culture)",
-    "Cultural appropriateness",
+  "Đã hoàn thành bài học": [
+    "Đã hoàn thành bài học",
+    "Lesson completed"
   ],
-  "Nhận xét từ AI Tutor:": [
-    "Nhận xét từ AI Tutor:",
-    "AI Tutor feedback:",
+  "Kiểm tra đáp án": [
+    "Kiểm tra đáp án",
+    "Check answer"
   ],
-  "Bạn đã nói: \"": [
-    "Bạn đã nói: \"",
-    "You said: \"",
+  "Nhìn xem bạn đã nói được gì!": [
+    "Nhìn xem bạn đã nói được gì!",
+    "See what you've spoken!"
   ],
-  "Người bản xứ nói: \"": [
-    "Người bản xứ nói: \"",
-    "Native speaker: \"",
+  "Củng cố kiến thức bằng một bài kiểm tra ngắn để kiểm tra độ hiểu bài.": [
+    "Củng cố kiến thức bằng một bài kiểm tra ngắn để kiểm tra độ hiểu bài.",
+    "Reinforce your knowledge with a short quiz to test your understanding."
   ],
-  "Tiếp tục kịch bản mới": [
-    "Tiếp tục kịch bản mới",
-    "Continue to next scenario",
+  "Bắt đầu quiz ngay →": [
+    "Bắt đầu quiz ngay →",
+    "Start quiz now →"
   ],
-  "Hoàn tất & Nhận đánh giá": [
-    "Hoàn tất & Nhận đánh giá",
-    "Complete & get feedback",
+  "Đến lượt bạn luyện nói & trò chuyện": [
+    "Đến lượt bạn luyện nói & trò chuyện",
+    "Your turn to speak & converse"
+  ],
+  "Thực hành cùng AI Tutor trong môi trường đàm thoại trực tiếp.": [
+    "Thực hành cùng AI Tutor trong môi trường đàm thoại trực tiếp.",
+    "Practice with AI Tutor in a real-time conversation setting."
+  ],
+  "Bắt đầu luyện tập cùng AI →": [
+    "Bắt đầu luyện tập cùng AI →",
+    "Start practicing with AI →"
+  ],
+  "Xem lời thoại (Transcript)": [
+    "Xem lời thoại (Transcript)",
+    "View transcript"
+  ],
+  "Mở sổ tay từ vựng": [
+    "Mở sổ tay từ vựng",
+    "Open vocabulary notebook"
+  ],
+  "Lỗi thường gặp cần tránh:": [
+    "Lỗi thường gặp cần tránh:",
+    "Common mistakes to avoid:"
+  ],
+  "Mục tiêu bài học:": [
+    "Mục tiêu bài học:",
+    "Lesson objectives:"
+  ],
+  "Bài trước": [
+    "Bài trước",
+    "Previous lesson"
+  ],
+  "video": [
+    "video",
+    "video"
+  ],
+  "âm thanh": [
+    "âm thanh",
+    "audio"
+  ],
+  "Câu của bạn (bấm vào từ để bỏ chọn):": [
+    "Câu của bạn (bấm vào từ để bỏ chọn):",
+    "Your sentence (tap a word to unselect):"
+  ],
+  "Chọn các từ bên dưới theo thứ tự đúng để ghép thành câu hoàn chỉnh.": [
+    "Chọn các từ bên dưới theo thứ tự đúng để ghép thành câu hoàn chỉnh.",
+    "Choose words below in the correct order to build a complete sentence."
+  ],
+  "Kho từ vựng có sẵn:": [
+    "Kho từ vựng có sẵn:",
+    "Available word tiles:"
+  ],
+  "Tất cả các từ đã được đặt vào câu.": [
+    "Tất cả các từ đã được đặt vào câu.",
+    "All words have been placed into the sentence."
+  ],
+  "— Chọn cặp tương ứng —": [
+    "— Chọn cặp tương ứng —",
+    "— Select matching pair —"
+  ],
+  "Nhập câu trả lời của bạn:": [
+    "Nhập câu trả lời của bạn:",
+    "Enter your answer:"
+  ],
+  "Gõ câu trả lời bằng tiếng Việt tại đây…": [
+    "Gõ câu trả lời bằng tiếng Việt tại đây…",
+    "Type your answer in Vietnamese here…"
+  ],
+  "Gợi ý: Chú ý dấu câu và thanh điệu tiếng Việt (Sắc, Huyền, Hỏi, Ngã, Nặng).": [
+    "Gợi ý: Chú ý dấu câu và thanh điệu tiếng Việt (Sắc, Huyền, Hỏi, Ngã, Nặng).",
+    "Hint: Pay attention to punctuation and Vietnamese tones (Sắc, Huyền, Hỏi, Ngã, Nặng)."
+  ],
+  "Giao diện học viên": [
+    "Giao diện học viên",
+    "Learner view"
   ],
   "Bộ sưu tập danh hiệu": [
     "Bộ sưu tập danh hiệu",
-    "Badge collection",
+    "Badges collection"
   ],
-  "Tùy biến trải nghiệm": [
-    "Tùy biến trải nghiệm",
-    "Customize experience",
+  "Biểu tượng": [
+    "Biểu tượng",
+    "Icon"
+  ],
+  "Biểu tượng:": [
+    "Biểu tượng:",
+    "Icon:"
+  ],
+  "Duyệt đạt chuẩn": [
+    "Duyệt đạt chuẩn",
+    "Approve as qualified"
+  ],
+  "Cần chỉnh Prompt": [
+    "Cần chỉnh Prompt",
+    "Needs prompt adjustment"
+  ],
+  "Kiểm thử kịch bản AI": [
+    "Kiểm thử kịch bản AI",
+    "Test AI scenario"
+  ],
+  "Kiểm tra trực tiếp phản hồi của mô hình với phiên bản hướng dẫn hệ thống hiện hành trước khi xuất bản rộng rãi.": [
+    "Kiểm tra trực tiếp phản hồi của mô hình với phiên bản hướng dẫn hệ thống hiện hành trước khi xuất bản rộng rãi.",
+    "Directly test model responses with the current system prompt version before public release."
+  ],
+  "Cấu hình mô hình AI": [
+    "Cấu hình mô hình AI",
+    "AI model configuration"
+  ],
+  "+ Tạo kịch bản mới": [
+    "+ Tạo kịch bản mới",
+    "+ Create new scenario"
+  ],
+  "⚙️ Chỉnh sửa": [
+    "⚙️ Chỉnh sửa",
+    "⚙️ Edit"
+  ],
+  "Quản trị mô hình ngôn ngữ lớn (LLM), phiên bản hướng dẫn hệ thống, kiểm soát giới hạn tần suất, chi phí và bảo mật API.": [
+    "Quản trị mô hình ngôn ngữ lớn (LLM), phiên bản hướng dẫn hệ thống, kiểm soát giới hạn tần suất, chi phí và bảo mật API.",
+    "Manage Large Language Models (LLM), system prompt versions, rate limits, costs, and API security."
+  ],
+  "1. Chọn mô hình được phép": [
+    "1. Chọn mô hình được phép",
+    "1. Select permitted models"
+  ],
+  "Mô hình đang hoạt động chính:": [
+    "Mô hình đang hoạt động chính:",
+    "Primary active model:"
+  ],
+  "2. Phiên bản hướng dẫn hệ thống": [
+    "2. Phiên bản hướng dẫn hệ thống",
+    "2. System prompt version"
+  ],
+  "Phiên bản hướng dẫn hệ thống hiện hành:": [
+    "Phiên bản hướng dẫn hệ thống hiện hành:",
+    "Current system prompt version:"
+  ],
+  "Nếu chưa có công cụ đo đạc âm thanh thực tế, tuyệt đối không sinh điểm số phát âm ảo gây hiểu lầm cho người học.": [
+    "Nếu chưa có công cụ đo đạc âm thanh thực tế, tuyệt đối không sinh điểm số phát âm ảo gây hiểu lầm cho người học.",
+    "Without real acoustic measurement tools, never generate fake pronunciation scores that mislead learners."
+  ],
+  "Số lượt hội thoại tối đa mỗi phiên:": [
+    "Số lượt hội thoại tối đa mỗi phiên:",
+    "Max turns per session:"
+  ],
+  "Giới hạn số token đầu ra:": [
+    "Giới hạn số token đầu ra:",
+    "Output token limit:"
+  ],
+  "Số phiên tối đa trong ngày mỗi học viên:": [
+    "Số phiên tối đa trong ngày mỗi học viên:",
+    "Max sessions per day per learner:"
+  ],
+  "Ngân sách tối đa hàng tháng (USD):": [
+    "Ngân sách tối đa hàng tháng (USD):",
+    "Max monthly budget (USD):"
+  ],
+  "Đầu vào + Đầu ra": [
+    "Đầu vào + Đầu ra",
+    "Input + Output"
+  ],
+  "Tỷ lệ lỗi": [
+    "Tỷ lệ lỗi",
+    "Error rate"
+  ],
+  "đang giúp giảm chi phí và duy trì tốc độ phản hồi thấp cho các cuộc hội thoại.": [
+    "đang giúp giảm chi phí và duy trì tốc độ phản hồi thấp cho các cuộc hội thoại.",
+    "helps lower costs and maintain low latency for conversations."
+  ],
+  "Nhật ký gọi API gần đây": [
+    "Nhật ký gọi API gần đây",
+    "Recent API call logs"
+  ],
+  "Nhật ký quản trị": [
+    "Nhật ký quản trị",
+    "Admin audit logs"
+  ],
+  "← Quay lại khóa học": [
+    "← Quay lại khóa học",
+    "← Back to courses"
+  ],
+  "Bài học đang ở chế độ chỉ đọc theo trạng thái khóa học.": [
+    "Bài học đang ở chế độ chỉ đọc theo trạng thái khóa học.",
+    "Lesson is in read-only mode based on course status."
+  ],
+  "← Quay lại chỉnh sửa khóa học": [
+    "← Quay lại chỉnh sửa khóa học",
+    "← Back to course editing"
+  ],
+  "← Quay lại chỉnh sửa bài học": [
+    "← Quay lại chỉnh sửa bài học",
+    "← Back to lesson editing"
+  ],
+  "Về khóa học": [
+    "Về khóa học",
+    "Back to course"
+  ],
+  "Trình biên tập": [
+    "Trình biên tập",
+    "Editor"
+  ],
+  "Xem trước": [
+    "Xem trước",
+    "Preview"
+  ],
+  "Lưu bài viết": [
+    "Lưu bài viết",
+    "Save article"
+  ],
+  "Tóm tắt mở đầu:": [
+    "Tóm tắt mở đầu:",
+    "Opening summary:"
+  ],
+  "Từ vựng & Cụm từ liên quan": [
+    "Từ vựng & Cụm từ liên quan",
+    "Related vocabulary & phrases"
+  ],
+  "• Điểm đến:": [
+    "• Điểm đến:",
+    "• Destination:"
+  ],
+  "Cụm từ hữu ích kèm theo bài viết:": [
+    "Cụm từ hữu ích kèm theo bài viết:",
+    "Useful phrases accompanying the article:"
+  ],
+  "Quản lý danh mục": [
+    "Quản lý danh mục",
+    "Category management"
+  ],
+  "Duyệt": [
+    "Duyệt",
+    "Review"
+  ],
+  "Xem": [
+    "Xem",
+    "View"
+  ],
+  "Câu hỏi và đáp án": [
+    "Câu hỏi và đáp án",
+    "Questions and answers"
+  ],
+  "Cấu hình kịch bản": [
+    "Cấu hình kịch bản",
+    "Scenario configuration"
+  ],
+  "Thử nghiệm giả lập": [
+    "Thử nghiệm giả lập",
+    "Simulation test"
+  ],
+  "Lưu kịch bản": [
+    "Lưu kịch bản",
+    "Save scenario"
+  ],
+  "Bối cảnh tình huống:": [
+    "Bối cảnh tình huống:",
+    "Scenario context:"
+  ],
+  "2. Thiết lập vai trò": [
+    "2. Thiết lập vai trò",
+    "2. Role configuration"
+  ],
+  "Ảnh đại diện:": [
+    "Ảnh đại diện:",
+    "Avatar image:"
+  ],
+  "Vai trò của Học viên:": [
+    "Vai trò của Học viên:",
+    "Learner role:"
+  ],
+  "Câu chào mở đầu của AI:": [
+    "Câu chào mở đầu của AI:",
+    "AI opening greeting:"
+  ],
+  "4. Danh sách nhiệm vụ": [
+    "4. Danh sách nhiệm vụ",
+    "4. Mission task list"
+  ],
+  "Số lượt trao đổi tối đa:": [
+    "Số lượt trao đổi tối đa:",
+    "Max conversation turns:"
+  ],
+  "Độ lưu loát": [
+    "Độ lưu loát",
+    "Fluency"
+  ],
+  "Văn hóa & Ngữ cảnh": [
+    "Văn hóa & Ngữ cảnh",
+    "Culture & Context"
+  ],
+  "Chế độ bảo trì hệ thống": [
+    "Chế độ bảo trì hệ thống",
+    "System maintenance mode"
+  ],
+  "Thư điện tử": [
+    "Thư điện tử",
+    "Email"
+  ],
+  "Phân vai trò": [
+    "Phân vai trò",
+    "Role assignment"
+  ],
+  "Chỉ cần vài phút kiên trì mỗi ngày để tích lũy XP và duy trì chuỗi Streak rực cháy.": [
+    "Chỉ cần vài phút kiên trì mỗi ngày để tích lũy XP và duy trì chuỗi Streak rực cháy.",
+    "Just a few minutes each day to earn XP and keep your streak burning."
+  ],
+  "Nhập email đã đăng ký": [
+    "Nhập email đã đăng ký",
+    "Enter your registered email"
+  ],
+  "Đã tham gia học": [
+    "Đã tham gia học",
+    "Enrolled"
+  ],
+  "Bạn sẽ học được gì từ khóa học này": [
+    "Bạn sẽ học được gì từ khóa học này",
+    "What you will learn from this course"
+  ],
+  "Chuẩn đầu ra và các kỹ năng ngôn ngữ cốt lõi sau khóa học.": [
+    "Chuẩn đầu ra và các kỹ năng ngôn ngữ cốt lõi sau khóa học.",
+    "Learning outcomes and core language skills after the course."
+  ],
+  "Yêu cầu & Đối tượng phù hợp": [
+    "Yêu cầu & Đối tượng phù hợp",
+    "Prerequisites & Audience"
+  ],
+  "Thông tin chuẩn bị trước khi tham gia khóa học.": [
+    "Thông tin chuẩn bị trước khi tham gia khóa học.",
+    "Preparation information before joining the course."
+  ],
+  "Chưa có nội dung bài học nào được công bố.": [
+    "Chưa có nội dung bài học nào được công bố.",
+    "No published lessons available yet."
+  ],
+  "Module này chưa có bài học.": [
+    "Module này chưa có bài học.",
+    "This module has no lessons yet."
+  ],
+  "Lộ trình toàn diện • Standard Vietnamese Curriculum": [
+    "Lộ trình toàn diện • Standard Vietnamese Curriculum",
+    "Standard Vietnamese Curriculum"
+  ],
+  "Học tiếng Việt theo lộ trình bài bản": [
+    "Học tiếng Việt theo lộ trình bài bản",
+    "Learn Vietnamese with a structured curriculum"
+  ],
+  "Góc học tập của tôi →": [
+    "Góc học tập của tôi →",
+    "My Learning →"
+  ],
+  "Lộ trình học tương tác (EdTech) →": [
+    "Lộ trình học tương tác (EdTech) →",
+    "EdTech interactive path →"
+  ],
+  "Tìm khóa học theo tên hoặc nội dung…": [
+    "Tìm khóa học theo tên hoặc nội dung…",
+    "Search courses by name or content…"
+  ],
+  "Khám phá kho khóa học chuẩn CEFR": [
+    "Khám phá kho khóa học chuẩn CEFR",
+    "Explore CEFR-standard courses"
+  ],
+  "Tiếp nối hành trình học tập": [
+    "Tiếp nối hành trình học tập",
+    "Continue your learning journey"
+  ],
+  "Tiếp tục học ngay →": [
+    "Tiếp tục học ngay →",
+    "Continue learning now →"
+  ],
+  "Danh sách các khóa học được biên soạn chuẩn khung năng lực": [
+    "Danh sách các khóa học được biên soạn chuẩn khung năng lực",
+    "Curriculum aligned with CEFR standards"
+  ],
+  "khóa học": [
+    "khóa học",
+    "courses"
+  ],
+  "Đặt lại tất cả bộ lọc": [
+    "Đặt lại tất cả bộ lọc",
+    "Reset all filters"
+  ],
+  "Những cụm từ văn hóa hữu ích": [
+    "Những cụm từ văn hóa hữu ích",
+    "Useful cultural phrases"
+  ],
+  "Lắng nghe phát âm chuẩn và lưu vào sổ từ để ôn tập sau.": [
+    "Lắng nghe phát âm chuẩn và lưu vào sổ từ để ôn tập sau.",
+    "Listen to native pronunciation and save to your notebook for later review."
+  ],
+  "Muốn tìm hiểu sâu hơn về câu chuyện này?": [
+    "Muốn tìm hiểu sâu hơn về câu chuyện này?",
+    "Want to explore this story deeper?"
+  ],
+  "Cùng AI Tutor trò chuyện, giải đáp thắc mắc phong tục và tập quán Việt Nam.": [
+    "Cùng AI Tutor trò chuyện, giải đáp thắc mắc phong tục và tập quán Việt Nam.",
+    "Chat with AI Tutor to learn more about Vietnamese customs and traditions."
+  ],
+  "Từng câu chuyện nhỏ giúp ngôn ngữ trở nên gần gũi và sâu sắc hơn.": [
+    "Từng câu chuyện nhỏ giúp ngôn ngữ trở nên gần gũi và sâu sắc hơn.",
+    "Each small story makes the language more meaningful and relatable."
+  ],
+  "Văn hóa & Đời sống • Culture & Stories": [
+    "Văn hóa & Đời sống • Culture & Stories",
+    "Culture & Living Stories"
+  ],
+  "Nổi bật": [
+    "Nổi bật",
+    "Featured"
+  ],
+  "Tìm câu chuyện theo chủ đề hoặc từ khóa…": [
+    "Tìm câu chuyện theo chủ đề hoặc từ khóa…",
+    "Search stories by topic or keyword…"
+  ],
+  "Điểm đến:": [
+    "Điểm đến:",
+    "Destination:"
+  ],
+  "Hành trình của riêng bạn • Personal Learning Space": [
+    "Hành trình của riêng bạn • Personal Learning Space",
+    "Personal Learning Space"
+  ],
+  "Khám phá thêm khóa học →": [
+    "Khám phá thêm khóa học →",
+    "Explore more courses →"
+  ],
+  "Đến Lộ trình học tương tác (EdTech) →": [
+    "Đến Lộ trình học tương tác (EdTech) →",
+    "Go to EdTech interactive path →"
+  ],
+  "Chi tiết khóa": [
+    "Chi tiết khóa",
+    "Course details"
+  ],
+  "Khám phá khóa học mới": [
+    "Khám phá khóa học mới",
+    "Explore new courses"
+  ],
+  "Khám phá khóa học mới?": [
+    "Khám phá khóa học mới?",
+    "Explore new courses?"
+  ],
+  "Mở rộng hành trình học tập tiếng Việt theo chủ đề bạn yêu thích.": [
+    "Mở rộng hành trình học tập tiếng Việt theo chủ đề bạn yêu thích.",
+    "Expand your Vietnamese learning with topics you love."
+  ],
+  "Xem tất cả khóa học": [
+    "Xem tất cả khóa học",
+    "View all courses"
+  ],
+  "Khám phá khóa học ngay →": [
+    "Khám phá khóa học ngay →",
+    "Explore courses now →"
+  ],
+  "Lịch sử làm bài kiểm tra và đánh giá năng lực tiếng Việt của bạn.": [
+    "Lịch sử làm bài kiểm tra và đánh giá năng lực tiếng Việt của bạn.",
+    "Your quiz history and Vietnamese proficiency evaluations."
+  ],
+  "Trở lại thông tin khóa học": [
+    "Trở lại thông tin khóa học",
+    "Back to course details"
+  ],
+  "Đã đăng ký học": [
+    "Đã đăng ký học",
+    "Enrolled"
+  ],
+  "Lộ trình bài học chi tiết": [
+    "Lộ trình bài học chi tiết",
+    "Detailed lesson curriculum"
+  ],
+  "Hoàn thành từng bài để mở khóa các bài tiếp theo trong chương.": [
+    "Hoàn thành từng bài để mở khóa các bài tiếp theo trong chương.",
+    "Complete each lesson to unlock subsequent lessons in the module."
+  ],
+  "JPEG, PNG hoặc WebP · tối đa 5MB": [
+    "JPEG, PNG hoặc WebP · tối đa 5MB",
+    "JPEG, PNG, or WebP · max 5MB"
   ],
   "Công việc & Định cư": [
     "Công việc & Định cư",
-    "Work & Career",
+    "Work & Relocation"
   ],
   "Thi chứng chỉ VSL": [
     "Thi chứng chỉ VSL",
-    "Exam / VSL certification",
+    "VSL Certification Exam"
   ],
   "Văn hóa & Đời sống": [
     "Văn hóa & Đời sống",
-    "Culture & lifestyle",
+    "Culture & Life"
   ],
   "A1 – Mới bắt đầu": [
     "A1 – Mới bắt đầu",
-    "A1 – Beginner",
+    "A1 – Beginner"
   ],
   "A2 – Sơ cấp": [
     "A2 – Sơ cấp",
-    "A2 – Elementary",
+    "A2 – Elementary"
   ],
   "B1 – Trung cấp": [
     "B1 – Trung cấp",
-    "B1 – Intermediate",
+    "B1 – Intermediate"
+  ],
+  "B2 – Trung cấp nâng cao": [
+    "B2 – Trung cấp nâng cao",
+    "B2 – Upper-Intermediate"
+  ],
+  "Kiểm tra năng lực • Knowledge Check": [
+    "Kiểm tra năng lực • Knowledge Check",
+    "Proficiency Check"
+  ],
+  "Lưu ý trước khi làm bài:": [
+    "Lưu ý trước khi làm bài:",
+    "Important notes before starting:"
+  ],
+  "Hệ thống tự động lưu câu trả lời mỗi khi bạn chuyển câu.": [
+    "Hệ thống tự động lưu câu trả lời mỗi khi bạn chuyển câu.",
+    "Answers are automatically saved whenever you switch questions."
+  ],
+  "Bạn có thể tự do bấm chọn lại các câu trước để kiểm tra đáp án.": [
+    "Bạn có thể tự do bấm chọn lại các câu trước để kiểm tra đáp án.",
+    "You can freely revisit previous questions to check your answers."
+  ],
+  "Khi hoàn thành tất cả các câu, bấm nút Nộp bài để xem ngay kết quả chi tiết.": [
+    "Khi hoàn thành tất cả các câu, bấm nút Nộp bài để xem ngay kết quả chi tiết.",
+    "When all questions are answered, tap Submit to see detailed results."
+  ],
+  "Đang chuẩn bị đề thi…": [
+    "Đang chuẩn bị đề thi…",
+    "Preparing quiz questions…"
+  ],
+  "Câu trước": [
+    "Câu trước",
+    "Previous question"
+  ],
+  "Đáp án được tự động lưu mỗi khi chuyển câu": [
+    "Đáp án được tự động lưu mỗi khi chuyển câu",
+    "Answers are automatically saved as you navigate"
+  ],
+  "Nộp bài thi →": [
+    "Nộp bài thi →",
+    "Submit quiz →"
+  ],
+  "Câu tiếp theo": [
+    "Câu tiếp theo",
+    "Next question"
+  ],
+  "Kiểm tra lại bài": [
+    "Kiểm tra lại bài",
+    "Review quiz"
+  ],
+  "Xem chi tiết đáp án ↓": [
+    "Xem chi tiết đáp án ↓",
+    "View answer details ↓"
+  ],
+  "Xem lại câu trả lời và giải thích chi tiết": [
+    "Xem lại câu trả lời và giải thích chi tiết",
+    "Review answers and detailed explanations"
+  ],
+  "Đối chiếu câu trả lời của bạn với đáp án chính xác của hệ thống.": [
+    "Đối chiếu câu trả lời của bạn với đáp án chính xác của hệ thống.",
+    "Compare your answers with the system's correct solutions."
+  ],
+  "Đáp án chính xác:": [
+    "Đáp án chính xác:",
+    "Correct answer:"
+  ],
+  "Tất cả vùng miền": [
+    "Tất cả vùng miền",
+    "All regions"
+  ],
+  "Phù hợp văn hóa (Culture)": [
+    "Phù hợp văn hóa (Culture)",
+    "Cultural appropriateness"
+  ],
+  "Nhận xét từ AI Tutor:": [
+    "Nhận xét từ AI Tutor:",
+    "Feedback from AI Tutor:"
+  ],
+  "Thử lại kịch bản này": [
+    "Thử lại kịch bản này",
+    "Retry this scenario"
+  ],
+  "Tiếp tục kịch bản mới": [
+    "Tiếp tục kịch bản mới",
+    "Try another scenario"
+  ],
+  "Thoát kịch bản": [
+    "Thoát kịch bản",
+    "Exit scenario"
+  ],
+  "Bắt đầu lại": [
+    "Bắt đầu lại",
+    "Start over"
+  ],
+  "Kết thúc & Xem kết quả": [
+    "Kết thúc & Xem kết quả",
+    "Finish & View results"
+  ],
+  "Giải thích ngữ cảnh & cách dùng:": [
+    "Giải thích ngữ cảnh & cách dùng:",
+    "Context & usage explanation:"
+  ],
+  "Gợi ý câu trả lời tự nhiên (Bấm để gửi ngay):": [
+    "Gợi ý câu trả lời tự nhiên (Bấm để gửi ngay):",
+    "Natural response suggestions (Tap to send):"
+  ],
+  "Nhắc nhở vai diễn của bạn:": [
+    "Nhắc nhở vai diễn của bạn:",
+    "Your role reminder:"
+  ],
+  "Hoàn tất & Nhận đánh giá": [
+    "Hoàn tất & Nhận đánh giá",
+    "Complete & Get evaluation"
+  ],
+  "Tìm kịch bản theo tên, địa danh hoặc bối cảnh (Ví dụ: phở, chợ, taxi)...": [
+    "Tìm kịch bản theo tên, địa danh hoặc bối cảnh (Ví dụ: phở, chợ, taxi)...",
+    "Search scenarios by name, place, or context (e.g. phở, market, taxi)..."
+  ],
+  "Tùy biến trải nghiệm": [
+    "Tùy biến trải nghiệm",
+    "Customize experience"
+  ],
+  "Thông tin khóa học": [
+    "Thông tin khóa học",
+    "Course details"
+  ],
+  "Cấu trúc & bài học": [
+    "Cấu trúc & bài học",
+    "Curriculum & lessons"
+  ],
+  "Kiểm tra & xuất bản": [
+    "Kiểm tra & xuất bản",
+    "Review & publish"
+  ],
+  "Tên, mục tiêu và ảnh bìa": [
+    "Tên, mục tiêu và ảnh bìa",
+    "Title, objectives, and cover image"
+  ],
+  "Học phần, nội dung và quiz": [
+    "Học phần, nội dung và quiz",
+    "Modules, content, and quizzes"
+  ],
+  "Trải nghiệm của học viên": [
+    "Trải nghiệm của học viên",
+    "Learner experience"
+  ],
+  "Hoàn thiện và gửi duyệt": [
+    "Hoàn thiện và gửi duyệt",
+    "Finalize and submit for review"
+  ],
+  "Kiểm tra thông tin khóa học": [
+    "Kiểm tra thông tin khóa học",
+    "Check course information"
+  ],
+  "Hoàn thiện cấu trúc và nội dung": [
+    "Hoàn thiện cấu trúc và nội dung",
+    "Finalize structure and content"
+  ],
+  "Xem lại như một học viên": [
+    "Xem lại như một học viên",
+    "Review as a learner"
+  ],
+  "Kiểm tra và gửi duyệt": [
+    "Kiểm tra và gửi duyệt",
+    "Review and submit"
+  ],
+  "BƯỚC 1 / 4": [
+    "BƯỚC 1 / 4",
+    "STEP 1 / 4"
+  ],
+  "BƯỚC 2 / 4": [
+    "BƯỚC 2 / 4",
+    "STEP 2 / 4"
+  ],
+  "BƯỚC 3 / 4": [
+    "BƯỚC 3 / 4",
+    "STEP 3 / 4"
+  ],
+  "BƯỚC 4 / 4": [
+    "BƯỚC 4 / 4",
+    "STEP 4 / 4"
+  ],
+  "Chờ kiểm duyệt": [
+    "Chờ kiểm duyệt",
+    "Pending review"
+  ],
+  "Cần chỉnh sửa": [
+    "Cần chỉnh sửa",
+    "Needs revision"
+  ],
+  "Thêm ít nhất một học phần.": [
+    "Thêm ít nhất một học phần.",
+    "Add at least one module."
+  ],
+  "Thêm ít nhất một bài học.": [
+    "Thêm ít nhất một bài học.",
+    "Add at least one lesson."
+  ],
+  "Mỗi học phần cần có bài học.": [
+    "Mỗi học phần cần có bài học.",
+    "Every module needs a lesson."
+  ],
+  "Xuất bản tất cả bài học.": [
+    "Xuất bản tất cả bài học.",
+    "Publish every lesson."
+  ],
+  "Mỗi bài cần một hoạt động học bắt buộc đã xuất bản.": [
+    "Mỗi bài cần một hoạt động học bắt buộc đã xuất bản.",
+    "Every lesson needs a published required activity."
+  ],
+  "Mỗi bài cần một quiz đã xuất bản và gắn vào bài.": [
+    "Mỗi bài cần một quiz đã xuất bản và gắn vào bài.",
+    "Every lesson needs a published quiz attached."
+  ],
+  "Thêm quiz cuối khóa, xuất bản và gắn vào bài học.": [
+    "Thêm quiz cuối khóa, xuất bản và gắn vào bài học.",
+    "Add a final course quiz, publish it, and attach to a lesson."
+  ],
+  "Thêm khóa học bằng Excel": [
+    "Thêm khóa học bằng Excel",
+    "Add course via Excel"
+  ],
+  "Kiểm duyệt khóa học": [
+    "Kiểm duyệt khóa học",
+    "Review course"
+  ],
+  "Không gian biên soạn": [
+    "Không gian biên soạn",
+    "Authoring Studio"
+  ],
+  "KHÔNG GIAN BIÊN SOẠN": [
+    "KHÔNG GIAN BIÊN SOẠN",
+    "AUTHORING STUDIO"
+  ],
+  "Có thay đổi chưa lưu": [
+    "Có thay đổi chưa lưu",
+    "Unsaved changes"
+  ],
+  "Nội dung đã lưu trên hệ thống": [
+    "Nội dung đã lưu trên hệ thống",
+    "Content saved"
+  ],
+  "Tạo bằng Excel": [
+    "Tạo bằng Excel",
+    "Create via Excel"
+  ],
+  "Đã tạo khóa học nháp": [
+    "Đã tạo khóa học nháp",
+    "Draft course created"
+  ],
+  "Chưa import file": [
+    "Chưa import file",
+    "No file imported yet"
+  ],
+  "Các bước chỉnh sửa khóa học": [
+    "Các bước chỉnh sửa khóa học",
+    "Course authoring steps"
+  ],
+  "Hoàn tất": [
+    "Hoàn tất",
+    "Completed"
+  ],
+  "Đang thực hiện": [
+    "Đang thực hiện",
+    "In progress"
+  ],
+  "Bước kiểm tra": [
+    "Bước kiểm tra",
+    "Review step"
+  ],
+  "Chưa hoàn tất": [
+    "Chưa hoàn tất",
+    "Not completed"
+  ],
+  "CHỈNH SỬA THEO TỪNG BƯỚC": [
+    "CHỈNH SỬA THEO TỪNG BƯỚC",
+    "STEP-BY-STEP AUTHORING"
+  ],
+  "Mở cửa sổ chỉnh sửa": [
+    "Mở cửa sổ chỉnh sửa",
+    "Open editor modal"
+  ],
+  "Chỉnh sửa thông tin khóa học": [
+    "Chỉnh sửa thông tin khóa học",
+    "Edit course details"
+  ],
+  "XÂY DỰNG LỘ TRÌNH": [
+    "XÂY DỰNG LỘ TRÌNH",
+    "BUILD CURRICULUM"
+  ],
+  "Cấu trúc khóa học": [
+    "Cấu trúc khóa học",
+    "Course structure"
+  ],
+  "Chia nội dung thành học phần, rồi thêm bài học theo thứ tự.": [
+    "Chia nội dung thành học phần, rồi thêm bài học theo thứ tự.",
+    "Divide content into modules, then add lessons in sequence."
+  ],
+  "Thêm học phần": [
+    "Thêm học phần",
+    "Add module"
+  ],
+  "Bắt đầu với học phần đầu tiên": [
+    "Bắt đầu với học phần đầu tiên",
+    "Start with the first module"
+  ],
+  "Tạo học phần": [
+    "Tạo học phần",
+    "Create module"
+  ],
+  "Sửa học phần": [
+    "Sửa học phần",
+    "Edit module"
+  ],
+  "Thêm bài học vào học phần": [
+    "Thêm bài học vào học phần",
+    "Add lesson to module"
+  ],
+  "Đánh giá cuối khóa": [
+    "Đánh giá cuối khóa",
+    "Final course assessment"
+  ],
+  "Quiz tổng kết để kiểm tra mục tiêu của toàn khóa học.": [
+    "Quiz tổng kết để kiểm tra mục tiêu của toàn khóa học.",
+    "Comprehensive quiz to evaluate all course outcomes."
+  ],
+  "Tạo quiz cuối khóa": [
+    "Tạo quiz cuối khóa",
+    "Create final quiz"
+  ],
+  "Quản lý câu hỏi và đáp án của quiz cuối khóa": [
+    "Quản lý câu hỏi và đáp án của quiz cuối khóa",
+    "Manage questions and answers for final quiz"
+  ],
+  "Thêm ít nhất một bài học để tạo quiz tổng kết.": [
+    "Thêm ít nhất một bài học để tạo quiz tổng kết.",
+    "Add at least one lesson to create the final quiz."
+  ],
+  "SẴN SÀNG CHO HỌC VIÊN": [
+    "SẴN SÀNG CHO HỌC VIÊN",
+    "READY FOR LEARNERS"
+  ],
+  "Kiểm tra trước khi xuất bản": [
+    "Kiểm tra trước khi xuất bản",
+    "Pre-publish checklist"
+  ],
+  "Hoàn thiện nội dung, xem trước và gửi Admin kiểm duyệt.": [
+    "Hoàn thiện nội dung, xem trước và gửi Admin kiểm duyệt.",
+    "Finalize content, preview, and submit for Admin review."
+  ],
+  "Đã có ảnh bìa và mục tiêu học tập.": [
+    "Đã có ảnh bìa và mục tiêu học tập.",
+    "Cover image and learning outcomes are set."
+  ],
+  "Bổ sung": [
+    "Bổ sung",
+    "Add details"
+  ],
+  "Cấu trúc bài học, hoạt động và quiz đã đủ điều kiện.": [
+    "Cấu trúc bài học, hoạt động và quiz đã đủ điều kiện.",
+    "Lesson structure, activities, and quizzes meet all criteria."
+  ],
+  "Kiểm tra lại nội dung": [
+    "Kiểm tra lại nội dung",
+    "Re-check content"
+  ],
+  "Khóa học đã sẵn sàng gửi duyệt": [
+    "Khóa học đã sẵn sàng gửi duyệt",
+    "Course is ready for review"
+  ],
+  "Hoàn thiện các mục còn thiếu": [
+    "Hoàn thiện các mục còn thiếu",
+    "Complete missing items"
+  ],
+  "Sau khi gửi, khóa học chuyển sang chỉ đọc. Admin phê duyệt sẽ xuất bản cho học viên.": [
+    "Sau khi gửi, khóa học chuyển sang chỉ đọc. Admin phê duyệt sẽ xuất bản cho học viên.",
+    "After submission, the course becomes read-only. Admin approval will publish it for learners."
+  ],
+  "Gửi kiểm duyệt": [
+    "Gửi kiểm duyệt",
+    "Submit for review"
+  ],
+  "Đang gửi…": [
+    "Đang gửi…",
+    "Submitting…"
+  ],
+  "Quyết định kiểm duyệt": [
+    "Quyết định kiểm duyệt",
+    "Review decision"
+  ],
+  "Nhận xét cho người biên soạn": [
+    "Nhận xét cho người biên soạn",
+    "Feedback for author"
+  ],
+  "Nêu nội dung cần chỉnh sửa nếu từ chối…": [
+    "Nêu nội dung cần chỉnh sửa nếu từ chối…",
+    "State required changes if rejecting…"
+  ],
+  "Phê duyệt & xuất bản": [
+    "Phê duyệt & xuất bản",
+    "Approve & publish"
+  ],
+  "Yêu cầu chỉnh sửa": [
+    "Yêu cầu chỉnh sửa",
+    "Request revisions"
+  ],
+  "Khóa học đã xuất bản.": [
+    "Khóa học đã xuất bản.",
+    "Course published."
+  ],
+  "Mở trang khóa học dành cho học viên →": [
+    "Mở trang khóa học dành cho học viên →",
+    "Open learner course page →"
+  ],
+  "Lưu thay đổi để tiếp tục.": [
+    "Lưu thay đổi để tiếp tục.",
+    "Save changes to continue."
+  ],
+  "Kiểm tra đầy đủ trước khi gửi duyệt.": [
+    "Kiểm tra đầy đủ trước khi gửi duyệt.",
+    "Check thoroughly before submitting."
+  ],
+  "TỔNG QUAN KHÓA HỌC": [
+    "TỔNG QUAN KHÓA HỌC",
+    "COURSE OVERVIEW"
+  ],
+  "học phần": [
+    "học phần",
+    "modules"
+  ],
+  "phút nội dung": [
+    "phút nội dung",
+    "minutes of content"
+  ],
+  "TIẾN ĐỘ HOÀN THIỆN": [
+    "TIẾN ĐỘ HOÀN THIỆN",
+    "COMPLETION PROGRESS"
+  ],
+  "nhóm yêu cầu": [
+    "nhóm yêu cầu",
+    "requirement groups"
+  ],
+  "Đã đầy đủ": [
+    "Đã đầy đủ",
+    "Complete"
+  ],
+  "Cần bổ sung": [
+    "Cần bổ sung",
+    "Needs additions"
+  ],
+  "Bài học & hoạt động": [
+    "Bài học & hoạt động",
+    "Lessons & activities"
+  ],
+  "Đang hoàn thiện": [
+    "Đang hoàn thiện",
+    "In progress"
+  ],
+  "Đã sẵn sàng": [
+    "Đã sẵn sàng",
+    "Ready"
+  ],
+  "Mẹo biên soạn": [
+    "Mẹo biên soạn",
+    "Authoring tip"
+  ],
+  "Lưu thông tin trước khi chuyển bước. Mở Xem trước để kiểm tra nội dung theo góc nhìn học viên.": [
+    "Lưu thông tin trước khi chuyển bước. Mở Xem trước để kiểm tra nội dung theo góc nhìn học viên.",
+    "Save info before moving to the next step. Open Preview to test content from a learner's perspective."
+  ],
+  "Mở xem trước": [
+    "Mở xem trước",
+    "Open preview"
+  ],
+  "Quản lý biến thể vùng miền": [
+    "Quản lý biến thể vùng miền",
+    "Manage regional variants"
+  ],
+  "Liên kết cách nói Bắc, Trung và Nam với từ vựng chuẩn.": [
+    "Liên kết cách nói Bắc, Trung và Nam với từ vựng chuẩn.",
+    "Link Northern, Central, and Southern expressions with standard vocabulary."
+  ],
+  "Xem trang học viên": [
+    "Xem trang học viên",
+    "View learner page"
+  ],
+  "Thêm biến thể": [
+    "Thêm biến thể",
+    "Add variant"
+  ],
+  "Lưu trữ biến thể": [
+    "Lưu trữ biến thể",
+    "Archive variant"
+  ],
+  "Lưu trữ": [
+    "Lưu trữ",
+    "Archive"
+  ],
+  "Từ vựng chuẩn": [
+    "Từ vựng chuẩn",
+    "Standard vocabulary"
+  ],
+  "Từ chuẩn": [
+    "Từ chuẩn",
+    "Standard word"
+  ],
+  "Biến thể": [
+    "Biến thể",
+    "Variant"
+  ],
+  "Biến thể vùng miền": [
+    "Biến thể vùng miền",
+    "Regional variant"
+  ],
+  "Chỉnh sửa biến thể vùng miền": [
+    "Chỉnh sửa biến thể vùng miền",
+    "Edit regional variant"
+  ],
+  "Thêm biến thể vùng miền": [
+    "Thêm biến thể vùng miền",
+    "Add regional variant"
+  ],
+  "Từ vựng chuẩn *": [
+    "Từ vựng chuẩn *",
+    "Standard word *"
+  ],
+  "Chọn từ chuẩn": [
+    "Chọn từ chuẩn",
+    "Select standard word"
+  ],
+  "Vùng sử dụng *": [
+    "Vùng sử dụng *",
+    "Region *"
+  ],
+  "Chọn vùng miền": [
+    "Chọn vùng miền",
+    "Select region"
+  ],
+  "Biến thể *": [
+    "Biến thể *",
+    "Variant word *"
+  ],
+  "Nghĩa hoặc giải thích *": [
+    "Nghĩa hoặc giải thích *",
+    "Meaning or explanation *"
+  ],
+  "Ghi chú cách dùng": [
+    "Ghi chú cách dùng",
+    "Usage notes"
+  ],
+  "Lưu biến thể": [
+    "Lưu biến thể",
+    "Save variant"
+  ],
+  "Chờ xác nhận": [
+    "Chờ xác nhận",
+    "Pending confirmation"
+  ],
+  "Dữ liệu không hợp lệ": [
+    "Dữ liệu không hợp lệ",
+    "Invalid data"
+  ],
+  "Đã nhập thành công": [
+    "Đã nhập thành công",
+    "Imported successfully"
+  ],
+  "Ghi dữ liệu thất bại": [
+    "Ghi dữ liệu thất bại",
+    "Import failed"
+  ],
+  "Tổng dòng": [
+    "Tổng dòng",
+    "Total rows"
+  ],
+  "Hợp lệ": [
+    "Hợp lệ",
+    "Valid"
+  ],
+  "Dòng lỗi": [
+    "Dòng lỗi",
+    "Error rows"
+  ],
+  "Mục đã tạo": [
+    "Mục đã tạo",
+    "Created entries"
+  ],
+  "Người thực hiện:": [
+    "Người thực hiện:",
+    "Performed by:"
+  ],
+  "Lỗi cần xử lý": [
+    "Lỗi cần xử lý",
+    "Errors to resolve"
+  ],
+  "Dòng nguồn": [
+    "Dòng nguồn",
+    "Source row"
+  ],
+  "Cột": [
+    "Cột",
+    "Column"
+  ],
+  "Lỗi": [
+    "Lỗi",
+    "Error"
+  ],
+  "Dữ liệu trong file": [
+    "Dữ liệu trong file",
+    "File data"
+  ],
+  "Nhập dữ liệu": [
+    "Nhập dữ liệu",
+    "Data import"
+  ],
+  "Nhập dữ liệu từ vựng": [
+    "Nhập dữ liệu từ vựng",
+    "Vocabulary data import"
+  ],
+  "Lịch sử import": [
+    "Lịch sử import",
+    "Import history"
+  ],
+  "Tải mẫu Excel": [
+    "Tải mẫu Excel",
+    "Download Excel template"
+  ],
+  "File Excel (tối đa 10 MiB)": [
+    "File Excel (tối đa 10 MiB)",
+    "Excel file (max 10 MiB)"
+  ],
+  "Kiểm tra và xem trước": [
+    "Kiểm tra và xem trước",
+    "Validate & preview"
+  ],
+  "Xác nhận nhập Excel": [
+    "Xác nhận nhập Excel",
+    "Confirm Excel import"
+  ],
+  "Xác nhận nhập dữ liệu": [
+    "Xác nhận nhập dữ liệu",
+    "Confirm data import"
+  ],
+  "Xem lại trong lịch sử →": [
+    "Xem lại trong lịch sử →",
+    "View in history →"
+  ],
+  "Chi tiết lần import": [
+    "Chi tiết lần import",
+    "Import details"
+  ],
+  "Đã nhập / lỗi": [
+    "Đã nhập / lỗi",
+    "Imported / errors"
+  ],
+  "Chưa có lịch sử import": [
+    "Chưa có lịch sử import",
+    "No import history yet"
+  ],
+  "Chưa có loại dữ liệu được hỗ trợ": [
+    "Chưa có loại dữ liệu được hỗ trợ",
+    "No supported data types yet"
+  ],
+  "Chưa có biến thể phù hợp": [
+    "Chưa có biến thể phù hợp",
+    "No matching variants"
+  ],
+  "Trung tâm cập nhật": [
+    "Trung tâm cập nhật",
+    "Update Center"
+  ],
+  "Trung tâm cập nhật • Notification Center": [
+    "Trung tâm cập nhật • Notification Center",
+    "Notification Center"
+  ],
+  "Theo dõi tiến độ, nhiệm vụ hôm nay và thành tích đạt được trên hành trình học tiếng Việt.": [
+    "Theo dõi tiến độ, nhiệm vụ hôm nay và thành tích đạt được trên hành trình học tiếng Việt.",
+    "Track your progress, daily quests, and achievements on your Vietnamese learning journey."
+  ],
+  "Đã xem": [
+    "Đã xem",
+    "Read"
+  ],
+  "Tìm kiếm nội dung thông báo…": [
+    "Tìm kiếm nội dung thông báo…",
+    "Search notifications…"
+  ],
+  "Dọn dẹp đã đọc": [
+    "Dọn dẹp đã đọc",
+    "Clear read"
+  ],
+  "Xóa tất cả thông báo đã đọc": [
+    "Xóa tất cả thông báo đã đọc",
+    "Delete all read notifications"
+  ],
+  "Bắn test SSE": [
+    "Bắn test SSE",
+    "Send test SSE"
+  ],
+  "Chuỗi học": [
+    "Chuỗi học",
+    "Streak"
+  ],
+  "Đã đánh dấu tất cả thông báo là đã đọc!": [
+    "Đã đánh dấu tất cả thông báo là đã đọc!",
+    "Marked all notifications as read!"
+  ],
+  "Đã xóa thông báo.": [
+    "Đã xóa thông báo.",
+    "Notification deleted."
+  ],
+  "Đã dọn dẹp các thông báo đã đọc.": [
+    "Đã dọn dẹp các thông báo đã đọc.",
+    "Cleared read notifications."
+  ],
+  "Đã gửi yêu cầu bắn thông báo test! Đang chờ SSE phản hồi...": [
+    "Đã gửi yêu cầu bắn thông báo test! Đang chờ SSE phản hồi...",
+    "Sent test notification! Waiting for SSE response..."
+  ],
+  "Đã tạo thông báo test cục bộ thành công!": [
+    "Đã tạo thông báo test cục bộ thành công!",
+    "Test notification created locally!"
+  ],
+  "Không thể đánh dấu đã đọc:": [
+    "Không thể đánh dấu đã đọc:",
+    "Could not mark as read:"
+  ],
+  "Không thể xóa:": [
+    "Không thể xóa:",
+    "Could not delete:"
+  ],
+  "Không thể dọn dẹp:": [
+    "Không thể dọn dẹp:",
+    "Could not clear:"
+  ],
+  "Vừa xong": [
+    "Vừa xong",
+    "Just now"
+  ],
+  "Hôm qua": [
+    "Hôm qua",
+    "Yesterday"
+  ],
+  "Tạm khóa": [
+    "Tạm khóa",
+    "Locked"
+  ],
+  "Đã đăng ký": [
+    "Đã đăng ký",
+    "Enrolled"
+  ],
+  "Chưa đăng ký": [
+    "Chưa đăng ký",
+    "Not enrolled"
+  ],
+  "Xem chi tiết khóa học": [
+    "Xem chi tiết khóa học",
+    "View course details"
+  ],
+  "Tiến độ học": [
+    "Tiến độ học",
+    "Learning progress"
+  ],
+  "bài": [
+    "bài",
+    "lessons"
+  ],
+  "Học tiếp": [
+    "Học tiếp",
+    "Continue learning"
+  ],
+  "Lộ trình theo chuẩn CEFR": [
+    "Lộ trình theo chuẩn CEFR",
+    "CEFR standard curriculum"
+  ],
+  "Hội thoại thực tế & AI Tutor": [
+    "Hội thoại thực tế & AI Tutor",
+    "Real-life dialogues & AI Tutor"
+  ],
+  "Luyện tập & Đánh giá tức thì": [
+    "Luyện tập & Đánh giá tức thì",
+    "Instant practice & assessment"
+  ],
+  "Truy cập trọn đời trên máy tính & điện thoại": [
+    "Truy cập trọn đời trên máy tính & điện thoại",
+    "Lifetime access on desktop & mobile"
+  ],
+  "Tương tác AI Tutor luyện nói & sửa phát âm 24/7": [
+    "Tương tác AI Tutor luyện nói & sửa phát âm 24/7",
+    "24/7 interactive AI Tutor for speaking & pronunciation"
+  ],
+  "Cấp chứng nhận hoàn thành khóa học": [
+    "Cấp chứng nhận hoàn thành khóa học",
+    "Certificate of course completion"
+  ],
+  "Khóa học phù hợp với kết quả Entry Test": [
+    "Khóa học phù hợp với kết quả Entry Test",
+    "Courses recommended by Entry Test"
+  ],
+  "Xem tất cả trình độ": [
+    "Xem tất cả trình độ",
+    "View all levels"
+  ],
+  "YOUR VIETNAMESE ADVENTURE STARTS HERE": [
+    "HÀNH TRÌNH TIẾNG VIỆT CỦA BẠN BẮT ĐẦU TẠI ĐÂY",
+    "YOUR VIETNAMESE ADVENTURE STARTS HERE"
+  ],
+  "Learn Vietnamese the fun way!": [
+    "Học tiếng Việt thật hào hứng!",
+    "Learn Vietnamese the fun way!"
+  ],
+  "Discover Vietnam, speak confidently, and connect with millions of Vietnamese speakers through fun, interactive lessons.": [
+    "Khám phá Việt Nam, tự tin giao tiếp và kết nối cùng hàng triệu người Việt qua các bài học tương tác thú vị.",
+    "Discover Vietnam, speak confidently, and connect with millions of Vietnamese speakers through fun, interactive lessons."
+  ],
+  "CREATE ACCOUNT TO START": [
+    "TẠO TÀI KHOẢN ĐỂ BẮT ĐẦU",
+    "CREATE ACCOUNT TO START"
+  ],
+  "I ALREADY HAVE AN ACCOUNT": [
+    "TÔI ĐÃ CÓ TÀI KHOẢN",
+    "I ALREADY HAVE AN ACCOUNT"
+  ],
+  "Explore as guest": [
+    "Trải nghiệm với tư cách khách",
+    "Explore as guest"
+  ],
+  "Free first lesson": [
+    "Bài học đầu tiên miễn phí",
+    "Free first lesson"
+  ],
+  "Learn by doing": [
+    "Học qua thực hành",
+    "Learn by doing"
+  ],
+  "Built for real progress": [
+    "Được xây dựng cho sự tiến bộ thực",
+    "Built for real progress"
+  ],
+  "LET'S PERSONALIZE YOUR JOURNEY": [
+    "CÁ NHÂN HÓA HÀNH TRÌNH HỌC TẬP",
+    "LET'S PERSONALIZE YOUR JOURNEY"
+  ],
+  "Why do you want to learn Vietnamese?": [
+    "Tại sao bạn muốn học tiếng Việt?",
+    "Why do you want to learn Vietnamese?"
+  ],
+  "Great reasons! I’ll shape the journey around you.": [
+    "Lý do tuyệt vời! Mình sẽ xây dựng lộ trình phù hợp với bạn.",
+    "Great reasons! I’ll shape the journey around you."
+  ],
+  "Choose as many as you like!": [
+    "Hãy chọn tất cả những gì bạn muốn nhé!",
+    "Choose as many as you like!"
+  ],
+  "YOUR STARTING POINT": [
+    "ĐIỂM XUẤT PHÁT CỦA BẠN",
+    "YOUR STARTING POINT"
+  ],
+  "How much Vietnamese do you already know?": [
+    "Bạn đã biết bao nhiêu tiếng Việt rồi?",
+    "How much Vietnamese do you already know?"
+  ],
+  "Perfect — you’ll still get to choose where to begin.": [
+    "Tuyệt vời — bạn vẫn có thể chọn nơi bắt đầu.",
+    "Perfect — you’ll still get to choose where to begin."
+  ],
+  "There is no wrong answer. Be honest!": [
+    "Không có câu trả lời nào sai cả. Cứ tự nhiên nhé!",
+    "There is no wrong answer. Be honest!"
+  ],
+  "This self-assessment only helps us recommend a path. It does not certify your level.": [
+    "Đánh giá này giúp chúng mình gợi ý lộ trình phù hợp, không phải chứng chỉ chính thức.",
+    "This self-assessment only helps us recommend a path. It does not certify your level."
+  ],
+  "A LITTLE EVERY DAY": [
+    "MỖI NGÀY MỘT CHÚT",
+    "A LITTLE EVERY DAY"
+  ],
+  "Here's what you'll be able to do!": [
+    "Đây là những điều bạn sẽ đạt được!",
+    "Here's what you'll be able to do!"
+  ],
+  "Small steps every day can lead to amazing progress!": [
+    "Từng bước nhỏ mỗi ngày sẽ tạo nên bước tiến kỳ diệu!",
+    "Small steps every day can lead to amazing progress!"
+  ],
+  "BUILD YOUR HABIT": [
+    "XÂY DỰNG THÓI QUEN",
+    "BUILD YOUR HABIT"
+  ],
+  "How much time can you spend learning Vietnamese each day?": [
+    "Bạn có thể dành bao nhiêu thời gian học tiếng Việt mỗi ngày?",
+    "How much time can you spend learning Vietnamese each day?"
+  ],
+  "Your daily rhythm": [
+    "Nhịp học mỗi ngày",
+    "Your daily rhythm"
+  ],
+  "Consistency matters more than perfection.": [
+    "Kiên trì quan trọng hơn sự hoàn hảo.",
+    "Consistency matters more than perfection."
+  ],
+  "CHOOSE YOUR ADVENTURE": [
+    "CHỌN HÀNH TRÌNH CỦA BẠN",
+    "CHOOSE YOUR ADVENTURE"
+  ],
+  "Where would you like to start?": [
+    "Bạn muốn bắt đầu từ đâu?",
+    "Where would you like to start?"
+  ],
+  "Both paths are yours — you can always change direction.": [
+    "Cả hai lối đi đều mở — bạn luôn có thể chuyển đổi bất cứ lúc nào.",
+    "Both paths are yours — you can always change direction."
+  ],
+  "RECOMMENDED FOR BEGINNERS": [
+    "GỢI Ý CHO NGƯỜI MỚI",
+    "RECOMMENDED FOR BEGINNERS"
+  ],
+  "Start from Scratch": [
+    "Bắt đầu từ con số 0",
+    "Start from Scratch"
+  ],
+  "Learn Vietnamese step by step, starting with greetings, essential vocabulary, and simple sentences.": [
+    "Học tiếng Việt từng bước, từ lời chào, từ vựng cốt lõi đến những câu giao tiếp đơn giản.",
+    "Learn Vietnamese step by step, starting with greetings, essential vocabulary, and simple sentences."
+  ],
+  "START LESSON": [
+    "BẮT ĐẦU BÀI HỌC",
+    "START LESSON"
+  ],
+  "ABOUT 5 MINUTES": [
+    "KHOẢNG 5 PHÚT",
+    "ABOUT 5 MINUTES"
+  ],
+  "Find My Level": [
+    "Kiểm tra trình độ",
+    "Find My Level"
+  ],
+  "Take a quick Vietnamese placement test and discover the right starting point for your learning journey.": [
+    "Làm bài kiểm tra ngắn để tìm điểm xuất phát chuẩn nhất cho hành trình học tập của bạn.",
+    "Take a quick Vietnamese placement test and discover the right starting point for your learning journey."
+  ],
+  "TAKE THE TEST": [
+    "LÀM BÀI KIỂM TRA",
+    "TAKE THE TEST"
+  ],
+  "Tap the words below to build the sentence": [
+    "Chạm vào các từ bên dưới để ghép thành câu",
+    "Tap the words below to build the sentence"
+  ],
+  "CHECK": [
+    "KIỂM TRA",
+    "CHECK"
+  ],
+  "CONTINUE": [
+    "TIẾP TỤC",
+    "CONTINUE"
+  ],
+  "SEE RESULTS": [
+    "XEM KẾT QUẢ",
+    "SEE RESULTS"
+  ],
+  "XP EARNED": [
+    "XP ĐẠT ĐƯỢC",
+    "XP EARNED"
+  ],
+  "CORRECT": [
+    "CHÍNH XÁC",
+    "CORRECT"
+  ],
+  "ACCURACY": [
+    "ĐỘ CHÍNH XÁC",
+    "ACCURACY"
+  ],
+  "YOUR RECOMMENDED START": [
+    "LỘ TRÌNH ĐỀ XUẤT",
+    "YOUR RECOMMENDED START"
+  ],
+  "FIRST LESSON COMPLETE": [
+    "HOÀN THÀNH BÀI ĐẦU TIÊN",
+    "FIRST LESSON COMPLETE"
+  ],
+  "STARTING POINT FOUND": [
+    "ĐÃ XÁC ĐỊNH ĐIỂM XUẤT PHÁT",
+    "STARTING POINT FOUND"
+  ],
+  "Fantastic! You've completed your first Vietnamese lesson!": [
+    "Tuyệt vời! Bạn đã hoàn thành bài học tiếng Việt đầu tiên!",
+    "Fantastic! You've completed your first Vietnamese lesson!"
+  ],
+  "Great job! We've found a starting point for you!": [
+    "Làm tốt lắm! Chúng mình đã tìm thấy điểm xuất phát cho bạn!",
+    "Great job! We've found a starting point for you!"
+  ],
+  "ĐANG LƯU KẾT QUẢ…": [
+    "ĐANG LƯU KẾT QUẢ…",
+    "SAVING RESULTS…"
+  ],
+  "XEM KHÓA HỌC ĐƯỢC GỢI Ý": [
+    "XEM KHÓA HỌC ĐƯỢC GỢI Ý",
+    "VIEW RECOMMENDED COURSES"
+  ],
+  "Start over": [
+    "Làm lại từ đầu",
+    "Start over"
+  ],
+  "Back": [
+    "Quay lại",
+    "Back"
+  ],
+  "Đã lưu kết quả kiểm tra và cá nhân hóa gợi ý khóa học.": [
+    "Đã lưu kết quả kiểm tra và cá nhân hóa gợi ý khóa học.",
+    "Saved test results and personalized course recommendations."
+  ],
+  "Chưa thể đồng bộ kết quả, nhưng bạn vẫn có thể xem khóa học được gợi ý.": [
+    "Chưa thể đồng bộ kết quả, nhưng bạn vẫn có thể xem khóa học được gợi ý.",
+    "Could not sync results, but you can still view recommended courses."
+  ],
+  "Cấu hình OpenAI API": [
+    "Cấu hình OpenAI API",
+    "OpenAI API configuration"
+  ],
+  "Kích hoạt LLM trực tiếp cho AI Tutor": [
+    "Kích hoạt LLM trực tiếp cho AI Tutor",
+    "Enable direct LLM for AI Tutor"
+  ],
+  "AI Speaking Partner • 7 Chế Độ Học": [
+    "AI Speaking Partner • 7 Chế Độ Học",
+    "AI Speaking Partner • 7 Learning Modes"
+  ],
+  "Kịch bản nhập vai tình huống": [
+    "Kịch bản nhập vai tình huống",
+    "Situational roleplay scenarios"
+  ],
+  "Lịch sử hội thoại": [
+    "Lịch sử hội thoại",
+    "Conversation history"
+  ],
+  "Nhận xét & Sửa lỗi ngữ pháp:": [
+    "Nhận xét & Sửa lỗi ngữ pháp:",
+    "Feedback & grammar corrections:"
+  ],
+  "Cách diễn đạt tự nhiên hơn của người bản xứ:": [
+    "Cách diễn đạt tự nhiên hơn của người bản xứ:",
+    "More natural native expressions:"
+  ],
+  "Lưu ý văn hóa & Ngữ cảnh ứng xử:": [
+    "Lưu ý văn hóa & Ngữ cảnh ứng xử:",
+    "Cultural notes & context:"
+  ],
+  "Từ vựng hữu ích gợi ý:": [
+    "Từ vựng hữu ích gợi ý:",
+    "Suggested useful vocabulary:"
+  ],
+  "Đã chép": [
+    "Đã chép",
+    "Copied"
+  ],
+  "Tốc độ đọc:": [
+    "Tốc độ đọc:",
+    "Reading speed:"
+  ],
+  "Đang đọc": [
+    "Đang đọc",
+    "Playing"
+  ],
+  "Dịch nghĩa (English):": [
+    "Dịch nghĩa (English):",
+    "English meaning:"
+  ],
+  "Chạm 1 lần để nói": [
+    "Chạm 1 lần để nói",
+    "Tap once to speak"
+  ],
+  "Vui lòng nhập tiêu đề bài viết.": [
+    "Vui lòng nhập tiêu đề bài viết.",
+    "Please enter the article title."
+  ],
+  "Vui lòng nhập tên kịch bản.": [
+    "Vui lòng nhập tên kịch bản.",
+    "Please enter the scenario name."
+  ],
+  "Đã gửi mã OTP mới. Vui lòng kiểm tra Gmail.": [
+    "Đã gửi mã OTP mới. Vui lòng kiểm tra Gmail.",
+    "New OTP sent. Please check your Gmail."
+  ],
+  "Bảng chữ cái": [
+    "Bảng chữ cái",
+    "Alphabet"
+  ],
+  "Nguyên âm": [
+    "Nguyên âm",
+    "Vowels"
+  ],
+  "Phụ âm": [
+    "Phụ âm",
+    "Consonants"
+  ],
+  "Thanh điệu": [
+    "Thanh điệu",
+    "Tones"
+  ],
+  "Hà Nội · nữ": [
+    "Hà Nội · nữ",
+    "Hanoi · female"
+  ],
+  "Kéo ngang để xem thêm vần ↔": [
+    "Kéo ngang để xem thêm vần ↔",
+    "Scroll horizontally to see more rimes ↔"
+  ],
+  "Vần →": [
+    "Vần →",
+    "Rimes →"
+  ],
+  "Âm đầu ↓": [
+    "Âm đầu ↓",
+    "Initial consonants ↓"
+  ],
+  "Chọn ít nhất một nhóm vần để xem bảng âm.": [
+    "Chọn ít nhất một nhóm vần để xem bảng âm.",
+    "Select at least one rime group to view the syllable chart."
+  ],
+  "Nghe lại": [
+    "Nghe lại",
+    "Replay"
+  ],
+  "Dừng": [
+    "Dừng",
+    "Stop"
+  ],
+  "Mẫu vần & Quy tắc ghép âm": [
+    "Mẫu vần & Quy tắc ghép âm",
+    "Rime patterns & spelling rules"
+  ],
+  "Bấm để phóng to": [
+    "Bấm để phóng to",
+    "Click to enlarge"
+  ],
+  "Hình ảnh minh họa bài học": [
+    "Hình ảnh minh họa bài học",
+    "Lesson illustration image"
+  ],
+  "Mẹo học Shadowing:": [
+    "Mẹo học Shadowing:",
+    "Shadowing practice tip:"
+  ],
+  "Thẻ Flashcard": [
+    "Thẻ Flashcard",
+    "Flashcards"
+  ],
+  "Danh sách lưới": [
+    "Danh sách lưới",
+    "Grid view"
+  ],
+  "Ví dụ thực tế:": [
+    "Ví dụ thực tế:",
+    "Real-life examples:"
+  ],
+  "Từ trước": [
+    "Từ trước",
+    "Previous word"
+  ],
+  "Từ tiếp theo": [
+    "Từ tiếp theo",
+    "Next word"
+  ],
+  "Lưu ý ngữ pháp:": [
+    "Lưu ý ngữ pháp:",
+    "Grammar note:"
+  ],
+  "Nghe câu mẫu": [
+    "Nghe câu mẫu",
+    "Listen to sample sentence"
+  ],
+  "Tiến độ bài học:": [
+    "Tiến độ bài học:",
+    "Lesson progress:"
+  ],
+  "HỌC TIẾP NGAY (5 PHÚT)": [
+    "HỌC TIẾP NGAY (5 PHÚT)",
+    "CONTINUE LEARNING (5 MIN)"
+  ],
+  "Ngày Streak": [
+    "Ngày Streak",
+    "Day Streak"
+  ],
+  "Tổng XP": [
+    "Tổng XP",
+    "Total XP"
+  ],
+  "Trái tim": [
+    "Trái tim",
+    "Hearts"
+  ],
+  "Vào Lộ trình EdTech →": [
+    "Vào Lộ trình EdTech →",
+    "Go to EdTech Path →"
+  ],
+  "Nội dung Khám phá": [
+    "Nội dung Khám phá",
+    "Explore Content"
+  ],
+  "Biến thể ngôn ngữ đã xuất bản hiển thị theo vùng của điểm đến và từ chuẩn được chọn.": [
+    "Biến thể ngôn ngữ đã xuất bản hiển thị theo vùng của điểm đến và từ chuẩn được chọn.",
+    "Published language variants display based on the destination's region and chosen standard word."
+  ],
+  "Liên kết": [
+    "Liên kết",
+    "Link"
+  ],
+  "Không có nội dung khả dụng để liên kết.": [
+    "Không có nội dung khả dụng để liên kết.",
+    "No content available to link."
+  ],
+  "Tự động sửa lỗi": [
+    "Tự động sửa lỗi",
+    "Auto correction"
+  ],
+  "Nghe AI nói": [
+    "Nghe AI nói",
+    "Listen to AI voice"
+  ],
+  "Chọn câu trả lời thử:": [
+    "Chọn câu trả lời thử:",
+    "Choose sample reply:"
+  ],
+  "Vào phòng đàm thoại AI Tutor": [
+    "Vào phòng đàm thoại AI Tutor",
+    "Enter AI Tutor conversation"
+  ],
+  "Không cần Unikey": [
+    "Không cần Unikey",
+    "No Unikey needed"
+  ],
+  "Khung gõ thử:": [
+    "Khung gõ thử:",
+    "Practice typing box:"
+  ],
+  "Bấm phím bên dưới…": [
+    "Bấm phím bên dưới…",
+    "Tap keys below…"
+  ],
+  "Từ mẫu:": [
+    "Từ mẫu:",
+    "Sample word:"
+  ],
+  "Bao gồm đối thoại, trả giá và chỉ đường": [
+    "Bao gồm đối thoại, trả giá và chỉ đường",
+    "Includes dialogue, bargaining, and asking directions"
+  ],
+  "Lộ trình học tập cá nhân hóa": [
+    "Lộ trình học tập cá nhân hóa",
+    "Personalized learning path"
+  ],
+  "Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo.": [
+    "Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo.",
+    "Explore your Vietnamese learning roadmap stage by stage, earn XP, and unlock interactive lessons."
+  ],
+  "Hoạt động học tập gần đây": [
+    "Hoạt động học tập gần đây",
+    "Recent learning activity"
+  ],
+  "Đã điểm danh (+10 XP)": [
+    "Đã điểm danh (+10 XP)",
+    "Checked in (+10 XP)"
+  ],
+  "Điểm danh hôm nay (+10 XP)": [
+    "Điểm danh hôm nay (+10 XP)",
+    "Check in today (+10 XP)"
+  ],
+  "1 Khiên bảo vệ sẵn sàng": [
+    "1 Khiên bảo vệ sẵn sàng",
+    "1 Streak shield ready"
+  ],
+  "Đã xong": [
+    "Đã xong",
+    "Completed"
+  ],
+  "Phát âm bài học": [
+    "Phát âm bài học",
+    "Lesson pronunciation"
+  ],
+  "Đổi thứ tự:": [
+    "Đổi thứ tự:",
+    "Change order:"
+  ],
+  "Định nghĩa Việt–Việt:": [
+    "Định nghĩa Việt–Việt:",
+    "Vietnamese-Vietnamese definition:"
+  ],
+  "Định nghĩa Việt–Việt": [
+    "Định nghĩa Việt–Việt",
+    "Vietnamese-Vietnamese definition"
+  ],
+  "Nhãn cách dùng": [
+    "Nhãn cách dùng",
+    "Usage labels"
+  ],
+  "Tiến độ tổng thể": [
+    "Tiến độ tổng thể",
+    "Overall progress"
+  ],
+  "trên tổng số": [
+    "trên tổng số",
+    "out of"
+  ],
+  "Tiến độ làm bài": [
+    "Tiến độ làm bài",
+    "Quiz progress"
+  ],
+  "Tạo câu hỏi cho quiz": [
+    "Tạo câu hỏi cho quiz",
+    "Create question for quiz"
+  ],
+  "Hình minh họa câu hỏi": [
+    "Hình minh họa câu hỏi",
+    "Question illustration image"
+  ],
+  "Tìm câu hỏi trong ngân hàng": [
+    "Tìm câu hỏi trong ngân hàng",
+    "Search question bank"
+  ],
+  "Quiz đã gắn vào bài học.": [
+    "Quiz đã gắn vào bài học.",
+    "Quiz is attached to the lesson."
+  ],
+  "Sau khi xuất bản quiz, gắn nó vào bài học.": [
+    "Sau khi xuất bản quiz, gắn nó vào bài học.",
+    "After publishing the quiz, attach it to the lesson."
+  ],
+  "Gắn quiz vào bài học": [
+    "Gắn quiz vào bài học",
+    "Attach quiz to lesson"
+  ],
+  "+ Tạo câu hỏi và đáp án": [
+    "+ Tạo câu hỏi và đáp án",
+    "+ Create question & answers"
+  ],
+  "Trạng thái câu hỏi": [
+    "Trạng thái câu hỏi",
+    "Question status"
+  ],
+  "+ Tạo quiz bài học": [
+    "+ Tạo quiz bài học",
+    "+ Create lesson quiz"
+  ],
+  "+ Thêm ảnh": [
+    "+ Thêm ảnh",
+    "+ Add image"
+  ],
+  "+ Thêm video": [
+    "+ Thêm video",
+    "+ Add video"
+  ],
+  "+ Hoạt động khác": [
+    "+ Hoạt động khác",
+    "+ Other activities"
+  ],
+  "Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.": [
+    "Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.",
+    "Admins can view all content using the preview function."
+  ],
+  "Tạo quiz bài học": [
+    "Tạo quiz bài học",
+    "Create lesson quiz"
+  ],
+  "Kiểm duyệt nội dung": [
+    "Kiểm duyệt nội dung",
+    "Content moderation"
+  ],
+  "Quản lý nội dung học tập": [
+    "Quản lý nội dung học tập",
+    "Learning content management"
+  ],
+  "+ Import khóa học": [
+    "+ Import khóa học",
+    "+ Import course"
+  ],
+  "Trạng thái nội dung": [
+    "Trạng thái nội dung",
+    "Content status"
+  ],
+  "Kiểm duyệt →": [
+    "Kiểm duyệt →",
+    "Review →"
+  ],
+  "Chỉnh sửa →": [
+    "Chỉnh sửa →",
+    "Edit →"
+  ],
+  "Xem nội dung bài học": [
+    "Xem nội dung bài học",
+    "View lesson content"
+  ],
+  "Đóng menu": [
+    "Đóng menu",
+    "Close menu"
+  ],
+  "Mở menu quản trị": [
+    "Mở menu quản trị",
+    "Open admin menu"
+  ],
+  "Điều hướng quản trị": [
+    "Điều hướng quản trị",
+    "Admin navigation"
+  ],
+  "Người quản lý nội dung": [
+    "Người quản lý nội dung",
+    "Content Manager"
+  ],
+  "CONTENT MANAGER": [
+    "CONTENT MANAGER",
+    "CONTENT MANAGER"
+  ],
+  "Tự tạo từ tên; bạn có thể sửa nếu muốn.": [
+    "Tự tạo từ tên; bạn có thể sửa nếu muốn.",
+    "Generated from name; you can edit if desired."
+  ],
+  "JPG, PNG hoặc WebP, tối đa 5 MB. Ảnh được tải lên Cloudinary khi lưu khóa học.": [
+    "JPG, PNG hoặc WebP, tối đa 5 MB. Ảnh được tải lên Cloudinary khi lưu khóa học.",
+    "JPG, PNG, or WebP, up to 5 MB. Uploaded to Cloudinary on save."
+  ],
+  "Nhập các lựa chọn, sau đó đánh dấu đáp án đúng. Câu nhiều đáp án cho phép chọn nhiều ô.": [
+    "Nhập các lựa chọn, sau đó đánh dấu đáp án đúng. Câu nhiều đáp án cho phép chọn nhiều ô.",
+    "Enter options, then mark the correct answer. Multiple-choice questions allow multiple selections."
+  ],
+  "Mỗi nghĩa cần định nghĩa tiếng Việt hoặc thông tin tiếng Anh có căn cứ. Không tự gán bản dịch khi chưa xác định đúng nghĩa.": [
+    "Mỗi nghĩa cần định nghĩa tiếng Việt hoặc thông tin tiếng Anh có căn cứ. Không tự gán bản dịch khi chưa xác định đúng nghĩa.",
+    "Each definition requires verified Vietnamese meaning or English context. Do not assign unverified translations."
+  ],
+  "Kết quả đã sẵn sàng. HolaVietnamese sẽ dùng trình độ này để gợi ý các khóa học phù hợp với bạn.": [
+    "Kết quả đã sẵn sàng. HolaVietnamese sẽ dùng trình độ này để gợi ý các khóa học phù hợp với bạn.",
+    "Your results are ready. HolaVietnamese will recommend courses matching your level."
   ],
 };

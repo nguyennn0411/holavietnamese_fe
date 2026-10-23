@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Volume2, Music, Info, HelpCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { TonePracticeDataDTO, VietnameseTone } from '@/types/edtech';
 import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { ToneCurveGraph } from '@/components/edtech/ui/ToneCurveGraph';
 import { audioFeedback } from '@/utils/audioFeedback';
+import BilingualText, { bilingualLabel } from '@/components/common/BilingualText';
 
 interface TonePracticeExerciseProps {
   data: TonePracticeDataDTO;
@@ -17,6 +19,8 @@ export const TonePracticeExercise: React.FC<TonePracticeExerciseProps> = ({
   selectedTone,
   onSelectTone,
 }) => {
+  const { i18n } = useTranslation();
+  const isEn = (i18n.resolvedLanguage || i18n.language || 'vi').toLowerCase().startsWith('en');
   const [activePreviewTone, setActivePreviewTone] = useState<VietnameseTone>(
     data.targetTone
   );
@@ -44,20 +48,20 @@ export const TonePracticeExercise: React.FC<TonePracticeExerciseProps> = ({
         <div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-purple-50 text-purple-700 border border-purple-200">
             <Music className="w-3.5 h-3.5 text-purple-600" />
-            Luyện Cao Độ Thanh Điệu • Tone Mastery
+            <BilingualText vi="Luyện Cao Độ Thanh Điệu • Tone Mastery" en="Tone Pitch Mastery" />
           </span>
           <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 mt-2">
-            Nghe và chọn thanh điệu chính xác:
+            <BilingualText vi="Nghe và chọn thanh điệu chính xác:" en="Listen and choose the correct tone:" />
           </h2>
         </div>
 
         <button
           type="button"
           onClick={() => setShowGuideModal(!showGuideModal)}
-          className="text-xs font-bold text-slate-500 hover:text-purple-600 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-purple-50/50 transition-all"
+          className="text-xs font-bold text-slate-500 hover:text-purple-600 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-purple-50/50 transition-all cursor-pointer"
         >
           <HelpCircle className="w-4 h-4" />
-          <span>Biểu đồ 6 thanh</span>
+          <span><BilingualText vi="Biểu đồ 6 thanh" en="6-Tone Chart" /></span>
         </button>
       </div>
 
@@ -68,25 +72,28 @@ export const TonePracticeExercise: React.FC<TonePracticeExerciseProps> = ({
             type="button"
             onClick={handlePlayTargetWord}
             className="!min-h-0 !min-w-0 !p-0 !border-0 w-16 h-16 rounded-3xl bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center shadow-[0_4px_0_#6b21a8] active:translate-y-1 active:shadow-none transition-all cursor-pointer group shrink-0 audio-btn"
-            aria-label="Nghe âm thanh mẫu"
+            aria-label={bilingualLabel("Nghe âm thanh mẫu", "Listen to sample audio")}
           >
             <Volume2 className="w-8 h-8 shrink-0 group-hover:scale-110 transition-transform" strokeWidth={2.2} />
           </button>
 
           <div>
             <span className="text-xs font-bold text-purple-600 uppercase tracking-wider block">
-              Nghĩa tiếng Anh: "{data.targetMeaningEn}"
+              <BilingualText vi="Nghĩa tiếng Anh: " en="English meaning: " />"{data.targetMeaningEn}"
             </span>
             <div className="flex items-baseline gap-2 mt-0.5">
               <span className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight vn-diacritic-safe">
                 "{data.targetWord}"
               </span>
               <span className="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
-                Âm gốc: {data.baseSyllable}
+                <BilingualText vi={`Âm gốc: ${data.baseSyllable}`} en={`Base: ${data.baseSyllable}`} />
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Chạm nút loa để nghe độ cao giọng nói (Pitch Contour).
+              <BilingualText
+                vi="Chạm nút loa để nghe độ cao giọng nói (Pitch Contour)."
+                en="Tap speaker to hear voice pitch contour."
+              />
             </p>
           </div>
         </div>
@@ -106,11 +113,14 @@ export const TonePracticeExercise: React.FC<TonePracticeExerciseProps> = ({
       <div className="w-full">
         <div className="flex items-center justify-between mb-3 px-1">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-            Chọn thanh điệu tương ứng (Select the matching tone):
+            <BilingualText vi="Chọn thanh điệu tương ứng:" en="Select the matching tone:" />
           </span>
           {selectedTone && (
             <span className="text-xs font-bold text-emerald-600">
-              Đã chọn: {VIETNAMESE_TONES[selectedTone]?.nameVi}
+              <BilingualText
+                vi={`Đã chọn: ${VIETNAMESE_TONES[selectedTone]?.nameVi}`}
+                en={`Selected: ${VIETNAMESE_TONES[selectedTone]?.nameEn}`}
+              />
             </span>
           )}
         </div>
@@ -143,7 +153,7 @@ export const TonePracticeExercise: React.FC<TonePracticeExerciseProps> = ({
                     </span>
                     <div>
                       <span className="text-xs font-bold text-slate-800 block leading-none">
-                        {toneObj.nameVi}
+                        {isEn ? toneObj.nameEn : toneObj.nameVi}
                       </span>
                       <span className="text-[10px] text-slate-400 font-medium">
                         {toneObj.nameEn.split(' ')[0]}
@@ -175,7 +185,8 @@ export const TonePracticeExercise: React.FC<TonePracticeExerciseProps> = ({
         <div className="w-full mt-5 bg-amber-50/70 border border-amber-200 rounded-2xl p-3.5 flex items-start gap-2.5 text-xs text-amber-900">
           <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <strong>Ghi nhớ ngữ điệu:</strong> {data.explanation}
+            <strong><BilingualText vi="Ghi nhớ ngữ điệu: " en="Tone memory tip: " /></strong>
+            {data.explanation}
           </div>
         </div>
       )}

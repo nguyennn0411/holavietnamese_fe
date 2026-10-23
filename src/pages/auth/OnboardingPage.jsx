@@ -20,29 +20,29 @@ export function OnboardingPage() {
   });
 
   const goals = [
-    { id: 'travel', title: '✈️ Du lịch & Khám phá', desc: 'Hỏi đường, gọi món, đi taxi, mặc cả chợ đêm' },
-    { id: 'work', title: '💼 Công việc & Định cư', desc: 'Giao tiếp văn phòng, phỏng vấn, gặp đối tác' },
-    { id: 'exam_vsl', title: '🎓 Thi chứng chỉ VSL', desc: 'Ngữ pháp chuẩn, luyện 6 thanh điệu, đọc hiểu' },
-    { id: 'culture', title: '🏮 Văn hóa & Đời sống', desc: 'Xem phim, kết bạn với người Việt, hiểu ca dao' },
+    { id: 'travel', title: '✈️ Du lịch & Khám phá', titleEn: '✈️ Travel & Exploration', desc: 'Hỏi đường, gọi món, đi taxi, mặc cả chợ đêm', descEn: 'Directions, ordering food, taxis, night market bargaining' },
+    { id: 'work', title: '💼 Công việc & Định cư', titleEn: '💼 Work & Relocation', desc: 'Giao tiếp văn phòng, phỏng vấn, gặp đối tác', descEn: 'Office communication, interviews, meeting partners' },
+    { id: 'exam_vsl', title: '🎓 Thi chứng chỉ VSL', titleEn: '🎓 VSL Certification', desc: 'Ngữ pháp chuẩn, luyện 6 thanh điệu, đọc hiểu', descEn: 'Standard grammar, 6 tones practice, reading comprehension' },
+    { id: 'culture', title: '🏮 Văn hóa & Đời sống', titleEn: '🏮 Culture & Daily Life', desc: 'Xem phim, kết bạn với người Việt, hiểu ca dao', descEn: 'Watch movies, make Vietnamese friends, understand folk verses' },
   ];
 
   const levels = [
-    { id: 'A1', title: 'Mới bắt đầu (A1)', desc: 'Chưa biết từ nào hoặc chỉ biết Xin chào, Cảm ơn' },
-    { id: 'A2', title: 'Sơ cấp (A2)', desc: 'Biết từ vựng cơ bản, ghép câu đơn giản' },
-    { id: 'B1', title: 'Trung cấp (B1)', desc: 'Giao tiếp được các tình huống quen thuộc thường nhật' },
+    { id: 'A1', title: 'Mới bắt đầu (A1)', titleEn: 'Beginner (A1)', desc: 'Chưa biết từ nào hoặc chỉ biết Xin chào, Cảm ơn', descEn: 'Complete beginner or only know Xin chào, Cảm ơn' },
+    { id: 'A2', title: 'Sơ cấp (A2)', titleEn: 'Elementary (A2)', desc: 'Biết từ vựng cơ bản, ghép câu đơn giản', descEn: 'Know basic vocabulary and simple sentence structures' },
+    { id: 'B1', title: 'Trung cấp (B1)', titleEn: 'Intermediate (B1)', desc: 'Giao tiếp được các tình huống quen thuộc thường nhật', descEn: 'Can converse in common everyday familiar situations' },
   ];
 
   const times = [
-    { minutes: 10, label: 'Thư giãn (10 phút/ngày)', sub: 'Khoảng 1-2 bài học ngắn' },
-    { minutes: 15, label: 'Tiêu chuẩn (15 phút/ngày)', sub: 'Lý tưởng để duy trì phản xạ' },
-    { minutes: 30, label: 'Nghiêm túc (30 phút/ngày)', sub: 'Tăng tốc độ làm chủ tiếng Việt' },
+    { minutes: 10, label: 'Thư giãn (10 phút/ngày)', labelEn: 'Casual (10 min/day)', sub: 'Khoảng 1-2 bài học ngắn', subEn: 'Around 1-2 quick lessons' },
+    { minutes: 15, label: 'Tiêu chuẩn (15 phút/ngày)', labelEn: 'Standard (15 min/day)', sub: 'Lý tưởng để duy trì phản xạ', subEn: 'Ideal for keeping up your reflex' },
+    { minutes: 30, label: 'Nghiêm túc (30 phút/ngày)', labelEn: 'Intensive (30 min/day)', sub: 'Tăng tốc độ làm chủ tiếng Việt', subEn: 'Fast-track your Vietnamese fluency' },
   ];
 
   const handleFinish = async () => {
     setLoading(true); setError('');
     try {
       await learnerService.saveOnboarding(preferences);
-      navigate('/', { state: { welcomeToast: 'Chào mừng bạn! Lộ trình học cá nhân hóa đã sẵn sàng.' } });
+      navigate('/', { state: { welcomeToast: bilingualLabel('Chào mừng bạn! Lộ trình học cá nhân hóa đã sẵn sàng.', 'Welcome! Your personalized learning path is ready.') } });
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }
   };
@@ -129,8 +129,12 @@ export function OnboardingPage() {
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}><BilingualText>{g.title}</BilingualText></strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}><BilingualText>{g.desc}</BilingualText></span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>
+                      <BilingualText vi={g.title} en={g.titleEn} />
+                    </strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}>
+                      <BilingualText vi={g.desc} en={g.descEn} />
+                    </span>
                   </div>
                 ))}
               </div>
@@ -160,8 +164,12 @@ export function OnboardingPage() {
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}><BilingualText>{l.title}</BilingualText></strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}><BilingualText>{l.desc}</BilingualText></span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>
+                      <BilingualText vi={l.title} en={l.titleEn} />
+                    </strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}>
+                      <BilingualText vi={l.desc} en={l.descEn} />
+                    </span>
                   </div>
                 ))}
               </div>
@@ -196,8 +204,12 @@ export function OnboardingPage() {
                       cursor: 'pointer',
                     }}
                   >
-                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}><BilingualText>{t.label}</BilingualText></strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}><BilingualText>{t.sub}</BilingualText></span>
+                    <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--color-ink)' }}>
+                      <BilingualText vi={t.label} en={t.labelEn} />
+                    </strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-forest)' }}>
+                      <BilingualText vi={t.sub} en={t.subEn} />
+                    </span>
                   </div>
                 ))}
               </div>
@@ -218,9 +230,9 @@ export function OnboardingPage() {
         </div>
       </div>
 
-      <aside className="auth-right-panel" aria-label="Lộ trình cá nhân hóa">
+      <aside className="auth-right-panel" aria-label={bilingualLabel("Lộ trình cá nhân hóa", "Personalized learning roadmap")}>
         <div className="auth-drum-bg">
-          <img src={dongSonBg} alt="Hoa văn trống đồng Đông Sơn" className="auth-drum-img" />
+          <img src={dongSonBg} alt={bilingualLabel("Hoa văn trống đồng Đông Sơn", "Dong Son bronze drum patterns")} className="auth-drum-img" />
         </div>
         <div className="auth-visual-topline"><span /><BilingualText>{"Lộ trình cá nhân hóa · Khởi đầu tự tin"}</BilingualText></div>
         <div className="auth-hero-card">

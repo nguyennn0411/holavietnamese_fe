@@ -254,6 +254,19 @@ export const SCENARIOS = [
 const ROLEPLAY_SESSION_STORAGE = 'hola_ai_roleplay_session_';
 const ROLEPLAY_RESULT_STORAGE = 'hola_ai_roleplay_result_';
 
+let dynamicScenarios = [...SCENARIOS];
+if (typeof localStorage !== 'undefined') {
+  try {
+    const cached = localStorage.getItem('hola_cached_ai_scenarios');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        dynamicScenarios = parsed;
+      }
+    }
+  } catch {}
+}
+
 export const aiRoleplayService = {
   getLevels() {
     return SCENARIO_LEVELS;
@@ -263,8 +276,46 @@ export const aiRoleplayService = {
     return SCENARIO_TOPICS;
   },
 
+  async fetchScenarios() {
+    try {
+      let token = '';
+      if (typeof localStorage !== 'undefined') {
+        token = localStorage.getItem('token') || localStorage.getItem('access_token') || '';
+      }
+      const headers = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      const res = await fetch('/api/ai/scenarios', { headers });
+      if (res.ok) {
+        const data = await res.json();
+        const list = data.result || data;
+        if (Array.isArray(list) && list.length > 0) {
+          dynamicScenarios = list.map(item => {
+            const fallback = SCENARIOS.find(s => s.id === item.id) || {};
+            return {
+              ...fallback,
+              ...item,
+              aiRole: item.aiRole || fallback.aiRole,
+              learnerRole: item.learnerRole || fallback.learnerRole,
+              objectives: Array.isArray(item.objectives) && item.objectives.length > 0 ? item.objectives : fallback.objectives,
+              vocabularyHints: Array.isArray(item.vocabularyHints) && item.vocabularyHints.length > 0 ? item.vocabularyHints : fallback.vocabularyHints,
+            };
+          });
+          if (typeof localStorage !== 'undefined') {
+            try {
+              localStorage.setItem('hola_cached_ai_scenarios', JSON.stringify(dynamicScenarios));
+            } catch {}
+          }
+          return dynamicScenarios;
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return dynamicScenarios;
+  },
+
   listScenarios({ search = '', level = 'all', topic = 'all' } = {}) {
-    let result = [...SCENARIOS];
+    let result = [...dynamicScenarios];
 
     if (search.trim()) {
       const q = search.trim().toLowerCase();
@@ -288,7 +339,7 @@ export const aiRoleplayService = {
   },
 
   getScenario(id) {
-    return SCENARIOS.find(s => s.id === id) || SCENARIOS[0];
+    return dynamicScenarios.find(s => s.id === id) || SCENARIOS.find(s => s.id === id) || SCENARIOS[0];
   },
 
   getRoleplaySession(scenarioId) {

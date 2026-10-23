@@ -68,11 +68,11 @@ export function VerifyEmailPage() {
     event.preventDefault();
     if (verifying || verified) return;
     if (!emailIsValid) {
-      setFormError('Vui lòng nhập đúng email đã dùng để đăng ký.');
+      setFormError(bilingualLabel('Vui lòng nhập đúng email đã dùng để đăng ký.', 'Please enter the email address used during registration.'));
       return;
     }
     if (!isValidOtp(otp)) {
-      setOtpError('Mã OTP phải gồm đúng 6 chữ số.');
+      setOtpError(bilingualLabel('Mã OTP phải gồm đúng 6 chữ số.', 'OTP must consist of exactly 6 digits.'));
       return;
     }
 
@@ -82,20 +82,20 @@ export function VerifyEmailPage() {
     try {
       const response = await authApi.verifyEmailOtp(normalizedEmail, otp);
       if (!isSuccessfulAuthResponse(response)) {
-        const error = new Error(response?.message || 'Không thể xác minh email.');
+        const error = new Error(response?.message || bilingualLabel('Không thể xác minh email.', 'Unable to verify email.'));
         error.code = response?.code;
         throw error;
       }
       clearPendingVerification();
       setVerified(true);
-      setMessage(response.message || 'Xác minh email thành công');
-      toast.success(response.message || 'Xác minh email thành công');
+      setMessage(response.message || bilingualLabel('Xác minh email thành công', 'Email verified successfully'));
+      toast.success(response.message || bilingualLabel('Xác minh email thành công', 'Email verified successfully'));
       redirectTimerRef.current = window.setTimeout(() => {
         navigate('/login', {
           replace: true,
           state: {
             from: afterLogin,
-            message: 'Xác minh email thành công. Hãy đăng nhập để bắt đầu bài kiểm tra đầu vào.',
+            message: bilingualLabel('Xác minh email thành công. Hãy đăng nhập để bắt đầu bài kiểm tra đầu vào.', 'Email verified successfully. Please sign in to begin your placement test.'),
           },
         });
       }, 1500);
@@ -109,7 +109,7 @@ export function VerifyEmailPage() {
   const handleResend = async () => {
     if (resending || cooldown > 0) return;
     if (!emailIsValid) {
-      setFormError('Vui lòng nhập đúng email đã dùng để đăng ký.');
+      setFormError(bilingualLabel('Vui lòng nhập đúng email đã dùng để đăng ký.', 'Please enter the email address used during registration.'));
       return;
     }
 
@@ -117,17 +117,17 @@ export function VerifyEmailPage() {
     setFormError('');
     try {
       const response = await authApi.resendVerificationOtp(normalizedEmail);
-      if (!isSuccessfulAuthResponse(response)) throw new Error(response?.message || 'Không thể gửi lại mã OTP.');
+      if (!isSuccessfulAuthResponse(response)) throw new Error(response?.message || bilingualLabel('Không thể gửi lại mã OTP.', 'Unable to resend OTP code.'));
       savePendingVerificationEmail(normalizedEmail);
       setOtp('');
       setOtpError('');
-      setMessage('Mã OTP mới đã được gửi. Vui lòng kiểm tra Gmail của bạn.');
+      setMessage(bilingualLabel('Mã OTP mới đã được gửi. Vui lòng kiểm tra Gmail của bạn.', 'A new OTP has been sent. Please check your Gmail.'));
       setDevelopmentOtp(getDevelopmentOtp(response, import.meta.env.DEV));
       startResendCooldown(60);
       setCooldown(60);
-      toast.success('Đã gửi mã OTP mới. Vui lòng kiểm tra Gmail.');
+      toast.success(bilingualLabel('Đã gửi mã OTP mới. Vui lòng kiểm tra Gmail.', 'A new OTP code has been sent. Please check Gmail.'));
     } catch (error) {
-      setFormError(error?.message || 'Không thể gửi lại mã OTP. Vui lòng thử lại.');
+      setFormError(error?.message || bilingualLabel('Không thể gửi lại mã OTP. Vui lòng thử lại.', 'Unable to resend OTP code. Please try again.'));
     } finally {
       setResending(false);
     }

@@ -1,5 +1,5 @@
 ﻿import { useState, useRef, useEffect, useMemo } from 'react';
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { LessonStatus } from './LessonStatus';
 import {
@@ -62,7 +62,7 @@ export function LessonSidebar({
           ? 'h-full border-0 rounded-none'
           : 'h-[calc(100vh-140px)] max-h-[840px] min-h-[500px] rounded-3xl border border-[#E8E5DF] overflow-hidden'
       }`}
-      aria-label="Lộ trình bài học trong khóa"
+      aria-label={bilingualLabel("Lộ trình bài học trong khóa", "Course roadmap")}
     >
       {/* ==================== ROADMAP HEADER ==================== */}
       <div className="shrink-0 bg-[#FFFDF9] border-b border-[#E8E5DF]/60 p-4 sm:p-5 space-y-3">
@@ -78,7 +78,7 @@ export function LessonSidebar({
                   <BilingualText vi="Lộ trình bài học" en="Course Roadmap" />
                 </h2>
                 <span className="px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 text-[11px] font-bold shrink-0">
-                  {totalCount} bài
+                  <BilingualText vi={`${totalCount} bài`} en={`${totalCount} lessons`} />
                 </span>
               </div>
             </div>
@@ -88,7 +88,7 @@ export function LessonSidebar({
             <button
               type="button"
               onClick={onClose}
-              aria-label="Đóng danh sách bài"
+              aria-label={bilingualLabel("Đóng danh sách bài", "Close lesson list")}
               className="p-1.5 rounded-xl text-stone-500 hover:bg-stone-100 transition-colors cursor-pointer"
             >
               <X size={18} />
@@ -108,7 +108,7 @@ export function LessonSidebar({
           <div className="flex items-center justify-between text-xs font-bold text-[#253044]">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
-              <span>{completedCount}/{totalCount} bài hoàn thành</span>
+              <span><BilingualText vi={`${completedCount}/${totalCount} bài hoàn thành`} en={`${completedCount}/${totalCount} lessons completed`} /></span>
             </span>
             <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-black text-xs">
               {progressPercent}%
@@ -131,7 +131,7 @@ export function LessonSidebar({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm bài học..."
+              placeholder={bilingualLabel("Tìm bài học...", "Search lessons...")}
               className="w-full pl-8 pr-7 py-1.5 text-xs bg-white border border-[#E8E5DF]/80 rounded-xl focus:outline-none focus:border-[#FF7A00] focus:ring-1 focus:ring-[#FF7A00] placeholder:text-stone-400 text-[#253044]"
             />
             {searchQuery && (
@@ -139,7 +139,7 @@ export function LessonSidebar({
                 type="button"
                 onClick={() => setSearchQuery('')}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 p-0.5 cursor-pointer"
-                aria-label="Xóa tìm kiếm"
+                aria-label={bilingualLabel("Xóa tìm kiếm", "Clear search")}
               >
                 <X size={12} />
               </button>
@@ -222,13 +222,13 @@ export function LessonSidebar({
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF7A00] opacity-75" />
                             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#FF7A00]" />
                           </span>
-                          <span>Đang học</span>
+                          <span><BilingualText vi="Đang học" en="In progress" /></span>
                         </span>
                       )}
 
                       {!isCurrent && isCompleted && (
                         <span className="text-emerald-600 font-semibold text-[10px]">
-                          Hoàn thành
+                          <BilingualText vi="Hoàn thành" en="Completed" />
                         </span>
                       )}
                     </div>

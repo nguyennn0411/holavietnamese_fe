@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useCallback, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
@@ -98,10 +98,10 @@ export function MyLearningPage({ initialTab = 'courses' }) {
   );
 
   const tabItems = [
-    { id: 'courses', label: 'Khóa học của tôi', icon: BookOpen },
-    { id: 'vocabulary', label: 'Từ vựng đã lưu', icon: Languages },
-    { id: 'journey', label: 'Khám phá Việt Nam', icon: MapPin },
-    { id: 'quiz', label: 'Lịch sử quiz', icon: Award },
+    { id: 'courses', labelVi: 'Khóa học của tôi', labelEn: 'My Courses', icon: BookOpen },
+    { id: 'vocabulary', labelVi: 'Từ vựng đã lưu', labelEn: 'Saved Words', icon: Languages },
+    { id: 'journey', labelVi: 'Khám phá Việt Nam', labelEn: 'Explore Vietnam', icon: MapPin },
+    { id: 'quiz', labelVi: 'Lịch sử quiz', labelEn: 'Quiz History', icon: Award },
   ];
 
   return (
@@ -110,7 +110,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
         <div className="relative z-10 max-w-3xl space-y-3">
           <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
-            <BilingualText>{"Hành trình của riêng bạn • Personal Learning Space"}</BilingualText>
+            <BilingualText vi="Hành trình của riêng bạn" en="Personal Learning Space" />
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-black text-[#253044] tracking-tight">
@@ -142,7 +142,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
       </section>
 
       {/* Modern Tabs Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-[#E8E5DF] scrollbar-none" role="tablist" aria-label="Góc học tập">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-[#E8E5DF] scrollbar-none" role="tablist" aria-label={bilingualLabel("Góc học tập", "My Learning")}>
         {tabItems.map((item) => {
           const Icon = item.icon;
           const isActive = tab === item.id;
@@ -159,7 +159,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   : 'border-transparent text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8]/50'
               }`}
             >
-              <BilingualText>{item.label}</BilingualText>
+              <BilingualText vi={item.labelVi} en={item.labelEn} />
             </button>
           );
         })}
@@ -189,7 +189,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   </div>
                   <div>
                     <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
-                      Bài đã học
+                      <BilingualText vi="Bài đã học" en="Completed lessons" />
                     </span>
                     <strong className="text-lg sm:text-xl font-black text-[#253044]">
                       {data.completedLessons ?? data.completedLessonsCount ?? 0}
@@ -203,7 +203,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   </div>
                   <div>
                     <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
-                      Từ đã lưu
+                      <BilingualText vi="Từ đã lưu" en="Saved words" />
                     </span>
                     <strong className="text-lg sm:text-xl font-black text-[#253044]">
                       {data.savedVocabCount ?? 0}
@@ -217,10 +217,10 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   </div>
                   <div>
                     <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
-                      Chuỗi học tập
+                      <BilingualText vi="Chuỗi học tập" en="Day streak" />
                     </span>
                     <strong className="text-lg sm:text-xl font-black text-[#253044]">
-                      {data.currentStreak ?? data.streakCount ?? 1} ngày
+                      {data.currentStreak ?? data.streakCount ?? 1} <BilingualText vi="ngày" en="days" />
                     </strong>
                   </div>
                 </div>
@@ -231,10 +231,10 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   </div>
                   <div>
                     <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
-                      Thời gian học
+                      <BilingualText vi="Thời gian học" en="Learning time" />
                     </span>
                     <strong className="text-lg sm:text-xl font-black text-[#253044]">
-                      {data.totalTimeMinutes ?? 45} phút
+                      {data.totalTimeMinutes ?? 45} <BilingualText vi="phút" en="min" />
                     </strong>
                   </div>
                 </div>
@@ -262,7 +262,10 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                           <span className="font-bold text-amber-300">{activeCourse.level}</span>
                           <span>•</span>
                           <span>
-                            Đã hoàn thành {activeCourse.completedLessons}/{activeCourse.totalLessons || '—'} bài học ({activeCourse.progressPercentage}%)
+                            <BilingualText
+                              vi={`Đã hoàn thành ${activeCourse.completedLessons}/${activeCourse.totalLessons || '—'} bài học (${activeCourse.progressPercentage}%)`}
+                              en={`Completed ${activeCourse.completedLessons}/${activeCourse.totalLessons || '—'} lessons (${activeCourse.progressPercentage}%)`}
+                            />
                           </span>
                         </div>
                         <div className="w-full max-w-md h-2 rounded-full bg-white/20 overflow-hidden mt-1">
@@ -297,7 +300,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
                   {/* Course Filter Controls (All, In Progress, Completed) */}
                   <div className="flex items-center justify-between border-b border-[#E8E5DF]/60 pb-3 flex-wrap gap-3">
-                    <div className="flex items-center gap-2" role="tablist" aria-label="Bộ lọc khóa học">
+                    <div className="flex items-center gap-2" role="tablist" aria-label={bilingualLabel("Bộ lọc khóa học", "Course filters")}>
                       <button
                         type="button"
                         role="tab"
@@ -409,8 +412,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                                     value={course.progressPercentage}
                                     label={
                                       course.totalLessons
-                                        ? `${course.completedLessons}/${course.totalLessons} bài học`
-                                        : `${course.progressPercentage}% hoàn thành`
+                                        ? bilingualLabel(`${course.completedLessons}/${course.totalLessons} bài học`, `${course.completedLessons}/${course.totalLessons} lessons`)
+                                        : bilingualLabel(`${course.progressPercentage}% hoàn thành`, `${course.progressPercentage}% completed`)
                                     }
                                   />
                                 </div>
@@ -421,14 +424,14 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                                   className="button flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-sm transition-all"
                                   to={continueUrl}
                                 >
-                                  <BilingualText>{isCompleted ? 'Xem lại khóa học' : 'Tiếp tục học →'}</BilingualText>
+                                  <BilingualText vi={isCompleted ? 'Xem lại khóa học' : 'Tiếp tục học →'} en={isCompleted ? 'Review course' : 'Continue learning →'} />
                                   <ArrowRight size={14} />
                                 </Link>
 
                                 <Link
                                   className="px-3 py-2.5 rounded-xl border border-[#E8E5DF] bg-white hover:bg-[#F7F0E3] text-[#253044] text-xs font-bold transition-all"
                                   to={`/courses/${course.id}`}
-                                  title="Chi tiết khóa học"
+                                  title={bilingualLabel("Chi tiết khóa học", "Course details")}
                                 >
                                   <BookOpen size={14} />
                                 </Link>
@@ -464,11 +467,11 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                   ) : (
                     <div className="space-y-4">
                       <EmptyState
-                        title={allCourses.length ? "Không có khóa học nào ở trạng thái này" : "Bạn chưa đăng ký khóa học nào"}
+                        title={allCourses.length ? bilingualLabel("Không có khóa học nào ở trạng thái này", "No courses match this status") : bilingualLabel("Bạn chưa đăng ký khóa học nào", "You haven't enrolled in any courses yet")}
                         description={
                           allCourses.length
-                            ? "Hãy thử đổi bộ lọc sang tất cả khóa học để xem toàn bộ danh sách."
-                            : "Khám phá ngay kho khóa học phong phú để bắt đầu hành trình học tiếng Việt."
+                            ? bilingualLabel("Hãy thử đổi bộ lọc sang tất cả khóa học để xem toàn bộ danh sách.", "Try changing the filter to all courses to view the full list.")
+                            : bilingualLabel("Khám phá ngay kho khóa học phong phú để bắt đầu hành trình học tiếng Việt.", "Explore our rich catalog of courses to begin your Vietnamese learning journey.")
                         }
                       />
                       <div className="flex justify-center">
@@ -549,8 +552,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                     </div>
                   ) : (
                     <EmptyState
-                      title="Sổ tay đang chờ những từ đầu tiên"
-                      description="Lưu từ mới trong bài học hoặc thêm vào sổ tay để ôn tập ngắt quãng."
+                      title={bilingualLabel("Sổ tay đang chờ những từ đầu tiên", "Notebook is waiting for your first words")}
+                      description={bilingualLabel("Lưu từ mới trong bài học hoặc thêm vào sổ tay để ôn tập ngắt quãng.", "Save new words from lessons or your notebook to review with spaced repetition.")}
                     />
                   )}
                 </section>
@@ -637,8 +640,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                     </div>
                   ) : (
                     <EmptyState
-                      title="Chưa có bài kiểm tra đã hoàn thành"
-                      description="Các kết quả quiz sau mỗi chương học sẽ xuất hiện tại đây."
+                      title={bilingualLabel("Chưa có bài kiểm tra đã hoàn thành", "No completed quizzes yet")}
+                      description={bilingualLabel("Các kết quả quiz sau mỗi chương học sẽ xuất hiện tại đây.", "Quiz results from completed units will appear here.")}
                     />
                   )}
                 </section>

@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useCourse } from '@/hooks/useCourses';
@@ -25,6 +25,7 @@ function getLessonTypeInfo(lesson) {
     return {
       type: 'DIALOGUE',
       labelVi: 'Hội thoại',
+      labelEn: 'Dialogue',
       icon: MessageCircle,
       badgeClass: 'bg-amber-50 text-amber-800 border-amber-200/80',
     };
@@ -38,6 +39,7 @@ function getLessonTypeInfo(lesson) {
     return {
       type: 'VOCABULARY',
       labelVi: 'Từ vựng',
+      labelEn: 'Vocabulary',
       icon: BookOpen,
       badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
     };
@@ -51,6 +53,7 @@ function getLessonTypeInfo(lesson) {
     return {
       type: 'GRAMMAR',
       labelVi: 'Ngữ pháp',
+      labelEn: 'Grammar',
       icon: FileText,
       badgeClass: 'bg-blue-50 text-blue-800 border-blue-200/80',
     };
@@ -67,6 +70,7 @@ function getLessonTypeInfo(lesson) {
     return {
       type: 'SPEAKING',
       labelVi: 'Nghe & Nói',
+      labelEn: 'Listening & Speaking',
       icon: Headphones,
       badgeClass: 'bg-purple-50 text-purple-800 border-purple-200/80',
     };
@@ -85,6 +89,7 @@ function getLessonTypeInfo(lesson) {
     return {
       type: 'PRACTICE',
       labelVi: 'Luyện tập & Quiz',
+      labelEn: 'Practice & Quiz',
       icon: CheckSquare,
       badgeClass: 'bg-rose-50 text-rose-800 border-rose-200/80',
     };
@@ -94,6 +99,7 @@ function getLessonTypeInfo(lesson) {
     return {
       type: 'CULTURE',
       labelVi: 'Văn hóa',
+      labelEn: 'Culture',
       icon: Compass,
       badgeClass: 'bg-teal-50 text-teal-800 border-teal-200/80',
     };
@@ -102,6 +108,7 @@ function getLessonTypeInfo(lesson) {
   return {
     type: 'LESSON',
     labelVi: 'Bài học',
+      labelEn: 'Lesson',
     icon: PlayCircle,
     badgeClass: 'bg-stone-100 text-stone-700 border-stone-200/80',
   };
@@ -111,11 +118,11 @@ function getLessonTypeInfo(lesson) {
  * Định dạng thời lượng từ phút sang dạng dễ đọc: X phút hoặc Xh Ym
  */
 function formatDuration(minutes) {
-  if (!minutes || minutes <= 0) return '0 phút';
-  if (minutes < 60) return `${minutes} phút`;
+  if (!minutes || minutes <= 0) return bilingualLabel('0 phút', '0 min');
+  if (minutes < 60) return bilingualLabel(`${minutes} phút`, `${minutes} min`);
   const hours = Math.floor(minutes / 60);
   const remainingMins = minutes % 60;
-  return remainingMins > 0 ? `${hours}h ${remainingMins}m` : `${hours} giờ`;
+  return remainingMins > 0 ? `${hours}h ${remainingMins}m` : bilingualLabel(`${hours} giờ`, `${hours} hrs`);
 }
 
 /**
@@ -362,12 +369,18 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
     if (!isEnrolled) {
       setToastData({
-        message: `Bạn cần đăng ký khóa học để truy cập bài học "${lessonTitle}".`,
+        message: bilingualLabel(
+          `Bạn cần đăng ký khóa học để truy cập bài học "${lessonTitle}".`,
+          `You need to enroll in this course to access "${lessonTitle}".`
+        ),
         type: 'NOT_ENROLLED',
       });
     } else {
       setToastData({
-        message: `Bài "${lessonTitle}" đang bị khóa. Hãy hoàn thành các bài học trước để mở khóa nhé!`,
+        message: bilingualLabel(
+          `Bài "${lessonTitle}" đang bị khóa. Hãy hoàn thành các bài học trước để mở khóa nhé!`,
+          `Lesson "${lessonTitle}" is locked. Complete previous lessons to unlock!`
+        ),
         type: 'LOCKED_NEXT',
       });
     }
@@ -451,14 +464,14 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
     setEnrollError(null);
     try {
       const result = await courseService.enroll(targetCourseId);
-      if (!result?.isEnrolled) throw new Error('Đăng ký khóa học chưa hoàn tất. Vui lòng thử lại.');
+      if (!result?.isEnrolled) throw new Error(bilingualLabel('Đăng ký khóa học chưa hoàn tất. Vui lòng thử lại.', 'Course enrollment incomplete. Please try again.'));
       closeToast();
       onReload?.();
     } catch (err) {
       if (err?.status === 401 || err?.status === 403) {
         navigate('/login', { state: { from: location.pathname } });
       } else {
-        setEnrollError(err.message || 'Không thể đăng ký khóa học vào lúc này.');
+        setEnrollError(err.message || bilingualLabel('Không thể đăng ký khóa học vào lúc này.', 'Unable to enroll in course at this time.'));
       }
     } finally {
       setEnrollPending(false);
@@ -492,7 +505,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 disabled={enrollPending}
                 className="px-3 py-1.5 rounded-xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
               >
-                Đăng ký ngay
+                <BilingualText vi="Đăng ký ngay" en="Enroll now" />
               </button>
             ) : (
               <Link
@@ -500,7 +513,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 onClick={closeToast}
                 className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-bold text-xs shadow-xs transition-colors"
               >
-                <span>Học tiếp</span>
+                <span><BilingualText vi="Học tiếp" en="Continue" /></span>
                 <ArrowRight size={12} />
               </Link>
             )}
@@ -508,7 +521,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
             <button
               type="button"
               onClick={closeToast}
-              aria-label="Đóng thông báo"
+              aria-label={bilingualLabel("Đóng thông báo", "Close notification")}
               className="p-1 rounded-lg text-[#FFF7E8]/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <X size={15} />
@@ -551,13 +564,13 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
             {/* Các điểm nổi bật */}
             <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
-                <span>Lộ trình theo chuẩn CEFR</span>
+                <BilingualText vi="Lộ trình theo chuẩn CEFR" en="CEFR standard roadmap" />
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
-                <span>Hội thoại thực tế & AI Tutor</span>
+                <BilingualText vi="Hội thoại thực tế & AI Tutor" en="Real conversation & AI Tutor" />
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
-                <span>Luyện tập & Đánh giá tức thì</span>
+                <BilingualText vi="Luyện tập & Đánh giá tức thì" en="Practice & instant assessment" />
               </div>
             </div>
           </section>
@@ -628,9 +641,9 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 <p className="text-xs text-[#64748B] mt-1">
                   <span>{modules.length} modules</span>
                   <span className="mx-1.5">•</span>
-                  <span>{totalLessons} bài học</span>
+                  <span><BilingualText vi={`${totalLessons} bài học`} en={`${totalLessons} lessons`} /></span>
                   <span className="mx-1.5">•</span>
-                  <span>{formatDuration(totalDurationMinutes)} thời lượng</span>
+                  <span>{formatDuration(totalDurationMinutes)} <BilingualText vi="thời lượng" en="total duration" /></span>
                 </p>
               </div>
 
@@ -640,7 +653,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                   onClick={toggleAllModules}
                   className="self-start sm:self-center text-xs font-bold text-[#EA580C] hover:text-[#FF7A00] hover:underline transition-colors py-1.5 px-3 rounded-xl bg-[#FFF2D6]/70 hover:bg-[#FFF2D6] border border-[#FFCD00]/50 cursor-pointer shadow-2xs"
                 >
-                  {isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
+                  <BilingualText vi={isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'} en={isAllExpanded ? 'Collapse all' : 'Expand all'} />
                 </button>
               )}
             </div>
@@ -692,7 +705,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                               {isModuleFinished && (
                                 <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
                                   <CheckCircle2 size={11} />
-                                  Hoàn thành
+                                  <BilingualText vi="Hoàn thành" en="Completed" />
                                 </span>
                               )}
                             </div>
@@ -712,7 +725,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
                         <div className="flex items-center gap-3 text-xs text-[#64748B] shrink-0">
                           <span className="hidden sm:inline-block">
-                            {moduleLessons.length} bài học
+                            <BilingualText vi={`${moduleLessons.length} bài học`} en={`${moduleLessons.length} lessons`} />
                           </span>
                           <span className="hidden md:inline-block text-[#EA580C] font-medium">
                             • {formatDuration(moduleMinutes)}
@@ -764,7 +777,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                       }
                                     }}
                                     className="flex items-center justify-between p-3.5 rounded-xl bg-[#F9F8F6] border border-[#EAE2D7] text-xs sm:text-sm cursor-not-allowed select-none transition-all group opacity-85 hover:opacity-100"
-                                    title="Bài học đang bị khóa - Bấm để xem thông tin mở khóa"
+                                    title={bilingualLabel("Bài học đang bị khóa - Bấm để xem thông tin mở khóa", "Lesson locked - Click to view unlock info")}
                                   >
                                     <div className="flex items-center gap-3 min-w-0">
                                       <div className="w-7 h-7 rounded-lg bg-stone-100 text-stone-400 flex items-center justify-center shrink-0 border border-stone-200">
@@ -782,7 +795,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                           <span
                                             className={`hidden sm:inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold border ${typeInfo.badgeClass} opacity-60`}
                                           >
-                                            {typeInfo.labelVi}
+                                            <BilingualText vi={typeInfo.labelVi} en={typeInfo.labelEn} />
                                           </span>
                                         </div>
                                         {(lesson.descriptionVi || lesson.description || lesson.objectiveVi || lesson.objectiveEn) && (
@@ -799,11 +812,11 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                     <div className="flex items-center gap-2.5 text-[11px] text-stone-400 shrink-0 ml-2">
                                       <span className="inline-flex items-center gap-1">
                                         <Clock size={12} />
-                                        {lessonDuration} phút
+                                        {lessonDuration} <BilingualText vi="phút" en="mins" />
                                       </span>
                                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-stone-200 text-stone-600 font-bold text-[10px]">
                                         <Lock size={10} />
-                                        <span>Đã khóa</span>
+                                        <span><BilingualText vi="Đã khóa" en="Locked" /></span>
                                       </span>
                                     </div>
                                   </div>
@@ -848,7 +861,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                         <span
                                           className={`hidden sm:inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold border ${typeInfo.badgeClass}`}
                                         >
-                                          {typeInfo.labelVi}
+                                          <BilingualText vi={typeInfo.labelVi} en={typeInfo.labelEn} />
                                         </span>
                                       </div>
                                       {(lesson.descriptionVi || lesson.description || lesson.objectiveVi || lesson.objectiveEn) && (
@@ -865,21 +878,21 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                   <div className="flex items-center gap-2.5 text-[11px] text-[#64748B] shrink-0 ml-2">
                                     <span className="inline-flex items-center gap-1 font-medium">
                                       <Clock size={12} className="text-[#EA580C]" />
-                                      {lessonDuration} phút
+                                      {lessonDuration} <BilingualText vi="phút" en="mins" />
                                     </span>
 
                                     {lessonLockInfo.isCompleted ? (
                                       <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[10px]">
-                                        Đã học
+                                        <BilingualText vi="Đã học" en="Completed" />
                                       </span>
                                     ) : lessonLockInfo.isNext ? (
                                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#FF7A00] text-white font-extrabold text-[10px] shadow-xs">
                                         <Play size={10} fill="white" />
-                                        Học ngay
+                                        <BilingualText vi="Học ngay" en="Start now" />
                                       </span>
                                     ) : (
                                       <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-bold text-[10px]">
-                                        Vào bài
+                                        <BilingualText vi="Vào bài" en="Enter" />
                                       </span>
                                     )}
                                   </div>
@@ -916,10 +929,10 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-[#64748B] uppercase block">
-                    Số bài học
+                    <BilingualText vi="Số bài học" en="Total lessons" />
                   </span>
                   <span className="text-sm font-black text-[#253044]">
-                    {totalLessons} bài học
+                    <BilingualText vi={`${totalLessons} bài học`} en={`${totalLessons} lessons`} />
                   </span>
                 </div>
               </div>
@@ -930,7 +943,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-[#64748B] uppercase block">
-                    Thời lượng
+                    <BilingualText vi="Thời lượng" en="Duration" />
                   </span>
                   <span className="text-sm font-black text-[#253044]">
                     {formatDuration(totalDurationMinutes)}
@@ -945,7 +958,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 <div className="flex items-center justify-between text-xs font-bold text-emerald-900">
                   <span className="flex items-center gap-1.5">
                     <CheckCircle2 size={14} className="text-emerald-700" />
-                    <span>Tiến độ học tập</span>
+                    <span><BilingualText vi="Tiến độ học tập" en="Learning progress" /></span>
                   </span>
                   <span>{progressPercent}%</span>
                 </div>
@@ -956,7 +969,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                   />
                 </div>
                 <div className="text-[11px] text-emerald-800 font-medium">
-                  Đã hoàn thành {completedLessons}/{totalLessons} bài học
+                  <BilingualText vi={`Đã hoàn thành ${completedLessons}/${totalLessons} bài học`} en={`Completed ${completedLessons}/${totalLessons} lessons`} />
                 </div>
               </div>
             )}
@@ -969,13 +982,10 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                   className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all"
                 >
                   <Play size={16} fill="white" />
-                  <BilingualText>
-                    {isCompleted
-                      ? 'Xem lại khóa học →'
-                      : completedLessons > 0
-                      ? 'Tiếp tục học ngay →'
-                      : 'Bắt đầu học bài đầu tiên →'}
-                  </BilingualText>
+                  <BilingualText
+                    vi={isCompleted ? 'Xem lại khóa học →' : completedLessons > 0 ? 'Tiếp tục học ngay →' : 'Bắt đầu học bài đầu tiên →'}
+                    en={isCompleted ? 'Review course →' : completedLessons > 0 ? 'Continue learning now →' : 'Start first lesson →'}
+                  />
                 </Link>
               ) : (
                 <button
@@ -988,14 +998,15 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                   {enrollPending ? (
                     <>
                       <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Đang đăng ký…</span>
+                      <span><BilingualText vi="Đang đăng ký…" en="Enrolling…" /></span>
                     </>
                   ) : (
                     <>
                       <Play size={16} fill="currentColor" />
-                      <BilingualText>
-                        {course.isFree ? 'Đăng ký học miễn phí' : 'Đăng ký học ngay'}
-                      </BilingualText>
+                      <BilingualText
+                        vi={course.isFree ? 'Đăng ký học miễn phí' : 'Đăng ký học ngay'}
+                        en={course.isFree ? 'Enroll for free' : 'Enroll now'}
+                      />
                     </>
                   )}
                 </button>
@@ -1012,13 +1023,13 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
             {/* Danh sách quyền lợi và tiện ích đi kèm */}
             <div className="border-t border-[#E8E5DF]/40 pt-4 space-y-2.5 text-xs text-[#64748B]">
               <div className="flex items-center gap-2">
-                <span>Truy cập trọn đời trên máy tính & điện thoại</span>
+                <span><BilingualText vi="Truy cập trọn đời trên máy tính & điện thoại" en="Lifetime access on desktop & mobile" /></span>
               </div>
               <div className="flex items-center gap-2">
-                <span>Tương tác AI Tutor luyện nói & sửa phát âm 24/7</span>
+                <span><BilingualText vi="Tương tác AI Tutor luyện nói & sửa phát âm 24/7" en="24/7 AI Tutor speaking & pronunciation practice" /></span>
               </div>
               <div className="flex items-center gap-2">
-                <span>Cấp chứng nhận hoàn thành khóa học</span>
+                <span><BilingualText vi="Cấp chứng nhận hoàn thành khóa học" en="Certificate of completion awarded" /></span>
               </div>
             </div>
           </div>
@@ -1048,7 +1059,10 @@ export function CourseDetailPage() {
         </Link>
         <span>/</span>
         <span className="text-[#253044] truncate max-w-xs sm:max-w-md">
-          {resource.data?.course?.titleVi || resource.data?.course?.title || 'Chi tiết khóa học'}
+          <BilingualText
+            vi={resource.data?.course?.titleVi || resource.data?.course?.title || 'Chi tiết khóa học'}
+            en={resource.data?.course?.title || 'Course Details'}
+          />
         </span>
       </nav>
 

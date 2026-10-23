@@ -23,21 +23,21 @@ export function ResetPasswordPage() {
   const handleReset = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setStatus({ loading: false, message: '', error: 'Mật khẩu xác nhận không trùng khớp.' });
+      setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu xác nhận không trùng khớp.', 'Confirmation password does not match.') });
       return;
     }
     if (password.length < 6) {
-      setStatus({ loading: false, message: '', error: 'Mật khẩu phải từ 6 ký tự trở lên.' });
+      setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu phải từ 6 ký tự trở lên.', 'Password must be at least 6 characters.') });
       return;
     }
 
     setStatus({ loading: true, message: '', error: '' });
     try {
       const res = await learnerService.forgotPasswordReset(email, otp, password);
-      setStatus({ loading: false, message: res.message || 'Đặt lại mật khẩu thành công!', error: '' });
+      setStatus({ loading: false, message: res.message || bilingualLabel('Đặt lại mật khẩu thành công!', 'Password reset successfully!'), error: '' });
       setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
-      setStatus({ loading: false, message: '', error: err.message || 'Mã xác thực không hợp lệ.' });
+      setStatus({ loading: false, message: '', error: err.message || bilingualLabel('Mã xác thực không hợp lệ.', 'Invalid verification code.') });
     }
   };
 
@@ -118,8 +118,8 @@ export function ResetPasswordPage() {
                     type="button"
                     className="auth-show-btn"
                     onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                    title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    aria-label={showPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
+                    title={showPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -135,7 +135,7 @@ export function ResetPasswordPage() {
                     id="reset-direct-confirm"
                     className="auth-input auth-password-input"
                     type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder={bilingualLabel("Nhập lại mật khẩu")}
+                    placeholder={bilingualLabel("Nhập lại mật khẩu", "Re-enter password")}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
@@ -144,8 +144,8 @@ export function ResetPasswordPage() {
                     type="button"
                     className="auth-show-btn"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                    title={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    aria-label={showConfirmPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
+                    title={showConfirmPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
                   >
                     {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>

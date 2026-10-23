@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 ﻿import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
@@ -21,15 +22,15 @@ export function SituationalDrillsCard() {
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
           <span className="px-3 py-1 rounded-full bg-[#FFF0DC] text-[#EA580C] text-xs font-bold uppercase tracking-wider">
-            Tình huống thực tế • Situational Drills
+            <BilingualText vi="Tình huống thực tế • Situational Drills" en="Real-world Situational Drills" />
           </span>
           <span className="text-[11px] font-semibold text-[#64748B]">Interactive preview</span>
         </div>
         <h3 className="text-lg sm:text-xl font-black text-[#253044]">
-          Bước ra đường phố và giao tiếp tự tin
+          <BilingualText vi="Bước ra đường phố và giao tiếp tự tin" en="Step out and speak with confidence" />
         </h3>
         <p className="text-xs text-[#64748B]">
-          Bấm chọn từng tình huống để nghe câu giao tiếp chuẩn bản xứ:
+          <BilingualText vi="Bấm chọn từng tình huống để nghe câu giao tiếp chuẩn bản xứ:" en="Select a situation to hear native conversational phrases:" />
         </p>
       </div>
 
@@ -76,8 +77,8 @@ export function SituationalDrillsCard() {
             type="button"
             onClick={() => speakVietnamese(currentSituation.phraseVi)}
             className="!min-h-0 !min-w-0 !p-0 w-9 h-9 rounded-xl bg-[#EA580C] text-white flex items-center justify-center shadow-xs hover:bg-[#C2410C] transition-colors shrink-0 ml-2 cursor-pointer"
-            title="Nghe câu mẫu"
-            aria-label="Nghe câu mẫu"
+            title={bilingualLabel("Nghe câu mẫu", "Listen to sample sentence")}
+            aria-label={bilingualLabel("Nghe câu mẫu", "Listen to sample sentence")}
           >
             <Volume2 className="w-4 h-4 shrink-0" strokeWidth={2.2} />
           </button>
@@ -89,9 +90,9 @@ export function SituationalDrillsCard() {
       </div>
 
       <div className="flex items-center justify-between text-xs">
-        <span className="text-[#64748B]">Bao gồm đối thoại, trả giá và chỉ đường</span>
+        <span className="text-[#64748B]"><BilingualText vi="Bao gồm đối thoại, trả giá và chỉ đường" en="Includes dialogues, bargaining, and directions" /></span>
         <Link to="/courses" className="text-[#EA580C] font-bold hover:underline flex items-center gap-1">
-          <span>Xem tất cả khóa học</span>
+          <span><BilingualText vi="Xem tất cả khóa học" en="View all courses" /></span>
           <ArrowRight size={13} />
         </Link>
       </div>

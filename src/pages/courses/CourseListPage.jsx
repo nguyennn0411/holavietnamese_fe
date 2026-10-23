@@ -1,4 +1,4 @@
-﻿import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
@@ -34,13 +34,13 @@ export function CourseListPage() {
   const isPlacementRecommendation = searchParams.get('recommended') === '1' && level !== 'all';
 
   const levelOptions = [
-    { id: 'all', label: 'Tất cả trình độ', desc: 'Toàn bộ khóa học' },
-    { id: 'A0', label: 'A0 - Nhập môn', desc: 'Chữ cái & Thanh điệu' },
-    { id: 'A1', label: 'A1 - Cơ bản', desc: 'Chào hỏi & Giao tiếp nền tảng' },
-    { id: 'A2', label: 'A2 - Sơ cấp', desc: 'Đời sống & Mua sắm hàng ngày' },
-    { id: 'B1', label: 'B1 - Trung cấp', desc: 'Hội thoại mở rộng & Tự tin diễn đạt' },
-    { id: 'B2', label: 'B2 - Cao cấp', desc: 'Làm việc & Thảo luận chủ đề' },
-    { id: 'C1', label: 'C1 - Thành thạo', desc: 'Ngôn ngữ học thuật & Chuyên sâu' },
+    { id: 'all', label: 'Tất cả trình độ', labelEn: 'All levels', desc: 'Toàn bộ khóa học', descEn: 'All courses' },
+    { id: 'A0', label: 'A0 - Nhập môn', labelEn: 'A0 - Absolute Beginner', desc: 'Chữ cái & Thanh điệu', descEn: 'Alphabet & 6 Tones' },
+    { id: 'A1', label: 'A1 - Cơ bản', labelEn: 'A1 - Elementary', desc: 'Chào hỏi & Giao tiếp nền tảng', descEn: 'Greetings & Basic Communication' },
+    { id: 'A2', label: 'A2 - Sơ cấp', labelEn: 'A2 - Pre-Intermediate', desc: 'Đời sống & Mua sắm hàng ngày', descEn: 'Daily Life & Shopping' },
+    { id: 'B1', label: 'B1 - Trung cấp', labelEn: 'B1 - Intermediate', desc: 'Hội thoại mở rộng & Tự tin diễn đạt', descEn: 'Conversations & Self-Expression' },
+    { id: 'B2', label: 'B2 - Cao cấp', labelEn: 'B2 - Upper Intermediate', desc: 'Làm việc & Thảo luận chủ đề', descEn: 'Work & Thematic Discussions' },
+    { id: 'C1', label: 'C1 - Thành thạo', labelEn: 'C1 - Advanced', desc: 'Ngôn ngữ học thuật & Chuyên sâu', descEn: 'Academic & In-depth Fluency' },
   ];
 
   return (
@@ -88,11 +88,11 @@ export function CourseListPage() {
         <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/90 px-5 py-4 shadow-xs" role="status">
           <div className="flex items-start gap-3">
             <div>
-              <strong className="block text-sm text-emerald-950">Khóa học phù hợp với kết quả Entry Test</strong>
-              <span className="text-xs text-emerald-800">Kết quả của bạn phù hợp với trình độ {level}. Danh sách bên dưới đã được lọc tự động.</span>
+              <strong className="block text-sm text-emerald-950"><BilingualText vi="Khóa học phù hợp với kết quả Entry Test" en="Courses matching your Entry Test result" /></strong>
+              <span className="text-xs text-emerald-800"><BilingualText vi={`Kết quả của bạn phù hợp với trình độ ${level}. Danh sách bên dưới đã được lọc tự động.`} en={`Your result matches level ${level}. The list below has been filtered automatically.`} /></span>
             </div>
           </div>
-          <button type="button" className="inline-flex min-h-9 shrink-0 items-center justify-center rounded-xl border border-emerald-300 bg-white px-4 text-xs font-bold text-emerald-900 hover:bg-emerald-100" onClick={() => setLevel('all')}>Xem tất cả trình độ</button>
+          <button type="button" className="inline-flex min-h-9 shrink-0 items-center justify-center rounded-xl border border-emerald-300 bg-white px-4 text-xs font-bold text-emerald-900 hover:bg-emerald-100" onClick={() => setLevel('all')}><BilingualText vi="Xem tất cả trình độ" en="View all levels" /></button>
         </section>
       )}
 
@@ -107,15 +107,15 @@ export function CourseListPage() {
           </span>
           <div>
             <strong className="block text-sm sm:text-base font-black text-[#EA580C] group-hover:text-[#FF7A00] transition-colors">
-              Bảng chữ cái tiếng Việt & 6 Thanh điệu →
+              <BilingualText vi="Bảng chữ cái tiếng Việt & 6 Thanh điệu →" en="Vietnamese Alphabet & 6 Tones →" />
             </strong>
             <span className="text-xs text-[#64748B] font-medium">
-              29 chữ cái, ghép âm, thanh điệu đặc trưng · Tích hợp phát âm chuẩn giọng Bắc - Nam
+              <BilingualText vi="29 chữ cái, ghép âm, thanh điệu đặc trưng · Tích hợp phát âm chuẩn giọng Bắc - Nam" en="29 letters, syllable combinations, tones · Northern & Southern standard pronunciation" />
             </span>
           </div>
         </div>
         <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-black text-[#FF7A00] group-hover:translate-x-1 transition-transform">
-          Học phát âm ngay →
+          <BilingualText vi="Học phát âm ngay →" en="Learn pronunciation now →" />
         </span>
       </Link>
 
@@ -149,11 +149,11 @@ export function CourseListPage() {
           });
 
           const statusOptions = [
-            { id: 'all', label: 'Tất cả trạng thái', count: statusCounts.all },
-            { id: 'in_progress', label: 'Đang học', count: statusCounts.in_progress },
-            { id: 'enrolled', label: 'Đã đăng ký', count: statusCounts.enrolled },
-            { id: 'completed', label: 'Đã hoàn thành', count: statusCounts.completed },
-            { id: 'not_enrolled', label: 'Chưa đăng ký', count: statusCounts.not_enrolled },
+            { id: 'all', label: 'Tất cả trạng thái', labelEn: 'All statuses', count: statusCounts.all },
+            { id: 'in_progress', label: 'Đang học', labelEn: 'In Progress', count: statusCounts.in_progress },
+            { id: 'enrolled', label: 'Đã đăng ký', labelEn: 'Enrolled', count: statusCounts.enrolled },
+            { id: 'completed', label: 'Đã hoàn thành', labelEn: 'Completed', count: statusCounts.completed },
+            { id: 'not_enrolled', label: 'Chưa đăng ký', labelEn: 'Not Enrolled', count: statusCounts.not_enrolled },
           ];
 
           // Lọc danh sách khóa học
@@ -201,7 +201,7 @@ export function CourseListPage() {
                     />
                     <input
                       type="text"
-                      aria-label="Tìm khóa học"
+                      aria-label={bilingualLabel("Tìm khóa học", "Search courses")}
                       placeholder={bilingualLabel("Tìm khóa học theo tên hoặc nội dung…")}
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
@@ -212,7 +212,7 @@ export function CourseListPage() {
                         type="button"
                         onClick={() => setSearch('')}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#253044] p-1 cursor-pointer"
-                        aria-label="Xóa tìm kiếm"
+                        aria-label={bilingualLabel("Xóa tìm kiếm", "Clear search")}
                       >
                         <X size={15} />
                       </button>
@@ -230,7 +230,7 @@ export function CourseListPage() {
                 <div
                   className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-[#E8E5DF]/40"
                   role="tablist"
-                  aria-label="Trạng thái học tập"
+                  aria-label={bilingualLabel("Trạng thái học tập", "Learning status")}
                 >
                   {statusOptions.map((opt) => {
                     const isActive = statusFilter === opt.id;
@@ -247,7 +247,7 @@ export function CourseListPage() {
                             : 'text-[#64748B] hover:text-[#253044] hover:bg-[#F7F0E3]/70'
                         }`}
                       >
-                        <span>{opt.label}</span>
+                        <BilingualText vi={opt.label} en={opt.labelEn} />
                         <span
                           className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
                             isActive
@@ -266,7 +266,7 @@ export function CourseListPage() {
                 <div
                   className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-none"
                   role="tablist"
-                  aria-label="Trình độ khóa học"
+                  aria-label={bilingualLabel("Trình độ khóa học", "Course level")}
                 >
                   {levelOptions.map((opt) => {
                     const isActive = level === opt.id;
@@ -292,7 +292,7 @@ export function CourseListPage() {
                             }`}
                           />
                         )}
-                        <span>{opt.label}</span>
+                        <BilingualText vi={opt.label} en={opt.labelEn} />
                       </button>
                     );
                   })}
@@ -312,7 +312,7 @@ export function CourseListPage() {
                       <BilingualText>{"Tiếp nối hành trình học tập"}</BilingualText>
                     </span>
                     <h2 className="text-xl sm:text-2xl font-black text-white m-0">
-                      {enrolled[0].course.title}
+                      <BilingualText vi={enrolled[0].course.titleVi || enrolled[0].course.title} en={enrolled[0].course.title} />
                     </h2>
                     <p className="text-xs text-[#D5DDCB] m-0">
                       <BilingualText>
@@ -355,11 +355,11 @@ export function CourseListPage() {
               ) : (
                 <div className="space-y-4">
                   <EmptyState
-                    title={items.length ? 'Không tìm thấy khóa học phù hợp' : 'Các khóa học sẽ sớm có mặt'}
+                    title={items.length ? bilingualLabel('Không tìm thấy khóa học phù hợp', 'No matching courses found') : bilingualLabel('Các khóa học sẽ sớm có mặt', 'Courses coming soon')}
                     description={
                       items.length
-                        ? 'Thử thay đổi từ khóa tìm kiếm hoặc điều chỉnh bộ lọc trình độ / trạng thái.'
-                        : 'Hãy quay lại sau để đón đọc những bài học mới nhất.'
+                        ? bilingualLabel('Thử thay đổi từ khóa tìm kiếm hoặc điều chỉnh bộ lọc trình độ / trạng thái.', 'Try changing your search keywords or adjusting level / status filters.')
+                        : bilingualLabel('Hãy quay lại sau để đón đọc những bài học mới nhất.', 'Please check back later for the latest lessons.')
                     }
                   />
                   {(search || level !== 'all' || statusFilter !== 'all') && (

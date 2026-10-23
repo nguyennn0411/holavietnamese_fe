@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { learnerService } from '@/services/learnerService';
 import { Trophy } from 'lucide-react';
@@ -19,7 +19,7 @@ export function AchievementsPage() {
       })
       .catch((err) => {
         if (!active) return;
-        setError(err.message || 'Không thể tải thành tích.');
+        setError(err.message || bilingualLabel('Không thể tải thành tích.', 'Unable to load achievements.'));
         setLoading(false);
       });
     return () => { active = false; };
@@ -52,17 +52,19 @@ export function AchievementsPage() {
       {/* Overview Banner */}
       <div className="achieve-banner">
         <div>
-          <span className="achieve-banner-subtitle"><BilingualText>{"BỘ SƯU TẬP DANH HIỆU"}</BilingualText></span>
-          <h2 className="achieve-banner-title"><BilingualText>{"Đã mở khóa"}</BilingualText>{unlockedCount} / {data.badges.length}<BilingualText>{"huy hiệu"}</BilingualText></h2>
+          <span className="achieve-banner-subtitle"><BilingualText vi="BỘ SƯU TẬP DANH HIỆU" en="ACHIEVEMENT COLLECTION" /></span>
+          <h2 className="achieve-banner-title">
+            <BilingualText vi={`Đã mở khóa ${unlockedCount} / ${data.badges.length} huy hiệu`} en={`Unlocked ${unlockedCount} / ${data.badges.length} badges`} />
+          </h2>
         </div>
         <Trophy size={40} className="text-[#FF7A00]" />
       </div>
 
       {/* Badges Grid */}
-      <h3 className="achieve-section-title"><BilingualText>{"Huy hiệu học tập"}</BilingualText></h3>
+      <h3 className="achieve-section-title"><BilingualText vi="Huy hiệu học tập" en="Learning Badges" /></h3>
       <div className="achieve-badge-grid">
         {data.badges.length === 0 ? (
-          <div className="account-empty"><BilingualText>{"Chưa có huy hiệu nào trong hệ thống."}</BilingualText></div>
+          <div className="account-empty"><BilingualText vi="Chưa có huy hiệu nào trong hệ thống." en="No badges available in the system." /></div>
         ) : (
           data.badges.map((badge) => (
             <div
@@ -70,7 +72,7 @@ export function AchievementsPage() {
               className={`achieve-badge-card ${badge.unlocked ? 'unlocked' : 'locked'}`}
             >
               <div className="achieve-badge-icon">
-                {badge.unlocked ? 'ĐẠT' : 'CHƯA'}
+                {badge.unlocked ? <BilingualText vi="ĐẠT" en="EARNED" /> : <BilingualText vi="CHƯA" en="LOCKED" />}
               </div>
               <div className="achieve-badge-info">
                 <strong>{badge.name || badge.title}</strong>

@@ -127,7 +127,7 @@ const learnerEn = {
       conversation: { eyebrow: 'Vietnamese for real life', title: 'Speak Vietnamese With Confidence.', description: "From ordering coffee to meeting new friends, practice conversations you'll actually use.", action: 'Start Practicing', imageAlt: 'People sharing a meal and conversation in Hanoi' },
       culture: { eyebrow: 'Taste, traditions, stories', title: 'More Than a Language. A Whole Culture.', description: 'Discover Vietnamese food, traditions, and everyday expressions as you learn.', action: 'Explore Lessons', imageAlt: 'A table filled with traditional Vietnamese dishes' },
     },
-    modules: { vocabulary: 'Vocabulary', vocabularyText: 'Review saved words and build recall.', listening: 'Listening', listeningText: 'Train your ear with course audio.', pronunciation: 'Pronunciation', pronunciationText: 'Master Vietnamese letters and sounds.', practice: 'AI speaking practice', practiceText: 'Build confidence in guided conversations.' },
+    modules: { roadmap: 'Learning roadmap', roadmapText: 'Step-by-step interactive lesson map.', courses: 'Courses', coursesText: 'Diverse course catalog organized by topic.', vocabulary: 'Vocabulary', vocabularyText: 'Review saved words and build recall.', listening: 'Listening', listeningText: 'Train your ear with course audio.', pronunciation: 'Pronunciation', pronunciationText: 'Master Vietnamese letters and sounds.', practice: 'AI speaking practice', practiceText: 'Build confidence in guided conversations.' },
   },
 };
 
@@ -160,7 +160,7 @@ const learnerVi = {
       conversation: { eyebrow: 'Tiếng Việt trong đời sống', title: 'Tự tin giao tiếp tiếng Việt.', description: 'Từ gọi cà phê đến làm quen bạn mới, hãy luyện tập những cuộc hội thoại thực tế.', action: 'Bắt đầu luyện tập', imageAlt: 'Mọi người dùng bữa và trò chuyện tại Hà Nội' },
       culture: { eyebrow: 'Ẩm thực, truyền thống, câu chuyện', title: 'Không chỉ là ngôn ngữ, mà còn là văn hóa.', description: 'Khám phá ẩm thực, truyền thống và những cách diễn đạt thú vị trong đời sống Việt Nam.', action: 'Khám phá bài học', imageAlt: 'Bàn ăn với các món Việt Nam truyền thống' },
     },
-    modules: { vocabulary: 'Từ vựng', vocabularyText: 'Ôn từ đã lưu và tăng khả năng ghi nhớ.', listening: 'Luyện nghe', listeningText: 'Luyện tai qua nội dung âm thanh trong khóa học.', pronunciation: 'Phát âm', pronunciationText: 'Làm chủ chữ cái và âm tiếng Việt.', practice: 'Luyện nói với AI', practiceText: 'Tự tin hơn qua hội thoại có hướng dẫn.' },
+    modules: { roadmap: 'Lộ trình học', roadmapText: 'Bản đồ bài học tương tác từng bước.', courses: 'Khóa học', coursesText: 'Danh mục khóa học đa dạng theo chủ đề.', vocabulary: 'Từ vựng', vocabularyText: 'Ôn từ đã lưu và tăng khả năng ghi nhớ.', listening: 'Luyện nghe', listeningText: 'Luyện tai qua nội dung âm thanh trong khóa học.', pronunciation: 'Phát âm', pronunciationText: 'Làm chủ chữ cái và âm tiếng Việt.', practice: 'Luyện nói với AI', practiceText: 'Tự tin hơn qua hội thoại có hướng dẫn.' },
   },
 };
 

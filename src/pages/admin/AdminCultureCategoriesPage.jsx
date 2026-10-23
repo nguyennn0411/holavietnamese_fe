@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -41,7 +41,11 @@ export function AdminCultureCategoriesPage() {
   };
 
   const handleDelete = async (id, name) => {
-    if (await confirm({ title: 'Xóa danh mục văn hóa?', description: `Danh mục “${name}” sẽ bị xóa khỏi hệ thống.`, confirmLabel: 'Xóa danh mục' })) {
+    if (await confirm({
+      title: bilingualLabel('Xóa danh mục văn hóa?', 'Delete cultural category?'),
+      description: bilingualLabel(`Danh mục “${name}” sẽ bị xóa khỏi hệ thống.`, `Category “${name}” will be removed from the system.`),
+      confirmLabel: bilingualLabel('Xóa danh mục', 'Delete category'),
+    })) {
       const remaining = adminCultureAiService.deleteCategory(id);
       setCategories(remaining);
       showToast('Đã xóa danh mục.');
@@ -97,7 +101,7 @@ export function AdminCultureCategoriesPage() {
                       disabled={idx === 0}
                       onClick={() => handleMove(idx, -1)}
                       style={{ padding: '2px 6px', fontSize: '11px', background: 'transparent', border: 'none', cursor: idx === 0 ? 'default' : 'pointer', color: 'var(--color-ink)' }}
-                      title="Chuyển lên trên"
+                      title={bilingualLabel("Chuyển lên trên", "Move up")}
                     >
                       ▲
                     </button>
@@ -107,7 +111,7 @@ export function AdminCultureCategoriesPage() {
                       disabled={idx === categories.length - 1}
                       onClick={() => handleMove(idx, 1)}
                       style={{ padding: '2px 6px', fontSize: '11px', background: 'transparent', border: 'none', cursor: idx === categories.length - 1 ? 'default' : 'pointer', color: 'var(--color-ink)' }}
-                      title="Chuyển xuống dưới"
+                      title={bilingualLabel("Chuyển xuống dưới", "Move down")}
                     >
                       ▼
                     </button>
@@ -156,7 +160,7 @@ export function AdminCultureCategoriesPage() {
 
       {/* Edit / Create Modal */}
       {editingCategory && (
-        <Modal title={editingCategory.id ? "Chỉnh sửa danh mục" : "Thêm danh mục văn hóa"} onClose={()=>setEditingCategory(null)}>
+        <Modal title={editingCategory.id ? bilingualLabel("Chỉnh sửa danh mục", "Edit Category") : bilingualLabel("Thêm danh mục văn hóa", "Add Cultural Category")} onClose={()=>setEditingCategory(null)}>
 <form onSubmit={handleSave}>
               <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr', gap: '12px' }}>
                 <label><BilingualText>{"Biểu tượng:"}</BilingualText><input

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Search, Volume2, Bookmark, BookmarkCheck, Filter, Keyboard, ArrowLeftRight, Home } from 'lucide-react';
@@ -7,6 +7,18 @@ import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { DiacriticKeyboardBar } from '@/components/edtech/ui/DiacriticKeyboardBar';
 import { MinimalPairsComparator } from '@/components/edtech/ui/MinimalPairsComparator';
 import { audioFeedback } from '@/utils/audioFeedback';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { vocabularyCatalogService } from '@/services/vocabularyCatalogService';
+
+function detectVietnameseTone(word: string): VietnameseTone {
+  const normalized = (word || '').toLowerCase();
+  if (/[áắấéếíóốớúứý]/.test(normalized)) return 'SAC';
+  if (/[àằầèềìòồờùừỳ]/.test(normalized)) return 'HUYEN';
+  if (/[ảẳẩẻểỉỏổởủửỷ]/.test(normalized)) return 'HOI';
+  if (/[ãẵẫẽễĩõỗỡũữỹ]/.test(normalized)) return 'NGA';
+  if (/[ạặậẹệịọộợụựỵ]/.test(normalized)) return 'NANG';
+  return 'NGANG';
+}
 
 const MOCK_VOCABULARY: VocabularyItemDTO[] = [
   {
@@ -104,6 +116,38 @@ export const VocabularyHubScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'VOCAB' | 'MINIMAL_PAIRS'>('VOCAB');
   const [showKeyboardBar, setShowKeyboardBar] = useState(false);
 
+  useEffect(() => {
+    let active = true;
+    vocabularyCatalogService.list({ size: 150 })
+      .then((res: any) => {
+        if (!active) return;
+        const rawItems = Array.isArray(res) ? res : Array.isArray(res?.content) ? res.content : Array.isArray(res?.result) ? res.result : [];
+        if (rawItems.length > 0) {
+          const mapped: VocabularyItemDTO[] = rawItems.map((item: any) => {
+            const meaning = item.meanings?.[0];
+            const example = meaning?.examples?.[0];
+            return {
+              id: String(item.id),
+              word: item.word || '',
+              ipa: item.pronunciation || '',
+              tone: detectVietnameseTone(item.word || ''),
+              partOfSpeech: item.partOfSpeech || 'Từ vựng',
+              englishMeaning: meaning?.translationEn || meaning?.definitionEn || item.meaning || '',
+              topic: item.topic || 'Từ vựng trọng tâm',
+              cefrLevel: item.cefrLevel || 'A1',
+              exampleVi: example?.exampleVi || '',
+              exampleEn: example?.translationEn || '',
+              bookmarked: false,
+              masteryPercentage: 0,
+            };
+          });
+          setVocabList(mapped);
+        }
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
+
   const handleToggleBookmark = (id: string) => {
     audioFeedback.playPopSound(1.3);
     setVocabList((prev) =>
@@ -138,18 +182,18 @@ export const VocabularyHubScreen: React.FC = () => {
             className="flex items-center gap-1.5 text-[#431914] hover:text-[#EA580C] transition-colors px-2.5 py-1.5 rounded-xl hover:bg-[#FFF9EE]"
           >
             <Home className="w-3.5 h-3.5" />
-            <span>Trang chủ</span>
+            <span><BilingualText vi="Trang chủ" en="Home" /></span>
           </Link>
           <span className="text-slate-300">/</span>
           <Link
             to="/edtech/dashboard"
             className="flex items-center gap-1.5 text-[#431914] hover:text-[#EA580C] transition-colors px-2.5 py-1.5 rounded-xl hover:bg-[#FFF9EE]"
           >
-            <span>Lộ trình học</span>
+            <span><BilingualText vi="Lộ trình học" en="Learning Roadmap" /></span>
           </Link>
           <span className="text-slate-300">/</span>
           <span className="text-[#EA580C] bg-[#FFF4EB] px-3 py-1 rounded-xl border border-[#E7B59D] font-bold">
-            Kho Từ Vựng & 6 Thanh Điệu
+            <BilingualText vi="Kho Từ Vựng & 6 Thanh Điệu" en="Vocabulary Hub & 6 Tones" />
           </span>
         </div>
 
@@ -164,7 +208,7 @@ export const VocabularyHubScreen: React.FC = () => {
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Từ vựng ({vocabList.length})
+            <BilingualText vi="Từ vựng" en="Vocabulary" /> ({vocabList.length})
           </button>
           <button
             type="button"
@@ -176,7 +220,7 @@ export const VocabularyHubScreen: React.FC = () => {
             }`}
           >
             <ArrowLeftRight className="w-3.5 h-3.5 text-purple-600" />
-            <span>Cặp dấu đối chiếu</span>
+            <span><BilingualText vi="Cặp dấu đối chiếu" en="Minimal Pairs" /></span>
           </button>
         </div>
       </div>
@@ -187,13 +231,16 @@ export const VocabularyHubScreen: React.FC = () => {
           <div>
             <div className="text-center max-w-xl mx-auto mb-8">
               <span className="text-xs font-bold uppercase tracking-widest text-purple-700 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">
-                Luyện tai người bản ngữ • Ear Training
+                <BilingualText vi="Luyện tai người bản ngữ" en="Ear Training" />
               </span>
               <h2 className="text-2xl md:text-3xl font-black text-slate-900 mt-2">
-                Phân Biệt Các Cặp Dấu Dễ Nhầm
+                <BilingualText vi="Phân Biệt Các Cặp Dấu Dễ Nhầm" en="Distinguish Confusing Tone Pairs" />
               </h2>
               <p className="text-sm text-slate-500 mt-1">
-                Người học tiếng Việt thường nhầm lẫn giữa Hỏi/Ngã hoặc Huyền/Nặng. Hãy nghe và đối chiếu biểu đồ cao độ để làm chủ từng thanh âm!
+                <BilingualText
+                  vi="Người học tiếng Việt thường nhầm lẫn giữa Hỏi/Ngã hoặc Huyền/Nặng. Hãy nghe và đối chiếu biểu đồ cao độ để làm chủ từng thanh âm!"
+                  en="Learners often confuse Hỏi/Ngã or Huyền/Nặng. Listen and compare pitch contours to master each tone!"
+                />
               </p>
             </div>
 
@@ -211,7 +258,7 @@ export const VocabularyHubScreen: React.FC = () => {
                     <input
                       ref={searchInputRef}
                       type="text"
-                      placeholder="Tìm từ vựng, gõ tiếng Việt..."
+                      placeholder={bilingualLabel("Tìm từ vựng, gõ tiếng Việt...", "Search vocabulary, type Vietnamese...")}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all vn-diacritic-safe"
@@ -227,8 +274,8 @@ export const VocabularyHubScreen: React.FC = () => {
                         ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
                         : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                     }`}
-                    title="Bật bàn phím gõ dấu ảo"
-                    aria-label="Bật bàn phím gõ dấu ảo"
+                    title={bilingualLabel("Bật bàn phím gõ dấu ảo", "Toggle virtual diacritic keyboard")}
+                    aria-label={bilingualLabel("Bật bàn phím gõ dấu ảo", "Toggle virtual diacritic keyboard")}
                   >
                     <Keyboard className="w-4 h-4" />
                   </button>
@@ -237,7 +284,7 @@ export const VocabularyHubScreen: React.FC = () => {
                 {/* Tone Filter Buttons */}
                 <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
                   <span className="text-xs font-bold text-slate-400 mr-1 flex items-center gap-1 shrink-0">
-                    <Filter className="w-3.5 h-3.5" /> Thanh:
+                    <Filter className="w-3.5 h-3.5" /> <BilingualText vi="Thanh:" en="Tone:" />
                   </span>
                   <button
                     type="button"
@@ -248,7 +295,7 @@ export const VocabularyHubScreen: React.FC = () => {
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
-                    Tất cả
+                    <BilingualText vi="Tất cả" en="All" />
                   </button>
                   {Object.keys(VIETNAMESE_TONES).map((toneKey) => {
                     const tone = VIETNAMESE_TONES[toneKey];
@@ -319,7 +366,7 @@ export const VocabularyHubScreen: React.FC = () => {
                       type="button"
                       onClick={() => handleToggleBookmark(item.id)}
                       className="text-slate-400 hover:text-amber-500 transition-colors p-1"
-                      aria-label="Lưu từ vựng"
+                      aria-label={bilingualLabel("Lưu từ vựng", "Bookmark word")}
                     >
                       {item.bookmarked ? (
                         <BookmarkCheck className="w-5 h-5 text-amber-500 fill-amber-400" />
@@ -339,7 +386,7 @@ export const VocabularyHubScreen: React.FC = () => {
                       type="button"
                       onClick={() => handleSpeak(item.word)}
                       className="!min-h-0 !min-w-0 !p-0 !border-0 w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 flex items-center justify-center transition-colors active:scale-95 shrink-0 cursor-pointer audio-btn"
-                      aria-label={`Phát âm ${item.word}`}
+                      aria-label={bilingualLabel(`Phát âm ${item.word}`, `Pronounce ${item.word}`)}
                     >
                       <Volume2 className="w-4 h-4 shrink-0" strokeWidth={2.2} />
                     </button>
@@ -351,7 +398,7 @@ export const VocabularyHubScreen: React.FC = () => {
                       {item.ipa}
                     </span>
                     <span className="text-[11px] font-medium text-slate-400">
-                      {item.partOfSpeech}
+                      <BilingualText vi={item.partOfSpeech} />
                     </span>
                   </div>
 
@@ -373,7 +420,7 @@ export const VocabularyHubScreen: React.FC = () => {
 
                 {/* Footer Topic Badge */}
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                  <span>Chủ đề: {item.topic}</span>
+                  <span><BilingualText vi="Chủ đề:" en="Topic:" /> {bilingualLabel(item.topic)}</span>
                   <span className="text-emerald-600 font-bold">{item.cefrLevel}</span>
                 </div>
               </motion.div>
@@ -384,7 +431,7 @@ export const VocabularyHubScreen: React.FC = () => {
         {filteredList.length === 0 && (
           <div className="text-center py-16 bg-white rounded-3xl border border-slate-200">
             <p className="text-slate-400 font-bold text-base">
-              Không tìm thấy từ vựng phù hợp với bộ lọc.
+              <BilingualText vi="Không tìm thấy từ vựng phù hợp với bộ lọc." en="No vocabulary matches your filter." />
             </p>
           </div>
         )}

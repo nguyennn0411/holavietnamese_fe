@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Volume2 } from 'lucide-react';
 import { speakVietnamese } from '@/utils/speech';
 import { QUICK_SRS_WORDS } from '@/components/home/data/homeData';
@@ -21,10 +22,10 @@ export function VocabularyGardenSRS({
           </span>
           <div>
             <h3 className="text-sm sm:text-base font-black text-[#253044]">
-              Vườn từ vựng • 2-Minute Memory Warm-up
+              <BilingualText vi="Vườn từ vựng • Khởi động trí nhớ 2 phút" en="Vocabulary Garden • 2-Minute Memory Warm-up" />
             </h3>
             <p className="text-[11px] text-[#64748B]">
-              Thuật toán nhắc lại ngắt quãng (SRS): 3 từ vựng này sắp rơi khỏi trí nhớ của bạn!
+              <BilingualText vi="Thuật toán nhắc lại ngắt quãng (SRS): 3 từ vựng này sắp rơi khỏi trí nhớ của bạn!" en="Spaced Repetition (SRS): These 3 words are about to fade from memory!" />
             </p>
           </div>
         </div>
@@ -33,7 +34,7 @@ export function VocabularyGardenSRS({
           onClick={onWaterAll}
           className="px-4 py-2 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF0DC] border border-[#E8E5DF] text-[#EA580C] font-bold text-xs shrink-0 transition-colors cursor-pointer"
         >
-          Tưới nước tất cả (+15 XP) →
+          <BilingualText vi="Tưới nước tất cả (+15 XP) →" en="Water all (+15 XP) →" />
         </button>
       </div>
 
@@ -60,8 +61,8 @@ export function VocabularyGardenSRS({
                   type="button"
                   onClick={() => speakVietnamese(item.vi)}
                   className="!min-h-0 !min-w-0 !p-0 w-8 h-8 rounded-lg bg-white border border-[#E8E5DF] hover:bg-[#EA580C] text-[#EA580C] hover:text-white flex items-center justify-center transition-all shadow-2xs shrink-0 cursor-pointer group/audio audio-btn"
-                  title={`Phát âm "${item.vi}"`}
-                  aria-label={`Phát âm ${item.vi}`}
+                  title={bilingualLabel(`Phát âm "${item.vi}"`, `Pronounce "${item.vi}"`)}
+                  aria-label={bilingualLabel(`Phát âm ${item.vi}`, `Pronounce ${item.vi}`)}
                 >
                   <Volume2 className="w-4 h-4 shrink-0 transition-transform group-hover/audio:scale-110" strokeWidth={2.2} />
                 </button>
@@ -78,7 +79,7 @@ export function VocabularyGardenSRS({
                       : 'bg-[#FFF0DC] text-[#EA580C] hover:bg-[#EA580C] hover:text-white'
                   }`}
                 >
-                  {isWatered ? '✓ Đã thuộc' : '+5 XP'}
+                  {isWatered ? <BilingualText vi="✓ Đã thuộc" en="✓ Mastered" /> : '+5 XP'}
                 </button>
               </div>
             </div>

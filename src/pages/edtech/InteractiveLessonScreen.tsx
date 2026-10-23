@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LessonResponse, QuestionDTO, VietnameseTone, WordBankToken } from '@/types/edtech';
 import { LessonHeader } from '@/components/edtech/lesson/LessonHeader';
 import { BottomActionBar, FeedbackState } from '@/components/edtech/lesson/BottomActionBar';
@@ -12,6 +12,8 @@ import { MinimalPairsComparator, COMMON_MINIMAL_PAIRS } from '@/components/edtec
 import { LessonCompleteModal } from '@/components/edtech/lesson/LessonCompleteModal';
 import { audioFeedback } from '@/utils/audioFeedback';
 import { learnerService } from '@/services/learnerService';
+import { learningService } from '@/services/learningService';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 
 // High-fidelity Mock Lesson matching Spring Boot DTO contract
 export const MOCK_LESSON: LessonResponse = {
@@ -117,9 +119,89 @@ export const MOCK_LESSON: LessonResponse = {
 
 export const InteractiveLessonScreen: React.FC = () => {
   const navigate = useNavigate();
+  const { lessonId } = useParams<{ lessonId?: string }>();
 
   // Lesson State
-  const [lesson] = useState<LessonResponse>(MOCK_LESSON);
+  const [lesson, setLesson] = useState<LessonResponse>(MOCK_LESSON);
+
+  useEffect(() => {
+    if (!lessonId) return;
+    let active = true;
+    learningService.lesson(lessonId)
+      .then((res: any) => {
+        if (!active || !res) return;
+        const activities = Array.isArray(res.activities) ? res.activities : [];
+        const generatedQuestions: QuestionDTO[] = [];
+        let order = 0;
+
+        // Find VOCABULARY activity
+        const vocabAct = activities.find((a: any) => a.activityType === 'VOCABULARY');
+        if (vocabAct?.contentJson?.items && Array.isArray(vocabAct.contentJson.items)) {
+          vocabAct.contentJson.items.slice(0, 3).forEach((item: any) => {
+            generatedQuestions.push({
+              id: `q-vocab-${item.wordVi || order}`,
+              orderIndex: order++,
+              type: 'FLASHCARD',
+              prompt: 'Học từ vựng mới',
+              xpValue: 15,
+              data: {
+                vietnameseWord: item.wordVi || '',
+                ipa: item.pronunciation || '',
+                englishMeaning: item.meaningEn || '',
+                partOfSpeech: item.wordType || 'Từ vựng',
+                tone: 'NGANG',
+                exampleSentenceVi: item.exampleVi || '',
+                exampleSentenceEn: item.exampleEn || '',
+                notesForForeigners: 'Ghi nhớ cách phát âm và ý nghĩa của từ vựng.',
+              },
+            });
+          });
+        }
+
+        // Find DIALOGUE activity
+        const dialAct = activities.find((a: any) => a.activityType === 'DIALOGUE');
+        if (dialAct?.contentJson?.lines && Array.isArray(dialAct.contentJson.lines) && dialAct.contentJson.lines.length > 0) {
+          const line = dialAct.contentJson.lines[0];
+          const words = (line.textVi || '').split(/\s+/).filter(Boolean);
+          if (words.length > 1) {
+            generatedQuestions.push({
+              id: `q-dialogue-${order}`,
+              orderIndex: order++,
+              type: 'WORD_BANK',
+              prompt: 'Dịch câu sang tiếng Việt',
+              xpValue: 20,
+              data: {
+                promptEn: line.textEn || '',
+                sentenceViTarget: words,
+                translationEn: line.textEn || '',
+                grammarNote: 'Sắp xếp các từ theo đúng ngữ pháp tiếng Việt.',
+                tokens: [...words, 'rất', 'không'].map((text, i) => ({ id: `token-${i}`, text })),
+              },
+            });
+          }
+        }
+
+        if (generatedQuestions.length < 5) {
+          generatedQuestions.push(MOCK_LESSON.questions[3]);
+          generatedQuestions.push(MOCK_LESSON.questions[4]);
+        }
+
+        setLesson({
+          id: String(res.id),
+          unitId: String(res.unitId || res.moduleId || 'unit-1'),
+          unitTitle: res.moduleTitleVi || res.moduleTitle || 'Bài học thực hành',
+          unitNumber: Number(res.unitSortOrder || res.lessonOrder || 1),
+          title: res.title || 'Bài học tương tác',
+          titleVi: res.titleVi || res.title || 'Bài học tương tác',
+          description: res.descriptionVi || res.description || '',
+          cefrLevel: 'A1',
+          totalQuestions: generatedQuestions.length,
+          questions: generatedQuestions,
+        });
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, [lessonId]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hearts, setHearts] = useState<number>(() => {
     try {
@@ -471,13 +553,22 @@ export const InteractiveLessonScreen: React.FC = () => {
                 <div className="w-full flex flex-col items-center">
                   <div className="w-full max-w-3xl text-left mb-5">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200">
-                      Thử thách đối chiếu thanh điệu • Tone Contrast Challenge
+                      <BilingualText
+                        vi="Thử thách đối chiếu thanh điệu"
+                        en="Tone Contrast Challenge"
+                      />
                     </span>
                     <h2 className="text-xl md:text-2xl font-black text-slate-800 mt-2">
-                      Nghe và bấm chọn: Bạn đang nghe thấy Lựa chọn A hay Lựa chọn B?
+                      <BilingualText
+                        vi="Nghe và bấm chọn: Bạn đang nghe thấy Lựa chọn A hay Lựa chọn B?"
+                        en="Listen and choose: Are you hearing Option A or Option B?"
+                      />
                     </h2>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      Bấm nút loa từng bên để đối chiếu biểu đồ cao độ trước khi chọn.
+                      <BilingualText
+                        vi="Bấm nút loa từng bên để đối chiếu biểu đồ cao độ trước khi chọn."
+                        en="Click speaker buttons to compare pitch contours before selecting."
+                      />
                     </p>
                   </div>
 

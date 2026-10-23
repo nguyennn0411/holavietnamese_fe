@@ -172,7 +172,7 @@ export const DEFAULT_LEAGUE_LEADERBOARD = [
   { rank: 1, name: 'Alex M.', code: 'US', xp: 520, badge: '🥇', isUser: false },
   { rank: 2, name: 'Sarah K.', code: 'UK', xp: 485, badge: '🥈', isUser: false },
   { rank: 3, name: 'Kenji T.', code: 'JP', xp: 440, badge: '🥉', isUser: false },
-  { rank: 4, name: 'Bạn', code: 'VN', xp: 380, badge: '⭐', isUser: true },
+  { rank: 4, name: 'Bạn', nameEn: 'You', code: 'VN', xp: 380, badge: '⭐', isUser: true },
 ];
 
 /**
@@ -192,5 +192,11 @@ export const WORD_OF_THE_DAY = {
   speechText: 'Dạ. Dạ con cảm ơn bác.',
   description:
     'Từ mở đầu câu kinh điển của người miền Nam, thể hiện sự kính trọng, lễ phép và khiêm nhường đối với người lớn tuổi.',
+  descriptionVi:
+    'Từ mở đầu câu kinh điển của người miền Nam, thể hiện sự kính trọng, lễ phép và khiêm nhường đối với người lớn tuổi.',
+  descriptionEn:
+    'The classic southern Vietnamese opening word, expressing deep respect, politeness, and humility toward elders.',
   example: 'Ví dụ: “Dạ, cho con gửi tiền ạ.”',
+  exampleVi: 'Ví dụ: “Dạ, cho con gửi tiền ạ.”',
+  exampleEn: 'Example: “Dạ, cho con gửi tiền ạ.”',
 };

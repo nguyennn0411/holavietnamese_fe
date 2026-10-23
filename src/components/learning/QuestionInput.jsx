@@ -153,7 +153,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
                     disabled={disabled}
                     onClick={() => handleRemoveWord(id)}
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white text-[#253044] font-bold text-sm shadow-xs border border-[#E8E5DF] hover:border-[#FF7A00] hover:bg-rose-50 hover:text-[#FF7A00] transition-all cursor-pointer group active:scale-95"
-                    title="Bấm để loại bỏ"
+                    title={bilingualLabel("Bấm để loại bỏ", "Click to remove")}
                   >
                     <span>{text}</span>
                     <X size={13} className="text-stone-400 group-hover:text-[#FF7A00] transition-colors" />
@@ -197,7 +197,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
         {/* Reorder Arrows Controls for Fine Tuning */}
         {sequence.length > 1 && (
           <div className="reorder-controls pt-2 flex flex-wrap gap-2 items-center text-xs">
-            <span className="font-semibold text-stone-500 mr-1 text-[11px]">Đổi thứ tự:</span>
+            <span className="font-semibold text-stone-500 mr-1 text-[11px]"><BilingualText vi="Đổi thứ tự:" en="Reorder:" /></span>
             {sequence.map((id, index) => {
               const opt = options.find((o) => String(o.id) === String(id));
               const text = opt?.textVi || opt?.text || id;

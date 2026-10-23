@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText } from '@/components/common/BilingualText';
 import { useState, useMemo } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -98,11 +98,11 @@ function getLessonTypeInfo(lesson) {
 }
 
 function formatDuration(minutes) {
-  if (!minutes || minutes <= 0) return '15 phút';
-  if (minutes < 60) return `${minutes} phút`;
+  if (!minutes || minutes <= 0) return bilingualLabel('15 phút', '15 min');
+  if (minutes < 60) return bilingualLabel(`${minutes} phút`, `${minutes} min`);
   const hours = Math.floor(minutes / 60);
   const remainingMins = minutes % 60;
-  return remainingMins > 0 ? `${hours}h ${remainingMins}m` : `${hours} giờ`;
+  return remainingMins > 0 ? `${hours}h ${remainingMins}m` : bilingualLabel(`${hours} giờ`, `${hours} hrs`);
 }
 
 export function ResumeCoursePage() {
@@ -362,7 +362,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
               <div className="flex items-center justify-between text-xs font-bold text-[#253044]">
                 <span className="flex items-center gap-1.5">
                   <Award size={15} className="text-[#FF7A00]" />
-                  <span>Tiến độ tổng thể</span>
+                  <span><BilingualText vi="Tiến độ tổng thể" en="Overall progress" /></span>
                 </span>
                 <span className="text-[#FF7A00]">{progressPercent}%</span>
               </div>
@@ -375,7 +375,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                 />
               </div>
               <p className="text-[11px] text-[#64748B]">
-                Đã hoàn thành <strong>{completedCount}</strong> trên tổng số <strong>{totalLessons}</strong> bài học
+                <BilingualText vi={<><BilingualText vi={<>Đã hoàn thành <strong>{completedCount}</strong> trên tổng số <strong>{totalLessons}</strong> bài học</>} en={<>Completed <strong>{completedCount}</strong> of <strong>{totalLessons}</strong> lessons</>} /></>} en={<>Completed <strong>{completedCount}</strong> of <strong>{totalLessons}</strong> lessons</>} />
               </p>
             </div>
 
@@ -418,7 +418,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
             onClick={toggleAll}
             className="text-xs font-bold text-[#EA580C] hover:underline px-3 py-1.5 rounded-lg bg-[#FFF7E8] border border-[#E8E5DF] cursor-pointer"
           >
-            {isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
+            {isAllExpanded ? <BilingualText vi="Thu gọn tất cả" en="Collapse all" /> : <BilingualText vi="Mở rộng tất cả" en="Expand all" />}
           </button>
         </div>
 
@@ -472,10 +472,13 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                         </p>
                       )}
                       <p className="text-[11px] text-[#64748B] flex items-center gap-2 mt-1">
-                        <span>{moduleLessons.length} bài học</span>
+                        <span><BilingualText vi={`${moduleLessons.length} bài học`} en={`${moduleLessons.length} lessons`} /></span>
                         <span>•</span>
                         <span className={isModuleDone ? 'text-emerald-700 font-bold' : ''}>
-                          {moduleCompletedCount}/{moduleLessons.length} đã hoàn thành
+                          <BilingualText
+                            vi={`${moduleCompletedCount}/${moduleLessons.length} đã hoàn thành`}
+                            en={`${moduleCompletedCount}/${moduleLessons.length} completed`}
+                          />
                         </span>
                       </p>
                     </div>
@@ -541,11 +544,11 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                                   className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${typeInfo.badgeClass}`}
                                 >
                                   <TypeIcon size={11} />
-                                  <span>{typeInfo.labelVi}</span>
+                                  <span><BilingualText vi={typeInfo.labelVi} en={typeInfo.labelEn} /></span>
                                 </span>
                                 {isCurrent && (
                                   <span className="px-2 py-0.5 rounded-md bg-[#FF7A00] text-white text-[10px] font-bold uppercase tracking-wider">
-                                    Đang học
+                                    <BilingualText vi="Đang học" en="In Progress" />
                                   </span>
                                 )}
                               </div>
@@ -575,7 +578,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                               <button
                                 type="button"
                                 onClick={() => handleLockedClick(lessonTitle)}
-                                aria-label={`Bài học ${lessonTitle} đang bị khóa`}
+                                aria-label={bilingualLabel(`Bài học ${lessonTitle} đang bị khóa`, `Lesson ${lessonTitle} is locked`)}
                                 className="p-2 text-stone-400 hover:text-stone-600 cursor-pointer"
                               >
                                 <Lock size={15} />

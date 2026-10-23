@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
@@ -22,14 +22,14 @@ export function AdminAiScenariosPage() {
 
   const handleStatusChange = (id, newStatus) => {
     adminCultureAiService.updateScenarioStatus(id, newStatus);
-    toast.success(`Đã đổi trạng thái kịch bản sang: ${newStatus}`);
+    toast.success(bilingualLabel(`Đã đổi trạng thái kịch bản sang: ${newStatus}`, `Scenario status changed to: ${newStatus}`));
   };
 
   const handleDelete = async (id, title) => {
-    const accepted = await confirm({ title: 'Xóa kịch bản AI?', description: `Kịch bản “${title}” sẽ bị xóa và không thể khôi phục.`, confirmLabel: 'Xóa kịch bản' });
+    const accepted = await confirm({ title: bilingualLabel('Xóa kịch bản AI?', 'Delete AI scenario?'), description: bilingualLabel(`Kịch bản “${title}” sẽ bị xóa và không thể khôi phục.`, `Scenario “${title}” will be deleted and cannot be recovered.`), confirmLabel: bilingualLabel('Xóa kịch bản', 'Delete scenario') });
     if (!accepted) return;
     adminCultureAiService.deleteScenario(id);
-    toast.success('Đã xóa kịch bản.');
+    toast.success(bilingualLabel('Đã xóa kịch bản.', 'Scenario deleted.'));
   };
 
   const getStatusBadge = (status) => {
@@ -185,14 +185,14 @@ export function AdminAiScenariosPage() {
                         <button
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-ink)' }}
-                          title="Kích hoạt kịch bản"
+                          title={bilingualLabel("Kích hoạt kịch bản", "Activate scenario")}
                           onClick={() => handleStatusChange(sc.id, 'ACTIVE')}
                         ><BilingualText>{"✓ Bật"}</BilingualText></button>
                       ) : (
                         <button
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-red)' }}
-                          title="Tạm khóa kịch bản"
+                          title={bilingualLabel("Tạm khóa kịch bản", "Archive scenario")}
                           onClick={() => handleStatusChange(sc.id, 'DRAFT')}
                         ><BilingualText>{"Tắt"}</BilingualText></button>
                       )}
@@ -201,7 +201,7 @@ export function AdminAiScenariosPage() {
                         to={`/admin/ai-scenarios/${sc.id}`}
                         className="button secondary"
                         style={{ fontSize: '11px', padding: '5px 8px' }}
-                        title="Chỉnh sửa vai trò, bối cảnh, tiêu chí"
+                        title={bilingualLabel("Chỉnh sửa vai trò, bối cảnh, tiêu chí", "Edit roles, context, objectives")}
                       ><BilingualText>{"⚙️ Chỉnh sửa"}</BilingualText></Link>
 
                       <Link
@@ -209,13 +209,13 @@ export function AdminAiScenariosPage() {
                         target="_blank"
                         className="button secondary"
                         style={{ fontSize: '11px', padding: '5px 8px' }}
-                        title="Thử nghiệm trực tiếp phiên nhập vai"
+                        title={bilingualLabel("Thử nghiệm trực tiếp phiên nhập vai", "Test roleplay session live")}
                       ><BilingualText>{"🎮 Thử"}</BilingualText></Link>
 
                       <button
                         className="button secondary"
                         style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-red)' }}
-                        title="Xóa kịch bản"
+                        title={bilingualLabel("Xóa kịch bản", "Delete scenario")}
                         onClick={() => handleDelete(sc.id, sc.title)}
                       >
                         <Trash2 size={15} aria-hidden="true" />

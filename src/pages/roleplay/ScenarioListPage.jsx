@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, MapPin, Target, RotateCcw, Play } from 'lucide-react';
@@ -10,6 +10,13 @@ export function ScenarioListPage() {
   const [search, setSearch] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');
+  const [, setDbRevision] = useState(0);
+
+  useEffect(() => {
+    aiRoleplayService.fetchScenarios().then(() => {
+      setDbRevision(v => v + 1);
+    });
+  }, []);
 
   const levels = aiRoleplayService.getLevels();
   const topics = aiRoleplayService.getTopics();
@@ -47,15 +54,18 @@ export function ScenarioListPage() {
         <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
           <div className="relative z-10 max-w-3xl space-y-3">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#FF7A00] text-xs font-black uppercase tracking-wider shadow-2xs">
-              <span>50+ Tình huống giao tiếp • Real-Life Scenarios</span>
+              <span><BilingualText vi="50+ Tình huống giao tiếp • Real-Life Scenarios" en="50+ Real-Life Conversation Scenarios" /></span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#253044] tracking-tight leading-tight">
-              Kịch Bản Nhập Vai Thực Tế
+              <BilingualText vi="Kịch Bản Nhập Vai Thực Tế" en="Real-Life Roleplay Scenarios" />
             </h1>
 
             <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
-              Luyện phản xạ giao tiếp tự nhiên cùng AI trong các bối cảnh đời thực: từ gọi món phở Bát Đàn, trả giá chợ Bến Thành cho đến hỏi đường phố cổ và giao lưu bạn bè.
+              <BilingualText
+                vi="Luyện phản xạ giao tiếp tự nhiên cùng AI trong các bối cảnh đời thực: từ gọi món phở Bát Đàn, trả giá chợ Bến Thành cho đến hỏi đường phố cổ và giao lưu bạn bè."
+                en="Practice natural communication reflexes with AI in real-life contexts: from ordering pho at Bat Dan, bargaining at Ben Thanh market to asking for directions in the Old Quarter and socializing with friends."
+              />
             </p>
 
             <div className="pt-2 flex items-center gap-3">
@@ -63,7 +73,7 @@ export function ScenarioListPage() {
                 to="/ai-tutor"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] hover:text-[#FF7A00] text-xs font-bold shadow-2xs transition-all"
               >
-                <span>Trò chuyện tự do với AI Tutor →</span>
+                <span><BilingualText vi="Trò chuyện tự do với AI Tutor →" en="Free Chat with AI Tutor →" /></span>
               </Link>
             </div>
           </div>
@@ -79,7 +89,7 @@ export function ScenarioListPage() {
             />
             <input
               type="text"
-              aria-label="Tìm kiếm kịch bản"
+              aria-label={bilingualLabel("Tìm kiếm kịch bản", "Search scenarios")}
               placeholder={bilingualLabel("Tìm kịch bản theo tên, địa danh hoặc bối cảnh (Ví dụ: phở, chợ, taxi)...")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -90,7 +100,7 @@ export function ScenarioListPage() {
                 type="button"
                 onClick={() => setSearch('')}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#FF7A00] p-1"
-                aria-label="Xóa tìm kiếm"
+                aria-label={bilingualLabel("Xóa tìm kiếm", "Clear search")}
               >
                 <X size={16} />
               </button>
@@ -101,7 +111,7 @@ export function ScenarioListPage() {
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-1 border-t border-[#E8E5DF]/40">
             {/* Level Selector */}
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold text-[#64748B] shrink-0">Trình độ:</span>
+              <span className="text-xs font-bold text-[#64748B] shrink-0"><BilingualText vi="Trình độ:" en="Level:" /></span>
               <div className="flex items-center gap-1.5 flex-wrap">
                 {levels.map((lvl) => {
                   const isSelected = selectedLevel === lvl.id;
@@ -125,7 +135,7 @@ export function ScenarioListPage() {
 
             {/* Topic Selector */}
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold text-[#64748B] shrink-0">Chủ đề:</span>
+              <span className="text-xs font-bold text-[#64748B] shrink-0"><BilingualText vi="Chủ đề:" en="Topic:" /></span>
               <div className="flex items-center gap-1.5 flex-wrap">
                 {topics.map((t) => {
                   const isSelected = selectedTopic === t.id;
@@ -153,10 +163,10 @@ export function ScenarioListPage() {
         <div className="flex items-center justify-between text-sm px-1">
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-black text-[#253044]">
-              Danh sách kịch bản
+              <BilingualText vi="Danh sách kịch bản" en="Scenario List" />
             </h2>
             <span className="px-2.5 py-0.5 rounded-full bg-[#FFFCF7] border border-[#E8E5DF] text-xs font-bold text-[#FF7A00]">
-              {scenarios.length} tình huống
+              {scenarios.length} <BilingualText vi="tình huống" en="scenarios" />
             </span>
           </div>
 
@@ -167,7 +177,7 @@ export function ScenarioListPage() {
               className="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1 cursor-pointer"
             >
               <RotateCcw size={12} />
-              <span>Đặt lại bộ lọc</span>
+              <span><BilingualText vi="Đặt lại bộ lọc" en="Reset filters" /></span>
             </button>
           )}
         </div>
@@ -177,17 +187,20 @@ export function ScenarioListPage() {
           <div className="text-center py-16 px-6 bg-white/90 backdrop-blur-md rounded-3xl border border-[#E8E5DF] space-y-3">
             <MessageSquare size={36} className="text-stone-400 mx-auto" />
             <h3 className="text-lg font-bold text-[#253044]">
-              Không tìm thấy kịch bản phù hợp
+              <BilingualText vi="Không tìm thấy kịch bản phù hợp" en="No matching scenarios found" />
             </h3>
             <p className="text-xs sm:text-sm text-[#64748B] max-w-md mx-auto">
-              Hãy thử chọn cấp độ khác hoặc bấm "Đặt lại bộ lọc" để xem danh sách đầy đủ.
+              <BilingualText
+                vi='Hãy thử chọn cấp độ khác hoặc bấm "Đặt lại bộ lọc" để xem danh sách đầy đủ.'
+                en='Try selecting another level or click "Reset filters" to view the full list.'
+              />
             </p>
             <button
               type="button"
               onClick={handleResetFilters}
               className="mt-2 px-5 py-2.5 rounded-xl bg-[#FF7A00] text-white text-xs font-bold shadow-xs hover:bg-[#C2410C] transition-colors"
             >
-              Xem tất cả kịch bản
+              <BilingualText vi="Xem tất cả kịch bản" en="View all scenarios" />
             </button>
           </div>
         ) : (
@@ -250,12 +263,12 @@ export function ScenarioListPage() {
                       </div>
                       <div className="flex items-center justify-between pt-1 border-t border-[#E8E5DF]/40">
                         <span className="text-[#253044] font-bold flex items-center gap-1">
-                          <span>Bạn:</span>
+                          <span><BilingualText vi="Bạn:" en="You:" /></span>
                           <span>{sc.learnerRole.role}</span>
                         </span>
                         <span className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">
                           <Target size={11} />
-                          <span>{sc.objectives.length} nhiệm vụ</span>
+                          <span>{sc.objectives.length} <BilingualText vi="nhiệm vụ" en="tasks" /></span>
                         </span>
                       </div>
                     </div>
@@ -267,14 +280,14 @@ export function ScenarioListPage() {
                       to={`/ai-scenarios/${sc.id}`}
                       className="flex-1 py-2.5 px-3 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] text-xs font-bold text-center transition-colors"
                     >
-                      Chi tiết
+                      <BilingualText vi="Chi tiết" en="Details" />
                     </Link>
                     <Link
                       to={`/ai-roleplay/${sc.id}`}
                       className="flex-1 py-2.5 px-3 rounded-xl bg-[#FF7A00] hover:bg-[#C2410C] text-white text-xs font-black text-center shadow-[0_2px_0_#C2410C] active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-1.5 transition-all"
                     >
                       <Play size={12} fill="currentColor" />
-                      <span>Nhập vai</span>
+                      <span><BilingualText vi="Nhập vai" en="Roleplay" /></span>
                     </Link>
                   </div>
                 </div>

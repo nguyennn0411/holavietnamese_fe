@@ -20,18 +20,18 @@ const LANGUAGE_OPTIONS = [
 ];
 
 const GOAL_OPTIONS = [
-  { value: 'daily_communication', label: 'Giao tiếp hằng ngày (Daily communication)' },
-  { value: 'travel', label: 'Du lịch & Khám phá (Travel)' },
-  { value: 'work', label: 'Công việc & Định cư (Work & Career)' },
-  { value: 'exam_vsl', label: 'Thi chứng chỉ VSL (Exam / VSL)' },
-  { value: 'culture', label: 'Văn hóa & Đời sống (Culture)' },
+  { value: 'daily_communication', labelVi: 'Giao tiếp hằng ngày', labelEn: 'Daily communication' },
+  { value: 'travel', labelVi: 'Du lịch & Khám phá', labelEn: 'Travel & Exploration' },
+  { value: 'work', labelVi: 'Công việc & Định cư', labelEn: 'Work & Career' },
+  { value: 'exam_vsl', labelVi: 'Thi chứng chỉ VSL', labelEn: 'VSL Proficiency Exam' },
+  { value: 'culture', labelVi: 'Văn hóa & Đời sống', labelEn: 'Culture & Daily Life' },
 ];
 
 const LEVEL_OPTIONS = [
-  { value: 'A1', label: 'A1 – Người mới bắt đầu (Beginner)' },
-  { value: 'A2', label: 'A2 – Sơ cấp (Elementary)' },
-  { value: 'B1', label: 'B1 – Trung cấp (Intermediate)' },
-  { value: 'B2', label: 'B2 – Trung cấp nâng cao (Upper Intermediate)' },
+  { value: 'A1', labelVi: 'A1 – Người mới bắt đầu', labelEn: 'A1 – Beginner' },
+  { value: 'A2', labelVi: 'A2 – Sơ cấp', labelEn: 'A2 – Elementary' },
+  { value: 'B1', labelVi: 'B1 – Trung cấp', labelEn: 'B1 – Intermediate' },
+  { value: 'B2', labelVi: 'B2 – Trung cấp nâng cao', labelEn: 'B2 – Upper Intermediate' },
 ];
 
 export function RegisterPage() {
@@ -71,33 +71,33 @@ export function RegisterPage() {
 
     const trimmedUsername = username.trim();
     if (!trimmedUsername) {
-      errors.username = 'Vui lòng nhập tên đăng nhập';
+      errors.username = bilingualLabel('Vui lòng nhập tên đăng nhập', 'Please enter your username');
     } else if (trimmedUsername.length < 3) {
-      errors.username = 'Tên đăng nhập phải có ít nhất 3 ký tự';
+      errors.username = bilingualLabel('Tên đăng nhập phải có ít nhất 3 ký tự', 'Username must be at least 3 characters');
     }
 
     const trimmedEmail = email.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!trimmedEmail) {
-      errors.email = 'Vui lòng nhập địa chỉ email';
+      errors.email = bilingualLabel('Vui lòng nhập địa chỉ email', 'Please enter your email address');
     } else if (!emailRegex.test(trimmedEmail)) {
-      errors.email = 'Email không đúng định dạng (VD: alex@example.com)';
+      errors.email = bilingualLabel('Email không đúng định dạng (VD: alex@example.com)', 'Invalid email format (e.g. alex@example.com)');
     }
 
     if (!password) {
-      errors.password = 'Vui lòng nhập mật khẩu';
+      errors.password = bilingualLabel('Vui lòng nhập mật khẩu', 'Please enter your password');
     } else if (password.length < 6) {
-      errors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      errors.password = bilingualLabel('Mật khẩu phải có ít nhất 6 ký tự', 'Password must be at least 6 characters');
     }
 
     if (!confirmPassword) {
-      errors.confirmPassword = 'Vui lòng xác nhận mật khẩu';
+      errors.confirmPassword = bilingualLabel('Vui lòng xác nhận mật khẩu', 'Please confirm your password');
     } else if (confirmPassword !== password) {
-      errors.confirmPassword = 'Mật khẩu xác nhận không trùng khớp';
+      errors.confirmPassword = bilingualLabel('Mật khẩu xác nhận không trùng khớp', 'Confirmation password does not match');
     }
 
     if (!fullName.trim()) {
-      errors.fullName = 'Vui lòng nhập họ và tên';
+      errors.fullName = bilingualLabel('Vui lòng nhập họ và tên', 'Please enter your full name');
     }
 
     setFieldErrors(errors);
@@ -150,7 +150,7 @@ export function RegisterPage() {
           replace: true,
           state: {
             email: verificationEmail,
-            message: result.message || 'Đăng ký thành công. Vui lòng kiểm tra email để lấy mã OTP.',
+            message: result.message || bilingualLabel('Đăng ký thành công. Vui lòng kiểm tra email để lấy mã OTP.', 'Registration successful. Please check your email for OTP code.'),
             developmentOtp: result.developmentOtp,
             fromRegistration: true,
             afterLogin,
@@ -162,13 +162,13 @@ export function RegisterPage() {
           setStep(1);
           setFieldErrors((prev) => ({
             ...prev,
-            username: result.message || 'Tên đăng nhập đã được sử dụng',
+            username: result.message || bilingualLabel('Tên đăng nhập đã được sử dụng', 'Username is already taken'),
           }));
         } else if (result.code === 1006) {
           setStep(1);
           setFieldErrors((prev) => ({
             ...prev,
-            email: result.message || 'Email đã được sử dụng',
+            email: result.message || bilingualLabel('Email đã được sử dụng', 'Email is already in use'),
           }));
         } else if (
           result.message &&
@@ -189,11 +189,11 @@ export function RegisterPage() {
           setStep(1);
           setFieldErrors((prev) => ({ ...prev, username: result.message }));
         } else {
-          setError(result.message || 'Đăng ký không thành công. Vui lòng kiểm tra lại thông tin.');
+          setError(result.message || bilingualLabel('Đăng ký không thành công. Vui lòng kiểm tra lại thông tin.', 'Registration failed. Please check your details.'));
         }
       }
     } catch {
-      setError('Đã xảy ra lỗi kết nối với máy chủ. Vui lòng thử lại sau.');
+      setError(bilingualLabel('Đã xảy ra lỗi kết nối với máy chủ. Vui lòng thử lại sau.', 'Server connection error. Please try again later.'));
     } finally {
       setLoading(false);
     }
@@ -352,8 +352,8 @@ export function RegisterPage() {
                       type="button"
                       className="auth-show-btn"
                       onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                      title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                      aria-label={showPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
+                      title={showPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -373,7 +373,7 @@ export function RegisterPage() {
                       id="confirmPassword"
                       className={`auth-input auth-password-input ${fieldErrors.confirmPassword ? 'auth-input-error' : ''}`}
                       type={showConfirmPassword ? 'text' : 'password'}
-                      placeholder={bilingualLabel("Nhập lại mật khẩu")}
+                      placeholder={bilingualLabel("Nhập lại mật khẩu", "Re-enter your password")}
                       value={confirmPassword}
                       onChange={(e) => {
                         setConfirmPassword(e.target.value);
@@ -386,8 +386,8 @@ export function RegisterPage() {
                       type="button"
                       className="auth-show-btn"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                      title={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                      aria-label={showConfirmPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
+                      title={showConfirmPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
                     >
                       {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -459,7 +459,7 @@ export function RegisterPage() {
                 >
                   {GOAL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
-                      {bilingualLabel(opt.label)}
+                      {bilingualLabel(opt.labelVi, opt.labelEn)}
                     </option>
                   ))}
                 </select>
@@ -478,7 +478,7 @@ export function RegisterPage() {
                 >
                   {LEVEL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
-                      {bilingualLabel(opt.label)}
+                      {bilingualLabel(opt.labelVi, opt.labelEn)}
                     </option>
                   ))}
                 </select>

@@ -109,8 +109,12 @@ export interface MinimalPairItemDTO {
 export interface MinimalPairDTO {
   id: string;
   title: string;
+  titleEn?: string;
   contrastFocus: string;
+  contrastFocusVi?: string;
+  contrastFocusEn?: string;
   explanationEn: string;
+  explanationVi?: string;
   itemA: MinimalPairItemDTO;
   itemB: MinimalPairItemDTO;
   quizTargetItem?: 'A' | 'B';

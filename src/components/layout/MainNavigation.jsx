@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { Home, BookOpen, Map, Languages, Landmark, Newspaper, Compass, GraduationCap, Type } from 'lucide-react';
@@ -17,7 +17,7 @@ const NAV_ITEMS = [
 
 export function MainNavigation({ onNavigate }) {
   return (
-    <nav id="primary-navigation" className="site-nav" aria-label="Điều hướng chính">
+    <nav id="primary-navigation" className="site-nav" aria-label={bilingualLabel("Điều hướng chính", "Primary navigation")}>
       {NAV_ITEMS.map(({ to, label, en, icon: Icon, end, badge }) => (
         <NavLink key={to} to={to} end={end} className="site-nav__link" onClick={onNavigate}>
           <span className="site-nav__icon" aria-hidden="true"><Icon size={17} strokeWidth={1.8}/></span>

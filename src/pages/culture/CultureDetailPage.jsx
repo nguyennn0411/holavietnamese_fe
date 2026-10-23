@@ -1,7 +1,8 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { cultureService } from '@/services/cultureService';
 import { vocabularyService } from '@/services/vocabularyService';
 import { aiTutorService } from '@/services/aiTutorService';
@@ -12,15 +13,17 @@ import { Clock, MapPin, ArrowLeft, Compass } from 'lucide-react';
 export function CultureDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const isVi = (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('vi');
   const article = cultureService.getArticle(id);
   const relatedArticles = cultureService.getRelatedArticles(id);
   const [toastMessage, setToastMessage] = useState('');
 
   if (!article) {
     return (
-      <EmptyState title="Không tìm thấy bài viết văn hóa">
+      <EmptyState title={bilingualLabel("Không tìm thấy bài viết văn hóa", "Cultural article not found")}>
         <Link className="button" to="/culture">
-          <BilingualText>{"Về thư viện văn hóa"}</BilingualText>
+          <BilingualText vi="Về thư viện văn hóa" en="Back to Culture Library" />
         </Link>
       </EmptyState>
     );
@@ -38,9 +41,9 @@ export function CultureDetailPage() {
         meaning: phrase.meaning,
         notes: `Từ vựng văn hóa: ${article.title} (${phrase.context || ''})`,
       });
-      showToast(`Đã lưu “${phrase.word}” vào sổ từ vựng.`);
+      showToast(bilingualLabel(`Đã lưu “${phrase.word}” vào sổ từ vựng.`, `Saved "${phrase.word}" to vocabulary notebook.`));
     } catch (err) {
-      showToast(`Không lưu được từ vựng: ${err.message}`);
+      showToast(bilingualLabel(`Không lưu được từ vựng: ${err.message}`, `Failed to save vocabulary: ${err.message}`));
     }
   }
 
@@ -58,11 +61,11 @@ export function CultureDetailPage() {
           to="/culture"
         >
           <ArrowLeft size={13} />
-          <BilingualText>{"Thư viện văn hóa"}</BilingualText>
+          <BilingualText vi="Thư viện văn hóa" en="Culture Library" />
         </Link>
         <span>/</span>
         <span className="text-[#253044] truncate max-w-xs sm:max-w-md">
-          {article.categoryName}
+          <BilingualText vi={article.categoryNameVi || article.categoryName} en={article.categoryNameEn || article.categoryName} />
         </span>
       </nav>
 
@@ -70,32 +73,32 @@ export function CultureDetailPage() {
       <header className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFFDF9] via-[#FFF7E8] to-[#FFF0DC] border border-[#E8E5DF] p-6 sm:p-10 shadow-xs space-y-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-[#FFF0DC] text-[#F97316] border border-[#F97316]/30 text-xs font-bold uppercase tracking-wider shadow-2xs">
-            {article.categoryName}
+            <BilingualText vi={article.categoryNameVi || article.categoryName} en={article.categoryNameEn || article.categoryName} />
           </span>
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-[#EA580C] border border-[#E8E5DF] text-xs font-semibold">
             <MapPin size={12} className="text-[#EA580C]" />
-            {article.destinationName}
+            <BilingualText vi={article.destinationNameVi || article.destinationName} en={article.destinationNameEn || article.destinationName} />
           </span>
           <span className="inline-flex items-center gap-1 text-xs text-[#64748B] font-medium ml-auto">
             <Clock size={13} className="text-[#EA580C]" />
-            {article.readTime}
+            <BilingualText vi={article.readTimeVi || article.readTime} en={article.readTimeEn || article.readTime} />
           </span>
         </div>
 
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#253044] tracking-tight leading-tight">
-          <BilingualText vi={article.titleVi || article.title} en={article.title} />
+          <BilingualText vi={article.titleVi || article.title} en={article.titleEn || article.title} />
         </h1>
 
         <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-3xl">
-          {article.subtitle}
+          <BilingualText vi={article.subtitleVi || article.subtitle} en={article.subtitleEn || article.subtitle} />
         </p>
 
         <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-[#64748B] border-t border-[#E8E5DF]/50">
           <span className="font-bold text-[#253044]">{article.author}</span>
           <span>•</span>
-          <span>{article.authorRole}</span>
+          <span><BilingualText vi={article.authorRoleVi || article.authorRole} en={article.authorRoleEn || article.authorRole} /></span>
           <span>•</span>
-          <span>Ngày đăng: {article.publishedDate}</span>
+          <span><BilingualText vi="Ngày đăng:" en="Published:" /> {article.publishedDate}</span>
         </div>
       </header>
 
@@ -116,7 +119,7 @@ export function CultureDetailPage() {
         {/* Main Content Body */}
         <div className="lg:col-span-8 space-y-8">
           <div className="bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-10 shadow-xs">
-            <RichText text={article.content} />
+            <RichText text={isVi ? (article.contentVi || article.content) : (article.contentEn || article.content)} />
           </div>
 
           {/* Useful Phrases Box */}
@@ -211,10 +214,15 @@ export function CultureDetailPage() {
           <section className="card bg-white rounded-3xl border border-[#E8E5DF] p-6 shadow-xs space-y-3">
             <div className="flex items-center gap-2">
               <Compass size={18} className="text-[#FF7A00]" />
-              <h2 className="text-base font-black text-[#253044]">{article.destinationName}</h2>
+              <h2 className="text-base font-black text-[#253044]">
+                <BilingualText vi={article.destinationNameVi || article.destinationName} en={article.destinationNameEn || article.destinationName} />
+              </h2>
             </div>
             <p className="text-xs text-[#64748B]">
-              Khám phá vùng đất và những nét văn hóa địa phương đặc trưng.
+              <BilingualText
+                vi="Khám phá vùng đất và những nét văn hóa địa phương đặc trưng."
+                en="Explore the land and unique local cultural characteristics."
+              />
             </p>
             <Link
               className="text-link inline-flex items-center gap-1 text-xs font-bold text-[#FF7A00] hover:underline"

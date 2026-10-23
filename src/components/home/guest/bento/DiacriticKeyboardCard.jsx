@@ -1,3 +1,4 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 ﻿import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Keyboard, Delete, Volume2 } from 'lucide-react';
@@ -21,23 +22,23 @@ export function DiacriticKeyboardCard() {
           <div className="flex items-center gap-2">
             <Keyboard size={18} className="text-[#EA580C]" />
             <span className="text-xs font-bold uppercase tracking-wider text-[#EA580C]">
-              Trợ lý gõ dấu ảo
+              <BilingualText vi="Trợ lý gõ dấu ảo" en="Virtual Diacritic Assistant" />
             </span>
           </div>
-          <span className="text-[10px] font-semibold text-[#64748B]">Không cần Unikey</span>
+          <span className="text-[10px] font-semibold text-[#64748B]"><BilingualText vi="Không cần Unikey" en="No Unikey required" /></span>
         </div>
         <h3 className="text-lg sm:text-xl font-black text-[#253044]">
-          Bàn phím gõ dấu 1-chạm tương tác
+          <BilingualText vi="Bàn phím gõ dấu 1-chạm tương tác" en="One-touch Interactive Diacritic Keyboard" />
         </h3>
         <p className="text-xs text-[#64748B]">
-          Bấm phím để chèn dấu tiếng Việt và phát âm ngay lập tức:
+          <BilingualText vi="Bấm phím để chèn dấu tiếng Việt và phát âm ngay lập tức:" en="Press keys to insert Vietnamese accents and pronounce immediately:" />
         </p>
       </div>
 
       {/* Interactive Notepad Display */}
       <div className="p-3 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF] space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-[10px] font-bold uppercase text-[#64748B]">Khung gõ thử:</span>
+          <span className="text-[10px] font-bold uppercase text-[#64748B]"><BilingualText vi="Khung gõ thử:" en="Practice typing:" /></span>
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -46,10 +47,10 @@ export function DiacriticKeyboardCard() {
                 audioFeedback.playTap();
               }}
               className="text-[11px] text-[#64748B] hover:text-[#EA580C] font-bold flex items-center gap-0.5 cursor-pointer"
-              title="Xóa ký tự cuối"
+              title={bilingualLabel("Xóa ký tự cuối", "Delete last character")}
             >
               <Delete size={12} />
-              <span>Xóa</span>
+              <span><BilingualText vi="Xóa" en="Delete" /></span>
             </button>
             <button
               type="button"
@@ -59,13 +60,13 @@ export function DiacriticKeyboardCard() {
               }}
               className="text-[11px] text-[#64748B] hover:text-[#EA580C] font-bold cursor-pointer"
             >
-              Làm trống
+              <BilingualText vi="Làm trống" en="Clear" />
             </button>
           </div>
         </div>
         <div className="flex items-center justify-between gap-2 bg-white px-3 py-2 rounded-xl border border-[#E8E5DF]/60">
           <span className="font-black text-[#253044] text-base truncate">
-            {typedText || <span className="text-stone-300 font-normal italic">Bấm phím bên dưới…</span>}
+            {typedText || <span className="text-stone-300 font-normal italic"><BilingualText vi="Bấm phím bên dưới…" en="Press keys below…" /></span>}
           </span>
           <button
             type="button"
@@ -74,8 +75,8 @@ export function DiacriticKeyboardCard() {
             }}
             disabled={!typedText}
             className="!min-h-0 !min-w-0 !p-0 w-8 h-8 rounded-lg bg-[#FFF0DC] hover:bg-[#EA580C] text-[#EA580C] hover:text-white flex items-center justify-center transition-colors shrink-0 disabled:opacity-40 cursor-pointer"
-            title="Phát âm từ vừa gõ"
-            aria-label="Phát âm từ vừa gõ"
+            title={bilingualLabel("Phát âm từ vừa gõ", "Pronounce typed word")}
+            aria-label={bilingualLabel("Phát âm từ vừa gõ", "Pronounce typed word")}
           >
             <Volume2 className="w-4 h-4 shrink-0" strokeWidth={2.2} />
           </button>
@@ -102,7 +103,7 @@ export function DiacriticKeyboardCard() {
 
       {/* Preset Words */}
       <div className="flex items-center gap-1.5 pt-1 overflow-x-auto">
-        <span className="text-[10px] text-[#64748B] font-bold shrink-0">Từ mẫu:</span>
+        <span className="text-[10px] text-[#64748B] font-bold shrink-0"><BilingualText vi="Từ mẫu:" en="Sample words:" /></span>
         {SAMPLE_PRESET_WORDS.map((w) => (
           <button
             key={w}
