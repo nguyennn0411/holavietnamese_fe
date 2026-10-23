@@ -4,6 +4,15 @@ import { Send, X } from 'lucide-react';
 import { aiTutorService } from '@/services/aiTutorService';
 import ngheIdleMascot from '@/assets/mascot/nghe-idle.webp';
 
+function cleanMiniChatText(value) {
+  if (typeof value !== 'string') return '';
+
+  return value
+    .replace(/^\s*(?:user|response)\s+safety\s*:\s*(?:safe|unsafe|blocked|unknown)\s*$/gim, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 export function AiTutorFloatingButton() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -12,8 +21,11 @@ export function AiTutorFloatingButton() {
   const [session, setSession] = useState(null);
   const inputRef = useRef(null);
 
-  // The AI Tutor page already has its own full conversation UI.
-  if (location.pathname === '/ai-tutor') return null;
+  // The AI Tutor page already has its own full conversation UI. Never expose
+  // the helper during a quiz attempt, where it could be used as a shortcut.
+  const isQuizRoute = location.pathname.startsWith('/quizzes/')
+    || location.pathname.startsWith('/quiz-attempts/');
+  if (location.pathname === '/ai-tutor' || isQuizRoute) return null;
 
   const openChat = () => {
     const activeSession = aiTutorService.getSession(aiTutorService.getActiveSessionId());
@@ -52,7 +64,9 @@ export function AiTutorFloatingButton() {
     }
   };
 
-  const visibleMessages = (session?.messages || []).slice(-4);
+  const visibleMessages = (session?.messages || [])
+    .map((message) => ({ ...message, text: cleanMiniChatText(message.text) }))
+    .filter((message) => message.text);
 
   return (
     <div className={`ai-tutor-widget ${isOpen ? 'is-open' : ''}`}>
