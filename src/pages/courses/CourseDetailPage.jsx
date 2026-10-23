@@ -530,12 +530,12 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
         </div>
       )}
 
-      {/* Bố cục chính Desktop: 65% trái, 35% phải sticky */}
-      <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-8 lg:gap-10 items-start">
-        {/* ===================== CỘT TRÁI (65%): GIỚI THIỆU, CHUẨN ĐẦU RA, DANH SÁCH MODULE ===================== */}
+      {/* Bố cục chính Desktop: 68% trái, 32% phải sticky */}
+      <div className="grid grid-cols-1 lg:grid-cols-[66fr_34fr] xl:grid-cols-[68fr_32fr] 2xl:grid-cols-[70fr_30fr] gap-8 xl:gap-10 items-start">
+        {/* ===================== CỘT TRÁI: GIỚI THIỆU, CHUẨN ĐẦU RA, DANH SÁCH MODULE ===================== */}
         <div className="w-full space-y-8">
           {/* 1. Phần Giới Thiệu Khóa Học */}
-          <section className="bg-gradient-to-br from-[#FFF7E8] via-[#FDFBF7] to-[#F7F0E3] rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-5">
+          <section className="bg-gradient-to-br from-[#FFF7E8] via-[#FDFBF7] to-[#F7F0E3] rounded-3xl border border-[#E8E5DF] p-8 sm:p-10 shadow-xs space-y-5">
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="px-3.5 py-1 rounded-full bg-[#FF7A00] text-white font-extrabold text-xs uppercase tracking-wider shadow-xs">
                 {course.level}
@@ -1047,7 +1047,7 @@ export function CourseDetailPage() {
   const resource = useCourse(courseId);
 
   return (
-    <section className="course-detail-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-6">
+    <section className="course-detail-page w-full max-w-full px-0 py-6 space-y-8">
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-2 text-xs font-semibold text-[#64748B]">
         <Link

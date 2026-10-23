@@ -30,14 +30,14 @@ export function CultureExplorePage() {
   const isFiltered = search || selectedCategory !== 'all' || selectedDestination !== 'all';
 
   return (
-    <div className="p4-container culture-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8">
+    <div className="culture-page w-full max-w-full px-0 py-6 space-y-8">
       {/* Hero Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFFDF9] via-[#FFF7E8] to-[#FFF0DC] border border-[#E8E5DF] p-6 sm:p-10 shadow-xs">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFFDF9] via-[#FFF7E8] to-[#FFF0DC] border border-[#E8E5DF] p-8 sm:p-12 shadow-xs">
         <div
           className="absolute -right-8 -bottom-8 w-64 h-64 opacity-10 pointer-events-none"
           style={{ backgroundImage: "url('/design/dong-son.svg')", backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}
         />
-        <div className="relative z-10 max-w-3xl space-y-3">
+        <div className="relative z-10 max-w-4xl space-y-3">
           <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-white/90 border border-[#FDBA74] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-2xs">
             <BilingualText>{"Văn hóa & Đời sống • Culture & Stories"}</BilingualText>
           </div>
@@ -46,7 +46,7 @@ export function CultureExplorePage() {
             <BilingualText>{"Khám phá văn hóa Việt Nam"}</BilingualText>
           </h1>
 
-          <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
+          <p className="text-base sm:text-lg text-[#64748B] leading-relaxed max-w-3xl">
             <BilingualText
               vi="Ngôn ngữ trở nên gần gũi và sống động khi bạn thấu hiểu những câu chuyện phong tục, ẩm thực và nơi chốn phía sau."
               en="Language becomes intimate and vivid when you understand the stories, customs, cuisine, and places behind it."
@@ -201,14 +201,14 @@ export function CultureExplorePage() {
 
       {/* Stories Grid */}
       {articles.length ? (
-        <div className="culture-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="culture-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 xl:gap-8">
           {articles.map((article) => (
             <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.25 }} key={article.id}>
               <Link
-                className="culture-story-card group relative flex flex-col bg-white border border-[#E8E5DF] rounded-2xl overflow-hidden shadow-xs hover:shadow-xl hover:border-[#FDBA74] transition-all duration-300 h-full"
+                className="culture-story-card group relative flex flex-col bg-white border border-[#E8E5DF] rounded-3xl overflow-hidden shadow-xs hover:shadow-xl hover:border-[#FDBA74] transition-all duration-300 h-full"
                 to={`/culture/${article.id}`}
               >
-                <div className="relative overflow-hidden aspect-[16/10] bg-[#FFF7E8]">
+                <div className="relative overflow-hidden aspect-[16/9.5] bg-[#FFF7E8]">
                   <ContentImage
                     src={article.coverImage}
                     alt={article.title}

@@ -447,7 +447,7 @@ export function AiTutorPage() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-6 space-y-6">
+      <div className="relative z-10 w-full max-w-full px-0 py-6 space-y-6">
         {confirmationDialog}
 
         {/* Modal cấu hình OpenAI API Key */}
@@ -583,9 +583,9 @@ export function AiTutorPage() {
       </div>
 
       {/* Main 2-Column AI Workspace */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 xl:grid-cols-12 2xl:grid-cols-12 gap-6 xl:gap-8 items-start">
         {/* Left Sidebar (4 cols on lg ~ 30%): Chat History & Sessions */}
-        <aside className="lg:col-span-4 bg-white/95 backdrop-blur-md rounded-3xl border border-[#DECBB4]/80 p-4 sm:p-5 shadow-sm space-y-4 text-left">
+        <aside className="lg:col-span-4 xl:col-span-4 2xl:col-span-3 bg-white/95 backdrop-blur-md rounded-3xl border border-[#DECBB4]/80 p-5 sm:p-6 shadow-sm space-y-4 text-left">
           {/* Top Button: New Chat */}
           <button
             type="button"
@@ -699,7 +699,7 @@ export function AiTutorPage() {
         </aside>
 
         {/* Right Main Column (8 cols on lg ~ 70%): Studio Chat Console */}
-        <main className="lg:col-span-8 bg-white/95 backdrop-blur-md rounded-3xl border border-[#DECBB4]/80 shadow-[0_10px_30px_rgba(67,25,20,0.04)] overflow-hidden flex flex-col min-h-[640px] text-left">
+        <main className="lg:col-span-8 xl:col-span-8 2xl:col-span-9 bg-white/95 backdrop-blur-md rounded-3xl border border-[#DECBB4]/80 shadow-[0_10px_30px_rgba(67,25,20,0.04)] overflow-hidden flex flex-col min-h-[720px] text-left">
           {/* Top Console Bar with Mode Info & Speed Toggle */}
           <div className="p-4 sm:p-5 border-b border-[#DECBB4]/60 bg-gradient-to-r from-[#FFF9EE] via-white to-[#FFF9EE] space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -798,7 +798,7 @@ export function AiTutorPage() {
           {/* Chat Messages Stream */}
           <div
             ref={chatContainerRef}
-            className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-5 max-h-[520px] bg-gradient-to-b from-[#FAF8F5]/40 via-white to-[#FAF8F5]/40"
+            className="flex-1 p-6 sm:p-8 overflow-y-auto space-y-6 min-h-[480px] max-h-[calc(100vh-320px)] bg-gradient-to-b from-[#FAF8F5]/40 via-white to-[#FAF8F5]/40"
           >
             {!currentSession ? (
               <div className="h-full min-h-[470px] flex flex-col items-center justify-center text-center px-6">
@@ -844,7 +844,7 @@ export function AiTutorPage() {
 
                   {/* Message Bubble Card */}
                   <div
-                    className={`ai-tutor-message max-w-[85%] sm:max-w-[78%] rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs text-xs sm:text-sm leading-relaxed ${
+                    className={`ai-tutor-message max-w-[88%] sm:max-w-[82%] xl:max-w-[78%] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-xs text-sm sm:text-base leading-relaxed ${
                       isAi
                         ? 'ai-tutor-message--ai bg-white border border-[#DECBB4]/80 text-[#202124] rounded-tl-sm'
                         : 'ai-tutor-message--user bg-gradient-to-r from-[#DA251D] to-[#89221E] text-white rounded-tr-sm shadow-md'
@@ -1066,7 +1066,7 @@ export function AiTutorPage() {
           </div>
 
           {/* Input Area Bar */}
-          <form onSubmit={handleSubmit} className="p-3 sm:p-4 bg-white border-t border-[#DECBB4]/60 flex items-center gap-2 sm:gap-3">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-5 bg-white border-t border-[#DECBB4]/60 flex items-center gap-3 sm:gap-4">
             {/* Voice Input Mic Button */}
             <button
               type="button"

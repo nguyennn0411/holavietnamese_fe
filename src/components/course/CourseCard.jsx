@@ -79,10 +79,10 @@ export function CourseCard({ course, enrollment }) {
     <motion.article
       whileHover={{ y: -4 }}
       transition={{ duration: 0.22, ease: 'easeOut' }}
-      className="card course-card group relative bg-white border border-[#E8E5DF]/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-[#FF7A00]/60 transition-all duration-300"
+      className="card course-card group relative bg-white border border-[#E8E5DF]/80 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:border-[#FF7A00]/60 transition-all duration-300"
     >
       {/* Thumbnail area with overlay badges */}
-      <div className="relative overflow-hidden aspect-[16/10] bg-stone-900 shrink-0">
+      <div className="relative overflow-hidden aspect-[16/9.5] bg-stone-900 shrink-0">
         <CourseThumbnail course={course} />
 
         {/* Level badge floating */}
@@ -97,10 +97,10 @@ export function CourseCard({ course, enrollment }) {
       </div>
 
       {/* Card body */}
-      <div className="card-body p-5 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+      <div className="card-body p-6 sm:p-7 flex flex-col flex-1 justify-between gap-5">
         <div className="space-y-3">
           {/* Metadata info */}
-          <div className="flex items-center gap-3 text-xs text-[#64748B] font-semibold">
+          <div className="flex items-center gap-3 text-xs sm:text-sm text-[#64748B] font-semibold">
             <span className="inline-flex items-center gap-1.5">
               <BilingualText
                 vi={`${course.totalLessons ?? course.lessonCount ?? 0} bài học`}
@@ -122,26 +122,26 @@ export function CourseCard({ course, enrollment }) {
 
           {/* Title & English Subtitle */}
           <div>
-            <h2 className="text-lg sm:text-xl font-black text-[#253044] group-hover:text-[#FF7A00] transition-colors leading-snug line-clamp-1 m-0">
+            <h2 className="text-xl sm:text-2xl font-black text-[#253044] group-hover:text-[#FF7A00] transition-colors leading-snug line-clamp-1 m-0">
               <Link to={`/courses/${course.id}`} className="hover:underline no-underline text-inherit">
                 <BilingualText vi={course.titleVi || course.title} en={course.title} />
               </Link>
             </h2>
             {course.title && course.titleVi && course.title !== course.titleVi && (
-              <p className="text-xs font-medium text-[#8C7A6B] line-clamp-1 mt-0.5 m-0">
+              <p className="text-xs sm:text-sm font-medium text-[#8C7A6B] line-clamp-1 mt-0.5 m-0">
                 {course.title}
               </p>
             )}
           </div>
 
           {/* Description */}
-          <p className="text-xs sm:text-sm text-[#5C4D42] line-clamp-2 leading-relaxed m-0">
+          <p className="text-sm sm:text-base text-[#5C4D42] line-clamp-2 leading-relaxed m-0">
             <BilingualText vi={course.descriptionVi || course.description} en={course.description} />
           </p>
 
           {/* Progress bar if enrolled */}
           {isEnrolled && (
-            <div className="space-y-1.5 bg-[#FFF7E8] p-3 rounded-xl border border-[#E8E5DF]/60">
+            <div className="space-y-1.5 bg-[#FFF7E8] p-3.5 rounded-2xl border border-[#E8E5DF]/60">
               <div className="flex items-center justify-between text-xs font-bold text-[#253044]">
                 <span className="flex items-center gap-1.5">
                   <BilingualText vi="Tiến độ học" en="Learning progress" />
@@ -167,7 +167,7 @@ export function CourseCard({ course, enrollment }) {
           {isEnrolled ? (
             <Link
               to={`/courses/${course.id}`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all no-underline group/btn cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-sm shadow-sm hover:shadow-md transition-all no-underline group/btn cursor-pointer"
             >
               {isCompleted ? (
                 <BilingualText vi="Xem lại khóa học" en="Review course" />
@@ -179,7 +179,7 @@ export function CourseCard({ course, enrollment }) {
           ) : (
             <Link
               to={`/courses/${course.id}`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#24382B] hover:bg-[#1a2920] text-[#FFF7E8] font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all no-underline group/btn cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#24382B] hover:bg-[#1a2920] text-[#FFF7E8] font-black text-sm shadow-sm hover:shadow-md transition-all no-underline group/btn cursor-pointer"
             >
               <BilingualText vi="Xem chi tiết khóa học" en="View course details" />
               <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -187,7 +187,7 @@ export function CourseCard({ course, enrollment }) {
           )}
 
           {/* Quick Level & Count Pill on right */}
-          <span className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-[#64748B] bg-[#FFF7E8] border border-[#E8E5DF]/80 px-2.5 py-1 rounded-lg">
+          <span className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-[#64748B] bg-[#FFF7E8] border border-[#E8E5DF]/80 px-3 py-1.5 rounded-xl">
             {course.level} • <BilingualText vi={`${course.totalLessons ?? course.lessonCount ?? 0} bài`} en={`${course.totalLessons ?? course.lessonCount ?? 0} lessons`} />
           </span>
         </div>

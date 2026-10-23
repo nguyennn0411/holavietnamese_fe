@@ -53,10 +53,10 @@ export function ScenarioListPage() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8 text-left">
+      <div className="relative z-10 w-full max-w-full px-0 py-6 space-y-8 text-left">
         {/* Header Hero Banner */}
-        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
-          <div className="relative z-10 max-w-3xl space-y-3">
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-8 sm:p-12 shadow-sm">
+          <div className="relative z-10 max-w-4xl space-y-3">
             <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#FF7A00] text-xs font-black uppercase tracking-wider shadow-2xs">
               <span><BilingualText vi="50+ Tình huống giao tiếp • Real-Life Scenarios" en="50+ Real-Life Conversation Scenarios" /></span>
             </div>
@@ -65,7 +65,7 @@ export function ScenarioListPage() {
               <BilingualText vi="Kịch Bản Nhập Vai Thực Tế" en="Real-Life Roleplay Scenarios" />
             </h1>
 
-            <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
+            <p className="text-base sm:text-lg text-[#64748B] leading-relaxed max-w-3xl">
               <BilingualText
                 vi="Luyện phản xạ giao tiếp tự nhiên cùng AI trong các bối cảnh đời thực: từ gọi món phở Bát Đàn, trả giá chợ Bến Thành cho đến hỏi đường phố cổ và giao lưu bạn bè."
                 en="Practice natural communication reflexes with AI in real-life contexts: from ordering pho at Bat Dan, bargaining at Ben Thanh market to asking for directions in the Old Quarter and socializing with friends."
@@ -208,7 +208,7 @@ export function ScenarioListPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 xl:gap-8">
             {scenarios.map((sc) => (
               <motion.div
                 key={sc.id}
@@ -217,7 +217,7 @@ export function ScenarioListPage() {
                 className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 overflow-hidden shadow-xs hover:shadow-xl hover:border-[#FF7A00]/60 transition-all flex flex-col justify-between group"
               >
                 {/* Media Image with Badges */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
+                <div className="relative aspect-[16/9.5] overflow-hidden bg-stone-100">
                   <ContentImage
                     src={sc.thumbnail}
                     alt={isVi ? (sc.titleVi || sc.title) : (sc.titleEn || sc.title)}
@@ -241,21 +241,21 @@ export function ScenarioListPage() {
                     <span className="text-[10px] font-black uppercase text-[#FFCD00] tracking-wider block">
                       {isVi ? (sc.topicLabelVi || sc.topicLabel) : (sc.topicLabelEn || sc.topicLabel)} • {isVi ? (sc.durationVi || sc.duration) : (sc.durationEn || sc.duration)}
                     </span>
-                    <h3 className="text-base font-black truncate drop-shadow-sm mt-0.5">
+                    <h3 className="text-base sm:text-lg font-black truncate drop-shadow-sm mt-0.5">
                       <BilingualText vi={sc.titleVi || sc.title} en={sc.titleEn || sc.title} />
                     </h3>
                   </div>
                 </div>
 
                 {/* Body Content */}
-                <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                <div className="p-6 flex-1 flex flex-col justify-between gap-5">
                   <div className="space-y-3">
-                    <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-[#5C4D42] line-clamp-2 leading-relaxed">
                       {isVi ? (sc.overviewVi || sc.overview) : (sc.overviewEn || sc.overview)}
                     </p>
 
                     {/* Role Play Snapshot Box */}
-                    <div className="p-3 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/70 space-y-1.5 text-xs">
+                    <div className="p-3.5 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/70 space-y-1.5 text-xs">
                       <div className="flex items-center justify-between">
                         <span className="text-[#FF7A00] font-bold flex items-center gap-1">
                           <span>AI:</span>
@@ -282,16 +282,15 @@ export function ScenarioListPage() {
                   <div className="pt-2 border-t border-[#E8E5DF]/40 flex items-center gap-2">
                     <Link
                       to={`/ai-scenarios/${sc.id}`}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] text-xs font-bold text-center transition-colors"
+                      className="flex-1 py-3 px-3 rounded-2xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] text-xs sm:text-sm font-black text-center transition-colors"
                     >
                       <BilingualText vi="Chi tiết" en="Details" />
                     </Link>
                     <Link
                       to={`/ai-roleplay/${sc.id}`}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#FF7A00] hover:bg-[#C2410C] text-white text-xs font-black text-center shadow-[0_2px_0_#C2410C] active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-1.5 transition-all"
+                      className="flex-1 py-3 px-3 rounded-2xl bg-[#FF7A00] hover:bg-[#C2410C] text-white text-xs sm:text-sm font-black text-center shadow-xs transition-colors"
                     >
-                      <Play size={12} fill="currentColor" />
-                      <span><BilingualText vi="Nhập vai" en="Roleplay" /></span>
+                      <BilingualText vi="Nhập vai →" en="Roleplay →" />
                     </Link>
                   </div>
                 </div>
