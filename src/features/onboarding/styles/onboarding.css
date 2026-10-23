@@ -761,6 +761,55 @@
   color: var(--ob-red);
 }
 
+.ob-welcome-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ob-topbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  justify-self: end;
+}
+
+.ob-complete-actions {
+  position: absolute;
+  right: 40px;
+  top: 31px;
+  z-index: 10;
+}
+
+.ob-lesson-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ob-lesson-header .language-switcher button {
+  width: auto;
+  height: auto;
+  min-width: 38px;
+  min-height: 34px;
+  padding: 6px 9px;
+  display: inline-flex;
+}
+
+@media (max-width: 600px) {
+  .ob-welcome-actions {
+    gap: 8px;
+  }
+  .ob-topbar-actions {
+    gap: 8px;
+  }
+  .ob-complete-actions {
+    right: 20px;
+    top: 20px;
+  }
+}
+
 .ob-welcome main {
   position: relative;
   z-index: 2;
