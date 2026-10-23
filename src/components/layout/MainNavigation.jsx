@@ -1,7 +1,7 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
-import { Home, BookOpen, Map, Languages, Landmark, Newspaper, Compass, GraduationCap, Type } from 'lucide-react';
+import { Home, BookOpen, Map, Languages, Landmark, Newspaper, Compass, Type } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ', en: 'Home', icon: Home, end: true },
@@ -12,7 +12,6 @@ const NAV_ITEMS = [
   { to: ROUTES.VOCABULARY, label: 'Từ vựng', en: 'Vocabulary', icon: Languages },
   { to: '/culture', label: 'Văn hóa', en: 'Culture', icon: Landmark },
   { to: '/blog', label: 'Blog', en: 'Stories', icon: Newspaper },
-  { to: '/my-learning', label: 'Góc học tập', en: 'My learning', icon: GraduationCap },
 ];
 
 export function MainNavigation({ onNavigate }) {
