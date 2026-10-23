@@ -1,6 +1,6 @@
 // AI Roleplay & Scenarios Service (Người 4: /ai-scenarios, /ai-scenarios/:id, /ai-roleplay/:id, /ai-sessions/:id/result)
 
-import axiosClient from '@/infrastructure/api/axiosClient';
+import axiosClient from '../infrastructure/api/axiosClient.js';
 
 export const SCENARIO_LEVELS = [
   { id: 'all', label: 'Tất cả trình độ' },
@@ -255,9 +255,9 @@ export const SCENARIOS = [
 
 const ROLEPLAY_SESSION_STORAGE = 'hola_ai_roleplay_session_';
 const ROLEPLAY_RESULT_STORAGE = 'hola_ai_roleplay_result_';
-const AI_PROVIDER = import.meta.env.VITE_AI_PROVIDER || 'openrouter';
-const AI_MODEL = import.meta.env.VITE_AI_MODEL || 'openrouter/free';
-const AI_REQUEST_TIMEOUT_MS = Math.max(5000, Number(import.meta.env.VITE_AI_REQUEST_TIMEOUT_MS) || 30000);
+const AI_PROVIDER = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_PROVIDER) || 'openrouter';
+const AI_MODEL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_MODEL) || 'openrouter/free';
+const AI_REQUEST_TIMEOUT_MS = Math.max(5000, Number(typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_REQUEST_TIMEOUT_MS) || 30000);
 
 const unwrapAiPayload = (response) => response?.result ?? response?.data ?? response ?? {};
 
