@@ -2,7 +2,7 @@ import { BilingualText, bilingualLabel, useBilingualLabel } from '@/components/c
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { aiRoleplayService } from '@/services/aiRoleplayService';
+import { aiRoleplayService, evaluateObjectives } from '@/services/aiRoleplayService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -56,6 +56,21 @@ export function RoleplaySessionPage() {
       }).catch(() => {});
     }
   }, [id]);
+
+  // Khi learner hoàn thành 100% mục tiêu → tự báo hoàn thành lên backend
+  // để Admin cập nhật "Lượt hoàn thành" (chỉ báo 1 lần mỗi phiên).
+  useEffect(() => {
+    if (!id || !session || session.completionReported) return;
+    if (!aiRoleplayService.isProgressComplete(id, session)) return;
+
+    aiRoleplayService.reportCompletion(id).then(res => {
+      setSession(aiRoleplayService.getRoleplaySession(id));
+      if (res && !res.alreadyReported) {
+        showToast('🎉 Bạn đã hoàn thành 100% mục tiêu! Tiến độ đã được ghi nhận.');
+      }
+    }).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, session?.completedTasks?.length, session?.completionReported]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -132,6 +147,15 @@ export function RoleplaySessionPage() {
 
     setIsSending(true);
     setInputText('');
+
+    // Cập nhật tức thì tiến độ mục tiêu ngay khi học viên gửi câu thoại
+    setSession(prev => {
+      if (!prev) return prev;
+      const nextCompleted = evaluateObjectives(scenario, prev.completedTasks || [], text);
+      const optimistic = { ...prev, completedTasks: nextCompleted };
+      aiRoleplayService.saveRoleplaySession(id, optimistic);
+      return optimistic;
+    });
 
     try {
       const { session: updatedSession } = await aiRoleplayService.sendRoleplayMessage(id, text);
@@ -624,6 +648,12 @@ export function RoleplaySessionPage() {
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
+              {session?.completionReported && (
+                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold">
+                  <CheckCircle2 size={12} />
+                  <BilingualText>{"Đã ghi nhận hoàn thành kịch bản"}</BilingualText>
+                </div>
+              )}
             </div>
 
             {/* Checklist */}
