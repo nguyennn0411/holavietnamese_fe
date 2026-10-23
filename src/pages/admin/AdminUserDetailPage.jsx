@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { adminService } from '@/services/adminService';
@@ -28,7 +28,7 @@ export function AdminUserDetailPage() {
     try {
       const res = await adminService.updateUserStatus(id, selectedStatus);
       setUser((value) => ({ ...value, status: selectedStatus }));
-      setMsg(res.message || 'Đã cập nhật trạng thái.');
+      setMsg(res.message || bilingualLabel('Đã cập nhật trạng thái.', 'Status updated successfully.'));
     } catch (error) { setMsg(error.message); }
   };
 
@@ -101,9 +101,9 @@ export function AdminUserDetailPage() {
               onChange={e => setSelectedRole(e.target.value)}
               style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
             >
-              <option value="LEARNER">{vietnameseLabel("Học viên")}</option>
-              <option value="INSTRUCTOR">{vietnameseLabel("Giảng viên")}</option>
-              <option value="ADMIN">{vietnameseLabel("Quản trị viên")}</option>
+              <option value="LEARNER">{bilingualLabel("Học viên", "Learner")}</option>
+              <option value="INSTRUCTOR">{bilingualLabel("Giảng viên", "Instructor")}</option>
+              <option value="ADMIN">{bilingualLabel("Quản trị viên", "Administrator")}</option>
             </select>
             <button
               type="button"

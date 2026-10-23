@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { CheckCircle2, ArrowRight, Play, BookOpen } from 'lucide-react';
@@ -67,7 +67,7 @@ export function MyCourseCard({ course }) {
           <Link
             to={`/courses/${course.courseId || course.id}`}
             className="p-2.5 rounded-xl border border-[#E8E5DF] bg-white hover:bg-stone-50 text-[#253044] text-xs font-bold transition-all"
-            title="Chi tiết khóa học"
+            title={bilingualLabel("Chi tiết khóa học", "Course details")}
           >
             <ArrowRight size={14} />
           </Link>

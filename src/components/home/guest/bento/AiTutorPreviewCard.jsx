@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
@@ -22,13 +23,13 @@ export function AiTutorPreviewCard() {
           <span className="px-3 py-1 rounded-full bg-[#FFF0DC] text-[#F97316] border border-[#F97316]/30 text-xs font-bold uppercase tracking-wider">
             AI Tutor 24/7
           </span>
-          <span className="text-[11px] text-[#F97316] font-bold">Tự động sửa lỗi</span>
+          <span className="text-[11px] text-[#F97316] font-bold"><BilingualText vi="Tự động sửa lỗi" en="Auto Error Correction" /></span>
         </div>
         <h3 className="text-xl sm:text-2xl font-black text-[#253044]">
-          Luyện phản xạ với AI Gia sư
+          <BilingualText vi="Luyện phản xạ với AI Gia sư" en="Build Conversational Reflexes with AI Tutor" />
         </h3>
         <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
-          Trò chuyện không áp lực. AI phân tích giọng đọc, gợi ý câu giao tiếp tự nhiên và giải thích ngữ pháp tức thì.
+          <BilingualText vi="Trò chuyện không áp lực. AI phân tích giọng đọc, gợi ý câu giao tiếp tự nhiên và giải thích ngữ pháp tức thì." en="Practice speaking without pressure. AI analyzes pronunciation, suggests natural phrases, and clarifies grammar instantly." />
         </p>
       </div>
 
@@ -69,14 +70,14 @@ export function AiTutorPreviewCard() {
             className="!min-h-0 !min-w-0 px-3 py-1.5 rounded-full bg-[#FFF0DC] hover:bg-[#FDE1B3] text-[#F97316] border border-[#F97316]/30 font-bold text-[11px] flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
           >
             <Volume2 className="w-3.5 h-3.5 shrink-0" strokeWidth={2.2} />
-            <span>Nghe AI nói</span>
+            <span><BilingualText vi="Nghe AI nói" en="Listen to AI" /></span>
           </button>
         </div>
       </div>
 
       {/* Interactive User Response Chips */}
       <div className="space-y-1.5">
-        <span className="text-[10px] uppercase font-bold text-[#F97316]">Chọn câu trả lời thử:</span>
+        <span className="text-[10px] uppercase font-bold text-[#F97316]"><BilingualText vi="Chọn câu trả lời thử:" en="Select sample reply:" /></span>
         <div className="flex flex-wrap gap-1.5">
           {AI_PROMPTS.map((p, idx) => (
             <button
@@ -102,7 +103,7 @@ export function AiTutorPreviewCard() {
         to="/ai-tutor"
         className="w-full py-3 px-4 rounded-xl bg-[#F97316] hover:bg-[#C2410C] text-white font-black text-xs text-center shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 no-underline"
       >
-        <span>Vào phòng đàm thoại AI Tutor</span>
+        <span><BilingualText vi="Vào phòng đàm thoại AI Tutor" en="Enter AI Tutor Conversation" /></span>
         <ArrowRight size={14} />
       </Link>
     </motion.div>

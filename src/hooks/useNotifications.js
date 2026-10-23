@@ -4,6 +4,7 @@ import { audioFeedback } from '@/utils/audioFeedback';
 import { DEFAULT_NOTIFICATIONS, normalizeNotification } from '@/constants/notifications';
 import { useNotificationStream } from './useNotificationStream';
 import { toast } from 'sonner';
+import { bilingualLabel, BilingualText } from '@/components/common/BilingualText';
 
 const EVENT_NOTIFICATIONS_UPDATED = 'hola:notifications-updated';
 
@@ -152,7 +153,7 @@ export function useNotifications() {
         // local state already updated
       }
     } catch (err) {
-      toast.error('Không thể đánh dấu đã đọc: ' + err.message);
+      toast.error(bilingualLabel('Không thể đánh dấu đã đọc: ', 'Could not mark as read: ') + err.message);
     } finally {
       setBusy(false);
     }
@@ -172,9 +173,9 @@ export function useNotifications() {
       } catch {
         // local state already updated
       }
-      toast.success('Đã đánh dấu tất cả thông báo là đã đọc!');
+      toast.success(bilingualLabel('Đã đánh dấu tất cả thông báo là đã đọc!', 'All notifications marked as read!'));
     } catch (err) {
-      toast.error('Lỗi khi đánh dấu: ' + err.message);
+      toast.error(bilingualLabel('Lỗi khi đánh dấu: ', 'Error marking as read: ') + err.message);
     } finally {
       setBusy(false);
     }
@@ -194,9 +195,9 @@ export function useNotifications() {
       } catch {
         // local state already updated
       }
-      toast.info('Đã xóa thông báo.');
+      toast.info(bilingualLabel('Đã xóa thông báo.', 'Notification deleted.'));
     } catch (err) {
-      toast.error('Không thể xóa: ' + err.message);
+      toast.error(bilingualLabel('Không thể xóa: ', 'Could not delete: ') + err.message);
     } finally {
       setBusy(false);
     }
@@ -216,9 +217,9 @@ export function useNotifications() {
       } catch {
         // local state already updated
       }
-      toast.info('Đã dọn dẹp các thông báo đã đọc.');
+      toast.info(bilingualLabel('Đã dọn dẹp các thông báo đã đọc.', 'Cleaned up read notifications.'));
     } catch (err) {
-      toast.error('Không thể dọn dẹp: ' + err.message);
+      toast.error(bilingualLabel('Không thể dọn dẹp: ', 'Could not clean up: ') + err.message);
     } finally {
       setBusy(false);
     }
@@ -230,7 +231,7 @@ export function useNotifications() {
     try {
       audioFeedback.playTap();
       await learnerService.sendTestNotification();
-      toast.success('Đã gửi yêu cầu bắn thông báo test! Đang chờ SSE phản hồi...');
+      toast.success(bilingualLabel('Đã gửi yêu cầu bắn thông báo test! Đang chờ SSE phản hồi...', 'Sent test notification request! Waiting for SSE response...'));
     } catch (err) {
       // Simulate if offline/local test
       handleNewNotification({
@@ -242,7 +243,7 @@ export function useNotifications() {
         isRead: false,
         createdAt: new Date().toISOString(),
       });
-      toast.success('Đã tạo thông báo test cục bộ thành công!');
+      toast.success(bilingualLabel('Đã tạo thông báo test cục bộ thành công!', 'Test notification generated successfully!'));
     } finally {
       setBusy(false);
     }

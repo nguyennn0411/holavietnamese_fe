@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useCallback, useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -495,7 +495,7 @@ function ActivityWorkspace({
         {/* Thanh chuyển bước hoạt động (Segmented steps) */}
         <nav
           className="flex items-center gap-2 overflow-x-auto py-1 scrollbar-none"
-          aria-label="Các hoạt động trong bài học"
+          aria-label={bilingualLabel("Các hoạt động trong bài học", "Lesson activities")}
         >
           {activities.map((item, i) => {
             const Icon = getActivityTypeIcon(item.activityType);
@@ -748,7 +748,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
               <BilingualText>{"Bắt đầu quiz ngay →"}</BilingualText>
             </Link>
           ) : (
-            <EmptyState title="Quiz chưa được liên kết" />
+            <EmptyState title={bilingualLabel("Quiz chưa được liên kết", "Quiz not linked")} />
           )}
         </div>
       </div>
@@ -838,7 +838,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
 
           {type === 'SOUND_PATTERN' && (
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold">
-              <span>Mẫu vần & Quy tắc ghép âm</span>
+              <span><BilingualText vi="Mẫu vần & Quy tắc ghép âm" en="Rhyme patterns & Sound combination rules" /></span>
             </div>
           )}
 
@@ -863,7 +863,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
               <div
                 onClick={() => setZoomedImage(content.imageUrl)}
                 className="group relative rounded-2xl border border-[#E8E5DF]/80 overflow-hidden bg-gradient-to-b from-[#FFFDF9] to-[#FFF7E8] p-3 flex justify-center shadow-xs hover:shadow-md transition-all cursor-pointer max-w-3xl mx-auto"
-                title="Bấm để phóng to hình ảnh"
+                title={bilingualLabel("Bấm để phóng to hình ảnh", "Click to enlarge image")}
               >
                 <ContentImage
                   className="activity-content-image max-h-[500px] w-auto max-w-full object-contain rounded-xl group-hover:scale-[1.01] transition-transform"
@@ -873,7 +873,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#253044] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
                     <ZoomIn size={14} className="text-[#FF7A00]" />
-                    <span>Bấm để phóng to</span>
+                    <span><BilingualText vi="Bấm để phóng to" en="Click to enlarge" /></span>
                   </span>
                 </div>
               </div>
@@ -903,7 +903,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
 
           {/* Hình minh họa giáo trình */}
           {content.illustrations?.length > 0 && (
-            <section className="textbook-illustrations space-y-4 pt-5 border-t border-[#E8E5DF]/50" aria-label="Hình minh họa trong giáo trình">
+            <section className="textbook-illustrations space-y-4 pt-5 border-t border-[#E8E5DF]/50" aria-label={bilingualLabel("Hình minh họa trong giáo trình", "Textbook illustrations")}>
               <div className="flex items-center justify-between gap-3 flex-wrap">
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-xl bg-[#FFF2D6] text-[#EA580C] border border-[#FFCD00]/40 flex items-center justify-center shrink-0 shadow-2xs">
@@ -939,7 +939,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
                         <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#253044] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
                           <ZoomIn size={14} className="text-[#FF7A00]" />
-                          <span>Bấm để phóng to</span>
+                          <span><BilingualText vi="Bấm để phóng to" en="Click to enlarge" /></span>
                         </span>
                       </div>
                     </div>
@@ -983,7 +983,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                   <div
                     onClick={() => setZoomedImage(contextual.src)}
                     className="group relative rounded-2xl border border-[#E8E5DF]/80 overflow-hidden bg-gradient-to-b from-[#FFFDF9] to-[#FFF7E8] p-3 flex justify-center shadow-xs cursor-pointer hover:shadow-md transition-all max-w-2xl mx-auto"
-                    title="Bấm để xem phóng to hình ảnh"
+                    title={bilingualLabel("Bấm để xem phóng to hình ảnh", "Click to enlarge image")}
                   >
                     <ContentImage
                       className="max-h-[380px] w-auto max-w-full object-contain rounded-xl group-hover:scale-[1.015] transition-transform"
@@ -993,7 +993,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
                       <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-[#253044] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
                         <ZoomIn size={14} className="text-[#FF7A00]" />
-                        <span>Bấm để phóng to</span>
+                        <span><BilingualText vi="Bấm để phóng to" en="Click to enlarge" /></span>
                       </span>
                     </div>
                   </div>
@@ -1032,13 +1032,13 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
             <div className="flex items-center justify-between pb-3 px-2 border-b border-stone-100 shrink-0">
               <span className="text-xs font-bold text-stone-600 flex items-center gap-1.5">
                 <BookOpen size={14} className="text-[#FF7A00]" />
-                <span>Hình ảnh minh họa bài học</span>
+                <span><BilingualText vi="Hình ảnh minh họa bài học" en="Lesson illustration" /></span>
               </span>
               <button
                 type="button"
                 onClick={() => setZoomedImage(null)}
                 className="p-1.5 rounded-xl text-stone-500 hover:text-stone-800 hover:bg-stone-100 transition-colors cursor-pointer"
-                title="Đóng xem ảnh"
+                title={bilingualLabel("Đóng xem ảnh", "Close image viewer")}
               >
                 <X size={18} />
               </button>
@@ -1048,7 +1048,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
               <ContentImage
                 src={zoomedImage}
                 className="max-h-[75vh] w-auto max-w-full object-contain rounded-xl shadow-xs"
-                alt="Hình minh họa phóng to"
+                alt={bilingualLabel("Hình minh họa phóng to", "Enlarged illustration")}
               />
             </div>
 
@@ -1268,7 +1268,7 @@ function DialogueRenderer({ content = {}, activity = {} }) {
       <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900">
         <Lightbulb size={16} className="text-amber-600 shrink-0 mt-0.5" />
         <span>
-          <strong>Mẹo học Shadowing:</strong> Hãy bấm nghe từng câu thoại và lặp lại ngay theo giọng người bản xứ để luyện nhịp điệu và ngữ điệu tự nhiên.
+          <strong><BilingualText vi="Mẹo học Shadowing:" en="Shadowing Tip:" /></strong> <BilingualText vi="Hãy bấm nghe từng câu thoại và lặp lại ngay theo giọng người bản xứ để luyện nhịp điệu và ngữ điệu tự nhiên." en="Listen to each dialogue line and repeat immediately after the native speaker to practice natural rhythm and intonation." />
         </span>
       </div>
     </div>
@@ -1288,8 +1288,8 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
   if (items.length === 0) {
     return (
       <EmptyState
-        title="Chưa có từ vựng để hiển thị"
-        description="Bạn có thể mở sổ tay từ vựng để ôn lại các từ đã lưu."
+        title={bilingualLabel("Chưa có từ vựng để hiển thị", "No vocabulary to display")}
+        description={bilingualLabel("Bạn có thể mở sổ tay từ vựng để ôn lại các từ đã lưu.", "You can open your vocabulary notebook to review saved words.")}
       >
         <Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}>
           <BilingualText>{"Mở sổ tay từ vựng"}</BilingualText>
@@ -1341,7 +1341,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
             }`}
           >
             <Layers size={13} />
-            <span>Thẻ Flashcard</span>
+            <span><BilingualText vi="Thẻ Flashcard" en="Flashcard" /></span>
           </button>
 
           <button
@@ -1354,7 +1354,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
             }`}
           >
             <LayoutGrid size={13} />
-            <span>Danh sách lưới</span>
+            <span><BilingualText vi="Danh sách lưới" en="Grid view" /></span>
           </button>
         </div>
       </div>
@@ -1451,7 +1451,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                 {exampleVi && (
                   <div className="bg-[#FFF7E8] rounded-2xl p-4 border border-[#E8E5DF]/60 text-left space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#EA580C]">Ví dụ thực tế:</span>
+                      <span className="text-xs font-bold text-[#EA580C]"><BilingualText vi="Ví dụ thực tế:" en="Real-world example:" /></span>
                       <div onClick={(e) => e.stopPropagation()}>
                         <SpeakButton
                           text={exampleVi}
@@ -1477,7 +1477,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
             <div className="flex items-center justify-between pt-4 border-t border-[#E8E5DF]/40 text-xs text-[#64748B]">
               <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#EA580C]">
                 <RotateCcw size={12} />
-                <span>{isFlipped ? 'Bấm để xem lại mặt trước' : 'Bấm để lật xem nghĩa'}</span>
+                <span>{isFlipped ? <BilingualText vi="Bấm để xem lại mặt trước" en="Click to flip back" /> : <BilingualText vi="Bấm để lật xem nghĩa" en="Click to flip and reveal meaning" />}</span>
               </span>
 
               {!preview && (
@@ -1490,7 +1490,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                   className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-colors cursor-pointer"
                 >
                   <Bookmark size={12} className="text-[#FF7A00]" />
-                  <span>Lưu từ</span>
+                  <span><BilingualText vi="Lưu từ" en="Save word" /></span>
                 </button>
               )}
             </div>
@@ -1506,7 +1506,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
               className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl text-xs font-bold text-[#253044] bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] shadow-xs cursor-pointer"
             >
               <ArrowLeft size={14} />
-              <span>Từ trước</span>
+              <span><BilingualText vi="Từ trước" en="Previous" /></span>
             </button>
 
             <span className="text-xs font-extrabold text-[#64748B]">
@@ -1518,7 +1518,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
               onClick={nextCard}
               className="inline-flex items-center gap-1.5 py-2 px-4 rounded-xl text-xs font-bold text-white bg-[#FF7A00] hover:bg-[#EA580C] shadow-xs cursor-pointer"
             >
-              <span>Từ tiếp theo</span>
+              <span><BilingualText vi="Từ tiếp theo" en="Next" /></span>
               <ArrowRight size={14} />
             </button>
           </div>
@@ -1613,7 +1613,7 @@ function VocabularyRenderer({ items = [], lessonId, preview, saved, saveError, o
                       className="w-full inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF2D6] text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-colors cursor-pointer"
                     >
                       <Bookmark size={13} className="text-[#FF7A00]" />
-                      <span>Lưu vào sổ tay</span>
+                      <span><BilingualText vi="Lưu vào sổ tay" en="Save to notebook" /></span>
                     </button>
                   </div>
                 )}
@@ -1648,8 +1648,8 @@ function GrammarRenderer({ activity = {}, content = {} }) {
   if (grammarTopics.length === 0) {
     return (
       <EmptyState
-        title="Chưa có nội dung ngữ pháp"
-        description="Nội dung ngữ pháp đang được biên soạn cho bài học này."
+        title={bilingualLabel("Chưa có nội dung ngữ pháp", "No grammar content")}
+        description={bilingualLabel("Nội dung ngữ pháp đang được biên soạn cho bài học này.", "Grammar content is being prepared for this lesson.")}
       />
     );
   }
@@ -1770,7 +1770,7 @@ function GrammarRenderer({ activity = {}, content = {} }) {
                           )}
                           {exNote && (
                             <p className="text-[11px] text-amber-800 m-0 pt-0.5">
-                              <span className="font-semibold text-amber-900 mr-1">Gợi ý:</span>{exNote}
+                              <span className="font-semibold text-amber-900 mr-1"><BilingualText vi="Gợi ý:" en="Hint:" /></span>{exNote}
                             </p>
                           )}
                         </div>
@@ -1797,7 +1797,7 @@ function GrammarRenderer({ activity = {}, content = {} }) {
       <div className="flex items-start gap-2.5 p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-xs text-blue-950">
         <Lightbulb size={16} className="text-blue-600 shrink-0 mt-0.5" />
         <span>
-          <strong>Lưu ý ngữ pháp:</strong> Trong giao tiếp tiếng Việt, việc dùng đúng đại từ nhân xưng (anh, chị, em, cô, chú...) kết hợp cùng cấu trúc câu trên sẽ giúp câu nói tự nhiên và lịch sự hơn rất nhiều.
+          <strong><BilingualText vi="Lưu ý ngữ pháp:" en="Grammar Note:" /></strong> <BilingualText vi="Trong giao tiếp tiếng Việt, việc dùng đúng đại từ nhân xưng (anh, chị, em, cô, chú...) kết hợp cùng cấu trúc câu trên sẽ giúp câu nói tự nhiên và lịch sự hơn rất nhiều." en="In Vietnamese communication, using the correct personal pronouns (anh, chị, em, cô, chú...) combined with the sentence structure above makes your speech much more natural and polite." />
         </span>
       </div>
     </div>

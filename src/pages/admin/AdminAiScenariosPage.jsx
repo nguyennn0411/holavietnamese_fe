@@ -1,9 +1,9 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
 import { toast } from 'sonner';
-import { Pencil, Play, Power, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminAiScenariosPage() {
@@ -11,49 +11,42 @@ export function AdminAiScenariosPage() {
   const [topicFilter, setTopicFilter] = useState('all');
   const [levelFilter, setLevelFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [scenarios, setScenarios] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { confirm, confirmationDialog } = useConfirmDialog();
 
-  useEffect(() => {
-    adminCultureAiService.listScenarioRecords().then(setScenarios).catch(error => toast.error(error.message)).finally(() => setLoading(false));
-  }, []);
-
-  const filteredScenarios = scenarios.filter(sc => {
-    const q = search.trim().toLowerCase();
-    return (!q || `${sc.title} ${sc.destination || ''}`.toLowerCase().includes(q)) && (topicFilter === 'all' || sc.topic === topicFilter) && (levelFilter === 'all' || sc.level === levelFilter) && (statusFilter === 'all' || sc.status === statusFilter);
+  const scenarios = adminCultureAiService.getScenarios({
+    search,
+    topic: topicFilter,
+    level: levelFilter,
+    status: statusFilter,
   });
 
   const handleStatusChange = (id, newStatus) => {
-    adminCultureAiService.updateScenarioRecordStatus(id, newStatus)
-      .then(updated => setScenarios(current => current.map(item => item.id === id ? updated : item)))
-      .catch(error => toast.error(error.message));
-    toast.success(`Đã đổi trạng thái kịch bản sang: ${newStatus}`);
+    adminCultureAiService.updateScenarioStatus(id, newStatus);
+    toast.success(bilingualLabel(`Đã đổi trạng thái kịch bản sang: ${newStatus}`, `Scenario status changed to: ${newStatus}`));
   };
 
   const handleDelete = async (id, title) => {
-    const accepted = await confirm({ title: 'Xóa kịch bản AI?', description: `Kịch bản “${title}” sẽ bị xóa và không thể khôi phục.`, confirmLabel: 'Xóa kịch bản' });
+    const accepted = await confirm({ title: bilingualLabel('Xóa kịch bản AI?', 'Delete AI scenario?'), description: bilingualLabel(`Kịch bản “${title}” sẽ bị xóa và không thể khôi phục.`, `Scenario “${title}” will be deleted and cannot be recovered.`), confirmLabel: bilingualLabel('Xóa kịch bản', 'Delete scenario') });
     if (!accepted) return;
-    await adminCultureAiService.deleteScenarioRecord(id);
-    setScenarios(current => current.filter(item => item.id !== id));
-    toast.success('Đã xóa kịch bản.');
+    adminCultureAiService.deleteScenario(id);
+    toast.success(bilingualLabel('Đã xóa kịch bản.', 'Scenario deleted.'));
   };
 
   const getStatusBadge = (status) => {
     switch (status) {
       case 'ACTIVE':
-        return <span className="admin-badge admin-badge-success admin-scenario-status"><span className="admin-scenario-status-dot" aria-hidden="true" /><BilingualText>{"Đang hoạt động"}</BilingualText></span>;
+        return <span className="admin-badge admin-badge-success"><BilingualText>{"Đang hoạt động"}</BilingualText></span>;
       case 'DRAFT':
-        return <span className="admin-badge admin-badge-warning admin-scenario-status"><span className="admin-scenario-status-dot" aria-hidden="true" /><BilingualText>{"Bản nháp"}</BilingualText></span>;
+        return <span className="admin-badge admin-badge-warning"><BilingualText>{"Bản nháp"}</BilingualText></span>;
       case 'ARCHIVED':
-        return <span className="admin-badge admin-badge-danger admin-scenario-status"><span className="admin-scenario-status-dot" aria-hidden="true" /><BilingualText>{"Đã khóa"}</BilingualText></span>;
+        return <span className="admin-badge admin-badge-danger"><BilingualText>{"Đã khóa"}</BilingualText></span>;
       default:
-        return <span className="admin-badge admin-scenario-status"><span className="admin-scenario-status-dot" aria-hidden="true" /><BilingualText>{status}</BilingualText></span>;
+        return <span className="admin-badge"><BilingualText>{status}</BilingualText></span>;
     }
   };
 
   return (
-    <div className="admin-content admin-ai-scenarios-page">
+    <div className="admin-content">
       {confirmationDialog}
 
       {/* Header */}
@@ -121,22 +114,22 @@ export function AdminAiScenariosPage() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th className="admin-scenario-col-title"><BilingualText>{"Kịch bản & Bối cảnh"}</BilingualText></th>
-              <th className="admin-scenario-col-role"><BilingualText>{"Nhân vật AI"}</BilingualText></th>
-              <th className="admin-scenario-col-level"><BilingualText>{"Trình độ"}</BilingualText></th>
-              <th className="admin-scenario-col-location"><BilingualText>{"Địa điểm"}</BilingualText></th>
-              <th className="admin-scenario-col-completions"><BilingualText>{"Lượt hoàn thành"}</BilingualText></th>
-              <th className="admin-scenario-col-status"><BilingualText>{"Trạng thái"}</BilingualText></th>
-              <th className="admin-scenario-col-actions"><BilingualText>{"Thao tác"}</BilingualText></th>
+              <th style={{ width: '34%' }}><BilingualText>{"Kịch bản & Bối cảnh"}</BilingualText></th>
+              <th><BilingualText>{"Nhân vật AI"}</BilingualText></th>
+              <th><BilingualText>{"Trình độ"}</BilingualText></th>
+              <th><BilingualText>{"Địa điểm"}</BilingualText></th>
+              <th><BilingualText>{"Lượt hoàn thành"}</BilingualText></th>
+              <th><BilingualText>{"Trạng thái"}</BilingualText></th>
+              <th style={{ textAlign: 'right' }}><BilingualText>{"Thao tác"}</BilingualText></th>
             </tr>
           </thead>
           <tbody>
-            {loading || filteredScenarios.length === 0 ? (
+            {scenarios.length === 0 ? (
               <tr>
                 <td colSpan={7} style={{ textAlign: 'center', padding: '40px', color: 'var(--color-muted)' }}><BilingualText>{"Không tìm thấy kịch bản AI nào phù hợp."}</BilingualText></td>
               </tr>
             ) : (
-              filteredScenarios.map(sc => (
+              scenarios.map(sc => (
                 <tr key={sc.id}>
                   <td>
                     <div>
@@ -177,9 +170,9 @@ export function AdminAiScenariosPage() {
 
                   <td>
                     <div style={{ fontSize: '13px' }}>
-                      <strong style={{ color: 'var(--color-ink)' }}>{sc.completionsCount || 0} <BilingualText>{"lượt"}</BilingualText></strong>
+                      <strong style={{ color: 'var(--color-ink)' }}>{sc.completionsCount || 0}<BilingualText>{"lượt"}</BilingualText></strong>
                       {sc.avgScore > 0 && (
-                        <div style={{ fontSize: '11px', color: 'var(--color-muted)' }}><BilingualText>{"Điểm TB: "}</BilingualText>{sc.avgScore}/100</div>
+                        <div style={{ fontSize: '11px', color: 'var(--color-muted)' }}><BilingualText>{"Điểm TB:"}</BilingualText>{sc.avgScore}/100</div>
                       )}
                     </div>
                   </td>
@@ -187,37 +180,42 @@ export function AdminAiScenariosPage() {
                   <td>{getStatusBadge(sc.status)}</td>
 
                   <td style={{ textAlign: 'right' }}>
-                    <div className="admin-scenario-actions">
+                    <div style={{ display: 'inline-flex', gap: '6px' }}>
                       {sc.status !== 'ACTIVE' ? (
                         <button
-                          className="button secondary admin-scenario-action admin-scenario-action--activate"
-                          title="Kích hoạt kịch bản"
+                          className="button secondary"
+                          style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-ink)' }}
+                          title={bilingualLabel("Kích hoạt kịch bản", "Activate scenario")}
                           onClick={() => handleStatusChange(sc.id, 'ACTIVE')}
-                        ><Power size={14} aria-hidden="true" /><BilingualText>{"Bật"}</BilingualText></button>
+                        ><BilingualText>{"✓ Bật"}</BilingualText></button>
                       ) : (
                         <button
-                          className="button secondary admin-scenario-action admin-scenario-action--disable"
-                          title="Tạm khóa kịch bản"
+                          className="button secondary"
+                          style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-red)' }}
+                          title={bilingualLabel("Tạm khóa kịch bản", "Archive scenario")}
                           onClick={() => handleStatusChange(sc.id, 'DRAFT')}
-                        ><Power size={14} aria-hidden="true" /><BilingualText>{"Tắt"}</BilingualText></button>
+                        ><BilingualText>{"Tắt"}</BilingualText></button>
                       )}
 
                       <Link
                         to={`/admin/ai-scenarios/${sc.id}`}
-                        className="button secondary admin-scenario-action admin-scenario-action--edit"
-                        title="Chỉnh sửa vai trò, bối cảnh, tiêu chí"
-                      ><Pencil size={14} aria-hidden="true" /><BilingualText>{"Sửa"}</BilingualText></Link>
+                        className="button secondary"
+                        style={{ fontSize: '11px', padding: '5px 8px' }}
+                        title={bilingualLabel("Chỉnh sửa vai trò, bối cảnh, tiêu chí", "Edit roles, context, objectives")}
+                      ><BilingualText>{"⚙️ Chỉnh sửa"}</BilingualText></Link>
 
                       <Link
                         to={`/ai-roleplay/${sc.id}`}
                         target="_blank"
-                        className="button secondary admin-scenario-action admin-scenario-action--try"
-                        title="Thử nghiệm trực tiếp phiên nhập vai"
-                      ><Play size={14} aria-hidden="true" /><BilingualText>{"Thử"}</BilingualText></Link>
+                        className="button secondary"
+                        style={{ fontSize: '11px', padding: '5px 8px' }}
+                        title={bilingualLabel("Thử nghiệm trực tiếp phiên nhập vai", "Test roleplay session live")}
+                      ><BilingualText>{"🎮 Thử"}</BilingualText></Link>
 
                       <button
-                        className="button secondary admin-scenario-action admin-scenario-action--delete"
-                        title="Xóa kịch bản"
+                        className="button secondary"
+                        style={{ fontSize: '11px', padding: '5px 8px', color: 'var(--color-red)' }}
+                        title={bilingualLabel("Xóa kịch bản", "Delete scenario")}
                         onClick={() => handleDelete(sc.id, sc.title)}
                       >
                         <Trash2 size={15} aria-hidden="true" />

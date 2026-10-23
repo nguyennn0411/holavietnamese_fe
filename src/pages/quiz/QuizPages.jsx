@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { MediaPlayer } from '@/components/learning/MediaPlayer';
 import { useCallback, useEffect, useState, useMemo } from 'react';
@@ -90,16 +90,16 @@ export function QuizPage() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 relative z-10">
                 <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
                   <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
-                    Số câu hỏi
+                    <BilingualText vi="Số câu hỏi" en="Total questions" />
                   </span>
                   <strong className="text-base sm:text-lg font-black text-[#253044]">
-                    {quiz.questionCount} câu
+                    <BilingualText vi={`${quiz.questionCount} câu`} en={`${quiz.questionCount} questions`} />
                   </strong>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
                   <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
-                    Điểm đạt
+                    <BilingualText vi="Điểm đạt" en="Passing score" />
                   </span>
                   <strong className="text-base sm:text-lg font-black text-emerald-700">
                     {quiz.passingScore}%
@@ -108,19 +108,19 @@ export function QuizPage() {
 
                 <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
                   <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
-                    Thời gian
+                    <BilingualText vi="Thời gian" en="Time limit" />
                   </span>
                   <strong className="text-base sm:text-lg font-black text-[#253044]">
-                    {quiz.timeLimitMinutes ? `${quiz.timeLimitMinutes} phút` : 'Tự do'}
+                    {quiz.timeLimitMinutes ? <BilingualText vi={`${quiz.timeLimitMinutes} phút`} en={`${quiz.timeLimitMinutes} min`} /> : <BilingualText vi="Tự do" en="Untimed" />}
                   </strong>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
                   <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
-                    Lần làm bài
+                    <BilingualText vi="Lần làm bài" en="Max attempts" />
                   </span>
                   <strong className="text-base sm:text-lg font-black text-[#253044]">
-                    {quiz.maxAttempts ? `${quiz.maxAttempts} lần` : 'Vô hạn'}
+                    {quiz.maxAttempts ? <BilingualText vi={`${quiz.maxAttempts} lần`} en={`${quiz.maxAttempts} attempts`} /> : <BilingualText vi="Vô hạn" en="Unlimited" />}
                   </strong>
                 </div>
               </div>
@@ -241,7 +241,7 @@ function Attempt({ attempt }) {
 
   if (!questions.length) {
     return (
-      <EmptyState title="Quiz chưa có câu hỏi">
+      <EmptyState title={bilingualLabel("Quiz chưa có câu hỏi", "Quiz has no questions")}>
         <Link className="button secondary" to="/my-learning">
           <BilingualText>{"Về góc học tập"}</BilingualText>
         </Link>
@@ -309,7 +309,10 @@ function Attempt({ attempt }) {
               <BilingualText vi={attempt.quizTitleVi || attempt.quizTitle} en={attempt.quizTitle} />
             </h1>
             <p className="text-[11px] text-[#64748B] m-0 font-medium">
-              Câu {index + 1} / {questions.length} · Đã làm: {answeredCount}/{questions.length} câu
+              <BilingualText
+                vi={`Câu ${index + 1} / ${questions.length} · Đã làm: ${answeredCount}/${questions.length} câu`}
+                en={`Question ${index + 1} / ${questions.length} · Answered: ${answeredCount}/${questions.length}`}
+              />
             </p>
           </div>
         </div>
@@ -324,7 +327,7 @@ function Attempt({ attempt }) {
                   ? 'bg-amber-100 text-amber-900 border border-amber-300'
                   : 'bg-stone-100 text-stone-700 border border-stone-200'
               }`}
-              title="Thời gian còn lại"
+              title={bilingualLabel("Thời gian còn lại", "Remaining time")}
             >
               <Clock size={13} className={isCriticalTimer ? 'text-white' : 'text-stone-500'} />
               <span>
@@ -347,7 +350,7 @@ function Attempt({ attempt }) {
       {/* Progress Bar & Question Jump Palette */}
       <div className="bg-white rounded-2xl border border-[#E8E5DF] p-4 shadow-xs space-y-3">
         <div className="flex items-center justify-between text-xs font-bold text-[#64748B]">
-          <span>Tiến độ làm bài</span>
+          <span><BilingualText vi="Tiến độ làm bài" en="Quiz progress" /></span>
           <span className="text-[#F97316]">{Math.round((answeredCount / questions.length) * 100)}%</span>
         </div>
 
@@ -361,7 +364,7 @@ function Attempt({ attempt }) {
         {/* Question Quick Jump Pills */}
         <div className="pt-2 flex flex-wrap gap-2 items-center">
           <span className="text-[11px] font-bold text-[#64748B] mr-1 hidden sm:inline">
-            Chọn câu:
+            <BilingualText vi="Chọn câu:" en="Jump to:" />
           </span>
           {questions.map((q, qIdx) => {
             const isCurrent = qIdx === index;
@@ -380,7 +383,7 @@ function Attempt({ attempt }) {
                     ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                     : 'bg-[#FFFCF7] text-[#253044] border border-[#E8E5DF]/70 hover:bg-[#FFF0DC]'
                 }`}
-                title={`Chuyển đến câu ${qIdx + 1}${isAnswered ? ' (Đã trả lời)' : ''}`}
+                title={bilingualLabel(`Chuyển đến câu ${qIdx + 1}${isAnswered ? ' (Đã trả lời)' : ''}`, `Go to question ${qIdx + 1}${isAnswered ? ' (Answered)' : ''}`)}
               >
                 {qIdx + 1}
               </button>
@@ -409,7 +412,7 @@ function Attempt({ attempt }) {
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E8E5DF]/40 pb-4">
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-[#FFF0DC] text-[#C2410C] font-black text-xs uppercase tracking-wider border border-[#FFCD00]/50">
-              Câu {index + 1} · {question.questionType?.replaceAll('_', ' ') || 'TRẮC NGHIỆM'}
+              <BilingualText vi={`Câu ${index + 1}`} en={`Question ${index + 1}`} /> · {question.questionType?.replaceAll('_', ' ') || <BilingualText vi="TRẮC NGHIỆM" en="MULTIPLE CHOICE" />}
             </span>
             <span className="px-2.5 py-1 rounded-full bg-stone-100 text-stone-700 font-bold text-xs">
               {question.points || 1} <BilingualText>{"điểm"}</BilingualText>
@@ -417,7 +420,7 @@ function Attempt({ attempt }) {
           </div>
 
           <span className="text-xs text-[#64748B] font-medium">
-            {answeredCount}/{questions.length} câu đã trả lời
+            <BilingualText vi={`${answeredCount}/${questions.length} câu đã trả lời`} en={`${answeredCount}/${questions.length} answered`} />
           </span>
         </div>
 
@@ -432,7 +435,7 @@ function Attempt({ attempt }) {
               <ContentImage
                 className="question-media max-h-72 w-auto object-contain rounded-xl"
                 src={question.imageUrl}
-                alt="Hình minh họa câu hỏi"
+                alt={bilingualLabel("Hình minh họa câu hỏi", "Question illustration")}
               />
             </div>
           )}
@@ -501,16 +504,24 @@ function Attempt({ attempt }) {
 
       {/* Confirmation Modal */}
       {confirm && (
-        <Modal title="Xác nhận nộp bài kiểm tra?" busy={busy} onClose={() => setConfirm(false)}>
+        <Modal title={bilingualLabel("Xác nhận nộp bài kiểm tra?", "Confirm quiz submission?")} busy={busy} onClose={() => setConfirm(false)}>
           <div className="space-y-4 py-2">
             <div className="p-4 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF] text-xs sm:text-sm text-[#253044] space-y-2">
               <p className="m-0 font-semibold">
-                Bạn đã trả lời <strong className="text-[#F97316]">{answeredCount}</strong> / <strong>{questions.length}</strong> câu hỏi.
+                <BilingualText
+                  vi={`Bạn đã trả lời ${answeredCount} / ${questions.length} câu hỏi.`}
+                  en={`You have answered ${answeredCount} / ${questions.length} questions.`}
+                />
               </p>
               {answeredCount < questions.length && (
                 <p className="m-0 text-amber-800 font-medium flex items-center gap-1.5 text-xs">
                   <AlertCircle size={14} className="shrink-0 text-amber-600" />
-                  <span>Vẫn còn {questions.length - answeredCount} câu chưa có câu trả lời. Bạn có chắc muốn nộp ngay?</span>
+                  <span>
+                    <BilingualText
+                      vi={`Vẫn còn ${questions.length - answeredCount} câu chưa có câu trả lời. Bạn có chắc muốn nộp ngay?`}
+                      en={`There are still ${questions.length - answeredCount} unanswered questions. Are you sure you want to submit now?`}
+                    />
+                  </span>
                 </p>
               )}
             </div>
@@ -625,11 +636,14 @@ function Result({ result }) {
         </h1>
 
         <p className="text-sm text-[#64748B] max-w-xl mx-auto">
-          <BilingualText>
-            {passed
+          <BilingualText
+            vi={passed
               ? 'Tuyệt vời! Bạn đã làm chủ tốt các kiến thức trong bài học này.'
               : 'Từng bước nhỏ đều có ý nghĩa. Hãy xem lại các câu trả lời để củng cố kiến thức nhé!'}
-          </BilingualText>
+            en={passed
+              ? 'Great job! You have successfully mastered the knowledge in this lesson.'
+              : 'Every small step counts. Review your answers to strengthen your knowledge!'}
+          />
         </p>
 
         {/* Circular Score Badge */}
@@ -643,7 +657,7 @@ function Result({ result }) {
           >
             <span className="text-4xl font-black tracking-tight">{percentage}%</span>
             <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5 opacity-80">
-              {passed ? 'Đạt chuẩn' : 'Chưa đạt'}
+              <BilingualText vi={passed ? 'Đạt chuẩn' : 'Chưa đạt'} en={passed ? 'Passed' : 'Needs Practice'} />
             </span>
           </div>
         </div>
@@ -652,21 +666,21 @@ function Result({ result }) {
         <div className="grid grid-cols-3 gap-3.5 max-w-lg mx-auto">
           <div className="p-3.5 rounded-2xl bg-white border border-emerald-200 text-center shadow-2xs space-y-0.5">
             <span className="text-[10px] font-bold text-emerald-700 uppercase block tracking-wider">
-              Câu đúng
+              <BilingualText vi="Câu đúng" en="Correct" />
             </span>
             <strong className="text-xl font-black text-emerald-800">{result.correctCount}</strong>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-white border border-rose-200 text-center shadow-2xs space-y-0.5">
             <span className="text-[10px] font-bold text-rose-700 uppercase block tracking-wider">
-              Câu sai
+              <BilingualText vi="Câu sai" en="Incorrect" />
             </span>
             <strong className="text-xl font-black text-rose-800">{result.incorrectCount}</strong>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-white border border-stone-200 text-center shadow-2xs space-y-0.5">
             <span className="text-[10px] font-bold text-stone-500 uppercase block tracking-wider">
-              Chưa làm
+              <BilingualText vi="Chưa làm" en="Unanswered" />
             </span>
             <strong className="text-xl font-black text-stone-700">{result.unansweredCount}</strong>
           </div>
@@ -744,14 +758,14 @@ function Result({ result }) {
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs font-bold text-[#C2410C]">
-                          Câu {qIdx + 1}
+                          <BilingualText vi={`Câu ${qIdx + 1}`} en={`Question ${qIdx + 1}`} />
                         </span>
                         <span
                           className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
                             isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                           }`}
                         >
-                          {isCorrect ? 'Chính xác' : 'Chưa đúng'}
+                          <BilingualText vi={isCorrect ? 'Chính xác' : 'Chưa đúng'} en={isCorrect ? 'Correct' : 'Incorrect'} />
                         </span>
                       </div>
                       <h3 className="text-sm sm:text-base font-bold text-[#253044] leading-snug">
@@ -794,7 +808,7 @@ function Result({ result }) {
                     <div className="p-3.5 rounded-xl bg-[#FFFCF7] border border-[#FFCD00]/50 text-[#253044] flex items-start gap-2.5">
                         <div className="space-y-0.5">
                         <strong className="text-xs font-bold text-[#C2410C] block">
-                          Giải thích:
+                          <BilingualText vi="Giải thích:" en="Explanation:" />
                         </strong>
                         <p className="text-xs text-[#64748B] m-0 leading-relaxed">
                           {question.explanationVi || question.explanation}

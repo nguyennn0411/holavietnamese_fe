@@ -1,3 +1,4 @@
+import { bilingualLabel } from '@/components/common/BilingualText';
 import React from 'react';
 import dongsonHeritage from '@/assets/images/dongson_heritage.png';
 
@@ -9,7 +10,7 @@ import dongsonHeritage from '@/assets/images/dongson_heritage.png';
  */
 export function AuthRightPanel({
   imageSrc = dongsonHeritage,
-  alt = 'Hoa văn Trống đồng Đông Sơn - Tinh hoa di sản văn hóa Việt Nam',
+  alt = bilingualLabel('Hoa văn Trống đồng Đông Sơn - Tinh hoa di sản văn hóa Việt Nam', 'Dong Son drum patterns - Vietnamese cultural heritage'),
 }) {
   return (
     <aside

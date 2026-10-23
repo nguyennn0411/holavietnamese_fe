@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
@@ -32,7 +33,8 @@ function StatCard({ label, value, detail, tone }) {
 }
 
 export function LearnerDashboard({ user }) {
-  const { t } = useTranslation('learner');
+  const { t, i18n } = useTranslation('learner');
+  const isVi = (i18n.resolvedLanguage || i18n.language || 'en').startsWith('vi');
   const reduceMotion = useReducedMotion();
   const [progress, setProgress] = useState(null);
   const [error, setError] = useState('');
@@ -59,11 +61,11 @@ export function LearnerDashboard({ user }) {
   const leaderboard = Array.isArray(progress?.weeklyLeaderboard) ? progress.weeklyLeaderboard : [];
 
   const modules = useMemo(() => [
-    { to: '/edtech/dashboard', title: 'Lộ trình học', text: 'Bản đồ bài học tương tác từng bước', tone: 'red' },
-    { to: '/vocabulary', title: t('dashboard.modules.vocabulary'), text: t('dashboard.modules.vocabularyText'), tone: 'gold' },
-    { to: '/courses', title: t('dashboard.modules.courses', { defaultValue: 'Khóa học' }), text: t('dashboard.modules.coursesText', { defaultValue: 'Danh mục khóa học đa dạng theo chủ đề' }), tone: 'blue' },
-    { to: '/ai-tutor', title: t('dashboard.modules.practice'), text: t('dashboard.modules.practiceText'), tone: 'green' },
-  ], [t]);
+    { to: '/edtech/dashboard', title: <BilingualText vi="Lộ trình học" en="Learning roadmap" />, text: <BilingualText vi="Bản đồ bài học tương tác từng bước" en="Step-by-step interactive lesson map." />, tone: 'red' },
+    { to: '/vocabulary', title: <BilingualText vi="Từ vựng" en="Vocabulary" />, text: <BilingualText vi="Ôn từ đã lưu và tăng khả năng ghi nhớ." en="Review saved words and build recall." />, tone: 'gold' },
+    { to: '/courses', title: <BilingualText vi="Khóa học" en="Courses" />, text: <BilingualText vi="Danh mục khóa học đa dạng theo chủ đề" en="Diverse course catalog organized by topic." />, tone: 'blue' },
+    { to: '/ai-tutor', title: <BilingualText vi="Luyện nói với AI" en="AI speaking practice" />, text: <BilingualText vi="Tự tin hơn qua hội thoại có hướng dẫn." en="Build confidence in guided conversations." />, tone: 'green' },
+  ], []);
 
   if (!progress && !error) return <DashboardSkeleton />;
 
@@ -84,7 +86,7 @@ export function LearnerDashboard({ user }) {
           <h1>{t('dashboard.welcomeName', { name: displayName })}</h1>
           <p>{t('dashboard.welcomeSubtitle')}</p>
         </div>
-        <Link to={continueTo} className="ld-button ld-button--primary"><Play size={16} fill="currentColor" />{currentLesson ? t('dashboard.continueLearning') : 'Xem lộ trình học'}</Link>
+        <Link to={continueTo} className="ld-button ld-button--primary"><Play size={16} fill="currentColor" />{currentLesson ? t('dashboard.continueLearning') : <BilingualText vi="Xem lộ trình học" en="View learning roadmap" />}</Link>
         <div className="ld-nghe"><MascotSpeechBubble>{currentLesson ? t('mascot.dashboard.continue') : t('mascot.dashboard.start')}</MascotSpeechBubble><BuffaloMascot variant={currentLesson ? 'encouraging' : 'teaching'} size="medium" animated accessibilityLabel={t('mascot.alt')} /></div>
       </motion.header>
 
@@ -98,11 +100,11 @@ export function LearnerDashboard({ user }) {
       <div className="ld-layout">
         <main className="ld-main-column">
           <motion.section className="ld-continue" {...entrance} transition={{ delay: reduceMotion ? 0 : .1 }}>
-            <div className="ld-section-label"><span>{t('dashboard.continueSection')}</span><small>{currentLesson?.courseTitle || 'Lộ trình học của bạn'}</small></div>
+            <div className="ld-section-label"><span>{t('dashboard.continueSection')}</span><small>{(isVi ? (currentLesson?.courseTitleVi || currentLesson?.courseTitle) : (currentLesson?.courseTitleEn || currentLesson?.courseTitle)) || <BilingualText vi="Lộ trình học của bạn" en="Your learning roadmap" />}</small></div>
             {currentLesson ? (
               <>
-                <h2>{currentLesson.titleVi || currentLesson.title}</h2>
-                <p>{currentLesson.description || t('dashboard.continueDescription')}</p>
+                <h2>{isVi ? (currentLesson.titleVi || currentLesson.title) : (currentLesson.titleEn || currentLesson.titleVi || currentLesson.title)}</h2>
+                <p>{(isVi ? currentLesson.description : (currentLesson.descriptionEn || currentLesson.description)) || t('dashboard.continueDescription')}</p>
                 <div className="ld-progress-copy"><span>{t('dashboard.lessonProgress')}</span><strong>{Math.round(lessonProgress)}%</strong></div>
                 <div className="ld-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(lessonProgress)}><span style={{ '--progress': `${lessonProgress}%` }} /></div>
                 <div className="ld-continue__footer">
@@ -112,11 +114,11 @@ export function LearnerDashboard({ user }) {
               </>
             ) : (
               <div className="ld-empty">
-                <h2>Lộ trình học tập cá nhân hóa</h2>
-                <p>Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo.</p>
+                <h2><BilingualText vi="Lộ trình học tập cá nhân hóa" en="Personalized Learning Path" /></h2>
+                <p><BilingualText vi="Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo." en="Explore the Vietnamese learning roadmap station by station, collect XP, and unlock interactive lessons." /></p>
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.25rem' }}>
                   <Link to="/edtech/dashboard" className="ld-button ld-button--primary">
-                    Vào lộ trình học<ArrowRight size={16} />
+                    <BilingualText vi="Vào lộ trình học" en="Open learning roadmap" /><ArrowRight size={16} />
                   </Link>
                   <Link to="/courses" className="ld-button" style={{ background: '#f5efe6', color: '#EA580C', border: '1px solid #ebdccb' }}>
                     {t('dashboard.exploreCourses')}<ArrowRight size={16} />
@@ -133,7 +135,7 @@ export function LearnerDashboard({ user }) {
 
           <motion.section className="ld-card ld-activity" {...entrance} transition={{ delay: reduceMotion ? 0 : .2 }}>
             <div className="ld-heading"><div><span>{t('dashboard.history')}</span><h2>{t('dashboard.recentActivity')}</h2></div></div>
-            {activities.length ? <div className="ld-activity__list">{activities.slice(0, 5).map((activity, index) => <div key={activity.id ?? index}><span className="ld-activity__dot"><Check size={12} /></span><div><strong>{activity.titleVi || activity.title}</strong><small>{activity.time}</small></div>{activity.xp != null && <b>+{activity.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Clock3 size={24} /><p>{t('dashboard.noActivity')}</p></div>}
+            {activities.length ? <div className="ld-activity__list">{activities.slice(0, 5).map((activity, index) => <div key={activity.id ?? index}><span className="ld-activity__dot"><Check size={12} /></span><div><strong>{isVi ? (activity.titleVi || activity.title) : (activity.titleEn || activity.titleVi || activity.title)}</strong><small>{activity.time}</small></div>{activity.xp != null && <b>+{activity.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Clock3 size={24} /><p>{t('dashboard.noActivity')}</p></div>}
           </motion.section>
         </main>
 
@@ -141,12 +143,12 @@ export function LearnerDashboard({ user }) {
           <section className="ld-card ld-daily">
             <div className="ld-heading"><div><span>{t('dashboard.today')}</span><h2>{t('todayChallenges')}</h2></div><Target size={20} /></div>
             <div className="ld-daily__goal"><div><span>{t('dailyGoal')}</span><strong>{todayMinutes}{dailyGoal ? ` / ${dailyGoal}` : ''} {t('minutes')}</strong></div><div className="ld-progress"><span style={{ '--progress': `${dailyPercent}%` }} /></div></div>
-            {quests.length ? <div className="ld-quest-list">{quests.slice(0, 4).map((quest, index) => <div key={quest.id ?? index} className={quest.done ? 'is-done' : ''}><span>{quest.done ? <Check size={12} /> : index + 1}</span><div><strong>{quest.title}</strong>{quest.progress && <small>{quest.progress}</small>}</div>{quest.xp != null && <b>+{quest.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Target size={23} /><p>{t('challengeEmpty')}</p></div>}
+            {quests.length ? <div className="ld-quest-list">{quests.slice(0, 4).map((quest, index) => <div key={quest.id ?? index} className={quest.done ? 'is-done' : ''}><span>{quest.done ? <Check size={12} /> : index + 1}</span><div><strong>{isVi ? quest.title : (quest.titleEn || quest.title)}</strong>{quest.progress && <small>{quest.progress}</small>}</div>{quest.xp != null && <b>+{quest.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Target size={23} /><p>{t('challengeEmpty')}</p></div>}
           </section>
 
           <section className="ld-card ld-leaderboard">
             <div className="ld-heading"><div><span>{t('dashboard.community')}</span><h2>{t('weeklyLeaderboard')}</h2></div><Trophy size={20} /></div>
-            {leaderboard.length ? <div className="ld-leaderboard__list">{leaderboard.slice(0, 5).map((item, index) => <div key={item.id ?? item.rank ?? index} className={item.isUser ? 'is-user' : ''}><span>{item.rank ?? index + 1}</span><strong>{item.name}</strong><b>{item.xp} XP</b></div>)}</div> : <div className="ld-empty ld-empty--compact"><Trophy size={23} /><p>{t('noLeaderboard')}</p></div>}
+            {leaderboard.length ? <div className="ld-leaderboard__list">{leaderboard.slice(0, 5).map((item, index) => <div key={item.id ?? item.rank ?? index} className={item.isUser ? 'is-user' : ''}><span>{item.rank ?? index + 1}</span><strong><BilingualText vi={item.name} en={item.nameEn || item.name} /></strong><b>{item.xp} XP</b></div>)}</div> : <div className="ld-empty ld-empty--compact"><Trophy size={23} /><p>{t('noLeaderboard')}</p></div>}
           </section>
 
           <section className="ld-review-card">
@@ -156,8 +158,18 @@ export function LearnerDashboard({ user }) {
           <section className="ld-card ld-word">
             <div className="ld-heading"><div><span>{t('dashboard.discovery')}</span><h2>{t('dashboard.wordOfDay')}</h2></div><button type="button" onClick={() => speakVietnamese(WORD_OF_THE_DAY.speechText || WORD_OF_THE_DAY.word)} aria-label={t('dashboard.listenWord', { word: WORD_OF_THE_DAY.word })}><Volume2 size={17} /></button></div>
             <strong>{WORD_OF_THE_DAY.word}</strong>
-            <p>{WORD_OF_THE_DAY.description}</p>
-            <small>{WORD_OF_THE_DAY.example}</small>
+            <p>
+              <BilingualText
+                vi={WORD_OF_THE_DAY.descriptionVi || WORD_OF_THE_DAY.description}
+                en={WORD_OF_THE_DAY.descriptionEn || "The classic southern Vietnamese opening word, expressing deep respect, politeness, and humility toward elders."}
+              />
+            </p>
+            <small>
+              <BilingualText
+                vi={WORD_OF_THE_DAY.exampleVi || WORD_OF_THE_DAY.example}
+                en={WORD_OF_THE_DAY.exampleEn || 'Example: “Dạ, cho con gửi tiền ạ.”'}
+              />
+            </small>
           </section>
         </aside>
       </div>

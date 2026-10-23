@@ -1,7 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
 import { Volume2 } from 'lucide-react';
 import { audioFeedback } from '@/utils/audioFeedback';
+import { useBilingualLabel } from '@/components/common/BilingualText';
 
 const speakVietnamese = (text, rate = 0.9) => {
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -26,6 +27,7 @@ export function SpeechBubble({
   delay = 0.3,
   className = '',
 }) {
+  const label = useBilingualLabel();
   const handlePlayAudio = (e) => {
     e.stopPropagation();
     audioFeedback.playPopSound(1.2);
@@ -70,8 +72,8 @@ export function SpeechBubble({
             type="button"
             onClick={handlePlayAudio}
             className="!min-h-0 !min-w-0 !p-0 w-6 h-6 rounded-lg bg-[#FFF9ED] hover:bg-[#FF7A00] text-[#FF7A00] hover:text-white flex items-center justify-center transition-colors shrink-0 shadow-2xs cursor-pointer group/audio"
-            title={`Phát âm: "${textVi}"`}
-            aria-label={`Phát âm ${textVi}`}
+            title={label(`Phát âm: "${textVi}"`, `Pronunciation: "${textVi}"`)}
+            aria-label={label(`Phát âm ${textVi}`, `Pronounce ${textVi}`)}
           >
             <Volume2 className="w-3.5 h-3.5 group-hover/audio:scale-110 transition-transform" />
           </button>

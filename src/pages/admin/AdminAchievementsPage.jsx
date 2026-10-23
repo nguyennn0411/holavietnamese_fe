@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useState, useEffect } from 'react';
 import { adminService } from '@/services/adminService';
@@ -61,7 +61,11 @@ export function AdminAchievementsPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!await confirm({ title: 'Xóa huy hiệu?', description: 'Huy hiệu sẽ bị xóa khỏi hệ thống và không thể khôi phục.', confirmLabel: 'Xóa huy hiệu' })) return;
+    if (!await confirm({
+      title: bilingualLabel('Xóa huy hiệu?', 'Delete badge?'),
+      description: bilingualLabel('Huy hiệu sẽ bị xóa khỏi hệ thống và không thể khôi phục.', 'The badge will be permanently deleted and cannot be restored.'),
+      confirmLabel: bilingualLabel('Xóa huy hiệu', 'Delete badge'),
+    })) return;
     try { const res = await adminService.deleteAchievement(id); setMsg(res.message || 'Đã xóa huy hiệu.'); loadData(); }
     catch (error) { setMsg(error.message); }
   };
@@ -139,7 +143,7 @@ export function AdminAchievementsPage() {
 
       {/* Modal Add Achievement */}
       {showModal && (
-        <Modal title={editingId ? "Cập nhật huy hiệu" : "Khởi tạo huy hiệu mới"} onClose={()=>setShowModal(false)}>
+        <Modal title={editingId ? bilingualLabel("Cập nhật huy hiệu", "Update Badge") : bilingualLabel("Khởi tạo huy hiệu mới", "Create New Badge")} onClose={()=>setShowModal(false)}>
 <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '12px' }}>
                 <div>
@@ -230,7 +234,7 @@ export function AdminAchievementsPage() {
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Link Icon SVG/PNG (Tùy chọn)"}</BilingualText></label>
                 <input
                   type="text"
-                  placeholder="https://... (để trống nếu dùng Emoji)"
+                  placeholder={bilingualLabel("https://... (để trống nếu dùng Emoji)", "https://... (leave blank for Emoji)")}
                   value={newAch.iconUrl}
                   onChange={e => setNewAch({ ...newAch, iconUrl: e.target.value })}
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}

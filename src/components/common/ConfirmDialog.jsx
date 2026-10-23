@@ -1,8 +1,8 @@
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { AlertTriangle, X } from 'lucide-react';
-import { BilingualText } from './BilingualText';
 
 function ConfirmDialog({ options, onResolve }) {
   const panelRef = useRef(null);
@@ -34,7 +34,7 @@ function ConfirmDialog({ options, onResolve }) {
       {options && <motion.div className="confirm-overlay" role="presentation" initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduceMotion ? 0 : .18 }} onMouseDown={(event) => { if (event.target === event.currentTarget) onResolve(false); }}>
         <motion.section ref={panelRef} className="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId}
           initial={reduceMotion ? false : { opacity: 0, y: 14, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: .98 }} transition={{ duration: reduceMotion ? 0 : .2, ease: [0.22, 1, 0.36, 1] }}>
-          <button className="confirm-dialog__close" type="button" aria-label="Đóng" onClick={() => onResolve(false)}><X size={18}/></button>
+          <button className="confirm-dialog__close" type="button" aria-label={bilingualLabel("Đóng", "Close")} onClick={() => onResolve(false)}><X size={18}/></button>
           <span className={`confirm-dialog__icon confirm-dialog__icon--${options.tone || 'danger'}`} aria-hidden="true"><AlertTriangle size={22}/></span>
           <div><h2 id={titleId}><BilingualText>{options.title || 'Xác nhận thao tác'}</BilingualText></h2><p id={descriptionId}><BilingualText>{options.description}</BilingualText></p></div>
           <div className="confirm-dialog__actions">

@@ -1,4 +1,4 @@
-﻿import { bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { CheckCircle2 } from 'lucide-react';
 
 const labels = {
@@ -15,13 +15,13 @@ export function LessonStatus({ status, isCurrent = false, showLabel = false }) {
     return (
       <span
         className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#FFF2D6] text-[#EA580C] border border-[#E8E5DF]/80 text-[10px] font-black uppercase tracking-wider shrink-0"
-        title="Đang học bài này"
+        title={bilingualLabel("Đang học bài này", "Currently learning this lesson")}
       >
         <span className="relative flex h-2 w-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF7A00] opacity-75" />
           <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF7A00]" />
         </span>
-        {showLabel && <span>Đang học</span>}
+        {showLabel && <span><BilingualText vi="Đang học" en="In progress" /></span>}
       </span>
     );
   }
@@ -30,7 +30,7 @@ export function LessonStatus({ status, isCurrent = false, showLabel = false }) {
     <span
       className={`lesson-status inline-flex items-center justify-center shrink-0 ${status?.toLowerCase() || ''}`}
       title={bilingualLabel(labels[status] || status)}
-      aria-label={labels[status] || status}
+      aria-label={bilingualLabel(labels[status] || status)}
     >
       {isCompleted ? (
         <span className="inline-flex items-center gap-1">
@@ -38,7 +38,7 @@ export function LessonStatus({ status, isCurrent = false, showLabel = false }) {
             <CheckCircle2 size={13} className="text-emerald-700" />
           </span>
           {showLabel && (
-            <span className="text-[11px] font-bold text-emerald-700">Đã xong</span>
+            <span className="text-[11px] font-bold text-emerald-700"><BilingualText vi="Đã xong" en="Completed" /></span>
           )}
         </span>
       ) : isInProgress ? (
@@ -47,7 +47,7 @@ export function LessonStatus({ status, isCurrent = false, showLabel = false }) {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF7A00] opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF7A00]" />
           </span>
-          {showLabel && <span>Đang học</span>}
+          {showLabel && <span><BilingualText vi="Đang học" en="In progress" /></span>}
         </span>
       ) : (
         <span className="w-3.5 h-3.5 rounded-full border-2 border-stone-300" />

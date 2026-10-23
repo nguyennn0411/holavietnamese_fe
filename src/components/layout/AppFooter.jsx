@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { Brand } from './Brand';
@@ -33,20 +33,20 @@ export function AppFooter() {
           </div>
 
           <div className="site-footer__social" aria-label="HolaVietnamese channels">
-            <Link to="/blog" aria-label="Stories and Blog" title="Học viên chia sẻ & Blog">
+            <Link to="/blog" aria-label="Stories and Blog" title={bilingualLabel("Học viên chia sẻ & Blog", "Learner Stories & Blog")}>
               <BookOpen size={16} />
             </Link>
-            <Link to="/ai-scenarios" aria-label="Conversation Scenarios" title="Luyện hội thoại & Cộng đồng">
+            <Link to="/ai-scenarios" aria-label="Conversation Scenarios" title={bilingualLabel("Luyện hội thoại & Cộng đồng", "Conversation Practice & Community")}>
               <MessageCircle size={16} />
             </Link>
-            <a href="mailto:support@holavietnamese.com" aria-label="Email support" title="Hỗ trợ qua Email">
+            <a href="mailto:support@holavietnamese.com" aria-label="Email support" title={bilingualLabel("Hỗ trợ qua Email", "Email Support")}>
               <Mail size={16} />
             </a>
           </div>
         </div>
 
         {/* Navigation Column 1: Khám phá */}
-        <nav className="site-footer__column" aria-label="Khám phá">
+        <nav className="site-footer__column" aria-label={bilingualLabel("Khám phá", "Explore")}>
           <strong><BilingualText vi="Khám phá" en="Explore" /></strong>
           <Link to="/courses"><BilingualText vi="Khóa học toàn diện" en="All Courses" /></Link>
           <Link to="/explore"><BilingualText vi="Hành trình di sản" en="Destinations" /></Link>
@@ -55,7 +55,7 @@ export function AppFooter() {
         </nav>
 
         {/* Navigation Column 2: Kỹ năng & Công cụ */}
-        <nav className="site-footer__column" aria-label="Tài nguyên học tập">
+        <nav className="site-footer__column" aria-label={bilingualLabel("Tài nguyên học tập", "Learning Resources")}>
           <strong><BilingualText vi="Kỹ năng & Công cụ" en="Skills & Tools" /></strong>
           <Link to={ROUTES.ALPHABET}><BilingualText vi="Bảng chữ cái & Âm điệu" en="Alphabet & Tones" /></Link>
           <Link to={ROUTES.VOCABULARY}><BilingualText vi="Kho từ vựng SRS" en="Vocabulary SRS" /></Link>
@@ -64,7 +64,7 @@ export function AppFooter() {
         </nav>
 
         {/* Navigation Column 3: Dành cho học viên */}
-        <nav className="site-footer__column" aria-label="Dành cho học viên">
+        <nav className="site-footer__column" aria-label={bilingualLabel("Dành cho học viên", "For Learners")}>
           <strong><BilingualText vi="Dành cho học viên" en="For Learners" /></strong>
           <Link to="/my-learning"><BilingualText vi="Góc học tập cá nhân" en="My Learning" /></Link>
           <Link to="/achievements"><BilingualText vi="Bảng thành tích & Huy hiệu" en="Achievements" /></Link>
@@ -73,7 +73,7 @@ export function AppFooter() {
         </nav>
 
         {/* Navigation Column 4: Hỗ trợ & Điều khoản */}
-        <nav className="site-footer__column" aria-label="Hỗ trợ & Pháp lý">
+        <nav className="site-footer__column" aria-label={bilingualLabel("Hỗ trợ & Pháp lý", "Support & Legal")}>
           <strong><BilingualText vi="Hỗ trợ & Pháp lý" en="Help & Legal" /></strong>
           <a href="mailto:support@holavietnamese.com"><BilingualText vi="Liên hệ hỗ trợ" en="Contact Support" /></a>
           <Link to="/settings"><BilingualText vi="Cài đặt học tập" en="Learning Settings" /></Link>

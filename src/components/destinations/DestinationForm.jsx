@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { Notice } from '@/components/common/Ui';
 import { destinationDraft, destinationPayload, DESTINATION_REGIONS, DESTINATION_STATUSES } from '@/models/Destination';
@@ -53,7 +53,7 @@ export function DestinationForm({ entry, onSaved, onCancel, onBusyChange }) {
       </label>)}
       <label htmlFor={`${formId}-region`}><BilingualText vi="Vùng miền *" en="Region" />
         <select id={`${formId}-region`} value={draft.region} onChange={event => change('region', event.target.value)} required>
-          <option value="">Chọn vùng miền</option>
+          <option value="">{bilingualLabel("Chọn vùng miền", "Select region")}</option>
           {DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi}</option>)}
         </select>
       </label>

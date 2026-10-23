@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { Breadcrumb, EmptyState, Notice, PageHeader } from '@/components/common/Ui';
@@ -19,15 +19,15 @@ export function AdminDestinationDetailPage() {
   const [message, setMessage] = useState('');
   const resource = useAsyncResource(useCallback(signal => adminDestinationService.get(id, { signal }), [id]));
   function saved() {
-    setMessage('Đã lưu điểm đến.');
+    setMessage(bilingualLabel('Đã lưu điểm đến.', 'Destination saved.'));
     setParams({});
     resource.reload();
   }
 
-  if (resource.error?.status === 404) return <EmptyState title="Không tìm thấy điểm đến"><Link className="button secondary" to={ROUTES.ADMIN_DESTINATIONS}><BilingualText vi="Về danh sách điểm đến" en="Back to destinations" /></Link></EmptyState>;
+  if (resource.error?.status === 404) return <EmptyState title={bilingualLabel("Không tìm thấy điểm đến", "Destination not found")}><Link className="button secondary" to={ROUTES.ADMIN_DESTINATIONS}><BilingualText vi="Về danh sách điểm đến" en="Back to destinations" /></Link></EmptyState>;
 
   return <div className="admin-destinations-page admin-destination-detail-page">
-    <Breadcrumb items={[{ label: 'Điểm đến', to: ROUTES.ADMIN_DESTINATIONS }, { label: editing ? 'Chỉnh sửa' : 'Chi tiết' }]} />
+    <Breadcrumb items={[{ label: bilingualLabel('Điểm đến', 'Destinations'), to: ROUTES.ADMIN_DESTINATIONS }, { label: editing ? bilingualLabel('Chỉnh sửa', 'Edit') : bilingualLabel('Chi tiết', 'Details') }]} />
     <ResourceState resource={resource}>{entry => <>
       <PageHeader eyebrow="Quản lý điểm đến" title={<BilingualText vi={entry.nameVi} en={entry.nameEn} />} actions={!editing && <button type="button" onClick={() => { setMessage(''); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa điểm đến" en="Edit destination" /></button>} />
       {message && <Notice kind="success"><BilingualText vi={message} en="Destination saved." /></Notice>}

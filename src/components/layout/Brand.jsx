@@ -1,3 +1,4 @@
+import { bilingualLabel } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 
 export function Brand({ compact = false, collapsed = false, className = '' }) {
@@ -5,7 +6,7 @@ export function Brand({ compact = false, collapsed = false, className = '' }) {
     <Link
       to="/"
       className={`site-brand${compact ? ' site-brand--compact' : ''}${collapsed ? ' site-brand--collapsed' : ''}${className ? ` ${className}` : ''}`}
-      aria-label="HolaVietnamese - Trang chủ"
+      aria-label={bilingualLabel("HolaVietnamese - Trang chủ", "HolaVietnamese - Home")}
     >
       <img
         className="site-brand__logo"

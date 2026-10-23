@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { learningService } from '@/services/learningService';
@@ -69,10 +69,10 @@ function LessonScreen({ courseId, lessonId }) {
                 <Link
                   to={`/courses/${courseId}`}
                   className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF2D6] text-[#FF7A00] text-xs font-bold border border-[#E8E5DF]/60 transition-colors shrink-0 no-underline"
-                  title="Quay lại khóa học"
+                  title={bilingualLabel("Quay lại khóa học", "Back to course")}
                 >
                   <ArrowLeft size={14} />
-                  <span className="hidden sm:inline">Khóa học</span>
+                  <span className="hidden sm:inline"><BilingualText vi="Khóa học" en="Course" /></span>
                 </Link>
 
                 <div className="h-5 w-[1px] bg-stone-200 hidden sm:block" />
@@ -80,7 +80,7 @@ function LessonScreen({ courseId, lessonId }) {
                 <div className="truncate">
                   <div className="flex items-center gap-2">
                     <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-bold text-[10px] uppercase shrink-0">
-                      Bài {lesson.lessonOrder || 1}
+                      <BilingualText vi={`Bài ${lesson.lessonOrder || 1}`} en={`Lesson ${lesson.lessonOrder || 1}`} />
                     </span>
                     <h1 className="text-sm sm:text-base font-black text-[#253044] truncate m-0">
                       <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
@@ -94,7 +94,7 @@ function LessonScreen({ courseId, lessonId }) {
                 {/* Thanh tiến độ tóm tắt */}
                 <div className="flex items-center gap-2 bg-[#FFF7E8] py-1.5 px-3 rounded-xl border border-[#E8E5DF]/60 text-xs font-bold text-[#64748B]">
                   <CheckCircle2 size={13} className="text-emerald-600" />
-                  <span>{completedCount}/{totalCount} bài</span>
+                  <span><BilingualText vi={`${completedCount}/${totalCount} bài`} en={`${completedCount}/${totalCount} lessons`} /></span>
                   <div className="w-16 h-2 rounded-full bg-stone-200 overflow-hidden ml-1">
                     <div
                       className="h-full bg-[#FF7A00] rounded-full transition-all duration-300"
@@ -108,10 +108,10 @@ function LessonScreen({ courseId, lessonId }) {
                   type="button"
                   onClick={() => setSavingWord(true)}
                   className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 text-[#253044] border border-[#E8E5DF] text-xs font-bold shadow-2xs transition-colors cursor-pointer"
-                  title="Thêm từ vựng mới vào sổ tay"
+                  title={bilingualLabel("Thêm từ vựng mới vào sổ tay", "Add new word to notebook")}
                 >
                   <Bookmark size={13} className="text-[#FF7A00]" />
-                  <span className="hidden sm:inline">Lưu từ vựng</span>
+                  <span className="hidden sm:inline"><BilingualText vi="Lưu từ vựng" en="Save word" /></span>
                 </button>
 
                 {/* Nút bật/tắt Sidebar */}
@@ -123,11 +123,11 @@ function LessonScreen({ courseId, lessonId }) {
                       ? 'bg-[#24382B] text-white border-[#24382B]'
                       : 'bg-white hover:bg-stone-50 text-stone-700 border-[#E8E5DF]'
                   }`}
-                  title={sidebarOpen ? 'Ẩn danh sách bài' : 'Hiện danh sách bài'}
+                  title={sidebarOpen ? bilingualLabel('Ẩn danh sách bài', 'Hide lesson list') : bilingualLabel('Hiện danh sách bài', 'Show lesson list')}
                 >
                   {sidebarOpen ? <PanelLeftClose size={14} /> : <PanelLeft size={14} />}
                   <span className="hidden sm:inline">
-                    {sidebarOpen ? 'Thu gọn' : 'Bài học'}
+                    {sidebarOpen ? <BilingualText vi="Thu gọn" en="Collapse" /> : <BilingualText vi="Bài học" en="Lessons" />}
                   </span>
                 </button>
 
@@ -245,7 +245,7 @@ function LessonScreen({ courseId, lessonId }) {
                 onClose={() => setSavingWord(false)}
                 onSaved={() => {
                   setSavingWord(false);
-                  setMessage('Đã lưu thành công vào sổ tay từ vựng.');
+                  setMessage(bilingualLabel('Đã lưu thành công vào sổ tay từ vựng.', 'Saved successfully to your vocabulary notebook.'));
                   setTimeout(() => setMessage(''), 4000);
                 }}
               />

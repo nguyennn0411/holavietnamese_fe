@@ -102,15 +102,15 @@ export function ContentForm({ kind, initial = {}, fixedFields = [], onSave, onCa
         {Array.isArray(type) ? <select disabled={busy} value={form[key] || type[0]} onChange={event => updateField(key, event.target.value)}>{type.map(option => <option key={option} value={option}>{bilingualLabel(option)}</option>)}</select>
           : type === 'textarea' ? <textarea disabled={busy} required={!optional} rows={3} value={form[key] || ''} onChange={event => updateField(key, event.target.value)}/>
             : <input disabled={busy} required={!optional} type={typeof type === 'string' ? type : 'text'} min={key === 'maxAttempts' || key === 'timeLimitMinutes' ? 1 : 0} max={key === 'passingScore' ? 100 : undefined} pattern={key === 'slug' ? '[a-z0-9]+(?:-[a-z0-9]+)*' : undefined} value={form[key] ?? ''} onChange={event => updateField(key, event.target.value)}/>}
-        {key === 'slug' && !initial.slug && <small>Tự tạo từ tên; bạn có thể sửa nếu muốn.</small>}
+        {key === 'slug' && !initial.slug && <small><BilingualText vi="Tự tạo từ tên; bạn có thể sửa nếu muốn." en="Auto-generated from title; edit if needed." /></small>}
       </label>;
     })}</div>
     {kind === 'courses' && <>
       <label className="course-cover-upload"><BilingualText>Ảnh bìa khóa học</BilingualText>
         <input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} required={!form.thumbnailUrl && !coverFile} onChange={chooseCover}/>
-        <small>JPG, PNG hoặc WebP, tối đa 5 MB. Ảnh được tải lên Cloudinary khi lưu khóa học.</small>
+        <small><BilingualText vi="JPG, PNG hoặc WebP, tối đa 5 MB. Ảnh được tải lên Cloudinary khi lưu khóa học." en="JPG, PNG or WebP, max 5 MB. Uploaded to Cloudinary on save." /></small>
       </label>
-      {coverPreview && <img className="course-cover-upload-preview" src={coverPreview} alt="Xem trước ảnh bìa khóa học"/>}
+      {coverPreview && <img className="course-cover-upload-preview" src={coverPreview} alt={bilingualLabel("Xem trước ảnh bìa khóa học", "Course cover preview")}/>}
       <label className="checkbox-row"><input type="checkbox" disabled={busy} checked={!!form.isFree} onChange={event => setForm({...form,isFree:event.target.checked})}/><BilingualText>Khóa học miễn phí</BilingualText></label>
     </>}
     {kind === 'quizzes' && <label className="checkbox-row"><input type="checkbox" disabled={busy} checked={!!form.randomizeQuestions} onChange={event => setForm({...form,randomizeQuestions:event.target.checked})}/><BilingualText>Xáo trộn câu hỏi</BilingualText></label>}

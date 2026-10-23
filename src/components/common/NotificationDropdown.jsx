@@ -1,8 +1,8 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Bell, CheckCheck, ArrowUpRight, BookOpen, Trophy, Flame, Settings, Clock } from 'lucide-react';
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useNotifications } from '@/hooks/useNotifications';
 
 /**
@@ -93,7 +93,7 @@ export function NotificationDropdown() {
         className="notification-menu__trigger relative p-2 rounded-xl text-[#253044] hover:bg-[#FFF0DC]/60 transition-colors cursor-pointer flex items-center justify-center"
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        aria-label="Thông báo"
+        aria-label={bilingualLabel("Thông báo", "Notifications")}
         aria-expanded={open}
         aria-haspopup="dialog"
       >
@@ -101,7 +101,7 @@ export function NotificationDropdown() {
         {unreadCount > 0 && (
           <span
             className="notification-menu__count absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#EA580C] text-white text-[10px] font-black flex items-center justify-center shadow-xs border-2 border-white animate-pulse"
-            aria-label={`${unreadCount} thông báo chưa đọc`}
+            aria-label={bilingualLabel(`${unreadCount} thông báo chưa đọc`, `${unreadCount} unread notifications`)}
           >
             {Math.min(unreadCount, 99)}
           </span>
@@ -114,7 +114,7 @@ export function NotificationDropdown() {
           <motion.section
             className="notification-menu__panel absolute right-0 top-[calc(100%+10px)] w-[min(380px,calc(100vw-24px))] z-50 bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF]/80 shadow-[0_20px_50px_rgba(67,25,20,0.14)] overflow-hidden text-left"
             role="dialog"
-            aria-label="Thông báo gần đây"
+            aria-label={bilingualLabel("Thông báo gần đây", "Recent notifications")}
             initial={reduceMotion ? false : { opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduceMotion ? undefined : { opacity: 0, y: -8, scale: 0.98 }}
@@ -128,11 +128,11 @@ export function NotificationDropdown() {
                 </strong>
                 {unreadCount > 0 ? (
                   <span className="px-2 py-0.5 rounded-full bg-[#EA580C] text-white text-[10px] font-bold">
-                    {unreadCount} mới
+                    <BilingualText vi={`${unreadCount} mới`} en={`${unreadCount} new`} />
                   </span>
                 ) : (
                   <span className="px-2 py-0.5 rounded-full bg-[#EDF0E5] text-[#24382B] text-[10px] font-bold">
-                    Đã đọc hết
+                    <BilingualText vi="Đã đọc hết" en="All read" />
                   </span>
                 )}
               </div>
@@ -143,10 +143,10 @@ export function NotificationDropdown() {
                   disabled={busy}
                   onClick={markAllAsRead}
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-[#EA580C] hover:bg-[#FFF0DC] transition-colors cursor-pointer"
-                  title="Đánh dấu tất cả đã đọc"
+                  title={bilingualLabel("Đánh dấu tất cả đã đọc", "Mark all as read")}
                 >
                   <CheckCheck size={14} />
-                  <span>Đọc tất cả</span>
+                  <span><BilingualText vi="Đọc tất cả" en="Mark all read" /></span>
                 </button>
               )}
             </header>
@@ -162,7 +162,7 @@ export function NotificationDropdown() {
                     : 'text-[#64748B] hover:text-[#253044] hover:bg-white'
                 }`}
               >
-                Tất cả ({notifications.length})
+                <BilingualText vi={`Tất cả (${notifications.length})`} en={`All (${notifications.length})`} />
               </button>
               <button
                 type="button"
@@ -173,7 +173,7 @@ export function NotificationDropdown() {
                     : 'text-[#64748B] hover:text-[#253044] hover:bg-white'
                 }`}
               >
-                Chưa đọc ({unreadCount})
+                <BilingualText vi={`Chưa đọc (${unreadCount})`} en={`Unread (${unreadCount})`} />
               </button>
             </div>
 
@@ -191,10 +191,13 @@ export function NotificationDropdown() {
                     <Bell size={22} className="opacity-60" />
                   </div>
                   <h4 className="text-xs font-bold text-[#253044]">
-                    {filter === 'unread' ? 'Tuyệt vời! Không còn thông báo chưa đọc' : 'Chưa có thông báo nào'}
+                    {filter === 'unread' ? <BilingualText vi="Tuyệt vời! Không còn thông báo chưa đọc" en="Great! No unread notifications" /> : <BilingualText vi="Chưa có thông báo nào" en="No notifications yet" />}
                   </h4>
                   <p className="text-[11px] text-[#64748B]">
-                    Các cập nhật bài học, huy hiệu và sự kiện sẽ hiển thị tại đây.
+                    <BilingualText
+                      vi="Các cập nhật bài học, huy hiệu và sự kiện sẽ hiển thị tại đây."
+                      en="Lesson updates, badges, and events will appear here."
+                    />
                   </p>
                 </div>
               ) : (
@@ -244,7 +247,7 @@ export function NotificationDropdown() {
                           )}
                           {item.link && (
                             <span className="text-[#EA580C] font-bold inline-flex items-center gap-0.5 ml-auto group-hover:underline">
-                              <span>Xem</span>
+                              <span><BilingualText vi="Xem" en="View" /></span>
                               <ArrowUpRight size={10} />
                             </span>
                           )}
@@ -263,14 +266,14 @@ export function NotificationDropdown() {
                 onClick={() => setOpen(false)}
                 className="hover:underline flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-white/60 transition-colors"
               >
-                <span>Xem toàn bộ thông báo</span>
+                <span><BilingualText vi="Xem toàn bộ thông báo" en="View all notifications" /></span>
                 <ArrowUpRight size={13} />
               </Link>
               <Link
                 to="/settings"
                 onClick={() => setOpen(false)}
                 className="text-[#64748B] hover:text-[#253044] p-1.5 rounded-lg hover:bg-white/60 transition-colors"
-                title="Cài đặt thông báo"
+                title={bilingualLabel("Cài đặt thông báo", "Notification settings")}
               >
                 <Settings size={15} />
               </Link>

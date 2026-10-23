@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -22,7 +22,7 @@ export function AdminCultureEditPage() {
     destination: 'Hà Nội',
     author: 'Biên tập viên Hola',
     authorRole: 'Chuyên gia văn hóa ẩm thực',
-    readTime: '5 phút đọc',
+    readTime: bilingualLabel('5 phút đọc', '5 min read'),
     status: 'PUBLISHED',
     coverImage: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80',
     summary: '',
@@ -87,7 +87,7 @@ export function AdminCultureEditPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
-      toast.error('Vui lòng nhập tiêu đề bài viết.');
+      toast.error(bilingualLabel('Vui lòng nhập tiêu đề bài viết.', 'Please enter an article title.'));
       return;
     }
 
@@ -97,7 +97,7 @@ export function AdminCultureEditPage() {
     };
 
     adminCultureAiService.saveArticle(payload);
-    showToast('Đã lưu bài viết văn hóa thành công!');
+    showToast(bilingualLabel('Đã lưu bài viết văn hóa thành công!', 'Cultural article saved successfully!'));
     setTimeout(() => {
       navigate('/admin/culture');
     }, 800);
@@ -227,7 +227,7 @@ export function AdminCultureEditPage() {
                         type="button"
                         onClick={() => handleRemovePhrase(idx)}
                         style={{ background: 'transparent', border: 'none', color: 'var(--color-red)', cursor: 'pointer', fontSize: '16px' }}
-                        title="Xóa cụm từ này"
+                        title={bilingualLabel("Xóa cụm từ này", "Delete this phrase")}
                       >
                         ✕
                       </button>
@@ -299,7 +299,7 @@ export function AdminCultureEditPage() {
                   <div style={{ marginTop: '12px', borderRadius: '12px', overflow: 'hidden', height: '160px', border: '1px solid var(--color-border)' }}>
                     <ContentImage
                       src={formData.coverImage}
-                      alt={formData.title || 'Ảnh bìa bài viết'}
+                      alt={formData.title || bilingualLabel('Ảnh bìa bài viết', 'Article cover image')}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
@@ -346,7 +346,7 @@ export function AdminCultureEditPage() {
 
           {formData.coverImage && (
             <div style={{ borderRadius: '16px', overflow: 'hidden', height: '320px', marginBottom: '28px' }}>
-              <ContentImage src={formData.coverImage} alt={formData.title || 'Ảnh bìa bài viết'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <ContentImage src={formData.coverImage} alt={formData.title || bilingualLabel('Ảnh bìa bài viết', 'Article cover image')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           )}
 

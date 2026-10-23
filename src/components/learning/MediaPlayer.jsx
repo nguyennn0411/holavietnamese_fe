@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+﻿import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { mediaSource } from '@/components/common/mediaSource';
 import { Volume2, Video, AlertCircle } from 'lucide-react';
@@ -40,7 +40,7 @@ function MediaAttempt({ value, type }) {
           controls
           preload="metadata"
           className="w-full aspect-video rounded-2xl"
-          aria-label="Video bài học"
+          aria-label={bilingualLabel("Video bài học", "Lesson video")}
           onError={() => setFailed(true)}
         >
           <BilingualText>{"Trình duyệt không hỗ trợ phát"}</BilingualText>
@@ -56,7 +56,7 @@ function MediaAttempt({ value, type }) {
         <span className="w-8 h-8 rounded-xl bg-white border border-[#E8E5DF]/60 flex items-center justify-center text-[#FF7A00] shadow-2xs">
           <Volume2 size={16} />
         </span>
-        <span className="hidden sm:inline">Phát âm bài học</span>
+        <span className="hidden sm:inline"><BilingualText vi="Phát âm bài học" en="Lesson audio" /></span>
       </div>
 
       <Player
@@ -64,7 +64,7 @@ function MediaAttempt({ value, type }) {
         controls
         preload="metadata"
         className="w-full h-10 rounded-xl"
-        aria-label="Âm thanh bài học"
+        aria-label={bilingualLabel("Âm thanh bài học", "Lesson audio")}
         onError={() => setFailed(true)}
       >
         <BilingualText>{"Trình duyệt không hỗ trợ phát"}</BilingualText>

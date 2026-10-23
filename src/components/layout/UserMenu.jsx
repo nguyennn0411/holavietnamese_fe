@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, useBilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -8,9 +8,10 @@ import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, Compass } fro
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
+  const label = useBilingualLabel();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-  const displayName = user?.fullName || user?.username || 'Học viên';
+  const displayName = user?.fullName || user?.username || label('Học viên', 'Learner');
   const reduceMotion = useReducedMotion();
   const { confirm, confirmationDialog } = useConfirmDialog();
 
@@ -47,9 +48,9 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
 
   return (
     <div className="user-menu" ref={menuRef}>
-      <button type="button" className="user-menu__trigger" onClick={() => setOpen((value) => !value)} aria-label={`Menu tài khoản của ${displayName}`} aria-expanded={open} aria-haspopup="menu">
+      <button type="button" className="user-menu__trigger" onClick={() => setOpen((value) => !value)} aria-label={label(`Menu tài khoản của ${displayName}`, `Account menu for ${displayName}`)} aria-expanded={open} aria-haspopup="menu">
         <span className="user-menu__avatar">
-          <ContentImage src={user?.avatarUrl} alt={`Ảnh đại diện của ${displayName}`} className="user-menu__avatar-image"
+          <ContentImage src={user?.avatarUrl} alt={label(`Ảnh đại diện của ${displayName}`, `Avatar of ${displayName}`)} className="user-menu__avatar-image"
             width={30} height={30} loading="eager" referrerPolicy="no-referrer"
             fallback={<span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>} />
         </span>

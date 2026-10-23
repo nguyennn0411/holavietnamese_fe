@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { courseService } from '@/services/courseService';
@@ -15,7 +15,7 @@ export function EnrollButton({ courseId, enrollment, onEnrolled }) {
     try {
       const result = await courseService.enroll(courseId);
       if (!result?.isEnrolled) {
-        throw new Error('Đăng ký khóa học chưa hoàn tất. Vui lòng thử lại.');
+        throw new Error(bilingualLabel('Đăng ký khóa học chưa hoàn tất. Vui lòng thử lại.', 'Course enrollment incomplete. Please try again.'));
       }
       onEnrolled?.(result);
     } catch (e) {

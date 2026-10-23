@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Volume2, ArrowLeftRight, HelpCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { MinimalPairDTO, VietnameseTone } from '@/types/edtech';
 import { VIETNAMESE_TONES, TONE_COLOR_MAP } from '@/constants/vietnameseTones';
 import { ToneCurveGraph } from '@/components/edtech/ui/ToneCurveGraph';
 import { audioFeedback } from '@/utils/audioFeedback';
+import BilingualText, { bilingualLabel } from '@/components/common/BilingualText';
 
 export const COMMON_MINIMAL_PAIRS: MinimalPairDTO[] = [
   {
     id: 'hoi-vs-nga',
     title: 'Thanh Hỏi (?) vs Thanh Ngã (~)',
+    titleEn: 'Hỏi Tone (?) vs Ngã Tone (~)',
     contrastFocus: 'Cặp dấu gây bối rối nhất',
-    explanationEn:
+    contrastFocusVi: 'Cặp dấu gây bối rối nhất',
+    contrastFocusEn: 'Most confusing tone pair',
+    explanationVi:
       'Thanh Hỏi hạ giọng xuống đáy cổ họng rồi nảy nhẹ (313). Thanh Ngã bắt đầu cao hơn, bị nghẹn/ngắt thanh hầu (glottal stop) rồi bật vút lên đỉnh (3ˀ5).',
+    explanationEn:
+      'Hỏi tone dips down into the lower throat then rebounds slightly (313). Ngã tone starts higher, pauses with a glottal stop, then rises sharply to the top (3ˀ5).',
     itemA: {
       word: 'mả',
       tone: 'HOI',
@@ -34,9 +41,14 @@ export const COMMON_MINIMAL_PAIRS: MinimalPairDTO[] = [
   {
     id: 'ngang-vs-huyen',
     title: 'Thanh Ngang (Không dấu) vs Thanh Huyền (\\)',
+    titleEn: 'Ngang Tone (Flat) vs Huyền Tone (Grave \\)',
     contrastFocus: 'Bằng phẳng vs Hạ thấp dần',
-    explanationEn:
+    contrastFocusVi: 'Bằng phẳng vs Hạ thấp dần',
+    contrastFocusEn: 'Flat level vs Gentle descent',
+    explanationVi:
       'Thanh Ngang giữ cao độ đều 33 không dao động. Thanh Huyền hạ giọng nhẹ nhàng từ 2 xuống 1 như một tiếng thở dài êm dịu.',
+    explanationEn:
+      'Ngang tone maintains an even mid pitch 33 without fluctuating. Huyền tone gently glides down from 2 to 1 like a soft sigh.',
     itemA: {
       word: 'ma',
       tone: 'NGANG',
@@ -58,9 +70,14 @@ export const COMMON_MINIMAL_PAIRS: MinimalPairDTO[] = [
   {
     id: 'huyen-vs-nang',
     title: 'Thanh Huyền (\\) vs Thanh Nặng (.)',
+    titleEn: 'Huyền Tone (Grave \\) vs Nặng Tone (Dot .)',
     contrastFocus: 'Hạ êm dịu vs Thả rơi đột ngột',
-    explanationEn:
+    contrastFocusVi: 'Hạ êm dịu vs Thả rơi đột ngột',
+    contrastFocusEn: 'Gentle descent vs Abrupt drop',
+    explanationVi:
       'Thanh Huyền êm dịu và kéo dài. Thanh Nặng rơi gấp xuống tận đáy và bị chặn cụt đột ngột bởi nắp thanh quản.',
+    explanationEn:
+      'Huyền tone is soft and sustained. Nặng tone drops steeply to the bottom and is abruptly cut short by a glottal closure.',
     itemA: {
       word: 'bà',
       tone: 'HUYEN',
@@ -96,6 +113,8 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
   selectedQuizChoice = null,
   className = '',
 }) => {
+  const { i18n } = useTranslation();
+  const isEn = (i18n.resolvedLanguage || i18n.language || 'vi').toLowerCase().startsWith('en');
   const [selectedPairId, setSelectedPairId] = useState(initialPairId);
   const activePair =
     COMMON_MINIMAL_PAIRS.find((p) => p.id === selectedPairId) ||
@@ -122,13 +141,16 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
         <div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200">
             <ArrowLeftRight className="w-3.5 h-3.5 text-purple-600" />
-            Cặp Dấu Dễ Nhầm • Minimal Pairs Tone Contrast
+            <BilingualText vi="Cặp Dấu Dễ Nhầm • Đối chiếu thanh điệu" en="Minimal Pairs Tone Contrast" />
           </span>
           <h3 className="text-xl md:text-2xl font-black text-slate-900 mt-2">
-            {activePair.title}
+            <BilingualText vi={activePair.title} en={activePair.titleEn || activePair.title} />
           </h3>
           <p className="text-xs text-purple-700 font-semibold mt-0.5">
-            {activePair.contrastFocus}
+            <BilingualText
+              vi={activePair.contrastFocusVi || activePair.contrastFocus}
+              en={activePair.contrastFocusEn || activePair.contrastFocus}
+            />
           </p>
         </div>
 
@@ -177,9 +199,11 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
               <span
                 className={`text-xs font-bold px-3 py-1 rounded-full border ${colorsA.bg} ${colorsA.text} ${colorsA.border}`}
               >
-                {toneA.nameVi} ({toneA.symbol})
+                {isEn ? toneA.nameEn : toneA.nameVi} ({toneA.symbol})
               </span>
-              <span className="text-xs font-bold text-slate-400">Lựa chọn A</span>
+              <span className="text-xs font-bold text-slate-400">
+                <BilingualText vi="Lựa chọn A" en="Option A" />
+              </span>
             </div>
 
             <div className="flex items-center justify-between gap-3 mb-3">
@@ -199,14 +223,14 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
                   handlePlayWord(activePair.itemA.word, activePair.itemA.tone);
                 }}
                 className="!min-h-0 !min-w-0 !p-0 w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-[0_3px_0_#cbd5e1] hover:border-purple-400 hover:shadow-[0_3px_0_#a855f7] active:translate-y-0.5 active:shadow-none flex items-center justify-center text-purple-700 transition-all cursor-pointer audio-btn"
-                aria-label={`Nghe từ ${activePair.itemA.word}`}
+                aria-label={bilingualLabel(`Nghe từ ${activePair.itemA.word}`, `Listen to word ${activePair.itemA.word}`)}
               >
                 <Volume2 className="w-6 h-6 shrink-0" strokeWidth={2.2} />
               </button>
             </div>
 
             <p className="text-sm font-bold text-slate-700 mb-2">
-              Nghĩa: "{activePair.itemA.meaningEn}"
+              <BilingualText vi="Nghĩa: " en="Meaning: " />"{activePair.itemA.meaningEn}"
             </p>
 
             <p className="text-xs text-slate-500 italic bg-white rounded-xl p-2.5 border border-slate-100">
@@ -237,9 +261,11 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
               <span
                 className={`text-xs font-bold px-3 py-1 rounded-full border ${colorsB.bg} ${colorsB.text} ${colorsB.border}`}
               >
-                {toneB.nameVi} ({toneB.symbol})
+                {isEn ? toneB.nameEn : toneB.nameVi} ({toneB.symbol})
               </span>
-              <span className="text-xs font-bold text-slate-400">Lựa chọn B</span>
+              <span className="text-xs font-bold text-slate-400">
+                <BilingualText vi="Lựa chọn B" en="Option B" />
+              </span>
             </div>
 
             <div className="flex items-center justify-between gap-3 mb-3">
@@ -259,14 +285,14 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
                   handlePlayWord(activePair.itemB.word, activePair.itemB.tone);
                 }}
                 className="!min-h-0 !min-w-0 !p-0 w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-[0_3px_0_#cbd5e1] hover:border-purple-400 hover:shadow-[0_3px_0_#a855f7] active:translate-y-0.5 active:shadow-none flex items-center justify-center text-purple-700 transition-all cursor-pointer audio-btn"
-                aria-label={`Nghe từ ${activePair.itemB.word}`}
+                aria-label={bilingualLabel(`Nghe từ ${activePair.itemB.word}`, `Listen to word ${activePair.itemB.word}`)}
               >
                 <Volume2 className="w-6 h-6 shrink-0" strokeWidth={2.2} />
               </button>
             </div>
 
             <p className="text-sm font-bold text-slate-700 mb-2">
-              Nghĩa: "{activePair.itemB.meaningEn}"
+              <BilingualText vi="Nghĩa: " en="Meaning: " />"{activePair.itemB.meaningEn}"
             </p>
 
             <p className="text-xs text-slate-500 italic bg-white rounded-xl p-2.5 border border-slate-100">
@@ -285,7 +311,11 @@ export const MinimalPairsComparator: React.FC<MinimalPairsComparatorProps> = ({
       <div className="mt-6 bg-purple-50/80 border border-purple-200 rounded-2xl p-4 flex items-start gap-3 text-xs text-purple-900">
         <HelpCircle className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
         <div>
-          <strong>Bí quyết phân biệt:</strong> {activePair.explanationEn}
+          <strong><BilingualText vi="Bí quyết phân biệt: " en="Key distinction: " /></strong>
+          <BilingualText
+            vi={activePair.explanationVi || activePair.explanationEn}
+            en={activePair.explanationEn}
+          />
         </div>
       </div>
     </div>

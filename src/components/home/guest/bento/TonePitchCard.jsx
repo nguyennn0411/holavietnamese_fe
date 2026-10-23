@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Volume2 } from 'lucide-react';
@@ -29,17 +30,17 @@ export function TonePitchCard() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="px-3 py-1 rounded-full bg-[#EDF0E5] text-[#24382B] text-xs font-bold uppercase tracking-wider">
-            Đồ thị cao độ • Live Pitch Contour
+            <BilingualText vi="Đồ thị cao độ • Live Pitch Contour" en="Live Pitch Contour Visualizer" />
           </span>
           <span className="text-[11px] font-bold text-[#EA580C] bg-[#FFF0DC] px-2.5 py-0.5 rounded-full">
             Web Audio API
           </span>
         </div>
         <h3 className="text-xl sm:text-2xl font-black text-[#253044]">
-          Làm chủ 6 thanh điệu tiếng Việt trực quan
+          <BilingualText vi="Làm chủ 6 thanh điệu tiếng Việt trực quan" en="Master 6 Vietnamese tones visually" />
         </h3>
         <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
-          Bấm chọn từng thanh để xem đồ thị dao động âm thanh uốn lượn và nghe chuẩn cao độ:
+          <BilingualText vi="Bấm chọn từng thanh để xem đồ thị dao động âm thanh uốn lượn và nghe chuẩn cao độ:" en="Click each tone to see its pitch curve and hear authentic pronunciation:" />
         </p>
       </div>
 
@@ -84,14 +85,14 @@ export function TonePitchCard() {
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-[#EA580C]" />
           <span>
-            Mẹo nhớ: <strong className="text-[#253044]">{VIETNAMESE_TONES[activeTone]?.mnemonicTip}</strong>
+            <BilingualText vi="Mẹo nhớ:" en="Memory tip:" /> <strong className="text-[#253044]">{VIETNAMESE_TONES[activeTone]?.mnemonicTip}</strong>
           </span>
         </div>
         <Link
           to="/edtech/vocabulary"
           className="text-[#EA580C] font-bold hover:underline flex items-center gap-1 shrink-0"
         >
-          Mở kho so sánh thanh điệu →
+          <BilingualText vi="Mở kho so sánh thanh điệu →" en="Open tone contrast library →" />
         </Link>
       </div>
     </motion.div>

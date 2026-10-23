@@ -1,10 +1,10 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { generatePath, Link } from 'react-router-dom'
 import { ROUTES } from '@/constants/routes'
 import { SpeakButton } from '@/components/common/Ui'
 import { BookmarkCheck, Pencil, Trash2 } from 'lucide-react'
 export function VocabularyCard({ entry, onEdit, onDelete, showDetails = true }) {
-  return <article className="card vocabulary-card"><BookmarkCheck className="vocabulary-saved-marker" size={20} role="img" aria-label="Đã lưu vào sổ tay" /><p className="eyebrow"><BilingualText>{entry.courseTitle || 'Từ đã lưu'}</BilingualText></p><div className="row"><h2 lang="vi">{showDetails ? <Link className="vocabulary-word-link" to={generatePath(ROUTES.VOCABULARY_NOTEBOOK_DETAIL, { id: String(entry.id) })}>{entry.word}</Link> : entry.word}</h2></div><p className="meaning preserve-lines">{entry.meaning}</p>
+  return <article className="card vocabulary-card"><BookmarkCheck className="vocabulary-saved-marker" size={20} role="img" aria-label={bilingualLabel("Đã lưu vào sổ tay", "Saved to notebook")} /><p className="eyebrow"><BilingualText>{entry.courseTitle || 'Từ đã lưu'}</BilingualText></p><div className="row"><h2 lang="vi">{showDetails ? <Link className="vocabulary-word-link" to={generatePath(ROUTES.VOCABULARY_NOTEBOOK_DETAIL, { id: String(entry.id) })}>{entry.word}</Link> : entry.word}</h2></div><p className="meaning preserve-lines">{entry.meaning}</p>
     {entry.pronunciation && <p className="vocabulary-card-pronunciation"><span className="muted"><BilingualText>{"Phát âm"}</BilingualText></span><br />{entry.pronunciation}</p>}
     {entry.exampleSentence && <blockquote lang="vi" className="preserve-lines">{entry.exampleSentence}</blockquote>}
     {entry.note && <p className="preserve-lines vocabulary-card-note">{entry.note}</p>}{entry.lessonTitle && <p className="muted vocabulary-card-lesson"><BilingualText>{"Bài học:"}</BilingualText>{entry.lessonTitle}</p>}

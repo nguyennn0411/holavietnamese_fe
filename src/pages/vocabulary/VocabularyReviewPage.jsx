@@ -32,7 +32,12 @@ function ReviewDeck({ session, onRestart }) {
   const submitting = useRef(false);
   const goodCount = results.filter(result => result.rating === 'GOOD' || result.rating === 'EASY').length;
   const moreCount = results.length - goodCount;
-  const labels = { AGAIN: 'Ôn lại', HARD: 'Khó', GOOD: 'Nhớ được', EASY: 'Dễ' };
+  const labels = {
+    AGAIN: { vi: 'Ôn lại', en: 'Again' },
+    HARD: { vi: 'Khó', en: 'Hard' },
+    GOOD: { vi: 'Nhớ được', en: 'Good' },
+    EASY: { vi: 'Dễ', en: 'Easy' }
+  };
   const ratingIcons = { AGAIN: RotateCcw, HARD: Gauge, GOOD: Check, EASY: CheckCheck };
   if (index >= entries.length) return <div className="review-summary card">
     <span className="state-symbol" aria-hidden="true"><CircleCheck size={36} /></span>
@@ -46,7 +51,7 @@ function ReviewDeck({ session, onRestart }) {
     </div>
     <p className="muted"><BilingualText vi={<>{moreCount} từ cần ôn thêm. Kết quả và lịch ôn đã được lưu.</>} en={<>{moreCount} words need more practice. Results and review schedules have been saved.</>} /></p>
     <div className="actions"><button onClick={onRestart}><BilingualText vi="Ôn lại" en="Again" /></button><Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}><BilingualText vi="Về sổ tay" en="Back to notebook" /></Link><Link className="text-link" to={`${ROUTES.MY_LEARNING}?tab=vocabulary`}><BilingualText vi="Về góc học tập" en="Back to my learning" /></Link></div>
-    <ul className="vocabulary-review-results">{results.map(result => <li key={result.entryId}><span>{result.word}</span><span className={`vocabulary-rating vocabulary-rating--${result.rating.toLowerCase()}`}><BilingualText>{labels[result.rating]}</BilingualText><br /><time dateTime={result.nextReviewAt}>{new Date(result.nextReviewAt).toLocaleString(locale)}</time></span></li>)}</ul>
+    <ul className="vocabulary-review-results">{results.map(result => <li key={result.entryId}><span>{result.word}</span><span className={`vocabulary-rating vocabulary-rating--${result.rating.toLowerCase()}`}><BilingualText vi={labels[result.rating]?.vi} en={labels[result.rating]?.en} /><br /><time dateTime={result.nextReviewAt}>{new Date(result.nextReviewAt).toLocaleString(locale)}</time></span></li>)}</ul>
   </div>;
   const word = entries[index];
   async function rate(value) {
@@ -59,5 +64,5 @@ function ReviewDeck({ session, onRestart }) {
     finally { submitting.current = false; setPending(false); }
   }
   const total = entries.length + session.results.length;
-  return <div className="review-workspace"><ProgressBar value={(results.length / total) * 100} label={`${results.length + 1} / ${total} ${locale === 'vi-VN' ? 'từ' : 'words'}`} /><article className="review-flashcard card" data-revealed={revealed}><p className="eyebrow">{word.courseTitle || <BilingualText vi="Sổ tay của bạn" en="Your notebook" />}</p><h2 lang="vi">{word.word}</h2><SpeakButton text={word.word} audioUrl={word.audioUrl} /><p className="muted">{word.pronunciation}</p>{revealed ? <div className="review-answer" aria-live="polite"><p>{word.meaning}</p>{word.exampleSentence && <blockquote>{word.exampleSentence}</blockquote>}</div> : <p className="review-question"><BilingualText vi="Bạn có nhớ từ này không?" en="Do you remember this word?" /></p>}<button disabled={pending} onClick={() => setRevealed(value => !value)}><BilingualText>{revealed ? 'Ẩn đáp án' : 'Xem đáp án'}</BilingualText></button></article>{error && <p role="alert">{error}</p>}<div className="review-ratings">{Object.entries(labels).map(([id, label]) => { const Icon = ratingIcons[id]; return <button key={id} className={`secondary vocabulary-rating-action vocabulary-rating-action--${id.toLowerCase()}`} disabled={!revealed || pending} onClick={() => rate(id)}><Icon size={18} aria-hidden="true" /><BilingualText>{label}</BilingualText></button>; })}</div></div>;
+  return <div className="review-workspace"><ProgressBar value={(results.length / total) * 100} label={`${results.length + 1} / ${total} ${locale === 'vi-VN' ? 'từ' : 'words'}`} /><article className="review-flashcard card" data-revealed={revealed}><p className="eyebrow">{word.courseTitle || <BilingualText vi="Sổ tay của bạn" en="Your notebook" />}</p><h2 lang="vi">{word.word}</h2><SpeakButton text={word.word} audioUrl={word.audioUrl} /><p className="muted">{word.pronunciation}</p>{revealed ? <div className="review-answer" aria-live="polite"><p>{word.meaning}</p>{word.exampleSentence && <blockquote>{word.exampleSentence}</blockquote>}</div> : <p className="review-question"><BilingualText vi="Bạn có nhớ từ này không?" en="Do you remember this word?" /></p>}<button disabled={pending} onClick={() => setRevealed(value => !value)}><BilingualText>{revealed ? 'Ẩn đáp án' : 'Xem đáp án'}</BilingualText></button></article>{error && <p role="alert">{error}</p>}<div className="review-ratings">{Object.entries(labels).map(([id, item]) => { const Icon = ratingIcons[id]; return <button key={id} className={`secondary vocabulary-rating-action vocabulary-rating-action--${id.toLowerCase()}`} disabled={!revealed || pending} onClick={() => rate(id)}><Icon size={18} aria-hidden="true" /><BilingualText vi={item.vi} en={item.en} /></button>; })}</div></div>;
 }

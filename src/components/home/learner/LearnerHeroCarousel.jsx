@@ -3,16 +3,36 @@ import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import bunChaImage from '@/assets/images/learner-carousel/bun-cha.webp';
-import mausoleumImage from '@/assets/images/learner-carousel/ho-chi-minh-mausoleum.webp';
-import tetImage from '@/assets/images/learner-carousel/vietnamese-tet.webp';
-import midAutumnImage from '@/assets/images/learner-carousel/mid-autumn-festival.webp';
+import {
+  localizedSiteField,
+  resolveBannerImage,
+  safeExternalUrl,
+  safeInternalPath,
+  useSiteContent,
+} from '@/application/context/SiteContentContext';
+import { BANNER_PLACEMENTS } from '@/config/siteContentDefaults';
 
 const AUTOPLAY_DELAY = 5600;
 const TRANSITION_MS = 600;
 
+function BannerAction({ banner, continueTo, label }) {
+  if (!label || banner?.actionType === 'NONE') return null;
+  if (banner?.actionType === 'EXTERNAL_URL') {
+    const href = safeExternalUrl(banner.actionTarget);
+    return href ? <a href={href} target="_blank" rel="noreferrer">{label}<ArrowRight size={17} /></a> : null;
+  }
+  const target = banner?.actionType === 'CONTINUE_LEARNING'
+    ? (safeInternalPath(continueTo) || safeInternalPath(banner.actionTarget) || '/edtech/dashboard')
+    : safeInternalPath(banner?.actionTarget);
+  return target ? <Link to={target}>{label}<ArrowRight size={17} /></Link> : null;
+}
+
 export function LearnerHeroCarousel({ continueTo }) {
-  const { t } = useTranslation('learner');
+  const { t, i18n } = useTranslation('learner');
+  const { getBanners } = useSiteContent();
+  const slides = getBanners(BANNER_PLACEMENTS.LEARNER_HOME);
+  const totalSlides = slides.length;
+  const language = i18n.resolvedLanguage || i18n.language || 'en';
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
@@ -22,32 +42,29 @@ export function LearnerHeroCarousel({ continueTo }) {
   const pointerStart = useRef(null);
   const unlockTimer = useRef(null);
 
-  const slides = [
-    { key: 'buncha', image: bunChaImage, to: continueTo || '/edtech/dashboard' },
-    { key: 'mausoleum', image: mausoleumImage, to: '/culture' },
-    { key: 'tet', image: tetImage, to: continueTo || '/edtech/dashboard' },
-    { key: 'midAutumn', image: midAutumnImage, to: '/ai-tutor' },
-  ];
-
   const navigate = useCallback((nextIndex, nextDirection = 1, manual = true) => {
-    if (transitionLocked.current) return;
+    if (transitionLocked.current || totalSlides < 2) return;
     transitionLocked.current = true;
     setDirection(nextDirection);
-    setActiveIndex((nextIndex + slides.length) % slides.length);
+    setActiveIndex((nextIndex + totalSlides) % totalSlides);
     if (manual) setTimerKey((value) => value + 1);
     window.clearTimeout(unlockTimer.current);
     unlockTimer.current = window.setTimeout(() => { transitionLocked.current = false; }, reduceMotion ? 50 : TRANSITION_MS);
-  }, [reduceMotion, slides.length]);
+  }, [reduceMotion, totalSlides]);
 
   useEffect(() => () => window.clearTimeout(unlockTimer.current), []);
 
   useEffect(() => {
-    if (paused || reduceMotion) return undefined;
+    if (activeIndex >= totalSlides) setActiveIndex(0);
+  }, [activeIndex, totalSlides]);
+
+  useEffect(() => {
+    if (paused || reduceMotion || totalSlides < 2) return undefined;
     const timer = window.setTimeout(() => navigate(activeIndex + 1, 1, false), AUTOPLAY_DELAY);
     return () => window.clearTimeout(timer);
-  }, [activeIndex, navigate, paused, reduceMotion, timerKey]);
+  }, [activeIndex, navigate, paused, reduceMotion, timerKey, totalSlides]);
 
-  const slide = slides[activeIndex];
+  const slide = slides[activeIndex] || slides[0];
   const handlePointerDown = (event) => { pointerStart.current = { x: event.clientX, y: event.clientY }; };
   const handlePointerUp = (event) => {
     if (!pointerStart.current) return;
@@ -56,6 +73,9 @@ export function LearnerHeroCarousel({ continueTo }) {
     pointerStart.current = null;
     if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY)) navigate(activeIndex + (deltaX < 0 ? 1 : -1), deltaX < 0 ? 1 : -1);
   };
+
+  if (totalSlides === 0) return null;
+  const slideKey = slide.id ?? slide.code ?? activeIndex;
 
   return (
     <section
@@ -73,7 +93,7 @@ export function LearnerHeroCarousel({ continueTo }) {
       <div className="learner-carousel__viewport">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.article
-            key={slide.key}
+            key={slideKey}
             className="learner-carousel__slide"
             custom={direction}
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: direction * 70 }}
@@ -81,30 +101,30 @@ export function LearnerHeroCarousel({ continueTo }) {
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: direction * -70 }}
             transition={{ duration: reduceMotion ? .1 : .58, ease: [0.22, 1, 0.36, 1] }}
             aria-roledescription="slide"
-            aria-label={t('dashboard.carousel.position', { current: activeIndex + 1, total: slides.length })}
+            aria-label={t('dashboard.carousel.position', { current: activeIndex + 1, total: totalSlides })}
           >
             <div className="learner-carousel__copy">
-              <span>{t(`dashboard.carousel.${slide.key}.eyebrow`)}</span>
-              <h2>{t(`dashboard.carousel.${slide.key}.title`)}</h2>
-              <p>{t(`dashboard.carousel.${slide.key}.description`)}</p>
-              <Link to={slide.to}>{t(`dashboard.carousel.${slide.key}.action`)}<ArrowRight size={17} /></Link>
+              <span>{localizedSiteField(slide, 'eyebrow', language)}</span>
+              <h2>{localizedSiteField(slide, 'title', language)}</h2>
+              <p>{localizedSiteField(slide, 'description', language)}</p>
+              <BannerAction banner={slide} continueTo={continueTo} label={localizedSiteField(slide, 'actionLabel', language)} />
             </div>
             <div className="learner-carousel__photo">
-              <img src={slide.image} alt={t(`dashboard.carousel.${slide.key}.imageAlt`)} loading={activeIndex === 0 ? 'eager' : 'lazy'} decoding="async" draggable="false" />
+              {resolveBannerImage(slide) && <img src={resolveBannerImage(slide)} alt={localizedSiteField(slide, 'imageAlt', language)} loading={activeIndex === 0 ? 'eager' : 'lazy'} decoding="async" draggable="false" />}
             </div>
           </motion.article>
         </AnimatePresence>
       </div>
 
-      <div className="learner-carousel__controls">
+      {totalSlides > 1 && <div className="learner-carousel__controls">
         <div className="learner-carousel__dots" role="group" aria-label={t('dashboard.carousel.choose')}>
-          {slides.map((item, index) => <button key={item.key} type="button" className={index === activeIndex ? 'is-active' : ''} onClick={() => navigate(index, index > activeIndex ? 1 : -1)} aria-label={t('dashboard.carousel.goTo', { number: index + 1 })} aria-current={index === activeIndex ? 'true' : undefined}><span /></button>)}
+          {slides.map((item, index) => <button key={item.id ?? item.code ?? index} type="button" className={index === activeIndex ? 'is-active' : ''} onClick={() => navigate(index, index > activeIndex ? 1 : -1)} aria-label={t('dashboard.carousel.goTo', { number: index + 1 })} aria-current={index === activeIndex ? 'true' : undefined}><span /></button>)}
         </div>
         <div className="learner-carousel__arrows">
           <button type="button" onClick={() => navigate(activeIndex - 1, -1)} aria-label={t('dashboard.carousel.previous')}><ArrowLeft size={18} /></button>
           <button type="button" onClick={() => navigate(activeIndex + 1, 1)} aria-label={t('dashboard.carousel.next')}><ArrowRight size={18} /></button>
         </div>
-      </div>
+      </div>}
     </section>
   );
 }

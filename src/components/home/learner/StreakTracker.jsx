@@ -1,3 +1,4 @@
+import { BilingualText } from '@/components/common/BilingualText';
 ﻿import React from 'react';
 import { Flame, CheckCircle, Gift, Shield } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -66,19 +67,19 @@ export function StreakTracker({
           {hasCheckedInToday ? (
             <>
               <CheckCircle size={15} className="text-emerald-700" />
-              <span>Đã điểm danh (+10 XP)</span>
+              <span><BilingualText vi="Đã điểm danh (+10 XP)" en="Checked in (+10 XP)" /></span>
             </>
           ) : (
             <>
               <Gift size={15} />
-              <span>Điểm danh hôm nay (+10 XP)</span>
+              <span><BilingualText vi="Điểm danh hôm nay (+10 XP)" en="Check in today (+10 XP)" /></span>
             </>
           )}
         </button> : null}
 
         {streakShieldCount != null ? <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/60 text-xs text-[#64748B]">
           <Shield size={16} className="text-emerald-600 shrink-0" />
-          <span>1 Khiên bảo vệ sẵn sàng</span>
+          <span><BilingualText vi="1 Khiên bảo vệ sẵn sàng" en="1 Streak Freeze ready" /></span>
         </div> : null}
       </div>
     </section>

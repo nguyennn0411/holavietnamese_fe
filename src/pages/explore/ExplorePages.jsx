@@ -1,4 +1,4 @@
-﻿import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { BilingualText } from '@/components/common/BilingualText';
 import { useAuth } from '@/application/context/AuthContext';
 import { useCallback, useState } from 'react';
@@ -127,7 +127,7 @@ export function ExploreVietnamPage() {
               type="submit"
               className="px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-md transition-all"
             >
-              <BilingualText>Tìm kiếm</BilingualText>
+              <BilingualText vi="Tìm kiếm" en="Search" />
             </button>
             <button
               type="button"
@@ -140,7 +140,7 @@ export function ExploreVietnamPage() {
       </form>
 
       {/* Destinations Board */}
-      {!isAuthenticated ? <EmptyState title={<BilingualText vi="Đăng nhập để khám phá" en="Sign in to explore" />}><Link className="button" to={ROUTES.LOGIN}><BilingualText>Đăng nhập</BilingualText></Link></EmptyState> : <ResourceState resource={resource}>
+      {!isAuthenticated ? <EmptyState title={<BilingualText vi="Đăng nhập để khám phá" en="Sign in to explore" />}><Link className="button" to={ROUTES.LOGIN}><BilingualText vi="Đăng nhập" en="Sign in" /></Link></EmptyState> : <ResourceState resource={resource}>
         {items => {
           const destinations = items.filter(item => item.status === 'PUBLISHED');
           return destinations.length === 0
@@ -186,7 +186,7 @@ export function ExploreVietnamPage() {
                         </h2>
                         {(destination.shortDescriptionVi || destination.shortDescriptionEn) && (
                           <p className="text-xs sm:text-sm text-[#64748B] line-clamp-2 mt-1 leading-relaxed">
-                            <BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn} />
+                            <BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn || destination.shortDescriptionVi} />
                           </p>
                         )}
                         <small className="inline-flex items-center gap-1 text-xs font-bold text-[#EA580C] mt-2 group-hover:underline">
@@ -245,7 +245,7 @@ export function DestinationDetailPage() {
                 </h1>
                 {(destination.shortDescriptionVi || destination.shortDescriptionEn) && (
                   <p className="lead text-sm sm:text-base text-[#64748B] leading-relaxed" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
-                    <BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn} />
+                    <BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn || destination.shortDescriptionVi} />
                   </p>
                 )}
               </div>

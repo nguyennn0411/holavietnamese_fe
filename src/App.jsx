@@ -1,7 +1,8 @@
 import { BilingualText, BilingualTextProvider } from '@/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
+import { SiteContentProvider } from '@/application/context/SiteContentContext';
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { RequireAuth } from '@/components/common/RequireAuth';
@@ -77,6 +78,7 @@ const AdminAchievementsPage = lazy(() => import('@/pages/admin/AdminAchievements
 const AdminXpRulesPage = lazy(() => import('@/pages/admin/AdminXpRulesPage').then(module => ({ default: module.AdminXpRulesPage })));
 const AdminAuditLogsPage = lazy(() => import('@/pages/admin/AdminAuditLogsPage').then(module => ({ default: module.AdminAuditLogsPage })));
 const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage').then(module => ({ default: module.AdminSettingsPage })));
+const AdminSiteContentPage = lazy(() => import('@/pages/admin/AdminSiteContentPage').then(module => ({ default: module.AdminSiteContentPage })));
 const AdminVocabularyPage = lazy(() => import('@/pages/admin/AdminVocabularyPage').then(module => ({ default: module.AdminVocabularyPage })));
 const AdminDestinationsPage = lazy(() => import('@/pages/admin/AdminDestinationsPage').then(module => ({ default: module.AdminDestinationsPage })));
 const AdminDestinationDetailPage = lazy(() => import('@/pages/admin/AdminDestinationDetailPage').then(module => ({ default: module.AdminDestinationDetailPage })));
@@ -108,9 +110,7 @@ const AdminQuizBuilderPage = lazy(() => import('@/pages/admin/AdminQuizPages').t
 const AdminQuizPreviewPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizPreviewPage })));
 
 function RouteTextLanguage({ children }) {
-  const { pathname } = useLocation();
-  const isAdmin = pathname === ROUTES.ADMIN || pathname.startsWith(`${ROUTES.ADMIN}/`);
-  return <BilingualTextProvider language={isAdmin ? 'vi' : 'bilingual'}>{children}</BilingualTextProvider>;
+  return <BilingualTextProvider>{children}</BilingualTextProvider>;
 }
 
 function App() {
@@ -118,7 +118,7 @@ function App() {
     <BrowserRouter><RouteTextLanguage>
       <Suspense fallback={null}><AppToaster /></Suspense>
       <ErrorBoundary>
-        <AuthProvider><OnboardingProvider>
+        <SiteContentProvider><AuthProvider><OnboardingProvider>
           <Suspense fallback={<div className="state loading-state" role="status"><span className="loading-spinner" aria-hidden="true"/><BilingualText>{"Đang tải trang…"}</BilingualText></div>}><Routes>
             {/* Standalone Fullscreen Auth Routes (Người 1) */}
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
@@ -225,6 +225,7 @@ function App() {
                 <Route path={ROUTES.ADMIN_XP_RULES} element={<AdminXpRulesPage />} />
                 <Route path={ROUTES.ADMIN_AUDIT_LOGS} element={<AdminAuditLogsPage />} />
                 <Route path={ROUTES.ADMIN_SETTINGS} element={<AdminSettingsPage />} />
+                <Route path={ROUTES.ADMIN_SITE_CONTENT} element={<AdminSiteContentPage />} />
 
                 {/* Admin Văn hóa & AI (Người 4) */}
                 <Route path={ROUTES.ADMIN_CULTURE} element={<AdminCultureListPage />} />
@@ -240,7 +241,7 @@ function App() {
               </Route>
             </Route>
           </Routes></Suspense>
-        </OnboardingProvider></AuthProvider>
+        </OnboardingProvider></AuthProvider></SiteContentProvider>
       </ErrorBoundary>
     </RouteTextLanguage></BrowserRouter>
   );

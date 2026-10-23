@@ -26,10 +26,10 @@ export function ForgotPasswordPage() {
 
     try {
       const res = await learnerService.forgotPasswordInitiate(email);
-      setStatus({ loading: false, message: res.message || 'Mã OTP 6 số đã được gửi vào email của bạn!', error: '' });
+      setStatus({ loading: false, message: res.message || bilingualLabel('Mã OTP 6 số đã được gửi vào email của bạn!', 'A 6-digit OTP code has been sent to your email!'), error: '' });
       setStep(2);
     } catch {
-      setStatus({ loading: false, message: '', error: 'Không thể gửi mã OTP. Vui lòng kiểm tra lại địa chỉ email hoặc thử lại sau.' });
+      setStatus({ loading: false, message: '', error: bilingualLabel('Không thể gửi mã OTP. Vui lòng kiểm tra lại địa chỉ email hoặc thử lại sau.', 'Unable to send OTP. Please check your email or try again later.') });
     }
   };
 
@@ -41,10 +41,10 @@ export function ForgotPasswordPage() {
 
     try {
       const res = await learnerService.forgotPasswordVerifyOtp(email, otp);
-      setStatus({ loading: false, message: res.message || 'Mã OTP hợp lệ! Vui lòng nhập mật khẩu mới.', error: '' });
+      setStatus({ loading: false, message: res.message || bilingualLabel('Mã OTP hợp lệ! Vui lòng nhập mật khẩu mới.', 'Valid OTP! Please enter your new password.'), error: '' });
       setStep(3);
     } catch (err) {
-      setStatus({ loading: false, message: '', error: err.message || 'Mã OTP không chính xác hoặc đã hết hạn.' });
+      setStatus({ loading: false, message: '', error: err.message || bilingualLabel('Mã OTP không chính xác hoặc đã hết hạn.', 'Invalid or expired OTP code.') });
     }
   };
 
@@ -52,21 +52,21 @@ export function ForgotPasswordPage() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (newPassword.length < 6) {
-      setStatus({ loading: false, message: '', error: 'Mật khẩu phải từ 6 ký tự trở lên.' });
+      setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu phải từ 6 ký tự trở lên.', 'Password must be at least 6 characters.') });
       return;
     }
     if (newPassword !== confirmPassword) {
-      setStatus({ loading: false, message: '', error: 'Mật khẩu xác nhận không trùng khớp.' });
+      setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu xác nhận không trùng khớp.', 'Confirmation password does not match.') });
       return;
     }
 
     setStatus({ loading: true, message: '', error: '' });
     try {
       const res = await learnerService.forgotPasswordReset(email, otp, newPassword);
-      setStatus({ loading: false, message: res.message || 'Đổi mật khẩu thành công! Đang chuyển đến trang đăng nhập…', error: '' });
+      setStatus({ loading: false, message: res.message || bilingualLabel('Đổi mật khẩu thành công! Đang chuyển đến trang đăng nhập…', 'Password reset successfully! Redirecting to login…'), error: '' });
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setStatus({ loading: false, message: '', error: err.message || 'Không thể đặt lại mật khẩu.' });
+      setStatus({ loading: false, message: '', error: err.message || bilingualLabel('Không thể đặt lại mật khẩu.', 'Unable to reset password.') });
     }
   };
 
@@ -210,8 +210,8 @@ export function ForgotPasswordPage() {
                     type="button"
                     className="auth-show-btn"
                     onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                    title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    aria-label={showPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
+                    title={showPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -227,7 +227,7 @@ export function ForgotPasswordPage() {
                     id="reset-confirm-password"
                     className="auth-input auth-password-input"
                     type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder={bilingualLabel("Nhập lại mật khẩu mới")}
+                    placeholder={bilingualLabel("Nhập lại mật khẩu mới", "Re-enter new password")}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
@@ -236,8 +236,8 @@ export function ForgotPasswordPage() {
                     type="button"
                     className="auth-show-btn"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                    title={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                    aria-label={showConfirmPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
+                    title={showConfirmPassword ? bilingualLabel('Ẩn mật khẩu', 'Hide password') : bilingualLabel('Hiện mật khẩu', 'Show password')}
                   >
                     {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>

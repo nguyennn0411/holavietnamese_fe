@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/edtech/ui/Button';
+import { BilingualText } from '@/components/common/BilingualText';
 
 export interface FeedbackState {
   status: 'correct' | 'incorrect';
@@ -93,11 +94,8 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
                           : 'text-rose-800'
                       }`}
                     >
-                      {feedback.messageVi}
+                      <BilingualText vi={feedback.messageVi} en={feedback.messageEn} />
                     </h3>
-                    <span className="text-xs font-semibold text-slate-500">
-                      • {feedback.messageEn}
-                    </span>
 
                     {/* XP or Heart indicator */}
                     {feedback.status === 'correct' && feedback.xpGained && (
@@ -107,7 +105,7 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
                     )}
                     {feedback.status === 'incorrect' && (
                       <span className="inline-flex items-center gap-1 text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-rose-200 text-rose-800 ml-auto">
-                        -1 Tim
+                        <BilingualText vi="-1 Tim" en="-1 Heart" />
                       </span>
                     )}
                   </div>
@@ -115,7 +113,9 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
                   {/* Correct Answer Display on Error */}
                   {feedback.status === 'incorrect' && feedback.correctAnswerText && (
                     <div className="mt-1.5 text-xs md:text-sm text-slate-700">
-                      <span className="font-bold text-rose-700">Đáp án chính xác: </span>
+                      <span className="font-bold text-rose-700">
+                        <BilingualText vi="Đáp án chính xác: " en="Correct answer: " />
+                      </span>
                       <span className="font-extrabold text-slate-900 bg-white/80 px-2 py-0.5 rounded-lg border border-rose-200 vn-diacritic-safe">
                         {feedback.correctAnswerText}
                       </span>
@@ -131,7 +131,7 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
               </motion.div>
             ) : (
               <div className="hidden md:block text-xs font-semibold text-slate-400">
-                Nhấn <kbd className="px-2 py-1 rounded bg-slate-100 border border-slate-300 font-mono text-[11px] text-slate-600">Enter ↵</kbd> để kiểm tra
+                <BilingualText vi="Nhấn" en="Press" /> <kbd className="px-2 py-1 rounded bg-slate-100 border border-slate-300 font-mono text-[11px] text-slate-600">Enter ↵</kbd> <BilingualText vi="để kiểm tra" en="to check" />
               </div>
             )}
           </AnimatePresence>
@@ -148,7 +148,7 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
               onClick={onCheck}
               is3D
             >
-              Kiểm tra • Check
+              <BilingualText vi="Kiểm tra" en="Check" />
             </Button>
           ) : (
             <Button
@@ -160,7 +160,7 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
               iconPosition="right"
               is3D
             >
-              Tiếp tục • Continue
+              <BilingualText vi="Tiếp tục" en="Continue" />
             </Button>
           )}
         </div>

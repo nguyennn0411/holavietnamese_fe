@@ -1,38 +1,45 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { BookOpen, Bot, ChevronLeft, Compass, GraduationCap, Home, Languages, Menu, Newspaper, Palette, X } from 'lucide-react';
+import { ChevronLeft, Menu, X } from 'lucide-react';
 import { Brand } from '@/components/layout/Brand';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
-import { ROUTES } from '@/constants/routes';
+import { localizedSiteField, safeInternalPath, useSiteContent } from '@/application/context/SiteContentContext';
+import { siteContentIcon } from '@/components/common/siteContentIcons';
+import { MENU_PLACEMENTS } from '@/config/siteContentDefaults';
 
-const guestItems = [
-  { to: '/', label: 'home', icon: Home, end: true },
-  { to: ROUTES.EDTECH_DASHBOARD, label: 'learningPath', icon: Compass },
-  { to: '/courses', label: 'courses', icon: GraduationCap },
-  { to: '/alphabet', label: 'alphabet', icon: Languages },
-  { to: '/vocabulary', label: 'vocabulary', icon: BookOpen },
-  { to: '/explore-vietnam', label: 'explore', icon: Compass },
-  { to: '/culture', label: 'culture', icon: Palette },
-  { to: '/blog', label: 'blog', icon: Newspaper },
-  { to: '/ai-tutor', label: 'aiTutor', icon: Bot },
-];
+function useGuestItems() {
+  const { i18n } = useTranslation();
+  const { getMenuItems } = useSiteContent();
+  const language = i18n.resolvedLanguage || i18n.language || 'en';
+  return useMemo(() => getMenuItems(MENU_PLACEMENTS.GUEST).map((item) => ({
+    ...item,
+    to: safeInternalPath(item.path),
+    label: localizedSiteField(item, 'label', language),
+    icon: siteContentIcon(item.iconKey),
+    end: item.path === '/',
+  })), [getMenuItems, language]);
+}
 
 function GuestNavigation({ collapsed = false, onNavigate }) {
-  const { t } = useTranslation('navigation');
   const location = useLocation();
+  const guestItems = useGuestItems();
   return <nav className="guest-sidebar__nav" aria-label="Guest navigation">
-    {guestItems.map(({ to, label, icon: Icon, end }) => {
+    {guestItems.map(({ id, code, to, label, icon: Icon, end }) => {
+      if (!to) return <div key={id ?? code} className="guest-sidebar__link is-disabled" aria-disabled="true" title={label}>
+        <span className="sidebar-link__icon"><Icon /></span>
+        <b className="sidebar-link__label">{label}</b>
+      </div>;
       const [path, hash = ''] = to.split('#');
       const active = end
         ? location.pathname === path && !location.hash
         : hash
           ? location.pathname === path && location.hash === `#${hash}`
           : location.pathname === path || location.pathname.startsWith(`${path}/`);
-      return <Link key={label} to={to} onClick={onNavigate} className={`guest-sidebar__link ${active ? 'is-active' : ''}`} aria-current={active ? 'page' : undefined} title={collapsed ? t(label) : undefined}>
+      return <Link key={id ?? code} to={to} onClick={onNavigate} className={`guest-sidebar__link ${active ? 'is-active' : ''}`} aria-current={active ? 'page' : undefined} title={collapsed ? label : undefined}>
         <span className="sidebar-link__icon"><Icon /></span>
-        <b className="sidebar-link__label">{t(label)}</b>
+        <b className="sidebar-link__label">{label}</b>
       </Link>;
     })}
   </nav>;
@@ -59,14 +66,16 @@ export function GuestSidebar({ collapsed, onToggle }) {
 export function GuestTopbar({ onOpenMenu }) {
   const { t } = useTranslation('navigation');
   const location = useLocation();
+  const guestItems = useGuestItems();
   const title = useMemo(() => guestItems.find(({ to }) => {
+    if (!to) return false;
     const path = to.split('#')[0];
     return path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(`${path}/`);
-  })?.label || 'home', [location.pathname]);
+  })?.label || t('home'), [guestItems, location.pathname, t]);
 
   return <header className="guest-topbar">
     <button type="button" className="guest-topbar__menu" onClick={onOpenMenu} aria-label="Open navigation"><Menu /></button>
-    <div className="guest-topbar__title"><small>HolaVietnamese</small><strong>{t(title)}</strong></div>
+    <div className="guest-topbar__title"><small>HolaVietnamese</small><strong>{title}</strong></div>
     <div className="guest-topbar__actions">
       <LanguageSwitcher compact />
       <Link to="/login" className="guest-topbar__signin">{t('signIn')}</Link>

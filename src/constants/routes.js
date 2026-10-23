@@ -84,6 +84,7 @@ export const ROUTES = {
   ADMIN_USER_DETAIL: '/admin/users/:id',
   ADMIN_ROLES: '/admin/roles',
   ADMIN_SETTINGS: '/admin/settings',
+  ADMIN_SITE_CONTENT: '/admin/site-content',
   ADMIN_ACHIEVEMENTS: '/admin/achievements',
   ADMIN_XP_RULES: '/admin/xp-rules',
   ADMIN_AUDIT_LOGS: '/admin/audit-logs',

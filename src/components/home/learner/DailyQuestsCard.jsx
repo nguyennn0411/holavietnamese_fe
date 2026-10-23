@@ -1,6 +1,7 @@
-﻿import React from 'react';
+import React from 'react';
 import { Gift, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { BilingualText } from '@/components/common/BilingualText';
 
 /**
  * Daily Quests Card with Tiered Chests and Countdown Timer
@@ -75,7 +76,7 @@ export function DailyQuestsCard({
                   onClick={() => onClaimQuest(quest.id)}
                   className="px-2.5 py-1 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-black text-[11px] shrink-0 shadow-2xs cursor-pointer"
                 >
-                  Nhận {quest.xp} XP
+                  <BilingualText vi={`Nhận ${quest.xp} XP`} en={`Claim ${quest.xp} XP`} />
                 </button>
               ) : (
                 <span className="font-black text-[#EA580C] shrink-0">

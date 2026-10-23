@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -30,7 +30,11 @@ export function AdminCultureListPage() {
   };
 
   const handleDelete = async (id, title) => {
-    if (await confirm({ title: 'Xóa bài viết văn hóa?', description: `Bài viết “${title}” sẽ bị xóa và không thể khôi phục.`, confirmLabel: 'Xóa bài viết' })) {
+    if (await confirm({
+      title: bilingualLabel('Xóa bài viết văn hóa?', 'Delete cultural article?'),
+      description: bilingualLabel(`Bài viết “${title}” sẽ bị xóa và không thể khôi phục.`, `Article “${title}” will be deleted and cannot be restored.`),
+      confirmLabel: bilingualLabel('Xóa bài viết', 'Delete article'),
+    })) {
       adminCultureAiService.deleteArticle(id);
       showToast('Đã xóa bài viết thành công.');
     }
@@ -176,14 +180,14 @@ export function AdminCultureListPage() {
                           <button
                             className="button secondary"
                             style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-ink)', borderColor: 'var(--color-border)' }}
-                            title="Duyệt & Xuất bản"
+                            title={bilingualLabel("Duyệt & Xuất bản", "Approve & Publish")}
                             onClick={() => handleStatusChange(article.id, 'PUBLISHED')}
                           ><BilingualText>{"Duyệt"}</BilingualText></button>
                         ) : (
                           <button
                             className="button secondary"
                             style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-red)', borderColor: 'var(--color-red-soft)' }}
-                            title="Gỡ bài về bản nháp"
+                            title={bilingualLabel("Gỡ bài về bản nháp", "Revert to draft")}
                             onClick={() => handleStatusChange(article.id, 'DRAFT')}
                           ><BilingualText>{"Gỡ bài"}</BilingualText></button>
                         )}
@@ -192,7 +196,7 @@ export function AdminCultureListPage() {
                           to={`/admin/culture/${article.id}`}
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 9px' }}
-                          title="Chỉnh sửa nội dung"
+                          title={bilingualLabel("Chỉnh sửa nội dung", "Edit content")}
                         ><BilingualText>{"Sửa"}</BilingualText></Link>
 
                         <Link
@@ -200,16 +204,16 @@ export function AdminCultureListPage() {
                           target="_blank"
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 9px' }}
-                          title="Xem trên trang học viên"
+                          title={bilingualLabel("Xem trên trang học viên", "View as learner")}
                         ><BilingualText>{"Xem"}</BilingualText></Link>
 
                         <button
                           className="button secondary"
                           style={{ fontSize: '11px', padding: '5px 9px', color: 'var(--color-red)' }}
-                          title="Xóa bài viết"
+                          title={bilingualLabel("Xóa bài viết", "Delete article")}
                           onClick={() => handleDelete(article.id, article.title)}
                         >
-                          Xóa
+                          <BilingualText vi="Xóa" en="Delete" />
                         </button>
                       </div>
                     </td>
