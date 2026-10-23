@@ -1,6 +1,6 @@
 import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
@@ -10,6 +10,17 @@ export function AdminCultureCategoriesPage() {
   const [categories, setCategories] = useState(() => adminCultureAiService.getCategories());
   const [editingCategory, setEditingCategory] = useState(null);
   const [toast, setToast] = useState('');
+
+  useEffect(() => {
+    const refresh = () => setCategories(adminCultureAiService.getCategories());
+    refresh();
+    window.addEventListener('hola-culture-updated', refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener('hola-culture-updated', refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, []);
 
   const showToast = (msg) => {
     setToast(msg);

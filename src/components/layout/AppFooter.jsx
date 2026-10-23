@@ -33,7 +33,7 @@ export function AppFooter() {
           </div>
 
           <div className="site-footer__social" aria-label="HolaVietnamese channels">
-            <Link to="/blog" aria-label="Stories and Blog" title={bilingualLabel("Học viên chia sẻ & Blog", "Learner Stories & Blog")}>
+            <Link to="/culture" aria-label="Vietnamese Culture" title={bilingualLabel("Văn hóa & Câu chuyện", "Culture & Stories")}>
               <BookOpen size={16} />
             </Link>
             <Link to="/ai-scenarios" aria-label="Conversation Scenarios" title={bilingualLabel("Luyện hội thoại & Cộng đồng", "Conversation Practice & Community")}>
@@ -51,7 +51,7 @@ export function AppFooter() {
           <Link to="/courses"><BilingualText vi="Khóa học toàn diện" en="All Courses" /></Link>
           <Link to="/explore"><BilingualText vi="Hành trình di sản" en="Destinations" /></Link>
           <Link to="/culture"><BilingualText vi="Văn hóa Việt Nam" en="Vietnamese Culture" /></Link>
-          <Link to="/blog"><BilingualText vi="Blog & Góc nhìn" en="Stories & Blog" /></Link>
+
         </nav>
 
         {/* Navigation Column 2: Kỹ năng & Công cụ */}

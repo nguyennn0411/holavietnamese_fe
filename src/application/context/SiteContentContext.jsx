@@ -161,6 +161,10 @@ export function SiteContentProvider({ children }) {
   const getMenuItems = useCallback((placement, { includeDisabled = false } = {}) => (
     content.menuItems.filter((item) => (
       item?.placement === placement
+      && item?.path !== '/blog'
+      && normalizedKey(item?.featureKey) !== 'BLOG'
+      && normalizedKey(item?.code) !== 'GUEST_BLOG'
+      && normalizedKey(item?.code) !== 'LEARNER_BLOG'
       && (includeDisabled || item?.enabled !== false)
       && (includeDisabled || featureEnabled(content.features, item?.featureKey, true))
     )).sort(byDisplayOrder)
@@ -170,6 +174,10 @@ export function SiteContentProvider({ children }) {
     const now = Date.now();
     return content.banners.filter((item) => (
       item?.placement === placement
+      && item?.path !== '/blog'
+      && normalizedKey(item?.featureKey) !== 'BLOG'
+      && normalizedKey(item?.code) !== 'GUEST_BLOG'
+      && normalizedKey(item?.code) !== 'LEARNER_BLOG'
       && (includeDisabled || item?.enabled !== false)
       && (includeDisabled || featureEnabled(content.features, item?.featureKey, true))
       && (includeDisabled || scheduledNow(item, now))

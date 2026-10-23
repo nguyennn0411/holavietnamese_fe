@@ -1,6 +1,6 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cultureService } from '@/services/cultureService';
@@ -18,6 +18,20 @@ export function CultureDetailPage() {
   const article = cultureService.getArticle(id);
   const relatedArticles = cultureService.getRelatedArticles(id);
   const [toastMessage, setToastMessage] = useState('');
+  const [, setCultureRevision] = useState(0);
+
+  useEffect(() => {
+    if (id) {
+      cultureService.incrementViews(id);
+    }
+    const refresh = () => setCultureRevision(v => v + 1);
+    window.addEventListener('hola-culture-updated', refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener('hola-culture-updated', refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, [id]);
 
   if (!article) {
     return (

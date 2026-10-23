@@ -609,7 +609,368 @@ Còn gì thi vị bằng việc neo ghe cạnh một chiếc thuyền bán đồ
   },
 ];
 
+const DEFAULT_ADMIN_CATEGORIES = [
+  { id: 'culinary', slug: 'culinary', icon: '🍜', name: 'Ẩm thực (Food & Cuisine)', label: 'Ẩm thực', labelVi: 'Ẩm thực', labelEn: 'Food & Cuisine', description: 'Món ăn, đồ uống, văn hóa cà phê và ẩm thực 3 miền', descriptionVi: 'Món ăn, đồ uống, văn hóa cà phê và ẩm thực 3 miền', descriptionEn: 'Dishes, beverages, coffee culture, and cuisine across 3 regions', order: 1 },
+  { id: 'tradition', slug: 'tradition', icon: '🏮', name: 'Lễ hội & Phong tục (Festivals & Traditions)', label: 'Lễ hội & Phong tục', labelVi: 'Lễ hội & Phong tục', labelEn: 'Festivals & Traditions', description: 'Tết cổ truyền, lễ hội dân gian, nghệ thuật xưng hô và phong tục Việt', descriptionVi: 'Tết cổ truyền, lễ hội dân gian, nghệ thuật xưng hô và phong tục Việt', descriptionEn: 'Lunar New Year, folk festivals, etiquette, and Vietnamese customs', order: 2 },
+  { id: 'daily-life', slug: 'daily-life', icon: '☕', name: 'Đời sống thường nhật (Daily Life)', label: 'Đời sống thường nhật', labelVi: 'Đời sống thường nhật', labelEn: 'Daily Life', description: 'Văn hóa vỉa hè, cà phê sáng, nhịp sống phố thị và nếp nhà Việt', descriptionVi: 'Văn hóa vỉa hè, cà phê sáng, nhịp sống phố thị và nếp nhà Việt', descriptionEn: 'Sidewalk culture, morning coffee, urban rhythm, and family life', order: 3 },
+  { id: 'art', slug: 'art', icon: '🏛️', name: 'Nghệ thuật & Di sản (Arts & Heritage)', label: 'Nghệ thuật & Di sản', labelVi: 'Nghệ thuật & Di sản', labelEn: 'Arts & Heritage', description: 'Di tích lịch sử, nghệ thuật truyền thống và di sản văn hóa', descriptionVi: 'Di tích lịch sử, nghệ thuật truyền thống và di sản văn hóa', descriptionEn: 'Historical monuments, traditional arts, and cultural heritage', order: 4 },
+  { id: 'travel-spots', slug: 'travel-spots', icon: '🗺️', name: 'Danh lam & Điểm đến (Destinations & Sights)', label: 'Danh lam & Điểm đến', labelVi: 'Danh lam & Điểm đến', labelEn: 'Destinations & Sights', description: 'Phố cổ Hội An, chợ nổi miền Tây và các điểm đến văn hóa nổi tiếng', descriptionVi: 'Phố cổ Hội An, chợ nổi miền Tây và các điểm đến văn hóa nổi tiếng', descriptionEn: 'Hoi An Ancient Town, Mekong floating markets, and famous cultural sights', order: 5 },
+];
+
+const STORAGE_CULTURE_ARTICLES = 'hola_admin_culture_articles_v2';
+const STORAGE_CULTURE_CATEGORIES = 'hola_admin_culture_categories_v2';
+
+const DEFAULT_VIEWS_BY_ID = {
+  'van-hoa-ca-phe-viet-nam': 1420,
+  'bi-quyet-pho-ha-noi': 2890,
+  'nghe-thuat-xung-ho-viet-nam': 980,
+  'phong-tuc-tet-nguyen-dan': 1150,
+  'kham-pha-hoi-an': 1640,
+  'cho-noi-mientay': 1230,
+};
+
+function resolveDestinationMeta(rawDest) {
+  const val = String(rawDest || '').trim();
+  const lower = val.toLowerCase();
+  const found = CULTURE_DESTINATIONS.find(
+    d => d.id === lower || d.labelVi.toLowerCase() === lower || d.labelEn.toLowerCase() === lower || lower.includes(d.labelVi.toLowerCase())
+  );
+  if (found) {
+    return {
+      destination: found.id,
+      destinationName: found.labelVi,
+      destinationNameVi: found.labelVi,
+      destinationNameEn: found.labelEn,
+    };
+  }
+  return {
+    destination: val || 'all',
+    destinationName: val || 'Toàn quốc',
+    destinationNameVi: val || 'Toàn quốc',
+    destinationNameEn: val || 'Nationwide',
+  };
+}
+
+function normalizeCategoryItem(cat, idx = 0) {
+  const id = cat.id || cat.slug || `cat-${idx + 1}`;
+  const slug = cat.slug || id;
+  const rawName = cat.name || cat.labelVi || cat.label || id;
+  const cleanVi = rawName.includes('(') ? rawName.split('(')[0].trim() : rawName;
+  return {
+    ...cat,
+    id,
+    slug,
+    icon: cat.icon || '🏮',
+    name: rawName,
+    label: cat.label || cleanVi,
+    labelVi: cat.labelVi || cleanVi,
+    labelEn: cat.labelEn || cleanVi,
+    description: cat.description || cat.descriptionVi || '',
+    descriptionVi: cat.descriptionVi || cat.description || '',
+    descriptionEn: cat.descriptionEn || cat.description || '',
+    order: Number(cat.order) || idx + 1,
+  };
+}
+
+function normalizeArticleItem(article, categories = DEFAULT_ADMIN_CATEGORIES) {
+  const seed = CULTURE_ARTICLES.find(a => a.id === article.id) || {};
+  const merged = { ...seed, ...article };
+  const catObj = categories.find(c => c.id === merged.category || c.slug === merged.category);
+  const destMeta = resolveDestinationMeta(merged.destinationName || merged.destination);
+  const categoryNameVi = catObj?.labelVi || merged.categoryNameVi || merged.categoryName || 'Văn hóa';
+  const categoryNameEn = catObj?.labelEn || merged.categoryNameEn || categoryNameVi;
+
+  // Khi Admin sửa title, subtitle, summary, content -> đồng bộ luôn sang trường Vi để hiển thị ngay trên Learner
+  const titleChanged = article.title && article.title !== seed.title;
+  const subtitleChanged = article.subtitle !== undefined && article.subtitle !== seed.subtitle;
+  const summaryChanged = article.summary !== undefined && article.summary !== seed.summary;
+  const contentChanged = article.content !== undefined && article.content !== seed.content;
+
+  const publishedDate = merged.publishedDate || merged.publishedAt || '25/03/2026';
+  const publishedAt = merged.publishedAt || merged.publishedDate || '2026-03-25';
+
+  return {
+    ...merged,
+    id: merged.id || `culture-${Date.now()}`,
+    title: merged.title || merged.titleVi || '',
+    titleVi: titleChanged ? article.title : (merged.titleVi || merged.title || ''),
+    titleEn: titleChanged ? (article.titleEn || article.title) : (merged.titleEn || merged.title || ''),
+    subtitle: merged.subtitle ?? merged.subtitleVi ?? '',
+    subtitleVi: subtitleChanged ? article.subtitle : (merged.subtitleVi ?? merged.subtitle ?? ''),
+    subtitleEn: subtitleChanged ? (article.subtitleEn || article.subtitle) : (merged.subtitleEn ?? merged.subtitle ?? ''),
+    summary: merged.summary ?? merged.summaryVi ?? '',
+    summaryVi: summaryChanged ? article.summary : (merged.summaryVi ?? merged.summary ?? ''),
+    summaryEn: summaryChanged ? (article.summaryEn || article.summary) : (merged.summaryEn ?? merged.summary ?? ''),
+    content: merged.content ?? merged.contentVi ?? '',
+    contentVi: contentChanged ? article.content : (merged.contentVi ?? merged.content ?? ''),
+    contentEn: contentChanged ? (article.contentEn || article.content) : (merged.contentEn ?? merged.content ?? ''),
+    category: catObj?.id || merged.category || 'culinary',
+    categoryName: catObj?.name || merged.categoryName || categoryNameVi,
+    categoryNameVi,
+    categoryNameEn,
+    ...destMeta,
+    region: merged.region || (destMeta.destination === 'hanoi' || destMeta.destination === 'sapa' ? 'Miền Bắc' : destMeta.destination === 'hue' || destMeta.destination === 'hoian' || destMeta.destination === 'danang' ? 'Miền Trung' : destMeta.destination === 'hcmc' || destMeta.destination === 'mientay' ? 'Miền Nam' : 'Toàn quốc'),
+    readTime: merged.readTime || merged.readTimeVi || '5 phút đọc',
+    readTimeVi: merged.readTime || merged.readTimeVi || '5 phút đọc',
+    readTimeEn: merged.readTimeEn || merged.readTime || '5 min read',
+    author: merged.author || 'Biên tập viên Hola',
+    authorRole: merged.authorRole || merged.authorRoleVi || 'Chuyên gia văn hóa Việt Nam',
+    authorRoleVi: merged.authorRole || merged.authorRoleVi || 'Chuyên gia văn hóa Việt Nam',
+    authorRoleEn: merged.authorRoleEn || merged.authorRole || 'Vietnamese Culture Specialist',
+    status: merged.status || 'PUBLISHED',
+    isFeatured: Boolean(merged.isFeatured),
+    views: typeof merged.views === 'number' ? merged.views : (DEFAULT_VIEWS_BY_ID[merged.id] ?? 0),
+    publishedDate,
+    publishedAt,
+    usefulPhrases: Array.isArray(merged.usefulPhrases) ? merged.usefulPhrases.filter(p => p && (p.word || p.meaning)) : [],
+  };
+}
+
+function emitCultureChanged() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('hola-culture-updated'));
+  }
+}
+
+function loadStoredCategories() {
+  try {
+    const raw = localStorage.getItem(STORAGE_CULTURE_CATEGORIES);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(normalizeCategoryItem).sort((a, b) => (a.order || 0) - (b.order || 0));
+      }
+    }
+  } catch {
+    // ignore storage errors
+  }
+  const seeded = DEFAULT_ADMIN_CATEGORIES.map(normalizeCategoryItem);
+  try {
+    localStorage.setItem(STORAGE_CULTURE_CATEGORIES, JSON.stringify(seeded));
+  } catch {
+    // ignore
+  }
+  return seeded;
+}
+
+function loadStoredArticles() {
+  const categories = loadStoredCategories();
+  try {
+    const raw = localStorage.getItem(STORAGE_CULTURE_ARTICLES);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(a => normalizeArticleItem(a, categories));
+      }
+    }
+  } catch {
+    // ignore storage errors
+  }
+  const seeded = CULTURE_ARTICLES.map(a => normalizeArticleItem({ ...a, status: 'PUBLISHED' }, categories));
+  try {
+    localStorage.setItem(STORAGE_CULTURE_ARTICLES, JSON.stringify(seeded));
+  } catch {
+    // ignore
+  }
+  return seeded;
+}
+
 export const cultureService = {
+  getCategories() {
+    const adminCats = loadStoredCategories();
+    return [
+      { id: 'all', label: 'Tất cả danh mục', labelVi: 'Tất cả danh mục', labelEn: 'All Categories' },
+      ...adminCats,
+    ];
+  },
+
+  getDestinations() {
+    return CULTURE_DESTINATIONS;
+  },
+
+  listArticles({ search = '', category = 'all', destination = 'all' } = {}) {
+    let result = loadStoredArticles().filter(a => !a.status || a.status === 'PUBLISHED');
+
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      result = result.filter(
+        a =>
+          (a.title || '').toLowerCase().includes(q) ||
+          (a.titleVi || '').toLowerCase().includes(q) ||
+          (a.titleEn || '').toLowerCase().includes(q) ||
+          (a.subtitle || '').toLowerCase().includes(q) ||
+          (a.summary || '').toLowerCase().includes(q) ||
+          (a.author || '').toLowerCase().includes(q)
+      );
+    }
+
+    if (category && category !== 'all') {
+      result = result.filter(a => a.category === category);
+    }
+
+    if (destination && destination !== 'all') {
+      const targetDest = resolveDestinationMeta(destination).destination;
+      result = result.filter(
+        a => a.destination === destination || a.destination === targetDest || (a.destinationName || '').toLowerCase() === destination.toLowerCase()
+      );
+    }
+
+    return result;
+  },
+
+  getFeaturedArticles() {
+    const published = this.listArticles();
+    const featured = published.filter(a => a.isFeatured);
+    return featured.length > 0 ? featured : published.slice(0, 1);
+  },
+
+  getArticle(id) {
+    const all = loadStoredArticles();
+    return all.find(a => a.id === id) || null;
+  },
+
+  getRelatedArticles(id) {
+    const article = this.getArticle(id);
+    if (!article) return [];
+    const published = this.listArticles();
+    return published
+      .filter(
+        a => a.id !== id && (article.relatedArticles?.includes(a.id) || a.destination === article.destination || a.category === article.category)
+      )
+      .slice(0, 3);
+  },
+
+  incrementViews(id) {
+    const list = loadStoredArticles();
+    const idx = list.findIndex(a => a.id === id);
+    if (idx === -1) return;
+    list[idx] = { ...list[idx], views: (Number(list[idx].views) || 0) + 1 };
+    try {
+      localStorage.setItem(STORAGE_CULTURE_ARTICLES, JSON.stringify(list));
+      emitCultureChanged();
+    } catch {
+      // ignore
+    }
+  },
+
+  // --- ADMIN METHODS (Linked directly with /admin/culture & /admin/culture-categories) ---
+  getAdminArticles(filters = {}) {
+    let items = loadStoredArticles();
+    if (filters.search) {
+      const q = filters.search.trim().toLowerCase();
+      items = items.filter(
+        a =>
+          (a.title || '').toLowerCase().includes(q) ||
+          (a.author || '').toLowerCase().includes(q) ||
+          (a.destinationName || '').toLowerCase().includes(q)
+      );
+    }
+    if (filters.category && filters.category !== 'all') {
+      items = items.filter(a => a.category === filters.category);
+    }
+    if (filters.status && filters.status !== 'all') {
+      items = items.filter(a => a.status === filters.status);
+    }
+    return items;
+  },
+
+  getAdminArticle(id) {
+    return this.getArticle(id);
+  },
+
+  saveAdminArticle(articleData) {
+    const categories = loadStoredCategories();
+    const list = loadStoredArticles();
+    const exists = list.some(a => a.id === articleData.id);
+    const todayStr = new Date().toLocaleDateString('vi-VN');
+    const normalized = normalizeArticleItem(
+      {
+        ...articleData,
+        id: articleData.id || `culture-${Date.now()}`,
+        publishedDate: articleData.publishedDate || todayStr,
+        publishedAt: articleData.publishedAt || todayStr,
+      },
+      categories
+    );
+
+    const updated = exists
+      ? list.map(a => (a.id === normalized.id ? normalizeArticleItem({ ...a, ...articleData, id: normalized.id }, categories) : a))
+      : [normalized, ...list];
+
+    localStorage.setItem(STORAGE_CULTURE_ARTICLES, JSON.stringify(updated));
+    emitCultureChanged();
+    return normalized;
+  },
+
+  deleteAdminArticle(id) {
+    const updated = loadStoredArticles().filter(a => a.id !== id);
+    localStorage.setItem(STORAGE_CULTURE_ARTICLES, JSON.stringify(updated));
+    emitCultureChanged();
+    return updated;
+  },
+
+  updateAdminArticleStatus(id, newStatus) {
+    const categories = loadStoredCategories();
+    const updated = loadStoredArticles().map(a =>
+      a.id === id ? normalizeArticleItem({ ...a, status: newStatus }, categories) : a
+    );
+    localStorage.setItem(STORAGE_CULTURE_ARTICLES, JSON.stringify(updated));
+    emitCultureChanged();
+    return updated.find(a => a.id === id) || null;
+  },
+
+  getAdminCategories() {
+    const articles = loadStoredArticles();
+    return loadStoredCategories().map(cat => ({
+      ...cat,
+      articleCount: articles.filter(a => a.category === cat.id || a.category === cat.slug).length,
+    }));
+  },
+
+  saveAdminCategory(catData) {
+    const list = loadStoredCategories();
+    const slug = (catData.slug || catData.id || catData.name || `cat-${Date.now()}`)
+      .toLowerCase()
+      .replace(/[^a-z0-9-_]+/g, '-')
+      .replace(/^-+|-+$/g, '') || `cat-${Date.now()}`;
+    let updated;
+    if (catData.id && list.some(c => c.id === catData.id)) {
+      updated = list.map((c, idx) => (c.id === catData.id ? normalizeCategoryItem({ ...c, ...catData, slug }, idx) : c));
+    } else {
+      const newCat = normalizeCategoryItem(
+        {
+          ...catData,
+          id: slug,
+          slug,
+          order: list.length + 1,
+        },
+        list.length
+      );
+      updated = [...list, newCat];
+    }
+    localStorage.setItem(STORAGE_CULTURE_CATEGORIES, JSON.stringify(updated));
+    emitCultureChanged();
+    return this.getAdminCategories();
+  },
+
+  reorderAdminCategories(orderedList) {
+    const normalized = orderedList.map((c, idx) => normalizeCategoryItem({ ...c, order: idx + 1 }, idx));
+    localStorage.setItem(STORAGE_CULTURE_CATEGORIES, JSON.stringify(normalized));
+    emitCultureChanged();
+    return this.getAdminCategories();
+  },
+
+  deleteAdminCategory(id) {
+    const updated = loadStoredCategories()
+      .filter(c => c.id !== id)
+      .map((c, idx) => ({ ...c, order: idx + 1 }));
+    localStorage.setItem(STORAGE_CULTURE_CATEGORIES, JSON.stringify(updated));
+    emitCultureChanged();
+    return this.getAdminCategories();
+  },
+};
+
+const _legacyCultureService = {
   getCategories() {
     return CULTURE_CATEGORIES;
   },

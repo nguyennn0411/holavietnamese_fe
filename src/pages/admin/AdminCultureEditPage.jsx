@@ -24,6 +24,7 @@ export function AdminCultureEditPage() {
     authorRole: 'Chuyên gia văn hóa ẩm thực',
     readTime: bilingualLabel('5 phút đọc', '5 min read'),
     status: 'PUBLISHED',
+    isFeatured: false,
     coverImage: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80',
     summary: '',
     content: '',
@@ -241,6 +242,17 @@ export function AdminCultureEditPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="admin-card">
                 <h3 style={{ margin: '0 0 14px 0', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Phân loại & Trạng thái"}</BilingualText></h3>
+
+                <label style={{ marginBottom: '12px', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={Boolean(formData.isFeatured)}
+                    onChange={e => setFormData({ ...formData, isFeatured: e.target.checked })}
+                  />
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-ink)' }}>
+                    <BilingualText vi="⭐ Bài viết Nổi bật (Hiển thị trên Banner đầu trang)" en="⭐ Featured Article (Show on Hero Banner)" />
+                  </span>
+                </label>
 
                 <label><BilingualText>{"Trạng thái xuất bản:"}</BilingualText><select
                     value={formData.status ?? ''}

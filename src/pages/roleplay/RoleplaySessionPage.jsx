@@ -46,8 +46,19 @@ export function RoleplaySessionPage() {
 
   const messagesContainerRef = useRef(null);
   const speechRecognitionRef = useRef(null);
+  const prevMsgCountRef = useRef(null);
 
   useEffect(() => {
+    prevMsgCountRef.current = null;
+    const scrollToPageTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      document.getElementById('main-content')?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    };
+    scrollToPageTop();
+    const rafId = requestAnimationFrame(scrollToPageTop);
+    const timerId = setTimeout(scrollToPageTop, 80);
     if (id) {
       const currentSession = aiRoleplayService.getRoleplaySession(id);
       setSession(currentSession);
@@ -55,6 +66,10 @@ export function RoleplaySessionPage() {
         if (updated) setSession(updated);
       }).catch(() => {});
     }
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(timerId);
+    };
   }, [id]);
 
   // Khi learner hoàn thành 100% mục tiêu → tự báo hoàn thành lên backend
@@ -76,7 +91,21 @@ export function RoleplaySessionPage() {
     const container = messagesContainerRef.current;
     if (!container) return;
 
-    container.scrollTo({
+    if (!session?.messages) return;
+    const currentCount = session.messages.length;
+    if (prevMsgCountRef.current === null) {
+      prevMsgCountRef.current = currentCount;
+      container.scrollTop = 0;
+      return;
+    }
+    if (currentCount > prevMsgCountRef.current || isSending) {
+      prevMsgCountRef.current = currentCount;
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+    if (false) container.scrollTo({
       top: container.scrollHeight,
       behavior: 'smooth',
     });
@@ -255,48 +284,64 @@ export function RoleplaySessionPage() {
         </div>
 
         {/* Speed & Global Actions */}
-        <div className="flex flex-wrap items-center gap-2.5 self-start md:self-auto">
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
           {/* Audio speed pill */}
-          <div className="flex items-center bg-white border border-[#E8E5DF] rounded-xl p-1 shadow-xs text-xs font-semibold">
-            <span className="px-2 text-[#64748B] text-[11px]"><BilingualText vi="Tốc độ đọc:" en="Audio speed:" /></span>
+          <button
+            type="button"
+            onClick={() => {
+              const newRate = speechRate >= 0.9 ? 0.7 : 0.95;
+              setSpeechRate(newRate);
+              showToast(bLabel(`Tốc độ phát âm: ${newRate >= 0.9 ? '1.0x Chuẩn' : '0.7x Chậm'}`, `Speech rate: ${newRate >= 0.9 ? '1.0x Normal' : '0.7x Slow'}`));
+            }}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', height: '38px', minHeight: '38px', padding: '0 14px', borderRadius: '12px', background: '#FFFFFF', color: '#DA251D', border: '1px solid #DECBB4', fontSize: '12.5px', fontWeight: 700, whiteSpace: 'nowrap', boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}
+            title={bLabel('Chuyển đổi tốc độ phát âm (1.0x Chuẩn / 0.7x Chậm)', 'Toggle speech rate (1.0x Normal / 0.7x Slow)')}
+          >
+            <span>{speechRate >= 0.9 ? bLabel('⚡ 1.0x Chuẩn', '⚡ 1.0x Normal') : bLabel('🐢 0.7x Chậm', '🐢 0.7x Slow')}</span>
+          </button>
+          <div style={{ display: 'none' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '0 8px 0 9px', color: '#64748B', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}><Volume2 size={13} style={{ color: '#F97316' }} />{bLabel('Tốc độ đọc:', 'Speed:')}</span>
             <button
               type="button"
               onClick={() => setSpeechRate(0.7)}
+              style={{ height: '30px', minHeight: '30px', padding: '0 11px', borderRadius: '9px', fontSize: '12px', fontWeight: 700, border: 'none', whiteSpace: 'nowrap', background: speechRate === 0.7 ? '#F97316' : 'transparent', color: speechRate === 0.7 ? '#FFFFFF' : '#475569', boxShadow: speechRate === 0.7 ? '0 2px 5px rgba(249,115,22,0.3)' : 'none' }}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 speechRate === 0.7
                   ? 'bg-[#DA251D] text-white font-bold shadow-xs'
                   : 'text-[#431914] hover:bg-[#FFF9ED]'
               }`}
             >
-              <BilingualText vi="0.7x Chậm" en="0.7x Slow" />
+              <span>{bLabel('0.7x Chậm', '0.7x Slow')}</span>
             </button>
             <button
               type="button"
               onClick={() => setSpeechRate(0.95)}
+              style={{ height: '30px', minHeight: '30px', padding: '0 11px', borderRadius: '9px', fontSize: '12px', fontWeight: 700, border: 'none', whiteSpace: 'nowrap', background: speechRate >= 0.9 ? '#F97316' : 'transparent', color: speechRate >= 0.9 ? '#FFFFFF' : '#475569', boxShadow: speechRate >= 0.9 ? '0 2px 5px rgba(249,115,22,0.3)' : 'none' }}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 speechRate >= 0.9
                   ? 'bg-[#DA251D] text-white font-bold shadow-xs'
                   : 'text-[#431914] hover:bg-[#FFF9ED]'
               }`}
             >
-              <BilingualText vi="1.0x Chuẩn" en="1.0x Normal" />
+              <span>{bLabel('1.0x Chuẩn', '1.0x Normal')}</span>
             </button>
           </div>
 
           <button
             onClick={handleResetSession}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', height: '38px', minHeight: '38px', padding: '0 14px', borderRadius: '12px', background: '#FFFFFF', color: '#475569', border: '1px solid #E2D5C3', fontSize: '12.5px', fontWeight: 600, whiteSpace: 'nowrap', boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF4E0] text-[#715A4F] hover:text-[#202124] border border-[#DECBB4] font-semibold text-xs shadow-xs transition-all"
           >
             <RotateCcw size={13} />
-            <BilingualText vi="Bắt đầu lại" en="Restart" />
+            <span>{bLabel('Bắt đầu lại', 'Restart')}</span>
           </button>
 
           <button
             onClick={handleFinishSession}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#202124] hover:bg-[#333] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all"
+            className="roleplay-header-finish-btn"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', height: '38px', minHeight: '38px', padding: '0 15px', borderRadius: '12px', background: '#253044', color: '#FFFFFF', border: '1px solid #253044', fontSize: '12.5px', fontWeight: 700, whiteSpace: 'nowrap', boxShadow: '0 2px 6px rgba(37,48,68,0.18)' }}
           >
             <Award size={14} className="text-[#FFCD00]" />
-            <BilingualText vi="Kết thúc & Xem kết quả" en="Finish & View Results" />
+            <span>{bLabel('Kết thúc & Xem kết quả', 'Finish & View Results')}</span>
           </button>
         </div>
       </header>
@@ -329,6 +374,7 @@ export function RoleplaySessionPage() {
 
             <button
               onClick={() => setShowHints(!showHints)}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', height: '32px', minHeight: '32px', padding: '0 12px', borderRadius: '10px', fontSize: '12px', fontWeight: 700, background: showHints ? '#FFF2D6' : '#FFFFFF', color: showHints ? '#A62A24' : '#715A4F', border: showHints ? '1px solid #FFCD00' : '1px solid #DECBB4', whiteSpace: 'nowrap' }}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
                 showHints
                   ? 'bg-[#FFF2D6] text-[#A62A24] border-[#FFCD00]'
@@ -336,7 +382,7 @@ export function RoleplaySessionPage() {
               }`}
             >
               <Lightbulb size={14} className={showHints ? 'text-[#DA251D]' : 'text-[#715A4F]'} />
-              <BilingualText vi={showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'} en={showHints ? 'Hide hints' : 'Show response hints'} />
+              <span>{bLabel(showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời', showHints ? 'Hide hints' : 'Show response hints')}</span>
             </button>
           </div>
 
@@ -440,6 +486,7 @@ export function RoleplaySessionPage() {
                       <button
                         type="button"
                         onClick={() => handleSpeak(msg.text, msg.id)}
+                        style={{ minHeight: '28px', height: '28px', padding: '0 10px', fontSize: '11.5px', borderRadius: '8px', background: isAi ? '#FFF9EE' : 'rgba(255,255,255,0.2)', color: isAi ? '#715A4F' : '#FFFFFF', border: isAi ? '1px solid #E8DCCF' : '1px solid rgba(255,255,255,0.3)' }}
                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                           isAi
                             ? 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] hover:text-[#DA251D] border border-[#E8DCCF]'
@@ -448,13 +495,14 @@ export function RoleplaySessionPage() {
                         title={bilingualLabel("Nghe phát âm chuẩn", "Listen to standard pronunciation")}
                       >
                         <Volume2 size={13} className={isPlayingThis ? 'text-[#DA251D] animate-spin' : ''} />
-                        <BilingualText vi="Nghe" en="Listen" />
+                        <span>{bLabel('Nghe', 'Listen')}</span>
                       </button>
 
                       {msg.translation && (
                         <button
                           type="button"
                           onClick={() => toggleTranslation(msg.id)}
+                          style={{ minHeight: '28px', height: '28px', padding: '0 10px', fontSize: '11.5px', borderRadius: '8px', background: isAi ? (isTranslating ? '#DA251D' : '#FFF9EE') : (isTranslating ? '#FFFFFF' : 'rgba(255,255,255,0.2)'), color: isAi ? (isTranslating ? '#FFFFFF' : '#715A4F') : (isTranslating ? '#DA251D' : '#FFFFFF'), border: isAi ? '1px solid #E8DCCF' : '1px solid rgba(255,255,255,0.3)' }}
                           className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                             isAi
                               ? isTranslating
@@ -467,7 +515,7 @@ export function RoleplaySessionPage() {
                           title={bilingualLabel("Dịch câu nói sang tiếng Anh", "Translate sentence to English")}
                         >
                           <Languages size={13} />
-                          <BilingualText vi={isTranslating ? 'Đóng dịch' : 'Dịch'} en={isTranslating ? 'Hide translation' : 'Translate'} />
+                          <span>{bLabel(isTranslating ? 'Đóng dịch' : 'Dịch', isTranslating ? 'Hide translation' : 'Translate')}</span>
                         </button>
                       )}
 
@@ -475,6 +523,7 @@ export function RoleplaySessionPage() {
                         <button
                           type="button"
                           onClick={() => toggleExplanation(msg.id)}
+                          style={{ minHeight: '28px', height: '28px', padding: '0 10px', fontSize: '11.5px', borderRadius: '8px', background: isAi ? (isExplaining ? '#24382B' : '#FFF9EE') : (isExplaining ? '#FFFFFF' : 'rgba(255,255,255,0.2)'), color: isAi ? (isExplaining ? '#FFFFFF' : '#715A4F') : (isExplaining ? '#24382B' : '#FFFFFF'), border: isAi ? '1px solid #E8DCCF' : '1px solid rgba(255,255,255,0.3)' }}
                           className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                             isAi
                               ? isExplaining
@@ -487,7 +536,7 @@ export function RoleplaySessionPage() {
                           title={bilingualLabel("Giải thích từ vựng & sắc thái văn hóa", "Explain vocabulary & cultural nuances")}
                         >
                           <HelpCircle size={13} />
-                          <BilingualText vi={isExplaining ? 'Đóng giải thích' : 'Giải thích'} en={isExplaining ? 'Hide explanation' : 'Explain'} />
+                          <span>{bLabel(isExplaining ? 'Đóng giải thích' : 'Giải thích', isExplaining ? 'Hide explanation' : 'Explain')}</span>
                         </button>
                       )}
                     </div>
@@ -723,10 +772,10 @@ export function RoleplaySessionPage() {
           <button
             type="button"
             onClick={handleFinishSession}
-            className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#DA251D] to-[#B71C1C] hover:from-[#B71C1C] hover:to-[#8B1414] text-white font-black text-sm shadow-md hover:shadow-xl transition-all"
+            style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '44px', minHeight: '44px', padding: '0 20px', borderRadius: '16px', background: 'linear-gradient(135deg, #F97316, #EA580C)', color: '#FFFFFF', border: 'none', fontSize: '13.5px', fontWeight: 800, boxShadow: '0 4px 12px rgba(249,115,22,0.28)' }}
           >
             <Award size={16} className="text-[#FFCD00]" />
-            <BilingualText vi="Hoàn tất & Nhận đánh giá ➔" en="Complete & View Evaluation ➔" />
+            <span>{bLabel('Hoàn tất & Nhận đánh giá ➔', 'Complete & View Evaluation ➔')}</span>
           </button>
         </aside>
       </div>

@@ -1,6 +1,7 @@
 // Admin Service for Culture, AI Scenarios, AI Settings, Usage & Reviews (Người 4 Admin)
 
 import axiosClient from '@/infrastructure/api/axiosClient';
+import { cultureService } from '@/services/cultureService';
 
 const STORAGE_ADMIN_CULTURE = 'hola_admin_culture_articles_v1';
 const STORAGE_ADMIN_CATEGORIES = 'hola_admin_culture_categories_v1';
@@ -403,6 +404,60 @@ export const adminCultureAiService = {
   },
   // --- CULTURE ARTICLES ---
   getArticles(filters = {}) {
+    if (typeof cultureService?.getAdminArticles === 'function') {
+      return cultureService.getAdminArticles(filters);
+    }
+    return this._legacyGetArticles(filters);
+  },
+  getArticle(id) {
+    if (typeof cultureService?.getAdminArticle === 'function') {
+      return cultureService.getAdminArticle(id);
+    }
+    return this._legacyGetArticle(id);
+  },
+  saveArticle(articleData) {
+    if (typeof cultureService?.saveAdminArticle === 'function') {
+      return cultureService.saveAdminArticle(articleData);
+    }
+    return this._legacySaveArticle(articleData);
+  },
+  deleteArticle(id) {
+    if (typeof cultureService?.deleteAdminArticle === 'function') {
+      return cultureService.deleteAdminArticle(id);
+    }
+    return this._legacyDeleteArticle(id);
+  },
+  updateArticleStatus(id, newStatus) {
+    if (typeof cultureService?.updateAdminArticleStatus === 'function') {
+      return cultureService.updateAdminArticleStatus(id, newStatus);
+    }
+    return this._legacyUpdateArticleStatus(id, newStatus);
+  },
+  getCategories() {
+    if (typeof cultureService?.getAdminCategories === 'function') {
+      return cultureService.getAdminCategories();
+    }
+    return this._legacyGetCategories();
+  },
+  saveCategory(catData) {
+    if (typeof cultureService?.saveAdminCategory === 'function') {
+      return cultureService.saveAdminCategory(catData);
+    }
+    return this._legacySaveCategory(catData);
+  },
+  reorderCategories(orderedList) {
+    if (typeof cultureService?.reorderAdminCategories === 'function') {
+      return cultureService.reorderAdminCategories(orderedList);
+    }
+    return this._legacyReorderCategories(orderedList);
+  },
+  deleteCategory(id) {
+    if (typeof cultureService?.deleteAdminCategory === 'function') {
+      return cultureService.deleteAdminCategory(id);
+    }
+    return this._legacyDeleteCategory(id);
+  },
+  _legacyGetArticles(filters = {}) {
     let items = [];
     try {
       const stored = localStorage.getItem(STORAGE_ADMIN_CULTURE);
@@ -424,12 +479,12 @@ export const adminCultureAiService = {
     return items;
   },
 
-  getArticle(id) {
+  _legacyGetArticle(id) {
     const list = this.getArticles();
     return list.find(a => a.id === id) || null;
   },
 
-  saveArticle(articleData) {
+  _legacySaveArticle(articleData) {
     const list = this.getArticles();
     let updated;
     const exists = list.some(a => a.id === articleData.id);
@@ -450,20 +505,20 @@ export const adminCultureAiService = {
     return articleData;
   },
 
-  deleteArticle(id) {
+  _legacyDeleteArticle(id) {
     const list = this.getArticles().filter(a => a.id !== id);
     localStorage.setItem(STORAGE_ADMIN_CULTURE, JSON.stringify(list));
     return list;
   },
 
-  updateArticleStatus(id, newStatus) {
+  _legacyUpdateArticleStatus(id, newStatus) {
     const list = this.getArticles().map(a => (a.id === id ? { ...a, status: newStatus } : a));
     localStorage.setItem(STORAGE_ADMIN_CULTURE, JSON.stringify(list));
     return list.find(a => a.id === id);
   },
 
   // --- CULTURE CATEGORIES ---
-  getCategories() {
+  _legacyGetCategories() {
     try {
       const stored = localStorage.getItem(STORAGE_ADMIN_CATEGORIES);
       return stored ? JSON.parse(stored) : INITIAL_CATEGORIES;
@@ -472,7 +527,7 @@ export const adminCultureAiService = {
     }
   },
 
-  saveCategory(catData) {
+  _legacySaveCategory(catData) {
     const list = this.getCategories();
     let updated;
     if (catData.id && list.some(c => c.id === catData.id)) {
@@ -490,12 +545,12 @@ export const adminCultureAiService = {
     return updated;
   },
 
-  reorderCategories(orderedList) {
+  _legacyReorderCategories(orderedList) {
     localStorage.setItem(STORAGE_ADMIN_CATEGORIES, JSON.stringify(orderedList));
     return orderedList;
   },
 
-  deleteCategory(id) {
+  _legacyDeleteCategory(id) {
     const list = this.getCategories().filter(c => c.id !== id);
     localStorage.setItem(STORAGE_ADMIN_CATEGORIES, JSON.stringify(list));
     return list;

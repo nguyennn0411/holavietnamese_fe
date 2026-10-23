@@ -394,19 +394,6 @@ body.ai-quiz-active .ai-tutor-widget {
   min-width: 168px;
 }
 
-.tutor-mode-select-wrap::after {
-  position: absolute;
-  top: 50%;
-  right: 13px;
-  width: 7px;
-  height: 7px;
-  content: '';
-  border-right: 1.5px solid var(--color-red);
-  border-bottom: 1.5px solid var(--color-red);
-  pointer-events: none;
-  transform: translateY(-65%) rotate(45deg);
-}
-
 .tutor-mode-select-icon {
   position: absolute;
   top: 50%;
@@ -418,11 +405,18 @@ body.ai-quiz-active .ai-tutor-widget {
   transform: translateY(-50%);
 }
 
-.tutor-mode-select {
+.tutor-mode-select-wrap.is-open .tutor-mode-select-trigger {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(255, 205, 0, .16), 0 8px 18px rgba(67, 25, 20, .09);
+}
+
+.tutor-mode-select-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   min-height: 40px;
   padding: 8px 34px 8px 37px;
-  appearance: none;
   color: var(--color-ink);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -432,23 +426,121 @@ body.ai-quiz-active .ai-tutor-widget {
   font-size: 12.5px;
   font-weight: 750;
   outline: none;
+  text-align: left;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
 
-.tutor-mode-select:hover,
-.tutor-mode-select:focus {
+.tutor-mode-select-trigger:hover,
+.tutor-mode-select-trigger:focus-visible {
   border-color: var(--color-gold);
   box-shadow: 0 4px 14px rgba(67, 25, 20, .09);
 }
 
-.tutor-mode-select:focus-visible {
+.tutor-mode-select-trigger:focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
 
-.tutor-mode-select option {
+.tutor-mode-select-current {
+  overflow: hidden;
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tutor-mode-select-chevron {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  color: var(--color-red);
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: transform .18s ease;
+}
+
+.tutor-mode-select-wrap.is-open .tutor-mode-select-chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.tutor-mode-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  display: grid;
+  gap: 4px;
+  min-width: 258px;
+  padding: 7px;
+  background: rgba(255, 252, 247, .98);
+  border: 1px solid rgba(222, 203, 180, .95);
+  border-radius: 16px;
+  box-shadow: 0 18px 38px rgba(67, 25, 20, .16), 0 4px 10px rgba(67, 25, 20, .07);
+  backdrop-filter: blur(14px);
+}
+
+.tutor-mode-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 47px;
+  padding: 8px 10px;
   color: var(--color-ink);
-  background: var(--color-surface);
-  font-weight: 600;
+  background: transparent;
+  border: 0;
+  border-radius: 11px;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: background .16s ease, transform .16s ease;
+}
+
+.tutor-mode-option:hover,
+.tutor-mode-option:focus-visible {
+  background: var(--color-cream);
+  outline: none;
+  transform: translateX(2px);
+}
+
+.tutor-mode-option.is-active {
+  color: var(--color-red);
+  background: var(--color-red-soft);
+}
+
+.tutor-mode-option-icon {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  place-items: center;
+  background: var(--color-gold-soft);
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+.tutor-mode-option-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+}
+
+.tutor-mode-option-name {
+  overflow: hidden;
+  font-size: 12.5px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tutor-mode-option-description {
+  overflow: hidden;
+  color: var(--color-muted);
+  font-size: 10px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tutor-mode-select-description {
@@ -474,6 +566,11 @@ body.ai-quiz-active .ai-tutor-widget {
   .tutor-mode-select-wrap {
     min-width: 0;
     flex: 1 1 160px;
+  }
+
+  .tutor-mode-menu {
+    right: auto;
+    width: min(100%, 320px);
   }
 
   .tutor-mode-select-description {
@@ -607,6 +704,53 @@ body.ai-quiz-active .ai-tutor-widget {
 
 .tutor-history-item:hover .tutor-history-item__actions {
   opacity: 1;
+}
+
+/* Compact conversation metadata: keep the date readable without competing with actions. */
+.session-card__meta {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 5px;
+  margin-top: 3px;
+  overflow: hidden;
+  color: var(--color-muted);
+  font-size: 10.5px;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.session-card__separator {
+  flex: 0 0 auto;
+  color: var(--color-clay);
+}
+
+.session-card__messages {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-card__date {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 3px;
+  padding-left: 6px;
+  color: var(--color-muted);
+  border-left: 1px solid var(--color-border);
+  font-variant-numeric: tabular-nums;
+}
+
+.session-card__date svg {
+  color: var(--color-clay);
+}
+
+.session-card__actions {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 5px;
 }
 
 .btn-icon-subtle {

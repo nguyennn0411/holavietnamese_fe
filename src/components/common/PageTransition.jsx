@@ -1,7 +1,16 @@
+import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 
 export function PageTransition({ children, className = '' }) {
   const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.getElementById('main-content')?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
   return (
     <motion.div
       className={`page-transition ${className}`.trim()}

@@ -1,6 +1,6 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Search, X, RotateCcw } from 'lucide-react';
@@ -11,6 +11,19 @@ export function CultureExplorePage() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDestination, setSelectedDestination] = useState('all');
+  const [, setCultureRevision] = useState(0);
+
+  useEffect(() => {
+    const refresh = () => setCultureRevision(v => v + 1);
+    window.addEventListener('hola-culture-updated', refresh);
+    window.addEventListener('storage', refresh);
+    window.addEventListener('focus', refresh);
+    return () => {
+      window.removeEventListener('hola-culture-updated', refresh);
+      window.removeEventListener('storage', refresh);
+      window.removeEventListener('focus', refresh);
+    };
+  }, []);
 
   const categories = cultureService.getCategories();
   const destinations = cultureService.getDestinations();

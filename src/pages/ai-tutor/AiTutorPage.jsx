@@ -25,6 +25,8 @@ import {
   Flame,
   Zap,
   VolumeX,
+  Calendar,
+  ChevronDown,
 } from 'lucide-react';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { aiTutorService } from '@/services/aiTutorService';
@@ -120,11 +122,11 @@ function FormattedMessageText({ text, isAi }) {
 
 export function AiTutorPage() {
   const { confirm, confirmationDialog } = useConfirmDialog();
-  const modes = aiTutorService.getModes();
+  const [modes, setModes] = useState(() => aiTutorService.getModes());
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState('');
   const [currentSession, setCurrentSession] = useState(null);
-  const [currentMode, setCurrentMode] = useState('tutor');
+  const [currentMode, setCurrentMode] = useState(() => aiTutorService.getModes()[0]?.id || 'tutor');
   const [inputText, setInputText] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -139,15 +141,37 @@ export function AiTutorPage() {
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [isConfiguringKey, setIsConfiguringKey] = useState(false);
+  const [isModeMenuOpen, setIsModeMenuOpen] = useState(false);
 
   const chatContainerRef = useRef(null);
   const speechRecognitionRef = useRef(null);
+  const modeMenuRef = useRef(null);
   const isFirstRender = useRef(true);
 
   // Ensure window stays at top on page mount
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, []);
+
+  useEffect(() => {
+    if (!isModeMenuOpen) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (!modeMenuRef.current?.contains(event.target)) {
+        setIsModeMenuOpen(false);
+      }
+    };
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') setIsModeMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isModeMenuOpen]);
 
   // Load sessions and AI status on mount
   useEffect(() => {
@@ -161,6 +185,18 @@ export function AiTutorPage() {
     aiTutorService.getAiStatus().then((st) => {
       if (st) setAiStatus(st);
     });
+
+    const syncModes = () => {
+      const nextModes = aiTutorService.getModes();
+      setModes(nextModes);
+      setCurrentMode(prev => (nextModes.some(m => m.id === prev) ? prev : (nextModes[0]?.id || 'tutor')));
+    };
+    window.addEventListener('hola-ai-settings-updated', syncModes);
+    window.addEventListener('storage', syncModes);
+    return () => {
+      window.removeEventListener('hola-ai-settings-updated', syncModes);
+      window.removeEventListener('storage', syncModes);
+    };
   }, []);
 
   const handleSaveApiKey = async (e) => {
@@ -590,7 +626,7 @@ export function AiTutorPage() {
           <button
             type="button"
             onClick={() => handleCreateNewChat(currentMode)}
-            className="w-full py-3 px-4 rounded-2xl bg-[#DA251D] hover:bg-[#89221E] text-white font-black text-xs shadow-[0_3px_0_#89221E] active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="w-full py-3 px-4 rounded-2xl bg-[var(--color-red)] hover:bg-[var(--color-red-hover)] text-white font-black text-xs shadow-[0_3px_0_#9A3412] active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <Plus size={16} strokeWidth={3} />
             <span><BilingualText vi="Cuộc trò chuyện mới" en="New conversation" /></span>
@@ -625,22 +661,28 @@ export function AiTutorPage() {
               const sessionMode = aiTutorService.getMode(s.mode);
               const isActive = s.id === activeSessionId;
               const isEditing = editingTitleId === s.id;
+              const rawDate = s.updatedAt || s.createdAt;
+              const sessionDate = rawDate ? new Date(rawDate) : new Date();
+              const validSessionDate = Number.isNaN(sessionDate.getTime()) ? new Date() : sessionDate;
+              const dateText = validSessionDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+              const timeText = validSessionDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 
               return (
                 <div
                   key={s.id}
                   onClick={() => handleSelectSession(s.id)}
+                  style={{ padding: '10px 12px' }}
                   className={`group relative p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2 ${
                     isActive
                       ? 'bg-[#FFF9EE] border-2 border-[#DA251D] shadow-xs'
                       : 'bg-[#FAF8F5] border-[#DECBB4]/60 hover:border-[#DA251D]/60 hover:bg-white'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex items-center gap-2 min-w-0 flex-1" style={{ minWidth: 0, flex: 1 }}>
                     <span className="w-8 h-8 rounded-xl bg-white border border-[#DECBB4]/60 flex items-center justify-center text-base shrink-0 shadow-2xs">
                       {sessionMode?.icon || '💬'}
                     </span>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1" style={{ minWidth: 0, flex: 1 }}>
                       {isEditing ? (
                         <input
                           type="text"
@@ -659,24 +701,56 @@ export function AiTutorPage() {
                           {s.titleVi || s.title}
                         </h4>
                       )}
-                      <div className="flex items-center gap-1.5 text-[10px] text-[#78685B] mt-0.5">
+                      <div className="session-card__meta">
                         <span className="font-semibold text-[#DA251D]">
                           {sessionMode?.name}
                         </span>
-                        <span>•</span>
-                        <span>
+                        <span className="session-card__separator">•</span>
+                        <span className="session-card__messages">
                           <BilingualText vi={`${s.messages?.length || 0} tin nhắn`} en={`${s.messages?.length || 0} messages`} />
+                        </span>
+                        <span
+                          className="session-card__date"
+                          title={`Ngày hội thoại: ${dateText} • ${timeText}`}
+                        >
+                          <Calendar size={11} aria-hidden="true" />
+                          {dateText}
                         </span>
                       </div>
                     </div>
                   </div>
 
                   {/* Actions: Rename & Delete */}
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                  <div className="session-card__actions">
                     <button
                       type="button"
                       onClick={(e) => handleStartRename(e, s)}
                       className="p-1.5 rounded-lg text-[#78685B] hover:text-[#202124] hover:bg-white transition-colors"
+                      style={{
+                        width: '26px',
+                        height: '26px',
+                        minHeight: '26px',
+                        minWidth: '26px',
+                        padding: 0,
+                        borderRadius: '7px',
+                        background: '#FFFFFF',
+                        border: '1px solid #E5D7C5',
+                        color: '#78685B',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 1px 2px rgba(67,25,20,0.04)',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = '#FFF5EB';
+                        e.currentTarget.style.borderColor = '#F59E0B';
+                        e.currentTarget.style.color = '#D97706';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = '#FFFFFF';
+                        e.currentTarget.style.borderColor = '#E5D7C5';
+                        e.currentTarget.style.color = '#78685B';
+                      }}
                       title="Đổi tên hội thoại"
                     >
                       <Edit3 size={13} />
@@ -686,6 +760,31 @@ export function AiTutorPage() {
                         type="button"
                         onClick={(e) => handleDeleteSession(e, s.id)}
                         className="p-1.5 rounded-lg text-[#78685B] hover:text-red-600 hover:bg-red-50 transition-colors"
+                        style={{
+                          width: '26px',
+                          height: '26px',
+                          minHeight: '26px',
+                          minWidth: '26px',
+                          padding: 0,
+                          borderRadius: '7px',
+                          background: '#FFFFFF',
+                          border: '1px solid #E5D7C5',
+                          color: '#78685B',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 1px 2px rgba(67,25,20,0.04)',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#FEF2F2';
+                          e.currentTarget.style.borderColor = '#FECACA';
+                          e.currentTarget.style.color = '#DC2626';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#FFFFFF';
+                          e.currentTarget.style.borderColor = '#E5D7C5';
+                          e.currentTarget.style.color = '#78685B';
+                        }}
                         title="Xóa hội thoại"
                       >
                         <Trash2 size={13} />
@@ -768,26 +867,60 @@ export function AiTutorPage() {
 
             {/* Compact mode dropdown */}
             <div className="tutor-mode-select-row">
-              <label className="tutor-mode-select-label" htmlFor="tutor-mode-select">
+              <span className="tutor-mode-select-label" id="tutor-mode-select-label">
                 Chế độ học
-              </label>
-              <div className="tutor-mode-select-wrap">
-                <span className="tutor-mode-select-icon" aria-hidden="true">
-                  {activeModeConfig.icon}
-                </span>
-                <select
+              </span>
+              <div className={`tutor-mode-select-wrap ${isModeMenuOpen ? 'is-open' : ''}`} ref={modeMenuRef}>
+                <button
+                  type="button"
                   id="tutor-mode-select"
-                  className="tutor-mode-select"
-                  value={currentMode}
-                  onChange={(event) => handleSwitchMode(event.target.value)}
-                  aria-label="Chọn chế độ AI Tutor"
+                  className="tutor-mode-select-trigger"
+                  aria-haspopup="listbox"
+                  aria-expanded={isModeMenuOpen}
+                  aria-labelledby="tutor-mode-select-label tutor-mode-select"
+                  onClick={() => setIsModeMenuOpen((open) => !open)}
                 >
-                  {modes.map((mode) => (
-                    <option key={mode.id} value={mode.id}>
-                      {mode.name}
-                    </option>
-                  ))}
-                </select>
+                  <span className="tutor-mode-select-icon" aria-hidden="true">{activeModeConfig.icon}</span>
+                  <span className="tutor-mode-select-current">{activeModeConfig.name}</span>
+                  <ChevronDown className="tutor-mode-select-chevron" size={16} strokeWidth={2.2} aria-hidden="true" />
+                </button>
+                <AnimatePresence>
+                  {isModeMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -5, scale: 0.98 }}
+                      transition={{ duration: 0.14 }}
+                      className="tutor-mode-menu"
+                      role="listbox"
+                      aria-label="Chọn chế độ AI Tutor"
+                    >
+                      {modes.map((mode) => {
+                        const isActive = mode.id === currentMode;
+                        return (
+                          <button
+                            key={mode.id}
+                            type="button"
+                            role="option"
+                            aria-selected={isActive}
+                            className={`tutor-mode-option ${isActive ? 'is-active' : ''}`}
+                            onClick={() => {
+                              handleSwitchMode(mode.id);
+                              setIsModeMenuOpen(false);
+                            }}
+                          >
+                            <span className="tutor-mode-option-icon" aria-hidden="true">{mode.icon}</span>
+                            <span className="tutor-mode-option-copy">
+                              <span className="tutor-mode-option-name">{mode.name}</span>
+                              <span className="tutor-mode-option-description">{mode.description}</span>
+                            </span>
+                            {isActive && <Check size={15} strokeWidth={3} aria-hidden="true" />}
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
               <span className="tutor-mode-select-description">
                 {activeModeConfig.description}
@@ -814,7 +947,7 @@ export function AiTutorPage() {
                 <button
                   type="button"
                   onClick={() => handleCreateNewChat(currentMode)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#DA251D] hover:bg-[#89221E] text-white text-xs font-black shadow-sm transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[var(--color-red)] hover:bg-[var(--color-red-hover)] text-white text-xs font-black shadow-sm transition-all cursor-pointer"
                 >
                   <Plus size={15} strokeWidth={3} />
                   Cuộc trò chuyện mới
@@ -853,9 +986,9 @@ export function AiTutorPage() {
                     {isAi && (
                       <div className="ai-tutor-message__label">
                         <Sparkles size={12} aria-hidden="true" />
-                        <span>Hola AI Tutor</span>
+                        <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>Hola AI Tutor</span>
                         <span className="ai-tutor-message__dot" aria-hidden="true" />
-                        <span>Trợ giảng tiếng Việt</span>
+                        <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>Trợ giảng tiếng Việt</span>
                       </div>
                     )}
 
@@ -867,7 +1000,7 @@ export function AiTutorPage() {
                       <div className="mt-3 p-3 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-amber-900 text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-amber-800">
                           <Edit3 size={13} className="text-amber-600 shrink-0" />
-                          <span><BilingualText vi="Nhận xét & Sửa lỗi ngữ pháp:" en="Grammar Feedback & Corrections:" /></span>
+                          <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}><BilingualText vi="Nhận xét & Sửa lỗi ngữ pháp:" en="Grammar Feedback & Corrections:" /></span>
                         </div>
                         <p className="text-amber-900/90 leading-relaxed">
                           {msg.grammarCorrection || msg.grammarCheck?.explanation}
@@ -880,7 +1013,7 @@ export function AiTutorPage() {
                       <div className="mt-2.5 p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-emerald-950 text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-emerald-800">
                           <Sparkles size={13} className="text-emerald-600 shrink-0" />
-                          <span>Cách diễn đạt tự nhiên hơn của người bản xứ:</span>
+                          <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>Cách diễn đạt tự nhiên hơn của người bản xứ:</span>
                         </div>
                         <p className="font-semibold text-emerald-900 leading-relaxed italic">
                           "{msg.nativeAlternative || msg.grammarCheck?.corrected}"
@@ -892,8 +1025,8 @@ export function AiTutorPage() {
                     {isAi && msg.culturalNote && (
                       <div className="mt-2.5 p-3 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4] text-[#431914] text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-[#DA251D]">
-                          <span>🏮</span>
-                          <span>Lưu ý văn hóa & Ngữ cảnh ứng xử:</span>
+                          <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>🏮</span>
+                          <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>Lưu ý văn hóa & Ngữ cảnh ứng xử:</span>
                         </div>
                         <p className="text-[#431914]/90 leading-relaxed">
                           {msg.culturalNote}
@@ -914,7 +1047,7 @@ export function AiTutorPage() {
                       <div className="mt-3 pt-3 border-t border-[#DECBB4]/40 space-y-2">
                         <div className="flex items-center gap-1.5 text-[11px] font-black text-[#DA251D]">
                           <BookOpen size={13} />
-                          <span><BilingualText vi="Từ vựng hữu ích gợi ý:" en="Suggested useful vocabulary:" /></span>
+                          <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}><BilingualText vi="Từ vựng hữu ích gợi ý:" en="Suggested useful vocabulary:" /></span>
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           {msg.savedWords.map((item, idx) => (
@@ -931,7 +1064,7 @@ export function AiTutorPage() {
                                 size={12}
                                 className="text-[#DA251D] group-hover/vocab:scale-115 transition-transform"
                               />
-                              <span>
+                              <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>
                                 <strong>{item.word}</strong>: {item.meaning}
                               </span>
                             </button>
@@ -959,7 +1092,7 @@ export function AiTutorPage() {
                               size={13}
                               className={isSpeaking ? 'animate-pulse' : ''}
                             />
-                            <span>{isSpeaking ? <BilingualText vi="Đang đọc..." en="Reading..." /> : <BilingualText vi="Nghe phát âm" en="Listen" />}</span>
+                            <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>{isSpeaking ? <BilingualText vi="Đang đọc..." en="Reading..." /> : <BilingualText vi="Nghe phát âm" en="Listen" />}</span>
                           </button>
 
                           {/* Sound wave bars animation while speaking */}
@@ -998,7 +1131,7 @@ export function AiTutorPage() {
                           ) : (
                             <>
                               <Copy size={12} />
-                              <span><BilingualText vi="Sao chép" en="Copy" /></span>
+                              <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}><BilingualText vi="Sao chép" en="Copy" /></span>
                             </>
                           )}
                         </button>

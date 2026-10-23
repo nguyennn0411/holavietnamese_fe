@@ -58,7 +58,10 @@ export function MainLayout() {
   useEffect(() => closeGuestDrawer(), [location.pathname, closeGuestDrawer]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.getElementById('main-content')?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.getElementById('main-content')?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [location.pathname]);
 

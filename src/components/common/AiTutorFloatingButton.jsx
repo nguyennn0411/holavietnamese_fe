@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Send, X } from 'lucide-react';
-import { aiTutorService } from '@/services/aiTutorService';
+import { aiTutorService, detectInputLanguage, enforceLanguageConsistency } from '@/services/aiTutorService';
 import ngheIdleMascot from '@/assets/mascot/nghe-idle.webp';
 
 function cleanMiniChatText(value) {
@@ -20,15 +20,44 @@ export function AiTutorFloatingButton() {
   const [isSending, setIsSending] = useState(false);
   const [session, setSession] = useState(null);
   const inputRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   // The AI Tutor page already has its own full conversation UI. Never expose
   // the helper during a quiz attempt, where it could be used as a shortcut.
   const isQuizRoute = location.pathname.startsWith('/quizzes/')
     || location.pathname.startsWith('/quiz-attempts/');
+
+  const rawMessages = session?.messages || [];
+  const visibleMessages = rawMessages
+    .map((message, idx) => {
+      let text = cleanMiniChatText(message.text);
+      if (message.sender === 'ai' && idx > 0) {
+        const prevUser = rawMessages.slice(0, idx).reverse().find((m) => m.sender === 'user');
+        if (prevUser?.text) {
+          text = enforceLanguageConsistency(text, detectInputLanguage(prevUser.text));
+        }
+      }
+      return { ...message, text };
+    })
+    .filter((message) => message.text);
+
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+    const scrollToLatest = () => {
+      const container = messagesContainerRef.current;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    };
+    scrollToLatest();
+    const rafId = window.requestAnimationFrame(scrollToLatest);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isOpen, visibleMessages.length, isSending]);
+
   if (location.pathname === '/ai-tutor' || isQuizRoute) return null;
 
   const openChat = () => {
-    const activeSession = aiTutorService.getSession(aiTutorService.getActiveSessionId());
+    const activeSession = aiTutorService.getOrCreateTodayMiniSession(session?.id);
     setSession(activeSession);
     setIsOpen(true);
     window.setTimeout(() => inputRef.current?.focus(), 0);
@@ -39,7 +68,7 @@ export function AiTutorFloatingButton() {
     const text = input.trim();
     if (!text || isSending) return;
 
-    const activeSession = session || aiTutorService.getSession(aiTutorService.getActiveSessionId());
+    const activeSession = aiTutorService.getOrCreateTodayMiniSession(session?.id);
     setInput('');
     setIsSending(true);
     try {
@@ -64,10 +93,6 @@ export function AiTutorFloatingButton() {
     }
   };
 
-  const visibleMessages = (session?.messages || [])
-    .map((message) => ({ ...message, text: cleanMiniChatText(message.text) }))
-    .filter((message) => message.text);
-
   return (
     <div className={`ai-tutor-widget ${isOpen ? 'is-open' : ''}`}>
       {isOpen && (
@@ -82,7 +107,7 @@ export function AiTutorFloatingButton() {
             </button>
           </header>
 
-          <div className="ai-tutor-chat__messages" aria-live="polite">
+          <div ref={messagesContainerRef} className="ai-tutor-chat__messages" aria-live="polite">
             {visibleMessages.map((message) => (
               <div key={message.id} className={`ai-tutor-chat__message ${message.sender === 'user' ? 'is-user' : ''}`}>
                 {message.text}

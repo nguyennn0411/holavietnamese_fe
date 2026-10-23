@@ -1,6 +1,7 @@
 // AI Roleplay & Scenarios Service (Người 4: /ai-scenarios, /ai-scenarios/:id, /ai-roleplay/:id, /ai-sessions/:id/result)
 
 import axiosClient from '@/infrastructure/api/axiosClient';
+import { detectInputLanguage } from './aiTutorService';
 
 export const SCENARIO_LEVELS = [
   { id: 'all', label: 'Tất cả trình độ' },
@@ -287,7 +288,7 @@ const normalizeAiPayload = (payload) => {
   }
 };
 
-const buildRoleplayContext = (scenario, session) => {
+const buildRoleplayContext = (scenario, session, lang = 'vi') => {
   const completed = new Set(session.completedTasks || []);
   const remainingObjectives = (scenario.objectives || [])
     .filter(objective => !completed.has(objective.id))
@@ -312,7 +313,9 @@ const buildRoleplayContext = (scenario, session) => {
     `LƯU Ý VĂN HÓA: ${scenario.culturalTip}`,
     'LỊCH SỬ GẦN ĐÂY:',
     recentMessages,
-    'QUY TẮC: Luôn ở trong vai và bám kịch bản. Nếu học viên nói lệch chủ đề, trả lời ngắn tối đa một câu rồi kéo họ về mục tiêu gần nhất bằng câu hỏi/gợi ý tiếng Việt. Không đổi vai, không mở chủ đề mới, không giảng dài. Trả JSON hợp lệ gồm text, translation, explanation, completedTasks; không bọc markdown.',
+    lang === 'en'
+      ? 'QUY TẮC: Học viên vừa hỏi/nói bằng TIẾNG ANH. Hãy ở trong vai và trả lời bằng TIẾNG ANH (có thể kèm cụm từ tiếng Việt ngắn trong ngoặc). Bám sát kịch bản, trả JSON hợp lệ gồm text, translation, explanation, completedTasks; không bọc markdown.'
+      : 'QUY TẮC: Học viên vừa hỏi/nói bằng TIẾNG VIỆT. Luôn ở trong vai, trả lời bằng TIẾNG VIỆT và bám kịch bản. Nếu học viên nói lệch chủ đề, trả lời ngắn tối đa một câu rồi kéo họ về mục tiêu gần nhất. Trả JSON hợp lệ gồm text, translation, explanation, completedTasks; không bọc markdown.',
   ].join('\\n');
 };
 
@@ -684,7 +687,8 @@ export const aiRoleplayService = {
               provider: AI_PROVIDER,
               model: AI_MODEL,
               scenarioId,
-              scenarioContext: buildRoleplayContext(scenario, session),
+              language: detectInputLanguage(userMsg.text),
+              scenarioContext: buildRoleplayContext(scenario, session, detectInputLanguage(userMsg.text)),
             },
             { timeout: AI_REQUEST_TIMEOUT_MS },
           );
@@ -729,6 +733,7 @@ export const aiRoleplayService = {
     await new Promise(r => setTimeout(r, 400));
 
     const totalUserMsgs = session.messages.filter(m => m.sender === 'user').length + 1;
+    const isEn = detectInputLanguage(userMsg.text) === 'en';
     let aiText = '';
     let translation = '';
     let explanation = '';
@@ -737,25 +742,33 @@ export const aiRoleplayService = {
     // Evaluate tasks based on message content & turn
     if (scenarioId === 'goi-mon-pho-ha-noi') {
       if (totalUserMsgs === 1) {
-        aiText = 'Được rồi cháu ơi! Một bát tái chín ít hành nhé. Cháu có muốn dùng thêm quẩy giòn nhúng nước dùng hay uống trà đá mát lạnh không? Quẩy nhà cô vừa mới rán giòn tan luôn!';
+        aiText = isEn
+          ? 'Alright! One rare and well-done pho with less scallions coming right up. Would you like crispy dough sticks (quẩy giòn) or cold iced green tea (trà đá)? Our dough sticks are freshly fried!'
+          : 'Được rồi cháu ơi! Một bát tái chín ít hành nhé. Cháu có muốn dùng thêm quẩy giòn nhúng nước dùng hay uống trà đá mát lạnh không? Quẩy nhà cô vừa mới rán giòn tan luôn!';
         translation = 'Alright! One rare and well-done pho with less scallions. Would you like crispy dough sticks or cold iced green tea? Our sticks are freshly fried and very crispy!';
         explanation = 'Cô Mai đã ghi nhận món ăn và chủ động gợi ý đồ ăn kèm (quẩy) cùng thức uống (trà đá). Bạn hãy gọi thêm món nhé!';
         if (!newCompletedTasks.includes('task-1')) newCompletedTasks.push('task-1');
         if (!newCompletedTasks.includes('task-2')) newCompletedTasks.push('task-2');
       } else if (totalUserMsgs === 2) {
-        aiText = 'Có ngay đây cháu! Một đĩa quẩy vàng ruộm và cốc trà đá bớt ngọt đây. Cháu ăn thử miếng thịt bò xem có vừa miệng không, bên cạnh có dấm tỏi với tương ớt cay đấy nhé!';
+        aiText = isEn
+          ? 'Here you go! One golden plate of crispy dough sticks and an iced green tea. Try the beef and see if it fits your taste—garlic vinegar and chili sauce are right beside you!'
+          : 'Có ngay đây cháu! Một đĩa quẩy vàng ruộm và cốc trà đá bớt ngọt đây. Cháu ăn thử miếng thịt bò xem có vừa miệng không, bên cạnh có dấm tỏi với tương ớt cay đấy nhé!';
         translation = 'Here you go! One golden plate of crispy dough sticks and a green tea. Try the beef and see if it fits your taste, garlic vinegar and chili sauce are right beside you!';
         explanation = 'Cô Mai mang đồ ăn ra và dặn bạn cách nêm nếm gia vị chuẩn Hà Nội (dấm tỏi, tương ớt). Bạn có thể khen ngon và chuẩn bị xin thanh toán.';
         if (!newCompletedTasks.includes('task-3')) newCompletedTasks.push('task-3');
       } else {
-        aiText = 'Của cháu bát phở bốn mươi lăm nghìn, quẩy mười nghìn, trà đá năm nghìn, tất cả tròn sáu mươi nghìn đồng cháu nhé! Cảm ơn cháu nhiều, chúc cháu có chuyến đi chơi Hà Nội vui vẻ nha!';
+        aiText = isEn
+          ? 'Your bill is 45,000 VND for pho, 10,000 VND for dough sticks, and 5,000 VND for iced tea—60,000 VND in total! Thank you so much, and have a wonderful trip in Hanoi!'
+          : 'Của cháu bát phở bốn mươi lăm nghìn, quẩy mười nghìn, trà đá năm nghìn, tất cả tròn sáu mươi nghìn đồng cháu nhé! Cảm ơn cháu nhiều, chúc cháu có chuyến đi chơi Hà Nội vui vẻ nha!';
         translation = 'Your bill is 45k for pho, 10k for dough sticks, 5k for iced tea, total is exactly 60,000 VND! Thank you very much, have a wonderful trip in Hanoi!';
         explanation = 'Cô Mai đã báo chi tiết từng món và tổng tiền rất rõ ràng. Nhiệm vụ thanh toán hoàn tất xuất sắc!';
         if (!newCompletedTasks.includes('task-4')) newCompletedTasks.push('task-4');
       }
     } else {
       // Generic smart roleplay
-      aiText = `Hay quá bạn ơi! Nghe bạn nói bằng tiếng Việt tự nhiên thế này tôi mừng lắm. Tôi rất tán thành ý của bạn. Bạn còn thắc mắc hay muốn tìm hiểu thêm điều gì nữa không?`;
+      aiText = isEn
+        ? `Awesome! I completely understand and agree with your point. Do you have any other questions or requests for me in this scenario?`
+        : `Hay quá bạn ơi! Nghe bạn nói bằng tiếng Việt tự nhiên thế này tôi mừng lắm. Tôi rất tán thành ý của bạn. Bạn còn thắc mắc hay muốn tìm hiểu thêm điều gì nữa không?`;
       translation = `Awesome! Hearing you speak Vietnamese so naturally makes me so glad. I completely agree with your point. Do you have any other questions or things you want to know?`;
       explanation = `Đối phương tiếp nhận phản hồi của bạn rất tích cực và cởi mở. Bạn đang hoàn thành rất tốt vai diễn của mình!`;
       if (totalUserMsgs >= 1 && !newCompletedTasks.includes('task-1')) newCompletedTasks.push('task-1');

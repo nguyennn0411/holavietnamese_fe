@@ -48,7 +48,7 @@ export const DEFAULT_MENU_ITEMS = Object.freeze([
   },
   {
     code: 'GUEST_BLOG', placement: MENU_PLACEMENTS.GUEST, labelVi: 'Blog', labelEn: 'Blog',
-    path: '/blog', iconKey: 'newspaper', displayOrder: 80, enabled: true, authRequired: false, mobilePrimary: false, featureKey: 'BLOG',
+    path: '/blog', iconKey: 'newspaper', displayOrder: 80, enabled: false, authRequired: false, mobilePrimary: false, featureKey: 'BLOG',
   },
   {
     code: 'GUEST_AI_TUTOR', placement: MENU_PLACEMENTS.GUEST, labelVi: 'Gia sư AI', labelEn: 'AI Tutor',
@@ -84,7 +84,7 @@ export const DEFAULT_MENU_ITEMS = Object.freeze([
   },
   {
     code: 'LEARNER_BLOG', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Blog', labelEn: 'Blog',
-    path: '/blog', iconKey: 'newspaper', displayOrder: 80, enabled: true, authRequired: false, mobilePrimary: false, featureKey: 'BLOG',
+    path: '/blog', iconKey: 'newspaper', displayOrder: 80, enabled: false, authRequired: false, mobilePrimary: false, featureKey: 'BLOG',
   },
   {
     code: 'LEARNER_PRONUNCIATION', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Phát âm', labelEn: 'Pronunciation',

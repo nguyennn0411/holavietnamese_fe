@@ -85,12 +85,9 @@ const AdminDestinationDetailPage = lazy(() => import('@/pages/admin/AdminDestina
 // Admin Pages (Người 4: Văn hóa & AI)
 const AdminCultureListPage = lazy(() => import('@/pages/admin/AdminCultureListPage').then(module => ({ default: module.AdminCultureListPage })));
 const AdminCultureEditPage = lazy(() => import('@/pages/admin/AdminCultureEditPage').then(module => ({ default: module.AdminCultureEditPage })));
-const AdminCultureCategoriesPage = lazy(() => import('@/pages/admin/AdminCultureCategoriesPage').then(module => ({ default: module.AdminCultureCategoriesPage })));
 const AdminAiScenariosPage = lazy(() => import('@/pages/admin/AdminAiScenariosPage').then(module => ({ default: module.AdminAiScenariosPage })));
 const AdminScenarioBuilderPage = lazy(() => import('@/pages/admin/AdminScenarioBuilderPage').then(module => ({ default: module.AdminScenarioBuilderPage })));
 const AdminAiSettingsPage = lazy(() => import('@/pages/admin/AdminAiSettingsPage').then(module => ({ default: module.AdminAiSettingsPage })));
-const AdminAiUsagePage = lazy(() => import('@/pages/admin/AdminAiUsagePage').then(module => ({ default: module.AdminAiUsagePage })));
-const AdminAiReviewsPage = lazy(() => import('@/pages/admin/AdminAiReviewsPage').then(module => ({ default: module.AdminAiReviewsPage })));
 const VocabularyReviewPage = lazy(() => import('@/pages/vocabulary/VocabularyReviewPage').then(module => ({ default: module.VocabularyReviewPage })));
 const ExploreVietnamPage = lazy(() => import('@/pages/explore/ExplorePages').then(module => ({ default: module.ExploreVietnamPage })));
 const DestinationDetailPage = lazy(() => import('@/pages/explore/ExplorePages').then(module => ({ default: module.DestinationDetailPage })));
@@ -149,8 +146,9 @@ function App() {
               <Route path={ROUTES.COURSES} element={<CourseListPage />} />
               <Route path={ROUTES.ALPHABET} element={<AlphabetPage />} />
               <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
-              <Route path={ROUTES.BLOG} element={<BlogHomePage />} />
-              <Route path={ROUTES.BLOG_DETAIL} element={<BlogDetailPage />} />
+              <Route path={ROUTES.BLOG} element={<Navigate to={ROUTES.CULTURE} replace />} />
+              <Route path={ROUTES.BLOG_DETAIL} element={<Navigate to={ROUTES.CULTURE} replace />} />
+
               <Route path={ROUTES.LOGIN_REQUIRED} element={<AuthRequiredPage />} />
               <Route path={ROUTES.AUTH_REQUIRED} element={<AuthRequiredPage />} />
 
@@ -231,13 +229,13 @@ function App() {
                 <Route path={ROUTES.ADMIN_CULTURE} element={<AdminCultureListPage />} />
                 <Route path={ROUTES.ADMIN_CULTURE_NEW} element={<AdminCultureEditPage />} />
                 <Route path={ROUTES.ADMIN_CULTURE_EDIT} element={<AdminCultureEditPage />} />
-                <Route path={ROUTES.ADMIN_CULTURE_CATEGORIES} element={<AdminCultureCategoriesPage />} />
+                <Route path={ROUTES.ADMIN_CULTURE_CATEGORIES} element={<Navigate to={`${ROUTES.ADMIN_CULTURE}?tab=categories`} replace />} />
                 <Route path={ROUTES.ADMIN_AI_SCENARIOS} element={<AdminAiScenariosPage />} />
                 <Route path={ROUTES.ADMIN_AI_SCENARIO_NEW} element={<AdminScenarioBuilderPage />} />
                 <Route path={ROUTES.ADMIN_AI_SCENARIO_BUILDER} element={<AdminScenarioBuilderPage />} />
                 <Route path={ROUTES.ADMIN_AI_SETTINGS} element={<AdminAiSettingsPage />} />
-                <Route path={ROUTES.ADMIN_AI_USAGE} element={<AdminAiUsagePage />} />
-                <Route path={ROUTES.ADMIN_AI_REVIEWS} element={<AdminAiReviewsPage />} />
+                <Route path={ROUTES.ADMIN_AI_USAGE} element={<Navigate to={`${ROUTES.ADMIN_AI_SETTINGS}?tab=usage`} replace />} />
+                <Route path={ROUTES.ADMIN_AI_REVIEWS} element={<Navigate to={ROUTES.ADMIN_AI_SCENARIOS} replace />} />
               </Route>
             </Route>
           </Routes></Suspense>

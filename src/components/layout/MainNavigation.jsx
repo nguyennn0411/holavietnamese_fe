@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { to: '/explore', label: 'Khám phá Việt Nam', en: 'Explore Vietnam', icon: Map },
   { to: ROUTES.VOCABULARY, label: 'Từ vựng', en: 'Vocabulary', icon: Languages },
   { to: '/culture', label: 'Văn hóa', en: 'Culture', icon: Landmark },
-  { to: '/blog', label: 'Blog', en: 'Stories', icon: Newspaper },
+
   { to: '/my-learning', label: 'Góc học tập', en: 'My learning', icon: GraduationCap },
 ];
 

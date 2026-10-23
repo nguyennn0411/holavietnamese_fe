@@ -29,7 +29,7 @@ export function AdminDestinationDetailPage() {
   return <div className="admin-destinations-page admin-destination-detail-page">
     <Breadcrumb items={[{ label: bilingualLabel('Điểm đến', 'Destinations'), to: ROUTES.ADMIN_DESTINATIONS }, { label: editing ? bilingualLabel('Chỉnh sửa', 'Edit') : bilingualLabel('Chi tiết', 'Details') }]} />
     <ResourceState resource={resource}>{entry => <>
-      <PageHeader eyebrow="Quản lý điểm đến" title={<BilingualText vi={entry.nameVi} en={entry.nameEn} />} actions={!editing && <button type="button" onClick={() => { setMessage(''); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa điểm đến" en="Edit destination" /></button>} />
+      <PageHeader eyebrow="Quản lý điểm đến" title={<BilingualText vi={entry.nameVi} en={entry.nameEn} />} actions={!editing && <button type="button" className="button" style={{ fontSize: '13px', minHeight: '40px', height: '40px', padding: '0 16px' }} onClick={() => { setMessage(''); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa điểm đến" en="Edit destination" /></button>} />
       {message && <Notice kind="success"><BilingualText vi={message} en="Destination saved." /></Notice>}
       <section className="admin-card">
         {editing ? <DestinationForm key={entry.id} entry={entry} onSaved={saved} onCancel={() => setParams({})} /> : <>
