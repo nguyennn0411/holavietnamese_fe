@@ -12,15 +12,38 @@ import '@/presentation/styles/duolingo-path.css';
 
 type AnyRecord = Record<string, any>;
 
+interface UnitConfig {
+  unitNumber: number;
+  title: string;
+  titleEn?: string;
+  description: string;
+  descriptionEn?: string;
+  gradient: string;
+  depthColor: string;
+  lessonRange: [number, number]; // 0-indexed inclusive [start, end]
+  guidebook: {
+    summary: string;
+    summaryEn?: string;
+    tips: string[];
+    tipsEn?: string[];
+    vocabulary: { vi: string; en: string }[];
+  };
+}
+
 const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
   {
     id: 1,
     title: 'Bài 1: Làm quen & Chào hỏi cơ bản',
     titleVi: 'Bài 1: Làm quen & Chào hỏi cơ bản',
+    titleEn: 'Lesson 1: Introduction & Basic Greetings',
     description: 'Học cách chào hỏi thông dụng trong đời sống Việt Nam: Xin chào, Cảm ơn, Tạm biệt và cách xưng hô lịch sự.',
+    descriptionVi: 'Học cách chào hỏi thông dụng trong đời sống Việt Nam: Xin chào, Cảm ơn, Tạm biệt và cách xưng hô lịch sự.',
+    descriptionEn: 'Learn common Vietnamese greetings: Hello, Thank you, Goodbye, and polite addressing forms.',
     estimatedDuration: 10,
     xpReward: 20,
     objectives: ['Chào hỏi tự nhiên', 'Nhận biết phát âm Xin chào - Cảm ơn', 'Tự tin xưng hô ban đầu'],
+    objectivesVi: ['Chào hỏi tự nhiên', 'Nhận biết phát âm Xin chào - Cảm ơn', 'Tự tin xưng hô ban đầu'],
+    objectivesEn: ['Natural greetings', 'Pronounce Hello & Thank you correctly', 'Confident basic addressing'],
     isCompleted: false,
     learningStatus: 'AVAILABLE',
   },
@@ -28,10 +51,15 @@ const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
     id: 2,
     title: 'Bài 2: Bảng chữ cái & 6 thanh điệu',
     titleVi: 'Bài 2: Bảng chữ cái & 6 thanh điệu',
+    titleEn: 'Lesson 2: Vietnamese Alphabet & 6 Tones',
     description: 'Khám phá bí mật 6 thanh điệu tiếng Việt (Ngang, Huyền, Sắc, Hỏi, Ngã, Nặng) với mô hình âm thanh trực quan.',
+    descriptionVi: 'Khám phá bí mật 6 thanh điệu tiếng Việt (Ngang, Huyền, Sắc, Hỏi, Ngã, Nặng) với mô hình âm thanh trực quan.',
+    descriptionEn: 'Unlock the secrets of 6 Vietnamese tones (Flat, Grave, Acute, Hook, Tilde, Dot) with interactive pitch contours.',
     estimatedDuration: 15,
     xpReward: 30,
     objectives: ['Phân biệt 6 dấu thanh', 'Thực hành các nguyên âm đặc trưng (ă, â, ê, ô, ơ, ư)', 'Luyện tai nghe cao độ'],
+    objectivesVi: ['Phân biệt 6 dấu thanh', 'Thực hành các nguyên âm đặc trưng (ă, â, ê, ô, ơ, ư)', 'Luyện tai nghe cao độ'],
+    objectivesEn: ['Distinguish 6 tone marks', 'Practice special vowels (ă, â, ê, ô, ơ, ư)', 'Train auditory pitch contour perception'],
     isCompleted: false,
     learningStatus: 'AVAILABLE',
   },
@@ -39,10 +67,15 @@ const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
     id: 3,
     title: 'Bài 3: Đếm số & Giá tiền',
     titleVi: 'Bài 3: Đếm số & Giá tiền',
+    titleEn: 'Lesson 3: Numbers & Shopping Prices',
     description: 'Làm chủ các con số từ 1 đến 1.000.000 và cách hỏi giá tiền Việt Nam Đồng (VND) khi đi chợ hay mua sắm.',
+    descriptionVi: 'Làm chủ các con số từ 1 đến 1.000.000 và cách hỏi giá tiền Việt Nam Đồng (VND) khi đi chợ hay mua sắm.',
+    descriptionEn: 'Master numbers from 1 to 1,000,000 and learn to ask prices in Vietnamese Dong (VND) at markets or shops.',
     estimatedDuration: 12,
     xpReward: 25,
     objectives: ['Đếm số trôi chảy từ 1 đến 100', 'Hỏi giá: "Bao nhiêu tiền một cái?"', 'Nhận diện mệnh giá tiền polymer'],
+    objectivesVi: ['Đếm số trôi chảy từ 1 đến 100', 'Hỏi giá: "Bao nhiêu tiền một cái?"', 'Nhận diện mệnh giá tiền polymer'],
+    objectivesEn: ['Count fluently from 1 to 100', 'Ask prices: "How much does it cost?"', 'Recognize polymer VND currency denominations'],
     isCompleted: false,
     learningStatus: 'LOCKED',
   },
@@ -50,10 +83,15 @@ const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
     id: 4,
     title: 'Bài 4: Giới thiệu bản thân & Quốc tịch',
     titleVi: 'Bài 4: Giới thiệu bản thân & Quốc tịch',
+    titleEn: 'Lesson 4: Self-Introduction & Nationality',
     description: 'Tự tin giới thiệu tên tuổi, quê hương, nghề nghiệp và sở thích bằng các mẫu câu tiếng Việt tự nhiên.',
+    descriptionVi: 'Tự tin giới thiệu tên tuổi, quê hương, nghề nghiệp và sở thích bằng các mẫu câu tiếng Việt tự nhiên.',
+    descriptionEn: 'Confidently introduce your name, hometown, profession, and hobbies using natural Vietnamese patterns.',
     estimatedDuration: 15,
     xpReward: 35,
     objectives: ['Mẫu câu: "Tôi là...", "Tôi đến từ..."', 'Nói về nghề nghiệp và thời gian ở Việt Nam', 'Giao tiếp làm quen bạn mới'],
+    objectivesVi: ['Mẫu câu: "Tôi là...", "Tôi đến từ..."', 'Nói về nghề nghiệp và thời gian ở Việt Nam', 'Giao tiếp làm quen bạn mới'],
+    objectivesEn: ['Sentence patterns: "I am...", "I come from..."', 'Talk about profession and time in Vietnam', 'Make new Vietnamese friends easily'],
     isCompleted: false,
     learningStatus: 'LOCKED',
   },
@@ -61,10 +99,15 @@ const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
     id: 5,
     title: 'Bài 5: Ẩm thực & Gọi món quán ăn',
     titleVi: 'Bài 5: Ẩm thực & Gọi món quán ăn',
+    titleEn: 'Lesson 5: Food & Ordering at Restaurants',
     description: 'Học từ vựng các món ăn Việt nức tiếng: Phở, Bánh mì, Bún chả, Cà phê sữa đá và cách gọi món chuẩn phong cách bản địa.',
+    descriptionVi: 'Học từ vựng các món ăn Việt nức tiếng: Phở, Bánh mì, Bún chả, Cà phê sữa đá và cách gọi món chuẩn phong cách bản địa.',
+    descriptionEn: 'Learn food vocabulary for famous Vietnamese dishes: Pho, Banh Mi, Bun Cha, Iced Milk Coffee, and order like a local.',
     estimatedDuration: 18,
     xpReward: 40,
     objectives: ['Gọi món và ghi chú đặc biệt (ít đá, không hành)', 'Hỏi xin hóa đơn: "Em ơi tính tiền!"', 'Khám phá văn hóa ẩm thực đường phố'],
+    objectivesVi: ['Gọi món và ghi chú đặc biệt (ít đá, không hành)', 'Hỏi xin hóa đơn: "Em ơi tính tiền!"', 'Khám phá văn hóa ẩm thực đường phố'],
+    objectivesEn: ['Order food with special notes (less ice, no scallions)', 'Ask for the bill: "Check please!"', 'Explore vibrant street food culture'],
     isCompleted: false,
     learningStatus: 'LOCKED',
   },
@@ -72,10 +115,15 @@ const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
     id: 6,
     title: 'Bài 6: Hỏi đường & Phương tiện đi lại',
     titleVi: 'Bài 6: Hỏi đường & Phương tiện đi lại',
+    titleEn: 'Lesson 6: Asking Directions & Transportation',
     description: 'Cách hỏi đường, bắt xe ôm công nghệ (Grab, Be) và chỉ hướng rẽ trái, rẽ phải, đi thẳng tại phố phường Việt Nam.',
+    descriptionVi: 'Cách hỏi đường, bắt xe ôm công nghệ (Grab, Be) và chỉ hướng rẽ trái, rẽ phải, đi thẳng tại phố phường Việt Nam.',
+    descriptionEn: 'How to ask directions, use ride-hailing apps (Grab, Be), and navigate turns (left, right, straight) across Vietnam.',
     estimatedDuration: 14,
     xpReward: 30,
     objectives: ['Chỉ đường: rẽ trái, rẽ phải, đi thẳng', 'Giao tiếp với tài xế xe công nghệ', 'Nhận diện các địa danh quen thuộc'],
+    objectivesVi: ['Chỉ đường: rẽ trái, rẽ phải, đi thẳng', 'Giao tiếp với tài xế xe công nghệ', 'Nhận diện các địa danh quen thuộc'],
+    objectivesEn: ['Direct turns: turn left, turn right, go straight', 'Communicate with ride-hailing drivers', 'Identify familiar landmarks and signs'],
     isCompleted: false,
     learningStatus: 'LOCKED',
   },
@@ -83,10 +131,15 @@ const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
     id: 7,
     title: 'Bài 7: Luyện phản xạ hội thoại AI',
     titleVi: 'Bài 7: Luyện phản xạ hội thoại AI',
+    titleEn: 'Lesson 7: Conversational AI Reflex Practice',
     description: 'Thực hành tương tác trực tiếp với Gia sư AI thông minh để kiểm tra phản xạ nói và nhận phản hồi phát âm chuẩn xác.',
+    descriptionVi: 'Thực hành tương tác trực tiếp với Gia sư AI thông minh để kiểm tra phản xạ nói và nhận phản hồi phát âm chuẩn xác.',
+    descriptionEn: 'Engage in open-ended conversations with the smart AI Tutor to test speaking reflexes and get instant feedback.',
     estimatedDuration: 15,
     xpReward: 50,
     objectives: ['Luyện nói phản xạ không cần kịch bản', 'Nhận chấm điểm phát âm AI theo thời gian thực', 'Tự tin hội thoại thực tế'],
+    objectivesVi: ['Luyện nói phản xạ không cần kịch bản', 'Nhận chấm điểm phát âm AI theo thời gian thực', 'Tự tin hội thoại thực tế'],
+    objectivesEn: ['Unscripted conversational reflex practice', 'Receive real-time AI pronunciation feedback', 'Build confidence in real situations'],
     isCompleted: false,
     learningStatus: 'LOCKED',
   },
@@ -94,43 +147,42 @@ const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
     id: 8,
     title: 'Bài 8: Tổng kết & Thử thách chặng Sơ cấp',
     titleVi: 'Bài 8: Tổng kết & Thử thách chặng Sơ cấp',
+    titleEn: 'Lesson 8: Final Review & Elementary Challenge',
     description: 'Kiểm tra tổng hợp kiến thức chặng Sơ cấp, nhận huy hiệu hoàn thành và mở khóa chặng tiếp theo.',
+    descriptionVi: 'Kiểm tra tổng hợp kiến thức chặng Sơ cấp, nhận huy hiệu hoàn thành và mở khóa chặng tiếp theo.',
+    descriptionEn: 'Comprehensive review across the Elementary stage to earn your completion badge and unlock next levels.',
     estimatedDuration: 20,
     xpReward: 80,
     objectives: ['Đạt 80%+ câu hỏi trắc nghiệm & nghe', 'Mở khóa chứng nhận Sơ cấp A1', 'Tích lũy trọn vẹn điểm thưởng chặng'],
+    objectivesVi: ['Đạt 80%+ câu hỏi trắc nghiệm & nghe', 'Mở khóa chứng nhận Sơ cấp A1', 'Tích lũy trọn vẹn điểm thưởng chặng'],
+    objectivesEn: ['Score 80%+ on quiz & listening challenges', 'Unlock digital Elementary A1 Certificate', 'Accumulate full stage bonus XP'],
     isCompleted: false,
     learningStatus: 'LOCKED',
   },
 ];
 
-interface UnitConfig {
-  unitNumber: number;
-  title: string;
-  description: string;
-  gradient: string;
-  depthColor: string;
-  lessonRange: [number, number]; // 0-indexed inclusive [start, end]
-  guidebook: {
-    summary: string;
-    tips: string[];
-    vocabulary: { vi: string; en: string }[];
-  };
-}
-
 const UNITS_DATA: UnitConfig[] = [
   {
     unitNumber: 1,
     title: 'Bước Đầu Làm Quen & Nền Tảng Âm Tiết',
+    titleEn: 'First Steps & Syllable Foundations',
     description: 'Làm quen cách chào hỏi lịch sự, giải mã 6 thanh điệu tiếng Việt và số đếm mua sắm.',
+    descriptionEn: 'Learn polite greetings, decode the 6 Vietnamese tones, and count numbers for shopping.',
     gradient: 'linear-gradient(135deg, #FF7A00 0%, #E11D48 100%)',
     depthColor: '#7A170F',
     lessonRange: [0, 2], // Lessons 1, 2, 3
     guidebook: {
       summary: 'Nền tảng thanh điệu và các câu chào hỏi căn bản nhất khi gặp người Việt Nam.',
+      summaryEn: 'Tone foundations and the most essential greetings when meeting Vietnamese people.',
       tips: [
         'Tiếng Việt có 6 thanh điệu: Ngang (không dấu), Huyền (`), Sắc (´), Hỏi (?), Ngã (~), Nặng (.)',
         'Xưng hô lịch sự: Chào anh (nam lớn hơn), Chào chị (nữ lớn hơn), Chào em (nhỏ tuổi hơn).',
         'Khi mua sắm, luôn thêm "ạ" ở cuối câu để thể hiện sự lễ phép: "Bao nhiêu tiền ạ?"',
+      ],
+      tipsEn: [
+        'Vietnamese has 6 tones: Mid level (no mark), Low falling (`), High rising (´), Dipping-rising (?), High breaking (~), Low constricted (.).',
+        'Polite pronouns: Chào anh (older male), Chào chị (older female), Chào em (younger person).',
+        'When shopping, always add "ạ" at the end for politeness: "Bao nhiêu tiền ạ?"',
       ],
       vocabulary: [
         { vi: 'Xin chào', en: 'Hello' },
@@ -143,16 +195,24 @@ const UNITS_DATA: UnitConfig[] = [
   {
     unitNumber: 2,
     title: 'Đời Sống Hằng Ngày & Ẩm Thực Phố Phường',
+    titleEn: 'Daily Life & Street Food Culture',
     description: 'Giới thiệu bản thân, tự tin gọi món phở bánh mì và hỏi đường đi lại.',
+    descriptionEn: 'Introduce yourself, order pho and banh mi with confidence, and ask for directions.',
     gradient: 'linear-gradient(135deg, #047857 0%, #10B981 100%)',
     depthColor: '#064E3B',
     lessonRange: [3, 5], // Lessons 4, 5, 6
     guidebook: {
       summary: 'Cách giao tiếp trong quán ăn Việt Nam và chỉ dẫn đường phố thân thiện.',
+      summaryEn: 'How to communicate in Vietnamese eateries and friendly street navigation.',
       tips: [
         'Khi gọi phục vụ tại quán: "Em ơi!" hoặc "Anh ơi!" là cách gọi tự nhiên và phổ biến nhất.',
         'Mẫu câu gọi món: "Cho em một bát phở bò tái ít hành" hoặc "Cho một ly cà phê sữa đá mang đi".',
         'Hỏi đường: "Cho tôi hỏi đường ra chợ Bến Thành đi hướng nào ạ?"',
+      ],
+      tipsEn: [
+        'Calling waitstaff at restaurants: "Em ơi!" or "Anh ơi!" is the most natural and friendly way.',
+        'Ordering phrase: "Cho em một bát phở bò..." (Give me a bowl of beef pho...) or "Cho một ly cà phê sữa đá mang đi" (One iced coffee with milk to go).',
+        'Asking directions: "Cho tôi hỏi đường ra chợ Bến Thành đi hướng nào ạ?" (Excuse me, which way to Ben Thanh market?)',
       ],
       vocabulary: [
         { vi: 'Phở bò', en: 'Beef pho noodles' },
@@ -165,16 +225,24 @@ const UNITS_DATA: UnitConfig[] = [
   {
     unitNumber: 3,
     title: 'Phản Xạ AI & Về Đích Chặng Sơ Cấp A1',
+    titleEn: 'AI Reflexes & A1 Elementary Milestone',
     description: 'Thực hành tương tác trực tiếp với Gia sư AI và hoàn thành thử thách chứng chỉ.',
+    descriptionEn: 'Practice live interactions with the AI Tutor and complete the certificate challenge.',
     gradient: 'linear-gradient(135deg, #B45309 0%, #F59E0B 100%)',
     depthColor: '#78350F',
     lessonRange: [6, 7], // Lessons 7, 8
     guidebook: {
       summary: 'Rèn luyện phản xạ phát âm chuẩn xác với Gia sư AI và tổng kết toàn bộ chặng Sơ cấp.',
+      summaryEn: 'Sharpen accurate pronunciation reflexes with AI Tutor and review the entire Elementary stage.',
       tips: [
         'Đừng sợ phát âm sai: Gia sư AI luôn kiên nhẫn sửa từng âm tiết và cao độ thanh điệu.',
         'Hãy luyện nói thành tiếng to, rõ ràng theo nhịp điệu tự nhiên.',
         'Hoàn thành bài 8 để nhận chứng chỉ điện tử A1 và mở khóa chặng Trung cấp!',
+      ],
+      tipsEn: [
+        'Do not fear mispronunciation: AI Tutor is always patient, guiding each syllable and tone contour.',
+        'Practice speaking out loud clearly with a natural conversational rhythm.',
+        'Complete lesson 8 to receive your digital A1 Certificate and unlock the Intermediate stage!',
       ],
       vocabulary: [
         { vi: 'Luyện tập', en: 'Practice' },
@@ -185,6 +253,54 @@ const UNITS_DATA: UnitConfig[] = [
     },
   },
 ];
+
+const KNOWN_COURSE_TITLES_EN: Record<string, string> = {
+  'Tiếng Việt cơ bản A1': 'Basic Vietnamese A1',
+  'Tiếng Việt Sơ Cấp A1': 'Elementary Vietnamese A1',
+  'Làm quen với Tiếng Việt': 'Introduction to Vietnamese',
+  'Tiếng Việt Giao Tiếp Sơ Cấp 1': 'Conversational Vietnamese 1',
+  'Tiếng Việt Giao Tiếp 1': 'Conversational Vietnamese 1',
+  'Tiếng Việt Giao Tiếp 2': 'Conversational Vietnamese 2',
+  'Tiếng Việt Trung Cấp B1': 'Intermediate Vietnamese B1',
+};
+
+const getCourseTitle = (c: AnyRecord | null, isVi: boolean) => {
+  if (!c) return isVi ? 'Tiếng Việt Sơ Cấp A1' : 'Elementary Vietnamese A1';
+  const rawTitle = c.titleVi || c.title || c.courseTitle || '';
+  if (isVi) return rawTitle || 'Tiếng Việt Sơ Cấp A1';
+  if (c.titleEn) return c.titleEn;
+  return KNOWN_COURSE_TITLES_EN[rawTitle] || rawTitle || 'Elementary Vietnamese A1';
+};
+
+const getLessonTitle = (lesson: AnyRecord, isVi: boolean) => {
+  if (isVi) return lesson.titleVi || lesson.title || '';
+  if (lesson.titleEn) return lesson.titleEn;
+  const match = DEFAULT_CURRICULUM_LESSONS.find(
+    (d) => d.id === lesson.id || d.titleVi === lesson.title || d.title === lesson.title
+  );
+  if (match?.titleEn) return match.titleEn;
+  return lesson.title || lesson.titleVi || '';
+};
+
+const getLessonDescription = (lesson: AnyRecord, isVi: boolean) => {
+  if (isVi) return lesson.descriptionVi || lesson.description || '';
+  if (lesson.descriptionEn) return lesson.descriptionEn;
+  const match = DEFAULT_CURRICULUM_LESSONS.find(
+    (d) => d.id === lesson.id || d.titleVi === lesson.title || d.title === lesson.title
+  );
+  if (match?.descriptionEn) return match.descriptionEn;
+  return lesson.description || lesson.descriptionVi || '';
+};
+
+const getLessonObjectives = (lesson: AnyRecord, isVi: boolean): string[] => {
+  if (isVi) return lesson.objectivesVi || lesson.objectives || [];
+  if (lesson.objectivesEn) return lesson.objectivesEn;
+  const match = DEFAULT_CURRICULUM_LESSONS.find(
+    (d) => d.id === lesson.id || d.titleVi === lesson.title || d.title === lesson.title
+  );
+  if (match?.objectivesEn) return match.objectivesEn;
+  return lesson.objectives || lesson.objectivesVi || [];
+};
 
 // Serpentine S-Curve Horizontal Offsets (in pixels)
 const S_CURVE_OFFSETS = [0, 56, 88, 56, 0, -56, -88, -56];
@@ -390,13 +506,13 @@ export const DashboardScreen: React.FC = () => {
               >
                 {courseList.map((c) => (
                   <option key={courseIdOf(c)} value={courseIdOf(c)}>
-                    {c.titleVi || c.title || c.courseTitle}
+                    {getCourseTitle(c, isVi)}
                   </option>
                 ))}
               </select>
             ) : (
               <span className="text-sm font-black text-[#EA580C]">
-                {course?.titleVi ?? course?.title ?? 'Tiếng Việt Sơ Cấp A1'}
+                {getCourseTitle(course, isVi)}
               </span>
             )}
           </div>
@@ -442,20 +558,20 @@ export const DashboardScreen: React.FC = () => {
                     style={{ background: unit.gradient, boxShadow: `0 6px 0 ${unit.depthColor}` }}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                      <div>
+                      <div className="flex-1 min-w-0 pr-2">
                         <span className="duo-unit-tag">
-                          <BookOpen size={13} /> <BilingualText vi={`CHƯƠNG ${unit.unitNumber}`} en={`UNIT ${unit.unitNumber}`} />
+                          <BookOpen size={13} className="shrink-0" /> <BilingualText vi={`CHƯƠNG ${unit.unitNumber}`} en={`UNIT ${unit.unitNumber}`} />
                         </span>
-                        <h2 className="duo-unit-title"><BilingualText vi={unit.title} en={unit.titleEn || unit.title} /></h2>
-                        <p className="duo-unit-desc"><BilingualText vi={unit.description} en={unit.descriptionEn || unit.description} /></p>
+                        <h2 className="duo-unit-title break-words"><BilingualText vi={unit.title} en={unit.titleEn || unit.title} /></h2>
+                        <p className="duo-unit-desc break-words"><BilingualText vi={unit.description} en={unit.descriptionEn || unit.description} /></p>
                       </div>
                       <button
                         type="button"
-                        className="duo-unit-guidebook-btn self-start sm:self-center"
+                        className="duo-unit-guidebook-btn shrink-0 self-start sm:self-center"
                         onClick={() => setActiveGuidebook(unit.guidebook)}
                       >
-                        <BookMarked size={16} />
-                        <span><BilingualText vi="HƯỚNG DẪN" en="GUIDEBOOK" /></span>
+                        <BookMarked size={16} className="shrink-0" />
+                        <span className="whitespace-nowrap"><BilingualText vi="HƯỚNG DẪN" en="GUIDEBOOK" /></span>
                       </button>
                     </div>
                   </div>
@@ -591,7 +707,7 @@ export const DashboardScreen: React.FC = () => {
                                 isCompleted ? 'is-completed' : isCurrent ? 'is-current' : 'is-locked'
                               }`}
                               onClick={() => setSelectedLesson(lesson)}
-                              title={lesson.titleVi || lesson.title}
+                              title={getLessonTitle(lesson, isVi)}
                             >
                               {isCompleted ? (
                                 <Check size={36} strokeWidth={4} />
@@ -778,11 +894,11 @@ export const DashboardScreen: React.FC = () => {
                 </span>
 
                 <h3 className="mt-3 text-2xl font-black text-[#251B18] leading-snug">
-                  {(isVi ? (selectedLesson.titleVi || selectedLesson.title) : (selectedLesson.titleEn || selectedLesson.title || selectedLesson.titleVi))}
+                  {getLessonTitle(selectedLesson, isVi)}
                 </h3>
 
                 <p className="mt-2 text-sm text-[#78685B] leading-relaxed">
-                  {(isVi ? selectedLesson.description : (selectedLesson.descriptionEn || selectedLesson.description))}
+                  {getLessonDescription(selectedLesson, isVi)}
                 </p>
 
                 <div className="mt-4 flex items-center justify-center gap-4 text-xs font-bold text-[#EA580C]">
@@ -794,13 +910,13 @@ export const DashboardScreen: React.FC = () => {
                   </span>
                 </div>
 
-                {Array.isArray(selectedLesson.objectives) && selectedLesson.objectives.length > 0 && (
+                {getLessonObjectives(selectedLesson, isVi).length > 0 && (
                   <div className="mt-5 text-left bg-[#FDFBF7] p-3.5 rounded-2xl border border-[#EADBC8]">
                     <span className="block text-xs font-black uppercase tracking-wider text-[#8a7565] mb-2">
                       <BilingualText vi="Mục tiêu bài học:" en="Lesson objectives:" />
                     </span>
                     <ul className="space-y-1.5">
-                      {selectedLesson.objectives.map((obj: string, i: number) => (
+                      {getLessonObjectives(selectedLesson, isVi).map((obj: string, i: number) => (
                         <li key={i} className="flex items-start gap-2 text-xs font-medium text-[#4B3F38]">
                           <Check size={14} className="text-[#16A34A] shrink-0 mt-0.5" strokeWidth={3} />
                           <span>{obj}</span>
@@ -845,7 +961,7 @@ export const DashboardScreen: React.FC = () => {
         {activeGuidebook && (
           <div className="duo-modal-overlay" onClick={() => setActiveGuidebook(null)}>
             <motion.div
-              className="duo-modal-card max-w-lg"
+              className="duo-modal-card duo-modal-card--guidebook"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -855,44 +971,75 @@ export const DashboardScreen: React.FC = () => {
                 type="button"
                 className="duo-modal-close"
                 onClick={() => setActiveGuidebook(null)}
-                aria-label="Đóng"
+                aria-label={bilingualLabel("Đóng", "Close")}
               >
                 <X size={18} />
               </button>
 
-              <div className="pt-2">
-                <div className="flex items-center gap-2 text-xs font-black text-[#FF7A00] uppercase tracking-wider mb-2">
-                  <BookMarked size={18} /> <BilingualText vi="Sổ tay ngữ pháp & phát âm" en="Grammar & Pronunciation Guidebook" />
+              {/* Modal Header with right clearance for close button */}
+              <div className="pr-12 pb-3 border-b border-[#F3EDE3]">
+                <div className="flex items-center gap-2 text-xs font-black text-[#FF7A00] uppercase tracking-wider mb-1.5">
+                  <BookMarked size={16} className="shrink-0" />
+                  <span className="truncate"><BilingualText vi="Sổ tay ngữ pháp & phát âm" en="Grammar & Pronunciation Guidebook" /></span>
                 </div>
-                <h3 className="text-xl font-black text-[#251B18]"><BilingualText vi="Điểm ngữ pháp & Từ vựng quan trọng" en="Key Grammar & Vocabulary" /></h3>
-                <p className="mt-2 text-xs text-[#78685B] leading-relaxed">
-                  {(isVi ? activeGuidebook.summary : (activeGuidebook.summaryEn || activeGuidebook.summary))}
-                </p>
+                <h3 className="text-xl font-black text-[#251B18] leading-tight">
+                  <BilingualText vi="Điểm ngữ pháp & Từ vựng quan trọng" en="Key Grammar & Vocabulary" />
+                </h3>
+              </div>
 
-                <div className="mt-4 space-y-2">
-                  <h4 className="text-xs font-black uppercase text-[#8a7565]"><BilingualText vi="Lời khuyên phát âm:" en="Pronunciation Tips:" /></h4>
-                  {activeGuidebook.tips.map((tip, i) => (
-                    <div key={i} className="text-xs bg-[#F9FAFB] p-2.5 rounded-xl border border-gray-200 text-[#374151]">
-                      • {tip}
-                    </div>
-                  ))}
+              {/* Scrollable Modal Body */}
+              <div className="duo-guidebook-scroll flex-1 py-4 space-y-4">
+                {/* Summary Box */}
+                <div className="bg-[#FFFBF5] border border-[#F3E5D4] rounded-2xl p-3 text-xs text-[#78685B] leading-relaxed break-words">
+                  {isVi ? activeGuidebook.summary : (activeGuidebook.summaryEn || activeGuidebook.summary)}
                 </div>
 
-                <div className="mt-4">
-                  <h4 className="text-xs font-black uppercase text-[#8a7565] mb-2"><BilingualText vi="Từ vựng then chốt:" en="Key Vocabulary:" /></h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {activeGuidebook.vocabulary.map((vocab, i) => (
-                      <div key={i} className="bg-[#FFF8EE] border border-[#EADBC8] p-2 rounded-xl text-xs">
-                        <strong className="block text-[#FF7A00]">{vocab.vi}</strong>
-                        <span className="text-[#8a7565]">{vocab.en}</span>
+                {/* Pronunciation Tips Section */}
+                <div>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-[#8a7565] mb-2">
+                    <BilingualText vi="Lời khuyên phát âm:" en="Pronunciation Tips:" />
+                  </h4>
+                  <div className="space-y-2">
+                    {(isVi ? activeGuidebook.tips : (activeGuidebook.tipsEn || activeGuidebook.tips)).map((tip, i) => (
+                      <div
+                        key={i}
+                        className="text-xs bg-[#F9FAFB] p-3 rounded-xl border border-gray-200 text-[#374151] leading-relaxed break-words flex items-start gap-2"
+                      >
+                        <span className="font-black text-[#FF7A00] select-none shrink-0">•</span>
+                        <span className="flex-1 min-w-0">{tip}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
+                {/* Key Vocabulary Section */}
+                <div>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-[#8a7565] mb-2">
+                    <BilingualText vi="Từ vựng then chốt:" en="Key Vocabulary:" />
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {activeGuidebook.vocabulary.map((vocab, i) => (
+                      <div
+                        key={i}
+                        className="bg-[#FFF8EE] border border-[#EADBC8] p-3 rounded-xl text-xs flex flex-col justify-center min-w-0 overflow-hidden shadow-2xs"
+                      >
+                        <strong className="block text-[#FF7A00] font-black text-sm truncate vn-diacritic-safe" title={vocab.vi}>
+                          {vocab.vi}
+                        </strong>
+                        <span className="text-[#8a7565] font-medium mt-0.5 break-words leading-snug">
+                          {vocab.en}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer Button */}
+              <div className="pt-3 border-t border-[#F3EDE3]">
                 <button
                   type="button"
-                  className="mt-6 w-full py-3 rounded-xl bg-[#F97316] text-white text-xs font-black hover:bg-[#C2410C] shadow-sm transition-colors"
+                  className="w-full py-3.5 px-4 rounded-xl bg-[#F97316] text-white text-xs font-black hover:bg-[#C2410C] shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 active:translate-y-0.5"
                   onClick={() => setActiveGuidebook(null)}
                 >
                   <BilingualText vi="ĐÃ HIỂU! TIẾP TỤC HỌC" en="GOT IT! CONTINUE" />
@@ -918,7 +1065,7 @@ export const DashboardScreen: React.FC = () => {
                 type="button"
                 className="duo-modal-close"
                 onClick={() => setChestModalOpen(false)}
-                aria-label="Đóng"
+                aria-label={bilingualLabel("Đóng", "Close")}
               >
                 <X size={18} />
               </button>

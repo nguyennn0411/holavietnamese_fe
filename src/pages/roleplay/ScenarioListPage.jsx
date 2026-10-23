@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, MapPin, Target, RotateCcw, Play } from 'lucide-react';
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { Search, X, MapPin, Target, RotateCcw, Play, MessageSquare } from 'lucide-react';
+import { BilingualText, bilingualLabel, useBilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
+import { useTranslation } from 'react-i18next';
 
 export function ScenarioListPage() {
+  const { i18n } = useTranslation();
+  const isVi = (i18n?.resolvedLanguage || i18n?.language || 'vi').startsWith('vi');
+  const bLabel = useBilingualLabel();
   const [search, setSearch] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');
@@ -89,8 +93,8 @@ export function ScenarioListPage() {
             />
             <input
               type="text"
-              aria-label={bilingualLabel("Tìm kiếm kịch bản", "Search scenarios")}
-              placeholder={bilingualLabel("Tìm kịch bản theo tên, địa danh hoặc bối cảnh (Ví dụ: phở, chợ, taxi)...")}
+              aria-label={bLabel("Tìm kiếm kịch bản", "Search scenarios")}
+              placeholder={bLabel("Tìm kịch bản theo tên, địa danh hoặc bối cảnh (Ví dụ: phở, chợ, taxi)...", "Search scenarios by name, destination, or context (e.g., pho, market, taxi)...")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-10 py-3 bg-[#FFFCF7] border border-[#E8E5DF]/80 focus:border-[#FF7A00] focus:bg-white rounded-2xl text-xs sm:text-sm text-[#253044] placeholder-[#64748B]/60 transition-all outline-none"
@@ -100,7 +104,7 @@ export function ScenarioListPage() {
                 type="button"
                 onClick={() => setSearch('')}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#FF7A00] p-1"
-                aria-label={bilingualLabel("Xóa tìm kiếm", "Clear search")}
+                aria-label={bLabel("Xóa tìm kiếm", "Clear search")}
               >
                 <X size={16} />
               </button>
@@ -126,7 +130,7 @@ export function ScenarioListPage() {
                           : 'bg-[#FFFCF7] hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]/70'
                       }`}
                     >
-                      {lvl.label}
+                      {isVi ? (lvl.labelVi || lvl.label) : (lvl.labelEn || lvl.label)}
                     </button>
                   );
                 })}
@@ -150,7 +154,7 @@ export function ScenarioListPage() {
                           : 'bg-[#FFFCF7] hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]/70'
                       }`}
                     >
-                      {t.label}
+                      {isVi ? (t.labelVi || t.label) : (t.labelEn || t.label)}
                     </button>
                   );
                 })}
@@ -216,7 +220,7 @@ export function ScenarioListPage() {
                 <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
                   <ContentImage
                     src={sc.thumbnail}
-                    alt={sc.title}
+                    alt={isVi ? (sc.titleVi || sc.title) : (sc.titleEn || sc.title)}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -224,21 +228,21 @@ export function ScenarioListPage() {
                   {/* Destination Tag */}
                   <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-[#253044] border border-[#E8E5DF] text-[11px] font-bold shadow-xs">
                     <MapPin size={12} className="text-[#F97316]" />
-                    <span>{sc.destination}</span>
+                    <span>{isVi ? (sc.destinationVi || sc.destination) : (sc.destinationEn || sc.destination)}</span>
                   </div>
 
                   {/* Level Badge */}
                   <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#FF7A00] text-white text-[10px] font-black uppercase tracking-wider shadow-xs">
-                    {sc.level}
+                    {isVi ? (sc.levelLabelVi || sc.level) : (sc.levelLabelEn || sc.level)}
                   </div>
 
                   {/* Title Overlay in Photo */}
                   <div className="absolute bottom-3 inset-x-3 text-white">
                     <span className="text-[10px] font-black uppercase text-[#FFCD00] tracking-wider block">
-                      {sc.topicLabel} • {sc.duration}
+                      {isVi ? (sc.topicLabelVi || sc.topicLabel) : (sc.topicLabelEn || sc.topicLabel)} • {isVi ? (sc.durationVi || sc.duration) : (sc.durationEn || sc.duration)}
                     </span>
                     <h3 className="text-base font-black truncate drop-shadow-sm mt-0.5">
-                      {sc.titleVi || sc.title}
+                      <BilingualText vi={sc.titleVi || sc.title} en={sc.titleEn || sc.title} />
                     </h3>
                   </div>
                 </div>
@@ -247,7 +251,7 @@ export function ScenarioListPage() {
                 <div className="p-5 flex-1 flex flex-col justify-between gap-4">
                   <div className="space-y-3">
                     <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
-                      {sc.overview}
+                      {isVi ? (sc.overviewVi || sc.overview) : (sc.overviewEn || sc.overview)}
                     </p>
 
                     {/* Role Play Snapshot Box */}
@@ -258,13 +262,13 @@ export function ScenarioListPage() {
                           <span className="text-[#253044]">{sc.aiRole.name}</span>
                         </span>
                         <span className="text-[10px] text-[#64748B] italic">
-                          ({sc.aiRole.role})
+                          ({isVi ? (sc.aiRole?.roleVi || sc.aiRole?.role) : (sc.aiRole?.roleEn || sc.aiRole?.role)})
                         </span>
                       </div>
                       <div className="flex items-center justify-between pt-1 border-t border-[#E8E5DF]/40">
                         <span className="text-[#253044] font-bold flex items-center gap-1">
                           <span><BilingualText vi="Bạn:" en="You:" /></span>
-                          <span>{sc.learnerRole.role}</span>
+                          <span>{isVi ? (sc.learnerRole?.roleVi || sc.learnerRole?.role) : (sc.learnerRole?.roleEn || sc.learnerRole?.role)}</span>
                         </span>
                         <span className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">
                           <Target size={11} />

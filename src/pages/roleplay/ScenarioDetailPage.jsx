@@ -1,13 +1,16 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, MapPin, Play } from 'lucide-react';
+import { ArrowLeft, MapPin, Play, MessageCircle } from 'lucide-react';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
+import { useTranslation } from 'react-i18next';
 
 export function ScenarioDetailPage() {
   const { id } = useParams();
+  const { i18n } = useTranslation();
+  const isVi = (i18n?.resolvedLanguage || i18n?.language || 'vi').startsWith('vi');
   const scenario = aiRoleplayService.getScenario(id);
 
   if (!scenario) {
@@ -56,10 +59,10 @@ export function ScenarioDetailPage() {
             <span><BilingualText vi="Danh sách kịch bản" en="Scenarios list" /></span>
           </Link>
           <span>/</span>
-          <span>{scenario.topicLabel}</span>
+          <span>{isVi ? (scenario.topicLabelVi || scenario.topicLabel) : (scenario.topicLabelEn || scenario.topicLabel)}</span>
           <span>/</span>
           <span className="text-[#253044] font-black truncate max-w-xs">
-            {scenario.titleVi || scenario.title}
+            <BilingualText vi={scenario.titleVi || scenario.title} en={scenario.titleEn || scenario.title} />
           </span>
         </nav>
 
@@ -71,28 +74,28 @@ export function ScenarioDetailPage() {
               {/* Badges Ribbon */}
               <div className="flex flex-wrap items-center gap-2">
                 <span className="px-3 py-1 rounded-full bg-[#FF7A00] text-white text-[10px] font-black uppercase tracking-wider shadow-2xs">
-                  {scenario.levelLabel}
+                  {isVi ? (scenario.levelLabelVi || scenario.levelLabel) : (scenario.levelLabelEn || scenario.levelLabel)}
                 </span>
                 <span className="px-3 py-1 rounded-full bg-[#253044] text-white text-[10px] font-bold uppercase tracking-wider">
-                  {scenario.topicLabel}
+                  {isVi ? (scenario.topicLabelVi || scenario.topicLabel) : (scenario.topicLabelEn || scenario.topicLabel)}
                 </span>
                 <span className="px-3 py-1 rounded-full bg-[#FFFCF7] border border-[#E8E5DF] text-[#253044] text-[11px] font-bold flex items-center gap-1">
                   <MapPin size={12} className="text-[#FF7A00]" />
-                  <span>{scenario.destination}</span>
+                  <span>{isVi ? (scenario.destinationVi || scenario.destination) : (scenario.destinationEn || scenario.destination)}</span>
                 </span>
                 <span className="px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold">
-                  <BilingualText vi="Độ khó:" en="Difficulty:" /> {scenario.difficulty}
+                  <BilingualText vi="Độ khó:" en="Difficulty:" /> {isVi ? (scenario.difficultyVi || scenario.difficulty) : (scenario.difficultyEn || scenario.difficulty)}
                 </span>
               </div>
 
               {/* Title */}
               <h1 className="text-2xl sm:text-4xl font-black text-[#253044] tracking-tight leading-tight">
-                {scenario.titleVi || scenario.title}
+                <BilingualText vi={scenario.titleVi || scenario.title} en={scenario.titleEn || scenario.title} />
               </h1>
 
               {/* Overview */}
               <p className="text-sm sm:text-base text-[#64748B] leading-relaxed">
-                {scenario.overview}
+                {isVi ? (scenario.overviewVi || scenario.overview) : (scenario.overviewEn || scenario.overview)}
               </p>
 
               {/* Primary Action Button */}
@@ -111,7 +114,7 @@ export function ScenarioDetailPage() {
             <div className="lg:col-span-5 aspect-[16/10] lg:aspect-auto h-full min-h-[240px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E8E5DF]/80 shadow-md">
               <ContentImage
                 src={scenario.coverImage}
-                alt={scenario.title}
+                alt={isVi ? (scenario.titleVi || scenario.title) : (scenario.titleEn || scenario.title)}
                 loading="eager"
                 className="w-full h-full object-cover"
               />
@@ -146,7 +149,7 @@ export function ScenarioDetailPage() {
                     </div>
                   </div>
                   <p className="text-xs text-[#64748B] leading-relaxed pt-1 border-t border-[#E8E5DF]/40">
-                    {scenario.aiRole.tone}
+                    {isVi ? (scenario.aiRole?.toneVi || scenario.aiRole?.tone) : (scenario.aiRole?.toneEn || scenario.aiRole?.tone)}
                   </p>
                 </div>
 
@@ -158,12 +161,12 @@ export function ScenarioDetailPage() {
                         <BilingualText vi="Bạn đóng vai" en="Your Role" />
                       </span>
                       <h3 className="text-sm font-black text-[#253044]">
-                        {scenario.learnerRole.role}
+                        {isVi ? (scenario.learnerRole?.roleVi || scenario.learnerRole?.role) : (scenario.learnerRole?.roleEn || scenario.learnerRole?.role)}
                       </h3>
                     </div>
                   </div>
                   <p className="text-xs text-[#64748B] leading-relaxed pt-1 border-t border-[#E8E5DF]/40">
-                    {scenario.learnerRole.context}
+                    {isVi ? (scenario.learnerRole?.contextVi || scenario.learnerRole?.context) : (scenario.learnerRole?.contextEn || scenario.learnerRole?.context)}
                   </p>
                 </div>
               </div>
@@ -190,7 +193,7 @@ export function ScenarioDetailPage() {
                       {i + 1}
                     </span>
                     <span className="text-xs sm:text-sm font-bold text-[#253044]">
-                      {task.label}
+                      {isVi ? (task.labelVi || task.label) : (task.labelEn || task.label)}
                     </span>
                   </div>
                 ))}
@@ -224,13 +227,13 @@ export function ScenarioDetailPage() {
             </section>
 
             {/* Cultural Tip Card */}
-            {scenario.culturalTip && (
+            {(scenario.culturalTipVi || scenario.culturalTip) && (
               <section className="bg-gradient-to-br from-[#FFF7E8] to-[#FFFCF7] rounded-3xl border border-[#E8E5DF] p-6 shadow-xs space-y-2">
                 <div className="flex items-center gap-2 text-xs font-black uppercase text-[#FF7A00] tracking-wider">
                   <span><BilingualText vi="Mẹo văn hóa thực tế:" en="Real-life Cultural Tips:" /></span>
                 </div>
                 <p className="text-xs sm:text-sm text-[#253044] leading-relaxed">
-                  {scenario.culturalTip}
+                  {isVi ? (scenario.culturalTipVi || scenario.culturalTip) : (scenario.culturalTipEn || scenario.culturalTip)}
                 </p>
               </section>
             )}

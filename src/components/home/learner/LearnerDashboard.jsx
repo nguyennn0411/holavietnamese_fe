@@ -33,7 +33,8 @@ function StatCard({ label, value, detail, tone }) {
 }
 
 export function LearnerDashboard({ user }) {
-  const { t } = useTranslation('learner');
+  const { t, i18n } = useTranslation('learner');
+  const isVi = (i18n.resolvedLanguage || i18n.language || 'en').startsWith('vi');
   const reduceMotion = useReducedMotion();
   const [progress, setProgress] = useState(null);
   const [error, setError] = useState('');
@@ -99,11 +100,11 @@ export function LearnerDashboard({ user }) {
       <div className="ld-layout">
         <main className="ld-main-column">
           <motion.section className="ld-continue" {...entrance} transition={{ delay: reduceMotion ? 0 : .1 }}>
-            <div className="ld-section-label"><span>{t('dashboard.continueSection')}</span><small>{currentLesson?.courseTitle || <BilingualText vi="Lộ trình học của bạn" en="Your learning roadmap" />}</small></div>
+            <div className="ld-section-label"><span>{t('dashboard.continueSection')}</span><small>{(isVi ? (currentLesson?.courseTitleVi || currentLesson?.courseTitle) : (currentLesson?.courseTitleEn || currentLesson?.courseTitle)) || <BilingualText vi="Lộ trình học của bạn" en="Your learning roadmap" />}</small></div>
             {currentLesson ? (
               <>
-                <h2>{currentLesson.titleVi || currentLesson.title}</h2>
-                <p>{currentLesson.description || t('dashboard.continueDescription')}</p>
+                <h2>{isVi ? (currentLesson.titleVi || currentLesson.title) : (currentLesson.titleEn || currentLesson.titleVi || currentLesson.title)}</h2>
+                <p>{(isVi ? currentLesson.description : (currentLesson.descriptionEn || currentLesson.description)) || t('dashboard.continueDescription')}</p>
                 <div className="ld-progress-copy"><span>{t('dashboard.lessonProgress')}</span><strong>{Math.round(lessonProgress)}%</strong></div>
                 <div className="ld-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(lessonProgress)}><span style={{ '--progress': `${lessonProgress}%` }} /></div>
                 <div className="ld-continue__footer">
@@ -134,7 +135,7 @@ export function LearnerDashboard({ user }) {
 
           <motion.section className="ld-card ld-activity" {...entrance} transition={{ delay: reduceMotion ? 0 : .2 }}>
             <div className="ld-heading"><div><span>{t('dashboard.history')}</span><h2>{t('dashboard.recentActivity')}</h2></div></div>
-            {activities.length ? <div className="ld-activity__list">{activities.slice(0, 5).map((activity, index) => <div key={activity.id ?? index}><span className="ld-activity__dot"><Check size={12} /></span><div><strong>{activity.titleVi || activity.title}</strong><small>{activity.time}</small></div>{activity.xp != null && <b>+{activity.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Clock3 size={24} /><p>{t('dashboard.noActivity')}</p></div>}
+            {activities.length ? <div className="ld-activity__list">{activities.slice(0, 5).map((activity, index) => <div key={activity.id ?? index}><span className="ld-activity__dot"><Check size={12} /></span><div><strong>{isVi ? (activity.titleVi || activity.title) : (activity.titleEn || activity.titleVi || activity.title)}</strong><small>{activity.time}</small></div>{activity.xp != null && <b>+{activity.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Clock3 size={24} /><p>{t('dashboard.noActivity')}</p></div>}
           </motion.section>
         </main>
 
@@ -142,7 +143,7 @@ export function LearnerDashboard({ user }) {
           <section className="ld-card ld-daily">
             <div className="ld-heading"><div><span>{t('dashboard.today')}</span><h2>{t('todayChallenges')}</h2></div><Target size={20} /></div>
             <div className="ld-daily__goal"><div><span>{t('dailyGoal')}</span><strong>{todayMinutes}{dailyGoal ? ` / ${dailyGoal}` : ''} {t('minutes')}</strong></div><div className="ld-progress"><span style={{ '--progress': `${dailyPercent}%` }} /></div></div>
-            {quests.length ? <div className="ld-quest-list">{quests.slice(0, 4).map((quest, index) => <div key={quest.id ?? index} className={quest.done ? 'is-done' : ''}><span>{quest.done ? <Check size={12} /> : index + 1}</span><div><strong>{quest.title}</strong>{quest.progress && <small>{quest.progress}</small>}</div>{quest.xp != null && <b>+{quest.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Target size={23} /><p>{t('challengeEmpty')}</p></div>}
+            {quests.length ? <div className="ld-quest-list">{quests.slice(0, 4).map((quest, index) => <div key={quest.id ?? index} className={quest.done ? 'is-done' : ''}><span>{quest.done ? <Check size={12} /> : index + 1}</span><div><strong>{isVi ? quest.title : (quest.titleEn || quest.title)}</strong>{quest.progress && <small>{quest.progress}</small>}</div>{quest.xp != null && <b>+{quest.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Target size={23} /><p>{t('challengeEmpty')}</p></div>}
           </section>
 
           <section className="ld-card ld-leaderboard">

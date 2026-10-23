@@ -1,4 +1,5 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel, useBilingualLabel } from '@/components/common/BilingualText';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
@@ -24,6 +25,9 @@ import {
 } from 'lucide-react';
 
 export function RoleplaySessionPage() {
+  const { i18n } = useTranslation();
+  const isVi = (i18n?.resolvedLanguage || i18n?.language || 'vi').startsWith('vi');
+  const bLabel = useBilingualLabel();
   const { confirm, confirmationDialog } = useConfirmDialog();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -88,7 +92,7 @@ export function RoleplaySessionPage() {
 
   const handleSpeak = (text, msgId = null) => {
     if (!('speechSynthesis' in window)) {
-      showToast('Trình duyệt không hỗ trợ phát âm.');
+      showToast(bLabel('Trình duyệt không hỗ trợ phát âm.', 'Browser does not support text-to-speech.'));
       return;
     }
     window.speechSynthesis.cancel();
@@ -101,12 +105,12 @@ export function RoleplaySessionPage() {
     utterance.onerror = () => setPlayingMsgId(null);
 
     window.speechSynthesis.speak(utterance);
-    showToast('Đang phát âm tiếng Việt...');
+    showToast(bLabel('Đang phát âm tiếng Việt...', 'Playing Vietnamese audio...'));
   };
 
   const handleToggleVoiceInput = () => {
     if (!speechRecognitionRef.current) {
-      showToast('Trình duyệt của bạn chưa hỗ trợ nhận diện giọng nói tiếng Việt.');
+      showToast(bLabel('Trình duyệt của bạn chưa hỗ trợ nhận diện giọng nói tiếng Việt.', 'Your browser does not support Vietnamese voice recognition.'));
       return;
     }
     if (isListening) {
@@ -115,7 +119,7 @@ export function RoleplaySessionPage() {
     } else {
       setIsListening(true);
       speechRecognitionRef.current.start();
-      showToast('Đang lắng nghe giọng nói của bạn...');
+      showToast(bLabel('Đang lắng nghe giọng nói của bạn...', 'Listening to your voice...'));
     }
   };
 
@@ -131,7 +135,7 @@ export function RoleplaySessionPage() {
       setSession(updatedSession);
     } catch (e) {
       console.error(e);
-      showToast('Lỗi khi gửi tin nhắn roleplay.');
+      showToast(bLabel('Lỗi khi gửi tin nhắn roleplay.', 'Error sending roleplay message.'));
     } finally {
       setIsSending(false);
     }
@@ -198,11 +202,11 @@ export function RoleplaySessionPage() {
               className="inline-flex items-center gap-1 font-semibold text-[#DA251D] hover:underline transition-colors"
             >
               <ArrowLeft size={13} />
-              <BilingualText>{"Thoát kịch bản"}</BilingualText>
+              <BilingualText vi="Thoát kịch bản" en="Exit scenario" />
             </Link>
             <span>/</span>
             <span className="font-medium text-[#4A3B32]">
-              <BilingualText vi={scenario.titleVi || scenario.title} en={scenario.title} />
+              <BilingualText vi={scenario.titleVi || scenario.title} en={scenario.titleEn || scenario.title} />
             </span>
           </nav>
 
@@ -210,7 +214,7 @@ export function RoleplaySessionPage() {
             <h1 className="text-xl sm:text-2xl font-black text-[#202124] tracking-tight">
               <BilingualText
                 vi={<>Phiên Roleplay: {scenario.titleVi || scenario.title}</>}
-                en={<>Roleplay session: {scenario.title}</>}
+                en={<>Roleplay session: {scenario.titleEn || scenario.title}</>}
               />
             </h1>
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#DA251D]/10 text-[#DA251D] text-[11px] font-bold">
@@ -253,7 +257,7 @@ export function RoleplaySessionPage() {
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF4E0] text-[#715A4F] hover:text-[#202124] border border-[#DECBB4] font-semibold text-xs shadow-xs transition-all"
           >
             <RotateCcw size={13} />
-            <BilingualText>{"Bắt đầu lại"}</BilingualText>
+            <BilingualText vi="Bắt đầu lại" en="Restart" />
           </button>
 
           <button
@@ -261,7 +265,7 @@ export function RoleplaySessionPage() {
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#202124] hover:bg-[#333] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all"
           >
             <Award size={14} className="text-[#FFCD00]" />
-            <BilingualText>{"Kết thúc & Xem kết quả"}</BilingualText>
+            <BilingualText vi="Kết thúc & Xem kết quả" en="Finish & View Results" />
           </button>
         </div>
       </header>
@@ -301,7 +305,7 @@ export function RoleplaySessionPage() {
               }`}
             >
               <Lightbulb size={14} className={showHints ? 'text-[#DA251D]' : 'text-[#715A4F]'} />
-              <BilingualText>{showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'}</BilingualText>
+              <BilingualText vi={showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'} en={showHints ? 'Hide hints' : 'Show response hints'} />
             </button>
           </div>
 
@@ -341,7 +345,7 @@ export function RoleplaySessionPage() {
                       }`}
                     >
                       <span>
-                        <BilingualText>{isAi ? scenario.aiRole.name : 'Bạn (Learner)'}</BilingualText>
+                        <BilingualText vi={isAi ? scenario.aiRole.name : 'Bạn (Learner)'} en={isAi ? scenario.aiRole.name : 'You (Learner)'} />
                       </span>
                       {isPlayingThis && (
                         <span className="flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-[#FF7A00]/10 text-[#FF7A00] text-[10px] font-bold animate-pulse">
@@ -390,7 +394,7 @@ export function RoleplaySessionPage() {
                       >
                         <div className="flex items-center gap-1.5 font-bold mb-0.5 text-[11px]">
                           <HelpCircle size={12} />
-                          <BilingualText>{"Giải thích ngữ cảnh & cách dùng:"}</BilingualText>
+                          <BilingualText vi="Giải thích ngữ cảnh & cách dùng:" en="Context & usage explanation:" />
                         </div>
                         <p>{msg.explanation}</p>
                       </motion.div>
@@ -413,7 +417,7 @@ export function RoleplaySessionPage() {
                         title={bilingualLabel("Nghe phát âm chuẩn", "Listen to standard pronunciation")}
                       >
                         <Volume2 size={13} className={isPlayingThis ? 'text-[#DA251D] animate-spin' : ''} />
-                        <BilingualText>{"Nghe"}</BilingualText>
+                        <BilingualText vi="Nghe" en="Listen" />
                       </button>
 
                       {msg.translation && (
@@ -432,7 +436,7 @@ export function RoleplaySessionPage() {
                           title={bilingualLabel("Dịch câu nói sang tiếng Anh", "Translate sentence to English")}
                         >
                           <Languages size={13} />
-                          <BilingualText>{isTranslating ? 'Đóng dịch' : 'Dịch'}</BilingualText>
+                          <BilingualText vi={isTranslating ? 'Đóng dịch' : 'Dịch'} en={isTranslating ? 'Hide translation' : 'Translate'} />
                         </button>
                       )}
 
@@ -452,7 +456,7 @@ export function RoleplaySessionPage() {
                           title={bilingualLabel("Giải thích từ vựng & sắc thái văn hóa", "Explain vocabulary & cultural nuances")}
                         >
                           <HelpCircle size={13} />
-                          <BilingualText>{isExplaining ? 'Đóng giải thích' : 'Giải thích'}</BilingualText>
+                          <BilingualText vi={isExplaining ? 'Đóng giải thích' : 'Giải thích'} en={isExplaining ? 'Hide explanation' : 'Explain'} />
                         </button>
                       )}
                     </div>
@@ -500,7 +504,7 @@ export function RoleplaySessionPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#A62A24] uppercase tracking-wider">
                     <Lightbulb size={13} className="text-[#DA251D]" />
-                    <BilingualText>{"Gợi ý câu trả lời tự nhiên (Bấm để gửi ngay):"}</BilingualText>
+                    <BilingualText vi="Gợi ý câu trả lời tự nhiên (Bấm để gửi ngay):" en="Natural response hints (Click to send):" />
                   </div>
                   <span className="text-[10px] text-[#64748B]"><BilingualText vi="Chạm 1 lần để nói" en="Tap once to speak" /></span>
                 </div>
@@ -560,7 +564,7 @@ export function RoleplaySessionPage() {
                   }}
                   rows={1}
                   disabled={isSending}
-                  placeholder={bilingualLabel(`Nhập câu thoại tiếng Việt của bạn với ${scenario.aiRole.name}...`, `Type your response to ${scenario.aiRole.name}...`)}
+                  placeholder={bLabel(`Nhập câu thoại tiếng Việt của bạn với ${scenario.aiRole.name}...`, `Type your Vietnamese response to ${scenario.aiRole.name}...`)}
                   className="w-full resize-none px-4 py-2.5 bg-[#FFF7E8] border border-[#E8E5DF] focus:border-[#FF7A00] focus:ring-2 focus:ring-[#FF7A00]/10 rounded-2xl text-xs sm:text-sm text-[#253044] placeholder-[#64748B]/60 transition-all outline-hidden leading-relaxed"
                 />
                 <span className="absolute right-3 bottom-2 text-[10px] text-[#64748B]/70 hidden sm:inline">
@@ -579,7 +583,7 @@ export function RoleplaySessionPage() {
                     : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
                 }`}
               >
-                <span><BilingualText>{"Gửi"}</BilingualText></span>
+                <span><BilingualText vi="Gửi" en="Send" /></span>
                 <Send size={15} />
               </button>
             </div>
@@ -593,7 +597,7 @@ export function RoleplaySessionPage() {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] font-bold text-[#DA251D] uppercase tracking-wider">
-                  <BilingualText>{"Tiến độ kịch bản"}</BilingualText>
+                  <BilingualText vi="Tiến độ kịch bản" en="Scenario progress" />
                 </span>
                 <span className="text-xs font-bold text-[#253044]">
                   <BilingualText
@@ -603,7 +607,7 @@ export function RoleplaySessionPage() {
                 </span>
               </div>
               <h3 className="text-base font-black text-[#202124] tracking-tight">
-                <BilingualText>{"Mục tiêu đối thoại"}</BilingualText>
+                <BilingualText vi="Mục tiêu đối thoại" en="Dialogue objectives" />
               </h3>
 
               {/* Progress bar */}
@@ -640,11 +644,11 @@ export function RoleplaySessionPage() {
 
                     <div className="flex-1 text-xs leading-snug">
                       <div className={`font-semibold ${isDone ? 'line-through opacity-80' : ''}`}>
-                        <BilingualText>{task.label}</BilingualText>
+                        {isVi ? (task.labelVi || task.label) : (task.labelEn || task.label)}
                       </div>
                       {isDone && (
                         <span className="inline-block mt-1 text-[10px] font-bold text-emerald-700">
-                          ✨ <BilingualText>{"Đã hoàn thành!"}</BilingualText>
+                          ✨ <BilingualText vi="Đã hoàn thành!" en="Completed!" />
                         </span>
                       )}
                     </div>
@@ -658,21 +662,22 @@ export function RoleplaySessionPage() {
           <div className="bg-gradient-to-br from-[#FFF9EE] to-[#FFF2D6] rounded-3xl border border-[#FFCD00]/50 p-5 shadow-xs space-y-2.5">
             <div className="flex items-center gap-2 text-xs font-bold text-[#A62A24]">
               <span>🎭</span>
-              <BilingualText>{"Nhắc nhở vai diễn của bạn:"}</BilingualText>
+              <BilingualText vi="Nhắc nhở vai diễn của bạn:" en="Your role reminder:" />
             </div>
 
             <div className="text-xs text-[#5B3E31] leading-relaxed">
-              <BilingualText>{"Bạn đang đóng vai:"}</BilingualText>{' '}
+              <BilingualText vi="Bạn đang đóng vai:" en="You are playing:" />{' '}
               <strong className="text-[#FF7A00] font-bold">
                 <BilingualText
-                  vi={scenario.learnerRole?.role || 'Du khách'}
+                  vi={scenario.learnerRole?.roleVi || scenario.learnerRole?.role || 'Du khách'}
                   en={scenario.learnerRole?.roleEn || scenario.learnerRole?.role || 'Traveler'}
                 />
               </strong>.
               <p className="mt-1">
-                <BilingualText>
-                  {"Hãy xưng hô tự nhiên và dùng kính ngữ lịch sự như \"Dạ\", \"ạ\", \"cho em hỏi\" để ghi điểm tối đa nhé!"}
-                </BilingualText>
+                <BilingualText
+                  vi={'Hãy xưng hô tự nhiên và dùng kính ngữ lịch sự như "Dạ", "ạ", "cho em hỏi" để ghi điểm tối đa nhé!'}
+                  en={'Use natural address terms and polite honorifics like "Dạ", "ạ", "cho em hỏi" to maximize your score!'}
+                />
               </p>
             </div>
           </div>
@@ -684,7 +689,7 @@ export function RoleplaySessionPage() {
             className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#DA251D] to-[#B71C1C] hover:from-[#B71C1C] hover:to-[#8B1414] text-white font-black text-sm shadow-md hover:shadow-xl transition-all"
           >
             <Award size={16} className="text-[#FFCD00]" />
-            <BilingualText>{"Hoàn tất & Nhận đánh giá ➔"}</BilingualText>
+            <BilingualText vi="Hoàn tất & Nhận đánh giá ➔" en="Complete & View Evaluation ➔" />
           </button>
         </aside>
       </div>

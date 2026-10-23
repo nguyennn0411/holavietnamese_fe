@@ -1,4 +1,4 @@
-﻿/* Duolingo-style Learning Path (HolaVietnamese EdTech Experience) */
+/* Duolingo-style Learning Path (HolaVietnamese EdTech Experience) */
 
 :root {
   --duo-green: #22A06B;
@@ -97,6 +97,8 @@
   font-weight: 900;
   line-height: 1.25;
   margin-bottom: 0.35rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .duo-unit-desc {
@@ -104,23 +106,30 @@
   opacity: 0.92;
   max-width: 42rem;
   line-height: 1.45;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .duo-unit-guidebook-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.22);
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.5);
   color: #FFFFFF;
-  padding: 0.55rem 1rem;
+  padding: 0.6rem 1.15rem;
   border-radius: 1rem;
   font-weight: 800;
   font-size: 0.85rem;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  line-height: 1.2;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
   transition: all 0.15s ease;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
+  min-width: max-content;
+  box-sizing: border-box;
 }
 
 .duo-unit-guidebook-btn:hover {
@@ -370,11 +379,41 @@
   border: 3px solid var(--duo-border);
   border-radius: 2rem;
   max-width: 440px;
+  max-height: min(92vh, 92dvh);
+  overflow-y: auto;
+  overflow-x: hidden;
   width: 100%;
   padding: 1.75rem;
   box-shadow: 0 24px 60px rgba(37, 48, 68, 0.15);
   position: relative;
   animation: duo-modal-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-sizing: border-box;
+}
+
+.duo-modal-card.duo-modal-card--guidebook {
+  max-width: 540px;
+  max-height: min(88vh, 88dvh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.5rem 1.75rem;
+}
+
+.duo-guidebook-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #E2E8F0 transparent;
+}
+
+.duo-guidebook-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.duo-guidebook-scroll::-webkit-scrollbar-thumb {
+  background-color: #E2E8F0;
+  border-radius: 4px;
 }
 
 @keyframes duo-modal-pop {
