@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Check, CircleAlert, Clock3, Play, RefreshCw, Target, Trophy, Volume2 } from 'lucide-react';
+import { ArrowRight, Check, CircleAlert, Clock3, Play, RefreshCw, Target, Volume2 } from 'lucide-react';
 import { learnerService } from '@/services/learnerService';
 import { WORD_OF_THE_DAY } from '@/components/home/data/homeData';
 import { speakVietnamese } from '@/utils/speech';
@@ -58,7 +58,6 @@ export function LearnerDashboard({ user }) {
   const continueTo = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : courseId ? `/learn/${courseId}` : '/edtech/dashboard';
   const activities = Array.isArray(progress?.recentActivities) ? progress.recentActivities : [];
   const quests = Array.isArray(progress?.dailyChallenges) ? progress.dailyChallenges : [];
-  const leaderboard = Array.isArray(progress?.weeklyLeaderboard) ? progress.weeklyLeaderboard : [];
 
   const modules = useMemo(() => [
     { to: '/edtech/dashboard', title: <BilingualText vi="Lộ trình học" en="Learning roadmap" />, text: <BilingualText vi="Bản đồ bài học tương tác từng bước" en="Step-by-step interactive lesson map." />, tone: 'red' },
@@ -144,11 +143,6 @@ export function LearnerDashboard({ user }) {
             <div className="ld-heading"><div><span>{t('dashboard.today')}</span><h2>{t('todayChallenges')}</h2></div><Target size={20} /></div>
             <div className="ld-daily__goal"><div><span>{t('dailyGoal')}</span><strong>{todayMinutes}{dailyGoal ? ` / ${dailyGoal}` : ''} {t('minutes')}</strong></div><div className="ld-progress"><span style={{ '--progress': `${dailyPercent}%` }} /></div></div>
             {quests.length ? <div className="ld-quest-list">{quests.slice(0, 4).map((quest, index) => <div key={quest.id ?? index} className={quest.done ? 'is-done' : ''}><span>{quest.done ? <Check size={12} /> : index + 1}</span><div><strong>{isVi ? quest.title : (quest.titleEn || quest.title)}</strong>{quest.progress && <small>{quest.progress}</small>}</div>{quest.xp != null && <b>+{quest.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Target size={23} /><p>{t('challengeEmpty')}</p></div>}
-          </section>
-
-          <section className="ld-card ld-leaderboard">
-            <div className="ld-heading"><div><span>{t('dashboard.community')}</span><h2>{t('weeklyLeaderboard')}</h2></div><Trophy size={20} /></div>
-            {leaderboard.length ? <div className="ld-leaderboard__list">{leaderboard.slice(0, 5).map((item, index) => <div key={item.id ?? item.rank ?? index} className={item.isUser ? 'is-user' : ''}><span>{item.rank ?? index + 1}</span><strong><BilingualText vi={item.name} en={item.nameEn || item.name} /></strong><b>{item.xp} XP</b></div>)}</div> : <div className="ld-empty ld-empty--compact"><Trophy size={23} /><p>{t('noLeaderboard')}</p></div>}
           </section>
 
           <section className="ld-review-card">

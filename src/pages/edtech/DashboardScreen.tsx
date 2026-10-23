@@ -806,48 +806,6 @@ export const DashboardScreen: React.FC = () => {
               </div>
             </div>
 
-            {/* Weekly Leaderboard Widget */}
-            <div className="duo-sidebar-widget">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-black text-lg text-[#251B18] flex items-center gap-2"><BilingualText vi="Bảng xếp hạng tuần" en="Weekly Leaderboard" /></h3>
-                <span className="text-xs font-black px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#B45309]">
-                  <BilingualText vi="HẠNG VÀNG" en="GOLD LEAGUE" />
-                </span>
-              </div>
-
-              <div className="space-y-2.5">
-                {[
-                  { rank: 1, name: 'Alexandre (France)', xp: 420, medal: '🥇' },
-                  { rank: 2, name: isVi ? 'Minh Tuấn (Bạn)' : 'Minh Tuan (You)', xp: 350, medal: '🥈', isUser: true },
-                  { rank: 3, name: 'Sarah Miller (USA)', xp: 290, medal: '🥉' },
-                ].map((item) => (
-                  <div
-                    key={item.rank}
-                    className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-black ${
-                      item.isUser ? 'bg-[#FFF8EE] border-2 border-[#E8B74C]' : 'bg-[#F9FAFB]'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-base">{item.medal}</span>
-                      <span className={item.isUser ? 'text-[#FF7A00]' : 'text-[#374151]'}>
-                        {item.name}
-                      </span>
-                    </div>
-                    <span className="text-[#8a7565]">{item.xp} XP</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-[#F3EDE3] text-center">
-                <Link
-                  to="/progress"
-                  className="text-xs font-black text-[#FF7A00] hover:underline"
-                >
-                  <BilingualText vi="Xem bảng xếp hạng đầy đủ →" en="View full leaderboard →" />
-                </Link>
-              </div>
-            </div>
-
             {/* Mascot Tip Companion Card */}
             <div className="duo-sidebar-widget bg-gradient-to-br from-[#FFF9F2] to-[#FFF3E3] border-[#EADBC8]">
               <div className="flex items-start gap-3">
