@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { ContentImage } from '@/components/common/ContentImage';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, Compass, GraduationCap } from 'lucide-react';
+import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, GraduationCap } from 'lucide-react';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
@@ -91,10 +91,6 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
                 />
               </span>
             </div>
-            <Link to={ROUTES.EDTECH_DASHBOARD} onClick={closeMenu} role="menuitem">
-              <Compass size={16} />
-              <BilingualText vi="Lộ trình học EdTech" en="EdTech Learning Path" />
-            </Link>
             <Link to={ROUTES.MY_LEARNING} onClick={closeMenu} role="menuitem">
               <GraduationCap size={16} />
               <BilingualText vi="Góc học tập của tôi" en="My Learning" />
