@@ -6,6 +6,7 @@ import { ResourceState } from '@/components/common/ResourceState';
 import { ImportJobResult, IMPORT_STATUS_LABELS } from '@/components/content-import/ImportJobResult';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { contentImportService } from '@/services/contentImportService';
+import { websiteImportService } from '@/services/websiteImportService';
 import { ROUTES } from '@/constants/routes';
 import { BilingualText, useBilingualLabel } from '@/components/common/BilingualText';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +20,7 @@ export function AdminImportHistoryPage() {
   const rawPage = Number(params.get('page') || 0), page = Number.isInteger(rawPage) && rawPage >= 0 ? rawPage : 0;
   const selected = params.get('id');
   const resource = useAsyncResource(useCallback(signal => contentImportService.history(page, { signal }), [page]));
+  const websiteResource = useAsyncResource(useCallback(signal => websiteImportService.history({ signal }), []));
 
   return <section className="content-import-page content-import-detail">
     <Breadcrumb items={[{ label: label('Từ vựng', 'Vocabulary'), to: ROUTES.ADMIN_VOCABULARY }, { label: label('Nhập dữ liệu', 'Import Data'), to: ROUTES.ADMIN_IMPORT }, { label: label('Lịch sử', 'History') }]} />
@@ -28,6 +30,15 @@ export function AdminImportHistoryPage() {
       description={<BilingualText vi="Xem bản xem trước, kết quả và lỗi của những lần nhập dữ liệu." en="View previews, results, and logs of data import operations." />}
       actions={<Link className="button" to={ROUTES.ADMIN_IMPORT}><BilingualText vi="Nhập dữ liệu" en="Import Data" /></Link>}
     />
+    <ResourceState resource={websiteResource}>{jobs => jobs.length ? <div className="admin-card import-history-card">
+      <h2><BilingualText vi="Website → Course" en="Website → Course" /></h2>
+      <div className="import-table-scroll"><table className="admin-table"><thead><tr>
+        <th><BilingualText>{"Thời gian"}</BilingualText></th><th><BilingualText vi="Nguồn" en="Source" /></th><th><BilingualText vi="Chế độ" en="Mode" /></th><th><BilingualText>{"Lesson / Block"}</BilingualText></th><th><BilingualText>{"Trạng thái"}</BilingualText></th><th><BilingualText vi="Kết quả" en="Result" /></th>
+      </tr></thead><tbody>{jobs.map(job => <tr key={job.id}>
+        <td>{new Date(job.createdAt).toLocaleString(locale)}</td><td>{job.title}<small className="history-source-url">{job.sourceUrl || job.sourceFilename}</small></td><td>{job.mode}</td><td>{job.stats?.lessons || 0} / {job.stats?.blocks || 0}</td><td>{job.status}</td>
+        <td>{job.resultCourseId ? <Link className="text-link" to={`/admin/courses/${job.resultCourseId}`}><BilingualText vi="Mở khóa học" en="Open course" /></Link> : <Link className="text-link" to={ROUTES.ADMIN_IMPORT}><BilingualText vi="Tiếp tục rà soát" en="Continue review" /></Link>}</td>
+      </tr>)}</tbody></table></div>
+    </div> : null}</ResourceState>
     <ResourceState resource={resource}>{data => data.content.length ? <>
       <div className="admin-card import-history-card">
         <div className="import-table-scroll">

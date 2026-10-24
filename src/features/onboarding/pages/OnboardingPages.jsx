@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Volume2 } from 'lucide-react';
 import { benefits, dailyGoals, firstLessonQuestions, learningReasons, levelOptions, placementBands, placementQuestions } from '../data/onboardingData';
 import { useOnboarding } from '../context/OnboardingContext';
 import { Brand, Confetti, LessonHeader, Mascot, OnboardingLayout, PrimaryButton, SelectionCard } from '../components/OnboardingUI';
+import { buildLearningPathPath, buildOnboardingRecommendation, buildRecommendationPath } from '../services/recommendationEngine';
 import { onboardingService } from '../services/onboardingService';
-import { toast } from 'sonner';
+import { useAuth } from '@/application/context/AuthContext';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
@@ -37,6 +38,11 @@ const playFeedbackTone = (correct) => {
 
 export function WelcomePage() {
   const navigate = useNavigate();
+  const { reset } = useOnboarding();
+  const startOnboarding = () => {
+    reset();
+    navigate('/onboarding/reason');
+  };
   return <div className="ob-welcome">
     <header>
       <Brand />
@@ -56,8 +62,8 @@ export function WelcomePage() {
         <span className="ob-kicker"><BilingualText vi="HÀNH TRÌNH TIẾNG VIỆT CỦA BẠN BẮT ĐẦU TẠI ĐÂY" en="YOUR VIETNAMESE ADVENTURE STARTS HERE" /></span>
         <h1><BilingualText vi={<>Học tiếng Việt<br /><em>theo cách thật vui!</em></>} en={<>Learn Vietnamese<br /><em>the fun way!</em></>} /></h1>
         <p><BilingualText vi="Khám phá Việt Nam, tự tin giao tiếp và kết nối với hàng triệu người nói tiếng Việt qua các bài học tương tác đầy thú vị." en="Discover Vietnam, speak confidently, and connect with millions of Vietnamese speakers through fun, interactive lessons." /></p>
-        <PrimaryButton onClick={() => navigate('/register', { state: { from: '/onboarding/reason' } })}>
-          <BilingualText vi="TẠO TÀI KHOẢN ĐỂ BẮT ĐẦU" en="CREATE ACCOUNT TO START" />
+        <PrimaryButton onClick={startOnboarding}>
+          <BilingualText vi="BẮT ĐẦU" en="GET STARTED" />
         </PrimaryButton>
         <button className="ob-outline" type="button" onClick={() => navigate('/login', { state: { from: '/onboarding/reason' } })}>
           <BilingualText vi="TÔI ĐÃ CÓ TÀI KHOẢN" en="I ALREADY HAVE AN ACCOUNT" />
@@ -76,17 +82,32 @@ export function WelcomePage() {
 }
 
 export function ReasonPage() {
-  const { data, update } = useOnboarding(); const navigate = useNavigate();
-  const toggle = (id) => update({ learningReasons: data.learningReasons.includes(id) ? data.learningReasons.filter((item) => item !== id) : [...data.learningReasons, id] });
+  const { data, update } = useOnboarding(); const navigate = useNavigate(); const location = useLocation();
+  const selectedCount = data.learningReasons.length;
+  useEffect(() => {
+    const requestedDestination = location.state?.onboardingGate ? location.state?.from : null;
+    if (['/learning-path', '/edtech/dashboard'].some(path => requestedDestination?.startsWith(path)) && requestedDestination !== data.requestedDestination) {
+      update({ requestedDestination });
+    }
+  }, [data.requestedDestination, location.state, update]);
+  const toggle = (id) => update({
+    learningReasons: data.learningReasons.includes(id)
+      ? data.learningReasons.filter((item) => item !== id)
+      : selectedCount < 2 ? [...data.learningReasons, id] : data.learningReasons,
+  });
   return <OnboardingLayout
     eyebrow={<BilingualText vi="CÁ NHÂN HÓA HÀNH TRÌNH CỦA BẠN" en="LET'S PERSONALIZE YOUR JOURNEY" />}
-    title={<BilingualText vi="Tại sao bạn muốn học tiếng Việt?" en="Why do you want to learn Vietnamese?" />}
+    title={<BilingualText vi="Điều gì quan trọng nhất với bạn khi học tiếng Việt?" en="What matters most to you when learning Vietnamese?" />}
     mascotMessage={data.learningReasons.length
-      ? <BilingualText vi="Những lý do thật tuyệt! Tôi sẽ đồng hành cùng bạn." en="Great reasons! I’ll shape the journey around you." />
-      : <BilingualText vi="Hãy chọn bao nhiêu lý do tùy thích nhé!" en="Choose as many as you like!" />}
+      ? <BilingualText vi="Mình sẽ dùng lựa chọn này để ưu tiên nội dung và khóa học phù hợp." en="I’ll use this to prioritize the right content and courses for you." />
+      : <BilingualText vi="Chọn một mục tiêu chính và tối đa một mục tiêu bổ sung nhé!" en="Choose one main goal and up to one supporting goal." />}
     wide
   >
-    <div className="ob-grid two">{learningReasons.map((item) => <SelectionCard key={item.id} {...item} selected={data.learningReasons.includes(item.id)} onClick={() => toggle(item.id)} />)}</div>
+    <div className="ob-grid two">{learningReasons.map((item) => {
+      const selected = data.learningReasons.includes(item.id);
+      return <SelectionCard key={item.id} {...item} selected={selected} disabled={!selected && selectedCount >= 2} onClick={() => toggle(item.id)} />;
+    })}</div>
+    <p className="ob-note"><BilingualText vi={`${selectedCount}/2 mục tiêu đã chọn · Lựa chọn đầu tiên là ưu tiên chính.`} en={`${selectedCount}/2 goals selected · Your first choice is the primary priority.`} /></p>
     <div className="ob-actions"><PrimaryButton disabled={!data.learningReasons.length} onClick={() => navigate('/onboarding/level')} /></div>
   </OnboardingLayout>;
 }
@@ -177,6 +198,7 @@ export function DailyGoalPage() {
 export function LearningPathPage() {
   const { data, update } = useOnboarding(); const navigate = useNavigate();
   if (!data.learningReasons.length || !data.currentLevel) return <Navigate to="/onboarding/reason" replace />;
+  const recommendedPath = ['new', 'words'].includes(data.currentLevel) ? 'beginner' : 'placement';
   const choose = (path) => { update({ learningPath: path }); window.setTimeout(() => navigate(path === 'beginner' ? '/onboarding/first-lesson' : '/onboarding/placement-test'), 180); };
   return <OnboardingLayout
     eyebrow={<BilingualText vi="CHỌN HƯỚNG ĐI CỦA BẠN" en="CHOOSE YOUR ADVENTURE" />}
@@ -186,13 +208,13 @@ export function LearningPathPage() {
   >
     <div className="ob-paths">
       <motion.button whileHover={{ y: -6 }} type="button" className={`ob-path-card beginner ${data.learningPath === 'beginner' ? 'is-selected' : ''}`} onClick={() => choose('beginner')}>
-        <em><BilingualText vi="KHUYÊN DÙNG CHO NGƯỜI MỚI BẮT ĐẦU" en="RECOMMENDED FOR BEGINNERS" /></em>
+        <em><BilingualText vi={recommendedPath === 'beginner' ? 'PHÙ HỢP NHẤT VỚI BẠN' : 'DÀNH CHO NGƯỜI MUỐN ÔN LẠI'} en={recommendedPath === 'beginner' ? 'BEST MATCH FOR YOU' : 'FOR A FRESH START'} /></em>
         <h2><BilingualText vi="Bắt đầu từ số 0" en="Start from Scratch" /></h2>
         <p><BilingualText vi="Học tiếng Việt từng bước một, bắt đầu với lời chào, từ vựng thiết yếu và câu đơn giản." en="Learn Vietnamese step by step, starting with greetings, essential vocabulary, and simple sentences." /></p>
         <strong><BilingualText vi="BẮT ĐẦU BÀI HỌC" en="START LESSON" /> <ChevronRight /></strong>
       </motion.button>
       <motion.button whileHover={{ y: -6 }} type="button" className={`ob-path-card placement ${data.learningPath === 'placement' ? 'is-selected' : ''}`} onClick={() => choose('placement')}>
-        <em><BilingualText vi="KHOẢNG 5 PHÚT" en="ABOUT 5 MINUTES" /></em>
+        <em><BilingualText vi={recommendedPath === 'placement' ? 'PHÙ HỢP NHẤT VỚI BẠN · 5 PHÚT' : 'KIỂM TRA NHANH · 5 PHÚT'} en={recommendedPath === 'placement' ? 'BEST MATCH FOR YOU · 5 MIN' : 'QUICK CHECK · 5 MIN'} /></em>
         <h2><BilingualText vi="Kiểm tra trình độ" en="Find My Level" /></h2>
         <p><BilingualText vi="Làm bài kiểm tra trình độ tiếng Việt nhanh để tìm điểm xuất phát phù hợp với bạn." en="Take a quick Vietnamese placement test and discover the right starting point for your learning journey." /></p>
         <strong><BilingualText vi="LÀM BÀI KIỂM TRA" en="TAKE THE TEST" /> <ChevronRight /></strong>
@@ -216,8 +238,14 @@ function ExerciseRunner({ mode }) {
     const nextAnswers = [...answers]; nextAnswers[index] = { questionId: question.id, response, correct }; setAnswers(nextAnswers);
     if (index === questions.length - 1) {
       const score = nextAnswers.filter((item) => item?.correct).length; const accuracy = Math.round(score / questions.length * 100);
-      if (mode === 'lesson') update({ firstLessonCompleted: true, firstLessonResult: { correct: score, total: questions.length, accuracy, xp: 20 }, guestExperienceCompleted: true, lessonAnswers: nextAnswers });
-      else { const band = [...placementBands].reverse().find((item) => score >= item.min); update({ placementTestCompleted: true, placementResult: { correct: score, total: questions.length, accuracy, level: band.label, targetLevel: band.targetLevel, recommendation: band.recommendation, xp: 30 }, guestExperienceCompleted: true, placementAnswers: nextAnswers }); }
+      const completion = mode === 'lesson'
+        ? { firstLessonCompleted: true, firstLessonResult: { correct: score, total: questions.length, accuracy, targetLevel: 'A0', xp: 20 }, lessonAnswers: nextAnswers }
+        : (() => {
+          const band = [...placementBands].reverse().find((item) => score >= item.min);
+          return { placementTestCompleted: true, placementResult: { correct: score, total: questions.length, accuracy, level: band.label, levelVi: band.labelVi, targetLevel: band.targetLevel, recommendation: band.recommendation, completedAt: new Date().toISOString(), xp: 30 }, placementAnswers: nextAnswers };
+        })();
+      const recommendation = buildOnboardingRecommendation({ ...data, ...completion, guestExperienceCompleted: true });
+      update({ ...completion, recommendation, guestExperienceCompleted: true });
       navigate('/onboarding/completed', { state: { mode } }); return;
     }
     const next = index + 1; setIndex(next); setSelected(''); setTokens([]); setChecked(false);
@@ -294,23 +322,48 @@ export const PlacementTestPage = () => <ExerciseRunner mode="placement" />;
 
 export function CompletionPage() {
   const { data } = useOnboarding(); const location = useLocation(); const navigate = useNavigate();
+  const { isAuthenticated, fetchProfile } = useAuth();
   const [saving, setSaving] = useState(false);
   const mode = location.state?.mode || (data.placementTestCompleted ? 'placement' : 'lesson');
   const result = mode === 'placement' ? data.placementResult : data.firstLessonResult;
   if (!result) return <Navigate to="/onboarding/learning-path" replace />;
 
+  const recommendation = data.recommendation || buildOnboardingRecommendation(data);
+  const courseRecommendationPath = buildRecommendationPath(recommendation);
+  const learningPathPath = buildLearningPathPath(recommendation);
+  const requestedLearningPath = ['/learning-path', '/edtech/dashboard'].some(path => data.requestedDestination?.startsWith(path));
+  const shouldOpenLearningPath = mode === 'placement' || requestedLearningPath;
+  const handleContinueToLogin = () => navigate('/login', {
+    state: {
+      from: learningPathPath,
+      message: bilingualLabel(
+        'Hoàn thành trải nghiệm khởi đầu! Đăng nhập để lưu tiến độ và xem khóa học phù hợp.',
+        'Welcome experience complete! Log in to save your progress and view matching courses.',
+      ),
+    },
+  });
+  const handleRegister = () => navigate('/register', { state: { from: learningPathPath } });
   const handleShowRecommendations = async () => {
-    if (saving) return;
-    setSaving(true);
-    try {
-      await onboardingService.syncGuestProgress();
-      toast.success(bilingualLabel('Đã lưu kết quả kiểm tra và cá nhân hóa gợi ý khóa học.', 'Assessment results saved and course recommendations personalized.'));
-    } catch {
-      toast.error(bilingualLabel('Chưa thể đồng bộ kết quả, nhưng bạn vẫn có thể xem khóa học được gợi ý.', 'Could not sync results yet, but you can still view recommended courses.'));
-    } finally {
-      const targetLevel = result.targetLevel || 'A1';
-      navigate(`/courses?level=${encodeURIComponent(targetLevel)}&recommended=1`, { replace: true });
+    if (isAuthenticated) {
+      setSaving(true);
+      try {
+        await onboardingService.syncGuestProgress();
+        await fetchProfile();
+      } catch {
+        // The local recommendation remains available if profile sync is temporarily unavailable.
+      } finally {
+        setSaving(false);
+      }
     }
+    if (!isAuthenticated && shouldOpenLearningPath) {
+      if (mode === 'placement') {
+        handleRegister();
+      } else {
+        handleContinueToLogin();
+      }
+      return;
+    }
+    navigate(isAuthenticated || shouldOpenLearningPath ? learningPathPath : courseRecommendationPath);
   };
 
   return <div className="ob-complete">
@@ -325,30 +378,57 @@ export function CompletionPage() {
         <Medal /> {mode === 'lesson' ? <BilingualText vi="HOÀN THÀNH BÀI HỌC ĐẦU TIÊN" en="FIRST LESSON COMPLETE" /> : <BilingualText vi="ĐÃ TÌM THẤY ĐIỂM XUẤT PHÁT" en="STARTING POINT FOUND" />}
       </span>
       <h1>
-        {mode === 'lesson'
-          ? <BilingualText vi="Tuyệt vời! Bạn đã hoàn thành bài học tiếng Việt đầu tiên!" en="Fantastic! You've completed your first Vietnamese lesson!" />
-          : <BilingualText vi="Làm tốt lắm! Chúng tôi đã tìm thấy điểm xuất phát cho bạn!" en="Great job! We've found a starting point for you!" />}
+        <BilingualText vi="Lộ trình cá nhân hóa của bạn đã sẵn sàng" en="Your personalized learning path is ready" />
       </h1>
       <p>
-        <BilingualText vi="Kết quả đã sẵn sàng. HolaVietnamese sẽ dùng trình độ này để gợi ý các khóa học phù hợp với bạn." en="Your results are ready. HolaVietnamese will use this level to recommend matching courses." />
+        <BilingualText vi="Đề xuất này kết hợp mục tiêu học, trình độ hiện tại và thời gian bạn có thể duy trì mỗi ngày." en="This recommendation combines your learning goals, current level, and the time you can sustain each day." />
       </p>
       <div className="ob-stats">
-        <article><strong>+{result.xp}</strong><span><BilingualText vi="XP ĐẠT ĐƯỢC" en="XP EARNED" /></span></article>
-        <article><strong>{result.correct}/{result.total}</strong><span><BilingualText vi="CÂU ĐÚNG" en="CORRECT" /></span></article>
-        <article><strong>{result.accuracy}%</strong><span><BilingualText vi="ĐỘ CHÍNH XÁC" en="ACCURACY" /></span></article>
+        <article><strong>{recommendation.targetLevel}</strong><span><BilingualText vi="ĐIỂM BẮT ĐẦU" en="STARTING LEVEL" /></span></article>
+        <article><strong>{recommendation.sessionsPerWeek}</strong><span><BilingualText vi="BUỔI / TUẦN" en="SESSIONS / WEEK" /></span></article>
+        <article><strong>{recommendation.weeklyMinutes}</strong><span><BilingualText vi="PHÚT / TUẦN" en="MINUTES / WEEK" /></span></article>
       </div>
       <div className="ob-recommend">
         <BookOpen />
         <div>
-          <span><BilingualText vi="LỘ TRÌNH GỢI Ý CHO BẠN" en="YOUR RECOMMENDED START" /></span>
-          <strong>{result.recommendation || 'Vietnamese Foundations · Lesson 2'}</strong>
-          {result.level && <small><BilingualText vi={`Nhóm gợi ý: ${result.level}. Đây là kết quả sơ bộ, không phải chứng chỉ CEFR chính thức.`} en={`Suggested group: ${result.level}. This is a preliminary result, not an official CEFR certification.`} /></small>}
+          <span><BilingualText vi="LỘ TRÌNH ĐỀ XUẤT" en="RECOMMENDED PATH" /></span>
+          <strong><BilingualText vi={recommendation.titleVi} en={recommendation.titleEn} /></strong>
+          <small><BilingualText vi={recommendation.summaryVi} en={recommendation.summaryEn} /></small>
         </div>
       </div>
+      <div className="ob-plan-grid">
+        <section>
+          <span><BilingualText vi="TRỌNG TÂM HỌC" en="LEARNING FOCUS" /></span>
+          <ul>{recommendation.focusVi.map((focus, index) => <li key={focus}><Check size={16} /><BilingualText vi={focus} en={recommendation.focusEn[index]} /></li>)}</ul>
+        </section>
+        <section>
+          <span><BilingualText vi="NHỊP HỌC ĐỀ XUẤT" en="RECOMMENDED PACE" /></span>
+          <strong><BilingualText vi={recommendation.paceTitleVi} en={recommendation.paceTitleEn} /></strong>
+          <p><BilingualText vi={recommendation.paceDetailVi} en={recommendation.paceDetailEn} /></p>
+          <small><BilingualText vi={`Dự kiến ${recommendation.estimatedWeeks} tuần để hoàn thành chặng đầu tiên.`} en={`About ${recommendation.estimatedWeeks} weeks for your first milestone.`} /></small>
+        </section>
+      </div>
+      {mode === 'placement' && <p className="ob-assessment-note"><BilingualText vi={`Kết quả kiểm tra: ${result.correct}/${result.total} câu đúng (${result.accuracy}%). Đây là gợi ý đầu vào, không phải chứng chỉ CEFR chính thức.`} en={`Placement result: ${result.correct}/${result.total} correct (${result.accuracy}%). This is a starting recommendation, not an official CEFR certificate.`} /></p>}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', alignItems: 'center' }}>
         <PrimaryButton disabled={saving} onClick={handleShowRecommendations}>
-          {saving ? <BilingualText vi="ĐANG LƯU KẾT QUẢ…" en="SAVING RESULTS…" /> : <BilingualText vi="XEM KHÓA HỌC ĐƯỢC GỢI Ý" en="VIEW RECOMMENDED COURSES" />}
+          {saving
+            ? <BilingualText vi="ĐANG LƯU LỘ TRÌNH…" en="SAVING YOUR PLAN…" />
+            : shouldOpenLearningPath && !isAuthenticated
+              ? mode === 'placement'
+                ? <BilingualText vi="ĐĂNG KÝ ĐỂ LƯU VÀ MỞ LỘ TRÌNH" en="SIGN UP TO SAVE AND OPEN MY LEARNING PATH" />
+                : <BilingualText vi="ĐĂNG NHẬP ĐỂ MỞ LỘ TRÌNH CỦA TÔI" en="LOG IN TO OPEN MY LEARNING PATH" />
+              : mode === 'placement'
+                ? <BilingualText vi="XEM LỘ TRÌNH ĐỀ XUẤT" en="VIEW MY RECOMMENDED PATH" />
+                : <BilingualText vi="XEM LỘ TRÌNH VÀ KHÓA HỌC PHÙ HỢP" en="VIEW MY PATH AND MATCHING COURSES" />}
         </PrimaryButton>
+        {!isAuthenticated && <>
+          <button type="button" className="ob-outline ob-complete-login" onClick={handleContinueToLogin}>
+            <BilingualText vi="ĐĂNG NHẬP ĐỂ LƯU ĐỀ XUẤT" en="LOG IN TO SAVE THIS PLAN" />
+          </button>
+          <button type="button" className="ob-text-link" onClick={handleRegister}>
+            <BilingualText vi="Chưa có tài khoản? Tạo tài khoản mới →" en="New here? Create an account →" />
+          </button>
+        </>}
       </div>
     </main>
   </div>;

@@ -28,10 +28,12 @@ const GOAL_OPTIONS = [
 ];
 
 const LEVEL_OPTIONS = [
+  { value: 'A0', labelVi: 'A0 – Chưa có nền tảng', labelEn: 'A0 – Pre-beginner' },
   { value: 'A1', labelVi: 'A1 – Người mới bắt đầu', labelEn: 'A1 – Beginner' },
   { value: 'A2', labelVi: 'A2 – Sơ cấp', labelEn: 'A2 – Elementary' },
   { value: 'B1', labelVi: 'B1 – Trung cấp', labelEn: 'B1 – Intermediate' },
   { value: 'B2', labelVi: 'B2 – Trung cấp nâng cao', labelEn: 'B2 – Upper Intermediate' },
+  { value: 'C1', labelVi: 'C1 – Nâng cao', labelEn: 'C1 – Advanced' },
 ];
 
 export function RegisterPage() {
@@ -53,10 +55,24 @@ export function RegisterPage() {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  // Step 2 fields
+  // Step 2 fields pre-filled from onboarding if available
   const [nativeLanguage, setNativeLanguage] = useState('en');
-  const [learningGoal, setLearningGoal] = useState('daily_communication');
-  const [targetLevel, setTargetLevel] = useState('A1');
+  const [learningGoal, setLearningGoal] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('hola:onboarding:v1') || '{}');
+      return stored.recommendation?.goalId || (stored.learningReasons?.[0] ? stored.learningReasons[0] : 'daily_communication');
+    } catch {
+      return 'daily_communication';
+    }
+  });
+  const [targetLevel, setTargetLevel] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('hola:onboarding:v1') || '{}');
+      return stored.placementResult?.targetLevel || stored.recommendation?.targetLevel || '';
+    } catch {
+      return '';
+    }
+  });
 
   // Field-specific validation and backend error state
   const [fieldErrors, setFieldErrors] = useState({});
@@ -136,8 +152,8 @@ export function RegisterPage() {
         fullName: fullName.trim() || username.trim(),
         phoneNumber: phoneNumber.trim(),
         nativeLanguage: isQuickMode ? 'en' : nativeLanguage,
-        learningGoal: isQuickMode ? 'daily_communication' : learningGoal,
-        targetLevel: isQuickMode ? 'A1' : targetLevel,
+        learningGoal: isQuickMode ? (learningGoal || 'daily_communication') : learningGoal,
+        targetLevel: targetLevel || null,
       };
 
       const result = await register(payload);
@@ -476,6 +492,7 @@ export function RegisterPage() {
                   onChange={(e) => setTargetLevel(e.target.value)}
                   required
                 >
+                  <option value="" disabled>{bilingualLabel('Chọn trình độ', 'Choose a level')}</option>
                   {LEVEL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {bilingualLabel(opt.labelVi, opt.labelEn)}

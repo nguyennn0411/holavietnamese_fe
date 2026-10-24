@@ -22,7 +22,7 @@ function BannerAction({ banner, continueTo, label }) {
     return href ? <a href={href} target="_blank" rel="noreferrer">{label}<ArrowRight size={17} /></a> : null;
   }
   const target = banner?.actionType === 'CONTINUE_LEARNING'
-    ? (safeInternalPath(continueTo) || safeInternalPath(banner.actionTarget) || '/edtech/dashboard')
+    ? (safeInternalPath(continueTo) || safeInternalPath(banner.actionTarget) || '/learning-path')
     : safeInternalPath(banner?.actionTarget);
   return target ? <Link to={target}>{label}<ArrowRight size={17} /></Link> : null;
 }

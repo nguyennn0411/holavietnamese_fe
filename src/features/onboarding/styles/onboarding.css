@@ -282,6 +282,17 @@
   box-shadow: 0 6px 0 #E8E5DF;
 }
 
+.ob-selection:disabled {
+  cursor: not-allowed;
+  opacity: .48;
+  filter: grayscale(.2);
+}
+
+.ob-selection:disabled:hover {
+  border-color: var(--ob-border);
+  box-shadow: 0 4px 0 #E8E5DF;
+}
+
 .ob-selection.is-selected {
   border-color: var(--ob-red);
   background: #FFF7E8;
@@ -1245,7 +1256,7 @@
 }
 
 .ob-complete main {
-  width: min(680px, 100%);
+  width: min(780px, 100%);
   margin: 0 auto;
 }
 
@@ -1353,6 +1364,90 @@
   color: var(--ob-muted);
   font-size: 10.5px;
   line-height: 1.5;
+}
+
+.ob-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 16px;
+  text-align: left;
+}
+
+.ob-plan-grid section {
+  min-height: 154px;
+  padding: 17px 18px;
+  background: white;
+  border: 1px solid var(--ob-border);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 var(--ob-border);
+}
+
+.ob-plan-grid section > span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--ob-red);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.ob-plan-grid ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ob-plan-grid li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--ob-ink);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.ob-plan-grid li svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--ob-green);
+}
+
+.ob-plan-grid strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ob-ink);
+  font-size: 14px;
+}
+
+.ob-plan-grid p,
+.ob-plan-grid small {
+  display: block;
+  margin: 0;
+  color: var(--ob-muted);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+.ob-plan-grid small {
+  margin-top: 8px;
+  color: var(--ob-green);
+  font-weight: 800;
+}
+
+.ob-assessment-note {
+  margin: 0 0 16px;
+  color: var(--ob-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.ob-complete-login {
+  width: 100%;
+  min-height: 48px;
 }
 
 .ob-complete .ob-primary {
@@ -1629,6 +1724,12 @@
   }
   .ob-stats article {
     padding: 12px 5px;
+  }
+  .ob-plan-grid {
+    grid-template-columns: 1fr;
+  }
+  .ob-plan-grid section {
+    min-height: auto;
   }
   .ob-complete {
     padding: 18px;

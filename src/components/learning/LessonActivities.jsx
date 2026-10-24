@@ -7,6 +7,7 @@ import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { ResourceState } from '@/components/common/ResourceState';
 import { Artwork, SpeakButton, Notice, EmptyState } from '@/components/common/Ui';
 import { RichText } from '@/components/common/RichText';
+import { SafeImportedHtml } from '@/components/common/SafeImportedHtml';
 import { ProgressBar } from '@/components/common/ProgressBar';
 import { QuestionInput } from './QuestionInput';
 import { answerPresent } from './answerUtils';
@@ -854,9 +855,19 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
             </h3>
           )}
 
-          <RichText text={content.body || content.textEn || content.translation || ''} />
+          {content.importedExact && content.html
+            ? <SafeImportedHtml html={content.html} />
+            : <RichText text={content.body || content.textEn || content.translation || ''} />}
 
           <MediaPlayer audioUrl={content.audioUrl} videoUrl={content.videoUrl} />
+
+          {content.embedUrl && (
+            <p className="text-sm">
+              <a className="text-link" href={content.embedUrl} target="_blank" rel="noopener noreferrer">
+                <BilingualText vi="Mở nội dung tương tác từ nguồn (cần kiểm tra)" en="Open source interactive content (review required)" />
+              </a>
+            </p>
+          )}
 
           {content.imageUrl && (
             <div className="space-y-2 my-4">

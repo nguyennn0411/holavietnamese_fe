@@ -65,9 +65,9 @@ export function OnboardingLayout({ children, title, eyebrow, mascotMessage, wide
   );
 }
 
-export function SelectionCard({ selected, onClick, icon: Icon, title, titleVi, detail, detailVi, badge, badgeVi, style }) {
+export function SelectionCard({ selected, disabled = false, onClick, icon: Icon, title, titleVi, detail, detailVi, badge, badgeVi, style }) {
   return (
-    <motion.button type="button" className={`ob-selection ${selected ? 'is-selected' : ''}`} onClick={onClick} whileHover={{ y: -4 }} whileTap={{ scale: 0.985 }} aria-pressed={selected} style={style}>
+    <motion.button type="button" className={`ob-selection ${selected ? 'is-selected' : ''}`} disabled={disabled} onClick={onClick} whileHover={disabled ? undefined : { y: -4 }} whileTap={disabled ? undefined : { scale: 0.985 }} aria-pressed={selected} style={style}>
       <span className="ob-selection-icon">{Icon ? <Icon size={27} /> : null}</span>
       <span className="ob-selection-copy">
         <strong><BilingualText vi={titleVi || title} en={title} /></strong>

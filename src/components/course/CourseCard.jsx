@@ -14,7 +14,7 @@ const LEVEL_BADGES = {
   C1: 'bg-[#F97316]/90 text-white border-orange-300/40',
 };
 
-export function CourseCard({ course, enrollment }) {
+export function CourseCard({ course, enrollment, recommendationRank }) {
   const isEnrolled = Boolean(enrollment?.isEnrolled);
   const isCompleted =
     enrollment?.status === 'COMPLETED' || enrollment?.progressPercentage === 100;
@@ -97,8 +97,13 @@ export function CourseCard({ course, enrollment }) {
       </div>
 
       {/* Card body */}
-      <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between gap-4">
-        <div className="space-y-2.5">
+      <div className="card-body p-5 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+        <div className="space-y-3">
+          {recommendationRank && (
+            <div className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#EA580C]">
+              <BilingualText vi={`Đề xuất #${recommendationRank} · Phù hợp với mục tiêu`} en={`Pick #${recommendationRank} · Matches your goal`} />
+            </div>
+          )}
           {/* Metadata info */}
           <div className="flex items-center gap-2 text-xs text-[#64748B] font-medium">
             <span className="inline-flex items-center gap-1">

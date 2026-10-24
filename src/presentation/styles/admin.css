@@ -259,6 +259,41 @@
   background: var(--bg-peach, #FFF0DC);
 }
 
+.course-review-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 16px;
+  border: 1px solid var(--border-color, #E8E5DF);
+  border-radius: 12px;
+  background: var(--bg-neutral, #F8FAFC);
+}
+
+.course-review-tabs p {
+  flex: 1 1 280px;
+  margin: 0 0 0 6px;
+  color: var(--text-secondary, #64748B);
+  font-size: 12px;
+}
+
+.admin-content .course-review-tabs button.is-active {
+  background: var(--primary-orange, #F97316);
+  border-color: var(--primary-orange, #F97316);
+  color: #fff;
+}
+
+.course-review-row td {
+  background: #FFFDF8;
+}
+
+.admin-content .course-review-action {
+  min-height: 34px;
+  padding: 7px 12px;
+  white-space: nowrap;
+}
+
 /* AI scenario table controls */
 .admin-ai-scenarios-page .admin-scenario-status {
   display: inline-flex;

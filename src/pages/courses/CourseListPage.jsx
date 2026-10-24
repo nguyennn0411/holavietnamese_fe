@@ -14,6 +14,11 @@ import { useCourses } from '@/hooks/useCourses';
 import { CourseCard } from '@/components/course/CourseCard';
 import { ResourceState } from '@/components/common/ResourceState';
 import { EmptyState, Artwork } from '@/components/common/Ui';
+import {
+  GOAL_PROFILES,
+  PACE_PROFILES,
+  rankCoursesForRecommendation,
+} from '@/features/onboarding/services/recommendationEngine';
 
 const LEVEL_COLORS = {
   all: 'bg-stone-400',
@@ -34,7 +39,11 @@ export function CourseListPage() {
     requestedLevel && Object.hasOwn(LEVEL_COLORS, requestedLevel) ? requestedLevel : 'all'
   ));
   const [statusFilter, setStatusFilter] = useState('all');
-  const isPlacementRecommendation = searchParams.get('recommended') === '1' && level !== 'all';
+  const goalId = searchParams.get('goal') || 'other';
+  const paceId = searchParams.get('pace') || 'steady';
+  const goalProfile = GOAL_PROFILES[goalId] || GOAL_PROFILES.other;
+  const paceProfile = PACE_PROFILES[paceId] || PACE_PROFILES.steady;
+  const isPersonalizedRecommendation = searchParams.get('recommended') === '1' && level !== 'all';
 
   const levelOptions = [
     { id: 'all', label: 'Tất cả trình độ', labelEn: 'All levels', desc: 'Toàn bộ khóa học', descEn: 'All courses' },
@@ -88,12 +97,12 @@ export function CourseListPage() {
         </div>
       </section>
 
-      {isPlacementRecommendation && (
-        <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 rounded-2xl border border-emerald-200 bg-emerald-50/90 px-4 sm:px-5 py-3.5 shadow-2xs" role="status">
+      {isPersonalizedRecommendation && (
+        <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/90 px-5 py-4 shadow-xs" role="status">
           <div className="flex items-start gap-3">
             <div>
-              <strong className="block text-sm font-bold text-emerald-950"><BilingualText vi="Khóa học phù hợp với kết quả Entry Test" en="Courses matching your Entry Test result" /></strong>
-              <span className="text-xs text-emerald-800"><BilingualText vi={`Kết quả của bạn phù hợp với trình độ ${level}. Danh sách bên dưới đã được lọc tự động.`} en={`Your result matches level ${level}. The list below has been filtered automatically.`} /></span>
+              <strong className="block text-sm text-emerald-950"><BilingualText vi="Lộ trình khóa học dành riêng cho bạn" en="Your personalized course pathway" /></strong>
+              <span className="text-xs text-emerald-800"><BilingualText vi={`${goalProfile.titleVi} · Bắt đầu ở ${level} · ${paceProfile.titleVi}.`} en={`${goalProfile.titleEn} · Starting at ${level} · ${paceProfile.titleEn}.`} /></span>
             </div>
           </div>
           <button type="button" className="inline-flex min-h-8 shrink-0 items-center justify-center rounded-xl border border-emerald-300 bg-white px-3.5 py-1.5 text-xs font-bold text-emerald-900 hover:bg-emerald-100 transition-colors cursor-pointer" onClick={() => setLevel('all')}><BilingualText vi="Xem tất cả trình độ" en="View all levels" /></button>
@@ -203,9 +212,27 @@ export function CourseListPage() {
           });
 
           const enrolled = items.filter((i) => i.enrollment?.isEnrolled);
+          const recommendedCourses = isPersonalizedRecommendation
+            ? rankCoursesForRecommendation(items, { targetLevel: level, goalId }).slice(0, 3)
+            : [];
 
           return (
-            <div className="space-y-7">
+            <div className="space-y-8">
+              {recommendedCourses.length > 0 && (
+                <section className="space-y-4 rounded-3xl border border-orange-200 bg-gradient-to-br from-orange-50/90 to-white p-5 sm:p-7 shadow-sm" aria-labelledby="recommended-courses-title">
+                  <div className="max-w-3xl">
+                    <span className="text-[11px] font-black uppercase tracking-[0.16em] text-[#EA580C]"><BilingualText vi="Gợi ý từ kết quả onboarding" en="Recommended from your onboarding" /></span>
+                    <h2 id="recommended-courses-title" className="mt-1 mb-1 text-xl sm:text-2xl font-black text-[#253044]"><BilingualText vi="Nên học những khóa này trước" en="Start with these courses" /></h2>
+                    <p className="m-0 text-xs sm:text-sm leading-relaxed text-[#64748B]"><BilingualText vi={`Các khóa học được xếp hạng theo trình độ ${level} và mục tiêu “${goalProfile.titleVi}”.`} en={`Courses are ranked for level ${level} and your goal: “${goalProfile.titleEn}”.`} /></p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {recommendedCourses.map(({ course, enrollment }, index) => (
+                      <CourseCard key={`recommended-${course.id}`} course={course} enrollment={enrollment} recommendationRank={index + 1} />
+                    ))}
+                  </div>
+                </section>
+              )}
+
               {/* Modern Filter Toolbar */}
               <section className="bg-white rounded-2xl border border-[#E8E5DF] p-4 sm:p-5 shadow-2xs space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
