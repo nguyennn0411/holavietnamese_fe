@@ -3,76 +3,54 @@
 import axiosClient from '../infrastructure/api/axiosClient.js';
 
 export const SCENARIO_LEVELS = [
-  { id: 'all', label: 'Tất cả trình độ', labelVi: 'Tất cả trình độ', labelEn: 'All Levels' },
-  { id: 'A1', label: 'A1 - Sơ cấp 1', labelVi: 'A1 - Sơ cấp 1', labelEn: 'A1 - Beginner 1' },
-  { id: 'A2', label: 'A2 - Sơ cấp 2', labelVi: 'A2 - Sơ cấp 2', labelEn: 'A2 - Beginner 2' },
-  { id: 'B1', label: 'B1 - Trung cấp 1', labelVi: 'B1 - Trung cấp 1', labelEn: 'B1 - Intermediate 1' },
-  { id: 'B2', label: 'B2 - Trung cấp 2', labelVi: 'B2 - Trung cấp 2', labelEn: 'B2 - Intermediate 2' },
-  { id: 'C1', label: 'C1 - Nâng cao', labelVi: 'C1 - Nâng cao', labelEn: 'C1 - Advanced' },
+  { id: 'all', label: 'Tất cả trình độ' },
+  { id: 'A1', label: 'A1 - Sơ cấp 1' },
+  { id: 'A2', label: 'A2 - Sơ cấp 2' },
+  { id: 'B1', label: 'B1 - Trung cấp 1' },
+  { id: 'B2', label: 'B2 - Trung cấp 2' },
+  { id: 'C1', label: 'C1 - Nâng cao' },
 ];
 
 export const SCENARIO_TOPICS = [
-  { id: 'all', label: 'Tất cả chủ đề', labelVi: 'Tất cả chủ đề', labelEn: 'All Topics' },
-  { id: 'dining', label: '🍜 Ẩm thực & Quán xá', labelVi: '🍜 Ẩm thực & Quán xá', labelEn: '🍜 Dining & Eateries' },
-  { id: 'shopping', label: '🛍️ Mua sắm & Mặc cả', labelVi: '🛍️ Mua sắm & Mặc cả', labelEn: '🛍️ Shopping & Bargaining' },
-  { id: 'travel', label: '🛵 Di chuyển & Du lịch', labelVi: '🛵 Di chuyển & Du lịch', labelEn: '🛵 Travel & Transport' },
-  { id: 'hospitality', label: '🏨 Khách sạn & Nghỉ dưỡng', labelVi: '🏨 Khách sạn & Nghỉ dưỡng', labelEn: '🏨 Hotel & Hospitality' },
-  { id: 'social', label: '🏡 Gia đình & Bạn bè', labelVi: '🏡 Gia đình & Bạn bè', labelEn: '🏡 Family & Friends' },
-  { id: 'work', label: '💼 Giao tiếp công sở', labelVi: '💼 Giao tiếp công sở', labelEn: '💼 Business & Workplace' },
+  { id: 'all', label: 'Tất cả chủ đề' },
+  { id: 'dining', label: '🍜 Ẩm thực & Quán xá' },
+  { id: 'shopping', label: '🛍️ Mua sắm & Mặc cả' },
+  { id: 'travel', label: '🛵 Di chuyển & Du lịch' },
+  { id: 'hospitality', label: '🏨 Khách sạn & Nghỉ dưỡng' },
+  { id: 'social', label: '🏡 Gia đình & Bạn bè' },
+  { id: 'work', label: '💼 Giao tiếp công sở' },
 ];
 
 export const SCENARIOS = [
   {
     id: 'goi-mon-pho-ha-noi',
     title: 'Gọi món tại quán Phở gia truyền Hà Nội',
-    titleVi: 'Gọi món tại quán Phở gia truyền Hà Nội',
-    titleEn: 'Ordering at a Traditional Hanoi Pho Restaurant',
     level: 'A1',
     levelLabel: 'A1 • Sơ cấp 1',
-    levelLabelVi: 'A1 • Sơ cấp 1',
-    levelLabelEn: 'A1 • Beginner 1',
     topic: 'dining',
     topicLabel: 'Ẩm thực & Quán xá',
-    topicLabelVi: 'Ẩm thực & Quán xá',
-    topicLabelEn: 'Dining & Eateries',
     destination: 'Hà Nội',
-    destinationVi: 'Hà Nội',
-    destinationEn: 'Hanoi',
     difficulty: 'Dễ',
-    difficultyVi: 'Dễ',
-    difficultyEn: 'Easy',
     duration: '5-10 phút',
-    durationVi: '5-10 phút',
-    durationEn: '5-10 mins',
     thumbnail: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn vừa đặt chân đến phố cổ Hà Nội vào một buổi sáng sớm se lạnh và ghé vào một quán phở bò gia truyền đông đúc trên phố Bát Đàn.',
-    overviewVi: 'Bạn vừa đặt chân đến phố cổ Hà Nội vào một buổi sáng sớm se lạnh và ghé vào một quán phở bò gia truyền đông đúc trên phố Bát Đàn.',
-    overviewEn: 'You just arrived in Hanoi Old Quarter on a crisp early morning and stopped by a bustling traditional beef pho eatery on Bat Dan Street.',
     aiRole: {
       name: 'Cô Mai (Chủ quán Phở)',
       role: 'Chủ quán phở Hà Nội nhanh nhẹn, xưng hô "cô - cháu"',
-      roleVi: 'Chủ quán phở Hà Nội nhanh nhẹn, xưng hô "cô - cháu"',
-      roleEn: 'Prompt Hanoi pho shop owner, addressing as "auntie - nephew/niece"',
       avatar: '👩‍🍳',
       tone: 'Thân thiện, xởi lởi, giọng Bắc chuẩn Tràng An, phục vụ nhanh nhẹn',
-      toneVi: 'Thân thiện, xởi lởi, giọng Bắc chuẩn Tràng An, phục vụ nhanh nhẹn',
-      toneEn: 'Friendly, generous, standard Northern Hanoi accent, quick service',
       initialGreeting: 'Chào cháu! Quán cô đang có bàn trống trong góc kìa, vào ngồi đi cháu! Hôm nay cháu muốn ăn phở bò tái, chín, hay nạm gầu nào?',
     },
     learnerRole: {
       role: 'Du khách lần đầu thưởng thức phở truyền thống',
-      roleVi: 'Du khách lần đầu thưởng thức phở truyền thống',
-      roleEn: 'First-time traveler enjoying traditional pho',
       context: 'Bạn cần tìm chỗ ngồi, gọi một bát phở bò theo khẩu vị riêng (ít hành, không cay) và gọi thêm đồ uống.',
-      contextVi: 'Bạn cần tìm chỗ ngồi, gọi một bát phở bò theo khẩu vị riêng (ít hành, không cay) và gọi thêm đồ uống.',
-      contextEn: 'Find a seat, order a bowl of beef pho tailored to your taste (less scallion, non-spicy), and order drinks.',
     },
     objectives: [
-      { id: 'task-1', label: 'Chào hỏi và xác nhận chỗ ngồi tại quán', labelVi: 'Chào hỏi và xác nhận chỗ ngồi tại quán', labelEn: 'Greet and confirm seating at the eatery', completed: false },
-      { id: 'task-2', label: 'Gọi một bát phở bò (tái/chín) kèm yêu cầu đặc biệt (ít hành/ớt)', labelVi: 'Gọi một bát phở bò (tái/chín) kèm yêu cầu đặc biệt (ít hành/ớt)', labelEn: 'Order beef pho (rare/well-done) with special requests (less scallion/chili)', completed: false },
-      { id: 'task-3', label: 'Gọi thêm đồ uống (trà đá/sữa đậu nành) và quẩy giòn', labelVi: 'Gọi thêm đồ uống (trà đá/sữa đậu nành) và quẩy giòn', labelEn: 'Order drinks (iced green tea/soy milk) and crispy fried dough sticks', completed: false },
-      { id: 'task-4', label: 'Hỏi giá tiền và cảm ơn thanh toán', labelVi: 'Hỏi giá tiền và cảm ơn thanh toán', labelEn: 'Ask for the bill and thank politely', completed: false },
+      { id: 'task-1', label: 'Chào hỏi và xác nhận chỗ ngồi tại quán', completed: false },
+      { id: 'task-2', label: 'Gọi một bát phở bò (tái/chín) kèm yêu cầu đặc biệt (ít hành/ớt)', completed: false },
+      { id: 'task-3', label: 'Gọi thêm đồ uống (trà đá/sữa đậu nành) và quẩy giòn', completed: false },
+      { id: 'task-4', label: 'Hỏi giá tiền và cảm ơn thanh toán', completed: false },
     ],
     vocabularyHints: [
       { word: 'Bát phở tái chín', meaning: 'Bowl of pho with rare and well-done beef' },
@@ -82,60 +60,36 @@ export const SCENARIOS = [
       { word: 'Hết bao nhiêu tiền ạ?', meaning: 'How much does it cost in total?' },
     ],
     culturalTip: 'Tại các quán phở truyền thống miền Bắc, quẩy được nhúng trực tiếp vào nước dùng phở để hút trọn vị ngọt béo của xương bò.',
-    culturalTipVi: 'Tại các quán phở truyền thống miền Bắc, quẩy được nhúng trực tiếp vào nước dùng phở để hút trọn vị ngọt béo của xương bò.',
-    culturalTipEn: 'In Northern traditional pho shops, crispy fried crullers are dipped directly into the broth to absorb the savory bone broth flavor.',
   },
   {
     id: 'tra-gia-cho-ben-thanh',
     title: 'Trả giá quà lưu niệm tại Chợ Bến Thành',
-    titleVi: 'Trả giá quà lưu niệm tại Chợ Bến Thành',
-    titleEn: 'Bargaining for Souvenirs at Ben Thanh Market',
     level: 'A2',
     levelLabel: 'A2 • Sơ cấp 2',
-    levelLabelVi: 'A2 • Sơ cấp 2',
-    levelLabelEn: 'A2 • Beginner 2',
     topic: 'shopping',
     topicLabel: 'Mua sắm & Mặc cả',
-    topicLabelVi: 'Mua sắm & Mặc cả',
-    topicLabelEn: 'Shopping & Bargaining',
     destination: 'TP. Hồ Chí Minh',
-    destinationVi: 'TP. Hồ Chí Minh',
-    destinationEn: 'Ho Chi Minh City',
     difficulty: 'Trung bình',
-    difficultyVi: 'Trung bình',
-    difficultyEn: 'Medium',
     duration: '8-12 phút',
-    durationVi: '8-12 phút',
-    durationEn: '8-12 mins',
     thumbnail: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn ghé thăm chợ Bến Thành ở Sài Gòn để mua quà lưu niệm cho bạn bè: nón lá vẽ tay và cà phê Robusta rang xay thơm lừng.',
-    overviewVi: 'Bạn ghé thăm chợ Bến Thành ở Sài Gòn để mua quà lưu niệm cho bạn bè: nón lá vẽ tay và cà phê Robusta rang xay thơm lừng.',
-    overviewEn: 'You visit Ben Thanh Market in Saigon to buy souvenirs for friends: hand-painted conical hats and aromatic roasted Robusta coffee.',
     aiRole: {
       name: 'Chị Ba Bến Thành',
       role: 'Tiểu thương sành sỏi, hoạt ngôn, xưng hô "chị - em"',
-      roleVi: 'Tiểu thương sành sỏi, hoạt ngôn, xưng hô "chị - em"',
-      roleEn: 'Savvy, eloquent market vendor, addressing as "older sister - younger sibling"',
       avatar: '🧣',
       tone: 'Niềm nở, dẻo miệng, giọng Nam Bộ ngọt ngào nhưng báo giá hơi cao',
-      toneVi: 'Niềm nở, dẻo miệng, giọng Nam Bộ ngọt ngào nhưng báo giá hơi cao',
-      toneEn: 'Welcoming, persuasive, sweet Southern accent, initially quoting higher prices',
       initialGreeting: 'Ủa em trai / em gái, ghé sạp chị Ba coi nón lá với cà phê nè! Hàng xịn thủ công loại một đó cưng, mở hàng cho chị một món lấy hên đi!',
     },
     learnerRole: {
       role: 'Khách du lịch muốn mua quà lưu niệm với giá hợp lý',
-      roleVi: 'Khách du lịch muốn mua quà lưu niệm với giá hợp lý',
-      roleEn: 'Tourist wanting to buy souvenirs at a reasonable price',
       context: 'Hỏi giá, khen sản phẩm đẹp, nhưng khéo léo thương lượng giảm từ 20-30% hoặc mua combo để được giá tốt.',
-      contextVi: 'Hỏi giá, khen sản phẩm đẹp, nhưng khéo léo thương lượng giảm từ 20-30% hoặc mua combo để được giá tốt.',
-      contextEn: 'Ask prices, compliment the items, and tactfully negotiate 20-30% off or combo discount.',
     },
     objectives: [
-      { id: 'task-1', label: 'Hỏi giá món đồ lưu niệm bằng tiếng Việt', labelVi: 'Hỏi giá món đồ lưu niệm bằng tiếng Việt', labelEn: 'Ask for the souvenir price in Vietnamese', completed: false },
-      { id: 'task-2', label: 'Khen món đồ và đưa ra đề xuất giảm giá lịch sự', labelVi: 'Khen món đồ và đưa ra đề xuất giảm giá lịch sự', labelEn: 'Praise the item and suggest a polite discount', completed: false },
-      { id: 'task-3', label: 'Đàm phán mua số lượng 2 món để được bớt thêm', labelVi: 'Đàm phán mua số lượng 2 món để được bớt thêm', labelEn: 'Negotiate buying 2 items for an extra discount', completed: false },
-      { id: 'task-4', label: 'Chốt giá thân thiện và hoàn tất thanh toán', labelVi: 'Chốt giá thân thiện và hoàn tất thanh toán', labelEn: 'Agree on price amicably and complete payment', completed: false },
+      { id: 'task-1', label: 'Hỏi giá món đồ lưu niệm bằng tiếng Việt', completed: false },
+      { id: 'task-2', label: 'Khen món đồ và đưa ra đề xuất giảm giá lịch sự', completed: false },
+      { id: 'task-3', label: 'Đàm phán mua số lượng 2 món để được bớt thêm', completed: false },
+      { id: 'task-4', label: 'Chốt giá thân thiện và hoàn tất thanh toán', completed: false },
     ],
     vocabularyHints: [
       { word: 'Cái nón này bao nhiêu tiền chị?', meaning: 'How much is this conical hat, sister?' },
@@ -144,60 +98,36 @@ export const SCENARIOS = [
       { word: 'Giá hữu nghị / Giá mở hàng', meaning: 'Friendly price / First-sale good luck price' },
     ],
     culturalTip: 'Ở miền Nam, nụ cười tươi và cách xưng hô thân mật "Chị Ba ơi, bớt em xíu nghen" luôn là vũ khí trả giá hiệu quả nhất!',
-    culturalTipVi: 'Ở miền Nam, nụ cười tươi và cách xưng hô thân mật "Chị Ba ơi, bớt em xíu nghen" luôn là vũ khí trả giá hiệu quả nhất!',
-    culturalTipEn: 'In Southern Vietnam, a bright smile and friendly address like "Chị Ba ơi, bớt em xíu nghen" are always the most effective bargaining approach!',
   },
   {
     id: 'bat-xe-om-cong-nghe',
     title: 'Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn',
-    titleVi: 'Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn',
-    titleEn: 'Taking a Ride-Hailing Motorbike & Directing Route',
     level: 'A2',
     levelLabel: 'A2 • Sơ cấp 2',
-    levelLabelVi: 'A2 • Sơ cấp 2',
-    levelLabelEn: 'A2 • Beginner 2',
     topic: 'travel',
     topicLabel: 'Di chuyển & Du lịch',
-    topicLabelVi: 'Di chuyển & Du lịch',
-    topicLabelEn: 'Travel & Transport',
     destination: 'Hà Nội / Sài Gòn',
-    destinationVi: 'Hà Nội / Sài Gòn',
-    destinationEn: 'Hanoi / Saigon',
     difficulty: 'Dễ - Trung bình',
-    difficultyVi: 'Dễ - Trung bình',
-    difficultyEn: 'Easy - Medium',
     duration: '6-10 phút',
-    durationVi: '6-10 phút',
-    durationEn: '6-10 mins',
     thumbnail: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn vừa đặt một chuyến xe ôm công nghệ trên app và bác tài xế gọi điện thoại xác nhận điểm đón.',
-    overviewVi: 'Bạn vừa đặt một chuyến xe ôm công nghệ trên app và bác tài xế gọi điện thoại xác nhận điểm đón.',
-    overviewEn: 'You booked a motorbike ride on an app and the driver calls to confirm the pickup point.',
     aiRole: {
       name: 'Bác Hùng (Tài xế công nghệ)',
       role: 'Tài xế xe ôm nhiều năm kinh nghiệm, nhiệt tình và mến khách',
-      roleVi: 'Tài xế xe ôm nhiều năm kinh nghiệm, nhiệt tình và mến khách',
-      roleEn: 'Experienced motorbike driver, enthusiastic and welcoming',
       avatar: '🛵',
       tone: 'Chân chất, hào sảng, xưng "chú - cháu/con"',
-      toneVi: 'Chân chất, hào sảng, xưng "chú - cháu/con"',
-      toneEn: 'Down-to-earth, hearty, addressing as "uncle - nephew/niece"',
       initialGreeting: 'A lô, cháu có phải là người đặt chuyến xe đi Bảo tàng Lịch sử không? Chú đang chạy tới gần rồi, cháu mặc áo màu gì, đứng chỗ nào để chú tấp vào đón?',
     },
     learnerRole: {
       role: 'Hành khách đang chờ đón ở cổng địa điểm',
-      roleVi: 'Hành khách đang chờ đón ở cổng địa điểm',
-      roleEn: 'Passenger waiting at the pickup entrance',
       context: 'Mô tả vị trí đang đứng, nhận diện biển số xe, yêu cầu tài xế chạy cẩn thận và hỏi han giao thông trên đường.',
-      contextVi: 'Mô tả vị trí đang đứng, nhận diện biển số xe, yêu cầu tài xế chạy cẩn thận và hỏi han giao thông trên đường.',
-      contextEn: 'Describe your location, confirm license plate, ask driver to ride safely, and chat about traffic.',
     },
     objectives: [
-      { id: 'task-1', label: 'Mô tả vị trí và trang phục nhận diện cho tài xế', labelVi: 'Mô tả vị trí và trang phục nhận diện cho tài xế', labelEn: 'Describe your location and clothes to the driver', completed: false },
-      { id: 'task-2', label: 'Xác nhận biển số xe và đội mũ bảo hiểm', labelVi: 'Xác nhận biển số xe và đội mũ bảo hiểm', labelEn: 'Confirm license plate and put on helmet', completed: false },
-      { id: 'task-3', label: 'Trò chuyện ngắn về đường xá hoặc thời tiết hôm nay', labelVi: 'Trò chuyện ngắn về đường xá hoặc thời tiết hôm nay', labelEn: 'Have a short chat about traffic or today’s weather', completed: false },
-      { id: 'task-4', label: 'Hỏi quét mã QR thanh toán và gửi lời cảm ơn', labelVi: 'Hỏi quét mã QR thanh toán và gửi lời cảm ơn', labelEn: 'Ask to scan QR code for payment and say thank you', completed: false },
+      { id: 'task-1', label: 'Mô tả vị trí và trang phục nhận diện cho tài xế', completed: false },
+      { id: 'task-2', label: 'Xác nhận biển số xe và đội mũ bảo hiểm', completed: false },
+      { id: 'task-3', label: 'Trò chuyện ngắn về đường xá hoặc thời tiết hôm nay', completed: false },
+      { id: 'task-4', label: 'Hỏi quét mã QR thanh toán và gửi lời cảm ơn', completed: false },
     ],
     vocabularyHints: [
       { word: 'Cháu đang đứng trước cổng', meaning: 'I am standing in front of the gate' },
@@ -206,60 +136,36 @@ export const SCENARIOS = [
       { word: 'Cháu quét mã QR chuyển khoản nhé', meaning: 'I will scan the QR code to transfer money' },
     ],
     culturalTip: 'Các bác tài xế xe ôm Việt Nam rất thích trò chuyện vui vẻ về cuộc sống và sẵn sàng chỉ cho bạn các quán ăn địa phương ngon nhất.',
-    culturalTipVi: 'Các bác tài xế xe ôm Việt Nam rất thích trò chuyện vui vẻ về cuộc sống và sẵn sàng chỉ cho bạn các quán ăn địa phương ngon nhất.',
-    culturalTipEn: 'Vietnamese ride-hailing drivers love cheerful chats about daily life and are always eager to recommend top authentic local food stalls.',
   },
   {
     id: 'checkin-khach-san-da-nang',
     title: 'Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng',
-    titleVi: 'Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng',
-    titleEn: 'Hotel Check-in & Inquiring Services in Da Nang',
     level: 'B1',
     levelLabel: 'B1 • Trung cấp 1',
-    levelLabelVi: 'B1 • Trung cấp 1',
-    levelLabelEn: 'B1 • Intermediate 1',
     topic: 'hospitality',
     topicLabel: 'Khách sạn & Nghỉ dưỡng',
-    topicLabelVi: 'Khách sạn & Nghỉ dưỡng',
-    topicLabelEn: 'Hotel & Hospitality',
     destination: 'Đà Nẵng',
-    destinationVi: 'Đà Nẵng',
-    destinationEn: 'Da Nang',
     difficulty: 'Trung bình',
-    difficultyVi: 'Trung bình',
-    difficultyEn: 'Medium',
     duration: '8-12 phút',
-    durationVi: '8-12 phút',
-    durationEn: '8-12 mins',
     thumbnail: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn vừa đến khách sạn 4 sao ven biển Mỹ Khê Đà Nẵng sau chuyến bay dài và làm thủ tục check-in tại quầy lễ tân.',
-    overviewVi: 'Bạn vừa đến khách sạn 4 sao ven biển Mỹ Khê Đà Nẵng sau chuyến bay dài và làm thủ tục check-in tại quầy lễ tân.',
-    overviewEn: 'You just arrived at a 4-star beachfront hotel in My Khe, Da Nang after a long flight and check in at reception.',
     aiRole: {
       name: 'Lễ tân Như Ý',
       role: 'Nhân viên lễ tân khách sạn Đà Nẵng chuyên nghiệp, chu đáo',
-      roleVi: 'Nhân viên lễ tân khách sạn Đà Nẵng chuyên nghiệp, chu đáo',
-      roleEn: 'Professional and attentive Da Nang hotel receptionist',
       avatar: '🛎️',
       tone: 'Lịch thiệp, chuẩn mực dịch vụ, giọng miền Trung nhẹ nhàng dễ thương',
-      toneVi: 'Lịch thiệp, chuẩn mực dịch vụ, giọng miền Trung nhẹ nhàng dễ thương',
-      toneEn: 'Courteous, service-oriented, soft and lovely Central accent',
       initialGreeting: 'Dạ em chào quý khách! Chào mừng anh/chị đã đến với Danang Sun Beach Hotel. Em có thể hỗ trợ anh/chị nhận phòng hoặc ký gửi hành lý ạ?',
     },
     learnerRole: {
       role: 'Khách du lịch đã đặt phòng trực tuyến',
-      roleVi: 'Khách du lịch đã đặt phòng trực tuyến',
-      roleEn: 'Tourist who booked a room online',
       context: 'Cung cấp mã đặt phòng, đề xuất đổi sang phòng tầng cao ngắm biển, hỏi thời gian buffet sáng và xin tư vấn thuê xe máy.',
-      contextVi: 'Cung cấp mã đặt phòng, đề xuất đổi sang phòng tầng cao ngắm biển, hỏi thời gian buffet sáng và xin tư vấn thuê xe máy.',
-      contextEn: 'Provide reservation code, request high floor ocean view, ask breakfast buffet hours, and ask for motorbike rental info.',
     },
     objectives: [
-      { id: 'task-1', label: 'Cung cấp tên và mã đặt phòng kèm giấy tờ tùy thân', labelVi: 'Cung cấp tên và mã đặt phòng kèm giấy tờ tùy thân', labelEn: 'Provide name and booking code with ID', completed: false },
-      { id: 'task-2', label: 'Yêu cầu phòng tầng cao có ban công hướng biển', labelVi: 'Yêu cầu phòng tầng cao có ban công hướng biển', labelEn: 'Request high floor room with sea view balcony', completed: false },
-      { id: 'task-3', label: 'Hỏi giờ phục vụ ăn sáng và mật khẩu WiFi', labelVi: 'Hỏi giờ phục vụ ăn sáng và mật khẩu WiFi', labelEn: 'Inquire breakfast serving hours and WiFi password', completed: false },
-      { id: 'task-4', label: 'Hỏi thủ tục thuê xe máy vi vu bán đảo Sơn Trà', labelVi: 'Hỏi thủ tục thuê xe máy vi vu bán đảo Sơn Trà', labelEn: 'Ask motorbike rental procedure for Son Tra peninsula trip', completed: false },
+      { id: 'task-1', label: 'Cung cấp tên và mã đặt phòng kèm giấy tờ tùy thân', completed: false },
+      { id: 'task-2', label: 'Yêu cầu phòng tầng cao có ban công hướng biển', completed: false },
+      { id: 'task-3', label: 'Hỏi giờ phục vụ ăn sáng và mật khẩu WiFi', completed: false },
+      { id: 'task-4', label: 'Hỏi thủ tục thuê xe máy vi vu bán đảo Sơn Trà', completed: false },
     ],
     vocabularyHints: [
       { word: 'Tôi đã đặt phòng qua mạng', meaning: 'I have booked a room online' },
@@ -268,60 +174,36 @@ export const SCENARIOS = [
       { word: 'Khách sạn có dịch vụ thuê xe máy không?', meaning: 'Does the hotel offer motorbike rental service?' },
     ],
     culturalTip: 'Người Đà Nẵng nổi tiếng thân thiện và mến khách bậc nhất cả nước, luôn sẵn sàng hướng dẫn bạn các quán hải sản người bản địa hay ăn.',
-    culturalTipVi: 'Người Đà Nẵng nổi tiếng thân thiện và mến khách bậc nhất cả nước, luôn sẵn sàng hướng dẫn bạn các quán hải sản người bản địa hay ăn.',
-    culturalTipEn: 'Da Nang locals are famous for supreme hospitality, always eager to recommend where residents eat fresh seafood.',
   },
   {
     id: 'ra-mat-gia-dinh-ban',
     title: 'Gặp gỡ và chào hỏi gia đình bạn người Việt',
-    titleVi: 'Gặp gỡ và chào hỏi gia đình bạn người Việt',
-    titleEn: 'Meeting & Greeting a Vietnamese Friend’s Family',
     level: 'B2',
     levelLabel: 'B2 • Trung cấp 2',
-    levelLabelVi: 'B2 • Trung cấp 2',
-    levelLabelEn: 'B2 • Intermediate 2',
     topic: 'social',
     topicLabel: 'Gia đình & Bạn bè',
-    topicLabelVi: 'Gia đình & Bạn bè',
-    topicLabelEn: 'Family & Friends',
     destination: 'Toàn quốc',
-    destinationVi: 'Toàn quốc',
-    destinationEn: 'Nationwide',
     difficulty: 'Nâng cao',
-    difficultyVi: 'Nâng cao',
-    difficultyEn: 'Advanced',
     duration: '10-15 phút',
-    durationVi: '10-15 phút',
-    durationEn: '10-15 mins',
     thumbnail: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn được một người bạn thân mời về thăm nhà dùng cơm trưa nhân dịp cuối tuần. Đây là lần đầu bạn gặp mặt bố mẹ của bạn mình.',
-    overviewVi: 'Bạn được một người bạn thân mời về thăm nhà dùng cơm trưa nhân dịp cuối tuần. Đây là lần đầu bạn gặp mặt bố mẹ của bạn mình.',
-    overviewEn: 'You are invited by a close friend to visit their home for weekend lunch. This is your first time meeting your friend’s parents.',
     aiRole: {
       name: 'Bác Hai (Bố của bạn)',
       role: 'Chủ nhà nồng hậu, quý mến bạn của con cái',
-      roleVi: 'Chủ nhà nồng hậu, quý mến bạn của con cái',
-      roleEn: 'Warm host parent, fond of children’s friends',
       avatar: '👴',
       tone: 'Ấm áp, ân cần, coi trọng lễ nghĩa gia phong',
-      toneVi: 'Ấm áp, ân cần, coi trọng lễ nghĩa gia phong',
-      toneEn: 'Warm, attentive, values traditional family etiquette',
       initialGreeting: 'Dạ chào cháu! Bác nghe Nam kể nhiều về cháu lắm rồi, hôm nay mới có dịp gặp mặt. Vào nhà uống nước xơi trầu cho mát nhé cháu!',
     },
     learnerRole: {
       role: 'Người bạn ngoại quốc đến thăm nhà dùng cơm',
-      roleVi: 'Người bạn ngoại quốc đến thăm nhà dùng cơm',
-      roleEn: 'Foreign friend visiting family for lunch',
       context: 'Chào hỏi lễ phép với kính ngữ chuẩn mực, trao món quà nhỏ kèm lời chúc, khen ngợi món ăn và mời cơm đúng phép tắc.',
-      contextVi: 'Chào hỏi lễ phép với kính ngữ chuẩn mực, trao món quà nhỏ kèm lời chúc, khen ngợi món ăn và mời cơm đúng phép tắc.',
-      contextEn: 'Politely greet with proper honorifics, offer a small gift with well wishes, praise food, and invite elders to eat.',
     },
     objectives: [
-      { id: 'task-1', label: 'Chào hỏi bằng kính ngữ "Dạ con chào hai bác ạ"', labelVi: 'Chào hỏi bằng kính ngữ "Dạ con chào hai bác ạ"', labelEn: 'Greet politely using "Dạ con chào hai bác ạ"', completed: false },
-      { id: 'task-2', label: 'Tặng quà lưu niệm và giải thích ý nghĩa lịch sự', labelVi: 'Tặng quà lưu niệm và giải thích ý nghĩa lịch sự', labelEn: 'Present souvenir gift and politely explain its meaning', completed: false },
-      { id: 'task-3', label: 'Mời cơm người lớn trước khi cầm đũa', labelVi: 'Mời cơm người lớn trước khi cầm đũa', labelEn: 'Politely invite elders to start eating before picking up chopsticks', completed: false },
-      { id: 'task-4', label: 'Cảm ơn lòng hiếu khách trước khi xin phép ra về', labelVi: 'Cảm ơn lòng hiếu khách trước khi xin phép ra về', labelEn: 'Thank for generous hospitality before bidding farewell', completed: false },
+      { id: 'task-1', label: 'Chào hỏi bằng kính ngữ "Dạ con chào hai bác ạ"', completed: false },
+      { id: 'task-2', label: 'Tặng quà lưu niệm và giải thích ý nghĩa lịch sự', completed: false },
+      { id: 'task-3', label: 'Mời cơm người lớn trước khi cầm đũa', completed: false },
+      { id: 'task-4', label: 'Cảm ơn lòng hiếu khách trước khi xin phép ra về', completed: false },
     ],
     vocabularyHints: [
       { word: 'Dạ, con chào hai bác ạ!', meaning: 'Polite greeting to the host parents' },
@@ -330,60 +212,36 @@ export const SCENARIOS = [
       { word: 'Bác gái nấu ăn ngon quá ạ!', meaning: 'Auntie cooks so deliciously!' },
     ],
     culturalTip: 'Khi đến thăm nhà người Việt, mang theo một giỏ trái cây tươi hoặc trà ngon làm quà biếu là hành động cực kỳ tinh tế và được quý trọng.',
-    culturalTipVi: 'Khi đến thăm nhà người Việt, mang theo một giỏ trái cây tươi hoặc trà ngon làm quà biếu là hành động cực kỳ tinh tế và được quý trọng.',
-    culturalTipEn: 'When visiting a Vietnamese home, bringing fresh fruits or fine tea as a gift is an appreciated, refined gesture.',
   },
   {
     id: 'phong-van-xin-viec-cong-so',
     title: 'Phỏng vấn xin việc tại doanh nghiệp Việt Nam',
-    titleVi: 'Phỏng vấn xin việc tại doanh nghiệp Việt Nam',
-    titleEn: 'Job Interview at a Vietnamese Enterprise',
     level: 'C1',
     levelLabel: 'C1 • Nâng cao',
-    levelLabelVi: 'C1 • Nâng cao',
-    levelLabelEn: 'C1 • Advanced',
     topic: 'work',
     topicLabel: 'Giao tiếp công sở',
-    topicLabelVi: 'Giao tiếp công sở',
-    topicLabelEn: 'Business & Workplace',
     destination: 'Hà Nội / TP.HCM',
-    destinationVi: 'Hà Nội / TP.HCM',
-    destinationEn: 'Hanoi / HCMC',
     difficulty: 'Thử thách',
-    difficultyVi: 'Thử thách',
-    difficultyEn: 'Challenging',
     duration: '12-18 phút',
-    durationVi: '12-18 phút',
-    durationEn: '12-18 mins',
     thumbnail: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn đang tham gia vòng phỏng vấn chuyên sâu cho vị trí Chuyên viên Hợp tác Quốc tế tại một tập đoàn công nghệ lớn ở Việt Nam.',
-    overviewVi: 'Bạn đang tham gia vòng phỏng vấn chuyên sâu cho vị trí Chuyên viên Hợp tác Quốc tế tại một tập đoàn công nghệ lớn ở Việt Nam.',
-    overviewEn: 'You are participating in an in-depth interview for an International Cooperation Specialist position at a tech corporation in Vietnam.',
     aiRole: {
       name: 'Chị Lan Hương (Giám đốc Nhân sự)',
       role: 'Nhà tuyển dụng chuyên nghiệp, đặt câu hỏi logic và tình huống thực tế',
-      roleVi: 'Nhà tuyển dụng chuyên nghiệp, đặt câu hỏi logic và tình huống thực tế',
-      roleEn: 'Professional HR Director asking structured logic and situational questions',
       avatar: '💼',
       tone: 'Trang trọng, chuyên nghiệp, đánh giá cao sự lưu loát và hòa nhập văn hóa',
-      toneVi: 'Trang trọng, chuyên nghiệp, đánh giá cao sự lưu loát và hòa nhập văn hóa',
-      toneEn: 'Formal, professional, highly values fluency and cultural adaptation',
       initialGreeting: 'Chào bạn. Cảm ơn bạn đã quan tâm đến cơ hội nghề nghiệp tại công ty chúng tôi. Trước hết, bạn vui lòng giới thiệu ngắn gọn về bản thân và lý do bạn muốn làm việc tại Việt Nam nhé.',
     },
     learnerRole: {
       role: 'Ứng viên sáng giá cho vị trí công việc chuyên nghiệp',
-      roleVi: 'Ứng viên sáng giá cho vị trí công việc chuyên nghiệp',
-      roleEn: 'Promising candidate for professional position',
       context: 'Trình bày bản thân bằng tiếng Việt chuẩn mực, nêu bật kỹ năng thế mạnh, cách thích nghi môi trường đa văn hóa và hỏi lại nhà tuyển dụng.',
-      contextVi: 'Trình bày bản thân bằng tiếng Việt chuẩn mực, nêu bật kỹ năng thế mạnh, cách thích nghi môi trường đa văn hóa và hỏi lại nhà tuyển dụng.',
-      contextEn: 'Present yourself in standard Vietnamese, highlight core skills, multicultural adaptability, and ask thoughtful questions.',
     },
     objectives: [
-      { id: 'task-1', label: 'Tự giới thiệu bản thân và kinh nghiệm chuyên môn lưu loát', labelVi: 'Tự giới thiệu bản thân và kinh nghiệm chuyên môn lưu loát', labelEn: 'Introduce yourself and professional background fluently', completed: false },
-      { id: 'task-2', label: 'Trình bày động lực làm việc và tình cảm với môi trường Việt Nam', labelVi: 'Trình bày động lực làm việc và tình cảm với môi trường Việt Nam', labelEn: 'Express work motivation and affinity for Vietnamese environment', completed: false },
-      { id: 'task-3', label: 'Trả lời câu hỏi xử lý bất đồng văn hóa trong làm việc nhóm', labelVi: 'Trả lời câu hỏi xử lý bất đồng văn hóa trong làm việc nhóm', labelEn: 'Answer question on handling cross-cultural team conflicts', completed: false },
-      { id: 'task-4', label: 'Đặt câu hỏi thông minh về định hướng phát triển của công ty', labelVi: 'Đặt câu hỏi thông minh về định hướng phát triển của công ty', labelEn: 'Ask insightful questions about company strategic direction', completed: false },
+      { id: 'task-1', label: 'Tự giới thiệu bản thân và kinh nghiệm chuyên môn lưu loát', completed: false },
+      { id: 'task-2', label: 'Trình bày động lực làm việc và tình cảm với môi trường Việt Nam', completed: false },
+      { id: 'task-3', label: 'Trả lời câu hỏi xử lý bất đồng văn hóa trong làm việc nhóm', completed: false },
+      { id: 'task-4', label: 'Đặt câu hỏi thông minh về định hướng phát triển của công ty', completed: false },
     ],
     vocabularyHints: [
       { word: 'Kinh nghiệm chuyên môn', meaning: 'Professional expertise and experience' },
@@ -392,8 +250,6 @@ export const SCENARIOS = [
       { word: 'Đóng góp vào sự phát triển', meaning: 'Contribute to the growth/development' },
     ],
     culturalTip: 'Trong văn hóa doanh nghiệp Việt Nam, sự tôn trọng đồng nghiệp, tinh thần đoàn kết và tính khiêm tốn được đánh giá cao ngang bằng với năng lực chuyên môn.',
-    culturalTipVi: 'Trong văn hóa doanh nghiệp Việt Nam, sự tôn trọng đồng nghiệp, tinh thần đoàn kết và tính khiêm tốn được đánh giá cao ngang bằng với năng lực chuyên môn.',
-    culturalTipEn: 'In Vietnamese corporate culture, respect for peers, solidarity, and humility are valued equally alongside technical capability.',
   },
 ];
 
@@ -461,16 +317,148 @@ const buildRoleplayContext = (scenario, session) => {
 };
 
 let dynamicScenarios = [...SCENARIOS];
-if (typeof localStorage !== 'undefined') {
-  try {
-    const cached = localStorage.getItem('hola_cached_ai_scenarios');
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        dynamicScenarios = parsed;
-      }
+
+// --- Objective evaluator -------------------------------------------------
+// The backend roleplay endpoint only returns the character's reply, so the
+// learner's progress is evaluated here from what the learner actually said.
+const normalizeVi = (text = '') => String(text)
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/đ/g, 'd')
+  .replace(/[^a-z0-9\s]/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+const OBJECTIVE_KEYWORDS = {
+  'goi-mon-pho-ha-noi': {
+    'task-1': ['chao', 'ngoi', 'ban trong', 'cho ngoi'],
+    'task-2': ['pho', 'tai', 'chin', 'nam', 'gau', 'hanh', 'ot', 'cay', 'bat'],
+    'task-3': ['tra da', 'quay', 'sua dau', 'do uong', 'uong', 'nuoc', 'chanh', 'trung'],
+    'task-4': ['bao nhieu', 'tien', 'thanh toan', 'tinh tien', 'cam on', 'gui co'],
+  },
+  'tra-gia-cho-ben-thanh': {
+    'task-1': ['bao nhieu', 'gia'],
+    'task-2': ['dep', 'bot', 'giam', 'dat qua', 'mac qua', 're hon'],
+    'task-3': ['hai cai', '2 cai', 'lay hai', 'lay 2', 'mua hai', 'mua 2', 'combo'],
+    'task-4': ['chot', 'thanh toan', 'gui chi', 'cam on', 'dong y', 'lay luon'],
+  },
+  'bat-xe-om-cong-nghe': {
+    'task-1': ['dung', 'ao', 'cong', 'truoc', 'mac'],
+    'task-2': ['bien so', 'mu', 'non bao hiem', 'bao hiem'],
+    'task-3': ['ket xe', 'tac duong', 'duong', 'thoi tiet', 'nang', 'mua'],
+    'task-4': ['qr', 'quet', 'chuyen khoan', 'thanh toan', 'cam on'],
+  },
+  'checkin-khach-san-da-nang': {
+    'task-1': ['dat phong', 'ma dat', 'ma phong', 'ten la', 'ho chieu', 'giay to', 'cmnd', 'can cuoc'],
+    'task-2': ['tang cao', 'ban cong', 'huong bien', 'view', 'nhin ra bien'],
+    'task-3': ['an sang', 'buffet', 'wifi', 'mat khau'],
+    'task-4': ['thue xe', 'xe may', 'son tra'],
+  },
+  'ra-mat-gia-dinh-ban': {
+    'task-1': ['chao hai bac', 'chao bac', 'con chao', 'chau chao'],
+    'task-2': ['qua', 'bieu', 'tang'],
+    'task-3': ['moi', 'xoi com', 'an com'],
+    'task-4': ['cam on', 'xin phep', 've'],
+  },
+  'phong-van-xin-viec-cong-so': {
+    'task-1': ['gioi thieu', 'kinh nghiem', 'ten toi', 'toi la'],
+    'task-2': ['dong luc', 'viet nam', 'yeu thich', 'muon lam', 'gan bo'],
+    'task-3': ['bat dong', 'van hoa', 'lam viec nhom', 'xung dot', 'dong nghiep'],
+    'task-4': ['cau hoi', 'dinh huong', 'phat trien', 'cong ty', 'lo trinh'],
+  },
+};
+
+const STOPWORDS = new Set(['va', 'cua', 'cho', 'voi', 'mot', 'cac', 'nhung', 'tai', 'den', 'trong', 'hoac', 'kem', 'de', 'la', 've']);
+
+const includesPhrase = (haystack, phrase) => (` ${haystack} `).includes(` ${phrase} `);
+
+const objectiveMatched = (scenarioId, objective, normalizedText) => {
+  const keywords = OBJECTIVE_KEYWORDS[scenarioId]?.[objective.id];
+  if (keywords) return keywords.some(k => includesPhrase(normalizedText, k));
+  // Admin-created scenario: match on meaningful words from the objective label.
+  const words = normalizeVi(objective.label).split(' ').filter(w => w.length >= 2 && !STOPWORDS.has(w));
+  const hits = words.filter(w => includesPhrase(normalizedText, w)).length;
+  return hits >= Math.min(2, words.length);
+};
+
+/** Returns the merged list of completed objective ids after a learner turn. */
+export const evaluateObjectives = (scenario, previousCompleted = [], userText = '') => {
+  const objectives = scenario?.objectives || [];
+  const completed = new Set(previousCompleted || []);
+  const text = normalizeVi(userText);
+  if (!text) return [...completed];
+
+  let matchedAny = false;
+  objectives.forEach(objective => {
+    if (!completed.has(objective.id) && objectiveMatched(scenario.id, objective, text)) {
+      completed.add(objective.id);
+      matchedAny = true;
     }
-  } catch {}
+  });
+
+  // A meaningful on-topic reply still moves the conversation forward:
+  // complete the next pending objective in order.
+  if (!matchedAny && text.split(' ').length >= 4) {
+    const next = objectives.find(objective => !completed.has(objective.id));
+    if (next) completed.add(next.id);
+  }
+
+  // Keep the original objective order.
+  return objectives.map(o => o.id).filter(objId => completed.has(objId));
+};
+
+const mergeScenarioItem = (item) => {
+  const existing = SCENARIOS.find(s => s.id === item.id) || {};
+  const rawObjectives = Array.isArray(item.objectives) && item.objectives.length > 0 ? item.objectives : (existing.objectives || []);
+  const normalizedObjectives = rawObjectives.map((obj, idx) => (typeof obj === 'string' ? { id: `task-${idx + 1}`, label: obj, completed: false } : { id: obj?.id || `task-${idx + 1}`, label: obj?.label || String(obj || ''), completed: Boolean(obj?.completed) }));
+  const rawHints = Array.isArray(item.vocabularyHints) && item.vocabularyHints.length > 0 ? item.vocabularyHints : (existing.vocabularyHints || []);
+  const normalizedHints = rawHints.map(h => (typeof h === 'string' ? { word: h, meaning: '' } : { word: h?.word || '', meaning: h?.meaning || '' }));
+  const topicObj = SCENARIO_TOPICS.find(t => t.id === (item.topic || existing.topic));
+  const levelObj = SCENARIO_LEVELS.find(l => l.id === (item.level || existing.level));
+  return {
+    ...existing,
+    ...item,
+    title: item.title || existing.title || 'Kịch bản giao tiếp',
+    overview: item.overview || existing.overview || '',
+    destination: item.destination || existing.destination || 'Việt Nam',
+    difficulty: item.difficulty || existing.difficulty || 'Trung bình',
+    duration: item.duration || existing.duration || '5-10 phút',
+    thumbnail: item.thumbnail || existing.thumbnail || SCENARIOS[0].thumbnail,
+    coverImage: item.coverImage || existing.coverImage || item.thumbnail || existing.thumbnail || SCENARIOS[0].coverImage,
+    topicLabel: existing.topicLabel || (topicObj ? topicObj.label.replace(/^[^\s]+\s/, '') : (item.topicLabel || item.topic || '')),
+    levelLabel: existing.levelLabel || (levelObj ? levelObj.label.replace(' - ', ' • ') : (item.levelLabel || item.level || '')),
+    aiRole: item.aiRole?.name ? { ...(existing.aiRole || {}), ...item.aiRole } : (existing.aiRole || { name: 'Nhân vật AI', role: 'Người bản xứ', avatar: '🎭', tone: 'Thân thiện', initialGreeting: 'Xin chào bạn!' }),
+    learnerRole: item.learnerRole?.role ? { ...(existing.learnerRole || {}), ...item.learnerRole } : (existing.learnerRole || { role: 'Người học tiếng Việt', context: '' }),
+    objectives: normalizedObjectives,
+    vocabularyHints: normalizedHints,
+    culturalTip: item.culturalTip || existing.culturalTip || '',
+  };
+};
+
+if (typeof window !== 'undefined') {
+  axiosClient.get('/api/ai/scenarios')
+    .then(res => {
+      const list = res?.result ?? res;
+      if (Array.isArray(list) && list.length > 0) {
+        const map = new Map();
+        list.forEach(item => {
+          const existing = SCENARIOS.find(s => s.id === item.id) || {};
+          // merged via mergeScenarioItem
+          map.set(item.id, mergeScenarioItem(item));
+          void ({
+            ...existing,
+            ...item,
+            aiRole: item.aiRole || existing.aiRole,
+            learnerRole: item.learnerRole || existing.learnerRole,
+            objectives: item.objectives || existing.objectives || [],
+            vocabularyHints: item.vocabularyHints || existing.vocabularyHints || [],
+          });
+        });
+        dynamicScenarios = Array.from(map.values()).filter(s => s.status === 'ACTIVE');
+      }
+    })
+    .catch(() => {});
 }
 
 export const aiRoleplayService = {
@@ -482,44 +470,6 @@ export const aiRoleplayService = {
     return SCENARIO_TOPICS;
   },
 
-  async fetchScenarios() {
-    try {
-      let token = '';
-      if (typeof localStorage !== 'undefined') {
-        token = localStorage.getItem('token') || localStorage.getItem('access_token') || '';
-      }
-      const headers = {};
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-      const res = await fetch('/api/ai/scenarios', { headers });
-      if (res.ok) {
-        const data = await res.json();
-        const list = data.result || data;
-        if (Array.isArray(list) && list.length > 0) {
-          dynamicScenarios = list.map(item => {
-            const fallback = SCENARIOS.find(s => s.id === item.id) || {};
-            return {
-              ...fallback,
-              ...item,
-              aiRole: item.aiRole || fallback.aiRole,
-              learnerRole: item.learnerRole || fallback.learnerRole,
-              objectives: Array.isArray(item.objectives) && item.objectives.length > 0 ? item.objectives : fallback.objectives,
-              vocabularyHints: Array.isArray(item.vocabularyHints) && item.vocabularyHints.length > 0 ? item.vocabularyHints : fallback.vocabularyHints,
-            };
-          });
-          if (typeof localStorage !== 'undefined') {
-            try {
-              localStorage.setItem('hola_cached_ai_scenarios', JSON.stringify(dynamicScenarios));
-            } catch {}
-          }
-          return dynamicScenarios;
-        }
-      }
-    } catch {
-      // fallback
-    }
-    return dynamicScenarios;
-  },
-
   listScenarios({ search = '', level = 'all', topic = 'all' } = {}) {
     let result = [...dynamicScenarios];
 
@@ -528,8 +478,8 @@ export const aiRoleplayService = {
       result = result.filter(
         s =>
           s.title.toLowerCase().includes(q) ||
-          s.overview.toLowerCase().includes(q) ||
-          s.destination.toLowerCase().includes(q)
+          (s.overview || '').toLowerCase().includes(q) ||
+          (s.destination || '').toLowerCase().includes(q)
       );
     }
 
@@ -548,11 +498,55 @@ export const aiRoleplayService = {
     return dynamicScenarios.find(s => s.id === id) || SCENARIOS.find(s => s.id === id) || SCENARIOS[0];
   },
 
+  async fetchScenarios() {
+    return this.fetchActiveScenarios();
+  },
+
+  async fetchActiveScenarios() {
+    try {
+      const res = await axiosClient.get('/api/ai/scenarios');
+      const list = res?.result ?? res;
+      if (Array.isArray(list) && list.length > 0) {
+        const map = new Map();
+        list.forEach(item => {
+          const existing = SCENARIOS.find(s => s.id === item.id) || {};
+          // merged via mergeScenarioItem
+          map.set(item.id, mergeScenarioItem(item));
+          void ({
+            ...existing,
+            ...item,
+            aiRole: item.aiRole || existing.aiRole,
+            learnerRole: item.learnerRole || existing.learnerRole,
+            objectives: item.objectives || existing.objectives || [],
+            vocabularyHints: item.vocabularyHints || existing.vocabularyHints || [],
+          });
+        });
+        dynamicScenarios = Array.from(map.values()).filter(s => s.status === 'ACTIVE');
+      }
+    } catch {
+      // fallback
+    }
+    return dynamicScenarios;
+  },
+
   getRoleplaySession(scenarioId) {
     const scenario = this.getScenario(scenarioId);
     try {
       const stored = localStorage.getItem(ROLEPLAY_SESSION_STORAGE + scenarioId);
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        let completed = parsed.completedTasks || [];
+        (parsed.messages || []).forEach(msg => {
+          if (msg.sender === 'user') {
+            completed = evaluateObjectives(scenario, completed, msg.text);
+          }
+        });
+        if (completed.length !== (parsed.completedTasks || []).length) {
+          parsed.completedTasks = completed;
+          this.saveRoleplaySession(scenarioId, parsed);
+        }
+        return parsed;
+      }
     } catch {
       // fallback
     }
@@ -588,7 +582,24 @@ export const aiRoleplayService = {
     }
   },
 
-  resetRoleplaySession(scenarioId) {
+  async initRoleplaySession(scenarioId) {
+    const session = this.getRoleplaySession(scenarioId);
+    if (!session.backendSessionId && localStorage.getItem('token')) {
+      try {
+        const res = await axiosClient.post(`/api/ai/roleplay/start/${scenarioId}`);
+        const newId = res?.result?.id || res?.id;
+        if (newId) {
+          session.backendSessionId = newId;
+          this.saveRoleplaySession(scenarioId, session);
+        }
+      } catch (err) {
+        console.warn('[AI Roleplay] Could not init backend session:', err.message);
+      }
+    }
+    return session;
+  },
+
+  resetRoleplaySession(scenarioId) { localStorage.removeItem(ROLEPLAY_RESULT_STORAGE + scenarioId);
     localStorage.removeItem(ROLEPLAY_SESSION_STORAGE + scenarioId);
     return this.getRoleplaySession(scenarioId);
   },
@@ -650,44 +661,64 @@ export const aiRoleplayService = {
     // AI response and the axios client can refresh an expired token.
     if (localStorage.getItem('token')) {
       try {
-        const backendSessionId = session.backendSessionId || `roleplay-${scenarioId}`;
-        const apiRes = await axiosClient.post(
-          `/api/ai/sessions/${backendSessionId}/messages`,
-          {
-            text: userMsg.text,
-            mode: 'roleplay',
-            provider: AI_PROVIDER,
-            model: AI_MODEL,
-            scenarioId,
-            scenarioContext: buildRoleplayContext(scenario, session),
-          },
-          { timeout: AI_REQUEST_TIMEOUT_MS },
-        );
-        const response = normalizeAiPayload(unwrapAiPayload(apiRes));
-        const responseText = getAiText(response);
+        let backendSessionId = session.backendSessionId;
+        if (!backendSessionId) {
+          try {
+            const startRes = await axiosClient.post(`/api/ai/roleplay/start/${scenarioId}`);
+            backendSessionId = startRes?.result?.id || startRes?.id;
+            if (backendSessionId) {
+              session.backendSessionId = backendSessionId;
+              this.saveRoleplaySession(scenarioId, session);
+            }
+          } catch (initErr) {
+            console.warn('[AI Roleplay] Could not start backend session before message:', initErr.message);
+          }
+        }
 
-        if (responseText) {
-          const updatedSession = {
-            ...session,
-            backendSessionId,
-            messages: [...(session.messages || []), userMsg, {
-              id: response.id || `rp-${Date.now()}-ai`,
-              sender: 'ai',
-              name: scenario.aiRole.name,
-              avatar: scenario.aiRole.avatar,
-              text: responseText,
-              translation: response.translation || '',
-              explanation: response.explanation || '',
-              timestamp: response.timestamp || new Date().toISOString(),
-            }],
-            completedTasks: response.completedTasks || session.completedTasks || [],
-          };
-          this.saveRoleplaySession(scenarioId, updatedSession);
-          return {
-            userMsg,
-            aiMsg: updatedSession.messages[updatedSession.messages.length - 1],
-            session: updatedSession,
-          };
+        if (backendSessionId) {
+          const apiRes = await axiosClient.post(
+            `/api/ai/roleplay/sessions/${backendSessionId}/messages`,
+            {
+              text: userMsg.text,
+              mode: 'roleplay',
+              provider: AI_PROVIDER,
+              model: AI_MODEL,
+              scenarioId,
+              scenarioContext: buildRoleplayContext(scenario, session),
+            },
+            { timeout: AI_REQUEST_TIMEOUT_MS },
+          );
+          const response = normalizeAiPayload(unwrapAiPayload(apiRes));
+          const responseText = getAiText(response);
+
+          if (responseText) {
+            const evaluatedTasks = evaluateObjectives(
+              scenario,
+              response.completedTasks || session.completedTasks || [],
+              userMsg.text,
+            );
+            const updatedSession = {
+              ...session,
+              backendSessionId,
+              messages: [...(session.messages || []), userMsg, {
+                id: response.id || `rp-${Date.now()}-ai`,
+                sender: 'ai',
+                name: scenario.aiRole.name,
+                avatar: scenario.aiRole.avatar,
+                text: responseText,
+                translation: response.translation || '',
+                explanation: response.explanation || '',
+                timestamp: response.timestamp || new Date().toISOString(),
+              }],
+              completedTasks: evaluatedTasks,
+            };
+            this.saveRoleplaySession(scenarioId, updatedSession);
+            return {
+              userMsg,
+              aiMsg: updatedSession.messages[updatedSession.messages.length - 1],
+              session: updatedSession,
+            };
+          }
         }
       } catch (error) {
         console.warn('[AI Roleplay] Backend AI unavailable; using local scenario fallback:', error.message);
@@ -745,24 +776,48 @@ export const aiRoleplayService = {
     };
 
     session.messages.push(userMsg, aiMsg);
-    session.completedTasks = newCompletedTasks;
+    session.completedTasks = evaluateObjectives(scenario, newCompletedTasks, userMsg.text);
     this.saveRoleplaySession(scenarioId, session);
 
     return { userMsg, aiMsg, session };
   },
 
-  finishRoleplayAndGetResult(scenarioId) {
+  async finishRoleplayAndGetResult(scenarioId) {
+    const result = this.buildRoleplayResult(scenarioId);
+
+    // Synchronize completion with backend to update completionsCount and admin stats
+    // (deduplicated: skipped if progress already reported 100% for this session)
+    await this.reportCompletion(scenarioId, result.totalScore);
+
+    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
+    return result;
+  },
+
+  buildRoleplayResult(scenarioId) {
     const session = this.getRoleplaySession(scenarioId);
     const scenario = this.getScenario(scenarioId);
 
     const userMessages = session.messages.filter(m => m.sender === 'user');
     const taskCount = scenario.objectives.length;
-    const completedCount = Math.max(session.completedTasks.length, Math.min(taskCount, userMessages.length + 1));
+    const completedCount = Math.min(taskCount, (session.completedTasks || []).length);
+    const objectiveRatio = taskCount > 0 ? completedCount / taskCount : 0;
+    const allTexts = userMessages.map(m => String(m.text || '').trim()).filter(Boolean);
+    const joinedNormalized = normalizeVi(allTexts.join(' '));
+    const words = joinedNormalized ? joinedNormalized.split(' ').filter(Boolean) : [];
+    const uniqueWords = new Set(words);
+    const avgWordsPerTurn = userMessages.length > 0 ? words.length / userMessages.length : 0;
 
-    const fluencyScore = Math.min(95, 75 + userMessages.length * 5);
-    const vocabScore = Math.min(92, 78 + userMessages.length * 4);
-    const grammarScore = Math.min(90, 80 + userMessages.length * 3);
-    const cultureScore = Math.min(98, 85 + userMessages.length * 3);
+    const fluencyScore = userMessages.length === 0 ? 0 : Math.min(98, Math.max(35, Math.min(35, userMessages.length * 8) + Math.min(30, Math.round(avgWordsPerTurn * 3)) + Math.round(objectiveRatio * 35)));
+    const hints = scenario.vocabularyHints || [];
+    const matchedHints = hints.filter(h => normalizeVi(h.word).split(' ').filter(w => w.length >= 2 && !STOPWORDS.has(w)).some(hw => includesPhrase(joinedNormalized, hw))).length;
+    const hintRatio = hints.length > 0 ? matchedHints / hints.length : objectiveRatio;
+    const vocabScore = userMessages.length === 0 ? 0 : Math.min(98, Math.max(35, 30 + Math.round(hintRatio * 30) + Math.min(40, uniqueWords.size * 2)));
+    const hasDiacritics = /[àáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđ]/i.test(allTexts.join(' '));
+    const fullSentenceRatio = userMessages.length > 0 ? allTexts.filter(t => t.split(/\s+/).length >= 4).length / userMessages.length : 0;
+    const grammarScore = userMessages.length === 0 ? 0 : Math.min(97, Math.max(35, 35 + Math.round(fullSentenceRatio * 30) + (hasDiacritics ? 15 : 4) + Math.round(objectiveRatio * 17)));
+    const politeTokens = ['da', 'a', 'vang', 'cam on', 'xin', 'nhe', 'nha', 'co', 'chu', 'bac', 'chi', 'anh', 'em', 'chau', 'con'];
+    const usedPoliteCount = politeTokens.filter(tok => includesPhrase(joinedNormalized, tok)).length;
+    const cultureScore = userMessages.length === 0 ? 0 : Math.min(99, Math.max(40, 42 + Math.min(35, usedPoliteCount * 7) + Math.round(objectiveRatio * 22)));
     const totalScore = Math.round((fluencyScore + vocabScore + grammarScore + cultureScore) / 4);
 
     const result = {
@@ -772,9 +827,7 @@ export const aiRoleplayService = {
       level: scenario.levelLabel,
       completedDate: new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }),
       totalScore,
-      rating: totalScore >= 90 ? 'Xuất sắc' : totalScore >= 80 ? 'Rất tốt' : 'Đạt yêu cầu',
-      ratingVi: totalScore >= 90 ? 'Xuất sắc' : totalScore >= 80 ? 'Rất tốt' : 'Đạt yêu cầu',
-      ratingEn: totalScore >= 90 ? 'Excellent' : totalScore >= 80 ? 'Very Good' : 'Satisfactory',
+      rating: totalScore >= 90 ? 'Xuất sắc' : totalScore >= 80 ? 'Rất tốt' : totalScore >= 65 ? 'Khá tốt' : totalScore >= 50 ? 'Đạt yêu cầu' : 'Cần cố gắng thêm',
       stats: {
         fluency: fluencyScore,
         vocabulary: vocabScore,
@@ -782,23 +835,17 @@ export const aiRoleplayService = {
         culture: cultureScore,
       },
       completedTasksRatio: `${completedCount}/${taskCount}`,
-      aiFeedback: `Bạn đã hoàn thành xuất sắc vai diễn trong kịch bản "${scenario.titleVi || scenario.title}"! Khả năng phản xạ và nắm bắt ngữ cảnh văn hóa rất ấn tượng. Bạn đã sử dụng đúng kính ngữ phù hợp với vai trò của nhân vật và biểu đạt mong muốn một cách lịch sự, tự nhiên.`,
-      aiFeedbackVi: `Bạn đã hoàn thành xuất sắc vai diễn trong kịch bản "${scenario.titleVi || scenario.title}"! Khả năng phản xạ và nắm bắt ngữ cảnh văn hóa rất ấn tượng. Bạn đã sử dụng đúng kính ngữ phù hợp với vai trò của nhân vật và biểu đạt mong muốn một cách lịch sự, tự nhiên.`,
-      aiFeedbackEn: `You completed your role in "${scenario.titleEn || scenario.title}" excellently! Your conversational reflexes and grasp of cultural context are very impressive. You used proper honorifics suited to your character's role and expressed requests politely and naturally.`,
+      aiFeedback: `Bạn đã hoàn thành xuất sắc vai diễn trong kịch bản "${scenario.title}"! Khả năng phản xạ và nắm bắt ngữ cảnh văn hóa rất ấn tượng. Bạn đã sử dụng đúng kính ngữ phù hợp với vai trò của nhân vật và biểu đạt mong muốn một cách lịch sự, tự nhiên.`,
       corrections: [
         {
           original: 'Cho tôi một phở bò tái.',
           nativeSuggestion: 'Dạ cho cháu một bát phở bò tái chín, ít hành nhé cô!',
           reason: 'Thêm kính ngữ "Dạ... nhé cô" và từ chỉ loại bát phở "một bát" để câu nói mang đậm phong thái giao tiếp Hà Nội.',
-          reasonVi: 'Thêm kính ngữ "Dạ... nhé cô" và từ chỉ loại bát phở "một bát" để câu nói mang đậm phong thái giao tiếp Hà Nội.',
-          reasonEn: 'Adding honorifics "Dạ... nhé cô" and the classifier "một bát" (a bowl) creates the authentic Hanoi conversational style.',
         },
         {
           original: 'Cái này hết bao nhiêu?',
           nativeSuggestion: 'Dạ của cháu hết tất cả bao nhiêu tiền ạ?',
           reason: 'Dùng từ "bao nhiêu tiền ạ" với người bán lớn tuổi thể hiện sự tôn trọng và lễ phép đúng chuẩn mực người Việt.',
-          reasonVi: 'Dùng từ "bao nhiêu tiền ạ" với người bán lớn tuổi thể hiện sự tôn trọng và lễ phép đúng chuẩn mực người Việt.',
-          reasonEn: 'Using "bao nhiêu tiền ạ" with older sellers shows standard Vietnamese respect and courtesy.',
         },
       ],
       practicedExpressions: [
@@ -810,18 +857,63 @@ export const aiRoleplayService = {
       nextScenario: SCENARIOS.find(s => s.id !== scenarioId) || SCENARIOS[1],
     };
 
-    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
     return result;
   },
 
   getResult(scenarioId) {
     try {
       const stored = localStorage.getItem(ROLEPLAY_RESULT_STORAGE + scenarioId);
-      if (stored) return JSON.parse(stored);
+      // Always recompute result from current session so score is never stuck on stale cache
     } catch {
       // fallback
     }
-    return this.finishRoleplayAndGetResult(scenarioId);
+    const result = this.buildRoleplayResult(scenarioId);
+    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
+    return result;
+  },
+
+  isProgressComplete(scenarioId, session = this.getRoleplaySession(scenarioId)) {
+    const scenario = this.getScenario(scenarioId);
+    const total = scenario?.objectives?.length || 0;
+    return total > 0 && (session?.completedTasks?.length || 0) >= total;
+  },
+
+  /**
+   * Report a finished roleplay to the backend exactly once per local session,
+   * so Admin "Lượt hoàn thành" increases by 1 per real completion.
+   */
+  async reportCompletion(scenarioId, score) {
+    const session = this.getRoleplaySession(scenarioId);
+    if (session.completionReported) return { alreadyReported: true };
+
+    // Mark first to avoid double posts from concurrent triggers (auto 100% + button).
+    this.saveRoleplaySession(scenarioId, { ...session, completionReported: true, completionReportedAt: new Date().toISOString() });
+
+    const userMessages = (session.messages || []).filter(m => m.sender === 'user').length;
+    const effectiveScore = (score !== undefined && score !== null) ? score : this.buildRoleplayResult(scenarioId).totalScore;
+    try {
+      let res;
+      if (session.backendSessionId) {
+        try {
+          res = await axiosClient.post(`/api/ai/roleplay/sessions/${session.backendSessionId}/finish`, { score: effectiveScore });
+        } catch {
+          res = await axiosClient.post(`/api/ai/roleplay/scenarios/${scenarioId}/complete`, { score: effectiveScore });
+        }
+      } else {
+        res = await axiosClient.post(`/api/ai/roleplay/scenarios/${scenarioId}/complete`, { score: effectiveScore });
+      }
+      return res?.result ?? res;
+    } catch (err) {
+      // Allow retry later if the backend was unreachable.
+      const latest = this.getRoleplaySession(scenarioId);
+      this.saveRoleplaySession(scenarioId, { ...latest, completionReported: false });
+      console.warn('[AI Roleplay] Could not report completion:', err?.message);
+      return null;
+    }
+  },
+
+  async syncCompletion(scenarioId, score = 85) {
+    return this.reportCompletion(scenarioId, score);
   },
 };
 

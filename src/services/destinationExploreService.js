@@ -9,5 +9,6 @@ export const destinationExploreService = {
   async get(id, options = {}) { return resultOf(await axiosClient.get(`/api/destinations/${encodeURIComponent(String(id))}/content`, options)); },
   async management(id, options = {}) { return resultOf(await axiosClient.get(path(id), options)); },
   async save(id, { vocabularyIds, cultureIds, scenarioIds }) { return resultOf(await axiosClient.put(path(id), { vocabularyIds, cultureIds, scenarioIds })); },
+  async vocabulary(keyword, options = {}) { return resultOf(await axiosClient.get('/api/vocabulary', { ...options, params: keyword ? { keyword } : {} })); },
   async scenarios(options = {}) { return resultOf(await axiosClient.get('/api/ai/scenarios', options)); },
 };

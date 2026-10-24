@@ -2,7 +2,7 @@ import { BilingualText, bilingualLabel, useBilingualLabel } from '@/components/c
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { aiRoleplayService } from '@/services/aiRoleplayService';
+import { aiRoleplayService, evaluateObjectives } from '@/services/aiRoleplayService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -51,8 +51,26 @@ export function RoleplaySessionPage() {
     if (id) {
       const currentSession = aiRoleplayService.getRoleplaySession(id);
       setSession(currentSession);
+      aiRoleplayService.initRoleplaySession(id).then(updated => {
+        if (updated) setSession(updated);
+      }).catch(() => {});
     }
   }, [id]);
+
+  // Khi learner hoàn thành 100% mục tiêu → tự báo hoàn thành lên backend
+  // để Admin cập nhật "Lượt hoàn thành" (chỉ báo 1 lần mỗi phiên).
+  useEffect(() => {
+    if (!id || !session || session.completionReported) return;
+    if (!aiRoleplayService.isProgressComplete(id, session)) return;
+
+    aiRoleplayService.reportCompletion(id).then(res => {
+      setSession(aiRoleplayService.getRoleplaySession(id));
+      if (res && !res.alreadyReported) {
+        showToast('🎉 Bạn đã hoàn thành 100% mục tiêu! Tiến độ đã được ghi nhận.');
+      }
+    }).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, session?.completedTasks?.length, session?.completionReported]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -130,6 +148,15 @@ export function RoleplaySessionPage() {
     setIsSending(true);
     setInputText('');
 
+    // Cập nhật tức thì tiến độ mục tiêu ngay khi học viên gửi câu thoại
+    setSession(prev => {
+      if (!prev) return prev;
+      const nextCompleted = evaluateObjectives(scenario, prev.completedTasks || [], text);
+      const optimistic = { ...prev, completedTasks: nextCompleted };
+      aiRoleplayService.saveRoleplaySession(id, optimistic);
+      return optimistic;
+    });
+
     try {
       const { session: updatedSession } = await aiRoleplayService.sendRoleplayMessage(id, text);
       setSession(updatedSession);
@@ -141,8 +168,12 @@ export function RoleplaySessionPage() {
     }
   };
 
-  const handleFinishSession = () => {
-    aiRoleplayService.finishRoleplayAndGetResult(id);
+  const handleFinishSession = async () => {
+    try {
+      await aiRoleplayService.finishRoleplayAndGetResult(id);
+    } catch (e) {
+      console.error('Error completing roleplay:', e);
+    }
     navigate(`/ai-sessions/${id}/result`);
   };
 
@@ -175,7 +206,7 @@ export function RoleplaySessionPage() {
   const progressPercent = Math.round((completedCount / totalTasks) * 100);
 
   return (
-    <div className="relative min-h-screen bg-[#FFF9ED] text-[#202124] px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+    <div className="relative min-h-screen bg-[#FFF9ED] text-[#202124] w-full max-w-full px-0 py-6 space-y-6">
       {confirmationDialog}
 
       {/* Toast Notification */}
@@ -273,7 +304,7 @@ export function RoleplaySessionPage() {
       {/* 2-Column Live Roleplay Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Main Dialogue Chat Window (Col 8) */}
-        <main className="lg:col-span-8 flex flex-col bg-white rounded-3xl border border-[#DECBB4] shadow-md overflow-hidden min-h-[620px]">
+        <main className="lg:col-span-8 flex flex-col bg-white rounded-3xl border border-[#DECBB4] shadow-md overflow-hidden min-h-[720px]">
           {/* Partner Status Header */}
           <div className="px-5 py-4 bg-gradient-to-r from-[#FFF9EE] to-white border-b border-[#EADCC7] flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -312,7 +343,7 @@ export function RoleplaySessionPage() {
           {/* Messages Flow Area */}
           <div
             ref={messagesContainerRef}
-            className="flex-1 p-5 sm:p-6 overflow-y-auto max-h-[500px] min-h-[380px] space-y-4 bg-gradient-to-b from-[#FFFDF9] to-white"
+            className="flex-1 p-5 sm:p-6 overflow-y-auto max-h-[640px] min-h-[460px] space-y-4 bg-gradient-to-b from-[#FFFDF9] to-white"
           >
             {session?.messages?.map((msg) => {
               const isAi = msg.sender === 'ai';
@@ -332,7 +363,7 @@ export function RoleplaySessionPage() {
                   )}
 
                   <div
-                    className={`max-w-[85%] sm:max-w-[78%] rounded-2xl p-4 shadow-xs transition-all ${
+                    className={`max-w-[88%] sm:max-w-[82%] xl:max-w-[78%] rounded-3xl p-5 sm:p-6 shadow-xs text-sm sm:text-base leading-relaxed transition-all ${
                       isAi
                         ? 'bg-white border border-[#E8DCCF] text-[#202124]'
                         : 'bg-gradient-to-br from-[#DA251D] to-[#B71C1C] text-white shadow-sm'
@@ -617,6 +648,12 @@ export function RoleplaySessionPage() {
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
+              {session?.completionReported && (
+                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold">
+                  <CheckCircle2 size={12} />
+                  <BilingualText>{"Đã ghi nhận hoàn thành kịch bản"}</BilingualText>
+                </div>
+              )}
             </div>
 
             {/* Checklist */}

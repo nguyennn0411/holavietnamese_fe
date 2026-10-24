@@ -96,7 +96,7 @@ export function NotificationsPage() {
       <AmbientWatermark className="absolute -right-24 top-20 w-[540px] h-[540px] opacity-[0.04]" />
       <AmbientWatermark className="absolute -left-28 bottom-20 w-[560px] h-[560px] opacity-[0.035]" />
 
-      <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 text-left">
+      <main className="relative z-10 w-full max-w-[1380px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 sm:py-12 space-y-8 text-left">
         {/* Page Top Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#E8E5DF]/60">
           <div className="space-y-1">

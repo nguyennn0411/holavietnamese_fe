@@ -2061,7 +2061,7 @@ export const DashboardScreen: React.FC = () => {
   /* Legacy game-style path is retained below temporarily for reference while the clean UI is verified. */
   return (
     <div className="duo-page-container">
-      <div className="mx-auto max-w-6xl">
+      <div className="w-full max-w-[1520px] 2xl:max-w-[1640px] mx-auto px-2 sm:px-4 lg:px-6">
         {/* Duolingo Top Cockpit Bar */}
         <div className="duo-stats-bar">
           <div className="flex items-center gap-2 flex-wrap">
@@ -2426,7 +2426,10 @@ export const DashboardScreen: React.FC = () => {
                         >
                           {/* Companion Mascot Nghé cheering at strategic nodes */}
                           {unit.unitNumber === 1 && idxInUnit === 1 && (
-                            <div className="duo-mascot-companion hidden md:flex" style={{ left: '-150px', top: '-15px' }}>
+                            <div
+                              className="duo-mascot-companion hidden md:flex"
+                              style={{ left: 'calc(50% - 220px)', top: '-15px' }}
+                            >
                               <div className="duo-mascot-bubble">
                                 {isVi ? 'Chỉ 10 phút mỗi ngày cùng Nghé nhé! 🎉' : 'Just 10 minutes a day with Nghé! 🎉'}
                               </div>
@@ -2435,7 +2438,10 @@ export const DashboardScreen: React.FC = () => {
                           )}
 
                           {unit.unitNumber === 2 && idxInUnit === 1 && (
-                            <div className="duo-mascot-companion hidden md:flex" style={{ right: '-150px', top: '-15px' }}>
+                            <div
+                              className="duo-mascot-companion hidden md:flex"
+                              style={{ left: 'calc(50% + 95px)', top: '-15px' }}
+                            >
                               <div className="duo-mascot-bubble">
                                 {isVi ? 'Bạn đang tiến bộ rất nhanh! 🌟' : 'You are making great progress! 🌟'}
                               </div>
@@ -2652,45 +2658,6 @@ export const DashboardScreen: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Weekly Leaderboard Widget */}
-            <div className="duo-sidebar-widget">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-black text-base text-[#251B18] flex items-center gap-2">
-                  <BilingualText vi="Bảng xếp hạng tuần" en="Weekly Leaderboard" />
-                </h3>
-                <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#B45309]">
-                  <BilingualText vi="HẠNG VÀNG" en="GOLD LEAGUE" />
-                </span>
-              </div>
-
-              <div className="space-y-2">
-                {[
-                  { rank: 1, name: 'Alexandre (France)', xp: 420, medal: '🥇' },
-                  { rank: 2, name: isVi ? 'Minh Tuấn (Bạn)' : 'Minh Tuan (You)', xp: 350, medal: '🥈', isUser: true },
-                  { rank: 3, name: 'Sarah Miller (USA)', xp: 290, medal: '🥉' },
-                ].map((item) => (
-                  <div
-                    key={item.rank}
-                    className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-black ${
-                      item.isUser ? 'bg-[#FFF8EE] border-2 border-[#E8B74C]' : 'bg-[#F9FAFB]'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-base">{item.medal}</span>
-                      <span className={item.isUser ? 'text-[#FF7A00]' : 'text-[#374151]'}>{item.name}</span>
-                    </div>
-                    <span className="text-[#8a7565]">{item.xp} XP</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-3 pt-3 border-t border-[#F3EDE3] text-center">
-                <Link to="/progress" className="text-xs font-black text-[#FF7A00] hover:underline">
-                  <BilingualText vi="Xem bảng xếp hạng đầy đủ →" en="View full leaderboard →" />
-                </Link>
               </div>
             </div>
 

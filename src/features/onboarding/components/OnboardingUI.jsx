@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BuffaloMascot } from '@/components/mascot';
 import { useOnboarding } from '../context/OnboardingContext';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
 const steps = [
   '/onboarding/reason', '/onboarding/level', '/onboarding/benefits',
@@ -46,7 +47,10 @@ export function OnboardingLayout({ children, title, eyebrow, mascotMessage, wide
           <div className="ob-progress-track"><motion.span initial={reduceMotion ? false : { width: 0 }} animate={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }} /></div>
           <small><BilingualText vi={`Bước ${Math.max(stepIndex + 1, 1)} / ${steps.length}`} en={`${Math.max(stepIndex + 1, 1)} of ${steps.length}`} /></small>
         </div>}
-        <button className="ob-reset" type="button" onClick={restart}><RotateCcw size={16} /> <span><BilingualText vi="Bắt đầu lại" en="Start over" /></span></button>
+        <div className="ob-topbar-actions">
+          <LanguageSwitcher compact />
+          <button className="ob-reset" type="button" onClick={restart}><RotateCcw size={16} /> <span><BilingualText vi="Bắt đầu lại" en="Start over" /></span></button>
+        </div>
       </header>
       <main className={`ob-main ${wide ? 'is-wide' : ''}`}>
         {!hideProgress && <button className="ob-back" type="button" onClick={() => navigate(previous)}><ArrowLeft size={19} /> <BilingualText vi="Quay lại" en="Back" /></button>}
@@ -76,7 +80,18 @@ export function SelectionCard({ selected, disabled = false, onClick, icon: Icon,
 }
 
 export function PrimaryButton({ children = <BilingualText vi="TIẾP TỤC" en="CONTINUE" />, disabled, onClick, type = 'button', className = '' }) {
-  return <motion.button type={type} className={`ob-primary ${className}`} disabled={disabled} onClick={onClick} whileTap={{ scale: 0.98 }}>{children}<span aria-hidden="true">→</span></motion.button>;
+  return (
+    <motion.button
+      type={type}
+      className={`ob-primary ${className}`}
+      disabled={disabled}
+      onClick={onClick}
+      whileTap={{ scale: 0.98 }}
+    >
+      <span className="ob-primary-text">{children}</span>
+      <span className="ob-primary-arrow" aria-hidden="true">→</span>
+    </motion.button>
+  );
 }
 
 export function LessonHeader({ current, total, onExit, sound, onSound }) {
@@ -84,7 +99,10 @@ export function LessonHeader({ current, total, onExit, sound, onSound }) {
     <header className="ob-lesson-header">
       <button type="button" onClick={onExit} aria-label={bilingualLabel("Thoát bài học", "Exit lesson")}><X /></button>
       <div className="ob-lesson-progress"><motion.span animate={{ width: `${(current / total) * 100}%` }} /></div>
-      <button type="button" onClick={onSound} aria-label={sound ? bilingualLabel('Tắt âm', 'Mute sound') : bilingualLabel('Bật âm', 'Turn on sound')}>{sound ? <Volume2 /> : <VolumeX />}</button>
+      <div className="ob-lesson-actions">
+        <LanguageSwitcher compact />
+        <button type="button" onClick={onSound} aria-label={sound ? bilingualLabel('Tắt âm', 'Mute sound') : bilingualLabel('Bật âm', 'Turn on sound')}>{sound ? <Volume2 /> : <VolumeX />}</button>
+      </div>
     </header>
   );
 }

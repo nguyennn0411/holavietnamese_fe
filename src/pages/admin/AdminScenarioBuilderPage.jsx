@@ -51,7 +51,8 @@ export function AdminScenarioBuilderPage() {
 
   useEffect(() => {
     if (!isNew) {
-      const existing = adminCultureAiService.getScenario(id);
+      adminCultureAiService.listScenarioRecords().then(records => {
+      const existing = records.find(item => item.id === id);
       if (existing) {
         setFormData({
           ...existing,
@@ -68,6 +69,7 @@ export function AdminScenarioBuilderPage() {
           ]);
         }
       }
+      }).catch(error => toast.error(error.message));
     }
   }, [id, isNew]);
 
@@ -110,7 +112,7 @@ export function AdminScenarioBuilderPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
       toast.error(bilingualLabel('Vui lòng nhập tên kịch bản.', 'Please enter a scenario name.'));
@@ -128,7 +130,7 @@ export function AdminScenarioBuilderPage() {
       sampleHints: formData.sampleHints.filter(Boolean),
     };
 
-    adminCultureAiService.saveScenario(payload);
+    await adminCultureAiService.saveScenarioRecord(payload);
     showToast('Đã lưu cấu hình kịch bản trong Scenario Builder!');
     setTimeout(() => {
       navigate('/admin/ai-scenarios');

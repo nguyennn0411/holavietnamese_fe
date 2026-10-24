@@ -9,6 +9,7 @@ import { buildLearningPathPath, buildOnboardingRecommendation, buildRecommendati
 import { onboardingService } from '../services/onboardingService';
 import { useAuth } from '@/application/context/AuthContext';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
 const speak = (text) => {
   if (!('speechSynthesis' in window)) return false;
@@ -43,7 +44,15 @@ export function WelcomePage() {
     navigate('/onboarding/reason');
   };
   return <div className="ob-welcome">
-    <header><Brand /><button onClick={() => navigate('/login')} type="button" className="ob-login-link"><BilingualText vi="ĐĂNG NHẬP" en="LOG IN" /></button></header>
+    <header>
+      <Brand />
+      <div className="ob-welcome-actions">
+        <LanguageSwitcher compact />
+        <button onClick={() => navigate('/login')} type="button" className="ob-login-link">
+          <BilingualText vi="ĐĂNG NHẬP" en="LOG IN" />
+        </button>
+      </div>
+    </header>
     <main>
       <motion.div className="ob-welcome-art" initial={{ opacity: 0, scale: .9 }} animate={{ opacity: 1, scale: 1 }}>
         <div className="ob-sun" />
@@ -358,7 +367,11 @@ export function CompletionPage() {
   };
 
   return <div className="ob-complete">
-    <Confetti /><Brand />
+    <Confetti />
+    <Brand />
+    <div className="ob-complete-actions">
+      <LanguageSwitcher compact />
+    </div>
     <main>
       <div className="ob-celebrate"><Mascot celebration /></div>
       <span className="ob-complete-kicker">

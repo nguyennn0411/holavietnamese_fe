@@ -12,11 +12,16 @@ import { destinationDate, DESTINATION_REGIONS, DESTINATION_STATUSES } from '@/mo
 import { adminDestinationService } from '@/services/destinationService';
 import { ROUTES } from '@/constants/routes';
 import { Plus } from 'lucide-react';
+import { useAuth } from '@/application/context/AuthContext';
+import { canReviewExplore, canWriteExplore } from '@/application/security/contentAccess';
 import '@/components/destinations/destinations.css';
 
 const emptyFilters = { keyword: '', status: '', region: '' };
 
 export function AdminDestinationsPage() {
+  const { user } = useAuth();
+  const mayWrite = canWriteExplore(user);
+  const mayReview = canReviewExplore(user);
   const [query, setQuery] = useState(emptyFilters);
   const [keyword, setKeyword] = useState('');
   const [creating, setCreating] = useState(false);
@@ -30,11 +35,23 @@ export function AdminDestinationsPage() {
     setMessage(bilingualLabel('Đã tạo điểm đến.', 'Destination created.'));
     resource.reload();
   }
+  async function transition(item, action) {
+    if (action === 'SUBMIT') await adminDestinationService.submitReview(item.id);
+    else if (action === 'ARCHIVE') await adminDestinationService.archive(item.id);
+    else if (action === 'RESTORE') await adminDestinationService.restore(item.id);
+    else await adminDestinationService.review(item.id, action);
+    setMessage(action === 'SUBMIT' ? bilingualLabel('Đã gửi điểm đến đi duyệt.', 'Destination submitted for review.')
+      : action === 'APPROVE' ? bilingualLabel('Đã duyệt và công khai điểm đến.', 'Destination approved and published.')
+        : action === 'REJECT' ? bilingualLabel('Đã trả điểm đến về bản nháp.', 'Destination returned to draft.')
+          : action === 'ARCHIVE' ? bilingualLabel('Đã lưu trữ điểm đến.', 'Destination archived.')
+            : bilingualLabel('Đã khôi phục điểm đến về bản nháp.', 'Destination restored to draft.'));
+    resource.reload();
+  }
 
   return <div className="admin-destinations-page">
     <Breadcrumb items={[{ label: bilingualLabel('Quản trị', 'Administration'), to: ROUTES.ADMIN }, { label: bilingualLabel('Điểm đến', 'Destinations') }]} />
     <PageHeader eyebrow="Khám phá Việt Nam" title={bilingualLabel("Quản lý điểm đến", "Manage destinations")} description="Quản lý nội dung điểm đến Việt Nam." actions={<>
-      <button type="button" onClick={() => { setMessage(''); setCreating(true); }}><Plus size={16} aria-hidden="true" /><BilingualText vi="Thêm điểm đến" en="Add destination" /></button>
+      {mayWrite && <button type="button" onClick={() => { setMessage(''); setCreating(true); }}><Plus size={16} aria-hidden="true" /><BilingualText vi="Thêm điểm đến" en="Add destination" /></button>}
     </>} />
     {message && <Notice kind="success"><BilingualText vi={message} en="Destination created." /></Notice>}
     <form className="admin-card destination-filters" onSubmit={event => { event.preventDefault(); filter('keyword', keyword.trim()); }}>
@@ -55,7 +72,12 @@ export function AdminDestinationsPage() {
             <td><ContentImage src={item.imageUrl} alt={item.nameVi} style={{ width: 80, height: 60, objectFit: 'cover', borderRadius: 8 }} /></td>
             <td><strong lang="vi">{item.nameVi}</strong></td><td lang="en">{item.nameEn}</td><td><DestinationRegion value={item.region} /></td>
             <td><DestinationStatusBadge status={item.status} /></td><td>{destinationDate(item.updatedAt)}</td>
-            <td><div className="actions"><Link className="button secondary" to={detailPath}><BilingualText>Chi tiết</BilingualText></Link><Link className="button secondary" to={`${detailPath}?edit=1`}><BilingualText>Sửa</BilingualText></Link></div></td>
+            <td><div className="actions"><Link className="button secondary" to={detailPath}><BilingualText>Chi tiết</BilingualText></Link>
+              {mayWrite && item.status === 'DRAFT' && <><Link className="button secondary" to={`${detailPath}?edit=1`}><BilingualText>Sửa</BilingualText></Link><button type="button" onClick={() => transition(item, 'SUBMIT')}><BilingualText vi="Gửi duyệt" en="Submit for review" /></button></>}
+              {mayWrite && ['DRAFT', 'PUBLISHED'].includes(item.status) && <button type="button" className="secondary" onClick={() => transition(item, 'ARCHIVE')}><BilingualText vi="Lưu trữ" en="Archive" /></button>}
+              {mayWrite && item.status === 'ARCHIVED' && <button type="button" className="secondary" onClick={() => transition(item, 'RESTORE')}><BilingualText vi="Khôi phục bản nháp" en="Restore draft" /></button>}
+              {mayReview && item.status === 'PENDING_REVIEW' && <><button type="button" onClick={() => transition(item, 'APPROVE')}><BilingualText vi="Phê duyệt & công khai" en="Approve & publish" /></button><button type="button" className="secondary" onClick={() => transition(item, 'REJECT')}><BilingualText vi="Trả về bản nháp" en="Return to draft" /></button></>}
+            </div></td>
           </tr>;
         })}</tbody>
       </table></div>}

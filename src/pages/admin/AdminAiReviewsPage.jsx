@@ -1,9 +1,10 @@
 import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { Lock, FlaskConical } from 'lucide-react';
 
 export function AdminAiReviewsPage() {
-  const [reviews, setReviews] = useState(() => adminCultureAiService.getReviews());
+  const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
   const [toast, setToast] = useState('');
 
@@ -13,16 +14,24 @@ export function AdminAiReviewsPage() {
   const [testOutput, setTestOutput] = useState('');
   const [isTesting, setIsTesting] = useState(false);
 
+  useEffect(() => {
+    adminCultureAiService.listReviewRecords().then(setReviews).catch(() => setReviews([]));
+  }, []);
+
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(''), 3000);
   };
 
-  const handleUpdateStatus = (id, newStatus) => {
-    const updated = adminCultureAiService.updateReviewStatus(id, newStatus);
-    setReviews(adminCultureAiService.getReviews());
-    setSelectedReview(updated);
-    showToast(`Đã cập nhật trạng thái kiểm tra chất lượng: ${newStatus}`);
+  const handleUpdateStatus = async (id, newStatus) => {
+    try {
+      const updated = await adminCultureAiService.updateReviewRecordStatus(id, newStatus);
+      setReviews(current => current.map(review => review.id === id ? { ...review, ...updated } : review));
+      setSelectedReview(current => current?.id === id ? { ...current, ...updated } : current);
+      showToast(`Đã cập nhật trạng thái kiểm tra chất lượng: ${newStatus}`);
+    } catch {
+      showToast('Không thể cập nhật đánh giá AI.');
+    }
   };
 
   const handleRunTest = async () => {
@@ -89,7 +98,14 @@ Câu trả lời của AI tạo ra:
               </tr>
             </thead>
             <tbody>
-              {reviews.map(r => (
+              {reviews.length === 0 ? (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '36px', color: 'var(--color-muted)' }}>
+                    <BilingualText vi="Chưa có phản hồi hoặc phiên cần kiểm tra nào từ học viên." en="No learner reviews or quality audit records found yet." />
+                  </td>
+                </tr>
+              ) : (
+                reviews.map(r => (
                 <tr
                   key={r.id}
                   onClick={() => setSelectedReview(r)}
@@ -115,10 +131,10 @@ Câu trả lời của AI tạo ra:
                   </td>
 
                   <td>
-                    {r.taggedIssues.length === 0 ? (
+                    {(!r.taggedIssues || r.taggedIssues.length === 0) ? (
                       <span className="admin-badge admin-badge-success"><BilingualText>{"Không có lỗi"}</BilingualText></span>
                     ) : (
-                      r.taggedIssues.map((issue, idx) => (
+                      (r.taggedIssues || []).map((issue, idx) => (
                         <span key={idx} className="admin-badge admin-badge-danger" style={{ display: 'inline-block', margin: '2px 0' }}>
                           {issue}
                         </span>
@@ -136,7 +152,8 @@ Câu trả lời của AI tạo ra:
                     )}
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>

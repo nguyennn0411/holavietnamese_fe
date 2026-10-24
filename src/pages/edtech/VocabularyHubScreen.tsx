@@ -226,7 +226,7 @@ export const VocabularyHubScreen: React.FC = () => {
       </div>
 
       {/* Main Body */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'MINIMAL_PAIRS' ? (
           <div>
             <div className="text-center max-w-xl mx-auto mb-8">

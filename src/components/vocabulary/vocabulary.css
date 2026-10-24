@@ -1064,7 +1064,10 @@ body:has(.vocabulary-ui dialog[open]) {
 
 /* Match the integrated Course List / My Learning presentation, using shared heritage tokens. */
 .vocabulary-ui:not(.vocabulary-detail-page) {
-  width: 100%; max-width: 1280px; min-width: 0; margin: 0 auto; padding: 32px;
+  width: 100%; max-width: 1560px; min-width: 0; margin: 0 auto; padding: 24px clamp(16px, 2vw, 32px);
+}
+@media(min-width: 1600px) {
+  .vocabulary-ui:not(.vocabulary-detail-page) { max-width: 1680px; }
 }
 .vocabulary-ui .page-header {
   position: relative; display: flex; flex-direction: column; align-items: flex-start;

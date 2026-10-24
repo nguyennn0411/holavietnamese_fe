@@ -354,6 +354,13 @@ function ActivityWorkspace({
   const exercise = practiceTypes.includes(activity?.activityType);
   const external = externalTypes.includes(activity?.activityType);
 
+  // Do not expose the floating AI helper while the learner is on a quiz gate.
+  useEffect(() => {
+    const quizActive = activity?.activityType === 'QUIZ';
+    document.body.classList.toggle('ai-quiz-active', quizActive);
+    return () => document.body.classList.remove('ai-quiz-active');
+  }, [activity?.id, activity?.activityType]);
+
   const change = (next) => {
     setIndex(next);
     setAnswer({});

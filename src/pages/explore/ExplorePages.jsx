@@ -38,14 +38,14 @@ export function ExploreVietnamPage() {
   };
 
   return (
-    <section className="explore-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <section className="explore-page w-full max-w-full px-0 py-6 space-y-8">
       {/* Hero Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-8 sm:p-12 shadow-sm">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none overflow-hidden hidden md:block">
           <Artwork kind="dong-son" className="w-full h-full object-contain object-right" />
         </div>
 
-        <div className="relative z-10 max-w-3xl space-y-4">
+        <div className="relative z-10 max-w-4xl space-y-4">
           <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
             <BilingualText vi="Ngôn ngữ chỉ là điểm bắt đầu" en="Language is only the beginning" />
           </div>
@@ -54,7 +54,7 @@ export function ExploreVietnamPage() {
             <BilingualText vi="Khám phá Việt Nam" en="Explore Vietnam" />
           </h1>
 
-          <p className="text-sm sm:text-base text-[#64748B] leading-relaxed max-w-2xl">
+          <p className="text-base sm:text-lg text-[#64748B] leading-relaxed max-w-3xl">
             <BilingualText vi="Học ngôn ngữ. Gặp gỡ văn hóa. Cảm thấy gần gũi hơn mỗi ngày qua từng nẻo đường đất nước hình chữ S." en="Learn the language. Discover the culture. Feel closer to Vietnam with every destination." />
           </p>
         </div>
@@ -231,11 +231,11 @@ export function DestinationDetailPage() {
       {destination => {
         if (!destination || destination.status !== 'PUBLISHED') return missing;
         return (
-          <section className="destination-detail-page w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+          <section className="destination-detail-page w-full max-w-full px-0 py-6 space-y-8">
             <Breadcrumb items={[{ label: <BilingualText vi="Khám phá Việt Nam" en="Explore Vietnam" />, to: backRoute }, { label: <BilingualText vi={destination.nameVi} en={destination.nameEn} /> }]} />
 
             {/* Destination Hero Banner */}
-            <div className="destination-hero card rounded-3xl bg-white border border-[#E8E5DF] p-6 sm:p-10 shadow-sm overflow-hidden">
+            <div className="destination-hero card rounded-3xl bg-white border border-[#E8E5DF] p-8 sm:p-12 shadow-sm overflow-hidden">
               <div className="space-y-4">
                 <p className="eyebrow text-xs font-bold text-[#EA580C] uppercase tracking-wider">
                   <DestinationRegion value={destination.region} />

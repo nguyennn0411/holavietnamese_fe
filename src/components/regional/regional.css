@@ -1,4 +1,5 @@
-.regional-page { width: 100%; max-width: 1280px; min-width: 0; margin: 0 auto; padding: 32px; }
+.regional-page { width: 100%; max-width: 1560px; min-width: 0; margin: 0 auto; padding: 24px clamp(16px, 2vw, 32px); }
+@media(min-width: 1600px) { .regional-page { max-width: 1680px; } }
 .regional-page .page-header { padding: 32px 40px; margin-bottom: 28px; border: 1px solid var(--color-border); border-radius: 24px; background: linear-gradient(135deg,var(--color-surface),var(--color-paper),var(--color-sand)); box-shadow: var(--heritage-shadow); }
 .regional-page .page-header h1 { font-size: clamp(28px,3.6vw,48px); margin-bottom: 14px; }
 .regional-page .page-header .eyebrow { color: var(--color-red); }

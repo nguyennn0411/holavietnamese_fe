@@ -48,6 +48,7 @@ export interface LoginResult {
   username: string;
   fullName?: string;
   roles?: string[];
+  permissions?: string[];
 }
 
 export type LoginResponse = ApiResponse<LoginResult>;
