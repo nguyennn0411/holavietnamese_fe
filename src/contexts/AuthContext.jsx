@@ -80,12 +80,10 @@ export const AuthProvider = ({ children }) => {
       const data = await authApi.login(username, password);
 
       if (data && data.code === 1000 && data.result?.token) {
-        const { token, userId, username: uname, fullName, roles, permissions } = data.result;
+        const { token, userId, username: uname, fullName, roles, permissions, onboardingCompleted } = data.result;
 
         localStorage.setItem('token', token);
         markHasAccount();
-        setAccessToken(token);
-        setIsAuthenticated(true);
 
         // Normalize roles array
         const normalizedRoles = normalizeRoles(roles);
@@ -96,14 +94,15 @@ export const AuthProvider = ({ children }) => {
           fullName: fullName || uname,
           roles: normalizedRoles,
           permissions: normalizePermissions(permissions),
+          onboardingCompleted: onboardingCompleted === true,
         };
         persistUser(userInfo);
         setUser(userInfo);
 
-        // Fetch profile in background
-        fetchProfile();
-
-        return { success: true, user: userInfo };
+        const profile = await fetchProfile();
+        setAccessToken(token);
+        setIsAuthenticated(true);
+        return { success: true, user: { ...userInfo, ...profile } };
       }
       return { success: false, message: data?.message || 'Invalid credentials' };
     } catch (error) {
@@ -154,12 +153,10 @@ export const AuthProvider = ({ children }) => {
       const data = await authApi.loginWithGoogle(credential);
 
       if (data && data.code === 1000 && data.result?.token) {
-        const { token, userId, username: uname, fullName, roles, permissions } = data.result;
+        const { token, userId, username: uname, fullName, roles, permissions, onboardingCompleted } = data.result;
 
         localStorage.setItem('token', token);
         markHasAccount();
-        setAccessToken(token);
-        setIsAuthenticated(true);
 
         const normalizedRoles = normalizeRoles(roles);
 
@@ -169,13 +166,15 @@ export const AuthProvider = ({ children }) => {
           fullName: fullName || uname,
           roles: normalizedRoles,
           permissions: normalizePermissions(permissions),
+          onboardingCompleted: onboardingCompleted === true,
         };
         persistUser(userInfo);
         setUser(userInfo);
 
-        fetchProfile();
-
-        return { success: true, user: userInfo };
+        const profile = await fetchProfile();
+        setAccessToken(token);
+        setIsAuthenticated(true);
+        return { success: true, user: { ...userInfo, ...profile } };
       }
       return { success: false, message: data?.message || 'Google login failed' };
     } catch (error) {

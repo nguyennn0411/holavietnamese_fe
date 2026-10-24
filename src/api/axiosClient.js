@@ -53,6 +53,18 @@ const clearAuthStorage = () => {
 axiosClient.interceptors.response.use(
   (response) => response.data,
   async (error) => {
+    // Request cancellation is expected during navigation and React StrictMode
+    // remounts. Preserve the original cancellation metadata so feature hooks
+    // can ignore it instead of presenting "canceled" as an application error.
+    if (
+      axios.isCancel(error)
+      || error?.code === 'ERR_CANCELED'
+      || error?.name === 'CanceledError'
+      || error?.name === 'AbortError'
+    ) {
+      return Promise.reject(error);
+    }
+
     const status = error.response?.status;
     const responseBody = error.response?.data;
     const originalRequest = error.config;

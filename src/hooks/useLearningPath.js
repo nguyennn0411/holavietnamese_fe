@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { learningPathService } from '@/services/learningPathService';
 
+const isCanceledRequest = reason => (
+  reason?.code === 'ERR_CANCELED'
+  || reason?.name === 'CanceledError'
+  || reason?.name === 'AbortError'
+);
+
 export function useLearningPath() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,7 +19,7 @@ export function useLearningPath() {
     try {
       setData(await learningPathService.me(signal ? { signal } : {}));
     } catch (reason) {
-      if (reason?.name !== 'CanceledError' && reason?.name !== 'AbortError') {
+      if (!isCanceledRequest(reason)) {
         setError(reason?.message || 'Không thể tải lộ trình học tập.');
       }
     } finally {
@@ -35,7 +41,9 @@ export function useLearningPath() {
       setData(next);
       return next;
     } catch (reason) {
-      setError(reason?.message || 'Không thể cập nhật lộ trình học tập.');
+      if (!isCanceledRequest(reason)) {
+        setError(reason?.message || 'Không thể cập nhật lộ trình học tập.');
+      }
       throw reason;
     } finally {
       setSaving(false);

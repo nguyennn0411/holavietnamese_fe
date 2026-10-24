@@ -5,7 +5,7 @@ import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Volume2, X } f
 import { benefits, dailyGoals, firstLessonQuestions, learningReasons, levelOptions, placementBands, placementQuestions } from '../data/onboardingData';
 import { useOnboarding } from '../context/OnboardingContext';
 import { Brand, Confetti, LessonHeader, Mascot, OnboardingLayout, PrimaryButton, SelectionCard } from '../components/OnboardingUI';
-import { buildLearningPathPath, buildOnboardingRecommendation, buildRecommendationPath } from '../services/recommendationEngine';
+import { buildLearningPathPath, buildOnboardingRecommendation } from '../services/recommendationEngine';
 import { onboardingService } from '../services/onboardingService';
 import { useAuth } from '@/contexts/AuthContext';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
@@ -39,9 +39,14 @@ const playFeedbackTone = (correct) => {
 export function WelcomePage() {
   const navigate = useNavigate();
   const { reset } = useOnboarding();
+  const { isAuthenticated } = useAuth();
   const startOnboarding = () => {
     reset();
-    navigate('/onboarding/reason');
+    if (isAuthenticated) {
+      navigate('/onboarding/reason');
+      return;
+    }
+    navigate('/register', { state: { from: '/onboarding/reason' } });
   };
   return (
     <div className="ob-welcome">
@@ -272,68 +277,38 @@ export function LearningPathPage() {
   const { data, update } = useOnboarding();
   const navigate = useNavigate();
   if (!data.learningReasons.length || !data.currentLevel) return <Navigate to="/onboarding/reason" replace />;
-  const recommendedPath = ['new', 'words'].includes(data.currentLevel) ? 'beginner' : 'placement';
-
-  const choose = (path) => {
-    update({ learningPath: path });
-    window.setTimeout(() => navigate(path === 'beginner' ? '/onboarding/first-lesson' : '/onboarding/placement-test'), 180);
+  const choosePlacement = () => {
+    update({ learningPath: 'placement' });
+    window.setTimeout(() => navigate('/onboarding/placement-test'), 180);
   };
-
-  return (
-    <OnboardingLayout
-      eyebrow={<BilingualText vi="CHỌN HƯỚNG ĐI CỦA BẠN" en="CHOOSE YOUR ADVENTURE" />}
-      title={<BilingualText vi="Bạn muốn bắt đầu từ đâu?" en="Where would you like to start?" />}
-      mascotMessage={<BilingualText vi="Cả hai hướng đi đều mở — bạn luôn có thể đổi hướng sau này." en="Both paths are yours — you can always change direction." />}
-      wide
-    >
-      <div className="ob-paths">
-        <motion.button
-          whileHover={{ y: -2 }}
-          whileTap={{ scale: 0.99 }}
-          type="button"
-          className={`ob-path-card answer-card beginner ${data.learningPath === 'beginner' ? 'is-selected selected' : ''}`}
-          aria-selected={data.learningPath === 'beginner'}
-          data-state={data.learningPath === 'beginner' ? 'checked' : 'unchecked'}
-          style={{ backgroundColor: '#ffffff' }}
-          onClick={() => choose('beginner')}
-        >
-          <em>
-            <BilingualText
-              vi={recommendedPath === 'beginner' ? 'PHÙ HỢP NHẤT VỚI BẠN' : 'DÀNH CHO NGƯỜI MUỐN ÔN LẠI'}
-              en={recommendedPath === 'beginner' ? 'BEST MATCH FOR YOU' : 'FOR A FRESH START'}
-            />
-          </em>
-          <h2><BilingualText vi="Bắt đầu từ số 0" en="Start from Scratch" /></h2>
-          <p><BilingualText vi="Học tiếng Việt từng bước một, bắt đầu với lời chào, từ vựng thiết yếu và câu đơn giản." en="Learn Vietnamese step by step, starting with greetings, essential vocabulary, and simple sentences." /></p>
-          <strong>
-            <BilingualText vi="BẮT ĐẦU BÀI HỌC" en="START LESSON" /> <ChevronRight size={16} />
-          </strong>
-        </motion.button>
-        <motion.button
-          whileHover={{ y: -2 }}
-          whileTap={{ scale: 0.99 }}
-          type="button"
-          className={`ob-path-card answer-card placement ${data.learningPath === 'placement' ? 'is-selected' : ''}`}
-          aria-selected={data.learningPath === 'placement'}
-          data-state={data.learningPath === 'placement' ? 'checked' : 'unchecked'}
-          style={{ backgroundColor: '#ffffff' }}
-          onClick={() => choose('placement')}
-        >
-          <em>
-            <BilingualText
-              vi={recommendedPath === 'placement' ? 'PHÙ HỢP NHẤT VỚI BẠN · 5 PHÚT' : 'KIỂM TRA NHANH · 5 PHÚT'}
-              en={recommendedPath === 'placement' ? 'BEST MATCH FOR YOU · 5 MIN' : 'QUICK CHECK · 5 MIN'}
-            />
-          </em>
-          <h2><BilingualText vi="Kiểm tra trình độ" en="Find My Level" /></h2>
-          <p><BilingualText vi="Làm bài kiểm tra trình độ tiếng Việt nhanh để tìm điểm xuất phát phù hợp với bạn." en="Take a quick Vietnamese placement test and discover the right starting point for your learning journey." /></p>
-          <strong>
-            <BilingualText vi="LÀM BÀI KIỂM TRA" en="TAKE THE TEST" /> <ChevronRight size={16} />
-          </strong>
-        </motion.button>
-      </div>
-    </OnboardingLayout>
-  );
+  return <OnboardingLayout
+    eyebrow={<BilingualText vi="XÁC ĐỊNH TRÌNH ĐỘ" en="FIND YOUR LEVEL" />}
+    title={<BilingualText vi="Tìm điểm bắt đầu phù hợp với bạn" en="Find the right place to start" />}
+    mascotMessage={<BilingualText vi="Làm bài kiểm tra ngắn để mình gợi ý bài học phù hợp nhất nhé!" en="Take a short test and I’ll find the right lessons for you!" />}
+    wide
+  >
+    <div className="ob-paths ob-paths-single">
+      <motion.button
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.99 }}
+        type="button"
+        className={`ob-path-card answer-card placement ${data.learningPath === 'placement' ? 'is-selected' : ''}`}
+        aria-selected={data.learningPath === 'placement'}
+        data-state={data.learningPath === 'placement' ? 'checked' : 'unchecked'}
+        style={{ backgroundColor: '#ffffff' }}
+        onClick={choosePlacement}
+      >
+        <em><BilingualText vi="KIỂM TRA TRÌNH ĐỘ · 5 PHÚT" en="PLACEMENT CHECK · 5 MINUTES" /></em>
+        <h2><BilingualText vi="Kiểm tra trình độ" en="Find My Level" /></h2>
+        <p><BilingualText vi="Trả lời các câu hỏi từ dễ đến khó để hệ thống xác định bài học phù hợp với bạn." en="Answer questions from easy to challenging so we can find the right lessons for you." /></p>
+        <div className="ob-path-details">
+          <span><Check size={16} /> <BilingualText vi="15 câu · Khoảng 5 phút" en="15 questions · About 5 minutes" /></span>
+          <span><BookOpen size={16} /> <BilingualText vi="Xác định trình độ A0–C1" en="Determine your A0–C1 level" /></span>
+        </div>
+        <strong><BilingualText vi="LÀM BÀI KIỂM TRA" en="TAKE THE TEST" /> <ChevronRight size={16} /></strong>
+      </motion.button>
+    </div>
+  </OnboardingLayout>;
 }
 
 function ExerciseRunner({ mode }) {
@@ -503,70 +478,82 @@ function ExerciseRunner({ mode }) {
             </>
           )}
         </div>
-        {!checked
-          ? <PrimaryButton disabled={!response} onClick={onCheck}><BilingualText vi="KIỂM TRA" en="CHECK" /></PrimaryButton>
-          : <PrimaryButton onClick={onContinue}>{index === questions.length - 1 ? <BilingualText vi="XEM KẾT QUẢ" en="SEE RESULTS" /> : <BilingualText vi="TIẾP TỤC" en="CONTINUE" />}</PrimaryButton>}
+        {mode === 'placement'
+          ? <PrimaryButton disabled={!response} onClick={onContinue}>{index === questions.length - 1 ? <BilingualText vi="XEM KẾT QUẢ" en="SEE RESULTS" /> : <BilingualText vi="CÂU TIẾP THEO" en="NEXT QUESTION" />}</PrimaryButton>
+          : !checked
+            ? <PrimaryButton disabled={!response} onClick={onCheck}><BilingualText vi="TRẢ LỜI" en="ANSWER" /></PrimaryButton>
+            : <PrimaryButton onClick={onContinue}>{index === questions.length - 1 ? <BilingualText vi="HOÀN THÀNH BÀI HỌC" en="FINISH LESSON" /> : <BilingualText vi="TIẾP TỤC" en="CONTINUE" />}</PrimaryButton>}
       </footer>
     </div>
   );
 }
 
-export const FirstLessonPage = () => {
+export function FirstLessonPage() {
   const { data } = useOnboarding();
-  return data.learningPath !== 'beginner' ? <Navigate to="/onboarding/learning-path" replace /> : <ExerciseRunner mode="lesson" />;
-};
+  const [practiceStarted, setPracticeStarted] = useState(false);
+  if (data.learningPath !== 'beginner') return <Navigate to="/onboarding/learning-path" replace />;
+  if (practiceStarted) return <ExerciseRunner mode="lesson" />;
 
+  const phrases = [
+    { vi: 'Xin chào', en: 'Hello' },
+    { vi: 'Cảm ơn', en: 'Thank you' },
+    { vi: 'Tạm biệt', en: 'Goodbye' },
+  ];
+
+  return <OnboardingLayout
+    eyebrow={<BilingualText vi="BÀI 1 · LỜI CHÀO CĂN BẢN" en="LESSON 1 · BASIC GREETINGS" />}
+    title={<BilingualText vi="Học trước, luyện tập sau" en="Learn first, practise next" />}
+    mascotMessage={<BilingualText vi="Đây là bài học, không phải bài kiểm tra. Hãy nghe và làm quen với ba cụm từ đầu tiên nhé!" en="This is a lesson, not a test. Listen and get familiar with your first three phrases!" />}
+    backTo="/onboarding/learning-path"
+    progressStep={5}
+  >
+    <section className="ob-lesson-intro">
+      <div className="ob-lesson-intro-heading">
+        <BookOpen />
+        <div>
+          <strong><BilingualText vi="Ba cụm từ đầu tiên" en="Your first three phrases" /></strong>
+          <span><BilingualText vi="Chạm vào từng cụm từ để nghe phát âm." en="Tap each phrase to hear its pronunciation." /></span>
+        </div>
+      </div>
+      <div className="ob-lesson-phrases">
+        {phrases.map((phrase) => (
+          <button key={phrase.vi} type="button" onClick={() => speak(phrase.vi)}>
+            <span><b>{phrase.vi}</b><small>{phrase.en}</small></span>
+            <Volume2 />
+          </button>
+        ))}
+      </div>
+    </section>
+    <p className="ob-note"><BilingualText vi="Sau phần này, bạn sẽ luyện tập có hướng dẫn và được giải thích đáp án ngay." en="Next, you will practise with guidance and receive an explanation after every answer." /></p>
+    <div className="ob-actions"><PrimaryButton onClick={() => setPracticeStarted(true)}><BilingualText vi="BẮT ĐẦU LUYỆN TẬP" en="START PRACTICE" /></PrimaryButton></div>
+  </OnboardingLayout>;
+}
 export const PlacementTestPage = () => <ExerciseRunner mode="placement" />;
 
 export function CompletionPage() {
   const { data } = useOnboarding();
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, fetchProfile } = useAuth();
+  const { fetchProfile } = useAuth();
   const [saving, setSaving] = useState(false);
   const mode = location.state?.mode || (data.placementTestCompleted ? 'placement' : 'lesson');
   const result = mode === 'placement' ? data.placementResult : data.firstLessonResult;
   if (!result) return <Navigate to="/onboarding/learning-path" replace />;
 
   const recommendation = data.recommendation || buildOnboardingRecommendation(data);
-  const courseRecommendationPath = buildRecommendationPath(recommendation);
   const learningPathPath = buildLearningPathPath(recommendation);
-  const requestedLearningPath = ['/learning-path', '/edtech/dashboard'].some(path => data.requestedDestination?.startsWith(path));
-  const shouldOpenLearningPath = mode === 'placement' || requestedLearningPath;
-
-  const handleContinueToLogin = () => navigate('/login', {
-    state: {
-      from: learningPathPath,
-      message: bilingualLabel(
-        'Hoàn thành trải nghiệm khởi đầu! Đăng nhập để lưu tiến độ và xem khóa học phù hợp.',
-        'Welcome experience complete! Log in to save your progress and view matching courses.',
-      ),
-    },
-  });
-
-  const handleRegister = () => navigate('/register', { state: { from: learningPathPath } });
 
   const handleShowRecommendations = async () => {
-    if (isAuthenticated) {
-      setSaving(true);
-      try {
-        await onboardingService.syncGuestProgress();
-        await fetchProfile();
-      } catch {
-        // The local recommendation remains available if profile sync is temporarily unavailable.
-      } finally {
-        setSaving(false);
-      }
+    setSaving(true);
+    try {
+      await onboardingService.syncProgress();
+      await fetchProfile();
+      navigate(learningPathPath);
+    } catch {
+      // Keep the result visible so the learner can retry saving without losing answers.
+    } finally {
+      setSaving(false);
     }
-    if (!isAuthenticated && shouldOpenLearningPath) {
-      if (mode === 'placement') {
-        handleRegister();
-      } else {
-        handleContinueToLogin();
-      }
-      return;
-    }
-    navigate(isAuthenticated || shouldOpenLearningPath ? learningPathPath : courseRecommendationPath);
   };
 
   return (
@@ -640,24 +627,10 @@ export function CompletionPage() {
           <PrimaryButton disabled={saving} onClick={handleShowRecommendations}>
             {saving
               ? <BilingualText vi="ĐANG LƯU LỘ TRÌNH…" en="SAVING YOUR PLAN…" />
-              : shouldOpenLearningPath && !isAuthenticated
-                ? mode === 'placement'
-                  ? <BilingualText vi="ĐĂNG KÝ ĐỂ LƯU VÀ MỞ LỘ TRÌNH" en="SIGN UP TO SAVE AND OPEN MY LEARNING PATH" />
-                  : <BilingualText vi="ĐĂNG NHẬP ĐỂ MỞ LỘ TRÌNH CỦA TÔI" en="LOG IN TO OPEN MY LEARNING PATH" />
-                : mode === 'placement'
-                  ? <BilingualText vi="XEM LỘ TRÌNH ĐỀ XUẤT" en="VIEW MY RECOMMENDED PATH" />
-                  : <BilingualText vi="XEM LỘ TRÌNH VÀ KHÓA HỌC PHÙ HỢP" en="VIEW MY PATH AND MATCHING COURSES" />}
+              : mode === 'placement'
+                ? <BilingualText vi="LƯU VÀ XEM LỘ TRÌNH ĐỀ XUẤT" en="SAVE AND VIEW MY RECOMMENDED PATH" />
+                : <BilingualText vi="LƯU VÀ XEM KHÓA HỌC PHÙ HỢP" en="SAVE AND VIEW MATCHING COURSES" />}
           </PrimaryButton>
-          {!isAuthenticated && (
-            <>
-              <button type="button" className="ob-outline ob-complete-login" onClick={handleContinueToLogin}>
-                <BilingualText vi="ĐĂNG NHẬP ĐỂ LƯU ĐỀ XUẤT" en="LOG IN TO SAVE THIS PLAN" />
-              </button>
-              <button type="button" className="ob-text-link" onClick={handleRegister}>
-                <BilingualText vi="Chưa có tài khoản? Tạo tài khoản mới →" en="New here? Create an account →" />
-              </button>
-            </>
-          )}
         </div>
       </main>
     </div>

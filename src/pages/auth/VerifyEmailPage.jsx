@@ -96,7 +96,7 @@ export function VerifyEmailPage() {
           replace: true,
           state: {
             from: afterLogin,
-            message: bilingualLabel('Xác minh email thành công. Hãy đăng nhập để bắt đầu bài kiểm tra đầu vào.', 'Email verified successfully. Please sign in to begin your placement test.'),
+            message: bilingualLabel('Xác minh email thành công. Hãy đăng nhập để bắt đầu thiết lập lộ trình học.', 'Email verified successfully. Please sign in to set up your learning path.'),
           },
         });
       }, 1500);
