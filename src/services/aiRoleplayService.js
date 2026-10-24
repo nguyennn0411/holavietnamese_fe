@@ -1,7 +1,7 @@
 // AI Roleplay & Scenarios Service (Người 4: /ai-scenarios, /ai-scenarios/:id, /ai-roleplay/:id, /ai-sessions/:id/result)
 
 import axiosClient from '@/infrastructure/api/axiosClient';
-import { detectInputLanguage } from './aiTutorService';
+import { detectInputLanguage, getCurrentUserStorageKey } from './aiTutorService';
 
 export const SCENARIO_LEVELS = [
   { id: 'all', label: 'Tất cả trình độ' },
@@ -254,8 +254,10 @@ export const SCENARIOS = [
   },
 ];
 
-const ROLEPLAY_SESSION_STORAGE = 'hola_ai_roleplay_session_';
-const ROLEPLAY_RESULT_STORAGE = 'hola_ai_roleplay_result_';
+const ROLEPLAY_SESSION_STORAGE = 'hola_ai_roleplay_session_v2_';
+const ROLEPLAY_RESULT_STORAGE = 'hola_ai_roleplay_result_v2_';
+const getRoleplaySessionKey = (scenarioId) => `${ROLEPLAY_SESSION_STORAGE}${getCurrentUserStorageKey()}_${scenarioId}`;
+const getRoleplayResultKey = (scenarioId) => `${ROLEPLAY_RESULT_STORAGE}${getCurrentUserStorageKey()}_${scenarioId}`;
 const AI_PROVIDER = import.meta.env.VITE_AI_PROVIDER || 'openrouter';
 const AI_MODEL = import.meta.env.VITE_AI_MODEL || 'openrouter/free';
 const AI_REQUEST_TIMEOUT_MS = Math.max(5000, Number(import.meta.env.VITE_AI_REQUEST_TIMEOUT_MS) || 30000);
@@ -535,7 +537,7 @@ export const aiRoleplayService = {
   getRoleplaySession(scenarioId) {
     const scenario = this.getScenario(scenarioId);
     try {
-      const stored = localStorage.getItem(ROLEPLAY_SESSION_STORAGE + scenarioId);
+      const stored = localStorage.getItem(getRoleplaySessionKey(scenarioId));
       if (stored) {
         const parsed = JSON.parse(stored);
         let completed = parsed.completedTasks || [];
@@ -579,7 +581,7 @@ export const aiRoleplayService = {
 
   saveRoleplaySession(scenarioId, session) {
     try {
-      localStorage.setItem(ROLEPLAY_SESSION_STORAGE + scenarioId, JSON.stringify(session));
+      localStorage.setItem(getRoleplaySessionKey(scenarioId), JSON.stringify(session));
     } catch (e) {
       console.error('Failed to save roleplay session', e);
     }
@@ -602,8 +604,9 @@ export const aiRoleplayService = {
     return session;
   },
 
-  resetRoleplaySession(scenarioId) { localStorage.removeItem(ROLEPLAY_RESULT_STORAGE + scenarioId);
-    localStorage.removeItem(ROLEPLAY_SESSION_STORAGE + scenarioId);
+  resetRoleplaySession(scenarioId) {
+    localStorage.removeItem(getRoleplayResultKey(scenarioId));
+    localStorage.removeItem(getRoleplaySessionKey(scenarioId));
     return this.getRoleplaySession(scenarioId);
   },
 
@@ -802,7 +805,7 @@ export const aiRoleplayService = {
     // (deduplicated: skipped if progress already reported 100% for this session)
     await this.reportCompletion(scenarioId, result.totalScore);
 
-    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
+    localStorage.setItem(getRoleplayResultKey(scenarioId), JSON.stringify(result));
     return result;
   },
 
@@ -875,13 +878,13 @@ export const aiRoleplayService = {
 
   getResult(scenarioId) {
     try {
-      const stored = localStorage.getItem(ROLEPLAY_RESULT_STORAGE + scenarioId);
+      localStorage.getItem(getRoleplayResultKey(scenarioId));
       // Always recompute result from current session so score is never stuck on stale cache
     } catch {
       // fallback
     }
     const result = this.buildRoleplayResult(scenarioId);
-    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
+    localStorage.setItem(getRoleplayResultKey(scenarioId), JSON.stringify(result));
     return result;
   },
 

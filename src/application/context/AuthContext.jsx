@@ -16,6 +16,7 @@ const persistUser = (userInfo) => {
   ['userId', 'username', 'fullName', 'roles'].forEach((key) => {
     if (userInfo[key] !== undefined) localStorage.setItem(key, key === 'roles' ? JSON.stringify(userInfo[key]) : String(userInfo[key]));
   });
+  ['hola_ai_tutor_sessions_v1', 'hola_ai_tutor_active_id_v1', 'hola_ai_tutor_mini_daily_v1'].forEach((k) => localStorage.removeItem(k));
 };
 
 export const AuthProvider = ({ children }) => {
@@ -191,7 +192,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      ['userId', 'username', 'fullName', 'roles'].forEach((key) => localStorage.removeItem(key));
+      ['userId', 'username', 'fullName', 'roles', 'hola_ai_tutor_sessions_v1', 'hola_ai_tutor_active_id_v1', 'hola_ai_tutor_mini_daily_v1'].forEach((key) => localStorage.removeItem(key));
       setAccessToken(null);
       setIsAuthenticated(false);
       setUser(null);

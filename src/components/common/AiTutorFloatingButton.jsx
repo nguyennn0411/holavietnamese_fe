@@ -1,7 +1,8 @@
 import { useLocation } from 'react-router-dom';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Send, X } from 'lucide-react';
-import { aiTutorService, detectInputLanguage, enforceLanguageConsistency } from '@/services/aiTutorService';
+import { aiTutorService, detectInputLanguage, enforceLanguageConsistency, getCurrentUserStorageKey } from '@/services/aiTutorService';
+import { useAuth } from '@/application/context/AuthContext';
 import ngheIdleMascot from '@/assets/mascot/nghe-idle.webp';
 
 function cleanMiniChatText(value) {
@@ -15,12 +16,20 @@ function cleanMiniChatText(value) {
 
 export function AiTutorFloatingButton() {
   const location = useLocation();
+  const { user, accessToken } = useAuth();
+  const activeUserKey = String(user?.userId ?? user?.id ?? user?.username ?? getCurrentUserStorageKey());
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [session, setSession] = useState(null);
   const inputRef = useRef(null);
   const messagesContainerRef = useRef(null);
+
+  useEffect(() => {
+    setSession(null);
+    setIsOpen(false);
+    setInput('');
+  }, [activeUserKey, accessToken]);
 
   // The AI Tutor page already has its own full conversation UI. Never expose
   // the helper during a quiz attempt, where it could be used as a shortcut.
@@ -141,10 +150,6 @@ export function AiTutorFloatingButton() {
         title={isOpen ? 'Đóng chat AI Tutor' : 'Hỏi AI Tutor'}
       >
         <img src={ngheIdleMascot} alt="" aria-hidden="true" />
-        <span className="ai-tutor-fab__content">
-          <strong>{isOpen ? 'Đóng chat' : 'Hỏi AI Tutor'}</strong>
-          {!isOpen && <small>Đang thắc mắc?</small>}
-        </span>
       </button>
     </div>
   );

@@ -125,9 +125,49 @@ export const TUTOR_MODES = [
   },
 ];
 
-const STORAGE_KEY = 'hola_ai_tutor_sessions_v1';
-const ACTIVE_SESSION_KEY = 'hola_ai_tutor_active_id_v1';
-const MINI_DAILY_SESSION_KEY = 'hola_ai_tutor_mini_daily_v1';
+const LEGACY_STORAGE_KEY = 'hola_ai_tutor_sessions_v1';
+const LEGACY_ACTIVE_SESSION_KEY = 'hola_ai_tutor_active_id_v1';
+const LEGACY_MINI_DAILY_SESSION_KEY = 'hola_ai_tutor_mini_daily_v1';
+
+const STORAGE_KEY_PREFIX = 'hola_ai_tutor_sessions_v2_';
+const ACTIVE_SESSION_KEY_PREFIX = 'hola_ai_tutor_active_id_v2_';
+const MINI_DAILY_SESSION_KEY_PREFIX = 'hola_ai_tutor_mini_daily_v2_';
+
+export const getCurrentUserStorageKey = () => {
+  try {
+    const rawUser = localStorage.getItem('user');
+    if (rawUser) {
+      const parsed = JSON.parse(rawUser);
+      const idCandidate = parsed?.userId ?? parsed?.id ?? parsed?.username ?? parsed?.email;
+      if (idCandidate !== undefined && idCandidate !== null && String(idCandidate).trim()) {
+        return String(idCandidate).trim().toLowerCase();
+      }
+    }
+    const directUserId = localStorage.getItem('userId') || localStorage.getItem('username');
+    if (directUserId && directUserId.trim()) {
+      return directUserId.trim().toLowerCase();
+    }
+    const token = localStorage.getItem('token');
+    if (token && token.includes('.')) {
+      const payloadPart = token.split('.')[1];
+      const json = atob(payloadPart.replace(/-/g, '+').replace(/_/g, '/'));
+      const payload = JSON.parse(json);
+      const subCandidate = payload?.userId ?? payload?.sub;
+      if (subCandidate !== undefined && subCandidate !== null && String(subCandidate).trim()) {
+        return String(subCandidate).trim().toLowerCase();
+      }
+    }
+  } catch {
+    // fallback to guest
+  }
+  return 'guest';
+};
+
+const getStorageKey = () => `${STORAGE_KEY_PREFIX}${getCurrentUserStorageKey()}`;
+const getActiveSessionKey = () => `${ACTIVE_SESSION_KEY_PREFIX}${getCurrentUserStorageKey()}`;
+const getMiniDailySessionKey = () => `${MINI_DAILY_SESSION_KEY_PREFIX}${getCurrentUserStorageKey()}`;
+const getWelcomeSessionId = () => `session-welcome-${getCurrentUserStorageKey()}`;
+const isWelcomeSessionId = (id) => typeof id === 'string' && (id === 'session-welcome' || id.startsWith('session-welcome-'));
 
 export const getLocalDateKey = (value = new Date()) => {
   const d = value instanceof Date ? value : new Date(value);
@@ -500,7 +540,7 @@ function conversationalReply(query, messages = [], lang = null) {
 
 function createDefaultSessions() {
   const initialSession = {
-    id: 'session-welcome',
+    id: getWelcomeSessionId(),
     title: 'Làm quen với AI Tutor',
     mode: 'tutor',
     createdAt: new Date().toISOString(),
@@ -543,15 +583,33 @@ export const aiTutorService = {
     return TUTOR_MODES.find(m => m.id === id) || TUTOR_MODES[0];
   },
 
+  clearLegacySharedCache() {
+    try {
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+      localStorage.removeItem(LEGACY_ACTIVE_SESSION_KEY);
+      localStorage.removeItem(LEGACY_MINI_DAILY_SESSION_KEY);
+    } catch {
+      // ignore
+    }
+  },
+
   getAllSessions() {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      this.clearLegacySharedCache();
+      const key = getStorageKey();
+      const stored = localStorage.getItem(key);
       if (!stored) {
         const defaults = createDefaultSessions();
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaults));
+        localStorage.setItem(key, JSON.stringify(defaults));
         return defaults;
       }
-      return normalizeSessionMessages(JSON.parse(stored));
+      const parsed = JSON.parse(stored);
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        const defaults = createDefaultSessions();
+        localStorage.setItem(key, JSON.stringify(defaults));
+        return defaults;
+      }
+      return normalizeSessionMessages(parsed);
     } catch {
       return createDefaultSessions();
     }
@@ -559,18 +617,70 @@ export const aiTutorService = {
 
   saveSessions(sessions) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+      localStorage.setItem(getStorageKey(), JSON.stringify(sessions));
     } catch (e) {
       console.error('Failed to save sessions:', e);
     }
   },
 
+  async syncSessionsFromBackend() {
+    if (!localStorage.getItem('token')) {
+      return this.getAllSessions();
+    }
+    try {
+      const res = await axiosClient.get('/api/ai/sessions', { timeout: 5000 });
+      const remoteList = unwrapAiPayload(res);
+      if (!Array.isArray(remoteList)) {
+        return this.getAllSessions();
+      }
+
+      const normalizedRemote = remoteList
+        .filter(item => item && item.id && String(item.mode || '').toLowerCase() !== 'roleplay')
+        .map(item => {
+          const rawMsgs = Array.isArray(item.messages) ? item.messages : [];
+          const mappedMsgs = rawMsgs.map((m, idx) => ({
+            id: m.id || `msg-${idx}-${item.id}`,
+            sender: m.sender || 'ai',
+            mode: m.mode || item.mode || 'tutor',
+            text: m.text || '',
+            translation: m.translation || null,
+            explanation: m.explanation || null,
+            nativeAlternative: m.nativeAlternative || null,
+            culturalNote: m.culturalNote || null,
+            grammarCorrection: m.grammarCorrection || null,
+            savedWords: m.savedWords || [],
+            timestamp: m.timestamp || m.createdAt || item.createdAt || new Date().toISOString(),
+          }));
+          return {
+            id: item.id,
+            title: item.title || `Hội thoại AI (${this.getMode(item.mode).name})`,
+            mode: item.mode || 'tutor',
+            createdAt: item.createdAt || new Date().toISOString(),
+            updatedAt: item.updatedAt || item.createdAt || new Date().toISOString(),
+            messages: mappedMsgs.length > 0 ? mappedMsgs : createDefaultSessions()[0].messages,
+          };
+        });
+
+      if (normalizedRemote.length > 0) {
+        const finalSessions = normalizeSessionMessages(normalizedRemote);
+        this.saveSessions(finalSessions);
+        return finalSessions;
+      }
+
+      // User has 0 sessions on backend: keep local user-scoped sessions if any, otherwise default welcome session
+      return this.getAllSessions();
+    } catch (err) {
+      console.warn('[AI Tutor] Không thể đồng bộ lịch sử từ backend:', err?.message || err);
+      return this.getAllSessions();
+    }
+  },
+
   getActiveSessionId() {
-    return localStorage.getItem(ACTIVE_SESSION_KEY) || 'session-welcome';
+    return localStorage.getItem(getActiveSessionKey()) || getWelcomeSessionId();
   },
 
   setActiveSessionId(id) {
-    localStorage.setItem(ACTIVE_SESSION_KEY, id);
+    localStorage.setItem(getActiveSessionKey(), id);
   },
 
   getSession(id) {
@@ -580,13 +690,14 @@ export const aiTutorService = {
 
   getOrCreateTodayMiniSession(preferredSessionId = null) {
     const todayKey = getLocalDateKey(new Date());
+    const miniStorageKey = getMiniDailySessionKey();
     const sessions = this.getAllSessions();
 
     if (preferredSessionId) {
       const preferred = sessions.find(s => s.id === preferredSessionId);
-      if (preferred && preferred.id !== 'session-welcome' && getLocalDateKey(preferred.createdAt || preferred.updatedAt) === todayKey) {
+      if (preferred && !isWelcomeSessionId(preferred.id) && getLocalDateKey(preferred.createdAt || preferred.updatedAt) === todayKey) {
         try {
-          localStorage.setItem(MINI_DAILY_SESSION_KEY, JSON.stringify({ dateKey: todayKey, sessionId: preferred.id }));
+          localStorage.setItem(miniStorageKey, JSON.stringify({ dateKey: todayKey, sessionId: preferred.id }));
         } catch {
           // ignore
         }
@@ -595,7 +706,7 @@ export const aiTutorService = {
     }
 
     try {
-      const storedDaily = JSON.parse(localStorage.getItem(MINI_DAILY_SESSION_KEY) || 'null');
+      const storedDaily = JSON.parse(localStorage.getItem(miniStorageKey) || 'null');
       if (storedDaily && storedDaily.dateKey === todayKey && storedDaily.sessionId) {
         const existingToday = sessions.find(s => s.id === storedDaily.sessionId);
         if (existingToday && getLocalDateKey(existingToday.createdAt || existingToday.updatedAt) === todayKey) {
@@ -609,11 +720,11 @@ export const aiTutorService = {
 
     // Look for any session created today (excluding the static welcome template if it was from an older day)
     const todayExisting = sessions.find(
-      s => s.id !== 'session-welcome' && getLocalDateKey(s.createdAt) === todayKey
+      s => !isWelcomeSessionId(s.id) && getLocalDateKey(s.createdAt) === todayKey
     );
     if (todayExisting) {
       try {
-        localStorage.setItem(MINI_DAILY_SESSION_KEY, JSON.stringify({ dateKey: todayKey, sessionId: todayExisting.id }));
+        localStorage.setItem(miniStorageKey, JSON.stringify({ dateKey: todayKey, sessionId: todayExisting.id }));
       } catch {
         // ignore
       }
@@ -624,7 +735,7 @@ export const aiTutorService = {
     // New day: create a fresh conversation for today
     const freshSession = this.createSession('tutor');
     try {
-      localStorage.setItem(MINI_DAILY_SESSION_KEY, JSON.stringify({ dateKey: todayKey, sessionId: freshSession.id }));
+      localStorage.setItem(miniStorageKey, JSON.stringify({ dateKey: todayKey, sessionId: freshSession.id }));
     } catch {
       // ignore
     }
@@ -652,8 +763,9 @@ export const aiTutorService = {
 
   createSession(mode = 'tutor', title = '') {
     const modeConfig = this.getMode(mode);
+    const userSuffix = getCurrentUserStorageKey();
     const newSession = {
-      id: `session-${Date.now()}`,
+      id: `session-${Date.now()}-${userSuffix}`,
       title: title || `Hội thoại mới (${modeConfig.name})`,
       mode: mode,
       createdAt: new Date().toISOString(),
@@ -691,14 +803,18 @@ export const aiTutorService = {
   },
 
   renameSession(id, newTitle) {
+    const trimmedTitle = newTitle.trim();
     const sessions = this.getAllSessions().map(s => {
       if (s.id === id) {
-        return { ...s, title: newTitle.trim() || s.title, updatedAt: new Date().toISOString() };
+        return { ...s, title: trimmedTitle || s.title, updatedAt: new Date().toISOString() };
       }
       return s;
     });
     this.saveSessions(sessions);
-    return sessions;
+    if (trimmedTitle && localStorage.getItem('token')) {
+      axiosClient.patch(`/api/ai/sessions/${id}`, { title: trimmedTitle }).catch(() => {});
+    }
+    return sessions.find(s => s.id === id) || sessions[0];
   },
 
   deleteSession(id) {
@@ -710,6 +826,9 @@ export const aiTutorService = {
 
     if (this.getActiveSessionId() === id) {
       this.setActiveSessionId(sessions[0].id);
+    }
+    if (localStorage.getItem('token')) {
+      axiosClient.delete(`/api/ai/sessions/${id}`).catch(() => {});
     }
     return sessions;
   },
@@ -762,7 +881,11 @@ export const aiTutorService = {
     });
 
     this.saveSessions(sessions);
-    return sessions.find(s => s.id === id);
+    const updated = sessions.find(s => s.id === id);
+    if (updated && localStorage.getItem('token')) {
+      axiosClient.patch(`/api/ai/sessions/${id}`, { mode: newMode, title: updated.title }).catch(() => {});
+    }
+    return updated;
   },
 
   async sendMessage(sessionId, text, currentMode = 'tutor', language = null) {
@@ -888,6 +1011,9 @@ export const aiTutorService = {
 
     const updatedSessions = this.getAllSessions().map(s => (s.id === sessionId ? updatedSession : s));
     this.saveSessions(updatedSessions);
+    if (newTitle !== session.title && localStorage.getItem('token')) {
+      axiosClient.patch(`/api/ai/sessions/${sessionId}`, { title: newTitle, mode: currentMode }).catch(() => {});
+    }
 
     return { userMsg, aiMsg, updatedSession };
   },

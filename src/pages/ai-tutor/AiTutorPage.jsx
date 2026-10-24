@@ -29,7 +29,8 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { aiTutorService } from '@/services/aiTutorService';
+import { aiTutorService, getCurrentUserStorageKey } from '@/services/aiTutorService';
+import { useAuth } from '@/application/context/AuthContext';
 import { vocabularyService } from '@/services/vocabularyService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { audioFeedback } from '@/utils/audioFeedback';
@@ -121,6 +122,8 @@ function FormattedMessageText({ text, isAi }) {
 }
 
 export function AiTutorPage() {
+  const { user, accessToken } = useAuth();
+  const activeUserKey = String(user?.userId ?? user?.id ?? user?.username ?? getCurrentUserStorageKey());
   const { confirm, confirmationDialog } = useConfirmDialog();
   const [modes, setModes] = useState(() => aiTutorService.getModes());
   const [sessions, setSessions] = useState([]);
@@ -173,8 +176,9 @@ export function AiTutorPage() {
     };
   }, [isModeMenuOpen]);
 
-  // Load sessions and AI status on mount
+  // Load sessions and AI status on mount or when the logged-in user changes
   useEffect(() => {
+    let cancelled = false;
     const loadedSessions = aiTutorService.getAllSessions();
     setSessions(loadedSessions);
     // Start on the history picker instead of reopening the last conversation.
@@ -182,8 +186,14 @@ export function AiTutorPage() {
     setActiveSessionId('');
     setCurrentSession(null);
 
+    aiTutorService.syncSessionsFromBackend().then((remoteSynced) => {
+      if (!cancelled && Array.isArray(remoteSynced)) {
+        setSessions(remoteSynced);
+      }
+    });
+
     aiTutorService.getAiStatus().then((st) => {
-      if (st) setAiStatus(st);
+      if (!cancelled && st) setAiStatus(st);
     });
 
     const syncModes = () => {
@@ -194,10 +204,11 @@ export function AiTutorPage() {
     window.addEventListener('hola-ai-settings-updated', syncModes);
     window.addEventListener('storage', syncModes);
     return () => {
+      cancelled = true;
       window.removeEventListener('hola-ai-settings-updated', syncModes);
       window.removeEventListener('storage', syncModes);
     };
-  }, []);
+  }, [activeUserKey, accessToken]);
 
   const handleSaveApiKey = async (e) => {
     e.preventDefault();
