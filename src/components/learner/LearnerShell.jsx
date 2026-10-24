@@ -100,6 +100,7 @@ export function LearnerTopbar({ user, stats, onLogout }) {
   const level = user?.targetLevel || user?.level || '—';
   const hasEnergy = stats?.hearts != null || stats?.energy != null;
   const isAdmin = user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_ADMIN');
+  const isContentManager = user?.roles?.includes('CONTENT_MANAGER') || user?.roles?.includes('ROLE_CONTENT_MANAGER');
 
   return (
     <header className="learner-topbar">
@@ -130,7 +131,7 @@ export function LearnerTopbar({ user, stats, onLogout }) {
       <div className="learner-topbar__actions">
         <LanguageSwitcher compact />
         <NotificationDropdown fallbackIcon={<Bell />} />
-        <UserMenu user={user} isAdmin={isAdmin} onLogout={onLogout} />
+        <UserMenu user={user} isAdmin={isAdmin} isContentManager={isContentManager} onLogout={onLogout} />
       </div>
     </header>
   );

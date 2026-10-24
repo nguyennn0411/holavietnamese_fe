@@ -1,8 +1,9 @@
 import React from 'react';
-import { useLocation, Outlet } from 'react-router-dom';
+import { Navigate, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '@/application/context/AuthContext';
 import { AuthRequiredPage } from '@/pages/auth/AuthRequiredPage';
 import { BilingualText } from '@/components/common/BilingualText';
+import { hasExistingAccount } from '@/utils/userState';
 
 export function RequireAuth({ fallbackFeature }) {
   const { isAuthenticated, loading } = useAuth();
@@ -20,6 +21,15 @@ export function RequireAuth({ fallbackFeature }) {
   }
 
   if (!isAuthenticated) {
+    if (fallbackFeature === 'learning' && !hasExistingAccount()) {
+      return (
+        <Navigate
+          to="/onboarding/reason"
+          replace
+          state={{ from: location.pathname + location.search, onboardingGate: true }}
+        />
+      );
+    }
     return (
       <AuthRequiredPage
         forcedFeature={fallbackFeature}

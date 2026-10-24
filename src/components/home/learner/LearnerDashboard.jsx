@@ -55,13 +55,13 @@ export function LearnerDashboard({ user }) {
   const displayName = user?.fullName || user?.username || t('dashboard.learner');
   const lessonId = currentLesson?.lessonId ?? currentLesson?.id;
   const courseId = currentLesson?.courseId;
-  const continueTo = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : courseId ? `/learn/${courseId}` : '/edtech/dashboard';
+  const continueTo = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : courseId ? `/learn/${courseId}` : '/learning-path';
   const activities = Array.isArray(progress?.recentActivities) ? progress.recentActivities : [];
   const quests = Array.isArray(progress?.dailyChallenges) ? progress.dailyChallenges : [];
   const leaderboard = Array.isArray(progress?.weeklyLeaderboard) ? progress.weeklyLeaderboard : [];
 
   const modules = useMemo(() => [
-    { to: '/edtech/dashboard', title: <BilingualText vi="Lộ trình học" en="Learning roadmap" />, text: <BilingualText vi="Bản đồ bài học tương tác từng bước" en="Step-by-step interactive lesson map." />, tone: 'red' },
+    { to: '/learning-path', title: <BilingualText vi="Lộ trình học" en="Learning roadmap" />, text: <BilingualText vi="Bản đồ bài học tương tác từng bước" en="Step-by-step interactive lesson map." />, tone: 'red' },
     { to: '/vocabulary', title: <BilingualText vi="Từ vựng" en="Vocabulary" />, text: <BilingualText vi="Ôn từ đã lưu và tăng khả năng ghi nhớ." en="Review saved words and build recall." />, tone: 'gold' },
     { to: '/courses', title: <BilingualText vi="Khóa học" en="Courses" />, text: <BilingualText vi="Danh mục khóa học đa dạng theo chủ đề" en="Diverse course catalog organized by topic." />, tone: 'blue' },
     { to: '/ai-tutor', title: <BilingualText vi="Luyện nói với AI" en="AI speaking practice" />, text: <BilingualText vi="Tự tin hơn qua hội thoại có hướng dẫn." en="Build confidence in guided conversations." />, tone: 'green' },
@@ -117,7 +117,7 @@ export function LearnerDashboard({ user }) {
                 <h2><BilingualText vi="Lộ trình học tập cá nhân hóa" en="Personalized Learning Path" /></h2>
                 <p><BilingualText vi="Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo." en="Explore the Vietnamese learning roadmap station by station, collect XP, and unlock interactive lessons." /></p>
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.25rem' }}>
-                  <Link to="/edtech/dashboard" className="ld-button ld-button--primary">
+                  <Link to="/learning-path" className="ld-button ld-button--primary">
                     <BilingualText vi="Vào lộ trình học" en="Open learning roadmap" /><ArrowRight size={16} />
                   </Link>
                   <Link to="/courses" className="ld-button" style={{ background: '#f5efe6', color: '#EA580C', border: '1px solid #ebdccb' }}>

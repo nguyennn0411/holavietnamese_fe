@@ -114,9 +114,9 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
               </Link>
             )}
             {isContentManager && !isAdmin && (
-              <Link to="/admin/courses" onClick={closeMenu} role="menuitem" className="user-menu__admin">
+              <Link to={ROUTES.ADMIN_COURSES} onClick={closeMenu} role="menuitem" className="user-menu__admin">
                 <Shield size={16} />
-                <BilingualText vi="Quản lý khóa học" en="Course Management" />
+                <BilingualText vi="Quản lý khóa học" en="Manage Courses" />
               </Link>
             )}
             <button type="button" className="user-menu__logout" onClick={handleLogout} role="menuitem">

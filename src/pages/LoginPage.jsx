@@ -63,7 +63,12 @@ export function LoginPage() {
               // Progress stays local and can be retried when connectivity returns.
             }
           }
-          navigate(from || (completedGuestOnboarding ? '/edtech/dashboard' : '/'), { replace: true });
+          const destination = (from && !from.startsWith('/onboarding/reason'))
+            ? from
+            : completedGuestOnboarding
+              ? '/learning-path'
+              : (from || '/');
+          navigate(destination, { replace: true });
         }
       }
     } catch {
@@ -189,7 +194,12 @@ export function LoginPage() {
               // Progress stays local and can be retried when connectivity returns.
             }
           }
-          navigate(from || (completedGuestOnboarding ? '/edtech/dashboard' : '/'), { replace: true });
+          const destination = (from && !from.startsWith('/onboarding/reason'))
+            ? from
+            : completedGuestOnboarding
+              ? '/learning-path'
+              : (from || '/');
+          navigate(destination, { replace: true });
         }
       }
     } catch {

@@ -4,13 +4,16 @@ import fs from 'node:fs/promises';
 
 const read = (path) => fs.readFile(new URL(path, import.meta.url), 'utf8');
 
-test('Welcome requires account creation before the onboarding entry test', async () => {
+test('Welcome opens the onboarding questions before account creation', async () => {
   const [pages, app] = await Promise.all([
     read('../src/features/onboarding/pages/OnboardingPages.jsx'),
     read('../src/App.jsx'),
   ]);
-  assert.match(pages, /navigate\('\/register', \{ state: \{ from: '\/onboarding\/reason' \} \}\)/);
-  assert.match(app, /<Route element=\{<RequireAuth fallbackFeature="learning" \/>\}>[\s\S]*path="\/onboarding\/placement-test"/);
+  assert.match(pages, /navigate\('\/onboarding\/reason'\)/);
+  assert.match(app, /path="\/onboarding\/reason" element=\{<ReasonPage \/>\}/);
+  assert.doesNotMatch(app, /<Route element=\{<RequireAuth fallbackFeature="learning" \/>\}>[\s\S]*path="\/onboarding\/placement-test"/);
+  assert.match(pages, /LOG IN TO SAVE THIS PLAN/);
+  assert.match(pages, /New here\? Create an account/);
 });
 
 test('authenticated existing learners can open the placement test directly', async () => {
@@ -30,18 +33,28 @@ test('registration and OTP verification preserve the post-login onboarding desti
   assert.match(flow, /POST_VERIFICATION_PATH_KEY/);
 });
 
-test('placement result maps to a CEFR target and filters recommended courses', async () => {
-  const [data, service, pages, courses] = await Promise.all([
+test('onboarding result maps to a CEFR target and ranks personalized courses', async () => {
+  const [data, service, engine, pages, courses] = await Promise.all([
     read('../src/features/onboarding/data/onboardingData.js'),
     read('../src/features/onboarding/services/onboardingService.js'),
+    read('../src/features/onboarding/services/recommendationEngine.js'),
     read('../src/features/onboarding/pages/OnboardingPages.jsx'),
     read('../src/pages/courses/CourseListPage.jsx'),
   ]);
   assert.match(data, /targetLevel: 'A1'/);
   assert.match(data, /targetLevel: 'A2'/);
   assert.match(data, /targetLevel: 'B1'/);
-  assert.match(service, /data\.placementResult\?\.targetLevel/);
-  assert.match(pages, /courses\?level=\$\{encodeURIComponent\(targetLevel\)\}&recommended=1/);
+  assert.match(data, /targetLevel: 'B2'/);
+  assert.match(data, /targetLevel: 'C1'/);
+  assert.match(service, /buildOnboardingRecommendation/);
+  assert.match(service, /recommendation\.secondaryGoalIds/);
+  assert.match(engine, /data\.placementResult\?\.targetLevel/);
+  assert.match(engine, /recommended: '1'/);
+  assert.match(engine, /goal: recommendation\.goalId/);
+  assert.match(engine, /pace: recommendation\.paceId/);
+  assert.match(pages, /buildRecommendationPath\(recommendation\)/);
   assert.match(courses, /searchParams\.get\('level'\)/);
-  assert.match(courses, /Khóa học phù hợp với kết quả Entry Test/);
+  assert.match(courses, /searchParams\.get\('goal'\)/);
+  assert.match(courses, /rankCoursesForRecommendation/);
+  assert.match(courses, /Lộ trình khóa học dành riêng cho bạn/);
 });
