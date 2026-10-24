@@ -150,7 +150,8 @@
 }
 
 .ob-main.is-wide {
-  width: min(980px, calc(100% - 40px));
+  width: min(1380px, calc(100% - 48px));
+  max-width: 1380px;
 }
 
 .ob-page {
@@ -261,6 +262,12 @@
 
 .ob-grid.four {
   grid-template-columns: repeat(4, 1fr);
+}
+
+.ob-grid.five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
 }
 
 .ob-stack {
@@ -399,6 +406,87 @@
   box-shadow: var(--ob-shadow-selected) !important;
 }
 
+/* 5-column cards (Level Options - Wide, Clear & Spacious) */
+.ob-grid.five .ob-selection {
+  min-height: 224px;
+  padding: 26px 20px 24px;
+  border-radius: 20px;
+  border: 1.5px solid #E2E8F0 !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.ob-grid.five .ob-selection:hover:not(:disabled) {
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  transform: translateY(-3.5px);
+}
+
+.ob-grid.five .ob-selection.is-selected {
+  border: 2px solid #EA580C !important;
+  border-color: #EA580C !important;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.16), 0 10px 32px rgba(234, 88, 12, 0.15) !important;
+  background: #FFFFFF !important;
+}
+
+.ob-grid.five .ob-selection-icon {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ob-grid.five .ob-selection-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.ob-grid.five .ob-check {
+  top: 22px;
+  right: 18px;
+  width: 26px;
+  height: 26px;
+  border-width: 2px;
+  transform: none;
+}
+
+.ob-grid.five .is-selected > .ob-check {
+  background: #EA580C;
+  border-color: #EA580C;
+  color: #FFFFFF;
+  transform: none;
+}
+
+.ob-grid.five .ob-selection-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.ob-grid.five .ob-selection-copy strong {
+  font-size: 16.5px;
+  font-weight: 700;
+  line-height: 1.38;
+  color: #111827;
+  letter-spacing: -0.2px;
+}
+
+.ob-grid.five .ob-selection-copy small {
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: #4B5563;
+}
+
 /* Selection Card Icon */
 .ob-selection-icon {
   width: 44px;
@@ -412,8 +500,9 @@
   transition: all 0.2s ease;
 }
 
-.ob-grid.four .ob-selection-icon {
-  margin-bottom: 8px;
+.ob-grid.four .ob-selection-icon,
+.ob-grid.five .ob-selection-icon {
+  margin-bottom: 10px;
 }
 
 /* Selection Copy (Typography) */
@@ -477,13 +566,15 @@
   color: #FFFFFF;
 }
 
-.ob-grid.four .ob-check {
+.ob-grid.four .ob-check,
+.ob-grid.five .ob-check {
   top: 18px;
-  right: 16px;
+  right: 14px;
   transform: none;
 }
 
-.ob-grid.four .is-selected > .ob-check {
+.ob-grid.four .is-selected > .ob-check,
+.ob-grid.five .is-selected > .ob-check {
   transform: none;
 }
 
@@ -588,10 +679,10 @@
 }
 
 .ob-note {
-  margin: 18px 2px 0;
-  color: var(--ob-muted);
-  font-size: 12px;
-  line-height: 1.5;
+  margin: 22px 2px 0;
+  color: #64748B;
+  font-size: 13.5px;
+  line-height: 1.6;
 }
 
 /* Benefits Grid */
@@ -1630,6 +1721,9 @@
   .ob-grid.four {
     grid-template-columns: repeat(2, 1fr);
   }
+  .ob-grid.five {
+    grid-template-columns: repeat(3, 1fr);
+  }
   .ob-welcome main {
     grid-template-columns: 1fr;
     text-align: center;
@@ -1701,20 +1795,24 @@
   .ob-grid.two, .ob-benefits, .ob-paths {
     grid-template-columns: 1fr;
   }
-  .ob-grid.four {
+  .ob-grid.four,
+  .ob-grid.five {
     grid-template-columns: 1fr;
     gap: 10px;
   }
-  .ob-grid.four .ob-selection {
+  .ob-grid.four .ob-selection,
+  .ob-grid.five .ob-selection {
     min-height: 84px;
     padding: 14px 48px 14px 14px;
     flex-direction: row;
     align-items: center;
   }
-  .ob-grid.four .ob-selection-icon {
+  .ob-grid.four .ob-selection-icon,
+  .ob-grid.five .ob-selection-icon {
     margin-bottom: 0;
   }
-  .ob-grid.four .ob-check {
+  .ob-grid.four .ob-check,
+  .ob-grid.five .ob-check {
     top: 50%;
     right: 16px;
     transform: translateY(-50%);

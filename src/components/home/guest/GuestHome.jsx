@@ -1,5 +1,7 @@
 import React from 'react';
 import { HeroBannerSlider, AnimatedMarquee } from '@/components/home/hero';
+import { ShiningAnnouncementPill } from '@/components/home/hero/ShiningAnnouncementPill';
+import { LiveLearnerPulse } from '@/components/home/hero/LiveLearnerPulse';
 import { GuestCulturalStrip } from './GuestCulturalStrip';
 import { AmbientWatermark } from '../common/HeritageWatermark';
 import { HeroInteractiveWidget } from './HeroInteractiveWidget';
@@ -32,6 +34,14 @@ export function GuestHome() {
 
       {/* Elegant Cultural Introduction Strip */}
       <GuestCulturalStrip />
+
+      {/* Lucian UX/UI #252 & #210 - Shining Announcement Pill & Live Learner Pulse */}
+      <section className="relative z-10 w-full bg-white/75 backdrop-blur-md border-b border-surface-border/60 py-2.5 px-4 sm:px-8">
+        <div className="max-w-[1560px] 2xl:max-w-[1680px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5">
+          <ShiningAnnouncementPill />
+          <LiveLearnerPulse />
+        </div>
+      </section>
 
       {/* 1. Flagship 3D Animated Hero Slider (85-95vh) */}
       <HeroBannerSlider />

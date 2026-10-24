@@ -13,11 +13,56 @@ export const learningReasons = [
 ];
 
 export const levelOptions = [
-  { id: 'new', title: "I'm completely new", titleVi: 'Tôi hoàn toàn mới bắt đầu', detail: 'Perfect — we will start with the essentials.', detailVi: 'Rất tốt — chúng ta sẽ bắt đầu từ những điều cốt lõi.', icon: Sprout },
-  { id: 'words', title: 'I know a few words', titleVi: 'Tôi biết một vài từ', detail: 'You recognize a handful of useful phrases.', detailVi: 'Bạn nhận biết được một số cụm từ thông dụng.', icon: MessageCircle },
-  { id: 'simple', title: 'I can have simple conversations', titleVi: 'Tôi có thể trò chuyện đơn giản', detail: 'You can handle familiar situations.', detailVi: 'Bạn có thể xử lý các tình huống quen thuộc.', icon: Baby },
-  { id: 'everyday', title: 'I can discuss everyday topics', titleVi: 'Tôi có thể thảo luận chủ đề thường ngày', detail: 'You can share ideas about daily life.', detailVi: 'Bạn có thể chia sẻ ý kiến về cuộc sống hàng ngày.', icon: Compass },
-  { id: 'fluent', title: "I'm already quite fluent", titleVi: 'Tôi đã nói khá lưu loát', detail: 'You want to polish nuance and accuracy.', detailVi: 'Bạn muốn trau chuốt độ tự nhiên và chính xác.', icon: Trophy },
+  {
+    id: 'new',
+    title: "I'm completely new",
+    titleVi: 'Tôi hoàn toàn mới bắt đầu',
+    detail: 'Perfect — we will start with the essentials.',
+    detailVi: 'Rất tốt — chúng ta sẽ bắt đầu từ những điều cốt lõi.',
+    icon: Sprout,
+    color: '#059669',
+    bg: '#ecfdf5',
+  },
+  {
+    id: 'words',
+    title: 'I know a few words',
+    titleVi: 'Tôi biết một vài từ',
+    detail: 'You recognize a handful of useful phrases.',
+    detailVi: 'Bạn nhận biết được một số cụm từ thông dụng.',
+    icon: MessageCircle,
+    color: '#0284c7',
+    bg: '#f0f9ff',
+  },
+  {
+    id: 'simple',
+    title: 'I can have simple conversations',
+    titleVi: 'Tôi có thể trò chuyện đơn giản',
+    detail: 'You can handle familiar situations.',
+    detailVi: 'Bạn có thể xử lý các tình huống quen thuộc.',
+    icon: Baby,
+    color: '#ea580c',
+    bg: '#fff7ed',
+  },
+  {
+    id: 'everyday',
+    title: 'I can discuss everyday topics',
+    titleVi: 'Tôi có thể thảo luận chủ đề thường ngày',
+    detail: 'You can share ideas about daily life.',
+    detailVi: 'Bạn có thể chia sẻ ý kiến về cuộc sống hàng ngày.',
+    icon: Compass,
+    color: '#7c3aed',
+    bg: '#f5f3ff',
+  },
+  {
+    id: 'fluent',
+    title: "I'm already quite fluent",
+    titleVi: 'Tôi đã nói khá lưu loát',
+    detail: 'You want to polish nuance and accuracy.',
+    detailVi: 'Bạn muốn trau chuốt độ tự nhiên và chính xác.',
+    icon: Trophy,
+    color: '#d97706',
+    bg: '#fffbeb',
+  },
 ];
 
 export const dailyGoals = [

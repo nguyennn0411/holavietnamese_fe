@@ -155,8 +155,9 @@ export function LevelPage() {
       mascotMessage={data.currentLevel
         ? <BilingualText vi="Tuyệt vời — bạn vẫn có thể chọn nơi bắt đầu sau." en="Perfect — you’ll still get to choose where to begin." />
         : <BilingualText vi="Không có câu trả lời nào sai cả. Hãy chọn đúng với bạn nhé!" en="There is no wrong answer. Be honest!" />}
+      wide
     >
-      <div className="ob-stack">
+      <div className="ob-grid five">
         {levelOptions.map((item) => (
           <SelectionCard
             key={item.id}

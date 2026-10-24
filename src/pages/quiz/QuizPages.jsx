@@ -11,6 +11,7 @@ import { ProgressBar } from '@/components/common/ProgressBar';
 import { QuestionInput } from '@/components/learning/QuestionInput';
 import { answerLabel, answerPresent } from '@/components/learning/answerUtils';
 import { Modal } from '@/components/common/Modal';
+import { FireworksBackground, CountingNumber } from '@/components/common/animate';
 import { Award, Clock, RotateCcw, BookOpen, CheckCircle2, ArrowRight, ArrowLeft, Check, AlertCircle, Play } from 'lucide-react';
 
 /**
@@ -619,6 +620,7 @@ function Result({ result }) {
 
       {/* Main Result Celebration Card */}
       <div className="quiz-result card relative overflow-hidden rounded-3xl bg-white border border-[#E5E7EB] p-6 sm:p-10 shadow-sm text-center space-y-6">
+        {passed && <FireworksBackground active={true} />}
         {/* Celebration / Outcome Pill */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-2xs mx-auto border"
           style={{
@@ -655,7 +657,7 @@ function Result({ result }) {
                 : 'bg-amber-50 border-amber-500 text-amber-800'
             }`}
           >
-            <span className="text-4xl font-black tracking-tight">{percentage}%</span>
+            <span className="text-4xl font-black tracking-tight"><CountingNumber number={percentage} />%</span>
             <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5 opacity-80">
               <BilingualText vi={passed ? 'Đạt chuẩn' : 'Chưa đạt'} en={passed ? 'Passed' : 'Needs Practice'} />
             </span>
@@ -668,14 +670,14 @@ function Result({ result }) {
             <span className="text-[10px] font-bold text-emerald-700 uppercase block tracking-wider">
               <BilingualText vi="Câu đúng" en="Correct" />
             </span>
-            <strong className="text-xl font-black text-emerald-800">{result.correctCount}</strong>
+            <strong className="text-xl font-black text-emerald-800"><CountingNumber value={result.correctCount} /></strong>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-white border border-rose-200 text-center shadow-2xs space-y-0.5">
             <span className="text-[10px] font-bold text-rose-700 uppercase block tracking-wider">
               <BilingualText vi="Câu sai" en="Incorrect" />
             </span>
-            <strong className="text-xl font-black text-rose-800">{result.incorrectCount}</strong>
+            <strong className="text-xl font-black text-rose-800"><CountingNumber value={result.incorrectCount} /></strong>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-white border border-stone-200 text-center shadow-2xs space-y-0.5">

@@ -3,6 +3,7 @@ import { TonePitchCard } from './bento/TonePitchCard';
 import { AiTutorPreviewCard } from './bento/AiTutorPreviewCard';
 import { DiacriticKeyboardCard } from './bento/DiacriticKeyboardCard';
 import { SituationalDrillsCard } from './bento/SituationalDrillsCard';
+import { SpotlightCard } from '@/components/common/animate/SpotlightCard';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -25,10 +26,18 @@ export function BentoGridSection() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
-        <TonePitchCard />
-        <AiTutorPreviewCard />
-        <DiacriticKeyboardCard />
-        <SituationalDrillsCard />
+        <SpotlightCard className="h-full rounded-3xl overflow-hidden" maxTilt={3}>
+          <TonePitchCard />
+        </SpotlightCard>
+        <SpotlightCard className="h-full rounded-3xl overflow-hidden" maxTilt={3}>
+          <AiTutorPreviewCard />
+        </SpotlightCard>
+        <SpotlightCard className="h-full rounded-3xl overflow-hidden" maxTilt={3}>
+          <DiacriticKeyboardCard />
+        </SpotlightCard>
+        <SpotlightCard className="h-full rounded-3xl overflow-hidden" maxTilt={3}>
+          <SituationalDrillsCard />
+        </SpotlightCard>
       </div>
     </section>
   );

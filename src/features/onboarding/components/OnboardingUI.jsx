@@ -124,6 +124,8 @@ export function SelectionCard({
   badge,
   badgeVi,
   style,
+  color,
+  bg,
 }) {
   return (
     <motion.button
@@ -138,7 +140,12 @@ export function SelectionCard({
       data-state={selected ? 'checked' : 'unchecked'}
       style={{ backgroundColor: '#ffffff', ...style }}
     >
-      <span className="ob-selection-icon">{Icon ? <Icon size={24} /> : null}</span>
+      <span
+        className="ob-selection-icon"
+        style={color ? { color, backgroundColor: bg || `${color}18` } : undefined}
+      >
+        {Icon ? <Icon size={24} /> : null}
+      </span>
       <span className="ob-selection-copy">
         <strong><BilingualText vi={titleVi || title} en={title} /></strong>
         {detail && <small><BilingualText vi={detailVi || detail} en={detail} /></small>}

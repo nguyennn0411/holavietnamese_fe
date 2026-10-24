@@ -30,6 +30,14 @@ export function LoginPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [googleButtonReady, setGoogleButtonReady] = useState(false);
   const [googleUnavailable, setGoogleUnavailable] = useState(false);
+  const [capsLockOn, setCapsLockOn] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
+
+  const triggerError = useCallback((message) => {
+    setError(message);
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 550);
+  }, []);
 
   useEffect(() => {
     if (location.state?.message) {
@@ -44,7 +52,7 @@ export function LoginPage() {
     try {
       const result = await loginWithGoogle(response.credential);
       if (!result.success) {
-        setError(result.message || 'Google sign-in failed.');
+        triggerError(result.message || 'Google sign-in failed.');
       } else {
         const from = location.state?.from || searchParams.get('from');
         clearPostVerificationPath();
@@ -72,7 +80,7 @@ export function LoginPage() {
         }
       }
     } catch {
-      setError('Google sign-in failed. Please try again.');
+      triggerError('Google sign-in failed. Please try again.');
     } finally {
       setGoogleLoading(false);
     }
@@ -175,7 +183,7 @@ export function LoginPage() {
           });
           return;
         }
-        setError(result.message || 'Login failed. Please try again.');
+        triggerError(result.message || 'Login failed. Please try again.');
       } else {
         const from = location.state?.from || searchParams.get('from');
         clearPostVerificationPath();
@@ -203,7 +211,7 @@ export function LoginPage() {
         }
       }
     } catch {
-      setError('An unexpected error occurred.');
+      triggerError('An unexpected error occurred.');
     } finally {
       setLoading(false);
     }
@@ -215,7 +223,7 @@ export function LoginPage() {
       <div className="auth-left-panel">
         <AuthHeader />
 
-        <main className="auth-left-content">
+        <main className={`auth-left-content ${isShaking ? "shake" : ""}`}>
           {/* Heading */}
           <h1 className="auth-heading">
             <BilingualText vi="Đăng nhập" en="Sign In" />
@@ -266,6 +274,11 @@ export function LoginPage() {
             <div className="auth-field">
               <label className="auth-label" htmlFor="login-password">
                 <BilingualText vi="Mật khẩu" en="Password" />
+                {capsLockOn && (
+                  <span className="auth-caps-alert" role="status" aria-live="polite">
+                    <BilingualText vi="Caps Lock đang bật" en="Caps Lock is on" />
+                  </span>
+                )}
               </label>
               <div className="auth-password-wrapper">
                 <input
@@ -276,6 +289,9 @@ export function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  onKeyUp={(e) => {
+                    if (e.getModifierState) setCapsLockOn(e.getModifierState('CapsLock'));
+                  }}
                   autoComplete="current-password"
                 />
                 <button
@@ -309,9 +325,10 @@ export function LoginPage() {
             {/* Primary Button */}
             <button
               type="submit"
-              className="auth-btn auth-btn-primary"
+              className={`auth-btn auth-btn-primary ${loading ? 'is-loading' : ''}`}
               disabled={loading}
             >
+              {loading && <span className="auth-spinner" aria-hidden="true" />}
               <BilingualText
                 vi={loading ? 'Đang đăng nhập…' : 'Đăng nhập'}
                 en={loading ? 'Signing in…' : 'Sign In'}

@@ -24,7 +24,8 @@ export default defineConfig(({ mode }) => {
         manualChunks(id) {
           if (!id.includes('node_modules')) return undefined
           if (id.includes('react-router') || id.includes('react-dom') || /[\\/]react[\\/]/.test(id)) return 'react-vendor'
-          if (id.includes('motion-dom') || id.includes('motion-utils') || /[\\/]motion[\\/]/.test(id)) return 'motion-vendor'
+          if (id.includes('motion-dom') || id.includes('motion-utils') || /[\\/]motion[\\/]/.test(id) || id.includes('@animate-ui')) return 'motion-vendor'
+          if (id.includes('radix-ui') || id.includes('@radix-ui')) return 'ui-vendor'
           if (id.includes('lucide-react')) return 'icons-vendor'
           if (id.includes('sonner')) return 'toast-vendor'
           if (id.includes('axios')) return 'http-vendor'

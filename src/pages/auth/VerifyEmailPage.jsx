@@ -38,6 +38,7 @@ export function VerifyEmailPage() {
   const [verifying, setVerifying] = useState(false);
   const [resending, setResending] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
   const [cooldown, setCooldown] = useState(() => getRemainingCooldown());
   const afterLogin = location.state?.afterLogin || loadPostVerificationPath();
 
@@ -101,6 +102,8 @@ export function VerifyEmailPage() {
       }, 1500);
     } catch (error) {
       setOtpError(getVerificationErrorMessage(error));
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 550);
     } finally {
       setVerifying(false);
     }
@@ -138,7 +141,7 @@ export function VerifyEmailPage() {
       <div className="auth-left-panel">
         <AuthHeader />
 
-        <main className="auth-left-content">
+        <main className={`auth-left-content ${isShaking ? "shake" : ""}`}>
           <div className="auth-verify-icon" aria-hidden="true"><MailCheck size={26} /></div>
           <h1 className="auth-heading"><BilingualText vi="Xác minh email" en="Verify your email" /></h1>
           <p className="auth-subtitle">

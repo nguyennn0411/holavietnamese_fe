@@ -136,3 +136,51 @@ input,select,textarea{color:var(--color-ink);background:var(--color-surface);bor
 .language-switcher{display:inline-flex;align-items:center;gap:3px;padding:3px;border:1px solid var(--color-border);border-radius:12px;background:var(--color-surface);box-shadow:0 2px 8px rgba(15,23,42,.04);white-space:nowrap}.language-switcher button{min-width:52px;min-height:34px;padding:6px 9px;display:inline-flex;align-items:center;justify-content:center;gap:5px;border:0;border-radius:9px;background:transparent;color:var(--color-muted);font-size:10px;font-weight:850;cursor:pointer;transition:.18s}.language-switcher button:hover{background:var(--color-sand);color:var(--color-ink)}.language-switcher button.is-active{background:linear-gradient(135deg,#FF8008,#FF6A00);color:#fff;box-shadow:0 4px 10px rgba(255,106,0,.28)}.language-switcher.is-compact button{min-width:38px;padding-inline:6px}.language-switcher.is-compact button span{font-size:12px}.language-switcher.is-compact button b{font-size:8px}.is-sidebar-collapsed .guest-sidebar .language-switcher{display:grid}.is-sidebar-collapsed .guest-sidebar .language-switcher button{min-width:34px}.auth-header{justify-content:space-between;gap:16px}.admin-topbar .language-switcher{margin-left:auto}
 @media(max-width:480px){.language-switcher button{min-width:42px;padding-inline:6px}.language-switcher button span{display:none}}
 @media(prefers-reduced-motion:reduce){.language-switcher button{transition:none}}
+
+/* ==========================================================================
+   Lucian UX/UI Prompt - Global Enhancements (lucianlabs.dev/uxui-prompt)
+   ========================================================================== */
+:root {
+  --ux-ease: cubic-bezier(.2, .8, .2, 1);
+  --ux-spring: cubic-bezier(.34, 1.45, .64, 1);
+  --ux-focus-ring: inset 0 0 0 1.5px var(--primary-orange), 0 0 0 4px rgba(249, 115, 22, 0.15);
+}
+
+/* Global Lucian Input, Select, Textarea Focus Ring */
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary-orange) !important;
+  box-shadow: var(--ux-focus-ring) !important;
+  outline: none !important;
+}
+
+/* Global Lucian Button Spring Feedback */
+button:not(:disabled):active,
+.button:not([aria-disabled="true"]):active {
+  transform: scale(0.98) !important;
+}
+
+/* Lucian Card Elevation & Polish */
+.card,
+.account-panel,
+.admin-card {
+  transition: box-shadow 0.25s var(--ux-ease), transform 0.25s var(--ux-ease), border-color 0.2s ease !important;
+}
+
+/* Lucian Modal & Dialog Spring Animation */
+dialog[open],
+.confirm-dialog,
+.modal {
+  animation: lucian-modal-in 0.3s var(--ux-spring) both !important;
+}
+@keyframes lucian-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

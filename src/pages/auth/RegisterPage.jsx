@@ -46,6 +46,14 @@ export function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [capsLockOn, setCapsLockOn] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
+
+  const triggerError = (msg) => {
+    setError(msg);
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 550);
+  };
 
   // Step 1 fields
   const [username, setUsername] = useState('');
@@ -123,7 +131,7 @@ export function RegisterPage() {
   const handleNext = (e) => {
     e.preventDefault();
     setError('');
-    if (!validateStep1()) return;
+    if (!validateStep1()) { setIsShaking(true); setTimeout(() => setIsShaking(false), 550); return; }
     setStep(2);
   };
 
@@ -231,7 +239,7 @@ export function RegisterPage() {
       <div className="auth-left-panel">
         <AuthHeader />
 
-        <main className="auth-left-content">
+        <main className={`auth-left-content ${isShaking ? "shake" : ""}`}>
           {/* Heading */}
           <h1 className="auth-heading" style={step === 1 ? { marginBottom: 'clamp(16px, 2.5vh, 24px)' } : undefined}>
             {step === 1 ? (
@@ -357,6 +365,7 @@ export function RegisterPage() {
                       className={`auth-input auth-password-input ${fieldErrors.password ? 'auth-input-error' : ''}`}
                       type={showPassword ? 'text' : 'password'}
                       placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
+                      onKeyUp={(e) => { if (e.getModifierState) setCapsLockOn(e.getModifierState("CapsLock")); }}
                       value={password}
                       onChange={(e) => {
                         setPassword(e.target.value);

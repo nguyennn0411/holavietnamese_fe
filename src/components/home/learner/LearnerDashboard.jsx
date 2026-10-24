@@ -11,6 +11,7 @@ import { LearnerHeroCarousel } from './LearnerHeroCarousel';
 import { LearnerMotivationStrip } from './LearnerMotivationStrip';
 import '@/styles/learner-dashboard.css';
 import { BuffaloMascot, MascotOnboarding, MascotSpeechBubble } from '@/components/mascot';
+import { SpotlightCard } from '@/components/common/animate/SpotlightCard';
 
 const clampPercent = (value) => Math.min(100, Math.max(0, Number(value) || 0));
 
@@ -26,9 +27,11 @@ function DashboardSkeleton() {
 
 function StatCard({ label, value, detail, tone }) {
   return (
-    <article className={`ld-stat ld-stat--${tone}`}>
+    <SpotlightCard maxTilt={3} className="h-full">
+      <article className={`ld-stat ld-stat--${tone} h-full`}>
       <div><span>{label}</span><strong>{value ?? '—'}</strong><small>{detail}</small></div>
-    </article>
+      </article>
+    </SpotlightCard>
   );
 }
 
