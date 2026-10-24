@@ -101,7 +101,7 @@ test('Active routes keep their paths; retired vocabulary classification has no r
     if (key === 'ADMIN_VOCABULARY_TOPICS') assert.equal(after[key],undefined);
     else assert.equal(after[key],path,key);
   }
-  const app=await fs.readFile(new URL('../src/App.jsx',import.meta.url),'utf8');
+  const app=await fs.readFile(new URL('../src/app/router/AppRouter.jsx',import.meta.url),'utf8');
   for(const key of Object.keys(after)) assert.ok(app.includes(`ROUTES.${key}`),`${key} has a Route`);
   for (const key of ['VOCABULARY_REVIEW','EXPLORE','DESTINATION_DETAIL','BLOG','BLOG_DETAIL','QUIZ','QUIZ_ATTEMPT','QUIZ_RESULT','ADMIN_COURSES','ADMIN_COURSE_BUILDER','ADMIN_COURSE_PREVIEW','ADMIN_LESSONS','ADMIN_LESSON_BUILDER','ADMIN_LESSON_PREVIEW','ADMIN_QUESTIONS','ADMIN_QUIZZES','ADMIN_QUIZ_BUILDER','ADMIN_QUIZ_PREVIEW']) {
     assert.ok(after[key], `${key} is available`);

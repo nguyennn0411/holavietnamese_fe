@@ -7,7 +7,7 @@ const read = (path) => fs.readFile(new URL(path, import.meta.url), 'utf8');
 test('Welcome opens the onboarding questions before account creation', async () => {
   const [pages, app] = await Promise.all([
     read('../src/features/onboarding/pages/OnboardingPages.jsx'),
-    read('../src/App.jsx'),
+    read('../src/app/router/AppRouter.jsx'),
   ]);
   assert.match(pages, /navigate\('\/onboarding\/reason'\)/);
   assert.match(app, /path="\/onboarding\/reason" element=\{<ReasonPage \/>\}/);
@@ -24,7 +24,7 @@ test('authenticated existing learners can open the placement test directly', asy
 
 test('registration and OTP verification preserve the post-login onboarding destination', async () => {
   const [register, verify, flow] = await Promise.all([
-    read('../src/pages/RegisterPage.jsx'),
+    read('../src/pages/auth/RegisterPage.jsx'),
     read('../src/pages/auth/VerifyEmailPage.jsx'),
     read('../src/features/auth/emailVerificationFlow.js'),
   ]);

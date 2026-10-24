@@ -1,8 +1,8 @@
-﻿import React, { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Lock, Bot, BookOpen, Compass, Palette, LogIn, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { BuffaloMascot, MascotSpeechBubble } from '@/components/mascot';
 import { BilingualText } from '@/components/common/BilingualText';
 import { AmbientWatermark } from '@/components/home/common/HeritageWatermark';

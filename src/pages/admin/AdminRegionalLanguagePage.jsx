@@ -10,8 +10,8 @@ import { adminVocabularyService } from '@/services/adminVocabularyService';
 import { REGIONAL_REGIONS, REGIONAL_STATUSES, regionalDraft, regionalPayload } from '@/models/RegionalVocabulary';
 import { ROUTES } from '@/constants/routes';
 import '@/components/regional/regional.css';
-import { useAuth } from '@/application/context/AuthContext';
-import { canReviewVocabulary, canWriteVocabulary } from '@/application/security/contentAccess';
+import { useAuth } from '@/contexts/AuthContext';
+import { canReviewVocabulary, canWriteVocabulary } from '@/utils/permissions/contentAccess';
 
 export function AdminRegionalLanguagePage() {
   const { user } = useAuth();

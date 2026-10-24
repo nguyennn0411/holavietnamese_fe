@@ -1,6 +1,6 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { AuthRequiredPage } from '@/pages/auth/AuthRequiredPage';
 
 export function ProtectedRoute() {

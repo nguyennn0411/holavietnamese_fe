@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint src/App.jsx src/application/context/AuthContext.jsx src/features/auth/emailVerificationFlow.js src/features/onboarding/data/onboardingData.js src/features/onboarding/pages/OnboardingPages.jsx src/features/onboarding/services/onboardingService.js src/infrastructure/api/authApi.js src/infrastructure/api/axiosClient.js src/pages/RegisterPage.jsx src/pages/LoginPage.jsx src/pages/auth/VerifyEmailPage.jsx src/pages/courses/CourseListPage.jsx qa/auth-email-verification.test.mjs qa/onboarding-registration-flow.test.mjs",
+    "lint": "eslint src/App.jsx src/app/providers/AppProviders.jsx src/app/router/AppRouter.jsx src/contexts/AuthContext.jsx src/features/auth/emailVerificationFlow.js src/features/onboarding/data/onboardingData.js src/features/onboarding/pages/OnboardingPages.jsx src/features/onboarding/services/onboardingService.js src/api/authApi.js src/api/axiosClient.js src/pages/auth/RegisterPage.jsx src/pages/auth/LoginPage.jsx src/pages/auth/VerifyEmailPage.jsx src/pages/courses/CourseListPage.jsx qa/auth-email-verification.test.mjs qa/onboarding-registration-flow.test.mjs",
     "type-check": "tsc -p tsconfig.auth.json",
     "preview": "vite preview",
     "test": "node --test qa/*.test.mjs",

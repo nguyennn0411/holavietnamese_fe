@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, BookOpen, Check, CheckCircle2, ChevronDown, ChevronUp, Clock, Download, Eye, FileSpreadsheet, FileText, Globe, ImagePlus, Layers, Plus, Save, Send, ShieldCheck, Upload } from 'lucide-react';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { contentService } from '@/services/contentService';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { ResourceState } from '@/components/common/ResourceState';

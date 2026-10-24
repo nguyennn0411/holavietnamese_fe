@@ -51,7 +51,7 @@ test('applying a recommendation asks for confirmation and preserves existing pro
 });
 
 test('Learning Path has responsive styles for desktop and mobile', async () => {
-  const css = await read('../src/presentation/styles/learning-path-simple.css');
+  const css = await read('../src/styles/learning-path-simple.css');
   assert.match(css, /@media \(max-width: 640px\)/);
   assert.match(css, /learning-path-personalized-hero/);
   assert.match(css, /learning-path-skeleton/);

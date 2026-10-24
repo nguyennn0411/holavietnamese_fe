@@ -2,7 +2,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { AppFooter, LayoutToast } from '@/components/layout';
 import { learnerService } from '@/services/learnerService';
 import { PageTransition } from '@/components/common/PageTransition';

@@ -6,7 +6,7 @@ const read = (path) => fs.readFile(new URL(path, import.meta.url), 'utf8');
 
 test('Learning Path requires authentication and completed onboarding', async () => {
   const [app, gate, page] = await Promise.all([
-    read('../src/App.jsx'),
+    read('../src/app/router/AppRouter.jsx'),
     read('../src/components/common/RequireLearningPathOnboarding.jsx'),
     read('../src/pages/learning-path/LearningPathPage.jsx'),
   ]);
@@ -24,7 +24,7 @@ test('onboarding completion redirects to the canonical Learning Path route', asy
   const [engine, service, login, pages] = await Promise.all([
     read('../src/features/onboarding/services/recommendationEngine.js'),
     read('../src/features/onboarding/services/onboardingService.js'),
-    read('../src/pages/LoginPage.jsx'),
+    read('../src/pages/auth/LoginPage.jsx'),
     read('../src/features/onboarding/pages/OnboardingPages.jsx'),
   ]);
   assert.match(engine, /return `\/learning-path\?\$\{params\.toString\(\)\}`/);

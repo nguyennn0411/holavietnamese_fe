@@ -1,4 +1,4 @@
-import axiosClient from '@/infrastructure/api/axiosClient';
+import axiosClient from '@/api/axiosClient';
 
 const resultOf = (response) => response?.result ?? response;
 const listOf = (value) => Array.isArray(value) ? value : (value?.content ?? value);

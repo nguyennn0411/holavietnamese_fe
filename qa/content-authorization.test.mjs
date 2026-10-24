@@ -9,7 +9,7 @@ import {
   canReviewVocabulary,
   canWriteExplore,
   canWriteVocabulary,
-} from '../src/application/security/contentAccess.js';
+} from '../src/utils/permissions/contentAccess.js';
 
 test('administrator can read and review but cannot edit Vocabulary or Explore', () => {
   const administrator = { roles: ['ADMIN'], permissions: [] };

@@ -6,7 +6,7 @@ import { ContentImage } from '@/components/common/ContentImage';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, GraduationCap } from 'lucide-react';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
-import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/application/security/contentAccess';
+import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 
 export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
   const contentAdminPath = canReadVocabulary(user) ? ROUTES.ADMIN_VOCABULARY

@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { BilingualText } from '@/components/common/BilingualText';
 
 export function RequireLearningPathOnboarding() {

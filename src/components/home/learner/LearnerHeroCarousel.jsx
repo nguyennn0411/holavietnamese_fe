@@ -9,7 +9,7 @@ import {
   safeExternalUrl,
   safeInternalPath,
   useSiteContent,
-} from '@/application/context/SiteContentContext';
+} from '@/contexts/SiteContentContext';
 import { BANNER_PLACEMENTS } from '@/config/siteContentDefaults';
 
 const AUTOPLAY_DELAY = 5600;

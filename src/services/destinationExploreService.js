@@ -1,4 +1,4 @@
-import axiosClient from '@/infrastructure/api/axiosClient';
+import axiosClient from '@/api/axiosClient';
 
 const resultOf = response => {
   if (response?.success === false || (response?.code != null && response.code !== 1000)) throw new Error(response.message || 'Không tải được nội dung điểm đến.');

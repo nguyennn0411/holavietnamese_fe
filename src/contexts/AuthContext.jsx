@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import authApi from '@/infrastructure/api/authApi';
+import authApi from '@/api/authApi';
 import { markHasAccount } from '@/utils/userState';
 import { getRegistrationVerificationState } from '@/features/auth/emailVerificationFlow';
 

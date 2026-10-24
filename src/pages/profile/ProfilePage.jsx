@@ -1,7 +1,7 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
 import { learnerService } from '@/services/learnerService';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { ContentImage } from '@/components/common/ContentImage';
 import { Camera, LoaderCircle, Upload } from 'lucide-react';
 import { toast } from 'sonner';

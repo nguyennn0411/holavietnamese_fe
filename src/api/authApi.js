@@ -1,4 +1,4 @@
-import axiosClient from '@/infrastructure/api/axiosClient';
+import axiosClient from '@/api/axiosClient';
 
 /** @typedef {import('./authApi.types').RegisterRequest} RegisterRequest */
 /** @typedef {import('./authApi.types').RegisterResponse} RegisterResponse */

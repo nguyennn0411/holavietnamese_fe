@@ -9,7 +9,7 @@ import { WORD_OF_THE_DAY } from '@/components/home/data/homeData';
 import { speakVietnamese } from '@/utils/speech';
 import { LearnerHeroCarousel } from './LearnerHeroCarousel';
 import { LearnerMotivationStrip } from './LearnerMotivationStrip';
-import '@/presentation/styles/learner-dashboard.css';
+import '@/styles/learner-dashboard.css';
 import { BuffaloMascot, MascotOnboarding, MascotSpeechBubble } from '@/components/mascot';
 
 const clampPercent = (value) => Math.min(100, Math.max(0, Number(value) || 0));

@@ -1,4 +1,4 @@
-import axiosClient from '@/infrastructure/api/axiosClient';
+import axiosClient from '@/api/axiosClient';
 
 const resultOf = response => {
   if (response?.success === false || (typeof response?.code === 'number' && response.code !== 1000)) {

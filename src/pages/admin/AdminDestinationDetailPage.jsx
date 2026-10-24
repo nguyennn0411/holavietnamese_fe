@@ -11,8 +11,8 @@ import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { adminDestinationService } from '@/services/destinationService';
 import { ROUTES } from '@/constants/routes';
 import '@/components/destinations/destinations.css';
-import { useAuth } from '@/application/context/AuthContext';
-import { canManageExploreLinks, canReviewExplore, canWriteExplore } from '@/application/security/contentAccess';
+import { useAuth } from '@/contexts/AuthContext';
+import { canManageExploreLinks, canReviewExplore, canWriteExplore } from '@/utils/permissions/contentAccess';
 
 export function AdminDestinationDetailPage() {
   const { user } = useAuth();

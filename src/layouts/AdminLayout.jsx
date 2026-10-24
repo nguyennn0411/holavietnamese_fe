@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import { PageTransition } from '@/components/common/PageTransition';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
-import { canReadExplore, canReadVocabulary } from '@/application/security/contentAccess';
+import { canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 const groups = [
   { title: 'Tổng quan', links: [[ROUTES.ADMIN, 'Dashboard'], [ROUTES.ADMIN_USERS, 'Người dùng']] },
   { title: 'Nội dung học tập', links: [['/admin/courses', 'Khóa học'], ['/admin/lessons', 'Bài học'], [ROUTES.ADMIN_VOCABULARY, 'Từ vựng'], ['/admin/questions', 'Ngân hàng câu hỏi'], ['/admin/quizzes', 'Quiz']] },

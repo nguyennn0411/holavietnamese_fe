@@ -3,7 +3,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { vocabularyReviewService } from '@/services/vocabularyReviewService';
 import { ResourceState } from '@/components/common/ResourceState';

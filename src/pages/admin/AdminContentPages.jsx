@@ -12,7 +12,7 @@ import { Modal } from '@/components/common/Modal';
 import { ContentForm } from '@/components/admin/ContentForm';
 import { moveItem } from '@/components/learning/answerUtils';
 import { LessonActivities } from '@/components/learning/LessonActivities';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 const labels = { courses:'Khóa học', lessons:'Bài học', quizzes:'Quiz' };
 export function AdminContentListPage({ kind }) {

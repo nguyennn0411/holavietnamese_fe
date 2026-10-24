@@ -8,8 +8,8 @@ import { Breadcrumb, PageHeader, Pagination } from '@/components/common/Ui';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { Plus } from 'lucide-react';
-import { useAuth } from '@/application/context/AuthContext';
-import { canImportVocabulary, canReviewVocabulary, canWriteVocabulary } from '@/application/security/contentAccess';
+import { useAuth } from '@/contexts/AuthContext';
+import { canImportVocabulary, canReviewVocabulary, canWriteVocabulary } from '@/utils/permissions/contentAccess';
 import '@/components/vocabulary/admin/admin-vocabulary.css';
 
 const emptyFilters = { keyword: '', status: '', partOfSpeech: '' };

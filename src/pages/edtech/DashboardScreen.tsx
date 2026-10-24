@@ -40,8 +40,8 @@ import {
   GOAL_PROFILES,
   normalizeGoalId,
 } from '@/features/onboarding/services/recommendationEngine';
-import '@/presentation/styles/duolingo-path.css';
-import '@/presentation/styles/learning-path-simple.css';
+import '@/styles/duolingo-path.css';
+import '@/styles/learning-path-simple.css';
 
 type AnyRecord = Record<string, any>;
 

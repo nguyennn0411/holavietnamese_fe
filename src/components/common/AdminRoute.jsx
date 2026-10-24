@@ -1,7 +1,7 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '@/application/context/AuthContext';
-import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/application/security/contentAccess';
+import { useAuth } from '@/contexts/AuthContext';
+import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 
 export function AdminRoute() {
   const { isAuthenticated, user, loading } = useAuth();

@@ -8,7 +8,7 @@ import { UserMenu } from '@/components/layout/UserMenu';
 import { NotificationDropdown } from '@/components/common/NotificationDropdown';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
-import { localizedSiteField, safeInternalPath, useSiteContent } from '@/application/context/SiteContentContext';
+import { localizedSiteField, safeInternalPath, useSiteContent } from '@/contexts/SiteContentContext';
 import { siteContentIcon } from '@/components/common/siteContentIcons';
 import { MENU_PLACEMENTS } from '@/config/siteContentDefaults';
 

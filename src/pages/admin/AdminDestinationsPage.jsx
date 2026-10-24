@@ -12,8 +12,8 @@ import { destinationDate, DESTINATION_REGIONS, DESTINATION_STATUSES } from '@/mo
 import { adminDestinationService } from '@/services/destinationService';
 import { ROUTES } from '@/constants/routes';
 import { Plus } from 'lucide-react';
-import { useAuth } from '@/application/context/AuthContext';
-import { canReviewExplore, canWriteExplore } from '@/application/security/contentAccess';
+import { useAuth } from '@/contexts/AuthContext';
+import { canReviewExplore, canWriteExplore } from '@/utils/permissions/contentAccess';
 import '@/components/destinations/destinations.css';
 
 const emptyFilters = { keyword: '', status: '', region: '' };

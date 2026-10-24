@@ -46,7 +46,7 @@ test('Dictionary uses keyword and pagination; content import accepts Excel only'
     post: async (path, body) => { calls.push([path,body]); return { result: { canConfirm: false } }; } };
   const load=async name => {
     const source=(await fs.readFile(new URL(`../src/services/${name}.js`,import.meta.url),'utf8'))
-      .replace("import axiosClient from '@/infrastructure/api/axiosClient';",'const axiosClient=globalThis.__dictionaryClient;');
+      .replace("import axiosClient from '@/api/axiosClient';",'const axiosClient=globalThis.__dictionaryClient;');
     return import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
   };
   const { vocabularyCatalogService }=await load('vocabularyCatalogService');

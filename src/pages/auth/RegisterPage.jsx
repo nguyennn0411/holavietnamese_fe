@@ -4,7 +4,7 @@ import { AuthFooter } from '@/components/auth/AuthFooter';
 import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
 import { useState } from 'react';
 import { useNavigate, Navigate, Link, useLocation } from 'react-router-dom';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { savePendingVerificationEmail, savePostVerificationPath, startResendCooldown } from '@/features/auth/emailVerificationFlow';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 

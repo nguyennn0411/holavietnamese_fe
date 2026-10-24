@@ -10,7 +10,7 @@ globalThis.localStorage={ getItem: key => key === 'token' ? 'explore-token' : nu
 globalThis.window={location:{pathname:'/explore',search:'',assign() {}}};
 globalThis.__exploreContract={axios};
 const load=source => import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
-const {default:client}=await load((await fs.readFile(new URL('../src/infrastructure/api/axiosClient.js',import.meta.url),'utf8'))
+const {default:client}=await load((await fs.readFile(new URL('../src/api/axiosClient.js',import.meta.url),'utf8'))
   .replace("import axios from 'axios';",'const {axios}=globalThis.__exploreContract;').replace('import.meta.env.VITE_API_BASE_URL','({}).VITE_API_BASE_URL'));
 globalThis.__exploreContract.client=client;
 const {destinationExploreService}=await load((await fs.readFile(new URL('../src/services/destinationExploreService.js',import.meta.url),'utf8'))

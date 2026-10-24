@@ -4,7 +4,7 @@ html, body, #root { min-height: 100%; margin: 0; }
 button, input, textarea, select { font: inherit; }
 a { color: inherit; text-underline-offset: 4px; }
 button, .button { border: 1px solid var(--green); background: var(--green); color: white; border-radius: 9px; padding: 11px 19px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 8px; }
-button:hover, .button:hover { background: var(--orange-hover, #C2410C); }
+button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):hover, .button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):hover { background: var(--orange-hover, #C2410C); }
 button:disabled { opacity: .6; cursor: default; }
 button.secondary, .button.secondary { background: transparent; color: var(--green); border-color: var(--color-border); }
 button.secondary:hover, .button.secondary:hover { background: var(--bg-peach, #FFF0DC); color: var(--primary-orange, #F97316); }

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { BilingualText } from '@/components/common/BilingualText';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useCallback, useState } from 'react';
 import { generatePath, Link, useLocation, useParams } from 'react-router-dom';
 import { Breadcrumb, EmptyState, Artwork } from '@/components/common/Ui';

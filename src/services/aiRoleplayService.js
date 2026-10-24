@@ -1,6 +1,6 @@
 // AI Roleplay & Scenarios Service (Người 4: /ai-scenarios, /ai-scenarios/:id, /ai-roleplay/:id, /ai-sessions/:id/result)
 
-import axiosClient from '../infrastructure/api/axiosClient.js';
+import axiosClient from '../api/axiosClient.js';
 
 export const SCENARIO_LEVELS = [
   { id: 'all', label: 'Tất cả trình độ' },

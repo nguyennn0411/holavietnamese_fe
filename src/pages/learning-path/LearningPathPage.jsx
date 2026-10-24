@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Check, ChevronRight, Circle, Lock, RefreshCw, Set
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { useLearningPath } from '@/hooks/useLearningPath';
-import '@/presentation/styles/learning-path-simple.css';
+import '@/styles/learning-path-simple.css';
 
 const LEVELS = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1'];
 const SOURCE_LABELS = {

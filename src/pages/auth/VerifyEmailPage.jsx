@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { MailCheck, RefreshCw, ShieldCheck } from 'lucide-react';
-import authApi from '@/infrastructure/api/authApi';
+import authApi from '@/api/authApi';
 import {
   clearPendingVerification,
   getDevelopmentOtp,
