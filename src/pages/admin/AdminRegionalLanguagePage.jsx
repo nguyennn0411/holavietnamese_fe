@@ -31,12 +31,14 @@ export function AdminRegionalLanguagePage() {
       if (action === 'SUBMIT') await adminRegionalVocabularyService.submitReview(entry.id);
       else if (action === 'ARCHIVE') await adminRegionalVocabularyService.archive(entry.id);
       else if (action === 'RESTORE') await adminRegionalVocabularyService.restore(entry.id);
+      else if (action === 'REVISE') await adminRegionalVocabularyService.revise(entry.id);
       else await adminRegionalVocabularyService.review(entry.id, action);
       setMessage(action === 'SUBMIT' ? label('Đã gửi biến thể đi duyệt.', 'Variant submitted for review.')
         : action === 'APPROVE' ? label('Đã duyệt và công khai biến thể.', 'Variant approved and published.')
           : action === 'REJECT' ? label('Đã trả biến thể về bản nháp.', 'Variant returned to draft.')
             : action === 'ARCHIVE' ? label('Đã lưu trữ biến thể.', 'Variant archived.')
-              : label('Đã khôi phục biến thể về bản nháp.', 'Variant restored to draft.'));
+              : action === 'RESTORE' ? label('Đã khôi phục biến thể về bản nháp.', 'Variant restored to draft.')
+                : label('Đã chuyển biến thể về bản nháp để chỉnh sửa.', 'Variant returned to draft for revision.'));
       resource.reload();
     } catch (failure) {
       setError(failure);
@@ -67,6 +69,7 @@ export function AdminRegionalLanguagePage() {
     {masters.error && <Notice kind="error">{masters.error.message} <button className="secondary" onClick={masters.reload}><BilingualText>{"Thử lại từ chuẩn"}</BilingualText></button></Notice>}
     <ResourceState resource={resource}>{items => items.length ? <div className="admin-card regional-table"><table className="admin-table"><thead><tr><th><BilingualText>{"Từ chuẩn"}</BilingualText></th><th><BilingualText>{"Vùng miền"}</BilingualText></th><th><BilingualText>{"Biến thể"}</BilingualText></th><th><BilingualText>{"Nghĩa"}</BilingualText></th><th><BilingualText>{"Trạng thái"}</BilingualText></th><th><BilingualText>{"Thao tác"}</BilingualText></th></tr></thead><tbody>{items.map(item => <tr key={item.id}><td>{item.masterWord}</td><td>{label(REGIONAL_REGIONS.find(region => region.value === item.region)?.vi || item.region)}</td><td><strong>{item.word}</strong></td><td>{item.meaning}</td><td>{label(item.status)}</td><td><div className="actions">
       {mayWrite && item.status === 'DRAFT' && <><button className="secondary" disabled={busy} onClick={() => setEditing(item)}><BilingualText>{"Sửa"}</BilingualText></button><button disabled={busy} onClick={() => transition(item, 'SUBMIT')}><BilingualText vi="Gửi duyệt" en="Submit for review" /></button></>}
+      {mayWrite && item.status === 'PUBLISHED' && <button disabled={busy} onClick={async () => { await transition(item, 'REVISE'); setEditing({ ...item, status: 'DRAFT' }); }}><BilingualText vi="Chỉnh sửa lại" en="Revise" /></button>}
       {mayWrite && ['DRAFT', 'PUBLISHED'].includes(item.status) && <button className="secondary" disabled={busy} onClick={() => transition(item, 'ARCHIVE')}><BilingualText vi="Lưu trữ" en="Archive" /></button>}
       {mayWrite && item.status === 'ARCHIVED' && <button className="secondary" disabled={busy} onClick={() => transition(item, 'RESTORE')}><BilingualText vi="Khôi phục bản nháp" en="Restore draft" /></button>}
       {mayReview && item.status === 'PENDING_REVIEW' && <><button disabled={busy} onClick={() => transition(item, 'APPROVE')}><BilingualText vi="Phê duyệt & công khai" en="Approve & publish" /></button><button className="secondary" disabled={busy} onClick={() => transition(item, 'REJECT')}><BilingualText vi="Trả về bản nháp" en="Return to draft" /></button></>}

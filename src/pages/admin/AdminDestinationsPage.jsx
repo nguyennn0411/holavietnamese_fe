@@ -39,12 +39,14 @@ export function AdminDestinationsPage() {
     if (action === 'SUBMIT') await adminDestinationService.submitReview(item.id);
     else if (action === 'ARCHIVE') await adminDestinationService.archive(item.id);
     else if (action === 'RESTORE') await adminDestinationService.restore(item.id);
+    else if (action === 'REVISE') await adminDestinationService.revise(item.id);
     else await adminDestinationService.review(item.id, action);
     setMessage(action === 'SUBMIT' ? bilingualLabel('Đã gửi điểm đến đi duyệt.', 'Destination submitted for review.')
       : action === 'APPROVE' ? bilingualLabel('Đã duyệt và công khai điểm đến.', 'Destination approved and published.')
         : action === 'REJECT' ? bilingualLabel('Đã trả điểm đến về bản nháp.', 'Destination returned to draft.')
           : action === 'ARCHIVE' ? bilingualLabel('Đã lưu trữ điểm đến.', 'Destination archived.')
-            : bilingualLabel('Đã khôi phục điểm đến về bản nháp.', 'Destination restored to draft.'));
+            : action === 'RESTORE' ? bilingualLabel('Đã khôi phục điểm đến về bản nháp.', 'Destination restored to draft.')
+              : bilingualLabel('Đã chuyển điểm đến về bản nháp để chỉnh sửa.', 'Destination returned to draft for revision.'));
     resource.reload();
   }
 
@@ -74,6 +76,7 @@ export function AdminDestinationsPage() {
             <td><DestinationStatusBadge status={item.status} /></td><td>{destinationDate(item.updatedAt)}</td>
             <td><div className="actions"><Link className="button secondary" to={detailPath}><BilingualText>Chi tiết</BilingualText></Link>
               {mayWrite && item.status === 'DRAFT' && <><Link className="button secondary" to={`${detailPath}?edit=1`}><BilingualText>Sửa</BilingualText></Link><button type="button" onClick={() => transition(item, 'SUBMIT')}><BilingualText vi="Gửi duyệt" en="Submit for review" /></button></>}
+              {mayWrite && item.status === 'PUBLISHED' && <button type="button" onClick={() => transition(item, 'REVISE')}><BilingualText vi="Chuyển về nháp để sửa" en="Return to draft to revise" /></button>}
               {mayWrite && ['DRAFT', 'PUBLISHED'].includes(item.status) && <button type="button" className="secondary" onClick={() => transition(item, 'ARCHIVE')}><BilingualText vi="Lưu trữ" en="Archive" /></button>}
               {mayWrite && item.status === 'ARCHIVED' && <button type="button" className="secondary" onClick={() => transition(item, 'RESTORE')}><BilingualText vi="Khôi phục bản nháp" en="Restore draft" /></button>}
               {mayReview && item.status === 'PENDING_REVIEW' && <><button type="button" onClick={() => transition(item, 'APPROVE')}><BilingualText vi="Phê duyệt & công khai" en="Approve & publish" /></button><button type="button" className="secondary" onClick={() => transition(item, 'REJECT')}><BilingualText vi="Trả về bản nháp" en="Return to draft" /></button></>}

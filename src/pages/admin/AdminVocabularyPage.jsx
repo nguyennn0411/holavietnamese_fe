@@ -59,12 +59,14 @@ export function AdminVocabularyPage() {
     const result = action === 'SUBMIT' ? await adminVocabularyService.submitReview(item.id)
       : action === 'ARCHIVE' ? await adminVocabularyService.archive(item.id)
         : action === 'RESTORE' ? await adminVocabularyService.restore(item.id)
+          : action === 'REVISE' ? await adminVocabularyService.revise(item.id)
           : await adminVocabularyService.review(item.id, action);
     setMessage(action === 'SUBMIT' ? bilingualLabel('Đã gửi từ vựng đi duyệt.', 'Vocabulary submitted for review.')
       : action === 'APPROVE' ? bilingualLabel('Đã duyệt và công khai từ vựng.', 'Vocabulary approved and published.')
         : action === 'REJECT' ? bilingualLabel('Đã trả từ vựng về bản nháp.', 'Vocabulary returned to draft.')
           : action === 'ARCHIVE' ? bilingualLabel('Đã lưu trữ từ vựng.', 'Vocabulary archived.')
-            : bilingualLabel('Đã khôi phục từ vựng về bản nháp.', 'Vocabulary restored to draft.'));
+            : action === 'RESTORE' ? bilingualLabel('Đã khôi phục từ vựng về bản nháp.', 'Vocabulary restored to draft.')
+              : bilingualLabel('Đã chuyển từ vựng về bản nháp để chỉnh sửa.', 'Vocabulary returned to draft for revision.'));
     reload();
     return result;
   }
@@ -95,6 +97,7 @@ export function AdminVocabularyPage() {
           <td><span className={`admin-badge ${item.status === 'PUBLISHED' ? 'admin-badge-success' : item.status === 'ARCHIVED' ? 'admin-badge-danger' : 'admin-badge-warning'}`}><BilingualText>{item.status}</BilingualText></span></td>
           <td><div className="actions"><button type="button" className="secondary" onClick={() => setModal({ mode: 'view', id: item.id })}><BilingualText>{"Chi tiết"}</BilingualText></button>
             {mayWrite && item.status === 'DRAFT' && <><button type="button" className="secondary" onClick={() => setModal({ mode: 'edit', id: item.id })}><BilingualText>{"Sửa"}</BilingualText></button><button type="button" onClick={() => transition(item, 'SUBMIT')}><BilingualText vi="Gửi duyệt" en="Submit for review" /></button></>}
+            {mayWrite && item.status === 'PUBLISHED' && <button type="button" onClick={async () => { await transition(item, 'REVISE'); setModal({ mode: 'edit', id: item.id }); }}><BilingualText vi="Chỉnh sửa lại" en="Revise" /></button>}
             {mayWrite && ['DRAFT', 'PUBLISHED'].includes(item.status) && <button type="button" className="secondary" onClick={() => transition(item, 'ARCHIVE')}><BilingualText vi="Lưu trữ" en="Archive" /></button>}
             {mayWrite && item.status === 'ARCHIVED' && <button type="button" className="secondary" onClick={() => transition(item, 'RESTORE')}><BilingualText vi="Khôi phục bản nháp" en="Restore draft" /></button>}
             {mayReview && item.status === 'PENDING_REVIEW' && <><button type="button" onClick={() => transition(item, 'APPROVE')}><BilingualText vi="Phê duyệt & công khai" en="Approve & publish" /></button><button type="button" className="secondary" onClick={() => transition(item, 'REJECT')}><BilingualText vi="Trả về bản nháp" en="Return to draft" /></button></>}

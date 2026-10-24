@@ -31,10 +31,12 @@ export function AdminDestinationDetailPage() {
   }
   async function transition(action) {
     if (action === 'SUBMIT') await adminDestinationService.submitReview(id);
+    else if (action === 'REVISE') await adminDestinationService.revise(id);
     else await adminDestinationService.review(id, action);
     setMessage(action === 'SUBMIT' ? bilingualLabel('Đã gửi điểm đến đi duyệt.', 'Destination submitted for review.')
       : action === 'APPROVE' ? bilingualLabel('Đã duyệt và công khai điểm đến.', 'Destination approved and published.')
-        : bilingualLabel('Đã trả điểm đến về bản nháp.', 'Destination returned to draft.'));
+        : action === 'REJECT' ? bilingualLabel('Đã trả điểm đến về bản nháp.', 'Destination returned to draft.')
+          : bilingualLabel('Đã chuyển điểm đến về bản nháp để chỉnh sửa.', 'Destination returned to draft for revision.'));
     resource.reload();
   }
 
@@ -45,6 +47,7 @@ export function AdminDestinationDetailPage() {
     <ResourceState resource={resource}>{entry => <>
       <PageHeader eyebrow="Quản lý điểm đến" title={<BilingualText vi={entry.nameVi} en={entry.nameEn} />} actions={!editing && <div className="actions">
         {mayWrite && entry.status === 'DRAFT' && <><button type="button" className="secondary" onClick={() => { setMessage(''); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa điểm đến" en="Edit destination" /></button><button type="button" onClick={() => transition('SUBMIT')}><BilingualText vi="Gửi duyệt" en="Submit for review" /></button></>}
+        {mayWrite && entry.status === 'PUBLISHED' && <button type="button" onClick={async () => { await transition('REVISE'); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa lại" en="Revise" /></button>}
         {mayReview && entry.status === 'PENDING_REVIEW' && <><button type="button" onClick={() => transition('APPROVE')}><BilingualText vi="Phê duyệt & công khai" en="Approve & publish" /></button><button type="button" className="secondary" onClick={() => transition('REJECT')}><BilingualText vi="Trả về bản nháp" en="Return to draft" /></button></>}
       </div>} />
       {message && <Notice kind="success"><BilingualText vi={message} en="Destination saved." /></Notice>}

@@ -21,4 +21,5 @@ export const adminRegionalVocabularyService = {
   async review(id, decision) { return resultOf(await axiosClient.post(`/api/admin/regional-language/${pathId(id)}/review`, { decision })); },
   async archive(id) { return resultOf(await axiosClient.post(`/api/admin/regional-language/${pathId(id)}/archive`)); },
   async restore(id) { return resultOf(await axiosClient.post(`/api/admin/regional-language/${pathId(id)}/restore`)); },
+  async revise(id) { return resultOf(await axiosClient.post(`/api/admin/regional-language/${pathId(id)}/revise`)); },
 };

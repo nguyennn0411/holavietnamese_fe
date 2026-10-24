@@ -54,5 +54,8 @@ export const adminVocabularyService = {
   async restore(id, options = {}) {
     return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/restore`, null, options));
   },
+  async revise(id, options = {}) {
+    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/revise`, null, options));
+  },
 
 };
