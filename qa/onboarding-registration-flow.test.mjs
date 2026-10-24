@@ -22,6 +22,22 @@ test('authenticated existing learners can open the placement test directly', asy
   assert.doesNotMatch(pages, /PlacementTestPage[^\n]*data\.learningPath !== 'placement'/);
 });
 
+test('learning path offers only the placement test', async () => {
+  const pages = await read('../src/features/onboarding/pages/OnboardingPages.jsx');
+  assert.doesNotMatch(pages, /Start from Scratch/);
+  assert.doesNotMatch(pages, /choose\('beginner'\)/);
+  assert.match(pages, /ob-paths ob-paths-single/);
+  assert.match(pages, /15 câu · Khoảng 5 phút/);
+});
+
+test('beginner lesson and placement test retain clearly different experiences', async () => {
+  const pages = await read('../src/features/onboarding/pages/OnboardingPages.jsx');
+  assert.match(pages, /Đây là bài học, không phải bài kiểm tra/);
+  assert.match(pages, /backTo="\/onboarding\/learning-path"/);
+  assert.match(pages, /mode === 'placement'[\s\S]*NEXT QUESTION/);
+  assert.match(pages, /mode === 'lesson'[\s\S]*TRẢ LỜI/);
+});
+
 test('registration and OTP verification preserve the post-login onboarding destination', async () => {
   const [register, verify, flow] = await Promise.all([
     read('../src/pages/auth/RegisterPage.jsx'),

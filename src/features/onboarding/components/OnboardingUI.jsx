@@ -35,13 +35,14 @@ export function Mascot({ message, compact = false, celebration = false }) {
   );
 }
 
-export function OnboardingLayout({ children, title, eyebrow, mascotMessage, wide = false, hideProgress = false }) {
+export function OnboardingLayout({ children, title, eyebrow, mascotMessage, wide = false, hideProgress = false, backTo, progressStep }) {
   const navigate = useNavigate();
   const location = useLocation();
   const reduceMotion = useReducedMotion();
   const { reset } = useOnboarding();
   const stepIndex = steps.indexOf(location.pathname);
-  const previous = stepIndex > 0 ? steps[stepIndex - 1] : '/welcome';
+  const currentStep = progressStep ?? Math.max(stepIndex + 1, 1);
+  const previous = backTo || (stepIndex > 0 ? steps[stepIndex - 1] : '/welcome');
 
   const restart = () => {
     if (window.confirm(bilingualLabel('Bắt đầu lại? Tiến trình khảo sát hiện tại của bạn sẽ bị xóa.', 'Start over? Your current onboarding progress will be cleared.'))) {

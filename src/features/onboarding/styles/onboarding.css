@@ -716,6 +716,11 @@
   margin: 0 auto;
 }
 
+.ob-paths-single {
+  grid-template-columns: minmax(0, 526px);
+  justify-content: center;
+}
+
 .ob-path-card {
   display: flex !important;
   flex-direction: column !important;
@@ -803,8 +808,37 @@
   font-weight: 400 !important;
   line-height: 1.55 !important;
   color: var(--ob-muted) !important;
-  margin: 0 0 22px !important;
-  flex-grow: 1 !important;
+  margin: 0 0 18px !important;
+  flex-grow: 0 !important;
+  min-height: auto !important;
+}
+
+.ob-path-details {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: #FFF7ED;
+  color: #9A3412;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ob-path-details span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ob-path-details svg {
+  flex: 0 0 auto;
+}
+
+.placement .ob-path-details {
+  background: #FFFBEB;
+  color: #92400E;
 }
 
 .ob-path-card > strong {
@@ -1097,6 +1131,90 @@
 }
 
 /* Answer Grid for Assessment Questions */
+.ob-lesson-intro {
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: clamp(22px, 4vw, 34px);
+  border: 1px solid var(--ob-border);
+  border-radius: 24px;
+  background: #FFFFFF;
+  box-shadow: var(--ob-shadow);
+}
+
+.ob-lesson-intro-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.ob-lesson-intro-heading > svg {
+  width: 46px;
+  height: 46px;
+  padding: 11px;
+  border-radius: 14px;
+  background: #FFF7ED;
+  color: #EA580C;
+}
+
+.ob-lesson-intro-heading div {
+  display: grid;
+  gap: 3px;
+}
+
+.ob-lesson-intro-heading strong {
+  color: var(--ob-ink);
+  font-size: 17px;
+}
+
+.ob-lesson-intro-heading span {
+  color: var(--ob-muted);
+  font-size: 13px;
+}
+
+.ob-lesson-phrases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ob-lesson-phrases button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 88px;
+  padding: 16px;
+  border: 2px solid #FED7AA;
+  border-radius: 16px;
+  background: #FFFCF7;
+  color: #EA580C;
+  cursor: pointer;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+}
+
+.ob-lesson-phrases button:hover {
+  transform: translateY(-2px);
+  border-color: #F97316;
+  box-shadow: 0 4px 0 #FED7AA;
+}
+
+.ob-lesson-phrases button span {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+}
+
+.ob-lesson-phrases b {
+  color: var(--ob-ink);
+  font-size: 16px;
+}
+
+.ob-lesson-phrases small {
+  color: var(--ob-muted);
+  font-size: 12px;
+}
+
 .ob-answer-grid {
   display: grid;
   gap: 12px;
@@ -1699,6 +1817,9 @@
     font-size: 23px;
   }
   .ob-grid.two, .ob-benefits, .ob-paths {
+    grid-template-columns: 1fr;
+  }
+  .ob-lesson-phrases {
     grid-template-columns: 1fr;
   }
   .ob-grid.four {
