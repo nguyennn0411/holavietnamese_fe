@@ -10,8 +10,8 @@ import { websiteImportService } from '@/services/websiteImportService';
 import { ROUTES } from '@/constants/routes';
 import { BilingualText, useBilingualLabel } from '@/components/common/BilingualText';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@/application/context/AuthContext';
-import { isAdministrator } from '@/application/security/contentAccess';
+import { useAuth } from '@/contexts/AuthContext';
+import { isAdministrator } from '@/utils/permissions/contentAccess';
 import '@/components/content-import/content-import.css';
 
 export function AdminImportHistoryPage() {
