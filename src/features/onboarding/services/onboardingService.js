@@ -11,7 +11,7 @@ export const onboardingService = {
     const data = this.readGuestProgress();
     return Boolean(data?.guestExperienceCompleted || data?.firstLessonCompleted || data?.placementTestCompleted);
   },
-  async syncGuestProgress() {
+  async syncProgress() {
     const data = this.readGuestProgress();
     if (!this.hasCompletedExperience()) return { skipped: true };
     const recommendation = buildOnboardingRecommendation(data);

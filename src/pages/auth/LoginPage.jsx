@@ -6,11 +6,22 @@ import { useAuth } from '@/contexts/AuthContext';
 import { AuthFooter } from '@/components/auth/AuthFooter';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { AuthRightPanel } from '@/components/auth/AuthRightPanel';
-import { onboardingService } from '@/features/onboarding/services/onboardingService';
 import { clearPostVerificationPath, getUnverifiedLoginEmail, savePendingVerificationEmail, savePostVerificationPath } from '@/features/auth/emailVerificationFlow';
 import { Eye, EyeOff } from 'lucide-react';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+const continueLearnerFlow = (navigate, user, from) => {
+  const requestedPath = from && !from.startsWith('/onboarding') ? from : null;
+  if (user?.onboardingCompleted !== true) {
+    navigate('/onboarding/reason', {
+      replace: true,
+      state: requestedPath ? { from: requestedPath, onboardingGate: true } : undefined,
+    });
+    return;
+  }
+  navigate(requestedPath || '/', { replace: true });
+};
 
 export function LoginPage() {
   const location = useLocation();
@@ -55,20 +66,7 @@ export function LoginPage() {
         } else if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
           navigate('/admin/courses', { replace: true });
         } else {
-          const completedGuestOnboarding = onboardingService.hasCompletedExperience();
-          if (completedGuestOnboarding) {
-            try {
-              await onboardingService.syncGuestProgress();
-            } catch {
-              // Progress stays local and can be retried when connectivity returns.
-            }
-          }
-          const destination = (from && !from.startsWith('/onboarding/reason'))
-            ? from
-            : completedGuestOnboarding
-              ? '/learning-path'
-              : (from || '/');
-          navigate(destination, { replace: true });
+          continueLearnerFlow(navigate, loggedUser, from);
         }
       }
     } catch {
@@ -149,7 +147,7 @@ export function LoginPage() {
     if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
       return <Navigate to="/admin/courses" replace />;
     }
-    return <Navigate to="/" replace />;
+    return <Navigate to={user?.onboardingCompleted === true ? '/' : '/onboarding/reason'} replace />;
   }
 
   const handleSubmit = async (e) => {
@@ -186,20 +184,7 @@ export function LoginPage() {
         } else if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
           navigate('/admin/courses', { replace: true });
         } else {
-          const completedGuestOnboarding = onboardingService.hasCompletedExperience();
-          if (completedGuestOnboarding) {
-            try {
-              await onboardingService.syncGuestProgress();
-            } catch {
-              // Progress stays local and can be retried when connectivity returns.
-            }
-          }
-          const destination = (from && !from.startsWith('/onboarding/reason'))
-            ? from
-            : completedGuestOnboarding
-              ? '/learning-path'
-              : (from || '/');
-          navigate(destination, { replace: true });
+          continueLearnerFlow(navigate, loggedUser, from);
         }
       }
     } catch {

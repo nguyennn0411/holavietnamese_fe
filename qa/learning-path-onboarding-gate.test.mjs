@@ -29,14 +29,14 @@ test('onboarding completion redirects to the canonical Learning Path route', asy
   ]);
   assert.match(engine, /return `\/learning-path\?\$\{params\.toString\(\)\}`/);
   assert.match(service, /learningPathService\.updatePreferences/);
-  assert.match(login, /completedGuestOnboarding\s*\? '\/learning-path'/);
+  assert.match(login, /user\?\.onboardingCompleted !== true/);
   assert.doesNotMatch(login, /loggedUser\?\.targetLevel\)\s*\? defaultLearningPath/);
-  assert.match(pages, /await onboardingService\.syncGuestProgress\(\);\s*await fetchProfile\(\);/);
+  assert.match(pages, /await onboardingService\.syncProgress\(\);\s*await fetchProfile\(\);/);
 });
 
 test('onboarding remembers a requested Learning Path destination', async () => {
   const pages = await read('../src/features/onboarding/pages/OnboardingPages.jsx');
   assert.match(pages, /\['\/learning-path', '\/edtech\/dashboard'\]/);
   assert.match(pages, /requestedDestination/);
-  assert.match(pages, /ĐĂNG NHẬP ĐỂ MỞ LỘ TRÌNH CỦA TÔI/);
+  assert.match(pages, /LƯU VÀ XEM LỘ TRÌNH ĐỀ XUẤT/);
 });

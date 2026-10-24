@@ -5,7 +5,7 @@ import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Volume2, X } f
 import { benefits, dailyGoals, firstLessonQuestions, learningReasons, levelOptions, placementBands, placementQuestions } from '../data/onboardingData';
 import { useOnboarding } from '../context/OnboardingContext';
 import { Brand, Confetti, LessonHeader, Mascot, OnboardingLayout, PrimaryButton, SelectionCard } from '../components/OnboardingUI';
-import { buildLearningPathPath, buildOnboardingRecommendation, buildRecommendationPath } from '../services/recommendationEngine';
+import { buildLearningPathPath, buildOnboardingRecommendation } from '../services/recommendationEngine';
 import { onboardingService } from '../services/onboardingService';
 import { useAuth } from '@/contexts/AuthContext';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
@@ -39,9 +39,14 @@ const playFeedbackTone = (correct) => {
 export function WelcomePage() {
   const navigate = useNavigate();
   const { reset } = useOnboarding();
+  const { isAuthenticated } = useAuth();
   const startOnboarding = () => {
     reset();
-    navigate('/onboarding/reason');
+    if (isAuthenticated) {
+      navigate('/onboarding/reason');
+      return;
+    }
+    navigate('/register', { state: { from: '/onboarding/reason' } });
   };
   return (
     <div className="ob-welcome">
@@ -528,51 +533,26 @@ export function CompletionPage() {
   const { data } = useOnboarding();
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, fetchProfile } = useAuth();
+  const { fetchProfile } = useAuth();
   const [saving, setSaving] = useState(false);
   const mode = location.state?.mode || (data.placementTestCompleted ? 'placement' : 'lesson');
   const result = mode === 'placement' ? data.placementResult : data.firstLessonResult;
   if (!result) return <Navigate to="/onboarding/learning-path" replace />;
 
   const recommendation = data.recommendation || buildOnboardingRecommendation(data);
-  const courseRecommendationPath = buildRecommendationPath(recommendation);
   const learningPathPath = buildLearningPathPath(recommendation);
-  const requestedLearningPath = ['/learning-path', '/edtech/dashboard'].some(path => data.requestedDestination?.startsWith(path));
-  const shouldOpenLearningPath = mode === 'placement' || requestedLearningPath;
-
-  const handleContinueToLogin = () => navigate('/login', {
-    state: {
-      from: learningPathPath,
-      message: bilingualLabel(
-        'Hoàn thành trải nghiệm khởi đầu! Đăng nhập để lưu tiến độ và xem khóa học phù hợp.',
-        'Welcome experience complete! Log in to save your progress and view matching courses.',
-      ),
-    },
-  });
-
-  const handleRegister = () => navigate('/register', { state: { from: learningPathPath } });
 
   const handleShowRecommendations = async () => {
-    if (isAuthenticated) {
-      setSaving(true);
-      try {
-        await onboardingService.syncGuestProgress();
-        await fetchProfile();
-      } catch {
-        // The local recommendation remains available if profile sync is temporarily unavailable.
-      } finally {
-        setSaving(false);
-      }
+    setSaving(true);
+    try {
+      await onboardingService.syncProgress();
+      await fetchProfile();
+      navigate(learningPathPath);
+    } catch {
+      // Keep the result visible so the learner can retry saving without losing answers.
+    } finally {
+      setSaving(false);
     }
-    if (!isAuthenticated && shouldOpenLearningPath) {
-      if (mode === 'placement') {
-        handleRegister();
-      } else {
-        handleContinueToLogin();
-      }
-      return;
-    }
-    navigate(isAuthenticated || shouldOpenLearningPath ? learningPathPath : courseRecommendationPath);
   };
 
   return (
@@ -646,24 +626,10 @@ export function CompletionPage() {
           <PrimaryButton disabled={saving} onClick={handleShowRecommendations}>
             {saving
               ? <BilingualText vi="ĐANG LƯU LỘ TRÌNH…" en="SAVING YOUR PLAN…" />
-              : shouldOpenLearningPath && !isAuthenticated
-                ? mode === 'placement'
-                  ? <BilingualText vi="ĐĂNG KÝ ĐỂ LƯU VÀ MỞ LỘ TRÌNH" en="SIGN UP TO SAVE AND OPEN MY LEARNING PATH" />
-                  : <BilingualText vi="ĐĂNG NHẬP ĐỂ MỞ LỘ TRÌNH CỦA TÔI" en="LOG IN TO OPEN MY LEARNING PATH" />
-                : mode === 'placement'
-                  ? <BilingualText vi="XEM LỘ TRÌNH ĐỀ XUẤT" en="VIEW MY RECOMMENDED PATH" />
-                  : <BilingualText vi="XEM LỘ TRÌNH VÀ KHÓA HỌC PHÙ HỢP" en="VIEW MY PATH AND MATCHING COURSES" />}
+              : mode === 'placement'
+                ? <BilingualText vi="LƯU VÀ XEM LỘ TRÌNH ĐỀ XUẤT" en="SAVE AND VIEW MY RECOMMENDED PATH" />
+                : <BilingualText vi="LƯU VÀ XEM KHÓA HỌC PHÙ HỢP" en="SAVE AND VIEW MATCHING COURSES" />}
           </PrimaryButton>
-          {!isAuthenticated && (
-            <>
-              <button type="button" className="ob-outline ob-complete-login" onClick={handleContinueToLogin}>
-                <BilingualText vi="ĐĂNG NHẬP ĐỂ LƯU ĐỀ XUẤT" en="LOG IN TO SAVE THIS PLAN" />
-              </button>
-              <button type="button" className="ob-text-link" onClick={handleRegister}>
-                <BilingualText vi="Chưa có tài khoản? Tạo tài khoản mới →" en="New here? Create an account →" />
-              </button>
-            </>
-          )}
         </div>
       </main>
     </div>

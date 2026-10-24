@@ -114,15 +114,17 @@ export function AppRouter() {
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
             <Route path={ROUTES.SIGNUP} element={<RegisterPage />} />
             <Route path={ROUTES.WELCOME} element={<WelcomePage />} />
-            <Route path={ROUTES.ONBOARDING} element={<Navigate to="/onboarding/reason" replace />} />
-            <Route path="/onboarding/reason" element={<ReasonPage />} />
-            <Route path="/onboarding/level" element={<LevelPage />} />
-            <Route path="/onboarding/benefits" element={<BenefitsPage />} />
-            <Route path="/onboarding/daily-goal" element={<DailyGoalPage />} />
-            <Route path="/onboarding/learning-path" element={<OnboardingLearningPathPage />} />
-            <Route path="/onboarding/first-lesson" element={<FirstLessonPage />} />
-            <Route path="/onboarding/placement-test" element={<PlacementTestPage />} />
-            <Route path="/onboarding/completed" element={<CompletionPage />} />
+            <Route element={<RequireAuth fallbackFeature="learning" />}>
+              <Route path={ROUTES.ONBOARDING} element={<Navigate to="/onboarding/reason" replace />} />
+              <Route path="/onboarding/reason" element={<ReasonPage />} />
+              <Route path="/onboarding/level" element={<LevelPage />} />
+              <Route path="/onboarding/benefits" element={<BenefitsPage />} />
+              <Route path="/onboarding/daily-goal" element={<DailyGoalPage />} />
+              <Route path="/onboarding/learning-path" element={<OnboardingLearningPathPage />} />
+              <Route path="/onboarding/first-lesson" element={<FirstLessonPage />} />
+              <Route path="/onboarding/placement-test" element={<PlacementTestPage />} />
+              <Route path="/onboarding/completed" element={<CompletionPage />} />
+            </Route>
             <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
             <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
             <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
