@@ -41,4 +41,18 @@ export const adminVocabularyService = {
     );
   },
 
+  async submitReview(id, options = {}) {
+    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/submit-review`, null, options));
+  },
+
+  async review(id, decision, options = {}) {
+    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/review`, { decision }, options));
+  },
+  async archive(id, options = {}) {
+    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/archive`, null, options));
+  },
+  async restore(id, options = {}) {
+    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/restore`, null, options));
+  },
+
 };
