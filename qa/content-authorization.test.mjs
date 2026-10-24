@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import {
   canImportVocabulary,
   canManageExploreLinks,
@@ -41,4 +42,13 @@ test('an administrator can receive a narrowly scoped content permission', () => 
   assert.equal(canReadExplore(exploreLinkManager), true);
   assert.equal(canManageExploreLinks(exploreLinkManager), true);
   assert.equal(canWriteExplore(exploreLinkManager), false);
+});
+
+test('content managers can view Vocabulary import history without requesting Admin-only course imports', () => {
+  const page = readFileSync(new URL('../src/pages/admin/AdminImportHistoryPage.jsx', import.meta.url), 'utf8');
+  const route = readFileSync(new URL('../src/components/common/AdminRoute.jsx', import.meta.url), 'utf8');
+
+  assert.match(route, /importPath \? canImportVocabulary\(user\)/);
+  assert.match(page, /mayViewWebsiteImports \? websiteImportService\.history/);
+  assert.match(page, /mayViewWebsiteImports && <ResourceState resource=\{websiteResource\}>/);
 });
