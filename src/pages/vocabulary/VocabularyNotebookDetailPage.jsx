@@ -1,4 +1,4 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ROUTES } from '@/constants/routes'
@@ -18,7 +18,7 @@ export function VocabularyNotebookDetailPage() {
   const [savedId, setSavedId] = useState(null)
 
   return <><VocabularyNotebookPage /><section className="vocabulary-detail-page vocabulary-ui vocabulary-notebook-detail">
-    <Modal title="Chi tiết từ vựng" onClose={() => navigate(ROUTES.VOCABULARY_NOTEBOOK)}>
+    <Modal title={bilingualLabel("Chi tiết từ vựng", "Vocabulary details")} onClose={() => navigate(ROUTES.VOCABULARY_NOTEBOOK)}>
     <p className="eyebrow"><BilingualText>{"Những từ bạn đã lưu"}</BilingualText></p>
     {savedId === id && <p className="success" role="status"><BilingualText>{"Đã lưu từ vựng."}</BilingualText></p>}
     <ResourceState resource={resource}>{entry => <NotebookEntryDetails key={entry.id} entry={entry} onSaved={() => { setSavedId(id); resource.reload() }} />}</ResourceState>

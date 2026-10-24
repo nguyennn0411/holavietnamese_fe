@@ -1,6 +1,7 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 
 export function AdminRoute() {
   const { isAuthenticated, user, loading } = useAuth();
@@ -21,9 +22,22 @@ export function AdminRoute() {
 
   const roles = user?.roles || [];
   const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
+  const isContentManager = roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER');
+  const contentPath = ['/admin/courses', '/admin/lessons', '/admin/questions', '/admin/quizzes']
+    .some(path => location.pathname === path || location.pathname.startsWith(`${path}/`));
+  const vocabularyPath = ['/admin/vocabulary', '/admin/regional-language']
+    .some(path => location.pathname === path || location.pathname.startsWith(`${path}/`));
+  const importPath = ['/admin/import', '/admin/imports']
+    .some(path => location.pathname === path || location.pathname.startsWith(`${path}/`));
+  const explorePath = ['/admin/destinations', '/admin/journey']
+    .some(path => location.pathname === path || location.pathname.startsWith(`${path}/`));
+  const moduleAllowed = vocabularyPath ? canReadVocabulary(user)
+    : importPath ? canImportVocabulary(user)
+      : explorePath ? canReadExplore(user)
+        : null;
 
-  // If user is a LEARNER attempting to access /admin -> redirect to home with flash message
-  if (!isAdmin) {
+  if ((moduleAllowed === false)
+    || (moduleAllowed === null && !isAdmin && !(isContentManager && contentPath))) {
     return (
       <Navigate
         to="/forbidden"

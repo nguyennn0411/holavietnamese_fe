@@ -1,42 +1,65 @@
 import { useCallback, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { ResourceState } from '@/components/common/ResourceState';
 import { Breadcrumb, EmptyState, Notice, PageHeader } from '@/components/common/Ui';
 import { DestinationForm } from '@/components/destinations/DestinationForm';
+import { DestinationContentEditor } from '@/components/destinations/DestinationContentEditor';
 import { DestinationMetadata, DestinationRegion, DestinationStatusBadge } from '@/components/destinations/DestinationMetadata';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { adminDestinationService } from '@/services/destinationService';
 import { ROUTES } from '@/constants/routes';
+import '@/components/destinations/destinations.css';
+import { useAuth } from '@/contexts/AuthContext';
+import { canManageExploreLinks, canReviewExplore, canWriteExplore } from '@/utils/permissions/contentAccess';
 
 export function AdminDestinationDetailPage() {
+  const { user } = useAuth();
+  const mayWrite = canWriteExplore(user);
+  const mayReview = canReviewExplore(user);
+  const mayManageLinks = canManageExploreLinks(user);
   const { id } = useParams();
   const [params, setParams] = useSearchParams();
   const editing = params.get('edit') === '1';
   const [message, setMessage] = useState('');
   const resource = useAsyncResource(useCallback(signal => adminDestinationService.get(id, { signal }), [id]));
   function saved() {
-    setMessage('Đã lưu điểm đến.');
+    setMessage(bilingualLabel('Đã lưu điểm đến.', 'Destination saved.'));
     setParams({});
     resource.reload();
   }
+  async function transition(action) {
+    if (action === 'SUBMIT') await adminDestinationService.submitReview(id);
+    else if (action === 'REVISE') await adminDestinationService.revise(id);
+    else await adminDestinationService.review(id, action);
+    setMessage(action === 'SUBMIT' ? bilingualLabel('Đã gửi điểm đến đi duyệt.', 'Destination submitted for review.')
+      : action === 'APPROVE' ? bilingualLabel('Đã duyệt và công khai điểm đến.', 'Destination approved and published.')
+        : action === 'REJECT' ? bilingualLabel('Đã trả điểm đến về bản nháp.', 'Destination returned to draft.')
+          : bilingualLabel('Đã chuyển điểm đến về bản nháp để chỉnh sửa.', 'Destination returned to draft for revision.'));
+    resource.reload();
+  }
 
-  if (resource.error?.status === 404) return <EmptyState title="Không tìm thấy điểm đến"><Link className="button secondary" to={ROUTES.ADMIN_DESTINATIONS}><BilingualText vi="Về danh sách điểm đến" en="Back to destinations" /></Link></EmptyState>;
+  if (resource.error?.status === 404) return <EmptyState title={bilingualLabel("Không tìm thấy điểm đến", "Destination not found")}><Link className="button secondary" to={ROUTES.ADMIN_DESTINATIONS}><BilingualText vi="Về danh sách điểm đến" en="Back to destinations" /></Link></EmptyState>;
 
-  return <div>
-    <Breadcrumb items={[{ label: 'Điểm đến', to: ROUTES.ADMIN_DESTINATIONS }, { label: editing ? 'Chỉnh sửa' : 'Chi tiết' }]} />
+  return <div className="admin-destinations-page admin-destination-detail-page">
+    <Breadcrumb items={[{ label: bilingualLabel('Điểm đến', 'Destinations'), to: ROUTES.ADMIN_DESTINATIONS }, { label: editing ? bilingualLabel('Chỉnh sửa', 'Edit') : bilingualLabel('Chi tiết', 'Details') }]} />
     <ResourceState resource={resource}>{entry => <>
-      <PageHeader title={<BilingualText vi={entry.nameVi} en={entry.nameEn} />} actions={!editing && <button type="button" onClick={() => { setMessage(''); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa điểm đến" en="Edit destination" /></button>} />
+      <PageHeader eyebrow="Quản lý điểm đến" title={<BilingualText vi={entry.nameVi} en={entry.nameEn} />} actions={!editing && <div className="actions">
+        {mayWrite && entry.status === 'DRAFT' && <><button type="button" className="secondary" onClick={() => { setMessage(''); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa điểm đến" en="Edit destination" /></button><button type="button" onClick={() => transition('SUBMIT')}><BilingualText vi="Gửi duyệt" en="Submit for review" /></button></>}
+        {mayWrite && entry.status === 'PUBLISHED' && <button type="button" onClick={async () => { await transition('REVISE'); setParams({ edit: '1' }); }}><BilingualText vi="Chỉnh sửa lại" en="Revise" /></button>}
+        {mayReview && entry.status === 'PENDING_REVIEW' && <><button type="button" onClick={() => transition('APPROVE')}><BilingualText vi="Phê duyệt & công khai" en="Approve & publish" /></button><button type="button" className="secondary" onClick={() => transition('REJECT')}><BilingualText vi="Trả về bản nháp" en="Return to draft" /></button></>}
+      </div>} />
       {message && <Notice kind="success"><BilingualText vi={message} en="Destination saved." /></Notice>}
       <section className="admin-card">
-        {editing ? <DestinationForm key={entry.id} entry={entry} onSaved={saved} onCancel={() => setParams({})} /> : <>
+        {editing && mayWrite && entry.status === 'DRAFT' ? <DestinationForm key={entry.id} entry={entry} onSaved={saved} onCancel={() => setParams({})} /> : <>
           <ContentImage src={entry.imageUrl} alt={entry.nameVi} className="figma-art" style={{ maxHeight: 280, objectFit: 'cover', borderRadius: 8 }} loading="eager" />
           <dl><dt><BilingualText vi="Tên tiếng Việt" en="Vietnamese name" /></dt><dd lang="vi">{entry.nameVi}</dd><dt><BilingualText vi="Tên tiếng Anh" en="English name" /></dt><dd lang="en">{entry.nameEn}</dd><dt>Slug</dt><dd>{entry.slug}</dd><dt><BilingualText vi="Vùng miền" en="Region" /></dt><dd><DestinationRegion value={entry.region} /></dd><dt><BilingualText>Trạng thái</BilingualText></dt><dd><DestinationStatusBadge status={entry.status} /></dd><dt><BilingualText vi="Đường dẫn ảnh" en="Image URL" /></dt><dd style={{ overflowWrap: 'anywhere' }}>{entry.imageUrl || '—'}</dd></dl>
           {[['shortDescriptionVi', 'Mô tả ngắn tiếng Việt', 'Short description in Vietnamese', 'vi'], ['shortDescriptionEn', 'Mô tả ngắn tiếng Anh', 'Short description in English', 'en'], ['descriptionVi', 'Mô tả tiếng Việt', 'Vietnamese description', 'vi'], ['descriptionEn', 'Mô tả tiếng Anh', 'English description', 'en']].map(([field, vi, en, lang]) => <section key={field}><h2><BilingualText vi={vi} en={en} /></h2><p lang={lang} style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{entry[field] || '—'}</p></section>)}
         </>}
       </section>
       <section className="admin-card" style={{ marginTop: 20 }}><DestinationMetadata entry={entry} /></section>
+      {!editing && <DestinationContentEditor key={entry.id} destinationId={entry.id} editable={mayManageLinks && entry.status === 'DRAFT'} />}
       <div className="actions" style={{ marginTop: 20 }}><Link className="button secondary" to={ROUTES.ADMIN_DESTINATIONS}><BilingualText vi="Về danh sách điểm đến" en="Back to destinations" /></Link></div>
     </>}</ResourceState>
   </div>;

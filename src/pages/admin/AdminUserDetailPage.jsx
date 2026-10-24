@@ -28,7 +28,7 @@ export function AdminUserDetailPage() {
     try {
       const res = await adminService.updateUserStatus(id, selectedStatus);
       setUser((value) => ({ ...value, status: selectedStatus }));
-      setMsg(res.message || 'Đã cập nhật trạng thái.');
+      setMsg(res.message || bilingualLabel('Đã cập nhật trạng thái.', 'Status updated successfully.'));
     } catch (error) { setMsg(error.message); }
   };
 
@@ -62,7 +62,7 @@ export function AdminUserDetailPage() {
         <h3><BilingualText>{"Trạng thái tài khoản"}</BilingualText></h3>
         <div className="actions">
           <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-            {['ACTIVE', 'INACTIVE', 'LOCKED', 'DISABLED'].map((status) => <option key={status} value={status}>{bilingualLabel(status)}</option>)}
+            {['ACTIVE', 'INACTIVE', 'LOCKED', 'DISABLED'].map((status) => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}
           </select>
           <button type="button" onClick={handleStatusChange}><BilingualText>{"Cập nhật trạng thái"}</BilingualText></button>
         </div>
@@ -74,7 +74,7 @@ export function AdminUserDetailPage() {
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}><BilingualText>{"Thông tin hồ sơ học viên"}</BilingualText></h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}><BilingualText>{"EMAIL"}</BilingualText></span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 700 }}><BilingualText>{"Thư điện tử"}</BilingualText></span>
               <p style={{ margin: '4px 0 0 0', fontWeight: 600 }}>{user.email}</p>
             </div>
             <div>
@@ -93,7 +93,7 @@ export function AdminUserDetailPage() {
         </div>
 
         <div className="admin-card">
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}><BilingualText>{"Phân vai trò (Role)"}</BilingualText></h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px 0' }}><BilingualText>{"Phân vai trò"}</BilingualText></h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--color-muted)', marginBottom: '16px' }}><BilingualText>{"Thay đổi quyền hạn truy cập của người dùng này."}</BilingualText></p>
           <div style={{ display: 'flex', gap: '10px' }}>
             <select
@@ -101,9 +101,9 @@ export function AdminUserDetailPage() {
               onChange={e => setSelectedRole(e.target.value)}
               style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
             >
-              <option value="LEARNER">{bilingualLabel("LEARNER (Học viên)")}</option>
-              <option value="INSTRUCTOR">{bilingualLabel("INSTRUCTOR (Giảng viên)")}</option>
-              <option value="ADMIN">{bilingualLabel("ADMIN (Quản trị viên)")}</option>
+              <option value="LEARNER">{bilingualLabel("Học viên", "Learner")}</option>
+              <option value="INSTRUCTOR">{bilingualLabel("Giảng viên", "Instructor")}</option>
+              <option value="ADMIN">{bilingualLabel("Quản trị viên", "Administrator")}</option>
             </select>
             <button
               type="button"

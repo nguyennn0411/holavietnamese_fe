@@ -1,12 +1,38 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, useBilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 import { ContentImage } from '@/components/common/ContentImage';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, GraduationCap } from 'lucide-react';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
+import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 
-export function UserMenu({ user, isAdmin, onLogout }) {
+export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
+  const contentAdminPath = canReadVocabulary(user) ? ROUTES.ADMIN_VOCABULARY
+    : canReadExplore(user) ? ROUTES.ADMIN_DESTINATIONS
+      : canImportVocabulary(user) ? ROUTES.ADMIN_IMPORT
+        : null;
+  const label = useBilingualLabel();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-  const displayName = user?.fullName || user?.username || 'Học viên';
+  const displayName = user?.fullName || user?.username || label('Học viên', 'Learner');
+  const reduceMotion = useReducedMotion();
+  const { confirm, confirmationDialog } = useConfirmDialog();
+
+  const handleLogout = async () => {
+    closeMenu();
+    const confirmed = await confirm({
+      title: <BilingualText vi="Đăng xuất khỏi HolaVietnamese?" en="Log out of HolaVietnamese?" />,
+      description: <BilingualText vi="Bạn có chắc chắn muốn đăng xuất không?" en="Are you sure you want to log out?" />,
+      confirmLabel: <BilingualText vi="Đăng xuất" en="Log Out" />,
+      cancelLabel: <BilingualText vi="Hủy" en="Cancel" />,
+      tone: 'danger',
+    });
+    if (confirmed) {
+      onLogout();
+    }
+  };
 
   useEffect(() => {
     const closeOnOutsideClick = (event) => {
@@ -27,25 +53,85 @@ export function UserMenu({ user, isAdmin, onLogout }) {
 
   return (
     <div className="user-menu" ref={menuRef}>
-      <button type="button" className="user-menu__trigger" onClick={() => setOpen((value) => !value)} aria-label={`Menu tài khoản của ${displayName}`} aria-expanded={open} aria-haspopup="menu">
+      <button
+        type="button"
+        className="user-menu__trigger"
+        onClick={() => setOpen((value) => !value)}
+        aria-label={label(`Menu tài khoản của ${displayName}`, `Account menu for ${displayName}`)}
+        aria-expanded={open}
+        aria-haspopup="menu"
+      >
         <span className="user-menu__avatar">
-          <ContentImage src={user?.avatarUrl} alt={`Ảnh đại diện của ${displayName}`} className="user-menu__avatar-image"
-            width={30} height={30} loading="eager" referrerPolicy="no-referrer"
-            fallback={<span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>} />
+          <ContentImage
+            src={user?.avatarUrl}
+            alt={label(`Ảnh đại diện của ${displayName}`, `Avatar of ${displayName}`)}
+            className="user-menu__avatar-image"
+            width={30}
+            height={30}
+            loading="eager"
+            referrerPolicy="no-referrer"
+            fallback={<span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>}
+          />
         </span>
         <span className="user-menu__name">{displayName}</span>
-        <span className="user-menu__chevron" aria-hidden="true">⌄</span>
+        <ChevronDown className="user-menu__chevron" size={16} aria-hidden="true" />
       </button>
-      {open && (
-        <div className="user-menu__panel" role="menu">
-          <div className="user-menu__identity"><strong>{displayName}</strong><span>@{user?.username || 'learner'} · <BilingualText>{isAdmin ? 'Quản trị viên' : 'Học viên'}</BilingualText></span></div>
-          <Link to="/profile" onClick={closeMenu} role="menuitem"><BilingualText>{"Hồ sơ cá nhân"}</BilingualText></Link>
-          <Link to="/settings" onClick={closeMenu} role="menuitem"><BilingualText>{"Cài đặt học tập"}</BilingualText></Link>
-          <Link to="/achievements" onClick={closeMenu} role="menuitem"><BilingualText>{"Thành tích"}</BilingualText></Link>
-          {isAdmin && <Link to="/admin" onClick={closeMenu} role="menuitem" className="user-menu__admin"><BilingualText>{"Trang quản trị"}</BilingualText></Link>}
-          <button type="button" className="user-menu__logout" onClick={() => { closeMenu(); onLogout(); }} role="menuitem"><BilingualText>{"Đăng xuất"}</BilingualText></button>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="user-menu__panel"
+            role="menu"
+            initial={reduceMotion ? false : { opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: -6, scale: 0.98 }}
+            transition={{ duration: reduceMotion ? 0 : 0.18 }}
+          >
+            <div className="user-menu__identity">
+              <strong>{displayName}</strong>
+              <span>
+                {user?.email || `@${user?.username || 'learner'}`} ·{' '}
+                <BilingualText
+                  vi={isAdmin ? 'Quản trị viên' : isContentManager ? 'Quản lý nội dung' : 'Học viên'}
+                  en={isAdmin ? 'Administrator' : isContentManager ? 'Content Manager' : 'Learner'}
+                />
+              </span>
+            </div>
+            <Link to={ROUTES.MY_LEARNING} onClick={closeMenu} role="menuitem">
+              <GraduationCap size={16} />
+              <BilingualText vi="Góc học tập của tôi" en="My Learning" />
+            </Link>
+            <Link to="/profile" onClick={closeMenu} role="menuitem">
+              <UserRound size={16} />
+              <BilingualText vi="Hồ sơ cá nhân" en="My Profile" />
+            </Link>
+            <Link to="/settings" onClick={closeMenu} role="menuitem">
+              <Settings size={16} />
+              <BilingualText vi="Cài đặt học tập" en="Settings" />
+            </Link>
+            <Link to="/achievements" onClick={closeMenu} role="menuitem">
+              <Trophy size={16} />
+              <BilingualText vi="Thành tích" en="Achievements" />
+            </Link>
+            {isAdmin && (
+              <Link to="/admin" onClick={closeMenu} role="menuitem" className="user-menu__admin">
+                <Shield size={16} />
+                <BilingualText vi="Trang quản trị" en="Admin Panel" />
+              </Link>
+            )}
+            {(isContentManager || contentAdminPath) && !isAdmin && (
+              <Link to={isContentManager ? ROUTES.ADMIN_COURSES : contentAdminPath} onClick={closeMenu} role="menuitem" className="user-menu__admin">
+                <Shield size={16} />
+                <BilingualText vi={isContentManager ? 'Quản lý khóa học' : 'Quản lý nội dung'} en={isContentManager ? 'Manage Courses' : 'Content Management'} />
+              </Link>
+            )}
+            <button type="button" className="user-menu__logout" onClick={handleLogout} role="menuitem">
+              <LogOut size={16} />
+              <BilingualText vi="Đăng xuất" en="Log Out" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {confirmationDialog}
     </div>
   );
 }

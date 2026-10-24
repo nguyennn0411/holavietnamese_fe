@@ -1,13 +1,26 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { ContentImage } from '@/components/common/ContentImage';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import { Search, X, MapPin, Target, RotateCcw, Play, MessageSquare } from 'lucide-react';
+import { BilingualText, bilingualLabel, useBilingualLabel } from '@/components/common/BilingualText';
+import { ContentImage } from '@/components/common/ContentImage';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
+import { useTranslation } from 'react-i18next';
 
 export function ScenarioListPage() {
+  const { i18n } = useTranslation();
+  const isVi = (i18n?.resolvedLanguage || i18n?.language || 'vi').startsWith('vi');
+  const bLabel = useBilingualLabel();
   const [search, setSearch] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');
+  const [, setDbRevision] = useState(0);
+
+  useEffect(() => {
+    aiRoleplayService.fetchScenarios().then(() => {
+      setDbRevision(v => v + 1);
+    });
+  }, []);
 
   const levels = aiRoleplayService.getLevels();
   const topics = aiRoleplayService.getTopics();
@@ -17,133 +30,275 @@ export function ScenarioListPage() {
     topic: selectedTopic,
   });
 
+  const handleResetFilters = () => {
+    setSearch('');
+    setSelectedLevel('all');
+    setSelectedTopic('all');
+  };
+
+  const isFiltered = search || selectedLevel !== 'all' || selectedTopic !== 'all';
+
   return (
-    <div className="p4-container">
-      {/* Header */}
-      <div>
-        <span className="p4-header-badge"><BilingualText>{"Roleplay & Scenarios"}</BilingualText></span>
-        <h1 className="p4-title"><BilingualText>{"Kịch bản nhập vai thực tế"}</BilingualText></h1>
-        <p className="p4-subtitle"><BilingualText>{"Luyện phản xạ giao tiếp tự nhiên cùng AI trong các tình huống đời thực: từ gọi món phở Bát Đàn, trả giá chợ Bến Thành cho đến phỏng vấn xin việc và ra mắt gia đình người Việt."}</BilingualText></p>
+    <div className="relative w-full min-h-[calc(100vh-80px)] overflow-hidden">
+      {/* Subtle Heritage Dong Son Bronze Drum Background Watermark */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center overflow-hidden select-none"
+        aria-hidden="true"
+      >
+        <div
+          className="w-[min(96vw,1000px)] h-[min(96vw,1000px)] sm:w-[920px] sm:h-[920px] lg:w-[1100px] lg:h-[1100px] aspect-square opacity-[0.05] bg-contain bg-center bg-no-repeat transform-gpu"
+          style={{
+            backgroundImage: `url('/design/dong-son-drum.webp')`,
+          }}
+        />
       </div>
 
-      {/* Filter Bar */}
-      <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '18px', padding: '20px', marginBottom: '28px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {/* Search */}
-        <div>
-          <input
-            type="text"
-            placeholder={bilingualLabel("Tìm kiếm kịch bản theo tên, địa điểm hoặc bối cảnh...")}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--color-border)' }}
-          />
-        </div>
+      <div className="relative z-10 w-full max-w-full px-0 py-6 space-y-8 text-left">
+        {/* Header Hero Banner */}
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-8 sm:p-12 shadow-sm">
+          <div className="relative z-10 max-w-4xl space-y-3">
+            <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#FF7A00] text-xs font-black uppercase tracking-wider shadow-2xs">
+              <span><BilingualText vi="50+ Tình huống giao tiếp • Real-Life Scenarios" en="50+ Real-Life Conversation Scenarios" /></span>
+            </div>
 
-        {/* Level & Topic Filters */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-red-hover)' }}><BilingualText>{"Trình độ:"}</BilingualText></span>
-            {levels.map(lvl => (
-              <button
-                key={lvl.id}
-                className={`destination-pill-btn ${selectedLevel === lvl.id ? 'active' : ''}`}
-                onClick={() => setSelectedLevel(lvl.id)}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#253044] tracking-tight leading-tight">
+              <BilingualText vi="Kịch Bản Nhập Vai Thực Tế" en="Real-Life Roleplay Scenarios" />
+            </h1>
+
+            <p className="text-base sm:text-lg text-[#64748B] leading-relaxed max-w-3xl">
+              <BilingualText
+                vi="Luyện phản xạ giao tiếp tự nhiên cùng AI trong các bối cảnh đời thực: từ gọi món phở Bát Đàn, trả giá chợ Bến Thành cho đến hỏi đường phố cổ và giao lưu bạn bè."
+                en="Practice natural communication reflexes with AI in real-life contexts: from ordering pho at Bat Dan, bargaining at Ben Thanh market to asking for directions in the Old Quarter and socializing with friends."
+              />
+            </p>
+
+            <div className="pt-2 flex items-center gap-3">
+              <Link
+                to="/ai-tutor"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] hover:text-[#FF7A00] text-xs font-bold shadow-2xs transition-all"
               >
-                <BilingualText>{lvl.label}</BilingualText>
+                <span><BilingualText vi="Trò chuyện tự do với AI Tutor →" en="Free Chat with AI Tutor →" /></span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Modern Filter Toolbar Card */}
+        <section className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 p-5 sm:p-6 shadow-xs space-y-4">
+          {/* Search Bar */}
+          <div className="relative w-full">
+            <Search
+              size={17}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]"
+            />
+            <input
+              type="text"
+              aria-label={bLabel("Tìm kiếm kịch bản", "Search scenarios")}
+              placeholder={bLabel("Tìm kịch bản theo tên, địa danh hoặc bối cảnh (Ví dụ: phở, chợ, taxi)...", "Search scenarios by name, destination, or context (e.g., pho, market, taxi)...")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 bg-[#FFFCF7] border border-[#E8E5DF]/80 focus:border-[#FF7A00] focus:bg-white rounded-2xl text-xs sm:text-sm text-[#253044] placeholder-[#64748B]/60 transition-all outline-none"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#FF7A00] p-1"
+                aria-label={bLabel("Xóa tìm kiếm", "Clear search")}
+              >
+                <X size={16} />
               </button>
-            ))}
+            )}
           </div>
 
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-red-hover)' }}><BilingualText>{"Chủ đề:"}</BilingualText></span>
-            {topics.map(t => (
-              <button
-                key={t.id}
-                className={`destination-pill-btn ${selectedTopic === t.id ? 'active' : ''}`}
-                onClick={() => setSelectedTopic(t.id)}
-              >
-                <BilingualText>{t.label}</BilingualText>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Scenarios Grid */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-        <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-ink)', margin: 0 }}><BilingualText>{"Danh sách kịch bản ("}</BilingualText>{scenarios.length})
-        </h2>
-        {(search || selectedLevel !== 'all' || selectedTopic !== 'all') && (
-          <button
-            onClick={() => { setSearch(''); setSelectedLevel('all'); setSelectedTopic('all'); }}
-            style={{ background: 'transparent', border: 'none', color: 'var(--color-red-hover)', fontSize: '13px', fontWeight: 650, cursor: 'pointer' }}
-          ><BilingualText>{"✕ Xóa bộ lọc"}</BilingualText></button>
-        )}
-      </div>
-
-      {scenarios.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px 20px', background: 'var(--color-surface)', borderRadius: '18px', border: '1px solid var(--color-border)' }}>
-          <p style={{ fontSize: '40px', margin: 0 }}>🎭</p>
-          <h3 style={{ fontSize: '18px', color: 'var(--color-ink)', margin: '10px 0' }}><BilingualText>{"Chưa tìm thấy kịch bản phù hợp"}</BilingualText></h3>
-          <p style={{ color: 'var(--color-muted)', fontSize: '14px' }}><BilingualText>{"Hãy thử điều chỉnh cấp độ hoặc chủ đề để khám phá thêm nhiều kịch bản thú vị nhé!"}</BilingualText></p>
-        </div>
-      ) : (
-        <div className="scenario-grid">
-          {scenarios.map(sc => (
-            <div key={sc.id} className="scenario-card">
-              <div className="scenario-card__media">
-                <ContentImage src={sc.thumbnail} alt={sc.title} />
-                <span className="culture-card__destination">📍 {sc.destination}</span>
-              </div>
-
-              <div className="scenario-card__body">
-                <div className="role-badge-row">
-                  <span className="badge-level">{sc.level}</span>
-                  <span className="badge-topic">{sc.topicLabel}</span>
-                  <span style={{ fontSize: '11px', color: 'var(--color-forest)', display: 'flex', alignItems: 'center' }}>
-                    ⏱️ {sc.duration}
-                  </span>
-                </div>
-
-                <h3 style={{ fontSize: '18px', fontWeight: 750, color: 'var(--color-ink)', margin: '0 0 8px', lineHeight: 1.35 }}>
-                  <BilingualText vi={sc.titleVi || sc.title} en={sc.title} />
-                </h3>
-
-                <p style={{ fontSize: '13.5px', color: 'var(--color-forest)', margin: '0 0 14px', lineHeight: 1.5 }}>
-                  {sc.overview}
-                </p>
-
-                {/* Role snapshot */}
-                <div className="scenario-role-box">
-                  <div>
-                    <span style={{ fontWeight: 700, color: 'var(--color-red-hover)' }}><BilingualText>{"AI đóng vai:"}</BilingualText></span> {sc.aiRole.name}
-                  </div>
-                  <div>
-                    <span style={{ fontWeight: 700, color: 'var(--color-ink)' }}><BilingualText>{"Bạn đóng vai:"}</BilingualText></span> {sc.learnerRole.role}
-                  </div>
-                </div>
-
-                {/* Objectives snapshot */}
-                <div style={{ fontSize: '12px', color: 'var(--color-muted)', margin: '6px 0 16px' }}>
-                  🎯 <strong>{sc.objectives.length}<BilingualText>{"nhiệm vụ"}</BilingualText></strong><BilingualText>{"cần hoàn thành trong phiên"}</BilingualText></div>
-
-                <div style={{ marginTop: 'auto', display: 'flex', gap: '10px' }}>
-                  <Link
-                    to={`/ai-scenarios/${sc.id}`}
-                    className="button secondary"
-                    style={{ flex: 1, fontSize: '13px', padding: '10px' }}
-                  ><BilingualText>{"Xem chi tiết"}</BilingualText></Link>
-                  <Link
-                    to={`/ai-roleplay/${sc.id}`}
-                    className="button"
-                    style={{ flex: 1, fontSize: '13px', padding: '10px', background: 'var(--color-red-hover)', borderColor: 'var(--color-red-hover)' }}
-                  ><BilingualText>{"Bắt đầu ➔"}</BilingualText></Link>
-                </div>
+          {/* Level & Topic Filter Pills */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-1 border-t border-[#E8E5DF]/40">
+            {/* Level Selector */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-bold text-[#64748B] shrink-0"><BilingualText vi="Trình độ:" en="Level:" /></span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {levels.map((lvl) => {
+                  const isSelected = selectedLevel === lvl.id;
+                  return (
+                    <button
+                      key={lvl.id}
+                      type="button"
+                      onClick={() => setSelectedLevel(lvl.id)}
+                      className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#FF7A00] text-white shadow-xs'
+                          : 'bg-[#FFFCF7] hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]/70'
+                      }`}
+                    >
+                      {isVi ? (lvl.labelVi || lvl.label) : (lvl.labelEn || lvl.label)}
+                    </button>
+                  );
+                })}
               </div>
             </div>
-          ))}
+
+            {/* Topic Selector */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-bold text-[#64748B] shrink-0"><BilingualText vi="Chủ đề:" en="Topic:" /></span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {topics.map((t) => {
+                  const isSelected = selectedTopic === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => setSelectedTopic(t.id)}
+                      className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#253044] text-white shadow-xs'
+                          : 'bg-[#FFFCF7] hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]/70'
+                      }`}
+                    >
+                      {isVi ? (t.labelVi || t.label) : (t.labelEn || t.label)}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Results Header */}
+        <div className="flex items-center justify-between text-sm px-1">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-black text-[#253044]">
+              <BilingualText vi="Danh sách kịch bản" en="Scenario List" />
+            </h2>
+            <span className="px-2.5 py-0.5 rounded-full bg-[#FFFCF7] border border-[#E8E5DF] text-xs font-bold text-[#FF7A00]">
+              {scenarios.length} <BilingualText vi="tình huống" en="scenarios" />
+            </span>
+          </div>
+
+          {isFiltered && (
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <RotateCcw size={12} />
+              <span><BilingualText vi="Đặt lại bộ lọc" en="Reset filters" /></span>
+            </button>
+          )}
         </div>
-      )}
+
+        {/* Scenarios Grid */}
+        {scenarios.length === 0 ? (
+          <div className="text-center py-16 px-6 bg-white/90 backdrop-blur-md rounded-3xl border border-[#E8E5DF] space-y-3">
+            <MessageSquare size={36} className="text-stone-400 mx-auto" />
+            <h3 className="text-lg font-bold text-[#253044]">
+              <BilingualText vi="Không tìm thấy kịch bản phù hợp" en="No matching scenarios found" />
+            </h3>
+            <p className="text-xs sm:text-sm text-[#64748B] max-w-md mx-auto">
+              <BilingualText
+                vi='Hãy thử chọn cấp độ khác hoặc bấm "Đặt lại bộ lọc" để xem danh sách đầy đủ.'
+                en='Try selecting another level or click "Reset filters" to view the full list.'
+              />
+            </p>
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="mt-2 px-5 py-2.5 rounded-xl bg-[#FF7A00] text-white text-xs font-bold shadow-xs hover:bg-[#C2410C] transition-colors"
+            >
+              <BilingualText vi="Xem tất cả kịch bản" en="View all scenarios" />
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 xl:gap-8">
+            {scenarios.map((sc) => (
+              <motion.div
+                key={sc.id}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.2 }}
+                className="bg-white/95 backdrop-blur-md rounded-3xl border border-[#E8E5DF]/80 overflow-hidden shadow-xs hover:shadow-xl hover:border-[#FF7A00]/60 transition-all flex flex-col justify-between group"
+              >
+                {/* Media Image with Badges */}
+                <div className="relative aspect-[16/9.5] overflow-hidden bg-stone-100">
+                  <ContentImage
+                    src={sc.thumbnail}
+                    alt={isVi ? (sc.titleVi || sc.title) : (sc.titleEn || sc.title)}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                  {/* Destination Tag */}
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-[#253044] border border-[#E8E5DF] text-[11px] font-bold shadow-xs">
+                    <MapPin size={12} className="text-[#F97316]" />
+                    <span>{isVi ? (sc.destinationVi || sc.destination) : (sc.destinationEn || sc.destination)}</span>
+                  </div>
+
+                  {/* Level Badge */}
+                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#FF7A00] text-white text-[10px] font-black uppercase tracking-wider shadow-xs">
+                    {isVi ? (sc.levelLabelVi || sc.level) : (sc.levelLabelEn || sc.level)}
+                  </div>
+
+                  {/* Title Overlay in Photo */}
+                  <div className="absolute bottom-3 inset-x-3 text-white">
+                    <span className="text-[10px] font-black uppercase text-[#FFCD00] tracking-wider block">
+                      {isVi ? (sc.topicLabelVi || sc.topicLabel) : (sc.topicLabelEn || sc.topicLabel)} • {isVi ? (sc.durationVi || sc.duration) : (sc.durationEn || sc.duration)}
+                    </span>
+                    <h3 className="text-base sm:text-lg font-black truncate drop-shadow-sm mt-0.5">
+                      <BilingualText vi={sc.titleVi || sc.title} en={sc.titleEn || sc.title} />
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Body Content */}
+                <div className="p-6 flex-1 flex flex-col justify-between gap-5">
+                  <div className="space-y-3">
+                    <p className="text-sm text-[#5C4D42] line-clamp-2 leading-relaxed">
+                      {isVi ? (sc.overviewVi || sc.overview) : (sc.overviewEn || sc.overview)}
+                    </p>
+
+                    {/* Role Play Snapshot Box */}
+                    <div className="p-3.5 rounded-2xl bg-[#FFFCF7] border border-[#E8E5DF]/70 space-y-1.5 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#FF7A00] font-bold flex items-center gap-1">
+                          <span>AI:</span>
+                          <span className="text-[#253044]">{sc.aiRole.name}</span>
+                        </span>
+                        <span className="text-[10px] text-[#64748B] italic">
+                          ({isVi ? (sc.aiRole?.roleVi || sc.aiRole?.role) : (sc.aiRole?.roleEn || sc.aiRole?.role)})
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between pt-1 border-t border-[#E8E5DF]/40">
+                        <span className="text-[#253044] font-bold flex items-center gap-1">
+                          <span><BilingualText vi="Bạn:" en="You:" /></span>
+                          <span>{isVi ? (sc.learnerRole?.roleVi || sc.learnerRole?.role) : (sc.learnerRole?.roleEn || sc.learnerRole?.role)}</span>
+                        </span>
+                        <span className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">
+                          <Target size={11} />
+                          <span>{sc.objectives.length} <BilingualText vi="nhiệm vụ" en="tasks" /></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="pt-2 border-t border-[#E8E5DF]/40 flex items-center gap-2">
+                    <Link
+                      to={`/ai-scenarios/${sc.id}`}
+                      className="flex-1 py-3 px-3 rounded-2xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] text-xs sm:text-sm font-black text-center transition-colors"
+                    >
+                      <BilingualText vi="Chi tiết" en="Details" />
+                    </Link>
+                    <Link
+                      to={`/ai-roleplay/${sc.id}`}
+                      className="flex-1 py-3 px-3 rounded-2xl bg-[#FF7A00] hover:bg-[#C2410C] text-white text-xs sm:text-sm font-black text-center shadow-xs transition-colors"
+                    >
+                      <BilingualText vi="Nhập vai →" en="Roleplay →" />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

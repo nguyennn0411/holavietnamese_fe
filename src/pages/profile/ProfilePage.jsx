@@ -1,15 +1,27 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { learnerService } from '@/services/learnerService';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { ContentImage } from '@/components/common/ContentImage';
+import { Camera, LoaderCircle, Upload } from 'lucide-react';
+import { toast } from 'sonner';
+
+const AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
 
 export function ProfilePage() {
-  const { fetchProfile } = useAuth();
+  const { fetchProfile, updateCurrentUser } = useAuth();
+  const avatarInputRef = useRef(null);
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({});
   const [editing, setEditing] = useState(false);
   const [state, setState] = useState({ loading: true, error: '', message: '' });
+  const [avatarPreview, setAvatarPreview] = useState('');
+  const [avatarState, setAvatarState] = useState({ uploading: false, error: '' });
+
+  useEffect(() => () => {
+    if (avatarPreview.startsWith('blob:')) URL.revokeObjectURL(avatarPreview);
+  }, [avatarPreview]);
 
   useEffect(() => {
     learnerService
@@ -30,11 +42,45 @@ export function ProfilePage() {
       const p = r.result ?? form;
       setProfile(p);
       setEditing(false);
-      setState({ loading: false, error: '', message: r.message || 'Đã cập nhật hồ sơ thành công!' });
+      setState({ loading: false, error: '', message: r.message || bilingualLabel('Đã cập nhật hồ sơ thành công!', 'Profile updated successfully!') });
       fetchProfile();
     } catch (err) {
       setState({ loading: false, error: err.message, message: '' });
     }
+  };
+
+  const uploadAvatar = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!AVATAR_TYPES.includes(file.type)) {
+      setAvatarState({ uploading: false, error: bilingualLabel('Chỉ chấp nhận ảnh JPEG, PNG hoặc WebP.', 'Only JPEG, PNG, or WebP images are accepted.') });
+      return;
+    }
+    if (file.size > MAX_AVATAR_SIZE) {
+      setAvatarState({ uploading: false, error: bilingualLabel('Ảnh đại diện không được vượt quá 5MB.', 'Avatar image must not exceed 5MB.') });
+      return;
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarPreview(previewUrl);
+    setAvatarState({ uploading: true, error: '' });
+    setState((current) => ({ ...current, error: '', message: '' }));
+    try {
+      const response = await learnerService.uploadAvatar(file);
+      const updatedUser = response?.result ?? response;
+      if (!updatedUser?.avatarUrl) throw new Error(response?.message || bilingualLabel('Máy chủ không trả về ảnh đại diện mới.', 'Server did not return a new avatar.'));
+      setProfile((current) => ({ ...current, ...updatedUser }));
+      setForm((current) => ({ ...current, ...updatedUser }));
+      updateCurrentUser(updatedUser);
+      setAvatarPreview('');
+      setState((current) => ({ ...current, message: response?.message || bilingualLabel('Cập nhật ảnh đại diện thành công.', 'Avatar updated successfully.') }));
+      toast.success(response?.message || bilingualLabel('Cập nhật ảnh đại diện thành công.', 'Avatar updated successfully.'));
+    } catch (error) {
+      setAvatarState({ uploading: false, error: error.message || bilingualLabel('Không thể tải ảnh đại diện lên.', 'Failed to upload avatar.') });
+      return;
+    }
+    setAvatarState({ uploading: false, error: '' });
   };
 
   if (state.loading && !profile) {
@@ -46,10 +92,11 @@ export function ProfilePage() {
   }
 
   const goalLabels = {
-    travel: '✈️ Du lịch & Khám phá',
-    work: '💼 Công việc & Định cư',
-    exam_vsl: '🎓 Thi chứng chỉ VSL',
-    culture: '🏮 Văn hóa & Đời sống',
+    daily_communication: { vi: '🗣️ Giao tiếp hằng ngày', en: '🗣️ Daily Communication' },
+    travel: { vi: '✈️ Du lịch & Khám phá', en: '✈️ Travel & Exploration' },
+    work: { vi: '💼 Công việc & Định cư', en: '💼 Work & Career' },
+    exam_vsl: { vi: '🎓 Thi chứng chỉ VSL', en: '🎓 VSL Exam' },
+    culture: { vi: '🏮 Văn hóa & Đời sống', en: '🏮 Culture & Life' },
   };
 
   const languageLabels = {
@@ -73,17 +120,24 @@ export function ProfilePage() {
 
       {/* Hero Avatar & Identity Card */}
       <section className="profile-hero">
-        <div className="profile-avatar">
+        <div className={`profile-avatar profile-avatar--editable ${avatarState.uploading ? 'is-uploading' : ''}`}>
             <ContentImage
-              src={profile.avatarUrl}
-              alt={`Ảnh đại diện của ${profile.fullName || profile.username || 'học viên'}`}
+              src={avatarPreview || profile.avatarUrl}
+              alt={bilingualLabel(`Ảnh đại diện của ${profile.fullName || profile.username || 'học viên'}`, `Avatar of ${profile.fullName || profile.username || 'learner'}`)}
               fallback={profile.fullName?.[0]?.toUpperCase() || 'H'}
               style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
             />
+            <input ref={avatarInputRef} className="profile-avatar-input" type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadAvatar} disabled={avatarState.uploading} aria-label={bilingualLabel("Chọn ảnh đại diện", "Select profile avatar")} />
+            <button type="button" className="profile-avatar-action" onClick={() => avatarInputRef.current?.click()} disabled={avatarState.uploading} aria-label={bilingualLabel("Thay đổi ảnh đại diện", "Change profile photo")}>
+              {avatarState.uploading ? <LoaderCircle className="profile-avatar-spinner" size={19}/> : <Camera size={19}/>}
+            </button>
         </div>
-        <div>
+        <div className="profile-identity">
           <h2>{profile.fullName || profile.username}</h2>
           <p>{profile.email}</p>
+          <button type="button" className="profile-upload-link" onClick={() => avatarInputRef.current?.click()} disabled={avatarState.uploading}><Upload size={14}/><BilingualText>{avatarState.uploading ? 'Đang tải ảnh lên…' : 'Đổi ảnh đại diện'}</BilingualText></button>
+          <small><BilingualText>{"JPEG, PNG hoặc WebP · tối đa 5MB"}</BilingualText></small>
+          {avatarState.error && <span className="profile-avatar-error" role="alert"><BilingualText>{avatarState.error}</BilingualText></span>}
         </div>
         <button
           type="button"
@@ -118,16 +172,6 @@ export function ProfilePage() {
           </label>
 
           <label>
-            <span><BilingualText>{"Ảnh đại diện (URL)"}</BilingualText></span>
-            <input
-              type="url"
-              value={form.avatarUrl || ''}
-              onChange={(e) => setForm({ ...form, avatarUrl: e.target.value })}
-              placeholder="https://..."
-            />
-          </label>
-
-          <label>
             <span><BilingualText>{"Quốc gia"}</BilingualText></span>
             <input
               type="text"
@@ -157,10 +201,10 @@ export function ProfilePage() {
               value={form.learningGoal || 'travel'}
               onChange={(e) => setForm({ ...form, learningGoal: e.target.value })}
             >
-              <option value="travel">{bilingualLabel("✈️ Du lịch & Khám phá")}</option>
-              <option value="work">{bilingualLabel("💼 Công việc & Định cư")}</option>
-              <option value="exam_vsl">{bilingualLabel("🎓 Thi chứng chỉ VSL")}</option>
-              <option value="culture">{bilingualLabel("🏮 Văn hóa & Đời sống")}</option>
+              <option value="travel">{bilingualLabel("Du lịch & Khám phá")}</option>
+              <option value="work">{bilingualLabel("Công việc & Định cư")}</option>
+              <option value="exam_vsl">{bilingualLabel("Thi chứng chỉ VSL")}</option>
+              <option value="culture">{bilingualLabel("Văn hóa & Đời sống")}</option>
             </select>
           </label>
 
@@ -170,10 +214,10 @@ export function ProfilePage() {
               value={form.targetLevel || 'A1'}
               onChange={(e) => setForm({ ...form, targetLevel: e.target.value })}
             >
-              <option value="A1">{bilingualLabel("🌱 A1 – Mới bắt đầu")}</option>
-              <option value="A2">{bilingualLabel("🌿 A2 – Sơ cấp")}</option>
-              <option value="B1">{bilingualLabel("🌳 B1 – Trung cấp")}</option>
-              <option value="B2">{bilingualLabel("🚀 B2 – Trung cấp nâng cao")}</option>
+              <option value="A1">{bilingualLabel("A1 – Mới bắt đầu")}</option>
+              <option value="A2">{bilingualLabel("A2 – Sơ cấp")}</option>
+              <option value="B1">{bilingualLabel("B1 – Trung cấp")}</option>
+              <option value="B2">{bilingualLabel("B2 – Trung cấp nâng cao")}</option>
             </select>
           </label>
 
@@ -185,7 +229,12 @@ export function ProfilePage() {
         <div className="profile-rows">
           <div>
             <b><BilingualText>{"Mục tiêu học tiếng Việt"}</BilingualText></b>
-            <span><BilingualText>{goalLabels[profile.learningGoal] || profile.learningGoal || 'Du lịch & Khám phá'}</BilingualText></span>
+            <span>
+              <BilingualText
+                vi={goalLabels[profile.learningGoal]?.vi || profile.learningGoal || 'Du lịch & Khám phá'}
+                en={goalLabels[profile.learningGoal]?.en || profile.learningGoal || 'Travel & Exploration'}
+              />
+            </span>
             <i>✓</i>
           </div>
           <div>

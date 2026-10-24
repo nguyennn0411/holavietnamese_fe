@@ -1,5 +1,5 @@
 import { VocabularyEntry } from '@/models/VocabularyEntry'
-import axiosClient from '@/infrastructure/api/axiosClient'
+import axiosClient from '@/api/axiosClient'
 export const vocabularyService = {
   async list(filters = {}, options = {}) {
     const params = Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== '' && value != null))
@@ -11,13 +11,18 @@ export const vocabularyService = {
   async delete(id) { await axiosClient.delete(`/api/me/vocabulary/${id}`); return null },
   saveWord(source, lessonId = null) {
     const meaning = source.meanings?.[0]
+      const masterVocabularyId = source.masterVocabularyId ?? (lessonId == null && source.wordVi == null && Array.isArray(source.meanings) ? source.id : null)
+      const isMaster = masterVocabularyId != null
+    const exampleSentence = source.exampleVi ?? meaning?.examples?.[0]?.exampleVi ?? source.exampleSentence ?? ''
+    const note = meaning?.usageNote ?? source.note ?? ''
     return vocabularyService.add({
       lessonId,
+        ...(isMaster ? { masterVocabularyId } : {}),
       word: source.wordVi ?? source.word,
-      meaning: source.meaningEn ?? meaning?.translationEn ?? source.meaning,
+      meaning: source.meaningEn ?? (meaning ? (meaning.translationEn || meaning.definitionVi || meaning.definitionEn || '').trim().slice(0, 1000) : source.meaning),
       pronunciation: source.pronunciation ?? '',
-      exampleSentence: source.exampleVi ?? meaning?.examples?.[0]?.exampleVi ?? source.exampleSentence ?? '',
-      note: meaning?.usageNote ?? source.note ?? '',
+      exampleSentence: isMaster ? exampleSentence.slice(0, 2000) : exampleSentence,
+      note: isMaster ? note.slice(0, 2000) : note,
     })
   }
 }

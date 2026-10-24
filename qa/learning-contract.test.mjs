@@ -92,13 +92,16 @@ test('API failure propagates to UI rather than being converted to successful dat
   assert.equal(fixture.session,original);
 });
 
-test('Every original route keeps its path, and all new routes are connected', async () => {
+test('Active routes keep their paths; retired vocabulary classification has no route', async () => {
   const original=execFileSync('git',['show','HEAD:src/constants/routes.js'],{encoding:'utf8'});
   const current=await fs.readFile(new URL('../src/constants/routes.js',import.meta.url),'utf8');
   const routeMap=text=>Object.fromEntries([...text.matchAll(/(\w+):\s*'([^']+)'/g)].map(([,key,path])=>[key,path]));
   const before=routeMap(original), after=routeMap(current);
-  for(const [key,path] of Object.entries(before)) assert.equal(after[key],path,key);
-  const app=await fs.readFile(new URL('../src/App.jsx',import.meta.url),'utf8');
+  for(const [key,path] of Object.entries(before)) {
+    if (key === 'ADMIN_VOCABULARY_TOPICS') assert.equal(after[key],undefined);
+    else assert.equal(after[key],path,key);
+  }
+  const app=await fs.readFile(new URL('../src/app/router/AppRouter.jsx',import.meta.url),'utf8');
   for(const key of Object.keys(after)) assert.ok(app.includes(`ROUTES.${key}`),`${key} has a Route`);
   for (const key of ['VOCABULARY_REVIEW','EXPLORE','DESTINATION_DETAIL','BLOG','BLOG_DETAIL','QUIZ','QUIZ_ATTEMPT','QUIZ_RESULT','ADMIN_COURSES','ADMIN_COURSE_BUILDER','ADMIN_COURSE_PREVIEW','ADMIN_LESSONS','ADMIN_LESSON_BUILDER','ADMIN_LESSON_PREVIEW','ADMIN_QUESTIONS','ADMIN_QUIZZES','ADMIN_QUIZ_BUILDER','ADMIN_QUIZ_PREVIEW']) {
     assert.ok(after[key], `${key} is available`);

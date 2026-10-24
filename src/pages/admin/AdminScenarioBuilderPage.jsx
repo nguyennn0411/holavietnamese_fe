@@ -1,7 +1,8 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { toast } from 'sonner';
 
 export function AdminScenarioBuilderPage() {
   const { id } = useParams();
@@ -24,7 +25,7 @@ export function AdminScenarioBuilderPage() {
     learnerRole: '',
     aiRole: {
       name: '',
-      avatar: '👩‍🍳',
+      avatar: '',
       role: '',
       tone: '',
       initialGreeting: '',
@@ -50,7 +51,8 @@ export function AdminScenarioBuilderPage() {
 
   useEffect(() => {
     if (!isNew) {
-      const existing = adminCultureAiService.getScenario(id);
+      adminCultureAiService.listScenarioRecords().then(records => {
+      const existing = records.find(item => item.id === id);
       if (existing) {
         setFormData({
           ...existing,
@@ -67,6 +69,7 @@ export function AdminScenarioBuilderPage() {
           ]);
         }
       }
+      }).catch(error => toast.error(error.message));
     }
   }, [id, isNew]);
 
@@ -109,10 +112,10 @@ export function AdminScenarioBuilderPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
-      alert('Vui lòng nhập tên kịch bản!');
+      toast.error(bilingualLabel('Vui lòng nhập tên kịch bản.', 'Please enter a scenario name.'));
       return;
     }
 
@@ -127,7 +130,7 @@ export function AdminScenarioBuilderPage() {
       sampleHints: formData.sampleHints.filter(Boolean),
     };
 
-    adminCultureAiService.saveScenario(payload);
+    await adminCultureAiService.saveScenarioRecord(payload);
     showToast('Đã lưu cấu hình kịch bản trong Scenario Builder!');
     setTimeout(() => {
       navigate('/admin/ai-scenarios');
@@ -169,19 +172,19 @@ export function AdminScenarioBuilderPage() {
             className={`button ${activeTab === 'builder' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('builder')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"⚙️ Cấu hình kịch bản"}</BilingualText></button>
+          ><BilingualText>{"Cấu hình kịch bản"}</BilingualText></button>
           <button
             type="button"
             className={`button ${activeTab === 'simulation' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('simulation')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"🧪 Thử nghiệm giả lập"}</BilingualText></button>
+          ><BilingualText>{"Thử nghiệm giả lập"}</BilingualText></button>
           <button
             type="button"
             className="button"
             onClick={handleSubmit}
             style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
-          ><BilingualText>{"💾 Lưu kịch bản"}</BilingualText></button>
+          ><BilingualText>{"Lưu kịch bản"}</BilingualText></button>
         </div>
       </div>
 
@@ -199,25 +202,25 @@ export function AdminScenarioBuilderPage() {
                     required
                     value={formData.title}
                     onChange={e => setFormData({ ...formData, title: e.target.value })}
-                    placeholder={bilingualLabel("Ví dụ: Gọi món tại quán Phở gia truyền Hà Nội...")}
+                    placeholder={vietnameseLabel("Ví dụ: Gọi món tại quán Phở gia truyền Hà Nội...")}
                   />
                 </label>
 
-                <label style={{ marginTop: '12px' }}><BilingualText>{"Bối cảnh tình huống (Context Story):"}</BilingualText><textarea
+                <label style={{ marginTop: '12px' }}><BilingualText>{"Bối cảnh tình huống:"}</BilingualText><textarea
                     rows={3}
                     value={formData.overview}
                     onChange={e => setFormData({ ...formData, overview: e.target.value })}
-                    placeholder={bilingualLabel("Mô tả hoàn cảnh xuất phát khi học viên bắt đầu kịch bản...")}
+                    placeholder={vietnameseLabel("Mô tả hoàn cảnh xuất phát khi học viên bắt đầu kịch bản...")}
                   />
                 </label>
               </div>
 
               {/* Roles Definition */}
               <div className="admin-card">
-                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"2. Thiết lập vai trò (Roles)"}</BilingualText></h3>
+                <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"2. Thiết lập vai trò"}</BilingualText></h3>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr', gap: '12px' }}>
-                  <label><BilingualText>{"Avatar:"}</BilingualText><input
+                  <label><BilingualText>{"Ảnh đại diện:"}</BilingualText><input
                       type="text"
                       value={formData.aiRole.avatar}
                       onChange={e => setFormData({ ...formData, aiRole: { ...formData.aiRole, avatar: e.target.value } })}
@@ -229,7 +232,7 @@ export function AdminScenarioBuilderPage() {
                       required
                       value={formData.aiRole.name}
                       onChange={e => setFormData({ ...formData, aiRole: { ...formData.aiRole, name: e.target.value } })}
-                      placeholder={bilingualLabel("Cô Mai (Chủ quán Phở), Bác Hùng (Tài xế)...")}
+                      placeholder={vietnameseLabel("Cô Mai (Chủ quán Phở), Bác Hùng (Tài xế)...")}
                     />
                   </label>
                 </div>
@@ -238,7 +241,7 @@ export function AdminScenarioBuilderPage() {
                     type="text"
                     value={formData.aiRole.role}
                     onChange={e => setFormData({ ...formData, aiRole: { ...formData.aiRole, role: e.target.value } })}
-                    placeholder={bilingualLabel("Chủ quán phở Hà Nội nhanh nhẹn, xưng hô 'cô - cháu'...")}
+                    placeholder={vietnameseLabel("Chủ quán phở Hà Nội nhanh nhẹn, xưng hô 'cô - cháu'...")}
                   />
                 </label>
 
@@ -246,15 +249,15 @@ export function AdminScenarioBuilderPage() {
                     type="text"
                     value={formData.aiRole.tone}
                     onChange={e => setFormData({ ...formData, aiRole: { ...formData.aiRole, tone: e.target.value } })}
-                    placeholder={bilingualLabel("Thân thiện, xởi lởi, giọng Bắc chuẩn Tràng An, phục vụ nhanh nhẹn...")}
+                    placeholder={vietnameseLabel("Thân thiện, xởi lởi, giọng Bắc chuẩn Tràng An, phục vụ nhanh nhẹn...")}
                   />
                 </label>
 
-                <label style={{ marginTop: '14px', borderTop: '1px dashed var(--color-border)', paddingTop: '14px' }}><BilingualText>{"Vai trò của Học viên (Learner Role):"}</BilingualText><input
+                <label style={{ marginTop: '14px', borderTop: '1px dashed var(--color-border)', paddingTop: '14px' }}><BilingualText>{"Vai trò của Học viên:"}</BilingualText><input
                     type="text"
                     value={formData.learnerRole}
                     onChange={e => setFormData({ ...formData, learnerRole: e.target.value })}
-                    placeholder={bilingualLabel("Du khách lần đầu thưởng thức phở truyền thống phố cổ...")}
+                    placeholder={vietnameseLabel("Du khách lần đầu thưởng thức phở truyền thống phố cổ...")}
                   />
                 </label>
               </div>
@@ -263,12 +266,12 @@ export function AdminScenarioBuilderPage() {
               <div className="admin-card">
                 <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"3. Lời thoại mở đầu & Gợi ý trả lời"}</BilingualText></h3>
 
-                <label><BilingualText>{"Câu chào mở đầu của AI (Initial Greeting):"}</BilingualText><textarea
+                <label><BilingualText>{"Câu chào mở đầu của AI:"}</BilingualText><textarea
                     rows={3}
                     required
                     value={formData.aiRole.initialGreeting}
                     onChange={e => setFormData({ ...formData, aiRole: { ...formData.aiRole, initialGreeting: e.target.value } })}
-                    placeholder={bilingualLabel("Câu đầu tiên AI sẽ tự động nói khi học viên vào phiên...")}
+                    placeholder={vietnameseLabel("Câu đầu tiên AI sẽ tự động nói khi học viên vào phiên...")}
                   />
                 </label>
 
@@ -283,7 +286,7 @@ export function AdminScenarioBuilderPage() {
                         type="text"
                         value={hint}
                         onChange={e => handleHintChange(idx, e.target.value)}
-                        placeholder={bilingualLabel("Mẫu câu gợi ý...")}
+                        placeholder={vietnameseLabel("Mẫu câu gợi ý...")}
                         style={{ fontSize: '13px' }}
                       />
                       <button type="button" onClick={() => handleRemoveHint(idx)} style={{ background: 'transparent', border: 'none', color: 'var(--color-red)', cursor: 'pointer' }}>
@@ -297,7 +300,7 @@ export function AdminScenarioBuilderPage() {
               {/* Objectives Builder */}
               <div className="admin-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"4. Danh sách nhiệm vụ (Objectives Checklist)"}</BilingualText></h3>
+                  <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"4. Danh sách nhiệm vụ"}</BilingualText></h3>
                   <button type="button" className="button secondary" onClick={handleAddObjective} style={{ fontSize: '11px', padding: '4px 10px' }}><BilingualText>{"+ Thêm nhiệm vụ"}</BilingualText></button>
                 </div>
 
@@ -311,7 +314,7 @@ export function AdminScenarioBuilderPage() {
                         type="text"
                         value={task}
                         onChange={e => handleObjectiveChange(idx, e.target.value)}
-                        placeholder={`Mục tiêu ${idx + 1}...`}
+                        placeholder={bilingualLabel(`Mục tiêu ${idx + 1}...`, `Objective ${idx + 1}...`)}
                         style={{ fontSize: '13px' }}
                       />
                       <button
@@ -333,28 +336,28 @@ export function AdminScenarioBuilderPage() {
                 <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Phân loại kịch bản"}</BilingualText></h3>
 
                 <label><BilingualText>{"Trạng thái:"}</BilingualText><select value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })}>
-                    <option value="ACTIVE">{bilingualLabel("Đang hoạt động (Active)")}</option>
-                    <option value="DRAFT">{bilingualLabel("Bản nháp (Draft)")}</option>
-                    <option value="ARCHIVED">{bilingualLabel("Lưu trữ (Archived)")}</option>
+                    <option value="ACTIVE">{vietnameseLabel("Đang hoạt động")}</option>
+                    <option value="DRAFT">{vietnameseLabel("Bản nháp")}</option>
+                    <option value="ARCHIVED">{vietnameseLabel("Lưu trữ")}</option>
                   </select>
                 </label>
 
                 <label style={{ marginTop: '12px' }}><BilingualText>{"Trình độ (CEFR):"}</BilingualText><select value={formData.level} onChange={e => setFormData({ ...formData, level: e.target.value })}>
-                    <option value="A1">{bilingualLabel("A1 - Sơ cấp 1")}</option>
-                    <option value="A2">{bilingualLabel("A2 - Sơ cấp 2")}</option>
-                    <option value="B1">{bilingualLabel("B1 - Trung cấp 1")}</option>
-                    <option value="B2">{bilingualLabel("B2 - Trung cấp 2")}</option>
-                    <option value="C1">{bilingualLabel("C1 - Nâng cao")}</option>
+                    <option value="A1">{vietnameseLabel("A1 - Sơ cấp 1")}</option>
+                    <option value="A2">{vietnameseLabel("A2 - Sơ cấp 2")}</option>
+                    <option value="B1">{vietnameseLabel("B1 - Trung cấp 1")}</option>
+                    <option value="B2">{vietnameseLabel("B2 - Trung cấp 2")}</option>
+                    <option value="C1">{vietnameseLabel("C1 - Nâng cao")}</option>
                   </select>
                 </label>
 
                 <label style={{ marginTop: '12px' }}><BilingualText>{"Chủ đề kịch bản:"}</BilingualText><select value={formData.topic} onChange={e => setFormData({ ...formData, topic: e.target.value })}>
-                    <option value="dining">{bilingualLabel("🍜 Ẩm thực & Quán xá")}</option>
-                    <option value="shopping">{bilingualLabel("🛍️ Mua sắm & Mặc cả")}</option>
-                    <option value="travel">{bilingualLabel("🛵 Di chuyển & Du lịch")}</option>
-                    <option value="hospitality">{bilingualLabel("🏨 Khách sạn & Nghỉ dưỡng")}</option>
-                    <option value="social">{bilingualLabel("🏡 Gia đình & Bạn bè")}</option>
-                    <option value="work">{bilingualLabel("💼 Giao tiếp công sở")}</option>
+                    <option value="dining">{vietnameseLabel("Ẩm thực & Quán xá")}</option>
+                    <option value="shopping">{vietnameseLabel("Mua sắm & Mặc cả")}</option>
+                    <option value="travel">{vietnameseLabel("Di chuyển & Du lịch")}</option>
+                    <option value="hospitality">{vietnameseLabel("Khách sạn & Nghỉ dưỡng")}</option>
+                    <option value="social">{vietnameseLabel("Gia đình & Bạn bè")}</option>
+                    <option value="work">{vietnameseLabel("Giao tiếp công sở")}</option>
                   </select>
                 </label>
 
@@ -362,7 +365,7 @@ export function AdminScenarioBuilderPage() {
                     type="text"
                     value={formData.destination}
                     onChange={e => setFormData({ ...formData, destination: e.target.value })}
-                    placeholder={bilingualLabel("Hà Nội, Sài Gòn, Đà Nẵng...")}
+                    placeholder={vietnameseLabel("Hà Nội, Sài Gòn, Đà Nẵng...")}
                   />
                 </label>
               </div>
@@ -371,7 +374,7 @@ export function AdminScenarioBuilderPage() {
               <div className="admin-card">
                 <h3 style={{ margin: '0 0 14px', fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Điều kiện kết thúc phiên"}</BilingualText></h3>
 
-                <label><BilingualText>{"Số lượt trao đổi tối đa (Max Turns):"}</BilingualText><input
+                <label><BilingualText>{"Số lượt trao đổi tối đa:"}</BilingualText><input
                     type="number"
                     min={4}
                     max={30}
@@ -397,13 +400,13 @@ export function AdminScenarioBuilderPage() {
                 <p style={{ fontSize: '12.5px', color: 'var(--color-red-hover)', margin: '0 0 12px' }}><BilingualText>{"Hệ thống phân tích 4 thang điểm cốt lõi dựa trên tương tác thực tế:"}</BilingualText></p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Độ lưu loát (Fluency)"}</BilingualText></strong><BilingualText>{": Khả năng phản xạ và nhịp đối thoại."}</BilingualText></div>
+                    <strong><BilingualText>{"Độ lưu loát"}</BilingualText></strong><BilingualText>{": Khả năng phản xạ và nhịp đối thoại."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Vốn từ vựng (Vocabulary)"}</BilingualText></strong><BilingualText>{": Từ ngữ chính xác theo chủ đề."}</BilingualText></div>
+                    <strong><BilingualText>{"Vốn từ vựng"}</BilingualText></strong><BilingualText>{": Từ ngữ chính xác theo chủ đề."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Ngữ pháp (Grammar)"}</BilingualText></strong><BilingualText>{": Trật tự từ và hư từ biểu cảm."}</BilingualText></div>
+                    <strong><BilingualText>{"Ngữ pháp"}</BilingualText></strong><BilingualText>{": Trật tự từ và hư từ biểu cảm."}</BilingualText></div>
                   <div style={{ background: 'var(--color-cream)', padding: '8px 12px', borderRadius: '8px', fontSize: '13px' }}>
-                    ✓ <strong><BilingualText>{"Văn hóa & Ngữ cảnh (Culture)"}</BilingualText></strong><BilingualText>{": Kính ngữ, thái độ lịch thiệp."}</BilingualText></div>
+                    <strong><BilingualText>{"Văn hóa & Ngữ cảnh"}</BilingualText></strong><BilingualText>{": Kính ngữ, thái độ lịch thiệp."}</BilingualText></div>
                 </div>
               </div>
             </div>
@@ -441,7 +444,7 @@ export function AdminScenarioBuilderPage() {
           <div style={{ display: 'flex', gap: '8px', marginTop: '16px', borderTop: '1px solid var(--color-border)', paddingTop: '14px' }}>
             <input
               type="text"
-              placeholder={bilingualLabel("Nhập thử phản hồi của học viên...")}
+              placeholder={vietnameseLabel("Nhập thử phản hồi của học viên...")}
               value={simInput}
               onChange={e => setSimInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSimulateSend()}

@@ -1,10 +1,12 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminCultureCategoriesPage() {
+  const { confirm, confirmationDialog } = useConfirmDialog();
   const [categories, setCategories] = useState(() => adminCultureAiService.getCategories());
   const [editingCategory, setEditingCategory] = useState(null);
   const [toast, setToast] = useState('');
@@ -38,8 +40,12 @@ export function AdminCultureCategoriesPage() {
     showToast('Đã lưu thông tin danh mục thành công!');
   };
 
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa danh mục "${name}"?`)) {
+  const handleDelete = async (id, name) => {
+    if (await confirm({
+      title: bilingualLabel('Xóa danh mục văn hóa?', 'Delete cultural category?'),
+      description: bilingualLabel(`Danh mục “${name}” sẽ bị xóa khỏi hệ thống.`, `Category “${name}” will be removed from the system.`),
+      confirmLabel: bilingualLabel('Xóa danh mục', 'Delete category'),
+    })) {
       const remaining = adminCultureAiService.deleteCategory(id);
       setCategories(remaining);
       showToast('Đã xóa danh mục.');
@@ -48,6 +54,7 @@ export function AdminCultureCategoriesPage() {
 
   return (
     <div className="admin-content">
+      {confirmationDialog}
       {toast && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
           <BilingualText>{toast}</BilingualText>
@@ -57,11 +64,11 @@ export function AdminCultureCategoriesPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: 'var(--color-forest)', marginBottom: '6px' }}>
-            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Quản lý bài viết văn hóa"}</BilingualText></Link>
+          <nav style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginBottom: '6px' }}>
+            <Link to="/admin/culture" style={{ color: 'var(--primary-orange, #F97316)', textDecoration: 'none', fontWeight: 600 }}><BilingualText>{"← Quản lý bài viết văn hóa"}</BilingualText></Link>
           </nav>
-          <h1 style={{ margin: 0, fontSize: '32px' }}><BilingualText>{"Danh mục văn hóa"}</BilingualText></h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-forest)', fontSize: '14px' }}><BilingualText>{"Quản lý các chủ đề lớn: Food, Festivals, History, Etiquette, Family, Lifestyle và sắp xếp thứ tự hiển thị cho học viên."}</BilingualText></p>
+          <h1 style={{ margin: 0, fontSize: '30px', fontWeight: 800, color: 'var(--text-primary, #253044)' }}><BilingualText>{"Danh mục văn hóa"}</BilingualText></h1>
+          <p style={{ margin: '4px 0 0', color: 'var(--text-secondary, #64748B)', fontSize: '14px' }}><BilingualText>{"Quản lý các chủ đề lớn: Food, Festivals, History, Etiquette, Family, Lifestyle và sắp xếp thứ tự hiển thị cho học viên."}</BilingualText></p>
         </div>
 
         <button
@@ -77,7 +84,7 @@ export function AdminCultureCategoriesPage() {
           <thead>
             <tr>
               <th style={{ width: '80px', textAlign: 'center' }}><BilingualText>{"Thứ tự"}</BilingualText></th>
-              <th style={{ width: '60px' }}><BilingualText>{"Icon"}</BilingualText></th>
+              <th style={{ width: '60px' }}><BilingualText>{"Biểu tượng"}</BilingualText></th>
               <th><BilingualText>{"Tên danh mục & Slug"}</BilingualText></th>
               <th><BilingualText>{"Mô tả chuyên mục"}</BilingualText></th>
               <th><BilingualText>{"Số bài viết"}</BilingualText></th>
@@ -94,7 +101,7 @@ export function AdminCultureCategoriesPage() {
                       disabled={idx === 0}
                       onClick={() => handleMove(idx, -1)}
                       style={{ padding: '2px 6px', fontSize: '11px', background: 'transparent', border: 'none', cursor: idx === 0 ? 'default' : 'pointer', color: 'var(--color-ink)' }}
-                      title="Chuyển lên trên"
+                      title={bilingualLabel("Chuyển lên trên", "Move up")}
                     >
                       ▲
                     </button>
@@ -104,7 +111,7 @@ export function AdminCultureCategoriesPage() {
                       disabled={idx === categories.length - 1}
                       onClick={() => handleMove(idx, 1)}
                       style={{ padding: '2px 6px', fontSize: '11px', background: 'transparent', border: 'none', cursor: idx === categories.length - 1 ? 'default' : 'pointer', color: 'var(--color-ink)' }}
-                      title="Chuyển xuống dưới"
+                      title={bilingualLabel("Chuyển xuống dưới", "Move down")}
                     >
                       ▼
                     </button>
@@ -115,7 +122,7 @@ export function AdminCultureCategoriesPage() {
 
                 <td>
                   <strong style={{ fontSize: '14px', color: 'var(--color-ink)', display: 'block' }}>{cat.name}</strong>
-                  <code style={{ fontSize: '11px', color: 'var(--color-forest)', background: 'var(--color-red-soft)', padding: '2px 6px', borderRadius: '4px' }}>
+                  <code style={{ fontSize: '11px', color: 'var(--primary-orange, #F97316)', background: 'var(--bg-peach, #FFF0DC)', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>
                     /{cat.slug}
                   </code>
                 </td>
@@ -123,8 +130,8 @@ export function AdminCultureCategoriesPage() {
                 <td style={{ fontSize: '13px', color: 'var(--color-ink)' }}><BilingualText vi={cat.descriptionVi || cat.description} en={cat.description} /></td>
 
                 <td>
-                  <span className="admin-badge admin-badge-info">
-                    {cat.articleCount || 0}<BilingualText>{"bài viết"}</BilingualText></span>
+                  <span className="admin-badge admin-badge-info" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px' }}>
+                    {cat.articleCount || 0} <BilingualText>{"bài viết"}</BilingualText></span>
                 </td>
 
                 <td style={{ textAlign: 'right' }}>
@@ -153,10 +160,10 @@ export function AdminCultureCategoriesPage() {
 
       {/* Edit / Create Modal */}
       {editingCategory && (
-        <Modal title={editingCategory.id ? "Chỉnh sửa danh mục" : "Thêm danh mục văn hóa"} onClose={()=>setEditingCategory(null)}>
+        <Modal title={editingCategory.id ? bilingualLabel("Chỉnh sửa danh mục", "Edit Category") : bilingualLabel("Thêm danh mục văn hóa", "Add Cultural Category")} onClose={()=>setEditingCategory(null)}>
 <form onSubmit={handleSave}>
               <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr', gap: '12px' }}>
-                <label><BilingualText>{"Icon:"}</BilingualText><input
+                <label><BilingualText>{"Biểu tượng:"}</BilingualText><input
                     type="text"
                     value={editingCategory.icon}
                     onChange={e => setEditingCategory({ ...editingCategory, icon: e.target.value })}
@@ -169,7 +176,7 @@ export function AdminCultureCategoriesPage() {
                     type="text"
                     value={editingCategory.name}
                     onChange={e => setEditingCategory({ ...editingCategory, name: e.target.value })}
-                    placeholder={bilingualLabel("Food (Ẩm thực)...")}
+                    placeholder={vietnameseLabel("Food (Ẩm thực)...")}
                     required
                   />
                 </label>
@@ -188,7 +195,7 @@ export function AdminCultureCategoriesPage() {
                   rows={3}
                   value={editingCategory.description}
                   onChange={e => setEditingCategory({ ...editingCategory, description: e.target.value })}
-                  placeholder={bilingualLabel("Mô tả nội dung học viên sẽ khám phá trong danh mục này...")}
+                  placeholder={vietnameseLabel("Mô tả nội dung học viên sẽ khám phá trong danh mục này...")}
                 />
               </label>
 

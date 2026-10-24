@@ -1,5 +1,7 @@
 // AI Roleplay & Scenarios Service (Người 4: /ai-scenarios, /ai-scenarios/:id, /ai-roleplay/:id, /ai-sessions/:id/result)
 
+import axiosClient from '../api/axiosClient.js';
+
 export const SCENARIO_LEVELS = [
   { id: 'all', label: 'Tất cả trình độ' },
   { id: 'A1', label: 'A1 - Sơ cấp 1' },
@@ -253,6 +255,211 @@ export const SCENARIOS = [
 
 const ROLEPLAY_SESSION_STORAGE = 'hola_ai_roleplay_session_';
 const ROLEPLAY_RESULT_STORAGE = 'hola_ai_roleplay_result_';
+const AI_PROVIDER = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_PROVIDER) || 'openrouter';
+const AI_MODEL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_MODEL) || 'openrouter/free';
+const AI_REQUEST_TIMEOUT_MS = Math.max(5000, Number(typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_REQUEST_TIMEOUT_MS) || 30000);
+
+const unwrapAiPayload = (response) => response?.result ?? response?.data ?? response ?? {};
+
+const getAiText = (payload) => (
+  payload?.text
+  ?? payload?.content
+  ?? payload?.answer
+  ?? payload?.reply
+  ?? payload?.message?.text
+  ?? payload?.choices?.[0]?.message?.content
+  ?? payload?.choices?.[0]?.text
+  ?? payload?.output_text
+  ?? payload?.output?.[0]?.content?.[0]?.text
+  ?? null
+);
+
+const normalizeAiPayload = (payload) => {
+  const rawText = getAiText(payload);
+  if (typeof rawText !== 'string') return payload;
+  const candidate = rawText.trim();
+  if (!candidate.startsWith('{') || !candidate.endsWith('}')) return payload;
+  try {
+    const parsed = JSON.parse(candidate);
+    return parsed && typeof parsed === 'object' ? { ...payload, ...parsed } : payload;
+  } catch {
+    return payload;
+  }
+};
+
+const buildRoleplayContext = (scenario, session) => {
+  const completed = new Set(session.completedTasks || []);
+  const remainingObjectives = (scenario.objectives || [])
+    .filter(objective => !completed.has(objective.id))
+    .map(objective => `- ${objective.id}: ${objective.label}`)
+    .join('\\n');
+  const recentMessages = (session.messages || [])
+    .slice(-8)
+    .map(message => `${message.sender === 'user' ? 'HỌC VIÊN' : scenario.aiRole.name}: ${message.text}`)
+    .join('\\n');
+
+  return [
+    'Bạn đang tham gia roleplay học tiếng Việt theo kịch bản bắt buộc.',
+    `KỊCH BẢN: ${scenario.title}`,
+    `BỐI CẢNH: ${scenario.overview}`,
+    `VAI AI: ${scenario.aiRole.name} — ${scenario.aiRole.role}`,
+    `GIỌNG ĐIỆU: ${scenario.aiRole.tone}`,
+    `VAI HỌC VIÊN: ${scenario.learnerRole?.role}`,
+    `MỤC TIÊU: ${scenario.learnerRole?.context}`,
+    'MỤC TIÊU CHƯA HOÀN THÀNH:',
+    remainingObjectives || '- Không còn mục tiêu bắt buộc; hãy kết thúc tự nhiên.',
+    `TỪ/CỤM TỪ NÊN KHUYẾN KHÍCH: ${(scenario.vocabularyHints || []).map(item => item.word).join(', ')}`,
+    `LƯU Ý VĂN HÓA: ${scenario.culturalTip}`,
+    'LỊCH SỬ GẦN ĐÂY:',
+    recentMessages,
+    'QUY TẮC: Luôn ở trong vai và bám kịch bản. Nếu học viên nói lệch chủ đề, trả lời ngắn tối đa một câu rồi kéo họ về mục tiêu gần nhất bằng câu hỏi/gợi ý tiếng Việt. Không đổi vai, không mở chủ đề mới, không giảng dài. Trả JSON hợp lệ gồm text, translation, explanation, completedTasks; không bọc markdown.',
+  ].join('\\n');
+};
+
+let dynamicScenarios = [...SCENARIOS];
+
+// --- Objective evaluator -------------------------------------------------
+// The backend roleplay endpoint only returns the character's reply, so the
+// learner's progress is evaluated here from what the learner actually said.
+const normalizeVi = (text = '') => String(text)
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/đ/g, 'd')
+  .replace(/[^a-z0-9\s]/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+const OBJECTIVE_KEYWORDS = {
+  'goi-mon-pho-ha-noi': {
+    'task-1': ['chao', 'ngoi', 'ban trong', 'cho ngoi'],
+    'task-2': ['pho', 'tai', 'chin', 'nam', 'gau', 'hanh', 'ot', 'cay', 'bat'],
+    'task-3': ['tra da', 'quay', 'sua dau', 'do uong', 'uong', 'nuoc', 'chanh', 'trung'],
+    'task-4': ['bao nhieu', 'tien', 'thanh toan', 'tinh tien', 'cam on', 'gui co'],
+  },
+  'tra-gia-cho-ben-thanh': {
+    'task-1': ['bao nhieu', 'gia'],
+    'task-2': ['dep', 'bot', 'giam', 'dat qua', 'mac qua', 're hon'],
+    'task-3': ['hai cai', '2 cai', 'lay hai', 'lay 2', 'mua hai', 'mua 2', 'combo'],
+    'task-4': ['chot', 'thanh toan', 'gui chi', 'cam on', 'dong y', 'lay luon'],
+  },
+  'bat-xe-om-cong-nghe': {
+    'task-1': ['dung', 'ao', 'cong', 'truoc', 'mac'],
+    'task-2': ['bien so', 'mu', 'non bao hiem', 'bao hiem'],
+    'task-3': ['ket xe', 'tac duong', 'duong', 'thoi tiet', 'nang', 'mua'],
+    'task-4': ['qr', 'quet', 'chuyen khoan', 'thanh toan', 'cam on'],
+  },
+  'checkin-khach-san-da-nang': {
+    'task-1': ['dat phong', 'ma dat', 'ma phong', 'ten la', 'ho chieu', 'giay to', 'cmnd', 'can cuoc'],
+    'task-2': ['tang cao', 'ban cong', 'huong bien', 'view', 'nhin ra bien'],
+    'task-3': ['an sang', 'buffet', 'wifi', 'mat khau'],
+    'task-4': ['thue xe', 'xe may', 'son tra'],
+  },
+  'ra-mat-gia-dinh-ban': {
+    'task-1': ['chao hai bac', 'chao bac', 'con chao', 'chau chao'],
+    'task-2': ['qua', 'bieu', 'tang'],
+    'task-3': ['moi', 'xoi com', 'an com'],
+    'task-4': ['cam on', 'xin phep', 've'],
+  },
+  'phong-van-xin-viec-cong-so': {
+    'task-1': ['gioi thieu', 'kinh nghiem', 'ten toi', 'toi la'],
+    'task-2': ['dong luc', 'viet nam', 'yeu thich', 'muon lam', 'gan bo'],
+    'task-3': ['bat dong', 'van hoa', 'lam viec nhom', 'xung dot', 'dong nghiep'],
+    'task-4': ['cau hoi', 'dinh huong', 'phat trien', 'cong ty', 'lo trinh'],
+  },
+};
+
+const STOPWORDS = new Set(['va', 'cua', 'cho', 'voi', 'mot', 'cac', 'nhung', 'tai', 'den', 'trong', 'hoac', 'kem', 'de', 'la', 've']);
+
+const includesPhrase = (haystack, phrase) => (` ${haystack} `).includes(` ${phrase} `);
+
+const objectiveMatched = (scenarioId, objective, normalizedText) => {
+  const keywords = OBJECTIVE_KEYWORDS[scenarioId]?.[objective.id];
+  if (keywords) return keywords.some(k => includesPhrase(normalizedText, k));
+  // Admin-created scenario: match on meaningful words from the objective label.
+  const words = normalizeVi(objective.label).split(' ').filter(w => w.length >= 2 && !STOPWORDS.has(w));
+  const hits = words.filter(w => includesPhrase(normalizedText, w)).length;
+  return hits >= Math.min(2, words.length);
+};
+
+/** Returns the merged list of completed objective ids after a learner turn. */
+export const evaluateObjectives = (scenario, previousCompleted = [], userText = '') => {
+  const objectives = scenario?.objectives || [];
+  const completed = new Set(previousCompleted || []);
+  const text = normalizeVi(userText);
+  if (!text) return [...completed];
+
+  let matchedAny = false;
+  objectives.forEach(objective => {
+    if (!completed.has(objective.id) && objectiveMatched(scenario.id, objective, text)) {
+      completed.add(objective.id);
+      matchedAny = true;
+    }
+  });
+
+  // A meaningful on-topic reply still moves the conversation forward:
+  // complete the next pending objective in order.
+  if (!matchedAny && text.split(' ').length >= 4) {
+    const next = objectives.find(objective => !completed.has(objective.id));
+    if (next) completed.add(next.id);
+  }
+
+  // Keep the original objective order.
+  return objectives.map(o => o.id).filter(objId => completed.has(objId));
+};
+
+const mergeScenarioItem = (item) => {
+  const existing = SCENARIOS.find(s => s.id === item.id) || {};
+  const rawObjectives = Array.isArray(item.objectives) && item.objectives.length > 0 ? item.objectives : (existing.objectives || []);
+  const normalizedObjectives = rawObjectives.map((obj, idx) => (typeof obj === 'string' ? { id: `task-${idx + 1}`, label: obj, completed: false } : { id: obj?.id || `task-${idx + 1}`, label: obj?.label || String(obj || ''), completed: Boolean(obj?.completed) }));
+  const rawHints = Array.isArray(item.vocabularyHints) && item.vocabularyHints.length > 0 ? item.vocabularyHints : (existing.vocabularyHints || []);
+  const normalizedHints = rawHints.map(h => (typeof h === 'string' ? { word: h, meaning: '' } : { word: h?.word || '', meaning: h?.meaning || '' }));
+  const topicObj = SCENARIO_TOPICS.find(t => t.id === (item.topic || existing.topic));
+  const levelObj = SCENARIO_LEVELS.find(l => l.id === (item.level || existing.level));
+  return {
+    ...existing,
+    ...item,
+    title: item.title || existing.title || 'Kịch bản giao tiếp',
+    overview: item.overview || existing.overview || '',
+    destination: item.destination || existing.destination || 'Việt Nam',
+    difficulty: item.difficulty || existing.difficulty || 'Trung bình',
+    duration: item.duration || existing.duration || '5-10 phút',
+    thumbnail: item.thumbnail || existing.thumbnail || SCENARIOS[0].thumbnail,
+    coverImage: item.coverImage || existing.coverImage || item.thumbnail || existing.thumbnail || SCENARIOS[0].coverImage,
+    topicLabel: existing.topicLabel || (topicObj ? topicObj.label.replace(/^[^\s]+\s/, '') : (item.topicLabel || item.topic || '')),
+    levelLabel: existing.levelLabel || (levelObj ? levelObj.label.replace(' - ', ' • ') : (item.levelLabel || item.level || '')),
+    aiRole: item.aiRole?.name ? { ...(existing.aiRole || {}), ...item.aiRole } : (existing.aiRole || { name: 'Nhân vật AI', role: 'Người bản xứ', avatar: '🎭', tone: 'Thân thiện', initialGreeting: 'Xin chào bạn!' }),
+    learnerRole: item.learnerRole?.role ? { ...(existing.learnerRole || {}), ...item.learnerRole } : (existing.learnerRole || { role: 'Người học tiếng Việt', context: '' }),
+    objectives: normalizedObjectives,
+    vocabularyHints: normalizedHints,
+    culturalTip: item.culturalTip || existing.culturalTip || '',
+  };
+};
+
+if (typeof window !== 'undefined') {
+  axiosClient.get('/api/ai/scenarios')
+    .then(res => {
+      const list = res?.result ?? res;
+      if (Array.isArray(list) && list.length > 0) {
+        const map = new Map();
+        list.forEach(item => {
+          const existing = SCENARIOS.find(s => s.id === item.id) || {};
+          // merged via mergeScenarioItem
+          map.set(item.id, mergeScenarioItem(item));
+          void ({
+            ...existing,
+            ...item,
+            aiRole: item.aiRole || existing.aiRole,
+            learnerRole: item.learnerRole || existing.learnerRole,
+            objectives: item.objectives || existing.objectives || [],
+            vocabularyHints: item.vocabularyHints || existing.vocabularyHints || [],
+          });
+        });
+        dynamicScenarios = Array.from(map.values()).filter(s => s.status === 'ACTIVE');
+      }
+    })
+    .catch(() => {});
+}
 
 export const aiRoleplayService = {
   getLevels() {
@@ -264,15 +471,15 @@ export const aiRoleplayService = {
   },
 
   listScenarios({ search = '', level = 'all', topic = 'all' } = {}) {
-    let result = [...SCENARIOS];
+    let result = [...dynamicScenarios];
 
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       result = result.filter(
         s =>
           s.title.toLowerCase().includes(q) ||
-          s.overview.toLowerCase().includes(q) ||
-          s.destination.toLowerCase().includes(q)
+          (s.overview || '').toLowerCase().includes(q) ||
+          (s.destination || '').toLowerCase().includes(q)
       );
     }
 
@@ -288,14 +495,58 @@ export const aiRoleplayService = {
   },
 
   getScenario(id) {
-    return SCENARIOS.find(s => s.id === id) || SCENARIOS[0];
+    return dynamicScenarios.find(s => s.id === id) || SCENARIOS.find(s => s.id === id) || SCENARIOS[0];
+  },
+
+  async fetchScenarios() {
+    return this.fetchActiveScenarios();
+  },
+
+  async fetchActiveScenarios() {
+    try {
+      const res = await axiosClient.get('/api/ai/scenarios');
+      const list = res?.result ?? res;
+      if (Array.isArray(list) && list.length > 0) {
+        const map = new Map();
+        list.forEach(item => {
+          const existing = SCENARIOS.find(s => s.id === item.id) || {};
+          // merged via mergeScenarioItem
+          map.set(item.id, mergeScenarioItem(item));
+          void ({
+            ...existing,
+            ...item,
+            aiRole: item.aiRole || existing.aiRole,
+            learnerRole: item.learnerRole || existing.learnerRole,
+            objectives: item.objectives || existing.objectives || [],
+            vocabularyHints: item.vocabularyHints || existing.vocabularyHints || [],
+          });
+        });
+        dynamicScenarios = Array.from(map.values()).filter(s => s.status === 'ACTIVE');
+      }
+    } catch {
+      // fallback
+    }
+    return dynamicScenarios;
   },
 
   getRoleplaySession(scenarioId) {
     const scenario = this.getScenario(scenarioId);
     try {
       const stored = localStorage.getItem(ROLEPLAY_SESSION_STORAGE + scenarioId);
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        let completed = parsed.completedTasks || [];
+        (parsed.messages || []).forEach(msg => {
+          if (msg.sender === 'user') {
+            completed = evaluateObjectives(scenario, completed, msg.text);
+          }
+        });
+        if (completed.length !== (parsed.completedTasks || []).length) {
+          parsed.completedTasks = completed;
+          this.saveRoleplaySession(scenarioId, parsed);
+        }
+        return parsed;
+      }
     } catch {
       // fallback
     }
@@ -331,7 +582,24 @@ export const aiRoleplayService = {
     }
   },
 
-  resetRoleplaySession(scenarioId) {
+  async initRoleplaySession(scenarioId) {
+    const session = this.getRoleplaySession(scenarioId);
+    if (!session.backendSessionId && localStorage.getItem('token')) {
+      try {
+        const res = await axiosClient.post(`/api/ai/roleplay/start/${scenarioId}`);
+        const newId = res?.result?.id || res?.id;
+        if (newId) {
+          session.backendSessionId = newId;
+          this.saveRoleplaySession(scenarioId, session);
+        }
+      } catch (err) {
+        console.warn('[AI Roleplay] Could not init backend session:', err.message);
+      }
+    }
+    return session;
+  },
+
+  resetRoleplaySession(scenarioId) { localStorage.removeItem(ROLEPLAY_RESULT_STORAGE + scenarioId);
     localStorage.removeItem(ROLEPLAY_SESSION_STORAGE + scenarioId);
     return this.getRoleplaySession(scenarioId);
   },
@@ -388,6 +656,75 @@ export const aiRoleplayService = {
       timestamp: new Date().toISOString(),
     };
 
+    // Roleplay pages can be opened by guests. Avoid sending an unauthenticated
+    // request to the protected backend; logged-in learners still get the real
+    // AI response and the axios client can refresh an expired token.
+    if (localStorage.getItem('token')) {
+      try {
+        let backendSessionId = session.backendSessionId;
+        if (!backendSessionId) {
+          try {
+            const startRes = await axiosClient.post(`/api/ai/roleplay/start/${scenarioId}`);
+            backendSessionId = startRes?.result?.id || startRes?.id;
+            if (backendSessionId) {
+              session.backendSessionId = backendSessionId;
+              this.saveRoleplaySession(scenarioId, session);
+            }
+          } catch (initErr) {
+            console.warn('[AI Roleplay] Could not start backend session before message:', initErr.message);
+          }
+        }
+
+        if (backendSessionId) {
+          const apiRes = await axiosClient.post(
+            `/api/ai/roleplay/sessions/${backendSessionId}/messages`,
+            {
+              text: userMsg.text,
+              mode: 'roleplay',
+              provider: AI_PROVIDER,
+              model: AI_MODEL,
+              scenarioId,
+              scenarioContext: buildRoleplayContext(scenario, session),
+            },
+            { timeout: AI_REQUEST_TIMEOUT_MS },
+          );
+          const response = normalizeAiPayload(unwrapAiPayload(apiRes));
+          const responseText = getAiText(response);
+
+          if (responseText) {
+            const evaluatedTasks = evaluateObjectives(
+              scenario,
+              response.completedTasks || session.completedTasks || [],
+              userMsg.text,
+            );
+            const updatedSession = {
+              ...session,
+              backendSessionId,
+              messages: [...(session.messages || []), userMsg, {
+                id: response.id || `rp-${Date.now()}-ai`,
+                sender: 'ai',
+                name: scenario.aiRole.name,
+                avatar: scenario.aiRole.avatar,
+                text: responseText,
+                translation: response.translation || '',
+                explanation: response.explanation || '',
+                timestamp: response.timestamp || new Date().toISOString(),
+              }],
+              completedTasks: evaluatedTasks,
+            };
+            this.saveRoleplaySession(scenarioId, updatedSession);
+            return {
+              userMsg,
+              aiMsg: updatedSession.messages[updatedSession.messages.length - 1],
+              session: updatedSession,
+            };
+          }
+        }
+      } catch (error) {
+        console.warn('[AI Roleplay] Backend AI unavailable; using local scenario fallback:', error.message);
+      }
+    }
+
     // Simulate smart roleplay response
     await new Promise(r => setTimeout(r, 400));
 
@@ -439,24 +776,48 @@ export const aiRoleplayService = {
     };
 
     session.messages.push(userMsg, aiMsg);
-    session.completedTasks = newCompletedTasks;
+    session.completedTasks = evaluateObjectives(scenario, newCompletedTasks, userMsg.text);
     this.saveRoleplaySession(scenarioId, session);
 
     return { userMsg, aiMsg, session };
   },
 
-  finishRoleplayAndGetResult(scenarioId) {
+  async finishRoleplayAndGetResult(scenarioId) {
+    const result = this.buildRoleplayResult(scenarioId);
+
+    // Synchronize completion with backend to update completionsCount and admin stats
+    // (deduplicated: skipped if progress already reported 100% for this session)
+    await this.reportCompletion(scenarioId, result.totalScore);
+
+    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
+    return result;
+  },
+
+  buildRoleplayResult(scenarioId) {
     const session = this.getRoleplaySession(scenarioId);
     const scenario = this.getScenario(scenarioId);
 
     const userMessages = session.messages.filter(m => m.sender === 'user');
     const taskCount = scenario.objectives.length;
-    const completedCount = Math.max(session.completedTasks.length, Math.min(taskCount, userMessages.length + 1));
+    const completedCount = Math.min(taskCount, (session.completedTasks || []).length);
+    const objectiveRatio = taskCount > 0 ? completedCount / taskCount : 0;
+    const allTexts = userMessages.map(m => String(m.text || '').trim()).filter(Boolean);
+    const joinedNormalized = normalizeVi(allTexts.join(' '));
+    const words = joinedNormalized ? joinedNormalized.split(' ').filter(Boolean) : [];
+    const uniqueWords = new Set(words);
+    const avgWordsPerTurn = userMessages.length > 0 ? words.length / userMessages.length : 0;
 
-    const fluencyScore = Math.min(95, 75 + userMessages.length * 5);
-    const vocabScore = Math.min(92, 78 + userMessages.length * 4);
-    const grammarScore = Math.min(90, 80 + userMessages.length * 3);
-    const cultureScore = Math.min(98, 85 + userMessages.length * 3);
+    const fluencyScore = userMessages.length === 0 ? 0 : Math.min(98, Math.max(35, Math.min(35, userMessages.length * 8) + Math.min(30, Math.round(avgWordsPerTurn * 3)) + Math.round(objectiveRatio * 35)));
+    const hints = scenario.vocabularyHints || [];
+    const matchedHints = hints.filter(h => normalizeVi(h.word).split(' ').filter(w => w.length >= 2 && !STOPWORDS.has(w)).some(hw => includesPhrase(joinedNormalized, hw))).length;
+    const hintRatio = hints.length > 0 ? matchedHints / hints.length : objectiveRatio;
+    const vocabScore = userMessages.length === 0 ? 0 : Math.min(98, Math.max(35, 30 + Math.round(hintRatio * 30) + Math.min(40, uniqueWords.size * 2)));
+    const hasDiacritics = /[àáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđ]/i.test(allTexts.join(' '));
+    const fullSentenceRatio = userMessages.length > 0 ? allTexts.filter(t => t.split(/\s+/).length >= 4).length / userMessages.length : 0;
+    const grammarScore = userMessages.length === 0 ? 0 : Math.min(97, Math.max(35, 35 + Math.round(fullSentenceRatio * 30) + (hasDiacritics ? 15 : 4) + Math.round(objectiveRatio * 17)));
+    const politeTokens = ['da', 'a', 'vang', 'cam on', 'xin', 'nhe', 'nha', 'co', 'chu', 'bac', 'chi', 'anh', 'em', 'chau', 'con'];
+    const usedPoliteCount = politeTokens.filter(tok => includesPhrase(joinedNormalized, tok)).length;
+    const cultureScore = userMessages.length === 0 ? 0 : Math.min(99, Math.max(40, 42 + Math.min(35, usedPoliteCount * 7) + Math.round(objectiveRatio * 22)));
     const totalScore = Math.round((fluencyScore + vocabScore + grammarScore + cultureScore) / 4);
 
     const result = {
@@ -466,7 +827,7 @@ export const aiRoleplayService = {
       level: scenario.levelLabel,
       completedDate: new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }),
       totalScore,
-      rating: totalScore >= 90 ? 'Xuất sắc' : totalScore >= 80 ? 'Rất tốt' : 'Đạt yêu cầu',
+      rating: totalScore >= 90 ? 'Xuất sắc' : totalScore >= 80 ? 'Rất tốt' : totalScore >= 65 ? 'Khá tốt' : totalScore >= 50 ? 'Đạt yêu cầu' : 'Cần cố gắng thêm',
       stats: {
         fluency: fluencyScore,
         vocabulary: vocabScore,
@@ -496,17 +857,63 @@ export const aiRoleplayService = {
       nextScenario: SCENARIOS.find(s => s.id !== scenarioId) || SCENARIOS[1],
     };
 
-    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
     return result;
   },
 
   getResult(scenarioId) {
     try {
       const stored = localStorage.getItem(ROLEPLAY_RESULT_STORAGE + scenarioId);
-      if (stored) return JSON.parse(stored);
+      // Always recompute result from current session so score is never stuck on stale cache
     } catch {
       // fallback
     }
-    return this.finishRoleplayAndGetResult(scenarioId);
+    const result = this.buildRoleplayResult(scenarioId);
+    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
+    return result;
+  },
+
+  isProgressComplete(scenarioId, session = this.getRoleplaySession(scenarioId)) {
+    const scenario = this.getScenario(scenarioId);
+    const total = scenario?.objectives?.length || 0;
+    return total > 0 && (session?.completedTasks?.length || 0) >= total;
+  },
+
+  /**
+   * Report a finished roleplay to the backend exactly once per local session,
+   * so Admin "Lượt hoàn thành" increases by 1 per real completion.
+   */
+  async reportCompletion(scenarioId, score) {
+    const session = this.getRoleplaySession(scenarioId);
+    if (session.completionReported) return { alreadyReported: true };
+
+    // Mark first to avoid double posts from concurrent triggers (auto 100% + button).
+    this.saveRoleplaySession(scenarioId, { ...session, completionReported: true, completionReportedAt: new Date().toISOString() });
+
+    const userMessages = (session.messages || []).filter(m => m.sender === 'user').length;
+    const effectiveScore = (score !== undefined && score !== null) ? score : this.buildRoleplayResult(scenarioId).totalScore;
+    try {
+      let res;
+      if (session.backendSessionId) {
+        try {
+          res = await axiosClient.post(`/api/ai/roleplay/sessions/${session.backendSessionId}/finish`, { score: effectiveScore });
+        } catch {
+          res = await axiosClient.post(`/api/ai/roleplay/scenarios/${scenarioId}/complete`, { score: effectiveScore });
+        }
+      } else {
+        res = await axiosClient.post(`/api/ai/roleplay/scenarios/${scenarioId}/complete`, { score: effectiveScore });
+      }
+      return res?.result ?? res;
+    } catch (err) {
+      // Allow retry later if the backend was unreachable.
+      const latest = this.getRoleplaySession(scenarioId);
+      this.saveRoleplaySession(scenarioId, { ...latest, completionReported: false });
+      console.warn('[AI Roleplay] Could not report completion:', err?.message);
+      return null;
+    }
+  },
+
+  async syncCompletion(scenarioId, score = 85) {
+    return this.reportCompletion(scenarioId, score);
   },
 };
+

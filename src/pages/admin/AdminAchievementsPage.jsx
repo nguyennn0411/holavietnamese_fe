@@ -1,7 +1,8 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { Modal } from '@/components/common/Modal';
 import { useState, useEffect } from 'react';
 import { adminService } from '@/services/adminService';
+import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export function AdminAchievementsPage() {
   const [achievements, setAchievements] = useState([]);
@@ -11,7 +12,7 @@ export function AdminAchievementsPage() {
     code: '',
     title: '',
     desc: '',
-    icon: '🌟',
+    icon: '',
     iconUrl: '',
     conditionType: 'LESSON_COUNT',
     criteria: '',
@@ -19,6 +20,7 @@ export function AdminAchievementsPage() {
   });
   const [msg, setMsg] = useState('');
   const [error,setError]=useState('');
+  const { confirm, confirmationDialog } = useConfirmDialog();
 
   useEffect(() => {
     loadData();
@@ -41,7 +43,7 @@ export function AdminAchievementsPage() {
       code: '',
       title: '',
       desc: '',
-      icon: '🌟',
+      icon: '',
       iconUrl: '',
       conditionType: 'LESSON_COUNT',
       criteria: '',
@@ -59,13 +61,18 @@ export function AdminAchievementsPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Bạn có chắc muốn xóa huy hiệu này?')) return;
+    if (!await confirm({
+      title: bilingualLabel('Xóa huy hiệu?', 'Delete badge?'),
+      description: bilingualLabel('Huy hiệu sẽ bị xóa khỏi hệ thống và không thể khôi phục.', 'The badge will be permanently deleted and cannot be restored.'),
+      confirmLabel: bilingualLabel('Xóa huy hiệu', 'Delete badge'),
+    })) return;
     try { const res = await adminService.deleteAchievement(id); setMsg(res.message || 'Đã xóa huy hiệu.'); loadData(); }
     catch (error) { setMsg(error.message); }
   };
 
   return (
     <div>
+      {confirmationDialog}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 4px 0' }}><BilingualText>{"Quản lý Thành tích & Huy hiệu"}</BilingualText></h1>
@@ -89,7 +96,7 @@ export function AdminAchievementsPage() {
       {error&&<div className="ui-notice ui-notice--error" role="alert"><BilingualText>{error}</BilingualText></div>}
       {msg && (
         <div style={{ padding: '10px 16px', background: 'var(--color-sage-soft)', color: 'var(--color-ink)', borderRadius: '8px', marginBottom: '16px' }}>
-          ✓ {msg}
+          {msg}
         </div>
       )}
 
@@ -136,11 +143,11 @@ export function AdminAchievementsPage() {
 
       {/* Modal Add Achievement */}
       {showModal && (
-        <Modal title={editingId ? "Cập nhật huy hiệu" : "Khởi tạo huy hiệu mới"} onClose={()=>setShowModal(false)}>
+        <Modal title={editingId ? bilingualLabel("Cập nhật huy hiệu", "Update Badge") : bilingualLabel("Khởi tạo huy hiệu mới", "Create New Badge")} onClose={()=>setShowModal(false)}>
 <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '12px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Icon (Emoji)"}</BilingualText></label>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Biểu tượng"}</BilingualText></label>
                   <input
                     type="text"
                     value={newAch.icon}
@@ -166,7 +173,7 @@ export function AdminAchievementsPage() {
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Tên huy hiệu"}</BilingualText></label>
                 <input
                   type="text"
-                  placeholder={bilingualLabel("Ví dụ: Bậc Thầy Phở Bò")}
+                  placeholder={vietnameseLabel("Ví dụ: Bậc Thầy Phở Bò")}
                   value={newAch.title}
                   onChange={e => setNewAch({ ...newAch, title: e.target.value })}
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
@@ -178,7 +185,7 @@ export function AdminAchievementsPage() {
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Mô tả huy hiệu"}</BilingualText></label>
                 <input
                   type="text"
-                  placeholder={bilingualLabel("Ví dụ: Hoàn thành chủ đề Gọi món Phở Hà Nội")}
+                  placeholder={vietnameseLabel("Ví dụ: Hoàn thành chủ đề Gọi món Phở Hà Nội")}
                   value={newAch.desc}
                   onChange={e => setNewAch({ ...newAch, desc: e.target.value })}
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
@@ -193,11 +200,11 @@ export function AdminAchievementsPage() {
                     onChange={e => setNewAch({ ...newAch, conditionType: e.target.value })}
                     style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
                   >
-                    <option value="LESSON_COUNT">{bilingualLabel("Số bài học hoàn thành")}</option>
-                    <option value="VOCAB_COUNT">{bilingualLabel("Số từ vựng ghi nhớ")}</option>
-                    <option value="STREAK_DAYS">{bilingualLabel("Chuỗi ngày liên tiếp (Streak)")}</option>
-                    <option value="JOURNEY_CITY">{bilingualLabel("Hoàn thành chặng Hành trình")}</option>
-                    <option value="QUIZ_SCORE">{bilingualLabel("Điểm số bài kiểm tra")}</option>
+                    <option value="LESSON_COUNT">{vietnameseLabel("Số bài học hoàn thành")}</option>
+                    <option value="VOCAB_COUNT">{vietnameseLabel("Số từ vựng ghi nhớ")}</option>
+                    <option value="STREAK_DAYS">{vietnameseLabel("Chuỗi ngày liên tiếp")}</option>
+                    <option value="JOURNEY_CITY">{vietnameseLabel("Hoàn thành chặng Hành trình")}</option>
+                    <option value="QUIZ_SCORE">{vietnameseLabel("Điểm số bài kiểm tra")}</option>
                   </select>
                 </div>
                 <div>
@@ -215,7 +222,7 @@ export function AdminAchievementsPage() {
               <div>
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Chi tiết điều kiện mở khóa"}</BilingualText></label>
                 <textarea
-                  placeholder={bilingualLabel("Mô tả hành động cần đạt để mở khóa huy hiệu…")}
+                  placeholder={vietnameseLabel("Mô tả hành động cần đạt để mở khóa huy hiệu…")}
                   value={newAch.criteria}
                   onChange={e => setNewAch({ ...newAch, criteria: e.target.value })}
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)', height: '60px' }}
@@ -227,7 +234,7 @@ export function AdminAchievementsPage() {
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}><BilingualText>{"Link Icon SVG/PNG (Tùy chọn)"}</BilingualText></label>
                 <input
                   type="text"
-                  placeholder="https://... (để trống nếu dùng Emoji)"
+                  placeholder={bilingualLabel("https://... (để trống nếu dùng Emoji)", "https://... (leave blank for Emoji)")}
                   value={newAch.iconUrl}
                   onChange={e => setNewAch({ ...newAch, iconUrl: e.target.value })}
                   style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--color-border)' }}

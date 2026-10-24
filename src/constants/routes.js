@@ -3,10 +3,20 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
+  SIGNUP: '/signup',
   VERIFY_EMAIL: '/verify-email',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   ONBOARDING: '/onboarding',
+  WELCOME: '/welcome',
+  LOGIN_REQUIRED: '/login-required',
+  AUTH_REQUIRED: '/auth-required',
+
+  // EdTech Next-Gen Experience
+  EDTECH_DASHBOARD: '/edtech/dashboard',
+  LEARNING_PATH: '/learning-path',
+  EDTECH_LESSON: '/edtech/lesson',
+  EDTECH_VOCABULARY: '/edtech/vocabulary',
 
   // Learner
   MY_LEARNING: '/my-learning',
@@ -27,10 +37,13 @@ export const ROUTES = {
   // Vocabulary (Người 3)
   VOCABULARY: '/vocabulary',
   VOCABULARY_CATALOG_DETAIL: '/vocabulary/:id',
-  ADMIN_VOCABULARY_TOPICS: '/admin/vocabulary-topics',
   VOCABULARY_NOTEBOOK: '/vocabulary/notebook',
   VOCABULARY_NOTEBOOK_DETAIL: '/vocabulary/notebook/:id',
   VOCABULARY_REVIEW: '/vocabulary/review',
+  REGIONAL_VIETNAMESE: '/regional-vietnamese',
+  ADMIN_REGIONAL_LANGUAGE: '/admin/regional-language',
+  ADMIN_IMPORT: '/admin/import',
+  ADMIN_IMPORT_HISTORY: '/admin/imports',
 
   EXPLORE: '/explore',
   DESTINATION_DETAIL: '/explore/:id',
@@ -54,6 +67,7 @@ export const ROUTES = {
   // Admin (Người 1)
   ADMIN: '/admin',
   ADMIN_COURSES: '/admin/courses',
+  ADMIN_COURSE_CREATE: '/admin/courses/new',
   ADMIN_COURSE_BUILDER: '/admin/courses/:courseId',
   ADMIN_COURSE_PREVIEW: '/admin/courses/:courseId/preview',
   ADMIN_LESSONS: '/admin/lessons',
@@ -66,10 +80,12 @@ export const ROUTES = {
   ADMIN_VOCABULARY: '/admin/vocabulary',
   ADMIN_DESTINATIONS: '/admin/destinations',
   ADMIN_DESTINATION_DETAIL: '/admin/destinations/:id',
+  ADMIN_JOURNEY: '/admin/journey',
   ADMIN_USERS: '/admin/users',
   ADMIN_USER_DETAIL: '/admin/users/:id',
   ADMIN_ROLES: '/admin/roles',
   ADMIN_SETTINGS: '/admin/settings',
+  ADMIN_SITE_CONTENT: '/admin/site-content',
   ADMIN_ACHIEVEMENTS: '/admin/achievements',
   ADMIN_XP_RULES: '/admin/xp-rules',
   ADMIN_AUDIT_LOGS: '/admin/audit-logs',

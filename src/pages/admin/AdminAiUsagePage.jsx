@@ -1,10 +1,27 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
 
 export function AdminAiUsagePage() {
-  const [usageData] = useState(() => adminCultureAiService.getUsageStats());
-  const { summary, modeBreakdown, recentLogs } = usageData;
+  const [usageData, setUsageData] = useState(null);
+  useEffect(() => {
+    adminCultureAiService.loadUsageStats()
+      .then(setUsageData)
+      .catch(() => setUsageData({ summary: {}, modeBreakdown: [], recentLogs: [] }));
+  }, []);
+  if (!usageData) return <div className="admin-content">Đang tải dữ liệu sử dụng AI...</div>;
+  const summary = {
+    totalSessions: 0,
+    totalApiCalls: 0,
+    totalTokens: 0,
+    costMonthUsd: 0,
+    budgetLimitUsd: 150,
+    avgResponseTimeMs: 0,
+    errorRate: '0.00%',
+    ...(usageData?.summary || {}),
+  };
+  const modeBreakdown = Array.isArray(usageData?.modeBreakdown) ? usageData.modeBreakdown : [];
+  const recentLogs = Array.isArray(usageData?.recentLogs) ? usageData.recentLogs : [];
 
   return (
     <div className="admin-content">
@@ -20,7 +37,7 @@ export function AdminAiUsagePage() {
         <div className="admin-card" style={{ padding: '20px' }}>
           <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 700, textTransform: 'uppercase' }}><BilingualText>{"Tổng số phiên"}</BilingualText></span>
           <div style={{ fontSize: '28px', fontWeight: 850, color: 'var(--color-ink)', margin: '6px 0' }}>
-            {summary.totalSessions.toLocaleString()}
+            {(summary.totalSessions ?? 0).toLocaleString()}
           </div>
           <span style={{ fontSize: '11px', color: 'var(--color-ink)' }}><BilingualText>{"↑ 14% so với tuần trước"}</BilingualText></span>
         </div>
@@ -28,7 +45,7 @@ export function AdminAiUsagePage() {
         <div className="admin-card" style={{ padding: '20px' }}>
           <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 700, textTransform: 'uppercase' }}><BilingualText>{"Tổng lượt gọi API"}</BilingualText></span>
           <div style={{ fontSize: '28px', fontWeight: 850, color: 'var(--color-ink)', margin: '6px 0' }}>
-            {summary.totalApiCalls.toLocaleString()}
+            {(summary.totalApiCalls ?? 0).toLocaleString()}
           </div>
           <span style={{ fontSize: '11px', color: 'var(--color-forest)' }}><BilingualText>{"Trung bình 12.4 gọi/phiên"}</BilingualText></span>
         </div>
@@ -36,9 +53,9 @@ export function AdminAiUsagePage() {
         <div className="admin-card" style={{ padding: '20px' }}>
           <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 700, textTransform: 'uppercase' }}><BilingualText>{"Token tiêu thụ"}</BilingualText></span>
           <div style={{ fontSize: '28px', fontWeight: 850, color: 'var(--color-ink)', margin: '6px 0' }}>
-            {(summary.totalTokens / 1000000).toFixed(2)}M
+            {(((summary.totalTokens || 0) / 1000000) || 0).toFixed(2)}M
           </div>
-          <span style={{ fontSize: '11px', color: 'var(--color-forest)' }}><BilingualText>{"Prompt + Completion"}</BilingualText></span>
+          <span style={{ fontSize: '11px', color: 'var(--color-forest)' }}><BilingualText>{"Đầu vào + Đầu ra"}</BilingualText></span>
         </div>
 
         <div className="admin-card" style={{ padding: '20px' }}>
@@ -52,15 +69,15 @@ export function AdminAiUsagePage() {
         <div className="admin-card" style={{ padding: '20px' }}>
           <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 700, textTransform: 'uppercase' }}><BilingualText>{"Độ trễ trung bình"}</BilingualText></span>
           <div style={{ fontSize: '28px', fontWeight: 850, color: 'var(--color-ink)', margin: '6px 0' }}>
-            {summary.avgResponseTimeMs} ms
+            {summary.avgResponseTimeMs ?? 0} ms
           </div>
           <span style={{ fontSize: '11px', color: 'var(--color-ink)' }}><BilingualText>{"P95: 580 ms (Rất nhanh)"}</BilingualText></span>
         </div>
 
         <div className="admin-card" style={{ padding: '20px' }}>
-          <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 700, textTransform: 'uppercase' }}><BilingualText>{"Tỷ lệ lỗi (Error)"}</BilingualText></span>
+          <span style={{ fontSize: '12px', color: 'var(--color-forest)', fontWeight: 700, textTransform: 'uppercase' }}><BilingualText>{"Tỷ lệ lỗi"}</BilingualText></span>
           <div style={{ fontSize: '28px', fontWeight: 850, color: 'var(--color-ink)', margin: '6px 0' }}>
-            {summary.errorRate}
+            {summary.errorRate || '0.00%'}
           </div>
           <span style={{ fontSize: '11px', color: 'var(--color-ink)' }}><BilingualText>{"Hệ thống đạt 99.82% SLA"}</BilingualText></span>
         </div>
@@ -83,15 +100,22 @@ export function AdminAiUsagePage() {
               </tr>
             </thead>
             <tbody>
-              {modeBreakdown.map(item => (
+              {modeBreakdown.length === 0 ? (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '24px', color: 'var(--color-muted)' }}>
+                    <BilingualText vi="Chưa có dữ liệu phân bổ theo chế độ." en="No mode breakdown recorded yet." />
+                  </td>
+                </tr>
+              ) : (
+                modeBreakdown.map(item => (
                 <tr key={item.mode}>
                   <td>
                     <strong style={{ color: 'var(--color-ink)' }}>{item.mode}</strong>
                     <div style={{ fontSize: '11px', color: 'var(--color-forest)' }}>{item.name}</div>
                   </td>
-                  <td>{item.calls.toLocaleString()}</td>
-                  <td>{(item.tokens / 1000).toLocaleString()}k</td>
-                  <td><strong style={{ color: 'var(--color-red-hover)' }}>${item.cost}</strong></td>
+                  <td>{(item.calls ?? 0).toLocaleString()}</td>
+                  <td>{Math.round((item.tokens ?? 0) / 1000).toLocaleString()}k</td>
+                  <td><strong style={{ color: 'var(--color-red-hover)' }}>${item.cost ?? 0}</strong></td>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '60px', height: '6px', background: 'var(--color-border)', borderRadius: '4px', overflow: 'hidden' }}>
@@ -101,7 +125,8 @@ export function AdminAiUsagePage() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>
@@ -124,7 +149,7 @@ export function AdminAiUsagePage() {
               />
             </div>
             <div style={{ marginTop: '12px', fontSize: '12.5px', color: 'var(--color-red-hover)', lineHeight: 1.5 }}>
-              💡 <em><BilingualText>{"Mẹo tối ưu:"}</BilingualText></em><BilingualText>{"Chế độ"}</BilingualText><strong>Gemini 1.5 Flash</strong><BilingualText>{"đang giúp giảm hơn 78% chi phí so với các mô hình tiêu chuẩn mà vẫn duy trì tốc độ phản hồi dưới 350ms."}</BilingualText></div>
+              <em><BilingualText>{"Mẹo tối ưu:"}</BilingualText></em><BilingualText>{"Chế độ"}</BilingualText><strong>Gemini 2.5 Flash</strong><BilingualText>{"đang giúp giảm chi phí và duy trì tốc độ phản hồi thấp cho các cuộc hội thoại."}</BilingualText></div>
           </div>
 
           <div className="admin-card">
@@ -150,7 +175,7 @@ export function AdminAiUsagePage() {
       {/* Real-time API Logs Table */}
       <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
         <div style={{ padding: '18px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 style={{ margin: 0, fontSize: '17px', color: 'var(--color-ink)' }}><BilingualText>{"Nhật ký gọi API gần đây (Audit Logs)"}</BilingualText></h2>
+          <h2 style={{ margin: 0, fontSize: '17px', color: 'var(--color-ink)' }}><BilingualText>{"Nhật ký gọi API gần đây"}</BilingualText></h2>
           <span style={{ fontSize: '12px', color: 'var(--color-ink)', fontWeight: 700 }}><BilingualText>{"● Live Stream"}</BilingualText></span>
         </div>
 
@@ -168,7 +193,14 @@ export function AdminAiUsagePage() {
             </tr>
           </thead>
           <tbody>
-            {recentLogs.map(log => (
+            {recentLogs.length === 0 ? (
+              <tr>
+                <td colSpan={8} style={{ textAlign: 'center', padding: '28px', color: 'var(--color-muted)' }}>
+                  <BilingualText vi="Chưa có nhật ký gọi API nào gần đây." en="No recent API call logs found." />
+                </td>
+              </tr>
+            ) : (
+              recentLogs.map(log => (
               <tr key={log.id}>
                 <td><code>{log.id}</code></td>
                 <td>{log.timestamp}</td>
@@ -179,7 +211,8 @@ export function AdminAiUsagePage() {
                 <td>{log.cost}</td>
                 <td><span className="admin-badge admin-badge-success"><BilingualText>{log.status}</BilingualText> OK</span></td>
               </tr>
-            ))}
+            ))
+            )}
           </tbody>
         </table>
       </div>

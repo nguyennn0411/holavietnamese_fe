@@ -1,6 +1,8 @@
-import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useState, useEffect } from 'react';
 import { learnerService } from '@/services/learnerService';
+import { Trophy } from 'lucide-react';
+import { StarsBackground, CountingNumber, SpotlightCard, ShimmeringText } from '@/components/common/animate';
 
 export function AchievementsPage() {
   const [data, setData] = useState(null);
@@ -8,20 +10,20 @@ export function AchievementsPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    let active = true;
     learnerService
       .getAchievements()
       .then((res) => {
-        setData(
-          Array.isArray(res)
-            ? { badges: res, passportStamps: [] }
-            : { badges: res?.badges ?? [], passportStamps: res?.passportStamps ?? [] }
-        );
+        if (!active) return;
+        setData({ badges: Array.isArray(res) ? res : res?.badges ?? [] });
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message || 'Không thể tải thành tích.');
+        if (!active) return;
+        setError(err.message || bilingualLabel('Không thể tải thành tích.', 'Unable to load achievements.'));
         setLoading(false);
       });
+    return () => { active = false; };
   }, []);
 
   if (loading) {
@@ -43,83 +45,64 @@ export function AchievementsPage() {
   return (
     <div className="account-page">
       <div className="account-header">
-        <span className="account-pill"><BilingualText>{"🏆 Bộ sưu tập danh hiệu"}</BilingualText></span>
+        <span className="account-pill"><BilingualText>{"Bộ sưu tập danh hiệu"}</BilingualText></span>
         <h1 className="account-title"><BilingualText>{"Huy hiệu & Thành tích"}</BilingualText></h1>
         <p className="account-desc"><BilingualText>{"Ghi nhận từng cột mốc nỗ lực trên hành trình khám phá ngôn ngữ và văn hóa Việt Nam."}</BilingualText></p>
       </div>
 
-      {/* Overview Banner */}
-      <div className="achieve-banner">
-        <div>
-          <span className="achieve-banner-subtitle"><BilingualText>{"BỘ SƯU TẬP DANH HIỆU"}</BilingualText></span>
-          <h2 className="achieve-banner-title"><BilingualText>{"Đã mở khóa"}</BilingualText>{unlockedCount} / {data.badges.length}<BilingualText>{"huy hiệu"}</BilingualText></h2>
+      {/* Overview Banner with subtle StarsBackground */}
+      <div className="achieve-banner relative overflow-hidden">
+        <StarsBackground className="opacity-40" starCount={35} />
+        <div className="relative z-10">
+          <span className="achieve-banner-subtitle"><BilingualText vi="BỘ SƯU TẬP DANH HIỆU" en="ACHIEVEMENT COLLECTION" /></span>
+          <h2 className="achieve-banner-title">
+            <BilingualText
+              vi={<>Đã mở khóa <CountingNumber value={unlockedCount} /> / {data.badges.length} huy hiệu</>}
+              en={<>Unlocked <CountingNumber value={unlockedCount} /> / {data.badges.length} badges</>}
+            />
+          </h2>
         </div>
-        <span className="achieve-banner-icon">🏆</span>
+        <Trophy size={40} className="text-[#FF7A00] relative z-10" />
       </div>
 
-      {/* Badges Grid */}
-      <h3 className="achieve-section-title"><BilingualText>{"Huy hiệu học tập"}</BilingualText></h3>
+      {/* Badges Grid with SpotlightCard */}
+      <h3 className="achieve-section-title"><BilingualText vi="Huy hiệu học tập" en="Learning Badges" /></h3>
       <div className="achieve-badge-grid">
         {data.badges.length === 0 ? (
-          <div className="account-empty"><BilingualText>{"Chưa có huy hiệu nào trong hệ thống."}</BilingualText></div>
+          <div className="account-empty"><BilingualText vi="Chưa có huy hiệu nào trong hệ thống." en="No badges available in the system." /></div>
         ) : (
           data.badges.map((badge) => (
-            <div
+            <SpotlightCard
               key={badge.id}
               className={`achieve-badge-card ${badge.unlocked ? 'unlocked' : 'locked'}`}
+              maxTilt={4}
             >
               <div className="achieve-badge-icon">
-                {badge.icon || (badge.unlocked ? '🏆' : '🔒')}
+                {badge.unlocked ? <BilingualText vi="ĐẠT" en="EARNED" /> : <BilingualText vi="CHƯA" en="LOCKED" />}
               </div>
               <div className="achieve-badge-info">
-                <strong>{badge.name || badge.title}</strong>
+                {badge.unlocked ? (
+                  <strong className="block"><ShimmeringText text={badge.name || badge.title} /></strong>
+                ) : (
+                  <strong>{badge.name || badge.title}</strong>
+                )}
                 <p>{badge.description || badge.desc || badge.criteria}</p>
                 {badge.unlocked ? (
-                  <span className="achieve-badge-status"><BilingualText>{"✓ Đã mở khóa"}</BilingualText>{badge.unlockedAt ? `· ${badge.unlockedAt}` : ''}
+                  <span className="achieve-badge-status"><BilingualText>{"Đã mở khóa"}</BilingualText>{badge.unlockedAt ? `· ${badge.unlockedAt}` : ''}
                   </span>
                 ) : (
                   <span className="achieve-badge-status locked">
-                    🔒 {badge.conditionValue || <BilingualText>Chưa đạt điều kiện</BilingualText>}
+                    {badge.conditionValue || <BilingualText>Chưa đạt điều kiện</BilingualText>}
                   </span>
                 )}
               </div>
-            </div>
+            </SpotlightCard>
           ))
         )}
       </div>
 
-      {/* Passport Stamps Section */}
-      <div className="achieve-passport-card">
-        <div className="achieve-passport-header">
-          <span className="achieve-passport-icon">🛂</span>
-          <div>
-            <h3><BilingualText>{"Hộ chiếu khám phá Việt Nam"}</BilingualText></h3>
-            <p><BilingualText>{"Mỗi khi hoàn thành các bài học gắn liền với địa danh, bạn sẽ nhận được một con tem hộ chiếu đặc trưng!"}</BilingualText></p>
-          </div>
-        </div>
-
-        <div className="achieve-stamp-grid">
-          {data.passportStamps.length === 0 ? (
-            <p className="account-desc"><BilingualText>{"Chưa có dữ liệu hành trình."}</BilingualText></p>
-          ) : (
-            data.passportStamps.map((stamp) => (
-              <div
-                key={stamp.id}
-                className={`achieve-stamp-box ${stamp.unlocked ? 'unlocked' : ''}`}
-              >
-                <span className="achieve-stamp-city">{stamp.city}</span>
-                <p className="achieve-stamp-name">{stamp.stamp}</p>
-                {stamp.unlocked ? (
-                  <span className="achieve-stamp-tag"><BilingualText>{"Đã đóng dấu ("}</BilingualText>{stamp.date || <BilingualText>Gần đây</BilingualText>})
-                  </span>
-                ) : (
-                  <span className="achieve-stamp-tag locked"><BilingualText>{"Chưa mở khóa"}</BilingualText></span>
-                )}
-              </div>
-            ))
-          )}
-        </div>
-      </div>
     </div>
   );
 }
+
+export default AchievementsPage;

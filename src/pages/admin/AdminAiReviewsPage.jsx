@@ -1,9 +1,10 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { useState } from 'react';
+import { BilingualText, vietnameseLabel } from '@/components/common/BilingualText';
+import { useEffect, useState } from 'react';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { Lock, FlaskConical } from 'lucide-react';
 
 export function AdminAiReviewsPage() {
-  const [reviews, setReviews] = useState(() => adminCultureAiService.getReviews());
+  const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
   const [toast, setToast] = useState('');
 
@@ -13,16 +14,24 @@ export function AdminAiReviewsPage() {
   const [testOutput, setTestOutput] = useState('');
   const [isTesting, setIsTesting] = useState(false);
 
+  useEffect(() => {
+    adminCultureAiService.listReviewRecords().then(setReviews).catch(() => setReviews([]));
+  }, []);
+
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(''), 3000);
   };
 
-  const handleUpdateStatus = (id, newStatus) => {
-    const updated = adminCultureAiService.updateReviewStatus(id, newStatus);
-    setReviews(adminCultureAiService.getReviews());
-    setSelectedReview(updated);
-    showToast(`Đã cập nhật trạng thái kiểm tra chất lượng: ${newStatus}`);
+  const handleUpdateStatus = async (id, newStatus) => {
+    try {
+      const updated = await adminCultureAiService.updateReviewRecordStatus(id, newStatus);
+      setReviews(current => current.map(review => review.id === id ? { ...review, ...updated } : review));
+      setSelectedReview(current => current?.id === id ? { ...current, ...updated } : current);
+      showToast(`Đã cập nhật trạng thái kiểm tra chất lượng: ${newStatus}`);
+    } catch {
+      showToast('Không thể cập nhật đánh giá AI.');
+    }
   };
 
   const handleRunTest = async () => {
@@ -32,16 +41,16 @@ export function AdminAiReviewsPage() {
     // Simulate backend test execution through admin evaluation pipeline
     setTimeout(() => {
       setIsTesting(false);
-      setTestOutput(`[AI Test Runner - v2.2.0-stable | Model: Gemini 1.5 Flash]
-✓ Nhận diện vai trò: Cô Mai (Chủ quán phở Hà Nội)
-✓ Phân tích câu thoại người học: "Dạ cho cháu một bát phở tái lăn, không cho hành lá nhé cô!"
-✓ Kính ngữ: Rất chuẩn xác (Dạ... nhé cô)
-✓ Xử lý yêu cầu khẩu vị: Không hành lá -> Đã ghi nhận chính xác
+      setTestOutput(`[AI Test Runner - v2.2.0-stable | Model: Gemini 2.5 Flash]
+[ĐẠT] Nhận diện vai trò: Cô Mai (Chủ quán phở Hà Nội)
+[ĐẠT] Phân tích câu thoại người học: "Dạ cho cháu một bát phở tái lăn, không cho hành lá nhé cô!"
+[ĐẠT] Kính ngữ: Rất chuẩn xác (Dạ... nhé cô)
+[ĐẠT] Xử lý yêu cầu khẩu vị: Không hành lá -> Đã ghi nhận chính xác
 
-➔ Câu trả lời của AI tạo ra:
+Câu trả lời của AI tạo ra:
 "Được rồi cháu ơi! Một bát tái lăn không hành nhé. Thịt bò xào lăn thơm phức đang sẵn trên chảo đây. Cháu có muốn dùng thêm đĩa quẩy giòn nhúng nước dùng hay uống trà đá không nào?"
 
-➔ Đánh giá tự động:
+Đánh giá tự động:
 - Lỗi sai kiến thức ẩm thực: 0
 - Lỗi ngữ pháp tiếng Việt: 0
 - Tính phù hợp văn hóa: 100%`);
@@ -65,7 +74,7 @@ export function AdminAiReviewsPage() {
 
       {/* Privacy Notice */}
       <div style={{ background: 'var(--color-red-soft)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <span style={{ fontSize: '20px' }}>🔒</span>
+        <Lock size={18} />
         <div style={{ fontSize: '13px', color: 'var(--color-ink)' }}>
           <strong><BilingualText>{"Chính sách quyền riêng tư lịch sử hội thoại:"}</BilingualText></strong><BilingualText>{"Chỉ hiển thị các phiên được người học cấp quyền gửi đánh giá, phản hồi báo lỗi, hoặc các phiên thuộc tập kiểm thử (Test Bench). Dữ liệu cá nhân nhạy cảm đã được ẩn danh hóa."}</BilingualText></div>
       </div>
@@ -89,7 +98,14 @@ export function AdminAiReviewsPage() {
               </tr>
             </thead>
             <tbody>
-              {reviews.map(r => (
+              {reviews.length === 0 ? (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '36px', color: 'var(--color-muted)' }}>
+                    <BilingualText vi="Chưa có phản hồi hoặc phiên cần kiểm tra nào từ học viên." en="No learner reviews or quality audit records found yet." />
+                  </td>
+                </tr>
+              ) : (
+                reviews.map(r => (
                 <tr
                   key={r.id}
                   onClick={() => setSelectedReview(r)}
@@ -106,7 +122,7 @@ export function AdminAiReviewsPage() {
 
                   <td>
                     <span style={{ color: 'var(--color-red)', fontWeight: 750 }}>
-                      {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
+                      {`${r.rating}/5`}
                     </span>
                   </td>
 
@@ -115,10 +131,10 @@ export function AdminAiReviewsPage() {
                   </td>
 
                   <td>
-                    {r.taggedIssues.length === 0 ? (
+                    {(!r.taggedIssues || r.taggedIssues.length === 0) ? (
                       <span className="admin-badge admin-badge-success"><BilingualText>{"Không có lỗi"}</BilingualText></span>
                     ) : (
-                      r.taggedIssues.map((issue, idx) => (
+                      (r.taggedIssues || []).map((issue, idx) => (
                         <span key={idx} className="admin-badge admin-badge-danger" style={{ display: 'inline-block', margin: '2px 0' }}>
                           {issue}
                         </span>
@@ -136,7 +152,8 @@ export function AdminAiReviewsPage() {
                     )}
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>
@@ -154,7 +171,7 @@ export function AdminAiReviewsPage() {
                 <div><strong><BilingualText>{"Mã phiên:"}</BilingualText></strong> <code>{selectedReview.sessionId}</code></div>
                 <div><strong><BilingualText>{"Đánh giá:"}</BilingualText></strong> {selectedReview.rating}<BilingualText>{"/5 sao"}</BilingualText></div>
                 <div style={{ marginTop: '8px', padding: '10px 12px', background: 'var(--color-cream)', borderRadius: '8px' }}>
-                  💬 <em>"{selectedReview.userFeedback}"</em>
+                  <em>"{selectedReview.userFeedback}"</em>
                 </div>
 
                 <div style={{ marginTop: '14px' }}>
@@ -165,13 +182,13 @@ export function AdminAiReviewsPage() {
                       className="button secondary"
                       style={{ fontSize: '12px', padding: '6px 12px', color: 'var(--color-ink)' }}
                       onClick={() => handleUpdateStatus(selectedReview.id, 'APPROVED')}
-                    ><BilingualText>{"✓ Duyệt đạt chuẩn"}</BilingualText></button>
+                    ><BilingualText>{"Duyệt đạt chuẩn"}</BilingualText></button>
                     <button
                       type="button"
                       className="button secondary"
                       style={{ fontSize: '12px', padding: '6px 12px', color: 'var(--color-red)' }}
                       onClick={() => handleUpdateStatus(selectedReview.id, 'NEEDS_PROMPT_TUNING')}
-                    ><BilingualText>{"⚠️ Cần chỉnh Prompt"}</BilingualText></button>
+                    ><BilingualText>{"Cần chỉnh Prompt"}</BilingualText></button>
                   </div>
                 </div>
               </div>
@@ -183,15 +200,15 @@ export function AdminAiReviewsPage() {
           {/* Test Sandbox (Kiểm thử kịch bản) */}
           <div className="admin-card" style={{ background: 'var(--color-surface)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <span style={{ fontSize: '20px' }}>🧪</span>
-              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Kiểm thử kịch bản AI (Prompt Sandbox)"}</BilingualText></h3>
+              <FlaskConical size={18} />
+              <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Kiểm thử kịch bản AI"}</BilingualText></h3>
             </div>
-            <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: 'var(--color-forest)' }}><BilingualText>{"Kiểm tra trực tiếp phản hồi của mô hình với phiên bản System Prompt hiện hành trước khi xuất bản rộng rãi."}</BilingualText></p>
+            <p style={{ margin: '0 0 14px', fontSize: '12.5px', color: 'var(--color-forest)' }}><BilingualText>{"Kiểm tra trực tiếp phản hồi của mô hình với phiên bản hướng dẫn hệ thống hiện hành trước khi xuất bản rộng rãi."}</BilingualText></p>
 
             <label><BilingualText>{"Chọn kịch bản kiểm thử:"}</BilingualText><select value={testScenarioId} onChange={e => setTestScenarioId(e.target.value)}>
-                <option value="goi-mon-pho-ha-noi">{bilingualLabel("Gọi món tại quán Phở gia truyền Hà Nội")}</option>
-                <option value="tra-gia-cho-ben-thanh">{bilingualLabel("Trả giá quà lưu niệm tại Chợ Bến Thành")}</option>
-                <option value="bat-xe-om-cong-nghe">{bilingualLabel("Đón xe ôm công nghệ & Chỉ đường")}</option>
+                <option value="goi-mon-pho-ha-noi">{vietnameseLabel("Gọi món tại quán Phở gia truyền Hà Nội")}</option>
+                <option value="tra-gia-cho-ben-thanh">{vietnameseLabel("Trả giá quà lưu niệm tại Chợ Bến Thành")}</option>
+                <option value="bat-xe-om-cong-nghe">{vietnameseLabel("Đón xe ôm công nghệ & Chỉ đường")}</option>
               </select>
             </label>
 

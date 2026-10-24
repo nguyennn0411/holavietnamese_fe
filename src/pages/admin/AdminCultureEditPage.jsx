@@ -1,8 +1,9 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { adminCultureAiService } from '@/services/adminCultureAiService';
+import { toast } from 'sonner';
 
 export function AdminCultureEditPage() {
   const { id } = useParams();
@@ -21,7 +22,7 @@ export function AdminCultureEditPage() {
     destination: 'Hà Nội',
     author: 'Biên tập viên Hola',
     authorRole: 'Chuyên gia văn hóa ẩm thực',
-    readTime: '5 phút đọc',
+    readTime: bilingualLabel('5 phút đọc', '5 min read'),
     status: 'PUBLISHED',
     coverImage: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80',
     summary: '',
@@ -86,7 +87,7 @@ export function AdminCultureEditPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
-      alert('Vui lòng nhập tiêu đề bài viết!');
+      toast.error(bilingualLabel('Vui lòng nhập tiêu đề bài viết.', 'Please enter an article title.'));
       return;
     }
 
@@ -96,7 +97,7 @@ export function AdminCultureEditPage() {
     };
 
     adminCultureAiService.saveArticle(payload);
-    showToast('Đã lưu bài viết văn hóa thành công!');
+    showToast(bilingualLabel('Đã lưu bài viết văn hóa thành công!', 'Cultural article saved successfully!'));
     setTimeout(() => {
       navigate('/admin/culture');
     }, 800);
@@ -113,8 +114,8 @@ export function AdminCultureEditPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '14px' }}>
         <div>
-          <nav style={{ fontSize: '13px', color: 'var(--color-forest)', marginBottom: '6px' }}>
-            <Link to="/admin/culture" style={{ color: 'var(--color-red-hover)', textDecoration: 'none' }}><BilingualText>{"← Quay lại danh sách bài viết"}</BilingualText></Link>
+          <nav style={{ fontSize: '13px', color: 'var(--text-secondary, #64748B)', marginBottom: '6px' }}>
+            <Link to="/admin/culture" style={{ color: 'var(--primary-orange, #F97316)', textDecoration: 'none', fontWeight: 600 }}><BilingualText>{"← Quay lại danh sách bài viết"}</BilingualText></Link>
           </nav>
           <h1 style={{ margin: 0, fontSize: '30px' }}>
             <BilingualText>{isNew ? 'Soạn thảo bài viết văn hóa mới' : `Biên tập: ${formData.title}`}</BilingualText>
@@ -127,19 +128,19 @@ export function AdminCultureEditPage() {
             className={`button ${activeTab === 'editor' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('editor')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"✏️ Trình biên tập"}</BilingualText></button>
+          ><BilingualText>{"Trình biên tập"}</BilingualText></button>
           <button
             type="button"
             className={`button ${activeTab === 'preview' ? '' : 'secondary'}`}
             onClick={() => setActiveTab('preview')}
             style={{ fontSize: '13px' }}
-          ><BilingualText>{"👁️ Xem trước (Preview)"}</BilingualText></button>
+          ><BilingualText>{"Xem trước"}</BilingualText></button>
           <button
             type="button"
             className="button"
             onClick={handleSubmit}
             style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
-          ><BilingualText>{"💾 Lưu bài viết"}</BilingualText></button>
+          ><BilingualText>{"Lưu bài viết"}</BilingualText></button>
         </div>
       </div>
 
@@ -154,7 +155,7 @@ export function AdminCultureEditPage() {
                     required
                     value={formData.title ?? ''}
                     onChange={e => setFormData({ ...formData, title: e.target.value })}
-                    placeholder={bilingualLabel("Ví dụ: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng...")}
+                    placeholder={vietnameseLabel("Ví dụ: Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng...")}
                   />
                 </label>
 
@@ -162,15 +163,15 @@ export function AdminCultureEditPage() {
                     type="text"
                     value={formData.subtitle ?? ''}
                     onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
-                    placeholder={bilingualLabel("Mô tả tóm lược nét hấp dẫn của bài viết...")}
+                    placeholder={vietnameseLabel("Mô tả tóm lược nét hấp dẫn của bài viết...")}
                   />
                 </label>
 
-                <label style={{ marginTop: '14px' }}><BilingualText>{"Tóm tắt mở đầu (Summary):"}</BilingualText><textarea
+                <label style={{ marginTop: '14px' }}><BilingualText>{"Tóm tắt mở đầu:"}</BilingualText><textarea
                     rows={3}
                     value={formData.summary ?? ''}
                     onChange={e => setFormData({ ...formData, summary: e.target.value })}
-                    placeholder={bilingualLabel("Đoạn văn ngắn làm nổi bật ý nghĩa văn hóa...")}
+                    placeholder={vietnameseLabel("Đoạn văn ngắn làm nổi bật ý nghĩa văn hóa...")}
                   />
                 </label>
               </div>
@@ -182,7 +183,7 @@ export function AdminCultureEditPage() {
                     required
                     value={formData.content ?? ''}
                     onChange={e => setFormData({ ...formData, content: e.target.value })}
-                    placeholder={bilingualLabel("Soạn nội dung bài viết với các đề mục ###, đoạn văn, và hình ảnh...")}
+                    placeholder={vietnameseLabel("Soạn nội dung bài viết với các đề mục ###, đoạn văn, và hình ảnh...")}
                     style={{ fontFamily: 'monospace', fontSize: '13.5px', lineHeight: 1.6 }}
                   />
                 </label>
@@ -192,8 +193,8 @@ export function AdminCultureEditPage() {
               <div className="admin-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <div>
-                    <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Từ vựng & Cụm từ liên quan (Useful Phrases)"}</BilingualText></h3>
-                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-forest)' }}><BilingualText>{"Học viên có thể nghe phát âm và lưu trực tiếp vào Sổ từ vựng khi đọc bài viết này."}</BilingualText></p>
+                    <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--color-ink)' }}><BilingualText>{"Từ vựng & Cụm từ liên quan"}</BilingualText></h3>
+                    <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary, #64748B)' }}><BilingualText>{"Học viên có thể nghe phát âm và lưu trực tiếp vào Sổ từ vựng khi đọc bài viết này."}</BilingualText></p>
                   </div>
                   <button type="button" className="button secondary" onClick={handleAddPhrase} style={{ fontSize: '12px', padding: '6px 12px' }}><BilingualText>{"+ Thêm từ"}</BilingualText></button>
                 </div>
@@ -203,21 +204,21 @@ export function AdminCultureEditPage() {
                     <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1.5fr auto', gap: '10px', alignItems: 'center', background: 'var(--color-cream)', padding: '10px', borderRadius: '10px' }}>
                       <input
                         type="text"
-                        placeholder={bilingualLabel("Từ tiếng Việt (vd: Cà phê phin)")}
+                        placeholder={vietnameseLabel("Từ tiếng Việt (vd: Cà phê phin)")}
                         value={phrase.word ?? ''}
                         onChange={e => handlePhraseChange(idx, 'word', e.target.value)}
                         style={{ fontSize: '13px' }}
                       />
                       <input
                         type="text"
-                        placeholder={bilingualLabel("Phiên âm (vd: kà-phê-phin)")}
+                        placeholder={vietnameseLabel("Phiên âm (vd: kà-phê-phin)")}
                         value={phrase.pronunciation ?? ''}
                         onChange={e => handlePhraseChange(idx, 'pronunciation', e.target.value)}
                         style={{ fontSize: '13px' }}
                       />
                       <input
                         type="text"
-                        placeholder={bilingualLabel("Nghĩa tiếng Anh / Diễn giải")}
+                        placeholder={vietnameseLabel("Nghĩa tiếng Anh / Diễn giải")}
                         value={phrase.meaning ?? ''}
                         onChange={e => handlePhraseChange(idx, 'meaning', e.target.value)}
                         style={{ fontSize: '13px' }}
@@ -226,7 +227,7 @@ export function AdminCultureEditPage() {
                         type="button"
                         onClick={() => handleRemovePhrase(idx)}
                         style={{ background: 'transparent', border: 'none', color: 'var(--color-red)', cursor: 'pointer', fontSize: '16px' }}
-                        title="Xóa cụm từ này"
+                        title={bilingualLabel("Xóa cụm từ này", "Delete this phrase")}
                       >
                         ✕
                       </button>
@@ -245,10 +246,10 @@ export function AdminCultureEditPage() {
                     value={formData.status ?? ''}
                     onChange={e => setFormData({ ...formData, status: e.target.value })}
                   >
-                    <option value="PUBLISHED">{bilingualLabel("Đã xuất bản (Published)")}</option>
-                    <option value="IN_REVIEW">{bilingualLabel("Chờ duyệt (In Review)")}</option>
-                    <option value="DRAFT">{bilingualLabel("Bản nháp (Draft)")}</option>
-                    <option value="ARCHIVED">{bilingualLabel("Lưu trữ (Archived)")}</option>
+                    <option value="PUBLISHED">{vietnameseLabel("Đã xuất bản")}</option>
+                    <option value="IN_REVIEW">{vietnameseLabel("Chờ duyệt")}</option>
+                    <option value="DRAFT">{vietnameseLabel("Bản nháp")}</option>
+                    <option value="ARCHIVED">{vietnameseLabel("Lưu trữ")}</option>
                   </select>
                 </label>
 
@@ -268,10 +269,10 @@ export function AdminCultureEditPage() {
                     value={formData.region ?? ''}
                     onChange={e => setFormData({ ...formData, region: e.target.value })}
                   >
-                    <option value="Toàn quốc">{bilingualLabel("Toàn quốc (National)")}</option>
-                    <option value="Miền Bắc">{bilingualLabel("Miền Bắc (Northern)")}</option>
-                    <option value="Miền Trung">{bilingualLabel("Miền Trung (Central)")}</option>
-                    <option value="Miền Nam">{bilingualLabel("Miền Nam (Southern)")}</option>
+                    <option value="Toàn quốc">{vietnameseLabel("Toàn quốc")}</option>
+                    <option value="Miền Bắc">{vietnameseLabel("Miền Bắc")}</option>
+                    <option value="Miền Trung">{vietnameseLabel("Miền Trung")}</option>
+                    <option value="Miền Nam">{vietnameseLabel("Miền Nam")}</option>
                   </select>
                 </label>
 
@@ -279,7 +280,7 @@ export function AdminCultureEditPage() {
                     type="text"
                     value={formData.destination ?? ''}
                     onChange={e => setFormData({ ...formData, destination: e.target.value })}
-                    placeholder={bilingualLabel("Ví dụ: Hà Nội, Hội An, Huế...")}
+                    placeholder={vietnameseLabel("Ví dụ: Hà Nội, Hội An, Huế...")}
                   />
                 </label>
               </div>
@@ -298,7 +299,7 @@ export function AdminCultureEditPage() {
                   <div style={{ marginTop: '12px', borderRadius: '12px', overflow: 'hidden', height: '160px', border: '1px solid var(--color-border)' }}>
                     <ContentImage
                       src={formData.coverImage}
-                      alt={formData.title || 'Ảnh bìa bài viết'}
+                      alt={formData.title || bilingualLabel('Ảnh bìa bài viết', 'Article cover image')}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
@@ -339,13 +340,13 @@ export function AdminCultureEditPage() {
             <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--color-red-hover)', textTransform: 'uppercase' }}><BilingualText>{"PREVIEW TRÊN GIAO DIỆN HỌC VIÊN"}</BilingualText></span>
             <h1 style={{ fontSize: '32px', margin: '8px 0', color: 'var(--color-ink)' }}><BilingualText>{formData.title || 'Chưa có tiêu đề'}</BilingualText></h1>
             <p style={{ fontSize: '16px', color: 'var(--color-red-hover)' }}>{formData.subtitle}</p>
-            <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}><BilingualText>{"Tác giả:"}</BilingualText><strong>{formData.author}</strong><BilingualText>{"• Điểm đến: 📍"}</BilingualText>{formData.destination}
+            <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}><BilingualText>{"Tác giả:"}</BilingualText><strong>{formData.author}</strong><BilingualText>{"• Điểm đến: "}</BilingualText>{formData.destination}
             </div>
           </div>
 
           {formData.coverImage && (
             <div style={{ borderRadius: '16px', overflow: 'hidden', height: '320px', marginBottom: '28px' }}>
-              <ContentImage src={formData.coverImage} alt={formData.title || 'Ảnh bìa bài viết'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <ContentImage src={formData.coverImage} alt={formData.title || bilingualLabel('Ảnh bìa bài viết', 'Article cover image')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           )}
 
@@ -355,7 +356,7 @@ export function AdminCultureEditPage() {
 
           {formData.usefulPhrases?.length > 0 && (
             <div style={{ marginTop: '36px', padding: '24px', background: 'var(--color-cream)', borderRadius: '16px' }}>
-              <h3 style={{ margin: '0 0 14px 0', color: 'var(--color-red-hover)' }}><BilingualText>{"📖 Cụm từ hữu ích kèm theo bài viết:"}</BilingualText></h3>
+              <h3 style={{ margin: '0 0 14px 0', color: 'var(--color-red-hover)' }}><BilingualText>{"Cụm từ hữu ích kèm theo bài viết:"}</BilingualText></h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
                 {formData.usefulPhrases.filter(p => p.word).map((p, idx) => (
                   <div key={idx} style={{ background: 'var(--color-surface)', padding: '10px 14px', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
