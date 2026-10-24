@@ -64,4 +64,7 @@ export const adminDestinationService = {
   async restore(id, options = {}) {
     return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/restore`, null, options));
   },
+  async revise(id, options = {}) {
+    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/revise`, null, options));
+  },
 };
