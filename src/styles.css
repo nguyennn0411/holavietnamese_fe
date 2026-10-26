@@ -269,3 +269,239 @@ label.question-option.selected,
   background: #FFFFFF !important;
   color: #1F2937 !important;
 }
+
+
+/* ==========================================================================
+   HOLAVIETNAMESE INTERACTION DESIGN SYSTEM
+   Standardizes interactive, active, clicked, and selected states to pure
+   white (#FFFFFF) with high-contrast text and warm brand orange borders.
+   ========================================================================== */
+
+/* 1. BUTTONS ON CLICK / PRESS / ACTIVE */
+button:not(:disabled):active,
+.button:not([aria-disabled="true"]):active,
+.btn-primary:not(:disabled):active,
+.auth-btn-primary:not(:disabled):active,
+.site-header__cta:active,
+.guest-topbar__cta:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border-color: #EA580C !important;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25) !important;
+}
+
+button:not(:disabled):active svg,
+.button:not([aria-disabled="true"]):active svg {
+  color: #EA580C !important;
+  stroke: #EA580C !important;
+}
+
+/* Secondary Buttons on Hover / Active / Focus */
+button.secondary:hover,
+.button.secondary:hover,
+button.secondary:active,
+.button.secondary:active,
+button.secondary:focus-visible,
+.button.secondary:focus-visible {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border-color: #EA580C !important;
+}
+
+/* Danger Buttons on Active / Click */
+button.danger:active,
+.button.danger:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #DC2626 !important;
+  border-color: #DC2626 !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25) !important;
+}
+
+/* 2. SIDEBAR & NAVIGATION ITEMS (Learner, Guest, Admin, Header) */
+.learner-sidebar__link.active,
+.learner-sidebar__link.is-active,
+.learner-sidebar__link[aria-current="page"],
+.guest-sidebar__link.active,
+.guest-sidebar__link.is-active,
+.guest-sidebar__link[aria-current="page"],
+.admin-nav-item.active,
+.admin-nav-item.is-active,
+.admin-nav-item[aria-current="page"],
+.site-nav__link.active,
+.site-nav__link.is-active,
+.site-nav__link[aria-current="page"],
+.main-nav a.active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border: 1.5px solid #EA580C !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 10px rgba(234, 88, 12, 0.12) !important;
+}
+
+.learner-sidebar__link.active svg,
+.learner-sidebar__link.active .sidebar-link__icon,
+.guest-sidebar__link.is-active svg,
+.guest-sidebar__link.is-active .sidebar-link__icon,
+.admin-nav-item.active svg,
+.site-nav__link.active svg {
+  color: #EA580C !important;
+  stroke: #EA580C !important;
+}
+
+.learner-sidebar__link:active,
+.guest-sidebar__link:active,
+.admin-nav-item:active,
+.site-nav__link:active,
+.main-nav a:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+}
+
+/* 3. TABS (UI Tabs, MyLearning Tabs, Admin Tabs, Roleplay/Category Tabs) */
+.ui-tabs button.active,
+.ui-tabs button[aria-selected="true"],
+.ui-tabs button[data-state="active"],
+.mylearning-tab-btn.active,
+.mylearning-tab-btn[aria-selected="true"],
+.category-tab-btn.active,
+.destination-pill-btn.active,
+.course-review-tabs button.is-active,
+.learning-path-level-tabs button.is-active,
+[role="tab"][aria-selected="true"] {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border-color: #EA580C !important;
+  font-weight: 700 !important;
+}
+
+.ui-tabs button:hover,
+.ui-tabs button:focus,
+.ui-tabs button:active,
+.mylearning-tab-btn:hover,
+.mylearning-tab-btn:active,
+.category-tab-btn:hover,
+.category-tab-btn:active,
+.destination-pill-btn:hover,
+.destination-pill-btn:active,
+[role="tab"]:hover,
+[role="tab"]:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+}
+
+/* 4. DROPDOWN ITEMS, MENU ITEMS, USER MENU */
+.user-menu__panel > a:hover,
+.user-menu__panel > a:focus,
+.user-menu__panel > a:active,
+.user-menu__logout:hover,
+.user-menu__logout:focus,
+.user-menu__logout:active,
+.dropdown-item:hover,
+.dropdown-item:active,
+.dropdown-item:focus,
+[role="menuitem"]:hover,
+[role="menuitem"]:focus,
+[role="menuitem"]:active,
+[role="option"]:hover,
+[role="option"]:focus,
+[role="option"]:active,
+[role="option"][aria-selected="true"],
+select option:checked {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  font-weight: 600 !important;
+}
+
+/* 5. FORM INPUTS & FOCUS RINGS */
+input:focus,
+select:focus,
+textarea:focus,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border-color: #EA580C !important;
+  outline: 2px solid rgba(234, 88, 12, 0.25) !important;
+  outline-offset: 1px !important;
+  color: #1E293B !important;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background-color: #FFFFFF !important;
+  accent-color: #EA580C !important;
+}
+
+/* 6. PAGINATION & FILTERS */
+.pagination button:hover,
+.pagination button:active,
+.pagination a:hover,
+.pagination a:active,
+.pagination button.active,
+.pagination a.active,
+.pagination .is-active,
+.filter-chip.active,
+.filter-chip:hover,
+.filter-chip:active,
+.explore-region-buttons button.active,
+.explore-region-buttons button:hover,
+.explore-region-buttons button:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border-color: #EA580C !important;
+  font-weight: 700 !important;
+}
+
+/* 7. ACCORDIONS & COLLAPSIBLES */
+summary:hover,
+summary:active,
+summary:focus,
+.accordion-trigger:hover,
+.accordion-trigger:active,
+.accordion-trigger:focus,
+.accordion-trigger[aria-expanded="true"] {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+}
+
+/* 8. AI ASSISTANT CHIPS & BUTTONS */
+.coursera-ai-chip:hover,
+.coursera-ai-chip:active,
+.coursera-ai-chip:focus,
+.prompt-chip:hover,
+.prompt-chip:active,
+.prompt-chip:focus,
+.prompt-chip.active,
+.mode-pill:hover,
+.mode-pill:active,
+.mode-pill.active,
+.tutor-history-item:hover,
+.tutor-history-item:active,
+.tutor-history-item.active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border-color: #EA580C !important;
+}
+
+/* 9. CLICKABLE CARDS ON HOVER, ACTIVE, SELECTED */
+.card-clickable:hover,
+.card-clickable:active,
+.card-clickable.is-selected,
+.card-clickable[aria-selected="true"],
+.journey-stop:hover,
+.journey-stop:active,
+.journey-stop.is-map-active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border-color: #EA580C !important;
+}

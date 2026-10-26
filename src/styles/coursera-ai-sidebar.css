@@ -292,7 +292,7 @@ body.is-resizing-ai-sidebar * {
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
-  background: #f8fafc;
+  background: #FFFFFF;
   border: 1px solid #e2e8f0;
   border-radius: 999px;
   font-size: 0.78rem;
@@ -343,7 +343,7 @@ body.is-resizing-ai-sidebar * {
 }
 
 .coursera-ai-chip:hover {
-  background: #f8fafc;
+  background: #FFFFFF;
   border-color: #cbd5e1;
   color: #0f172a;
   transform: translateY(-1px);
@@ -352,6 +352,9 @@ body.is-resizing-ai-sidebar * {
 
 .coursera-ai-chip:active {
   transform: translateY(0);
+  background: #FFFFFF !important;
+  border-color: #EA580C !important;
+  color: #EA580C !important;
 }
 
 .coursera-ai-chip__arrow {
@@ -422,7 +425,7 @@ body.is-resizing-ai-sidebar * {
 }
 
 .coursera-ai-msg__bubble {
-  background: #f8fafc;
+  background: #FFFFFF;
   border: 1px solid #e2e8f0;
   border-radius: 16px 16px 16px 4px;
   padding: 12px 14px;
@@ -514,7 +517,7 @@ body.is-resizing-ai-sidebar * {
   gap: 8px;
   padding: 10px 14px;
   border-radius: 14px;
-  background: #f8fafc;
+  background: #FFFFFF;
   border: 1px solid #e2e8f0;
   color: #64748b;
   font-size: 0.82rem;
@@ -711,6 +714,9 @@ body.is-resizing-ai-sidebar * {
 
 .learner-topbar__ai-btn:active {
   transform: translateY(0);
+  background: #FFFFFF !important;
+  border-color: #EA580C !important;
+  color: #EA580C !important;
 }
 
 /* Mobile & Tablet Drawer Overrides (<= 820px) */

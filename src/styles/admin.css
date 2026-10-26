@@ -75,15 +75,18 @@
 }
 
 .admin-nav-item:hover {
-  background: var(--bg-secondary, #FFF7E8);
+  background: #FFFFFF;
+  border: 1px solid var(--border-color, #E8E5DF);
   color: var(--primary-orange, #F97316);
 }
 
 .admin-nav-item.active {
-  background: var(--bg-peach, #FFF0DC);
+  background: #FFFFFF;
   color: var(--primary-orange, #F97316);
   font-weight: 700;
-  border-left: 3px solid var(--primary-orange, #F97316);
+  border: 1px solid var(--primary-orange, #F97316);
+  border-left: 3.5px solid var(--primary-orange, #F97316);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.08);
 }
 
 .admin-sidebar-footer {
@@ -174,7 +177,7 @@
   border-radius: 6px;
   font-size: 10px;
   font-weight: 700;
-  background: var(--bg-peach, #FFF0DC);
+  background: #FFFFFF;
   color: var(--primary-orange, #F97316);
 }
 
@@ -256,7 +259,7 @@
 
 .admin-badge-warning {
   color: var(--warm-orange, #F59E0B);
-  background: var(--bg-peach, #FFF0DC);
+  background: #FFFFFF;
 }
 
 .course-review-tabs {
@@ -279,9 +282,11 @@
 }
 
 .admin-content .course-review-tabs button.is-active {
-  background: var(--primary-orange, #F97316);
+  background: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
   border-color: var(--primary-orange, #F97316);
-  color: #fff;
+  color: var(--primary-orange, #F97316);
 }
 
 .course-review-row td {
@@ -459,7 +464,9 @@
 
 .admin-content button,
 .admin-content .button {
-  background: var(--primary-orange, #F97316);
+  background: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
   border: 1px solid var(--primary-orange, #F97316);
   color: #FFFFFF;
   border-radius: 8px;
@@ -482,7 +489,8 @@
 
 .admin-content button.secondary:hover,
 .admin-content .button.secondary:hover {
-  background: var(--bg-secondary, #FFF7E8);
+  background: #FFFFFF;
+  border: 1px solid var(--border-color, #E8E5DF);
   color: var(--primary-orange, #F97316);
   border-color: var(--primary-orange, #F97316);
 }
