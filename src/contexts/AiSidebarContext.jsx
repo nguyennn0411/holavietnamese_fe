@@ -46,7 +46,7 @@ export function AiSidebarProvider({ children, isSidebarCollapsed, setIsSidebarCo
   const isEligible = !isQuizRoute && !isStandaloneAiTutor;
 
   const setWidth = useCallback((newWidth) => {
-    const maxWidth = typeof window !== 'undefined' ? Math.max(MIN_WIDTH, window.innerWidth - 380) : 780;
+    const maxWidth = typeof window !== 'undefined' ? Math.max(MIN_WIDTH, window.innerWidth - 160) : 780;
     const clamped = Math.max(MIN_WIDTH, Math.min(maxWidth, newWidth));
     setWidthState(clamped);
     try {
