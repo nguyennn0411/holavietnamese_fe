@@ -1,194 +1,1257 @@
+/* ==========================================================================
+   Learning Path Page - Spacious, Modern & Responsive Styling
+   ========================================================================== */
+
 .learning-path-simple-page {
   min-height: calc(100vh - 72px);
-  padding: 32px 20px 64px;
-  background: #f7f7f6;
-  color: #171717;
+  padding: 24px 28px 64px;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #0f172a;
 }
 
+/* Wide Container - Extended to maximize screen space */
 .learning-path-simple-card {
-  width: min(100%, 920px);
+  width: min(100%, 1380px);
   margin: 0 auto;
-  padding: 0 28px 32px;
-  border: 1px solid #dededb;
-  border-radius: 18px;
-  background: #fff;
+  padding: 0 36px 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
 }
 
+/* Header */
 .learning-path-simple-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  min-height: 76px;
-  border-bottom: 1px solid #e8e8e5;
+  min-height: 80px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.learning-path-simple-header > div { display: grid; gap: 3px; }
-.learning-path-simple-header strong { display: flex; align-items: center; gap: 8px; font-size: 14px; }
-.learning-path-simple-header span { color: #686868; font-size: 12px; }
-.learning-path-simple-label { padding: 5px 10px; border-radius: 999px; background: #f1f1ef; color: #222 !important; font-weight: 650; }
+.learning-path-simple-header > div {
+  display: grid;
+  gap: 3px;
+}
 
-.learning-path-simple-intro { padding: 30px 10px 22px; }
-.learning-path-simple-kicker, .learning-path-status { display: inline-flex; width: fit-content; padding: 4px 9px; border-radius: 999px; background: #e6f5ea; color: #18723a; font-size: 11px; font-weight: 700; }
-.learning-path-simple-intro h1 { margin: 10px 0 5px; font-size: 24px; line-height: 1.25; letter-spacing: -.02em; }
-.learning-path-simple-intro p, .learning-path-level-copy p, .learning-path-section-heading p, .learning-path-roadmap p, .learning-path-continue p { margin: 0; color: #666; font-size: 12px; line-height: 1.55; }
-.learning-path-simple-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
-.learning-path-simple-tags span { padding: 4px 8px; border-radius: 6px; background: #f2f5f8; color: #485466; font-size: 10px; }
+.learning-path-simple-header strong {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 750;
+  color: #0f172a;
+}
 
-.learning-path-simple-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 0; padding: 18px 10px 28px; }
-.learning-path-simple-stats div { display: grid; gap: 6px; }
-.learning-path-simple-stats dt { font-size: 19px; font-weight: 750; }
-.learning-path-simple-stats dt.is-text { overflow: hidden; font-size: 12px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
-.learning-path-simple-stats dd { margin: 0; color: #707070; font-size: 11px; }
+.learning-path-header-icon {
+  color: #2563eb;
+}
 
-.learning-path-level-section, .learning-path-continue, .learning-path-course-path, .learning-path-roadmap, .learning-path-courses { margin-top: 18px; padding: 22px; border: 1px solid #e2e2df; border-radius: 14px; background: #fff; }
-.learning-path-section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
-.learning-path-section-heading h2 { margin: 0 0 4px; font-size: 14px; }
-.learning-path-section-heading > span, .learning-path-section-heading small { color: #666; font-size: 11px; }
-.learning-path-section-heading a { display: inline-flex; align-items: center; gap: 4px; color: #222; font-size: 11px; font-weight: 700; text-decoration: none; }
+.learning-path-simple-header span {
+  color: #64748b;
+  font-size: 13px;
+}
 
-.learning-path-level-tabs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin: 16px 0; }
-.learning-path-level-tabs button { min-height: 32px; border: 1px solid #d8d8d5; border-radius: 999px; background: #fff; color: #666; font-size: 12px; }
-.learning-path-level-tabs button.is-active { border-color: #171717; background: #171717; color: #fff; }
-.learning-path-level-copy { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; padding-top: 15px; border-top: 1px solid #ececea; }
-.learning-path-level-copy > span { grid-row: 1 / 3; align-self: start; padding: 5px 8px; border-radius: 6px; background: #eaf2ff; color: #3267a8; font-size: 10px; font-weight: 750; }
-.learning-path-level-copy strong { font-size: 15px; }
-
-.learning-path-continue > strong { display: block; margin: 15px 0 4px; font-size: 14px; }
-.learning-path-progress { height: 6px; margin: 14px 0; overflow: hidden; border-radius: 99px; background: #ececea; }
-.learning-path-progress span { display: block; height: 100%; border-radius: inherit; background: #2d9b5f; }
-.learning-path-link-button { padding: 7px 0; border: 0; background: transparent; color: #1d5d3a; font-size: 12px; font-weight: 700; }
-.learning-path-suggestion { margin-top: 15px; padding: 16px; border: 1px solid #dfdfdc; border-radius: 11px; background: #fafaf9; }
-.learning-path-suggestion > strong { font-size: 12px; }
-.learning-path-suggestion p { margin: 5px 0 12px; }
-.learning-path-suggestion button { width: 100%; min-height: 36px; border: 0; border-radius: 8px; background: #171717; color: #fff; font-size: 11px; font-weight: 700; }
-
-.learning-path-roadmap ol { margin: 18px 0 0; padding: 0; list-style: none; }
-.learning-path-roadmap li { position: relative; display: grid; grid-template-columns: 34px 1fr; gap: 13px; min-height: 77px; }
-.learning-path-roadmap li:not(:last-child)::after { content: ''; position: absolute; top: 32px; bottom: 0; left: 16px; width: 1px; background: #dededb; }
-.learning-path-roadmap li > span, .learning-path-roadmap li > button { z-index: 1; display: grid; width: 34px; height: 34px; place-items: center; border: 0; border-radius: 50%; background: #f1f1ef; color: #777; }
-.learning-path-roadmap li.is-completed > span, .learning-path-roadmap li.is-completed > button { background: #e5f6ec; color: #21844b; }
-.learning-path-roadmap li.is-current > button, .learning-path-roadmap li.is-available > button { background: #eaf1ff; color: #316bca; cursor: pointer; }
-.learning-path-roadmap li.is-locked > button { color: #999; }
-.learning-path-roadmap li div { padding: 1px 0 18px; }
-.learning-path-roadmap li small { display: block; margin-bottom: 3px; color: #7a7a7a; font-size: 10px; }
-.learning-path-roadmap li strong { display: block; margin-bottom: 3px; font-size: 13px; }
-
-.learning-path-course-list { display: grid; gap: 8px; margin-top: 15px; }
-.learning-path-course-path .learning-path-section-heading > button { min-height: 34px; padding: 0 13px; border: 0; border-radius: 8px; background: #171717; color: #fff; font-size: 11px; font-weight: 750; }
-.learning-path-course-path ol { display: grid; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
-.learning-path-course-path li { display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; gap: 12px; padding: 13px; border: 1px solid #e4e4e1; border-radius: 10px; }
-.learning-path-course-path li > span { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: #171717; color: #fff; font-size: 11px; font-weight: 800; }
-.learning-path-course-path li div { min-width: 0; }
-.learning-path-course-path li small { color: #3267a8; font-size: 10px; font-weight: 750; }
-.learning-path-course-path li strong { display: block; margin: 2px 0; font-size: 12px; }
-.learning-path-course-path li p { overflow: hidden; margin: 0; color: #707070; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
-.learning-path-course-path li > a { color: #555; }
-.learning-path-course-list button { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; min-height: 52px; padding: 10px 12px; border: 1px solid #e4e4e1; border-radius: 9px; background: #fff; color: #222; text-align: left; }
-.learning-path-course-list button > span { padding: 4px 7px; border-radius: 5px; background: #f1f1ef; color: #555; font-size: 10px; }
-.learning-path-course-list button > strong { font-size: 12px; }
-.learning-path-course-list button > small { display: inline-flex; align-items: center; color: #666; font-size: 10px; }
-.learning-path-empty { margin: 16px 0 0; color: #777; font-size: 12px; }
-
-.learning-path-preference-trigger,
-.learning-path-state button,
-.learning-path-personalized-hero button,
-.learning-path-preferences button {
+.learning-path-preference-trigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.learning-path-preference-trigger:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+/* Intro */
+.learning-path-simple-intro {
+  padding: 30px 4px 24px;
+}
+
+.learning-path-simple-kicker,
+.learning-path-status {
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
+  width: fit-content;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.learning-path-simple-intro h1 {
+  margin: 12px 0 6px;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+}
+
+.learning-path-simple-intro p,
+.learning-path-section-heading p,
+.learning-path-roadmap p,
+.learning-path-continue p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Hero Section - Rich Card with Mascot & Vibrant Accents
+   ========================================================================== */
+
+.learning-path-personalized-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 220px;
+  align-items: center;
+  gap: 32px;
+  margin: 0 0 24px;
+  padding: 28px 32px;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 55%, #f8fafc 100%);
+  box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.08);
+}
+
+.learning-path-hero-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.learning-path-level-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.learning-path-status-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.learning-path-personalized-hero h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.015em;
+}
+
+.learning-path-hero-meta {
+  margin: 0 0 18px !important;
+  color: #475569 !important;
+  font-size: 13px !important;
+  font-weight: 500;
+}
+
+.learning-path-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.learning-path-hero-cta:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+  background: #000000;
+}
+
+/* Mascot Zone */
+.learning-path-hero-mascot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.learning-path-hero-mascot .nghe-mascot {
+  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.12));
+}
+
+/* Hero Stats Sidebar */
+.learning-path-hero-dl {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 24px;
+  border-left: 1px solid rgba(203, 213, 225, 0.8);
+}
+
+.learning-path-hero-dl div {
+  display: grid;
+  gap: 2px;
+}
+
+.learning-path-hero-dl dt {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.learning-path-hero-dl dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 750;
+  color: #0f172a;
+}
+
+/* ==========================================================================
+   Enhanced Preferences Panel (Form)
+   ========================================================================== */
+
+.learning-path-preferences {
+  margin: 20px 0 28px;
+  padding: 26px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
+}
+
+.learning-path-preferences h2 {
+  margin: 0 0 18px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.learning-path-pref-field {
+  margin-bottom: 20px;
+}
+
+.learning-path-pref-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Level Pills */
+.learning-path-pref-levels {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.pref-level-btn {
+  min-height: 38px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pref-level-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.pref-level-btn.is-selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+/* Goal Selection Chips */
+.learning-path-pref-goals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.pref-goal-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pref-goal-chip:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.pref-goal-chip.is-active {
+  border-color: #059669;
+  background: #f0fdf4;
+  color: #065f46;
+  box-shadow: 0 0 0 1px #059669;
+}
+
+.goal-chip-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.goal-chip-text {
+  flex: 1;
+}
+
+.goal-chip-check {
+  color: #059669;
+  flex-shrink: 0;
+}
+
+/* Minutes Selection */
+.learning-path-pref-minutes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.pref-min-btn {
   min-height: 36px;
   padding: 0 14px;
-  border: 1px solid #d7d7d4;
+  border: 1.5px solid #e2e8f0;
   border-radius: 8px;
-  background: #fff;
-  color: #222;
-  font: inherit;
+  background: #ffffff;
+  color: #475569;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
-.learning-path-personalized-hero button,
-.learning-path-state button,
-.learning-path-preferences button:not(.secondary) { border-color: #181818; background: #181818; color: #fff; }
-button:disabled { cursor: not-allowed; opacity: .55; }
 
-.learning-path-inline-error { margin: 16px 0 0; padding: 10px 12px; border: 1px solid #e3c7c7; border-radius: 8px; background: #fff8f8; color: #8b2c2c; font-size: 12px; }
-.learning-path-confirm-list { display: grid; gap: 8px; max-height: 300px; margin: 0; padding: 0 4px 0 0; overflow-y: auto; list-style: none; }
-.learning-path-confirm-list li { display: grid; grid-template-columns: 30px minmax(0,1fr); align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e4e4e1; border-radius: 10px; background: #fafaf9; }
-.learning-path-confirm-list li > span { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: #181818; color: #fff; font-size: 11px; font-weight: 800; }
-.learning-path-confirm-list small { display: block; color: #3267a8; font-size: 10px; font-weight: 750; }
-.learning-path-confirm-list strong { display: block; overflow: hidden; margin-top: 2px; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
-.learning-path-personalized-hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; margin: 0 10px 18px; padding: 22px; border: 1px solid #dededb; border-radius: 13px; background: #fafaf9; }
-.learning-path-personalized-hero > div > span { display: inline-flex; padding: 4px 8px; border-radius: 6px; background: #e9eff8; color: #315a8a; font-size: 11px; font-weight: 800; }
-.learning-path-personalized-hero h2 { margin: 9px 0 5px; font-size: 18px; }
-.learning-path-personalized-hero p { margin: 0 0 14px; color: #666; font-size: 12px; line-height: 1.5; }
-.learning-path-personalized-hero dl { display: grid; gap: 9px; min-width: 160px; margin: 0; }
-.learning-path-personalized-hero dl div { padding-bottom: 8px; border-bottom: 1px solid #e5e5e2; }
-.learning-path-personalized-hero dt { color: #777; font-size: 10px; }
-.learning-path-personalized-hero dd { margin: 3px 0 0; font-size: 12px; font-weight: 700; }
+.pref-min-btn:hover {
+  background: #f8fafc;
+}
 
-.learning-path-preferences,
-.learning-path-progress-card { margin: 18px 10px; padding: 20px; border: 1px solid #dededb; border-radius: 12px; }
-.learning-path-preferences { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; background: #fafaf9; }
-.learning-path-preferences h2 { grid-column: 1 / -1; margin: 0; font-size: 14px; }
-.learning-path-preferences label { display: grid; gap: 6px; color: #555; font-size: 11px; font-weight: 650; }
-.learning-path-preferences input, .learning-path-preferences select { width: 100%; min-height: 38px; padding: 0 10px; border: 1px solid #d5d5d2; border-radius: 8px; background: #fff; color: #222; }
-.learning-path-preferences > div { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 8px; }
-.learning-path-progress-card .learning-path-simple-stats { padding: 10px 0 0; }
-.learning-path-progress-card .learning-path-section-heading > strong { font-size: 20px; }
+.pref-min-btn.is-selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
 
-.learning-path-continue-list { display: grid; gap: 10px; margin-top: 15px; }
-.learning-path-continue-list article { display: grid; grid-template-columns: minmax(0, 1fr) 170px auto; align-items: center; gap: 15px; padding: 14px; border: 1px solid #e2e2df; border-radius: 10px; }
-.learning-path-continue-list article strong { display: block; margin-top: 7px; font-size: 13px; }
-.learning-path-continue-list article > a { display: inline-flex; align-items: center; gap: 3px; color: #222; font-size: 11px; font-weight: 750; text-decoration: none; }
-.learning-path-continue-list .learning-path-progress { margin: 0; }
+.pref-min-input {
+  width: 90px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 650;
+  text-align: center;
+}
 
-.learning-path-roadmap li a { display: block; color: inherit; text-decoration: none; }
-.learning-path-roadmap li.is-in-progress > span { background: #eaf1ff; color: #316bca; }
-.learning-path-roadmap li.is-available > span { background: #f1f3f5; color: #3f5369; }
-.learning-path-roadmap li.is-locked { opacity: .62; }
+.pref-min-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.learning-path-pref-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.learning-path-pref-actions button {
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.learning-path-pref-actions button.secondary {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+}
+
+.learning-path-pref-actions button.primary {
+  border: 0;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.learning-path-pref-actions button.primary:hover:not(:disabled) {
+  background: #000000;
+}
+
+/* ==========================================================================
+   Progress Section
+   ========================================================================== */
+
+.learning-path-progress-card {
+  margin: 20px 0;
+  padding: 26px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.learning-path-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.learning-path-section-heading h2 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 750;
+  color: #0f172a;
+}
+
+.learning-path-section-heading a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: none;
+  transition: gap 0.15s ease;
+}
+
+.learning-path-section-heading a:hover {
+  gap: 9px;
+  text-decoration: underline;
+}
+
+.learning-path-percent-badge {
+  font-size: 24px;
+  font-weight: 850;
+  color: #059669;
+  letter-spacing: -0.02em;
+}
+
+.learning-path-progress {
+  height: 8px;
+  margin: 18px 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.learning-path-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  transition: width 0.4s ease;
+}
+
+.learning-path-simple-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 0;
+  padding: 16px 0 4px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.learning-path-simple-stats div {
+  display: grid;
+  gap: 4px;
+}
+
+.learning-path-simple-stats dt {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.learning-path-simple-stats dt.is-text {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.learning-path-simple-stats dd {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Continue Learning & Course Path
+   ========================================================================== */
+
+.learning-path-continue,
+.learning-path-course-path,
+.learning-path-roadmap,
+.learning-path-courses {
+  margin-top: 24px;
+  padding: 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.learning-path-continue-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.learning-path-continue-list article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px auto;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  transition: border-color 0.15s ease;
+}
+
+.learning-path-continue-list article:hover {
+  border-color: #cbd5e1;
+}
+
+.learning-path-continue-list article strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 750;
+  color: #0f172a;
+}
+
+.learning-path-continue-list article > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 750;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.learning-path-continue-list article > a:hover {
+  background: #1e293b;
+  transform: translateX(2px);
+}
+
+.learning-path-continue-list .learning-path-progress {
+  margin: 0;
+}
+
+.learning-path-suggestion {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  background: #eff6ff;
+}
+
+.learning-path-suggestion > strong {
+  font-size: 14px;
+  font-weight: 750;
+  color: #1e40af;
+}
+
+.learning-path-suggestion p {
+  margin: 6px 0 14px;
+  color: #3b82f6;
+}
+
+.learning-path-suggestion button {
+  min-height: 40px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #1e40af;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.learning-path-suggestion button:hover {
+  background: #1d4ed8;
+}
+
+/* Course Path List */
+.learning-path-course-path ol {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.learning-path-course-path li {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.learning-path-course-path li:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.learning-path-course-path li > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.learning-path-course-path li div {
+  min-width: 0;
+}
+
+.learning-path-course-path li small {
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.learning-path-course-path li strong {
+  display: block;
+  margin: 3px 0 2px;
+  font-size: 14px;
+  font-weight: 750;
+  color: #0f172a;
+}
+
+.learning-path-course-path li p {
+  overflow: hidden;
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.learning-path-course-path li > a {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 8px;
+  color: #64748b;
+  transition: all 0.15s ease;
+}
+
+.learning-path-course-path li > a:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* ==========================================================================
+   Interactive Roadmap & Milestone Highlight
+   ========================================================================== */
+
+.learning-path-roadmap ol {
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.learning-path-roadmap li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 16px;
+  min-height: 84px;
+}
+
+.learning-path-roadmap li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 40px;
+  bottom: 0;
+  left: 20px;
+  width: 2px;
+  background: #e2e8f0;
+}
+
+.learning-path-roadmap li > span {
+  z-index: 1;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.learning-path-roadmap li.is-completed > span {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #a7f3d0;
+}
+
+.learning-path-roadmap li.is-in-progress > span {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+  animation: pulse-ring 2s infinite ease-in-out;
+}
+
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.2); }
+  50% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
+}
+
+.learning-path-roadmap li.is-available > span {
+  background: #f8fafc;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+.learning-path-roadmap li.is-locked {
+  opacity: 0.65;
+}
+
+.learning-path-roadmap li div {
+  padding: 2px 0 20px;
+}
+
+.learning-path-lesson-box {
+  padding: 12px 16px;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  background: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.learning-path-roadmap li a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.learning-path-roadmap li a:hover .learning-path-lesson-box {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  transform: translateX(3px);
+}
+
+.learning-path-lesson-box small {
+  display: block;
+  margin-bottom: 3px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.learning-path-lesson-box strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 750;
+  color: #0f172a;
+}
+
+/* Milestone Card (Checkpoint) - Gold/Amber Highlight */
+.learning-path-roadmap li.is-milestone > span {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fde68a;
+}
+
+.learning-path-roadmap li.is-milestone.is-completed > span {
+  background: #fef9c3;
+  color: #ca8a04;
+  border-color: #fef08a;
+}
+
+.learning-path-milestone-box {
+  padding: 16px 20px;
+  border: 1.5px solid #fde68a;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.08);
+  transition: all 0.18s ease;
+}
+
+.learning-path-roadmap li a:hover .learning-path-milestone-box {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.15);
+  transform: translateX(3px);
+}
+
+.learning-path-milestone-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.learning-path-milestone-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.learning-path-milestone-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #059669;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.learning-path-milestone-box strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #78350f;
+}
+
+.learning-path-milestone-box p {
+  color: #92400e !important;
+}
+
+.learning-path-milestone-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: #f59e0b;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 750;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);
+  transition: all 0.15s ease;
+}
+
+.learning-path-milestone-cta:hover {
+  background: #d97706;
+}
+
+/* ==========================================================================
+   Recommended Courses Catalog
+   ========================================================================== */
+
+.learning-path-course-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
 
 .learning-path-course-list button,
-.learning-path-course-list > a { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; min-height: 52px; padding: 10px 12px; border: 1px solid #e4e4e1; border-radius: 9px; background: #fff; color: #222; text-align: left; text-decoration: none; }
-.learning-path-course-list > a > span { padding: 4px 7px; border-radius: 5px; background: #f1f1ef; color: #555; font-size: 10px; }
-.learning-path-course-list > a > strong { font-size: 12px; }
-.learning-path-course-list > a > small { color: #666; font-size: 10px; }
-.learning-path-empty > strong { display: block; margin-bottom: 5px; color: #333; }
-.learning-path-empty p { margin: 0; line-height: 1.55; }
+.learning-path-course-list > a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f172a;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
 
-.learning-path-state { display: grid; justify-items: center; gap: 12px; padding: 48px 28px; text-align: center; }
-.learning-path-state h1 { margin: 0; font-size: 22px; }
-.learning-path-state p { max-width: 620px; margin: 0; color: #666; font-size: 13px; line-height: 1.55; }
-.learning-path-state .learning-path-level-tabs { width: min(100%, 620px); }
-.learning-path-state-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; }
-.learning-path-state-actions a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border: 1px solid #d7d7d4; border-radius: 8px; color: #222; font-size: 12px; font-weight: 700; text-decoration: none; }
+.learning-path-course-list button:hover:not(:disabled),
+.learning-path-course-list > a:hover {
+  border-color: #2563eb;
+  background: #f8fafc;
+  transform: translateY(-1px);
+}
 
-.learning-path-skeleton { display: grid; gap: 18px; padding-block: 32px; }
-.learning-path-skeleton div { height: 92px; border-radius: 12px; background: linear-gradient(90deg, #eeeeeb 25%, #f7f7f5 50%, #eeeeeb 75%); background-size: 200% 100%; animation: learning-path-shimmer 1.4s infinite linear; }
-.learning-path-skeleton div:first-child { height: 44px; }
-.learning-path-skeleton div:nth-child(3) { height: 180px; }
-@keyframes learning-path-shimmer { to { background-position: -200% 0; } }
+.learning-path-course-list button > span,
+.learning-path-course-list > a > span {
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.learning-path-course-list button > strong,
+.learning-path-course-list > a > strong {
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.learning-path-course-list button > small,
+.learning-path-course-list > a > small {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.learning-path-empty {
+  margin: 20px 0 0;
+  padding: 24px;
+  border-radius: 12px;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.learning-path-empty > strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #334155;
+}
+
+/* ==========================================================================
+   Level Required & States
+   ========================================================================== */
+
+.learning-path-state {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 54px 28px;
+  text-align: center;
+}
+
+.learning-path-state-mascot {
+  margin-bottom: 8px;
+}
+
+.learning-path-state h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.learning-path-state p {
+  max-width: 620px;
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.learning-path-level-tabs {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  width: min(100%, 640px);
+  margin: 16px 0;
+}
+
+.learning-path-level-tabs button {
+  min-height: 40px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.learning-path-level-tabs button:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.learning-path-level-tabs button.is-active {
+  border-color: #0f172a;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.learning-path-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.learning-path-state-actions button,
+.learning-path-state-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.learning-path-state-actions button {
+  border: 0;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.learning-path-state-actions a {
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+}
+
+/* Skeleton Loading */
+.learning-path-skeleton {
+  display: grid;
+  gap: 20px;
+  padding-block: 40px;
+}
+
+.learning-path-skeleton div {
+  height: 96px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #f8fafc 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: learning-path-shimmer 1.4s infinite linear;
+}
+
+.learning-path-skeleton div:first-child {
+  height: 48px;
+}
+
+.learning-path-skeleton div:nth-child(3) {
+  height: 200px;
+}
+
+@keyframes learning-path-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.learning-path-inline-error {
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.learning-path-confirm-list {
+  display: grid;
+  gap: 8px;
+  max-height: 300px;
+  margin: 0;
+  padding: 0 4px 0 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.learning-path-confirm-list li {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.learning-path-confirm-list li > span {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.learning-path-confirm-list small {
+  display: block;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.learning-path-confirm-list strong {
+  display: block;
+  overflow: hidden;
+  margin-top: 2px;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================= */
+
+@media (max-width: 1024px) {
+  .learning-path-personalized-hero {
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+  }
+  .learning-path-hero-dl {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, 1fr);
+    padding-left: 0;
+    padding-top: 16px;
+    border-left: 0;
+    border-top: 1px solid rgba(203, 213, 225, 0.8);
+  }
+  .learning-path-pref-goals {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .learning-path-course-list {
+    grid-template-columns: 1fr;
+  }
+}
 
 @media (max-width: 640px) {
-  .learning-path-simple-page { padding: 16px 10px 40px; }
-  .learning-path-simple-card { padding: 0 15px 22px; border-radius: 14px; }
-  .learning-path-simple-header { min-height: 66px; }
-  .learning-path-simple-label { display: none; }
-  .learning-path-simple-intro { padding-inline: 2px; }
-  .learning-path-simple-intro h1 { font-size: 21px; }
-  .learning-path-simple-stats { padding-inline: 2px; gap: 9px; }
-  .learning-path-simple-stats dt { font-size: 17px; }
-  .learning-path-level-section, .learning-path-continue, .learning-path-course-path, .learning-path-roadmap, .learning-path-courses { padding: 16px; }
-  .learning-path-course-path .learning-path-section-heading > button { width: 100%; }
-  .learning-path-level-tabs { grid-template-columns: repeat(3, 1fr); }
-  .learning-path-section-heading { flex-wrap: wrap; }
-  .learning-path-personalized-hero { grid-template-columns: 1fr; margin-inline: 2px; padding: 16px; }
-  .learning-path-preferences { grid-template-columns: 1fr; margin-inline: 2px; }
-  .learning-path-preferences h2, .learning-path-preferences > div { grid-column: 1; }
-  .learning-path-progress-card { margin-inline: 2px; padding: 16px; }
-  .learning-path-continue-list article { grid-template-columns: 1fr; }
-  .learning-path-course-list button, .learning-path-course-list > a { grid-template-columns: auto 1fr; }
-  .learning-path-course-list button > small, .learning-path-course-list > a > small { grid-column: 2; }
+  .learning-path-simple-page {
+    padding: 14px 10px 40px;
+  }
+  .learning-path-simple-card {
+    padding: 0 16px 24px;
+    border-radius: 16px;
+  }
+  .learning-path-simple-intro h1 {
+    font-size: 22px;
+  }
+  .learning-path-personalized-hero {
+    grid-template-columns: 1fr;
+    padding: 20px 16px;
+    gap: 16px;
+  }
+  .learning-path-hero-mascot {
+    order: -1;
+  }
+  .learning-path-hero-dl {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .learning-path-pref-levels {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .learning-path-pref-goals {
+    grid-template-columns: 1fr;
+  }
+  .learning-path-simple-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .learning-path-continue-list article {
+    grid-template-columns: 1fr;
+  }
+  .learning-path-course-path li {
+    grid-template-columns: 32px 1fr;
+  }
+  .learning-path-course-path li > a {
+    display: none;
+  }
+  .learning-path-level-tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
