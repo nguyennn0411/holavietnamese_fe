@@ -125,6 +125,29 @@ export function CourseraAiSidebar({ width, onResize, onClose }) {
     return () => clearTimeout(timer);
   }, []);
 
+  // Handle Escape key to close & lock body scroll in drawer overlay mode (< 1600px)
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+
+    const isOverlayMode = typeof window !== 'undefined' && window.innerWidth < 1600;
+    const prevOverflow = document.body.style.overflow;
+    if (isOverlayMode) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleGlobalKeyDown);
+      if (isOverlayMode) {
+        document.body.style.overflow = prevOverflow;
+      }
+    };
+  }, [onClose]);
+
   // Handle incoming pending prompt (e.g. from lesson page)
   useEffect(() => {
     if (pendingPrompt) {
@@ -334,7 +357,7 @@ export function CourseraAiSidebar({ width, onResize, onClose }) {
   return (
     <>
       {/* Mobile backdrop */}
-      <div className="coursera-ai-backdrop lg:hidden" onClick={onClose} aria-hidden="true" />
+      <div className="coursera-ai-backdrop" onClick={onClose} aria-hidden="true" />
 
       <aside
         className="coursera-ai-sidebar"
