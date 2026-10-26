@@ -1,11 +1,11 @@
 /* ==========================================================================
-   Learning Path Page - Spacious, Modern & Responsive Styling
+   Learning Path Page - Clean White Clickable Selections & Spacious Layout
    ========================================================================== */
 
 .learning-path-simple-page {
   min-height: calc(100vh - 72px);
   padding: 24px 28px 64px;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  background: #f8fafc;
   color: #0f172a;
 }
 
@@ -53,6 +53,7 @@
   font-size: 13px;
 }
 
+/* Tùy chỉnh (Preferences Trigger Button) - Nền trắng rõ nét */
 .learning-path-preference-trigger {
   display: inline-flex;
   align-items: center;
@@ -60,20 +61,22 @@
   gap: 8px;
   min-height: 38px;
   padding: 0 16px;
-  border: 1px solid #cbd5e1;
+  border: 1.5px solid #cbd5e1;
   border-radius: 10px;
-  background: #ffffff;
-  color: #334155;
+  background: #ffffff !important;
+  color: #1e293b;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .learning-path-preference-trigger:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
-  color: #0f172a;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  color: #2563eb;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
 }
 
 /* Intro */
@@ -89,10 +92,12 @@
   width: fit-content;
   padding: 5px 12px;
   border-radius: 999px;
-  background: #ecfdf5;
+  background: #ffffff;
+  border: 1.5px solid #10b981;
   color: #059669;
   font-size: 12px;
   font-weight: 700;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.08);
 }
 
 .learning-path-simple-intro h1 {
@@ -115,7 +120,7 @@
 }
 
 /* ==========================================================================
-   Hero Section - Rich Card with Mascot & Vibrant Accents
+   Hero Section - Clean White Background with Crisp Borders & Mascot
    ========================================================================== */
 
 .learning-path-personalized-hero {
@@ -125,10 +130,10 @@
   gap: 32px;
   margin: 0 0 24px;
   padding: 28px 32px;
-  border: 1px solid #bfdbfe;
+  border: 1.5px solid #e2e8f0;
   border-radius: 16px;
-  background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 55%, #f8fafc 100%);
-  box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.08);
+  background: #ffffff;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
 }
 
 .learning-path-hero-badge-wrap {
@@ -142,21 +147,22 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 12px;
+  padding: 5px 14px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  color: #ffffff;
-  font-size: 12px;
+  background: #ffffff;
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  font-size: 13px;
   font-weight: 800;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
 }
 
 .learning-path-status-badge {
   display: inline-flex;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1;
   color: #475569;
   font-size: 11px;
   font-weight: 700;
@@ -185,7 +191,7 @@
   padding: 0 20px;
   border: 0;
   border-radius: 10px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: #0f172a;
   color: #ffffff;
   font-size: 13px;
   font-weight: 750;
@@ -209,7 +215,7 @@
 }
 
 .learning-path-hero-mascot .nghe-mascot {
-  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.12));
+  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.1));
 }
 
 /* Hero Stats Sidebar */
@@ -218,7 +224,7 @@
   gap: 12px;
   margin: 0;
   padding-left: 24px;
-  border-left: 1px solid rgba(203, 213, 225, 0.8);
+  border-left: 1px solid #e2e8f0;
 }
 
 .learning-path-hero-dl div {
@@ -242,15 +248,15 @@
 }
 
 /* ==========================================================================
-   Enhanced Preferences Panel (Form)
+   Tùy chỉnh lộ trình (Preferences Form) - Tất cả các lựa chọn ĐỀU NỀN TRẮNG
    ========================================================================== */
 
 .learning-path-preferences {
   margin: 20px 0 28px;
   padding: 26px;
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #e2e8f0;
   border-radius: 16px;
-  background: #ffffff;
+  background: #ffffff !important;
   box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
 }
 
@@ -268,43 +274,47 @@
 .learning-path-pref-field label {
   display: block;
   margin-bottom: 8px;
-  color: #334155;
-  font-size: 12px;
-  font-weight: 700;
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 750;
 }
 
-/* Level Pills */
+/* Lựa chọn Trình độ (Level Selection Pills) - NỀN TRẮNG 100% */
 .learning-path-pref-levels {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 
 .pref-level-btn {
-  min-height: 38px;
-  border: 1.5px solid #e2e8f0;
+  min-height: 42px;
+  border: 1.5px solid #cbd5e1;
   border-radius: 10px;
-  background: #ffffff;
-  color: #475569;
-  font-size: 13px;
+  background: #ffffff !important;
+  color: #334155;
+  font-size: 14px;
   font-weight: 750;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .pref-level-btn:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  color: #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
 }
 
 .pref-level-btn.is-selected {
-  border-color: #2563eb;
-  background: #eff6ff;
-  color: #1d4ed8;
-  box-shadow: 0 0 0 1px #2563eb;
+  background: #ffffff !important;
+  border: 2px solid #2563eb !important;
+  color: #2563eb !important;
+  font-weight: 850 !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), 0 2px 8px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Goal Selection Chips */
+/* Lựa chọn Mục tiêu (Goal Chips) - NỀN TRẮNG 100% */
 .learning-path-pref-goals {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -314,34 +324,37 @@
 .pref-goal-chip {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 8px 14px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
-  background: #ffffff;
-  color: #334155;
-  font-size: 12px;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  background: #ffffff !important;
+  color: #1e293b;
+  font-size: 13px;
   font-weight: 650;
   text-align: left;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .pref-goal-chip:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
 .pref-goal-chip.is-active {
-  border-color: #059669;
-  background: #f0fdf4;
-  color: #065f46;
-  box-shadow: 0 0 0 1px #059669;
+  background: #ffffff !important;
+  border: 2px solid #059669 !important;
+  color: #047857 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15), 0 2px 8px rgba(0, 0, 0, 0.05) !important;
 }
 
 .goal-chip-icon {
-  font-size: 16px;
+  font-size: 17px;
   flex-shrink: 0;
 }
 
@@ -354,54 +367,60 @@
   flex-shrink: 0;
 }
 
-/* Minutes Selection */
+/* Lựa chọn Phút học (Minutes Selection Pills) - NỀN TRẮNG 100% */
 .learning-path-pref-minutes {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .pref-min-btn {
-  min-height: 36px;
-  padding: 0 14px;
-  border: 1.5px solid #e2e8f0;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1.5px solid #cbd5e1;
   border-radius: 8px;
-  background: #ffffff;
-  color: #475569;
-  font-size: 12px;
+  background: #ffffff !important;
+  color: #334155;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .pref-min-btn:hover {
-  background: #f8fafc;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  color: #2563eb;
 }
 
 .pref-min-btn.is-selected {
-  border-color: #2563eb;
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: #ffffff !important;
+  border: 2px solid #2563eb !important;
+  color: #2563eb !important;
+  font-weight: 850 !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
 }
 
 .pref-min-input {
   width: 90px;
-  min-height: 36px;
+  min-height: 38px;
   padding: 0 10px;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #cbd5e1;
   border-radius: 8px;
-  background: #ffffff;
+  background: #ffffff !important;
   color: #0f172a;
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 750;
   text-align: center;
 }
 
 .pref-min-input:focus {
   outline: none;
+  background: #ffffff !important;
   border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .learning-path-pref-actions {
@@ -415,7 +434,7 @@
 
 .learning-path-pref-actions button {
   min-height: 40px;
-  padding: 0 18px;
+  padding: 0 20px;
   border-radius: 9px;
   font-size: 13px;
   font-weight: 700;
@@ -423,9 +442,14 @@
 }
 
 .learning-path-pref-actions button.secondary {
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #475569;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff !important;
+  color: #334155;
+}
+
+.learning-path-pref-actions button.secondary:hover {
+  border-color: #94a3b8;
+  color: #0f172a;
 }
 
 .learning-path-pref-actions button.primary {
@@ -445,9 +469,10 @@
 .learning-path-progress-card {
   margin: 20px 0;
   padding: 26px;
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #e2e8f0;
   border-radius: 16px;
-  background: #ffffff;
+  background: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .learning-path-section-heading {
@@ -540,7 +565,7 @@
 }
 
 /* ==========================================================================
-   Continue Learning & Course Path
+   Continue Learning & Course Path - NỀN TRẮNG SÁCH ĐẸP
    ========================================================================== */
 
 .learning-path-continue,
@@ -549,9 +574,10 @@
 .learning-path-courses {
   margin-top: 24px;
   padding: 28px;
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #e2e8f0;
   border-radius: 16px;
-  background: #ffffff;
+  background: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .learning-path-continue-list {
@@ -560,20 +586,24 @@
   margin-top: 18px;
 }
 
+/* Mỗi thẻ bài học tiếp tục - NỀN TRẮNG */
 .learning-path-continue-list article {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 220px auto;
   align-items: center;
   gap: 20px;
-  padding: 18px 20px;
-  border: 1px solid #e2e8f0;
+  padding: 18px 22px;
+  border: 1.5px solid #e2e8f0;
   border-radius: 12px;
-  background: #f8fafc;
-  transition: border-color 0.15s ease;
+  background: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all 0.15s ease;
 }
 
 .learning-path-continue-list article:hover {
-  border-color: #cbd5e1;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
 }
 
 .learning-path-continue-list article strong {
@@ -589,7 +619,7 @@
   align-items: center;
   gap: 6px;
   min-height: 38px;
-  padding: 0 16px;
+  padding: 0 18px;
   border-radius: 8px;
   background: #0f172a;
   color: #ffffff;
@@ -610,40 +640,42 @@
 
 .learning-path-suggestion {
   margin-top: 18px;
-  padding: 20px;
-  border: 1px solid #bfdbfe;
+  padding: 22px;
+  border: 1.5px solid #cbd5e1;
   border-radius: 12px;
-  background: #eff6ff;
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .learning-path-suggestion > strong {
   font-size: 14px;
   font-weight: 750;
-  color: #1e40af;
+  color: #0f172a;
 }
 
 .learning-path-suggestion p {
   margin: 6px 0 14px;
-  color: #3b82f6;
+  color: #64748b;
 }
 
 .learning-path-suggestion button {
   min-height: 40px;
-  padding: 0 20px;
+  padding: 0 22px;
   border: 0;
   border-radius: 8px;
-  background: #1e40af;
+  background: #0f172a;
   color: #ffffff;
   font-size: 13px;
   font-weight: 750;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .learning-path-suggestion button:hover {
-  background: #1d4ed8;
+  background: #000000;
 }
 
-/* Course Path List */
+/* Course Path List - NỀN TRẮNG */
 .learning-path-course-path ol {
   display: grid;
   gap: 12px;
@@ -657,16 +689,18 @@
   grid-template-columns: 36px minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
-  padding: 16px 20px;
-  border: 1px solid #e2e8f0;
+  padding: 16px 22px;
+  border: 1.5px solid #e2e8f0;
   border-radius: 12px;
-  background: #ffffff;
+  background: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   transition: all 0.15s ease;
 }
 
 .learning-path-course-path li:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.07);
 }
 
 .learning-path-course-path li > span {
@@ -714,17 +748,20 @@
   height: 36px;
   place-items: center;
   border-radius: 8px;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0;
   color: #64748b;
   transition: all 0.15s ease;
 }
 
 .learning-path-course-path li > a:hover {
-  background: #e2e8f0;
-  color: #0f172a;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  color: #2563eb;
 }
 
 /* ==========================================================================
-   Interactive Roadmap & Milestone Highlight
+   Interactive Roadmap & Milestone Highlight - NỀN TRẮNG HOÀN TOÀN
    ========================================================================== */
 
 .learning-path-roadmap ol {
@@ -758,32 +795,32 @@
   height: 40px;
   place-items: center;
   border-radius: 50%;
-  background: #f1f5f9;
+  background: #ffffff;
   color: #64748b;
-  border: 2px solid #ffffff;
+  border: 2px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
 .learning-path-roadmap li.is-completed > span {
-  background: #ecfdf5;
+  background: #ffffff;
   color: #059669;
-  border-color: #a7f3d0;
+  border-color: #10b981;
 }
 
 .learning-path-roadmap li.is-in-progress > span {
-  background: #eff6ff;
+  background: #ffffff;
   color: #2563eb;
-  border-color: #bfdbfe;
+  border-color: #2563eb;
   animation: pulse-ring 2s infinite ease-in-out;
 }
 
 @keyframes pulse-ring {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.2); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.25); }
   50% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
 }
 
 .learning-path-roadmap li.is-available > span {
-  background: #f8fafc;
+  background: #ffffff;
   color: #334155;
   border-color: #cbd5e1;
 }
@@ -796,11 +833,13 @@
   padding: 2px 0 20px;
 }
 
+/* Hộp Bài học Roadmap - NỀN TRẮNG */
 .learning-path-lesson-box {
-  padding: 12px 16px;
-  border: 1px solid #f1f5f9;
-  border-radius: 10px;
-  background: #ffffff;
+  padding: 14px 18px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   transition: all 0.15s ease;
 }
 
@@ -811,8 +850,9 @@
 }
 
 .learning-path-roadmap li a:hover .learning-path-lesson-box {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
   transform: translateX(3px);
 }
 
@@ -832,29 +872,30 @@
   color: #0f172a;
 }
 
-/* Milestone Card (Checkpoint) - Gold/Amber Highlight */
+/* Hộp Cột mốc (Milestone Checkpoint) - NỀN TRẮNG NỔI BẬT */
 .learning-path-roadmap li.is-milestone > span {
-  background: #fef3c7;
+  background: #ffffff;
   color: #d97706;
-  border-color: #fde68a;
+  border: 2px solid #f59e0b;
 }
 
 .learning-path-roadmap li.is-milestone.is-completed > span {
-  background: #fef9c3;
+  background: #ffffff;
   color: #ca8a04;
-  border-color: #fef08a;
+  border-color: #eab308;
 }
 
 .learning-path-milestone-box {
-  padding: 16px 20px;
-  border: 1.5px solid #fde68a;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
-  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.08);
+  padding: 18px 22px;
+  border: 2px solid #fde68a;
+  border-radius: 14px;
+  background: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.06);
   transition: all 0.18s ease;
 }
 
 .learning-path-roadmap li a:hover .learning-path-milestone-box {
+  background: #ffffff !important;
   border-color: #f59e0b;
   box-shadow: 0 4px 16px rgba(245, 158, 11, 0.15);
   transform: translateX(3px);
@@ -872,10 +913,10 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 9px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: #fef3c7;
-  border: 1px solid #fde68a;
+  background: #ffffff !important;
+  border: 1.5px solid #fde68a;
   color: #b45309;
   font-size: 11px;
   font-weight: 800;
@@ -923,7 +964,7 @@
 }
 
 /* ==========================================================================
-   Recommended Courses Catalog
+   Recommended Courses Catalog - NỀN TRẮNG
    ========================================================================== */
 
 .learning-path-course-list {
@@ -940,21 +981,23 @@
   align-items: center;
   gap: 12px;
   min-height: 56px;
-  padding: 12px 16px;
-  border: 1px solid #e2e8f0;
+  padding: 12px 18px;
+  border: 1.5px solid #e2e8f0;
   border-radius: 12px;
-  background: #ffffff;
+  background: #ffffff !important;
   color: #0f172a;
   text-align: left;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .learning-path-course-list button:hover:not(:disabled),
 .learning-path-course-list > a:hover {
+  background: #ffffff !important;
   border-color: #2563eb;
-  background: #f8fafc;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
   transform: translateY(-1px);
 }
 
@@ -962,7 +1005,8 @@
 .learning-path-course-list > a > span {
   padding: 4px 9px;
   border-radius: 6px;
-  background: #eff6ff;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
   color: #1d4ed8;
   font-size: 11px;
   font-weight: 800;
@@ -988,7 +1032,8 @@
   margin: 20px 0 0;
   padding: 24px;
   border-radius: 12px;
-  background: #f8fafc;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   text-align: center;
 }
 
@@ -1000,7 +1045,7 @@
 }
 
 /* ==========================================================================
-   Level Required & States
+   Level Required (Khi chưa có trình độ) - NỀN TRẮNG 100%
    ========================================================================== */
 
 .learning-path-state {
@@ -1030,35 +1075,41 @@
   line-height: 1.6;
 }
 
+/* Các tab chọn trình độ khi chưa có level - NỀN TRẮNG */
 .learning-path-level-tabs {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
+  gap: 10px;
   width: min(100%, 640px);
-  margin: 16px 0;
+  margin: 18px 0;
 }
 
 .learning-path-level-tabs button {
-  min-height: 40px;
-  border: 1.5px solid #e2e8f0;
+  min-height: 42px;
+  border: 1.5px solid #cbd5e1;
   border-radius: 999px;
-  background: #ffffff;
-  color: #475569;
+  background: #ffffff !important;
+  color: #334155;
   font-size: 14px;
   font-weight: 750;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .learning-path-level-tabs button:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  background: #ffffff !important;
+  border-color: #2563eb;
+  color: #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
 }
 
 .learning-path-level-tabs button.is-active {
-  border-color: #0f172a;
-  background: #0f172a;
-  color: #ffffff;
+  background: #ffffff !important;
+  border: 2px solid #2563eb !important;
+  color: #2563eb !important;
+  font-weight: 850 !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18), 0 2px 8px rgba(0, 0, 0, 0.05) !important;
 }
 
 .learning-path-state-actions {
@@ -1075,7 +1126,7 @@
   align-items: center;
   justify-content: center;
   min-height: 42px;
-  padding: 0 20px;
+  padding: 0 22px;
   border-radius: 10px;
   font-size: 13px;
   font-weight: 750;
@@ -1091,8 +1142,13 @@
 
 .learning-path-state-actions a {
   border: 1.5px solid #cbd5e1;
-  background: #ffffff;
+  background: #ffffff !important;
   color: #334155;
+}
+
+.learning-path-state-actions a:hover {
+  border-color: #94a3b8;
+  color: #0f172a;
 }
 
 /* Skeleton Loading */
@@ -1129,10 +1185,11 @@
   padding: 12px 16px;
   border: 1px solid #fecaca;
   border-radius: 10px;
-  background: #fef2f2;
+  background: #ffffff !important;
   color: #991b1b;
   font-size: 13px;
   font-weight: 600;
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.1);
 }
 
 .learning-path-confirm-list {
@@ -1150,10 +1207,10 @@
   grid-template-columns: 32px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
-  border: 1px solid #e2e8f0;
+  padding: 12px 16px;
+  border: 1.5px solid #e2e8f0;
   border-radius: 10px;
-  background: #f8fafc;
+  background: #ffffff !important;
 }
 
 .learning-path-confirm-list li > span {
@@ -1186,7 +1243,7 @@
 
 /* ==========================================================================
    Responsive Breakpoints
-   ========================================================================= */
+   ========================================================================== */
 
 @media (max-width: 1024px) {
   .learning-path-personalized-hero {
@@ -1199,7 +1256,7 @@
     padding-left: 0;
     padding-top: 16px;
     border-left: 0;
-    border-top: 1px solid rgba(203, 213, 225, 0.8);
+    border-top: 1px solid #e2e8f0;
   }
   .learning-path-pref-goals {
     grid-template-columns: repeat(2, 1fr);
