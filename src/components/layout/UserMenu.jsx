@@ -118,16 +118,10 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
                 <BilingualText vi="Trang quản trị" en="Admin Panel" />
               </Link>
             )}
-            {isContentManager && !isAdmin && (
-              <Link to={ROUTES.ADMIN_COURSES} onClick={closeMenu} role="menuitem" className="user-menu__admin">
+            {(isContentManager || contentAdminPath) && !isAdmin && (
+              <Link to={isContentManager ? ROUTES.ADMIN_COURSES : contentAdminPath} onClick={closeMenu} role="menuitem" className="user-menu__admin">
                 <Shield size={16} />
-                <BilingualText vi="Quản lý khóa học" en="Manage Courses" />
-              </Link>
-            )}
-            {!isContentManager && contentAdminPath && !isAdmin && (
-              <Link to={contentAdminPath} onClick={closeMenu} role="menuitem" className="user-menu__admin">
-                <Shield size={16} />
-                <BilingualText vi="Quản lý nội dung" en="Content Management" />
+                <BilingualText vi={isContentManager ? 'Quản lý khóa học' : 'Quản lý nội dung'} en={isContentManager ? 'Manage Courses' : 'Content Management'} />
               </Link>
             )}
             <button type="button" className="user-menu__logout" onClick={handleLogout} role="menuitem">
