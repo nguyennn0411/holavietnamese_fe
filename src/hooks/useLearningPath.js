@@ -16,14 +16,22 @@ export function useLearningPath() {
   const load = useCallback(async (signal) => {
     setLoading(true);
     setError('');
+    let canceled = false;
     try {
-      setData(await learningPathService.me(signal ? { signal } : {}));
+      const result = await learningPathService.me(signal ? { signal } : {});
+      if (!signal?.aborted) {
+        setData(result);
+      }
     } catch (reason) {
       if (!isCanceledRequest(reason)) {
         setError(reason?.message || 'Không thể tải lộ trình học tập.');
+      } else {
+        canceled = true;
       }
     } finally {
-      setLoading(false);
+      if (!signal?.aborted && !canceled) {
+        setLoading(false);
+      }
     }
   }, []);
 

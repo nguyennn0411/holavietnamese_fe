@@ -57,12 +57,14 @@ export function LearningPathPage() {
   const [goals, setGoals] = useState('');
   const [minutes, setMinutes] = useState(15);
   useEffect(()=>{
-    if (!path.data?.preferences) return;
-    setLevel(path.data.preferences.level || '');
-    setGoals((path.data.preferences.learningGoals || []).join(', '));
-    setMinutes(path.data.preferences.dailyStudyMinutes || 15);
+    const pref = path.data?.preferences;
+    if (!pref) return;
+    setLevel(pref.level || '');
+    setGoals((pref.learningGoals || []).join(', '));
+    setMinutes(pref.dailyStudyMinutes || 15);
   },[path.data]);
 
+  const preferences = path.data?.preferences || {};
   const recommendation = path.data?.recommendation || {};
   const recommended = recommendation.recommendedCourse;
   const recommendedPath = recommendation.recommendedPath || [];
@@ -73,17 +75,17 @@ export function LearningPathPage() {
   const progress = path.data?.progress || {};
   const continueLearning = path.data?.continueLearning || [];
   const nextMilestone = path.data?.roadmap?.find(module => module.milestone?.state !== 'COMPLETED');
-  const source = SOURCE_LABELS[path.data?.preferences?.levelSource] || ['Chưa xác định','Not determined'];
-  const catalogPath = useMemo(()=>{
-    const query=new URLSearchParams();
-    if (path.data?.preferences?.level) query.set('level',path.data.preferences.level);
-    const firstGoal=path.data?.preferences?.learningGoals?.[0];
-    if(firstGoal) query.set('goal',firstGoal);
+  const source = SOURCE_LABELS[preferences?.levelSource] || ['Chưa xác định', 'Not determined'];
+  const catalogPath = useMemo(() => {
+    const query = new URLSearchParams();
+    if (preferences?.level) query.set('level', preferences.level);
+    const firstGoal = preferences?.learningGoals?.[0];
+    if (firstGoal) query.set('goal', firstGoal);
     return `/courses?${query}`;
-  },[path.data]);
+  }, [preferences]);
 
-  if (path.loading) return <LearningPathSkeleton/>;
-  if (path.error&&!path.data) return <main className="learning-path-simple-page"><section className="learning-path-simple-card learning-path-state" role="alert"><h1><BilingualText vi="Không thể tải Learning Path" en="Unable to load Learning Path" /></h1><p>{path.error}</p><button onClick={path.reload}><RefreshCw size={15}/><BilingualText vi="Thử lại" en="Retry" /></button></section></main>;
+  if (path.error && !path.data) return <main className="learning-path-simple-page"><section className="learning-path-simple-card learning-path-state" role="alert"><h1><BilingualText vi="Không thể tải Learning Path" en="Unable to load Learning Path" /></h1><p>{path.error}</p><button onClick={path.reload}><RefreshCw size={15}/><BilingualText vi="Thử lại" en="Retry" /></button></section></main>;
+  if (path.loading || !path.data) return <LearningPathSkeleton/>;
   if (path.data?.requiresLevel) return <LevelRequired saving={path.saving} onSave={selected=>path.updatePreferences({level:selected,levelSource:'USER_CONFIRMED'})}/>;
 
   const applyCourse = async course => {
@@ -128,7 +130,7 @@ export function LearningPathPage() {
     {path.error&&<div className="learning-path-inline-error" role="alert">{path.error}</div>}
     <div className="learning-path-simple-intro"><span className="learning-path-simple-kicker"><BilingualText vi="Lộ trình cá nhân hóa" en="Personalized path" /></span><h1><BilingualText vi="Hành trình tiếng Việt của bạn" en="Your Vietnamese Journey" /></h1><p><BilingualText vi="Lộ trình sử dụng khóa học, module, bài học và đánh giá đã xuất bản." en="Your path uses published courses, modules, lessons, and assessments." /></p></div>
 
-    <section className="learning-path-personalized-hero"><div><span>{path.data.preferences.level}</span><h2>{roadmapCourse?titleOf(roadmapCourse):<BilingualText vi="Chưa có khóa học phù hợp" en="No matching course yet" />}</h2><p><BilingualText vi={`Mục tiêu: ${(path.data.preferences.learningGoals||[]).join(', ')||'Chưa cập nhật'} · ${path.data.preferences.dailyStudyMinutes||'—'} phút/ngày`} en={`Goals: ${(path.data.preferences.learningGoals||[]).join(', ')||'Not set'} · ${path.data.preferences.dailyStudyMinutes||'—'} min/day`} /></p>{recommendedPath.length>0&&<button disabled={path.saving} onClick={applyRecommendedPath}><BilingualText vi={`Áp dụng lộ trình ${recommendedPath.length} khóa học`} en={`Apply ${recommendedPath.length}-course path`}/></button>}</div><dl><div><dt><BilingualText vi="Trình độ" en="Level" /></dt><dd>{path.data.preferences.level}</dd></div><div><dt><BilingualText vi="Nguồn xác định" en="Level source" /></dt><dd><BilingualText vi={source[0]} en={source[1]}/></dd></div><div><dt><BilingualText vi="Trạng thái" en="Status" /></dt><dd>{path.data.roadmapPreview?<BilingualText vi="Bản xem trước" en="Preview"/>:<BilingualText vi="Đang áp dụng" en="Active"/>}</dd></div></dl></section>
+    <section className="learning-path-personalized-hero"><div><span>{preferences.level || '—'}</span><h2>{roadmapCourse?titleOf(roadmapCourse):<BilingualText vi="Chưa có khóa học phù hợp" en="No matching course yet" />}</h2><p><BilingualText vi={`Mục tiêu: ${(preferences.learningGoals||[]).join(', ')||'Chưa cập nhật'} · ${preferences.dailyStudyMinutes||'—'} phút/ngày`} en={`Goals: ${(preferences.learningGoals||[]).join(', ')||'Not set'} · ${preferences.dailyStudyMinutes||'—'} min/day`} /></p>{recommendedPath.length>0&&<button disabled={path.saving} onClick={applyRecommendedPath}><BilingualText vi={`Áp dụng lộ trình ${recommendedPath.length} khóa học`} en={`Apply ${recommendedPath.length}-course path`}/></button>}</div><dl><div><dt><BilingualText vi="Trình độ" en="Level" /></dt><dd>{preferences.level || '—'}</dd></div><div><dt><BilingualText vi="Nguồn xác định" en="Level source" /></dt><dd><BilingualText vi={source[0]} en={source[1]}/></dd></div><div><dt><BilingualText vi="Trạng thái" en="Status" /></dt><dd>{path.data?.roadmapPreview?<BilingualText vi="Bản xem trước" en="Preview"/>:<BilingualText vi="Đang áp dụng" en="Active"/>}</dd></div></dl></section>
 
     {editing&&<form className="learning-path-preferences" onSubmit={savePreferences}><h2><BilingualText vi="Tùy chỉnh lộ trình" en="Learning preferences" /></h2><label><BilingualText vi="Trình độ hiện tại" en="Current level"/><select value={level} onChange={event=>setLevel(event.target.value)}>{LEVELS.map(item=><option key={item}>{item}</option>)}</select></label><label><BilingualText vi="Mục tiêu học (phân cách bằng dấu phẩy)" en="Learning goals (comma separated)"/><input value={goals} onChange={event=>setGoals(event.target.value)}/></label><label><BilingualText vi="Phút học mỗi ngày" en="Daily study minutes"/><input type="number" min="5" max="240" value={minutes} onChange={event=>setMinutes(event.target.value)}/></label><div><button type="button" className="secondary" onClick={()=>setEditing(false)}><BilingualText vi="Hủy" en="Cancel"/></button><button disabled={path.saving}><BilingualText vi="Lưu thay đổi" en="Save changes"/></button></div></form>}
 
@@ -138,7 +140,7 @@ export function LearningPathPage() {
 
     {recommendedPath.length>0&&<section className="learning-path-course-path"><div className="learning-path-section-heading"><div><h2><BilingualText vi="Lộ trình khóa học được đề xuất" en="Recommended course path"/></h2><p><BilingualText vi="Hoàn thành các khóa học theo thứ tự để đạt mục tiêu đã chọn." en="Complete these courses in order to reach your selected goals."/></p></div><button disabled={path.saving} onClick={applyRecommendedPath}><BilingualText vi="Áp dụng lộ trình" en="Apply path"/></button></div><ol>{recommendedPath.map((course,index)=><li key={courseIdOf(course)}><span>{index+1}</span><div><small>{course.levelMin===course.levelMax?course.level:`${course.levelMin}–${course.levelMax}`}</small><strong>{titleOf(course)}</strong><p>{descriptionOf(course)}</p></div><Link to={`/courses/${courseIdOf(course)}`} aria-label={bilingualLabel(`Xem ${titleOf(course)}`,`View ${titleOf(course)}`)}><ChevronRight size={16}/></Link></li>)}</ol></section>}
 
-    <section className="learning-path-roadmap"><div className="learning-path-section-heading"><div><h2><BilingualText vi="Lộ trình tương tác" en="Interactive Roadmap"/></h2><p>{roadmapCourse?titleOf(roadmapCourse):<BilingualText vi="Chưa có lộ trình khả dụng" en="No path available"/>}{path.data.roadmapPreview&&<> · <BilingualText vi="Bản xem trước" en="Preview"/></>}</p></div>{roadmapCourse&&<Link to={`/courses/${roadmapCourse.id}`}><BilingualText vi="Chi tiết khóa học" en="Course details"/><ArrowRight size={14}/></Link>}</div><Roadmap stages={path.data.roadmap} courseId={roadmapCourse?.id}/></section>
+    <section className="learning-path-roadmap"><div className="learning-path-section-heading"><div><h2><BilingualText vi="Lộ trình tương tác" en="Interactive Roadmap"/></h2><p>{roadmapCourse?titleOf(roadmapCourse):<BilingualText vi="Chưa có lộ trình khả dụng" en="No path available"/>}{path.data?.roadmapPreview&&<> · <BilingualText vi="Bản xem trước" en="Preview"/></>}</p></div>{roadmapCourse&&<Link to={`/courses/${roadmapCourse.id}`}><BilingualText vi="Chi tiết khóa học" en="Course details"/><ArrowRight size={14}/></Link>}</div><Roadmap stages={path.data?.roadmap} courseId={roadmapCourse?.id}/></section>
 
     <section className="learning-path-courses"><div className="learning-path-section-heading"><div><h2><BilingualText vi="Khóa học đề xuất" en="Recommended Courses"/></h2><p><BilingualText vi="Xếp hạng theo trình độ, mục tiêu, điều kiện tiên quyết và trạng thái xuất bản." en="Ranked by level, goals, prerequisites, and publication status."/></p></div><Link to={catalogPath}><BilingualText vi="Mở Course Catalog" en="Open Course Catalog"/><ArrowRight size={14}/></Link></div>{exactCourses.length?<div className="learning-path-course-list">{exactCourses.map(item=><button key={item.id} onClick={()=>applyCourse(item)} disabled={path.saving}><span>{item.levelMin===item.levelMax?item.level:item.levelMin+'–'+item.levelMax}</span><strong>{titleOf(item)}</strong><small><BilingualText vi="Áp dụng" en="Apply"/><ChevronRight size={13}/></small></button>)}</div>:<div className="learning-path-empty"><strong><BilingualText vi="Chưa có khóa học phù hợp chính xác" en="No exact matching course"/></strong><p><BilingualText vi="Không tạo dữ liệu giả. Bạn có thể xem các lựa chọn gần nhất bên dưới hoặc mở Course Catalog." en="No placeholder course is created. Review the nearest options below or open Course Catalog."/></p>{nearestCourses.length>0&&<div className="learning-path-course-list">{nearestCourses.map(item=>{const reason=REASON_LABELS[item.recommendationReason]||REASON_LABELS.NEAREST_LEVEL;return <Link key={item.id} to={`/courses/${item.id}`}><span>{item.level}</span><strong>{titleOf(item)}</strong><small><BilingualText vi={reason[0]} en={reason[1]}/></small></Link>;})}</div>}</div>}</section>
   </section></main>{confirmationDialog}</>;
