@@ -152,53 +152,67 @@ export function ExploreVietnamPage() {
             )
             : (
               <div className="journey-board card bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-sm">
-                <aside className="journey-map">
-                  <p className="eyebrow text-xs font-bold text-[#EA580C] tracking-widest uppercase mb-2">
-                    <BilingualText vi={`VIỆT NAM · ${destinations.length} điểm đến`} en={`VIETNAM · ${destinations.length} destinations`} />
-                  </p>
+                <section className="journey-map" aria-label="Bản đồ khám phá">
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <p className="eyebrow text-xs font-bold text-[#EA580C] tracking-widest uppercase m-0">
+                      <BilingualText vi={`VIỆT NAM · ${destinations.length} ĐIỂM ĐẾN`} en={`VIETNAM · ${destinations.length} DESTINATIONS`} />
+                    </p>
+                    <span className="text-[11px] font-semibold text-[#64748B] hidden sm:inline">
+                      <BilingualText vi="Nhấn điểm đánh dấu để xem" en="Click pin to preview" />
+                    </span>
+                  </div>
                   <VietnamDiscoveryMap destinations={destinations} activeId={activeDestinationId}
                     onActivate={setActiveDestinationId} detailRoute={detailRoute} />
-                </aside>
+                </section>
 
-                <div className="journey-stops space-y-4">
-                  {destinations.map(destination => {
-                    return <Link
-                      className={`journey-stop group relative block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E8E5DF] hover:border-[#EA580C] shadow-xs hover:shadow-md transition-all text-decoration-none${activeDestinationId === destination.id ? ' is-map-active' : ''}`}
-                      key={destination.id}
-                      to={generatePath(detailRoute, { id: String(destination.id) })}
-                      onPointerEnter={event => { if (event.pointerType !== 'touch') setActiveDestinationId(destination.id); }}
-                      onFocus={() => setActiveDestinationId(destination.id)}
-                    >
-                      <span className="journey-dot" aria-hidden="true" />
-                      <div className="journey-thumbnail rounded-xl overflow-hidden shadow-xs">
-                        <ContentImage
-                          src={destination.imageUrl}
-                          alt={isVi ? destination.nameVi : (destination.nameEn || destination.nameVi)}
-                          className="figma-art w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
-                      <div>
-                        <p className="eyebrow text-[11px] font-bold text-[#EA580C] uppercase tracking-wider mb-1">
-                          <DestinationRegion value={destination.region} />
-                        </p>
-                        <h2 className="text-lg sm:text-xl font-black text-[#253044] group-hover:text-[#EA580C] transition-colors leading-snug">
-                          <BilingualText vi={destination.nameVi} en={destination.nameEn} />
-                        </h2>
-                        {(destination.shortDescriptionVi || destination.shortDescriptionEn) && (
-                          <p className="text-xs sm:text-sm text-[#64748B] line-clamp-2 mt-1 leading-relaxed">
-                            <BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn || destination.shortDescriptionVi} />
+                <section className="journey-directory pt-4 border-t border-[#E8E5DF]" aria-label="Danh sách điểm đến">
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <h2 className="text-lg font-black text-[#253044] m-0">
+                      <BilingualText vi="Tất cả điểm đến văn hóa" en="All Cultural Destinations" />
+                    </h2>
+                    <span className="text-xs font-bold text-[#EA580C]">
+                      {destinations.length} <BilingualText vi="địa danh" en="places" />
+                    </span>
+                  </div>
+                  <div className="journey-stops">
+                    {destinations.map(destination => {
+                      return <Link
+                        className={`journey-stop group relative p-4 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E8E5DF] hover:border-[#EA580C] shadow-xs hover:shadow-md transition-all text-decoration-none${activeDestinationId === destination.id ? ' is-map-active' : ''}`}
+                        key={destination.id}
+                        to={generatePath(detailRoute, { id: String(destination.id) })}
+                        onPointerEnter={event => { if (event.pointerType !== 'touch') setActiveDestinationId(destination.id); }}
+                        onFocus={() => setActiveDestinationId(destination.id)}
+                      >
+                        <div className="journey-thumbnail rounded-xl overflow-hidden shadow-xs">
+                          <ContentImage
+                            src={destination.imageUrl}
+                            alt={isVi ? destination.nameVi : (destination.nameEn || destination.nameVi)}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                        <div className="journey-stop__content flex-1 min-w-0">
+                          <p className="eyebrow text-[10px] font-bold text-[#EA580C] uppercase tracking-wider mb-1">
+                            <DestinationRegion value={destination.region} />
                           </p>
-                        )}
-                        <small className="inline-flex items-center gap-1 text-xs font-bold text-[#EA580C] mt-2 group-hover:underline">
-                          <BilingualText vi="Chi tiết" en="Details" /> →
-                        </small>
-                      </div>
-                      <span className="journey-number text-[#64748B] group-hover:text-[#EA580C] group-hover:translate-x-1 transition-all" aria-hidden="true">
-                        →
-                      </span>
-                    </Link>;
-                  })}
-                </div>
+                          <h3 className="text-base sm:text-lg font-black text-[#253044] group-hover:text-[#EA580C] transition-colors leading-snug truncate">
+                            <BilingualText vi={destination.nameVi} en={destination.nameEn} />
+                          </h3>
+                          {(destination.shortDescriptionVi || destination.shortDescriptionEn) && (
+                            <p className="text-xs text-[#64748B] line-clamp-2 mt-1 leading-relaxed">
+                              <BilingualText vi={destination.shortDescriptionVi || destination.shortDescriptionEn} en={destination.shortDescriptionEn || destination.shortDescriptionVi} />
+                            </p>
+                          )}
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#EA580C] mt-2 group-hover:underline">
+                            <BilingualText vi="Chi tiết" en="Details" /> →
+                          </span>
+                        </div>
+                        <span className="journey-number text-[#64748B] group-hover:text-[#EA580C] group-hover:translate-x-1 transition-all shrink-0" aria-hidden="true">
+                          →
+                        </span>
+                      </Link>;
+                    })}
+                  </div>
+                </section>
               </div>
             );
         }}
