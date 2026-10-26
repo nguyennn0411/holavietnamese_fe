@@ -184,3 +184,136 @@ dialog[open],
     transform: scale(1) translateY(0);
   }
 }
+
+
+/* ==========================================================================
+   GLOBAL BULLETPROOF LOCK FOR ALL SELECTION / CHOICE / ANSWER / OPTION CARDS
+   Ensures pure white background (#FFFFFF) across the entire project
+   ========================================================================== */
+.answer-card,
+.ob-selection,
+.ob-path-card,
+.question-option,
+.selection-card,
+.choice-card,
+.option-card,
+.pref-level-btn,
+.pref-goal-chip,
+.pref-min-btn,
+.learning-path-level-tabs button,
+.review-ratings button,
+button.ob-selection,
+button.ob-path-card,
+button.pref-level-btn,
+button.pref-goal-chip,
+button.pref-min-btn,
+label.question-option,
+.ob-answer-grid button,
+.learning-path-course-list button,
+.learning-path-course-list > a,
+.learning-path-continue-list article,
+.learning-path-course-path li,
+.learning-path-lesson-box,
+.learning-path-milestone-box,
+.learning-path-preference-trigger,
+.learning-path-status-badge,
+[role="radio"].selection-card,
+[role="checkbox"].selection-card,
+[role="radio"].question-option,
+[role="checkbox"].question-option {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+
+.answer-card:hover,
+.answer-card:focus,
+.answer-card:active,
+.ob-selection:hover,
+.ob-selection:focus,
+.ob-selection:active,
+.ob-path-card:hover,
+.ob-path-card:focus,
+.ob-path-card:active,
+.question-option:hover,
+.question-option:focus,
+.question-option:active,
+.selection-card:hover,
+.selection-card:focus,
+.selection-card:active,
+.choice-card:hover,
+.choice-card:focus,
+.choice-card:active,
+.pref-level-btn:hover,
+.pref-level-btn:focus,
+.pref-goal-chip:hover,
+.pref-goal-chip:focus,
+.pref-min-btn:hover,
+.pref-min-btn:focus,
+.learning-path-level-tabs button:hover,
+.learning-path-level-tabs button:focus,
+button.ob-selection:hover,
+button.ob-path-card:hover,
+label.question-option:hover,
+.ob-answer-grid button:hover,
+.learning-path-course-list button:hover,
+.learning-path-course-list > a:hover,
+.learning-path-continue-list article:hover,
+.learning-path-course-path li:hover,
+.learning-path-preference-trigger:hover {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+
+.answer-card.selected,
+.answer-card.is-selected,
+.answer-card[aria-selected="true"],
+.answer-card[aria-pressed="true"],
+.answer-card[data-state="checked"],
+.ob-selection.selected,
+.ob-selection.is-selected,
+.ob-selection[aria-selected="true"],
+.ob-selection[aria-pressed="true"],
+.ob-selection[data-state="checked"],
+.ob-path-card.selected,
+.ob-path-card.is-selected,
+.ob-path-card[aria-selected="true"],
+.ob-path-card[data-state="checked"],
+.question-option.selected,
+.question-option[aria-selected="true"],
+.question-option[data-state="checked"],
+.selection-card.selected,
+.selection-card.is-selected,
+.selection-card[aria-selected="true"],
+.selection-card[data-state="checked"],
+.choice-card.selected,
+.choice-card.is-selected,
+.pref-level-btn.is-selected,
+.pref-goal-chip.is-active,
+.pref-min-btn.is-selected,
+.learning-path-level-tabs button.is-active,
+button.ob-selection.is-selected,
+button.ob-path-card.is-selected,
+label.question-option.selected,
+.ob-answer-grid button.is-selected,
+.ob-answer-grid button.selected {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+
+.answer-card.selected:hover,
+.answer-card.is-selected:hover,
+.ob-selection.selected:hover,
+.ob-selection.is-selected:hover,
+.question-option.selected:hover,
+.selection-card.selected:hover,
+.pref-level-btn.is-selected:hover,
+.pref-goal-chip.is-active:hover,
+.pref-min-btn.is-selected:hover,
+.learning-path-level-tabs button.is-active:hover {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
