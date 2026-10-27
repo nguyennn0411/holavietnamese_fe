@@ -1,4 +1,4 @@
-import axiosClient from '@/api/axiosClient';
+import axiosClient from '@/infrastructure/api/axiosClient';
 
 const resultOf = response => {
   if (response?.success === false || (typeof response?.code === 'number' && response.code !== 1000)) {
@@ -51,20 +51,5 @@ export const adminDestinationService = {
   },
   async update(id, payload, options = {}) {
     return resultOf(await axiosClient.put(`/api/admin/destinations/${encodeURIComponent(id)}`, payload, options));
-  },
-  async submitReview(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/submit-review`, null, options));
-  },
-  async review(id, decision, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/review`, { decision }, options));
-  },
-  async archive(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/archive`, null, options));
-  },
-  async restore(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/restore`, null, options));
-  },
-  async revise(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/revise`, null, options));
   },
 };

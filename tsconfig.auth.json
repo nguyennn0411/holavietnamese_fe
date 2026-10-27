@@ -8,7 +8,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/api/authApi.types.ts",
+    "src/infrastructure/api/authApi.types.ts",
     "qa/auth-api.typecheck.ts"
   ]
 }

@@ -11,8 +11,6 @@ export const initialOnboardingData = {
   placementTestCompleted: false,
   placementResult: null,
   firstLessonResult: null,
-  recommendation: null,
-  requestedDestination: null,
   guestExperienceCompleted: false,
   onboardingCompleted: false,
   updatedAt: null,

@@ -1,5 +1,5 @@
 import { VocabularyEntry } from '@/models/VocabularyEntry'
-import axiosClient from '@/api/axiosClient'
+import axiosClient from '@/infrastructure/api/axiosClient'
 export const vocabularyService = {
   async list(filters = {}, options = {}) {
     const params = Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== '' && value != null))

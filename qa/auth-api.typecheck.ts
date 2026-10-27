@@ -4,7 +4,7 @@ import type {
   ResendVerificationOtpResponse,
   VerifyEmailOtpRequest,
   VerifyEmailOtpResponse,
-} from '../src/api/authApi.types';
+} from '../src/infrastructure/api/authApi.types';
 
 export const registerRequest = {
   username: 'username',

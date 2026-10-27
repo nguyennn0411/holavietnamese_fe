@@ -5,7 +5,7 @@ import { ChevronLeft, Menu, X } from 'lucide-react';
 import { Brand } from '@/components/layout/Brand';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
-import { localizedSiteField, safeInternalPath, useSiteContent } from '@/contexts/SiteContentContext';
+import { localizedSiteField, safeInternalPath, useSiteContent } from '@/application/context/SiteContentContext';
 import { siteContentIcon } from '@/components/common/siteContentIcons';
 import { MENU_PLACEMENTS } from '@/config/siteContentDefaults';
 

@@ -75,18 +75,15 @@
 }
 
 .admin-nav-item:hover {
-  background: #FFFFFF;
-  border: 1px solid var(--border-color, #E8E5DF);
+  background: var(--bg-secondary, #FFF7E8);
   color: var(--primary-orange, #F97316);
 }
 
 .admin-nav-item.active {
-  background: #FFFFFF;
+  background: var(--bg-peach, #FFF0DC);
   color: var(--primary-orange, #F97316);
   font-weight: 700;
-  border: 1px solid var(--primary-orange, #F97316);
-  border-left: 3.5px solid var(--primary-orange, #F97316);
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.08);
+  border-left: 3px solid var(--primary-orange, #F97316);
 }
 
 .admin-sidebar-footer {
@@ -177,7 +174,7 @@
   border-radius: 6px;
   font-size: 10px;
   font-weight: 700;
-  background: #FFFFFF;
+  background: var(--bg-peach, #FFF0DC);
   color: var(--primary-orange, #F97316);
 }
 
@@ -259,44 +256,7 @@
 
 .admin-badge-warning {
   color: var(--warm-orange, #F59E0B);
-  background: #FFFFFF;
-}
-
-.course-review-tabs {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 22px 0 0;
-  padding: 16px;
-  border: 1px solid var(--border-color, #E8E5DF);
-  border-radius: 12px;
-  background: var(--bg-neutral, #F8FAFC);
-}
-
-.course-review-tabs p {
-  flex: 1 1 280px;
-  margin: 0 0 0 6px;
-  color: var(--text-secondary, #64748B);
-  font-size: 12px;
-}
-
-.admin-content .course-review-tabs button.is-active {
-  background: #FFFFFF;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
-  border-color: var(--primary-orange, #F97316);
-  color: var(--primary-orange, #F97316);
-}
-
-.course-review-row td {
-  background: #FFFDF8;
-}
-
-.admin-content .course-review-action {
-  min-height: 34px;
-  padding: 7px 12px;
-  white-space: nowrap;
+  background: var(--bg-peach, #FFF0DC);
 }
 
 /* AI scenario table controls */
@@ -464,9 +424,7 @@
 
 .admin-content button,
 .admin-content .button {
-  background: #FFFFFF;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
+  background: var(--primary-orange, #F97316);
   border: 1px solid var(--primary-orange, #F97316);
   color: #FFFFFF;
   border-radius: 8px;
@@ -489,8 +447,7 @@
 
 .admin-content button.secondary:hover,
 .admin-content .button.secondary:hover {
-  background: #FFFFFF;
-  border: 1px solid var(--border-color, #E8E5DF);
+  background: var(--bg-secondary, #FFF7E8);
   color: var(--primary-orange, #F97316);
   border-color: var(--primary-orange, #F97316);
 }

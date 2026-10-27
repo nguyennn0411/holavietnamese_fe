@@ -5,7 +5,7 @@ import { useCourse } from '@/hooks/useCourses';
 import { CourseThumbnail } from '@/components/course/CourseInfo';
 import { ResourceState } from '@/components/common/ResourceState';
 import { courseService } from '@/services/courseService';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/application/context/AuthContext';
 import { ArrowLeft, CheckCircle2, BookOpen, Clock, ChevronDown, Play, PlayCircle, Lock, Compass, MessageCircle, FileText, Headphones, CheckSquare, ShieldCheck, AlertCircle, X, ArrowRight } from 'lucide-react';
 
 /**

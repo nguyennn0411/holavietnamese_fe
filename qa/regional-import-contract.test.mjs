@@ -8,7 +8,7 @@ import { ROUTES } from '../src/constants/routes.js';
 globalThis.__regionalImportContract = { axios };
 globalThis.localStorage = { getItem: key => key === 'token' ? 'regional-import-test-token' : null };
 const load = source => import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
-const clientSource = (await fs.readFile(new URL('../src/api/axiosClient.js', import.meta.url), 'utf8'))
+const clientSource = (await fs.readFile(new URL('../src/infrastructure/api/axiosClient.js', import.meta.url), 'utf8'))
   .replace("import axios from 'axios';", 'const { axios } = globalThis.__regionalImportContract;')
   .replace('import.meta.env.VITE_API_BASE_URL', '({}).VITE_API_BASE_URL');
 const { default: client } = await load(clientSource);
@@ -21,7 +21,7 @@ client.defaults.adapter = async config => {
   return { config, status: 200, statusText: 'OK', headers: {}, data: rejectEnvelope ? { code: 9999, message: 'Rejected operation' } : { code: 1000, result } };
 };
 const service = async file => load((await fs.readFile(new URL(`../src/services/${file}.js`, import.meta.url), 'utf8'))
-  .replace("import axiosClient from '@/api/axiosClient';", 'const axiosClient = globalThis.__regionalImportContract.client;'));
+  .replace("import axiosClient from '@/infrastructure/api/axiosClient';", 'const axiosClient = globalThis.__regionalImportContract.client;'));
 const { regionalVocabularyService, adminRegionalVocabularyService } = await service('regionalVocabularyService');
 const { contentImportService } = await service('contentImportService');
 const jobId = 'e7c658d0-7bc0-49d0-9ac0-221e5538d0ca';
@@ -75,7 +75,7 @@ test('Import history keeps pagination and uses the persisted job detail endpoint
   await contentImportService.history(3); assert.deepEqual(calls[0].params, { page: 3, size: 20 });
   await contentImportService.get(jobId); assert.equal(calls[1].url, `/api/admin/imports/${jobId}`);
   assert.equal(ROUTES.REGIONAL_VIETNAMESE, '/regional-vietnamese'); assert.equal(ROUTES.ADMIN_REGIONAL_LANGUAGE, '/admin/regional-language');
-  const app = await fs.readFile(new URL('../src/app/router/AppRouter.jsx', import.meta.url), 'utf8');
+  const app = await fs.readFile(new URL('../src/App.jsx', import.meta.url), 'utf8');
   const adminRoutes = app.slice(app.indexOf('<Route element={<AdminRoute />}>'));
   for (const route of ['ADMIN_REGIONAL_LANGUAGE', 'ADMIN_IMPORT', 'ADMIN_IMPORT_HISTORY']) assert.ok(adminRoutes.includes(`path={ROUTES.${route}}`));
 });

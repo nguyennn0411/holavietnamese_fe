@@ -27,7 +27,7 @@ const reviewResult = { entryId: 1, word: 'tạm biệt', rating: 'GOOD', reviewe
 globalThis.__vocabularyContract = { axios, VocabularyEntry, Course, Enrollment, Lesson, LearningProgress };
 globalThis.localStorage = { getItem: key => key === 'token' ? token : null };
 const load = source => import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
-const clientSource = (await fs.readFile(new URL('../src/api/axiosClient.js', import.meta.url), 'utf8'))
+const clientSource = (await fs.readFile(new URL('../src/infrastructure/api/axiosClient.js', import.meta.url), 'utf8'))
   .replace("import axios from 'axios';", 'const { axios } = globalThis.__vocabularyContract;')
   .replace('import.meta.env.VITE_API_BASE_URL', '({}).VITE_API_BASE_URL');
 const { default: client } = await load(clientSource);
@@ -90,7 +90,7 @@ test('Catalog and notebook paths select separate pages without shadowing review'
   for (const [path, expected] of [['/vocabulary', 'VOCABULARY'], ['/vocabulary/1009', 'VOCABULARY_CATALOG_DETAIL'], ['/vocabulary/notebook', 'VOCABULARY_NOTEBOOK'], ['/vocabulary/notebook/1', 'VOCABULARY_NOTEBOOK_DETAIL'], ['/vocabulary/review', 'VOCABULARY_REVIEW']]) {
     assert.equal(matchRoutes(routes, path).at(-1).route.id, expected);
   }
-  const app = await fs.readFile(new URL('../src/app/router/AppRouter.jsx', import.meta.url), 'utf8');
+  const app = await fs.readFile(new URL('../src/App.jsx', import.meta.url), 'utf8');
   assert.ok(app.includes("import('@/pages/vocabulary/VocabularyDetailPage')"));
   assert.ok(app.includes('path={ROUTES.VOCABULARY_CATALOG_DETAIL} element={<VocabularyDetailPage />}'));
 });

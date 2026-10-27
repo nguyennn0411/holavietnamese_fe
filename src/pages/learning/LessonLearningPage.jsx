@@ -9,22 +9,7 @@ import { LessonContent } from '@/components/learning/LessonContent';
 import { LessonNavigation } from '@/components/learning/LessonNavigation';
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm';
 import { LessonActivities } from '@/components/learning/LessonActivities';
-import { useAiSidebar } from '@/contexts/AiSidebarContext';
 import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check, Bot } from 'lucide-react';
-
-function LessonContextSyncer({ lesson, course }) {
-  const { setLearningContext } = useAiSidebar();
-  useEffect(() => {
-    if (lesson) {
-      setLearningContext({
-        lessonId: lesson.id,
-        lessonTitle: lesson.titleVi || lesson.title,
-        courseTitle: course?.titleVi || course?.title,
-      });
-    }
-  }, [lesson, course, setLearningContext]);
-  return null;
-}
 
 export function LessonLearningPage() {
   const { courseId, lessonId } = useParams();
@@ -34,7 +19,6 @@ export function LessonLearningPage() {
 function LessonScreen({ courseId, lessonId }) {
   const navigate = useNavigate();
   const resource = useLearning(courseId, lessonId);
-  const { openAiSidebar, setLearningContext } = useAiSidebar();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const [savingWord, setSavingWord] = useState(false);
@@ -147,18 +131,14 @@ function LessonScreen({ courseId, lessonId }) {
                   </span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => openAiSidebar(bilingualLabel(
-                    `Tôi đang học bài "${lesson.titleVi || lesson.title}". Hãy giải thích trọng tâm bài học và những cấu trúc ngữ pháp quan trọng trong bài này.`,
-                    `I am studying "${lesson.title}". Please explain the key lesson takeaways and important grammar points.`
-                  ))}
-                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#24382B] hover:bg-[#1a291f] text-white text-xs font-bold border border-[#24382B] shadow-2xs transition-colors cursor-pointer"
-                  title={bilingualLabel("Mở Trợ lý AI hỏi về bài học này", "Ask AI Coach about this lesson")}
+                <Link
+                  to={`/ai-tutor?lessonId=${encodeURIComponent(lesson.id)}&lessonTitle=${encodeURIComponent(lesson.titleVi || lesson.title || '')}&courseTitle=${encodeURIComponent(course?.titleVi || course?.title || '')}`}
+                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#24382B] hover:bg-[#1a291f] text-white text-xs font-bold border border-[#24382B] shadow-2xs transition-colors no-underline"
+                  title="Hỏi AI Tutor về bài học này"
                 >
                   <Bot size={14} />
-                  <span className="hidden sm:inline"><BilingualText vi="Hỏi AI" en="Ask AI" /></span>
-                </button>
+                  <span className="hidden sm:inline">Hỏi AI</span>
+                </Link>
               </div>
             </header>
 

@@ -4,7 +4,6 @@ import { Breadcrumb, EmptyState, PageHeader, Notice } from '@/components/common/
 import { ResourceState } from '@/components/common/ResourceState';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
 import { ImportJobResult } from '@/components/content-import/ImportJobResult';
-import { WebsiteImportWizard } from '@/components/content-import/WebsiteImportWizard';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { contentImportService } from '@/services/contentImportService';
 import { ROUTES } from '@/constants/routes';
@@ -13,21 +12,16 @@ import '@/components/content-import/content-import.css';
 
 export function AdminImportPage() {
   const label = useBilingualLabel();
-  const [importKind, setImportKind] = useState('website');
   const types = useAsyncResource(useCallback(signal => contentImportService.types({ signal }), []));
   return <section className="content-import-page">
-    <Breadcrumb items={[{ label: label('Quản lý nội dung', 'Content Management') }, { label: label('Nhập khóa học', 'Course Import') }]} />
+    <Breadcrumb items={[{ label: label('Từ vựng', 'Vocabulary'), to: ROUTES.ADMIN_VOCABULARY }, { label: label('Nhập dữ liệu', 'Import Data') }]} />
     <PageHeader
       eyebrow={<BilingualText vi="Quản lý nội dung" en="Content Management" />}
-      title={<BilingualText vi="Nhập giáo trình vào Course Builder" en="Import Textbooks into Course Builder" />}
-      description={<BilingualText vi="Chuyển website, Pressbooks XHTML/XML hoặc Excel thành nội dung nháp có thể kiểm tra trước khi xuất bản." en="Convert websites, Pressbooks XHTML/XML, or Excel into reviewable draft content before publishing." />}
+      title={<BilingualText vi="Nhập dữ liệu từ vựng" en="Vocabulary Data Import" />}
+      description={<BilingualText vi="Nhập mục từ nhiều nghĩa, ví dụ Việt–Anh và thông tin cách dùng từ Excel." en="Import polysemous entries, Vietnamese-English examples, and usage notes from Excel." />}
       actions={<Link className="button secondary" to={ROUTES.ADMIN_IMPORT_HISTORY}><BilingualText vi="Lịch sử import" en="Import History" /></Link>}
     />
-    <div className="import-kind-tabs" role="tablist" aria-label={label('Chọn phương thức import', 'Choose import method')}>
-      <button type="button" role="tab" aria-selected={importKind === 'website'} className={importKind === 'website' ? 'is-active' : ''} onClick={() => setImportKind('website')}><BilingualText vi="Website → Course" en="Website → Course" /></button>
-      <button type="button" role="tab" aria-selected={importKind === 'excel'} className={importKind === 'excel' ? 'is-active' : ''} onClick={() => setImportKind('excel')}><BilingualText vi="Excel từ vựng" en="Vocabulary Excel" /></button>
-    </div>
-    {importKind === 'website' ? <WebsiteImportWizard /> : <ResourceState resource={types}>{items => items.length ? <ImportUpload types={items} /> : <EmptyState title={<BilingualText vi="Chưa có loại dữ liệu được hỗ trợ" en="No supported data types yet" />} />}</ResourceState>}
+    <ResourceState resource={types}>{items => items.length ? <ImportUpload types={items} /> : <EmptyState title={<BilingualText vi="Chưa có loại dữ liệu được hỗ trợ" en="No supported data types yet" />} />}</ResourceState>
   </section>;
 }
 

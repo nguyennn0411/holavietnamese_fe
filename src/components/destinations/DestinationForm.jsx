@@ -1,8 +1,8 @@
 import { useId, useState } from 'react';
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/common/BilingualText';
 import { ContentImage } from '@/components/common/ContentImage';
 import { Notice } from '@/components/common/Ui';
-import { destinationDraft, destinationPayload, DESTINATION_REGIONS } from '@/models/Destination';
+import { destinationDraft, destinationPayload, DESTINATION_REGIONS, DESTINATION_STATUSES } from '@/models/Destination';
 import { adminDestinationService } from '@/services/destinationService';
 
 export function DestinationForm({ entry, onSaved, onCancel, onBusyChange }) {
@@ -57,7 +57,11 @@ export function DestinationForm({ entry, onSaved, onCancel, onBusyChange }) {
           {DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi}</option>)}
         </select>
       </label>
-      <p><strong><BilingualText>Trạng thái:</BilingualText></strong> <BilingualText>DRAFT</BilingualText></p>
+      <label htmlFor={`${formId}-status`}><BilingualText>Trạng thái</BilingualText>
+        <select id={`${formId}-status`} value={draft.status} onChange={event => change('status', event.target.value)}>
+          {DESTINATION_STATUSES.map(status => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}
+        </select>
+      </label>
       {draft.imageUrl && <ContentImage src={draft.imageUrl} alt={draft.nameVi || 'Ảnh điểm đến'} className="figma-art" style={{ maxHeight: 180, objectFit: 'cover', borderRadius: 8 }} />}
     </fieldset>
     {error && <Notice kind="error">{error.status === 409 ? <BilingualText vi="Slug đã tồn tại. Vui lòng nhập slug khác." en="This slug already exists. Please enter another slug." /> : <BilingualText>{error.message}</BilingualText>}</Notice>}

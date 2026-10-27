@@ -2,13 +2,13 @@ import { BilingualText, vietnameseLabel, bilingualLabel } from '@/components/com
 import { useEffect, useRef, useState } from 'react';
 import { Modal } from '@/components/common/Modal';
 import { adminVocabularyService } from '@/services/adminVocabularyService';
-import { newExample, newMeaning, vocabularyDraft, vocabularyPayload } from '@/models/AdminVocabulary';
+import { VOCABULARY_STATUSES, newExample, newMeaning, vocabularyDraft, vocabularyPayload } from '@/models/AdminVocabulary';
 import { DictionaryAttribution } from '@/components/vocabulary/DictionaryElements';
 import '@/components/vocabulary/dictionary.css';
 
 const dateText = (value) => value ? new Date(value).toLocaleString('vi-VN') : '—';
 
-function VocabularyDetail({ entry, onEdit, canEdit }) {
+function VocabularyDetail({ entry, onEdit }) {
   return <div className="admin-vocabulary-detail">
     <dl>
       <dt>ID</dt><dd>{entry.id}</dd><dt><BilingualText>{"Từ vựng"}</BilingualText></dt><dd>{entry.word}</dd>
@@ -28,11 +28,11 @@ function VocabularyDetail({ entry, onEdit, canEdit }) {
       </div>)}
     </section>)}
     <DictionaryAttribution source={entry.source} />
-    {canEdit && entry.status === 'DRAFT' && <div className="actions"><button type="button" onClick={onEdit}><BilingualText>{"Sửa từ vựng"}</BilingualText></button></div>}
+    <div className="actions"><button type="button" onClick={onEdit}><BilingualText>{"Sửa từ vựng"}</BilingualText></button></div>
   </div>;
 }
 
-export function AdminVocabularyModal({ mode, id, onClose, onSaved, onEdit, canEdit = false }) {
+export function AdminVocabularyModal({ mode, id, onClose, onSaved, onEdit }) {
   const submitting = useRef(false);
   const [entry, setEntry] = useState(null);
   const [draft, setDraft] = useState(() => vocabularyDraft());
@@ -74,14 +74,14 @@ export function AdminVocabularyModal({ mode, id, onClose, onSaved, onEdit, canEd
   return <Modal title={title} onClose={onClose} busy={pending}>
     {loading ? <div className="state" role="status"><BilingualText>{"Đang tải từ vựng…"}</BilingualText></div> : loadError
       ? <div className="state" role="alert"><p>{loadError}</p><button type="button" onClick={() => setRevision((value) => value + 1)}><BilingualText>{"Thử lại"}</BilingualText></button></div>
-      : mode === 'view' ? <VocabularyDetail entry={entry} onEdit={onEdit} canEdit={canEdit} />
+      : mode === 'view' ? <VocabularyDetail entry={entry} onEdit={onEdit} />
       : <form className="admin-vocabulary-form" onSubmit={submit}>
         <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
           <label><BilingualText>{"Từ vựng"}</BilingualText><input value={draft.word} onChange={(event) => change('word', event.target.value)} required maxLength={200} lang="vi" /></label>
           <label><BilingualText>{"Phiên âm"}</BilingualText><input value={draft.pronunciation} onChange={(event) => change('pronunciation', event.target.value)} maxLength={200} /></label>
           <label><BilingualText>{"Từ loại"}</BilingualText><input value={draft.partOfSpeech} onChange={(event) => change('partOfSpeech', event.target.value)} required maxLength={40} placeholder={vietnameseLabel("Ví dụ: phrase, noun, verb")} /></label>
           <label><BilingualText>{"Audio URL"}</BilingualText><input value={draft.audioUrl} onChange={(event) => change('audioUrl', event.target.value)} maxLength={2048} /></label>
-          <p><strong><BilingualText>{"Trạng thái:"}</BilingualText></strong> <BilingualText>{"DRAFT"}</BilingualText></p>
+          <label><BilingualText>{"Trạng thái"}</BilingualText><select value={draft.status} onChange={(event) => change('status', event.target.value)}>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></label>
           {draft.meanings.map((meaning, meaningIndex) => <section className="admin-card" key={meaningIndex} style={{ marginBottom: 14 }}>
             <div className="row"><h3><BilingualText>{"Nghĩa"}</BilingualText>{meaningIndex + 1}</h3><button type="button" className="secondary" disabled={draft.meanings.length === 1} onClick={() => change('meanings', draft.meanings.filter((_, index) => index !== meaningIndex))}><BilingualText>{"Xóa nghĩa"}</BilingualText>{meaningIndex + 1}</button></div>
             <label><BilingualText vi="Định nghĩa Việt–Việt" en="Vietnamese-Vietnamese definition" /><textarea value={meaning.definitionVi} onChange={event => changeMeaning(meaningIndex, 'definitionVi', event.target.value)} rows={4} maxLength={10000} lang="vi" /></label>

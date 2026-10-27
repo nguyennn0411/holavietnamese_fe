@@ -145,7 +145,7 @@ body.ai-quiz-active .ai-tutor-widget {
   justify-content: space-between;
   min-height: 76px;
   padding: 15px 15px 14px 18px;
-  color: var(--primary-orange, #F97316);
+  color: var(--color-surface);
   background:
     radial-gradient(circle at 88% 12%, rgba(255, 205, 0, 0.3), transparent 34%),
     linear-gradient(135deg, #b42318 0%, #7f211b 100%);
@@ -181,7 +181,7 @@ body.ai-quiz-active .ai-tutor-widget {
   height: 30px;
   min-height: 30px;
   padding: 0;
-  color: var(--primary-orange, #F97316);
+  color: var(--color-surface);
   background: rgba(255, 252, 247, 0.16);
   border: 0;
   border-radius: 50%;
@@ -221,7 +221,7 @@ body.ai-quiz-active .ai-tutor-widget {
 
 .ai-tutor-chat__message.is-user {
   align-self: flex-end;
-  color: var(--primary-orange, #F97316);
+  color: var(--color-surface);
   background: var(--color-red);
   border-color: transparent;
   border-radius: 15px 15px 5px 15px;
@@ -260,7 +260,7 @@ body.ai-quiz-active .ai-tutor-widget {
   min-height: 40px;
   height: 40px;
   padding: 0;
-  color: var(--primary-orange, #F97316);
+  color: var(--color-surface);
   background: var(--color-red);
   border: 0;
   border-radius: 13px;
@@ -269,8 +269,7 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .ai-tutor-chat__form button:not(:disabled):hover {
-  background: #FFFFFF;
-  font-weight: 700;
+  background: var(--color-red-hover);
   transform: translateY(-1px);
 }
 
@@ -762,9 +761,8 @@ body.ai-quiz-active .ai-tutor-widget {
 .btn-new-chat {
   width: 100%;
   padding: 10px 14px;
-  background: #FFFFFF;
-  font-weight: 700;
-  color: var(--primary-orange, #F97316);
+  background: var(--color-red-hover);
+  color: var(--color-surface);
   border: none;
   border-radius: 12px;
   font-weight: 650;
@@ -779,8 +777,7 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .btn-new-chat:hover {
-  background: #FFFFFF;
-  font-weight: 700;
+  background: var(--color-red-hover);
   transform: translateY(-1px);
 }
 
@@ -809,14 +806,11 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .tutor-history-item:hover {
-  background: #FFFFFF;
-  border-color: #FED7AA;
+  background: var(--color-red-soft);
 }
 
 .tutor-history-item.active {
-  background: #FFFFFF;
-  border-color: var(--primary-orange, #F97316);
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.08);
+  background: var(--color-gold-soft);
   border-color: var(--color-border);
   font-weight: 600;
 }
@@ -918,8 +912,7 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .btn-icon-subtle.danger:hover {
-  background: #FFFFFF;
-  border-color: #FED7AA;
+  background: var(--color-red-soft);
   color: var(--color-red);
 }
 
@@ -970,10 +963,9 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .mode-pill.active {
-  background: #FFFFFF;
-  color: var(--primary-orange, #F97316);
-  border-color: var(--primary-orange, #F97316);
-  font-weight: 700;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  border-color: var(--color-ink);
   box-shadow: 0 4px 12px rgba(50, 27, 23, 0.2);
 }
 
@@ -1058,8 +1050,8 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .message-row.user .message-avatar {
-  background: #FFFFFF;
-  color: var(--primary-orange, #F97316);
+  background: var(--color-ink);
+  color: var(--color-surface);
   font-weight: 700;
   font-size: 14px;
 }
@@ -1154,8 +1146,8 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .message-row.user .message-bubble {
-  background: #FFFFFF;
-  color: var(--primary-orange, #F97316);
+  background: var(--color-ink);
+  color: var(--color-surface);
   border-bottom-right-radius: 4px;
 }
 
@@ -1235,8 +1227,7 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .message-action-btn:hover {
-  background: #FFFFFF;
-  border-color: #FED7AA;
+  background: var(--color-red-soft);
   color: var(--color-ink);
   border-color: var(--color-border);
 }
@@ -1274,8 +1265,7 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .prompt-chip:hover {
-  background: #FFFFFF;
-  border-color: #FED7AA;
+  background: var(--color-red-soft);
   border-color: var(--color-gold);
   color: var(--color-ink);
 }
@@ -1307,16 +1297,15 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .tutor-textarea:focus {
-  border-color: var(--primary-orange, #F97316);
+  border-color: var(--color-red-hover);
   box-shadow: 0 0 0 3px rgba(159, 45, 32, 0.1);
 }
 
 .btn-send {
   height: 44px;
   padding: 0 20px;
-  background: #FFFFFF;
-  font-weight: 700;
-  color: var(--primary-orange, #F97316);
+  background: var(--color-red-hover);
+  color: var(--color-surface);
   border: none;
   border-radius: 12px;
   font-weight: 700;
@@ -1330,8 +1319,7 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .btn-send:hover:not(:disabled) {
-  background: #FFFFFF;
-  font-weight: 700;
+  background: var(--color-red-hover);
   transform: translateY(-1px);
 }
 
@@ -1359,8 +1347,7 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .btn-mic.listening {
-  background: #FFFFFF;
-  border-color: #FED7AA;
+  background: var(--color-red-soft);
   color: var(--color-red);
   border-color: var(--color-red);
   animation: pulse 1.5s infinite;
@@ -1376,8 +1363,8 @@ body.ai-quiz-active .ai-tutor-widget {
    CULTURE HUB & DETAIL (/culture, /culture/:id)
    ========================================================================== */
 .culture-banner {
-  background: #FFFFFF;
-  color: var(--primary-orange, #F97316);
+  background: var(--color-ink);
+  color: var(--color-surface);
   border-radius: 24px;
   padding: 44px 36px;
   margin-bottom: 36px;
@@ -1424,15 +1411,13 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .category-tab-btn:hover {
-  background: #FFFFFF;
-  border-color: #FED7AA;
+  background: var(--color-red-soft);
 }
 
 .category-tab-btn.active {
-  background: #FFFFFF;
-  font-weight: 700;
-  color: var(--primary-orange, #F97316);
-  border-color: var(--primary-orange, #F97316);
+  background: var(--color-red-hover);
+  color: var(--color-surface);
+  border-color: var(--color-red-hover);
   box-shadow: 0 4px 12px rgba(159, 45, 32, 0.2);
 }
 
@@ -1449,8 +1434,7 @@ body.ai-quiz-active .ai-tutor-widget {
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
-  background: #FFFFFF;
-  border-color: #FED7AA;
+  background: var(--color-red-soft);
   border: 1px solid var(--color-border);
   color: var(--color-red-hover);
   cursor: pointer;
@@ -1459,16 +1443,13 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .destination-pill-btn:hover {
-  background: #FFFFFF;
-  border-color: var(--primary-orange, #F97316);
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.08);
+  background: var(--color-gold-soft);
 }
 
 .destination-pill-btn.active {
-  background: #FFFFFF;
-  color: var(--primary-orange, #F97316);
-  border-color: var(--primary-orange, #F97316);
-  font-weight: 700;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  border-color: var(--color-ink);
 }
 
 .culture-grid {
@@ -1522,7 +1503,7 @@ body.ai-quiz-active .ai-tutor-widget {
   padding: 4px 10px;
   border-radius: 8px;
   background: rgba(40, 20, 15, 0.85);
-  color: var(--primary-orange, #F97316);
+  color: var(--color-surface);
   font-size: 11px;
   font-weight: 700;
   backdrop-filter: blur(4px);
@@ -1715,9 +1696,8 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .badge-level {
-  background: #FFFFFF;
-  font-weight: 700;
-  color: var(--primary-orange, #F97316);
+  background: var(--color-red-hover);
+  color: var(--color-surface);
   font-weight: 750;
   font-size: 11px;
   padding: 4px 8px;
@@ -1819,11 +1799,11 @@ body.ai-quiz-active .ai-tutor-widget {
   flex-shrink: 0;
   margin-top: 2px;
   background: var(--color-border);
-  color: var(--primary-orange, #F97316);
+  color: var(--color-surface);
 }
 
 .objective-item.done .objective-checkbox {
-  background: #FFFFFF;
+  background: var(--color-ink);
 }
 
 .roleplay-input-console {
@@ -1926,8 +1906,7 @@ body.ai-quiz-active .ai-tutor-widget {
 }
 
 .hint-chip-btn:hover {
-  background: #FFFFFF;
-  border-color: #FED7AA;
+  background: var(--color-red-soft);
   border-color: var(--color-gold);
 }
 
@@ -2017,8 +1996,7 @@ body.ai-quiz-active .ai-tutor-widget {
 .score-progress-fill {
   height: 100%;
   border-radius: 999px;
-  background: #FFFFFF;
-  font-weight: 700;
+  background: var(--color-red-hover);
 }
 
 /* Corrections card */
@@ -2055,8 +2033,8 @@ body.ai-quiz-active .ai-tutor-widget {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: #FFFFFF;
-  color: var(--primary-orange, #F97316);
+  background: var(--color-ink);
+  color: var(--color-surface);
   padding: 12px 20px;
   border-radius: 12px;
   font-size: 14px;

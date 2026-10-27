@@ -36,7 +36,7 @@ function ConfirmDialog({ options, onResolve }) {
           initial={reduceMotion ? false : { opacity: 0, y: 14, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: .98 }} transition={{ duration: reduceMotion ? 0 : .2, ease: [0.22, 1, 0.36, 1] }}>
           <button className="confirm-dialog__close" type="button" aria-label={bilingualLabel("Đóng", "Close")} onClick={() => onResolve(false)}><X size={18}/></button>
           <span className={`confirm-dialog__icon confirm-dialog__icon--${options.tone || 'danger'}`} aria-hidden="true"><AlertTriangle size={22}/></span>
-          <div className="confirm-dialog__copy"><h2 id={titleId}><BilingualText>{options.title || 'Xác nhận thao tác'}</BilingualText></h2><p id={descriptionId}><BilingualText>{options.description}</BilingualText></p>{options.details&&<div className="confirm-dialog__details">{options.details}</div>}</div>
+          <div><h2 id={titleId}><BilingualText>{options.title || 'Xác nhận thao tác'}</BilingualText></h2><p id={descriptionId}><BilingualText>{options.description}</BilingualText></p></div>
           <div className="confirm-dialog__actions">
             <button className="secondary" type="button" onClick={() => onResolve(false)}><BilingualText>{options.cancelLabel || 'Hủy'}</BilingualText></button>
             <button data-confirm className={options.tone === 'warning' ? '' : 'danger'} type="button" onClick={() => onResolve(true)}><BilingualText>{options.confirmLabel || 'Xác nhận'}</BilingualText></button>

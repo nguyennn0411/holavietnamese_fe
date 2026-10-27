@@ -1,4 +1,4 @@
-import axiosClient from '@/api/axiosClient';
+import axiosClient from '@/infrastructure/api/axiosClient';
 import { VocabularyEntry } from '@/models/VocabularyEntry';
 
 export const vocabularyReviewService = {

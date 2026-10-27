@@ -1,5 +1,5 @@
 import { httpClient } from '@/api/httpClient';
-import axiosClient from '@/api/axiosClient';
+import axiosClient from '@/infrastructure/api/axiosClient';
 
 // Reuse the project's existing JWT client and legacy session client as appropriate.
 const request = (path, method = 'GET', body, signal) => localStorage.getItem('token')

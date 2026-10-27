@@ -1,4 +1,4 @@
-import axiosClient from '@/api/axiosClient';
+import axiosClient from '@/infrastructure/api/axiosClient';
 
 // AI Tutor Service supporting 7 modes:
 // Tutor, Grammar, Translation, Conversation, Culture Guide, Travel, Regional Vietnamese

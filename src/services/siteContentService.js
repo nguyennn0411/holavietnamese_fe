@@ -1,5 +1,5 @@
 import { httpClient } from '@/api/httpClient';
-import axiosClient from '@/api/axiosClient';
+import axiosClient from '@/infrastructure/api/axiosClient';
 
 const resultOf = (response) => response?.result ?? response;
 const listOf = (response) => {

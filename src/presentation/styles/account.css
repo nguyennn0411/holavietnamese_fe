@@ -104,17 +104,12 @@
 }
 
 .mylearning-tab-btn:hover {
-  color: var(--primary-orange, #F97316);
-  background: #FFFFFF;
-}
-.mylearning-tab-btn:active {
-  background: #FFFFFF !important;
+  color: var(--acc-ink);
 }
 
 .mylearning-tab-btn.active {
-  color: var(--primary-orange, #F97316) !important;
-  background: #FFFFFF !important;
-  border-bottom: 2.5px solid var(--primary-orange, #F97316) !important;
+  color: var(--acc-red);
+  border-bottom-color: var(--acc-red);
   font-weight: 750;
 }
 
@@ -128,9 +123,8 @@
 }
 
 .mylearning-tab-btn.active .mylearning-tab-badge {
-  background: #FFF7ED !important;
-  color: var(--primary-orange, #F97316) !important;
-  border: 1px solid #FED7AA !important;
+  background: var(--color-cream);
+  color: var(--acc-red);
 }
 
 /* Tab 1: Course Grid */

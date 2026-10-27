@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BilingualText } from '@/components/common/BilingualText';
-import { useSiteContent } from '@/contexts/SiteContentContext';
+import { useSiteContent } from '@/application/context/SiteContentContext';
 import { siteContentService } from '@/services/siteContentService';
 
 const cardStyle = { padding: 0, overflowX: 'auto', marginBottom: 24 };

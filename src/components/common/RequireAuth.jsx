@@ -1,5 +1,6 @@
+import React from 'react';
 import { useLocation, Outlet } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/application/context/AuthContext';
 import { AuthRequiredPage } from '@/pages/auth/AuthRequiredPage';
 import { BilingualText } from '@/components/common/BilingualText';
 

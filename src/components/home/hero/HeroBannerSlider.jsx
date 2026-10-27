@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { HeroSlideContent } from './HeroSlideContent';
 import { HeroStageVisual } from './HeroStageVisual';
 import { audioFeedback } from '@/utils/audioFeedback';
-import { localizedSiteField, useSiteContent } from '@/contexts/SiteContentContext';
+import { localizedSiteField, useSiteContent } from '@/application/context/SiteContentContext';
 import { BANNER_PLACEMENTS } from '@/config/siteContentDefaults';
 
 const AUTOPLAY_DURATION = 5600;

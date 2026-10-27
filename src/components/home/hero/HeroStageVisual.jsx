@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { localizedSiteField, resolveBannerImage } from '@/contexts/SiteContentContext';
+import { localizedSiteField, resolveBannerImage } from '@/application/context/SiteContentContext';
 
 export function HeroStageVisual({ banner, eager = false }) {
   const { i18n } = useTranslation();

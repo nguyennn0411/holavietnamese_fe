@@ -1,4 +1,5 @@
 import { BilingualText } from '@/components/common/BilingualText';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { Flame, Zap, Heart, Compass } from 'lucide-react';
 
@@ -11,7 +12,7 @@ export function LearnerHeaderRibbon({
   streakCount = 0,
   totalXp = 0,
   hearts = 5,
-  hasCheckedInToday: _hasCheckedInToday = false,
+  hasCheckedInToday = false,
 }) {
   const effectiveStreak = streakCount;
   const effectiveXp = totalXp;
@@ -61,7 +62,7 @@ export function LearnerHeaderRibbon({
         </div>
 
         <Link
-          to="/learning-path"
+          to="/edtech/dashboard"
           className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-black text-xs shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-none transition-all"
         >
           <Compass size={16} />

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { BookOpen, ChevronLeft, ChevronRight, Heart, MessageCircle, Pause, Play } from 'lucide-react';
@@ -11,8 +11,8 @@ import hoiAnImage from '@/assets/images/guest-carousel/vietnam-hoi-an-banner.jpg
 export function LearnerHeroBanner({
   user,
   greeting: greetingProp,
-  streakCount: _streakCount = 0,
-  totalXp: _totalXp = 0,
+  streakCount = 0,
+  totalXp = 0,
   hearts,
   hasCheckedInToday = false,
   currentLesson,
@@ -28,7 +28,7 @@ export function LearnerHeroBanner({
   const progress = currentLesson?.progressPercent ?? currentLesson?.progress ?? 0;
   const lessonId = currentLesson?.lessonId ?? currentLesson?.id;
   const courseId = currentLesson?.courseId;
-  const lessonRoute = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : '/learning-path';
+  const lessonRoute = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : '/edtech/dashboard';
   // Compute greeting internally so the parent doesn't need to pass it
   const hour = new Date().getHours();
   const greeting = greetingProp ?? (hour < 12 ? t('hero.morning') : hour < 18 ? t('hero.afternoon') : t('hero.evening'));
@@ -63,6 +63,8 @@ export function LearnerHeroBanner({
     },
   ];
   const slide = slides[currentSlide];
+  const SlideIcon = slide.icon;
+
   useEffect(() => {
     if (isPaused || reduceMotion) return undefined;
     const timer = window.setInterval(() => setCurrentSlide((value) => (value + 1) % slides.length), 6500);

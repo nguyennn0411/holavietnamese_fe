@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { MailCheck, RefreshCw, ShieldCheck } from 'lucide-react';
-import authApi from '@/api/authApi';
+import authApi from '@/infrastructure/api/authApi';
 import {
   clearPendingVerification,
   getDevelopmentOtp,
@@ -38,7 +38,6 @@ export function VerifyEmailPage() {
   const [verifying, setVerifying] = useState(false);
   const [resending, setResending] = useState(false);
   const [verified, setVerified] = useState(false);
-  const [isShaking, setIsShaking] = useState(false);
   const [cooldown, setCooldown] = useState(() => getRemainingCooldown());
   const afterLogin = location.state?.afterLogin || loadPostVerificationPath();
 
@@ -96,14 +95,12 @@ export function VerifyEmailPage() {
           replace: true,
           state: {
             from: afterLogin,
-            message: bilingualLabel('Xác minh email thành công. Hãy đăng nhập để bắt đầu thiết lập lộ trình học.', 'Email verified successfully. Please sign in to set up your learning path.'),
+            message: bilingualLabel('Xác minh email thành công. Hãy đăng nhập để bắt đầu bài kiểm tra đầu vào.', 'Email verified successfully. Please sign in to begin your placement test.'),
           },
         });
       }, 1500);
     } catch (error) {
       setOtpError(getVerificationErrorMessage(error));
-      setIsShaking(true);
-      setTimeout(() => setIsShaking(false), 550);
     } finally {
       setVerifying(false);
     }
@@ -141,7 +138,7 @@ export function VerifyEmailPage() {
       <div className="auth-left-panel">
         <AuthHeader />
 
-        <main className={`auth-left-content ${isShaking ? "shake" : ""}`}>
+        <main className="auth-left-content">
           <div className="auth-verify-icon" aria-hidden="true"><MailCheck size={26} /></div>
           <h1 className="auth-heading"><BilingualText vi="Xác minh email" en="Verify your email" /></h1>
           <p className="auth-subtitle">

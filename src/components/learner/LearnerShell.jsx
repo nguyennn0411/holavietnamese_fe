@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
-  Bell, ChevronLeft, Flame, GraduationCap, Sparkles, Zap,
+  Bell, ChevronLeft, Flame, GraduationCap, Zap,
 } from 'lucide-react';
-import { useAiSidebar } from '@/contexts/AiSidebarContext';
 import { Brand } from '@/components/layout/Brand';
 import { UserMenu } from '@/components/layout/UserMenu';
 import { NotificationDropdown } from '@/components/common/NotificationDropdown';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
-import { localizedSiteField, safeInternalPath, useSiteContent } from '@/contexts/SiteContentContext';
+import { localizedSiteField, safeInternalPath, useSiteContent } from '@/application/context/SiteContentContext';
 import { siteContentIcon } from '@/components/common/siteContentIcons';
 import { MENU_PLACEMENTS } from '@/config/siteContentDefaults';
 
@@ -85,7 +84,6 @@ export function LearnerTopbar({ user, stats, onLogout }) {
   const { t, i18n } = useTranslation('navigation');
   const location = useLocation();
   const learnerItems = useLearnerItems();
-  const { openAiSidebar, isEligible } = useAiSidebar();
   const lang = i18n.resolvedLanguage || i18n.language || 'en';
   const isVi = lang.startsWith('vi');
 
@@ -102,7 +100,6 @@ export function LearnerTopbar({ user, stats, onLogout }) {
   const level = user?.targetLevel || user?.level || '—';
   const hasEnergy = stats?.hearts != null || stats?.energy != null;
   const isAdmin = user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_ADMIN');
-  const isContentManager = user?.roles?.includes('CONTENT_MANAGER') || user?.roles?.includes('ROLE_CONTENT_MANAGER');
 
   return (
     <header className="learner-topbar">
@@ -131,21 +128,9 @@ export function LearnerTopbar({ user, stats, onLogout }) {
         )}
       </div>
       <div className="learner-topbar__actions">
-        {isEligible && (
-          <button
-            type="button"
-            className="learner-topbar__ai-btn"
-            onClick={() => openAiSidebar()}
-            title={isVi ? 'Mở Trợ lý AI Hola' : 'Open Hola AI Coach'}
-            aria-label={isVi ? 'Mở Trợ lý AI Hola' : 'Open Hola AI Coach'}
-          >
-            <Sparkles size={14} />
-            <span>{isVi ? 'Trợ lý AI' : 'AI Coach'}</span>
-          </button>
-        )}
         <LanguageSwitcher compact />
         <NotificationDropdown fallbackIcon={<Bell />} />
-        <UserMenu user={user} isAdmin={isAdmin} isContentManager={isContentManager} onLogout={onLogout} />
+        <UserMenu user={user} isAdmin={isAdmin} onLogout={onLogout} />
       </div>
     </header>
   );

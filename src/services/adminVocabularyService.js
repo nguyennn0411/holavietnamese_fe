@@ -1,4 +1,4 @@
-import axiosClient from '@/api/axiosClient';
+import axiosClient from '@/infrastructure/api/axiosClient';
 
 const resultOf = (response) => response?.result ?? response;
 const paramsOf = filters => Object.fromEntries(['keyword', 'status', 'partOfSpeech', 'page', 'size']
@@ -39,23 +39,6 @@ export const adminVocabularyService = {
         ...options,
       })
     );
-  },
-
-  async submitReview(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/submit-review`, null, options));
-  },
-
-  async review(id, decision, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/review`, { decision }, options));
-  },
-  async archive(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/archive`, null, options));
-  },
-  async restore(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/restore`, null, options));
-  },
-  async revise(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/revise`, null, options));
   },
 
 };

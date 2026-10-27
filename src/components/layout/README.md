@@ -14,4 +14,4 @@ import { AppHeader, AppFooter, Brand } from '@/components/layout';
 - `LayoutToast`: thông báo lỗi cấp layout.
 
 Các trang thuộc `MainLayout` chỉ cần render nội dung trang. Không thêm lại header hoặc footer trong từng page.
-Style dùng chung nằm tại `src/styles/layout.css`.
+Style dùng chung nằm tại `src/presentation/styles/layout.css`.

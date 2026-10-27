@@ -10,9 +10,9 @@ export default defineConfig({ root:path('../'), plugins:[react(), {
   next();
  });}
 }], resolve:{ alias:[
- {find:'@/contexts/AuthContext',replacement:path('./FixtureAuth.jsx')},
+ {find:'@/application/context/AuthContext',replacement:path('./FixtureAuth.jsx')},
  {find:'@/api/httpClient',replacement:path('./fixtureHttpClient.js')},
- {find:'@/api/axiosClient',replacement:path('./fixtureAxios.js')},
+ {find:'@/infrastructure/api/axiosClient',replacement:path('./fixtureAxios.js')},
  {find:'@',replacement:path('../src')},
 ]}, server:{port:5174,strictPort:true,host:'localhost'} });
 

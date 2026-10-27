@@ -1,11 +1,7 @@
 // Admin Service for Culture, AI Scenarios, AI Settings, Usage & Reviews (Người 4 Admin)
 
-<<<<<<< HEAD
 import axiosClient from '@/infrastructure/api/axiosClient';
 import { cultureService } from '@/services/cultureService';
-=======
-import axiosClient from '@/api/axiosClient';
->>>>>>> 8d43116e8293d0a5196eba58e2247eab915417b2
 
 const STORAGE_ADMIN_CULTURE = 'hola_admin_culture_articles_v1';
 const STORAGE_ADMIN_CATEGORIES = 'hola_admin_culture_categories_v1';

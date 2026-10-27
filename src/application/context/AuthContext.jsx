@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import authApi from '@/infrastructure/api/authApi';
 import { markHasAccount } from '@/utils/userState';
@@ -242,7 +241,3 @@ export const useAuth = () => {
 };
 
 export default AuthContext;
-=======
-export * from '@/contexts/AuthContext';
-export { default } from '@/contexts/AuthContext';
->>>>>>> 8d43116e8293d0a5196eba58e2247eab915417b2

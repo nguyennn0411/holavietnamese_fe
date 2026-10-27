@@ -1,7 +1,7 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/application/context/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import { Notice } from '@/components/common/Ui';
 import { vocabularyService } from '@/services/vocabularyService';
