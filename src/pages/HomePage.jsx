@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { FixedHeritageBackdrop } from '@/components/home/common/HeritageWatermark';
 import { GuestHome } from '@/components/home/guest/GuestHome';
 import { LearnerDashboard } from '@/components/home/learner/LearnerDashboard';

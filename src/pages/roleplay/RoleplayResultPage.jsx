@@ -5,6 +5,10 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { aiRoleplayService } from '@/services/aiRoleplayService';
 import { vocabularyService } from '@/services/vocabularyService';
+<<<<<<< HEAD
+=======
+import axiosClient from '@/api/axiosClient';
+>>>>>>> 8d43116e8293d0a5196eba58e2247eab915417b2
 
 export function RoleplayResultPage() {
   const { id } = useParams();

@@ -12,7 +12,7 @@ import { QuestionForm } from '@/components/admin/QuestionForm';
 import { ContentForm } from '@/components/admin/ContentForm';
 import { QuestionInput } from '@/components/learning/QuestionInput';
 import { moveItem } from '@/components/learning/answerUtils';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function AdminQuestionBankPage(){
  const {user,isAdmin,isContentManager}=useAuth();

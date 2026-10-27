@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, BookOpen, Check, CheckCircle2, ChevronDown, ChevronUp, Clock, Download, Eye, FileSpreadsheet, FileText, Globe, ImagePlus, Layers, Plus, Save, Send, ShieldCheck, Upload } from 'lucide-react';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { contentService } from '@/services/contentService';
 import { useAsyncResource } from '@/hooks/useAsyncResource';
 import { ResourceState } from '@/components/common/ResourceState';
@@ -362,7 +362,7 @@ function CourseWorkbookPanel({ canImport, importedCourseId, busy, onBusyChange, 
       <div>
         <p className="studio-eyebrow"><BilingualText>{"TẠO KHÓA HỌC"}</BilingualText></p>
         <h2><FileSpreadsheet size={22} /> <BilingualText vi="Import khóa học từ Excel" en="Import course from Excel" /></h2>
-        <p><BilingualText vi="File mẫu gồm thông tin khóa, học phần, bài học, hoạt động, quiz và câu hỏi/đáp án." en="The template includes course info, modules, lessons, activities, quizzes, and questions/answers." /></p>
+        <p><BilingualText vi="File mẫu chứa trọn một khóa học cụ thể: thông tin khóa, học phần, bài học, hoạt động, quiz từng bài, quiz cuối khóa và câu hỏi/đáp án." en="The template contains one complete sample course: course info, modules, lessons, activities, lesson quizzes, a final quiz, and questions/answers." /></p>
       </div>
     </div>
     <div className="studio-workbook-flow" aria-label={label("Quy trình import khóa học")}>
@@ -386,7 +386,7 @@ function CourseWorkbookPanel({ canImport, importedCourseId, busy, onBusyChange, 
         <p>{preview.pendingMedia || 0} {label('mục media cần bổ sung sau khi nhập.')}</p>
         {preview.errors?.length > 0 && <ul>{preview.errors.slice(0, 20).map((item, index) => <li key={index}>{item}</li>)}</ul>}
       </div>}
-      <p className="studio-workbook-hint"><BilingualText vi="Ảnh bìa và các file ảnh, âm thanh, video có thể tải lên sau trong trình biên soạn. Nội dung nhập luôn ở trạng thái nháp để bạn kiểm tra và hoàn thiện." en="Cover images and media files can be uploaded later in the studio. Imported content remains draft for inspection." /></p>
+      <p className="studio-workbook-hint"><BilingualText vi="Sau khi import, khóa học được giữ ở trạng thái nháp để bạn kiểm tra. Nội dung mẫu đã đủ cấu trúc bắt buộc và có thể gửi Admin duyệt sau khi chỉnh sửa thông tin cần thiết." en="After import, the course remains a draft for inspection. The sample already includes the required structure and can be submitted for Admin review after any needed edits." /></p>
     </>}
     {error && <Notice kind="error">{error}</Notice>}
   </section>;

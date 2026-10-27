@@ -11,6 +11,7 @@ import { ProgressBar } from '@/components/common/ProgressBar';
 import { QuestionInput } from '@/components/learning/QuestionInput';
 import { answerLabel, answerPresent } from '@/components/learning/answerUtils';
 import { Modal } from '@/components/common/Modal';
+import { FireworksBackground, CountingNumber } from '@/components/common/animate';
 import { Award, Clock, RotateCcw, BookOpen, CheckCircle2, ArrowRight, ArrowLeft, Check, AlertCircle, Play } from 'lucide-react';
 
 /**
@@ -62,7 +63,7 @@ export function QuizPage() {
             </div>
 
             {/* Main Quiz Hero Card */}
-            <div className="quiz-gate card relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFFCF7] via-[#FFFCF7] to-[#FFF7E8] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm space-y-8">
+            <div className="quiz-gate card relative overflow-hidden rounded-3xl bg-white border border-[#E5E7EB] p-6 sm:p-10 shadow-sm space-y-8">
               {/* Dong Son background watermark */}
               <div className="absolute -right-10 -bottom-10 w-64 h-64 opacity-5 pointer-events-none select-none hidden sm:block">
                 <Artwork kind="dong-son" className="w-full h-full object-contain" />
@@ -70,7 +71,7 @@ export function QuizPage() {
 
               {/* Title & Badge */}
               <div className="text-center space-y-3 max-w-2xl mx-auto relative z-10">
-                <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] text-[#C2410C] border border-[#FFCD00]/50 font-extrabold text-xs uppercase tracking-wider shadow-2xs">
+                <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF4E8] text-[#F28C45] border border-[#FED7AA] font-bold text-xs uppercase tracking-wider shadow-2xs">
                   <BilingualText>{"Kiểm tra năng lực • Knowledge Check"}</BilingualText>
                 </div>
 
@@ -88,17 +89,17 @@ export function QuizPage() {
 
               {/* Key Exam Metrics Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 relative z-10">
-                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
-                  <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
+                <div className="p-4 rounded-2xl bg-white border border-[#E5E7EB] shadow-2xs text-center space-y-1">
+                  <span className="text-[11px] font-bold text-[#6B7280] block uppercase tracking-wider">
                     <BilingualText vi="Số câu hỏi" en="Total questions" />
                   </span>
-                  <strong className="text-base sm:text-lg font-black text-[#253044]">
+                  <strong className="text-base sm:text-lg font-black text-[#1F2937]">
                     <BilingualText vi={`${quiz.questionCount} câu`} en={`${quiz.questionCount} questions`} />
                   </strong>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
-                  <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
+                <div className="p-4 rounded-2xl bg-white border border-[#E5E7EB] shadow-2xs text-center space-y-1">
+                  <span className="text-[11px] font-bold text-[#6B7280] block uppercase tracking-wider">
                     <BilingualText vi="Điểm đạt" en="Passing score" />
                   </span>
                   <strong className="text-base sm:text-lg font-black text-emerald-700">
@@ -106,31 +107,31 @@ export function QuizPage() {
                   </strong>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
-                  <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
+                <div className="p-4 rounded-2xl bg-white border border-[#E5E7EB] shadow-2xs text-center space-y-1">
+                  <span className="text-[11px] font-bold text-[#6B7280] block uppercase tracking-wider">
                     <BilingualText vi="Thời gian" en="Time limit" />
                   </span>
-                  <strong className="text-base sm:text-lg font-black text-[#253044]">
+                  <strong className="text-base sm:text-lg font-black text-[#1F2937]">
                     {quiz.timeLimitMinutes ? <BilingualText vi={`${quiz.timeLimitMinutes} phút`} en={`${quiz.timeLimitMinutes} min`} /> : <BilingualText vi="Tự do" en="Untimed" />}
                   </strong>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs text-center space-y-1">
-                  <span className="text-[11px] font-bold text-[#64748B] block uppercase tracking-wider">
+                <div className="p-4 rounded-2xl bg-white border border-[#E5E7EB] shadow-2xs text-center space-y-1">
+                  <span className="text-[11px] font-bold text-[#6B7280] block uppercase tracking-wider">
                     <BilingualText vi="Lần làm bài" en="Max attempts" />
                   </span>
-                  <strong className="text-base sm:text-lg font-black text-[#253044]">
+                  <strong className="text-base sm:text-lg font-black text-[#1F2937]">
                     {quiz.maxAttempts ? <BilingualText vi={`${quiz.maxAttempts} lần`} en={`${quiz.maxAttempts} attempts`} /> : <BilingualText vi="Vô hạn" en="Unlimited" />}
                   </strong>
                 </div>
               </div>
 
               {/* Instructions Callout */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-white/80 border border-[#E8E5DF]/60 space-y-2 relative z-10 text-xs sm:text-sm text-[#253044]">
-                <strong className="font-bold text-[#C2410C] flex items-center gap-1.5">
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#F9FAFB] border border-[#E5E7EB] space-y-2 relative z-10 text-xs sm:text-sm text-[#1F2937]">
+                <strong className="font-bold text-[#F28C45] flex items-center gap-1.5">
                   <BilingualText>{"Lưu ý trước khi làm bài:"}</BilingualText>
                 </strong>
-                <ul className="space-y-1 text-xs text-[#64748B] pl-5 list-disc">
+                <ul className="space-y-1 text-xs text-[#6B7280] pl-5 list-disc">
                   <li>
                     <BilingualText>{"Hệ thống tự động lưu câu trả lời mỗi khi bạn chuyển câu."}</BilingualText>
                   </li>
@@ -155,7 +156,7 @@ export function QuizPage() {
                   type="button"
                   onClick={start}
                   disabled={busy}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 py-3.5 px-8 rounded-2xl bg-[#F97316] hover:bg-[#C2410C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95 disabled:opacity-60"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 py-3.5 px-8 rounded-xl bg-[#F28C45] hover:bg-[#EA580C] text-white font-bold text-sm shadow-sm hover:shadow transition-all cursor-pointer active:scale-95 disabled:opacity-60"
                 >
                   {busy ? (
                     <>
@@ -173,7 +174,7 @@ export function QuizPage() {
                 {quiz.courseId && (
                   <Link
                     to={`/courses/${quiz.courseId}`}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-white hover:bg-stone-50 text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-all no-underline"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-white hover:bg-stone-50 text-[#1F2937] border border-[#E5E7EB] font-bold text-xs shadow-2xs transition-all no-underline"
                   >
                     <BilingualText>{"← Về khóa học"}</BilingualText>
                   </Link>
@@ -299,16 +300,16 @@ function Attempt({ attempt }) {
   return (
     <section className="quiz-workspace-container w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
       {/* Sticky Header with Title and Countdown Timer */}
-      <header className="sticky top-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-3.5 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <header className="sticky top-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-[#E5E7EB] p-3.5 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2.5 min-w-0">
-          <span className="w-8 h-8 rounded-xl bg-[#FFF0DC] text-[#C2410C] flex items-center justify-center shrink-0 border border-[#FFCD00]/50 shadow-2xs font-bold text-xs">
+          <span className="w-8 h-8 rounded-xl bg-[#FFF4E8] text-[#F28C45] flex items-center justify-center shrink-0 border border-[#FED7AA] shadow-2xs font-bold text-xs">
             <Award size={16} />
           </span>
           <div className="truncate">
-            <h1 className="text-sm sm:text-base font-black text-[#253044] truncate m-0">
+            <h1 className="text-sm sm:text-base font-black text-[#1F2937] truncate m-0">
               <BilingualText vi={attempt.quizTitleVi || attempt.quizTitle} en={attempt.quizTitle} />
             </h1>
-            <p className="text-[11px] text-[#64748B] m-0 font-medium">
+            <p className="text-[11px] text-[#6B7280] m-0 font-medium">
               <BilingualText
                 vi={`Câu ${index + 1} / ${questions.length} · Đã làm: ${answeredCount}/${questions.length} câu`}
                 en={`Question ${index + 1} / ${questions.length} · Answered: ${answeredCount}/${questions.length}`}
@@ -340,7 +341,7 @@ function Attempt({ attempt }) {
             type="button"
             onClick={() => setConfirm(true)}
             disabled={busy}
-            className="px-3.5 py-1.5 rounded-xl bg-[#F97316] hover:bg-[#C2410C] text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-[#F28C45] hover:bg-[#EA580C] text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
           >
             <BilingualText>{"Nộp bài"}</BilingualText>
           </button>
@@ -348,22 +349,22 @@ function Attempt({ attempt }) {
       </header>
 
       {/* Progress Bar & Question Jump Palette */}
-      <div className="bg-white rounded-2xl border border-[#E8E5DF] p-4 shadow-xs space-y-3">
-        <div className="flex items-center justify-between text-xs font-bold text-[#64748B]">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 shadow-xs space-y-3">
+        <div className="flex items-center justify-between text-xs font-bold text-[#6B7280]">
           <span><BilingualText vi="Tiến độ làm bài" en="Quiz progress" /></span>
-          <span className="text-[#F97316]">{Math.round((answeredCount / questions.length) * 100)}%</span>
+          <span className="text-[#F28C45]">{Math.round((answeredCount / questions.length) * 100)}%</span>
         </div>
 
         <div className="w-full h-2 rounded-full bg-stone-100 overflow-hidden">
           <div
-            className="h-full rounded-full bg-[#F97316] transition-all duration-300"
+            className="h-full rounded-full bg-[#F28C45] transition-all duration-300"
             style={{ width: `${(answeredCount / questions.length) * 100}%` }}
           />
         </div>
 
         {/* Question Quick Jump Pills */}
         <div className="pt-2 flex flex-wrap gap-2 items-center">
-          <span className="text-[11px] font-bold text-[#64748B] mr-1 hidden sm:inline">
+          <span className="text-[11px] font-bold text-[#6B7280] mr-1 hidden sm:inline">
             <BilingualText vi="Chọn câu:" en="Jump to:" />
           </span>
           {questions.map((q, qIdx) => {
@@ -378,10 +379,10 @@ function Attempt({ attempt }) {
                 onClick={() => changeQuestion(qIdx)}
                 className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
                   isCurrent
-                    ? 'bg-[#F97316] text-white shadow-xs scale-105 ring-2 ring-[#F97316]/20'
+                    ? 'bg-[#F28C45] text-white shadow-xs scale-105 ring-2 ring-[#F28C45]/20'
                     : isAnswered
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                    : 'bg-[#FFFCF7] text-[#253044] border border-[#E8E5DF]/70 hover:bg-[#FFF0DC]'
+                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    : 'bg-white text-[#1F2937] border border-[#E5E7EB] hover:border-[#FDBA74]'
                 }`}
                 title={bilingualLabel(`Chuyển đến câu ${qIdx + 1}${isAnswered ? ' (Đã trả lời)' : ''}`, `Go to question ${qIdx + 1}${isAnswered ? ' (Answered)' : ''}`)}
               >
@@ -407,31 +408,31 @@ function Attempt({ attempt }) {
       )}
 
       {/* Main Question Card */}
-      <article className="quiz-question card bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-sm space-y-6">
+      <article className="quiz-question card bg-white rounded-3xl border border-[#E5E7EB] p-6 sm:p-8 shadow-sm space-y-6">
         {/* Question Header & Type Badge */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E8E5DF]/40 pb-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E5E7EB] pb-4">
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#FFF0DC] text-[#C2410C] font-black text-xs uppercase tracking-wider border border-[#FFCD00]/50">
+            <span className="px-3 py-1 rounded-full bg-[#FFF4E8] text-[#F28C45] font-bold text-xs uppercase tracking-wider border border-[#FED7AA]">
               <BilingualText vi={`Câu ${index + 1}`} en={`Question ${index + 1}`} /> · {question.questionType?.replaceAll('_', ' ') || <BilingualText vi="TRẮC NGHIỆM" en="MULTIPLE CHOICE" />}
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-stone-100 text-stone-700 font-bold text-xs">
+            <span className="px-2.5 py-1 rounded-full bg-stone-100 text-[#6B7280] font-bold text-xs">
               {question.points || 1} <BilingualText>{"điểm"}</BilingualText>
             </span>
           </div>
 
-          <span className="text-xs text-[#64748B] font-medium">
+          <span className="text-xs text-[#6B7280] font-medium">
             <BilingualText vi={`${answeredCount}/${questions.length} câu đã trả lời`} en={`${answeredCount}/${questions.length} answered`} />
           </span>
         </div>
 
         {/* Prompt */}
         <div className="space-y-3">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-black text-[#253044] leading-snug">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-black text-[#1F2937] leading-snug">
             <BilingualText vi={question.promptVi || question.prompt} en={question.prompt} />
           </h2>
 
           {question.imageUrl && (
-            <div className="rounded-2xl border border-[#E8E5DF]/60 overflow-hidden bg-[#FFFDF9] p-3 max-h-80 flex justify-center shadow-2xs">
+            <div className="rounded-2xl border border-[#E5E7EB] overflow-hidden bg-white p-3 max-h-80 flex justify-center shadow-2xs">
               <ContentImage
                 className="question-media max-h-72 w-auto object-contain rounded-xl"
                 src={question.imageUrl}
@@ -464,18 +465,18 @@ function Attempt({ attempt }) {
       </article>
 
       {/* Navigation Dock at Bottom */}
-      <div className="lesson-navigation flex items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-[#E8E5DF] shadow-xs">
+      <div className="lesson-navigation flex items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-[#E5E7EB] shadow-xs">
         <button
           type="button"
           disabled={busy || index === 0}
           onClick={() => changeQuestion(index - 1)}
-          className="button secondary inline-flex items-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-[#253044] bg-[#FFFCF7] hover:bg-[#FFF0DC] border border-[#E8E5DF] disabled:opacity-40 transition-all cursor-pointer"
+          className="button secondary inline-flex items-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-[#1F2937] bg-white hover:bg-stone-50 border border-[#E5E7EB] disabled:opacity-40 transition-all cursor-pointer"
         >
           <ArrowLeft size={14} />
           <BilingualText>{"Câu trước"}</BilingualText>
         </button>
 
-        <span className="text-xs text-[#64748B] font-medium hidden sm:inline-block text-center">
+        <span className="text-xs text-[#6B7280] font-medium hidden sm:inline-block text-center">
           <BilingualText>{"Đáp án được tự động lưu mỗi khi chuyển câu"}</BilingualText>
         </span>
 
@@ -484,7 +485,7 @@ function Attempt({ attempt }) {
             type="button"
             disabled={busy}
             onClick={() => setConfirm(true)}
-            className="button inline-flex items-center gap-2 py-2.5 px-6 rounded-xl text-xs sm:text-sm font-black text-white bg-[#F97316] hover:bg-[#C2410C] shadow-md hover:shadow-lg transition-all cursor-pointer"
+            className="button inline-flex items-center gap-2 py-2.5 px-6 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#F28C45] hover:bg-[#EA580C] shadow-sm transition-all cursor-pointer"
           >
             <CheckCircle2 size={15} />
             <BilingualText>{"Nộp bài thi →"}</BilingualText>
@@ -494,7 +495,7 @@ function Attempt({ attempt }) {
             type="button"
             disabled={busy}
             onClick={() => changeQuestion(index + 1)}
-            className="button inline-flex items-center gap-2 py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#F97316] hover:bg-[#C2410C] shadow-sm transition-all cursor-pointer"
+            className="button inline-flex items-center gap-2 py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#F28C45] hover:bg-[#EA580C] shadow-sm transition-all cursor-pointer"
           >
             <BilingualText>{"Câu tiếp theo"}</BilingualText>
             <ArrowRight size={14} />
@@ -618,24 +619,25 @@ function Result({ result }) {
       </div>
 
       {/* Main Result Celebration Card */}
-      <div className="quiz-result card relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFFCF7] via-[#FFFCF7] to-[#FFF7E8] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm text-center space-y-6">
+      <div className="quiz-result card relative overflow-hidden rounded-3xl bg-white border border-[#E5E7EB] p-6 sm:p-10 shadow-sm text-center space-y-6">
+        {passed && <FireworksBackground active={true} />}
         {/* Celebration / Outcome Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider shadow-2xs mx-auto border"
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-2xs mx-auto border"
           style={{
-            backgroundColor: passed ? '#DDF4E7' : '#FFF0EE',
-            color: passed ? '#22A06B' : '#DA251D',
-            borderColor: passed ? '#a7f3d0' : '#fecaca',
+            backgroundColor: passed ? '#F0FDF4' : '#FEF2F2',
+            color: passed ? '#16A34A' : '#EF4444',
+            borderColor: passed ? '#BBF7D0' : '#FECACA',
           }}
         >
           {passed ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
           <BilingualText>{passed ? 'Hoàn thành xuất sắc • Passed' : 'Cần ôn tập thêm • Keep Trying'}</BilingualText>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl font-black text-[#253044] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-black text-[#1F2937] tracking-tight">
           <BilingualText vi={result.quizTitleVi || result.quizTitle} en={result.quizTitle} />
         </h1>
 
-        <p className="text-sm text-[#64748B] max-w-xl mx-auto">
+        <p className="text-sm text-[#6B7280] max-w-xl mx-auto">
           <BilingualText
             vi={passed
               ? 'Tuyệt vời! Bạn đã làm chủ tốt các kiến thức trong bài học này.'
@@ -649,13 +651,13 @@ function Result({ result }) {
         {/* Circular Score Badge */}
         <div className="flex justify-center my-4">
           <div
-            className={`quiz-score relative flex flex-col items-center justify-center w-36 h-36 rounded-full border-4 shadow-md transition-all ${
+            className={`quiz-score relative flex flex-col items-center justify-center w-36 h-36 rounded-full border-4 shadow-sm transition-all ${
               passed
                 ? 'bg-emerald-50 border-emerald-500 text-emerald-800'
                 : 'bg-amber-50 border-amber-500 text-amber-800'
             }`}
           >
-            <span className="text-4xl font-black tracking-tight">{percentage}%</span>
+            <span className="text-4xl font-black tracking-tight"><CountingNumber number={percentage} />%</span>
             <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5 opacity-80">
               <BilingualText vi={passed ? 'Đạt chuẩn' : 'Chưa đạt'} en={passed ? 'Passed' : 'Needs Practice'} />
             </span>
@@ -668,14 +670,14 @@ function Result({ result }) {
             <span className="text-[10px] font-bold text-emerald-700 uppercase block tracking-wider">
               <BilingualText vi="Câu đúng" en="Correct" />
             </span>
-            <strong className="text-xl font-black text-emerald-800">{result.correctCount}</strong>
+            <strong className="text-xl font-black text-emerald-800"><CountingNumber value={result.correctCount} /></strong>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-white border border-rose-200 text-center shadow-2xs space-y-0.5">
             <span className="text-[10px] font-bold text-rose-700 uppercase block tracking-wider">
               <BilingualText vi="Câu sai" en="Incorrect" />
             </span>
-            <strong className="text-xl font-black text-rose-800">{result.incorrectCount}</strong>
+            <strong className="text-xl font-black text-rose-800"><CountingNumber value={result.incorrectCount} /></strong>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-white border border-stone-200 text-center shadow-2xs space-y-0.5">
@@ -693,17 +695,17 @@ function Result({ result }) {
         )}
 
         {/* Action Buttons */}
-        <div className="quiz-result-actions flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-[#E8E5DF]/40">
+        <div className="quiz-result-actions flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-[#E5E7EB]">
           <Link
             to={back}
-            className="button inline-flex items-center gap-2 py-3 px-6 rounded-2xl bg-[#F97316] hover:bg-[#C2410C] text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all no-underline cursor-pointer"
+            className="button inline-flex items-center gap-2 py-3 px-6 rounded-xl bg-[#F28C45] hover:bg-[#EA580C] text-white font-bold text-xs sm:text-sm shadow-sm transition-all no-underline cursor-pointer"
           >
             <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>
           </Link>
 
           <a
             href="#review-answers"
-            className="button secondary inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-white hover:bg-stone-50 text-[#253044] border border-[#E8E5DF] font-bold text-xs sm:text-sm shadow-2xs transition-all no-underline"
+            className="button secondary inline-flex items-center gap-2 py-3 px-5 rounded-xl bg-white hover:bg-stone-50 text-[#1F2937] border border-[#E5E7EB] font-bold text-xs sm:text-sm shadow-2xs transition-all no-underline"
           >
             <BilingualText>{"Xem chi tiết đáp án ↓"}</BilingualText>
           </a>
@@ -712,7 +714,7 @@ function Result({ result }) {
             type="button"
             disabled={busy || !result.canRetry}
             onClick={retry}
-            className="secondary inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-[#FFFCF7] hover:bg-[#FFF0DC] text-[#253044] border border-[#E8E5DF] font-bold text-xs sm:text-sm disabled:opacity-40 transition-all cursor-pointer"
+            className="secondary inline-flex items-center gap-2 py-3 px-5 rounded-xl bg-white hover:bg-[#FFF4E8] text-[#1F2937] border border-[#E5E7EB] font-bold text-xs sm:text-sm disabled:opacity-40 transition-all cursor-pointer"
           >
             <RotateCcw size={14} className={busy ? 'animate-spin' : ''} />
             <BilingualText>{busy ? 'Đang chuẩn bị…' : 'Làm lại quiz'}</BilingualText>
@@ -722,13 +724,13 @@ function Result({ result }) {
 
       {/* Review Answers Section */}
       <section className="quiz-workspace space-y-4" id="review-answers">
-        <div className="flex items-center gap-2 border-b border-[#E8E5DF]/50 pb-3">
-          <BookOpen size={20} className="text-[#F97316]" />
+        <div className="flex items-center gap-2 border-b border-[#E5E7EB] pb-3">
+          <BookOpen size={20} className="text-[#F28C45]" />
           <div>
-            <h2 className="text-lg sm:text-xl font-black text-[#253044] m-0">
+            <h2 className="text-lg sm:text-xl font-black text-[#1F2937] m-0">
               <BilingualText>{"Xem lại câu trả lời và giải thích chi tiết"}</BilingualText>
             </h2>
-            <p className="text-xs text-[#64748B] m-0">
+            <p className="text-xs text-[#6B7280] m-0">
               <BilingualText>{"Đối chiếu câu trả lời của bạn với đáp án chính xác của hệ thống."}</BilingualText>
             </p>
           </div>
@@ -740,35 +742,35 @@ function Result({ result }) {
 
             return (
               <details
-                className="answer-review card group rounded-2xl border border-[#E8E5DF] bg-white p-5 shadow-2xs open:shadow-xs transition-all"
+                className="answer-review card group rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-2xs open:shadow-xs transition-all"
                 key={question.questionId || qIdx}
                 open
               >
-                <summary className="flex items-start justify-between gap-3 cursor-pointer select-none list-none font-bold text-sm sm:text-base text-[#253044]">
+                <summary className="flex items-start justify-between gap-3 cursor-pointer select-none list-none font-bold text-sm sm:text-base text-[#1F2937]">
                   <div className="flex items-start gap-3 min-w-0">
                     <span
-                      className={`answer-mark w-7 h-7 rounded-xl flex items-center justify-center shrink-0 mt-0.5 font-black text-xs ${
+                      className={`answer-mark w-7 h-7 rounded-xl flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs ${
                         isCorrect
-                          ? 'correct bg-emerald-100 text-emerald-800 border border-emerald-300'
-                          : 'bg-rose-100 text-rose-800 border border-rose-300'
+                          ? 'correct bg-emerald-50 text-emerald-700 border border-emerald-200'
+                          : 'bg-rose-50 text-rose-700 border border-rose-200'
                       }`}
                     >
                       {isCorrect ? '✓' : '✕'}
                     </span>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-bold text-[#C2410C]">
+                        <span className="text-xs font-bold text-[#F28C45]">
                           <BilingualText vi={`Câu ${qIdx + 1}`} en={`Question ${qIdx + 1}`} />
                         </span>
                         <span
                           className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                            isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                            isCorrect ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'
                           }`}
                         >
                           <BilingualText vi={isCorrect ? 'Chính xác' : 'Chưa đúng'} en={isCorrect ? 'Correct' : 'Incorrect'} />
                         </span>
                       </div>
-                      <h3 className="text-sm sm:text-base font-bold text-[#253044] leading-snug">
+                      <h3 className="text-sm sm:text-base font-bold text-[#1F2937] leading-snug">
                         <BilingualText vi={question.promptVi || question.prompt} en={question.prompt} />
                       </h3>
                     </div>
@@ -780,7 +782,7 @@ function Result({ result }) {
                 </summary>
 
                 {/* Question Details Body */}
-                <div className="mt-4 pt-4 border-t border-[#E8E5DF]/40 space-y-3 text-xs sm:text-sm pl-10">
+                <div className="mt-4 pt-4 border-t border-[#E5E7EB] space-y-3 text-xs sm:text-sm pl-10">
                   {/* Learner's Answer */}
                   <div className="p-3 rounded-xl bg-stone-50 border border-stone-200">
                     <strong className="text-stone-600 block text-[11px] uppercase tracking-wider mb-0.5">
@@ -805,12 +807,12 @@ function Result({ result }) {
 
                   {/* Explanation */}
                   {(question.explanationVi || question.explanation) && (
-                    <div className="p-3.5 rounded-xl bg-[#FFFCF7] border border-[#FFCD00]/50 text-[#253044] flex items-start gap-2.5">
+                    <div className="p-3.5 rounded-xl bg-white border border-[#E5E7EB] text-[#1F2937] flex items-start gap-2.5">
                         <div className="space-y-0.5">
-                        <strong className="text-xs font-bold text-[#C2410C] block">
+                        <strong className="text-xs font-bold text-[#F28C45] block">
                           <BilingualText vi="Giải thích:" en="Explanation:" />
                         </strong>
-                        <p className="text-xs text-[#64748B] m-0 leading-relaxed">
+                        <p className="text-xs text-[#6B7280] m-0 leading-relaxed">
                           {question.explanationVi || question.explanation}
                         </p>
                       </div>

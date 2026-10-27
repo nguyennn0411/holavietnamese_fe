@@ -14,6 +14,7 @@ export const ROUTES = {
 
   // EdTech Next-Gen Experience
   EDTECH_DASHBOARD: '/edtech/dashboard',
+  LEARNING_PATH: '/learning-path',
   EDTECH_LESSON: '/edtech/lesson',
   EDTECH_VOCABULARY: '/edtech/vocabulary',
 

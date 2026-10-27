@@ -1,8 +1,8 @@
-﻿import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Lock, Bot, BookOpen, Compass, Palette, LogIn, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { BuffaloMascot, MascotSpeechBubble } from '@/components/mascot';
 import { BilingualText } from '@/components/common/BilingualText';
 import { AmbientWatermark } from '@/components/home/common/HeritageWatermark';
@@ -179,10 +179,10 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
 
   const mascotBubbleVi = isExistingUser
     ? feature.mascotBubbleVi
-    : 'Chào bạn mới! Hãy bắt đầu hành trình tại trang Welcome cùng Nghé để khám phá và làm quen trước khi mở khóa tính năng này nhé! ✨';
+    : 'Chào bạn mới! Hãy tạo tài khoản trước, sau đó Nghé sẽ hướng dẫn bạn qua phần onboarding để cá nhân hóa lộ trình nhé! ✨';
   const mascotBubbleEn = isExistingUser
     ? feature.mascotBubbleEn
-    : 'Welcome, newcomer! Start at the Welcome page with Nghé to discover your personal learning path! ✨';
+    : 'Welcome! Create your account first, then Nghé will guide you through onboarding to personalize your learning path! ✨';
 
   // If already logged in and visiting directly, take user to target
   if (isAuthenticated && targetPath && targetPath !== ROUTES.LOGIN_REQUIRED && targetPath !== ROUTES.AUTH_REQUIRED) {
@@ -296,13 +296,14 @@ export function AuthRequiredPage({ forcedFeature, targetPath: propTargetPath }) 
                 </>
               ) : (
                 <>
-                  {/* Primary for New User: Welcome */}
+                  {/* Primary for New User: register before onboarding */}
                   <Link
-                    to={ROUTES.WELCOME}
+                    to={ROUTES.REGISTER}
+                    state={{ from: targetPath.startsWith('/onboarding') ? '/onboarding/reason' : targetPath }}
                     className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#B31D16] hover:from-[#B31D16] hover:to-[#C2410C] text-white font-black text-sm text-center shadow-[0_4px_12px_rgba(218,37,29,0.28)] hover:shadow-lg active:scale-[0.99] transition-all flex items-center justify-center gap-2"
                   >
                     <ArrowRight size={18} />
-                    <BilingualText vi="Bắt đầu tại Welcome (Cho bạn mới)" en="Get Started at Welcome (For New Learners)" />
+                    <BilingualText vi="Đăng ký để bắt đầu" en="Register to Get Started" />
                   </Link>
 
                   {/* Secondary for New User: Sign In */}

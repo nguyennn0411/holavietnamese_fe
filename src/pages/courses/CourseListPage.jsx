@@ -6,20 +6,28 @@ import {
   Search,
   X,
   Play,
+  ArrowRight,
+  Compass,
+  Sparkles,
 } from 'lucide-react';
 import { useCourses } from '@/hooks/useCourses';
 import { CourseCard } from '@/components/course/CourseCard';
 import { ResourceState } from '@/components/common/ResourceState';
 import { EmptyState, Artwork } from '@/components/common/Ui';
+import {
+  GOAL_PROFILES,
+  PACE_PROFILES,
+  rankCoursesForRecommendation,
+} from '@/features/onboarding/services/recommendationEngine';
 
 const LEVEL_COLORS = {
-  all: 'bg-stone-500',
+  all: 'bg-stone-400',
   A0: 'bg-sky-500',
   A1: 'bg-emerald-500',
   A2: 'bg-teal-500',
   B1: 'bg-amber-500',
   B2: 'bg-purple-500',
-  C1: 'bg-[#FF7A00]',
+  C1: 'bg-[#F97316]',
 };
 
 export function CourseListPage() {
@@ -31,7 +39,11 @@ export function CourseListPage() {
     requestedLevel && Object.hasOwn(LEVEL_COLORS, requestedLevel) ? requestedLevel : 'all'
   ));
   const [statusFilter, setStatusFilter] = useState('all');
-  const isPlacementRecommendation = searchParams.get('recommended') === '1' && level !== 'all';
+  const goalId = searchParams.get('goal') || 'other';
+  const paceId = searchParams.get('pace') || 'steady';
+  const goalProfile = GOAL_PROFILES[goalId] || GOAL_PROFILES.other;
+  const paceProfile = PACE_PROFILES[paceId] || PACE_PROFILES.steady;
+  const isPersonalizedRecommendation = searchParams.get('recommended') === '1' && level !== 'all';
 
   const levelOptions = [
     { id: 'all', label: 'Tất cả trình độ', labelEn: 'All levels', desc: 'Toàn bộ khóa học', descEn: 'All courses' },
@@ -44,39 +56,40 @@ export function CourseListPage() {
   ];
 
   return (
-    <div className="courses-page w-full max-w-full px-0 py-6 space-y-8">
+    <div className="courses-page w-full max-w-full px-0 py-2 sm:py-4 space-y-7">
       {/* Hero Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-8 sm:p-12 shadow-sm">
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none overflow-hidden hidden md:block select-none">
+      <section className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#FFFDF9] via-[#FFF9F2] to-[#FFF3E6] border border-[#EADBC8]/70 p-6 sm:p-8 md:p-10 shadow-xs">
+        <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-[0.07] pointer-events-none overflow-hidden hidden md:block select-none">
           <Artwork kind="dong-son" className="w-full h-full object-contain object-right" />
         </div>
 
-        <div className="relative z-10 max-w-4xl space-y-4">
-          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-extrabold uppercase tracking-wider shadow-2xs">
+        <div className="relative z-10 max-w-3xl space-y-3.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF0DC] border border-[#FDBA74]/40 text-[#EA580C] text-[11px] sm:text-xs font-bold tracking-wide shadow-2xs">
+            <Sparkles size={13} className="text-[#EA580C]" />
             <BilingualText>{"Lộ trình toàn diện • Standard Vietnamese Curriculum"}</BilingualText>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#253044] tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E293B] tracking-tight leading-snug">
             <BilingualText>{"Học tiếng Việt theo lộ trình bài bản"}</BilingualText>
           </h1>
 
-          <p className="text-base sm:text-lg text-[#64748B] leading-relaxed max-w-3xl">
+          <p className="text-xs sm:text-sm md:text-base text-[#64748B] leading-relaxed max-w-2xl">
             <BilingualText>
               {"Tìm điểm bắt đầu của bạn. Từng bài học được thiết kế bám sát thực tế đời sống, ngữ pháp tự nhiên và văn hóa Việt Nam."}
             </BilingualText>
           </p>
 
-          <div className="pt-2 flex flex-wrap items-center gap-3">
+          <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
             <Link
               to="/my-learning"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-xs shadow-md hover:shadow-lg transition-all no-underline active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#F97316] hover:bg-[#EA580C] text-white font-bold text-xs shadow-xs hover:shadow transition-all no-underline active:scale-95"
             >
               <BilingualText>{"Góc học tập của tôi →"}</BilingualText>
             </Link>
 
             <Link
               to="/edtech/dashboard"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/90 hover:bg-white text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-all hover:border-[#FF7A00] no-underline active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-[#FFF9F2] text-[#1E293B] border border-[#E2E8F0] hover:border-[#FDBA74] font-bold text-xs shadow-2xs transition-all no-underline active:scale-95"
             >
               <BilingualText>{"Lộ trình học tương tác (EdTech) →"}</BilingualText>
             </Link>
@@ -84,39 +97,51 @@ export function CourseListPage() {
         </div>
       </section>
 
-      {isPlacementRecommendation && (
+      {isPersonalizedRecommendation && (
         <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/90 px-5 py-4 shadow-xs" role="status">
           <div className="flex items-start gap-3">
             <div>
-              <strong className="block text-sm text-emerald-950"><BilingualText vi="Khóa học phù hợp với kết quả Entry Test" en="Courses matching your Entry Test result" /></strong>
-              <span className="text-xs text-emerald-800"><BilingualText vi={`Kết quả của bạn phù hợp với trình độ ${level}. Danh sách bên dưới đã được lọc tự động.`} en={`Your result matches level ${level}. The list below has been filtered automatically.`} /></span>
+              <strong className="block text-sm text-emerald-950"><BilingualText vi="Lộ trình khóa học dành riêng cho bạn" en="Your personalized course pathway" /></strong>
+              <span className="text-xs text-emerald-800"><BilingualText vi={`${goalProfile.titleVi} · Bắt đầu ở ${level} · ${paceProfile.titleVi}.`} en={`${goalProfile.titleEn} · Starting at ${level} · ${paceProfile.titleEn}.`} /></span>
             </div>
           </div>
-          <button type="button" className="inline-flex min-h-9 shrink-0 items-center justify-center rounded-xl border border-emerald-300 bg-white px-4 text-xs font-bold text-emerald-900 hover:bg-emerald-100" onClick={() => setLevel('all')}><BilingualText vi="Xem tất cả trình độ" en="View all levels" /></button>
+          <button type="button" className="inline-flex min-h-8 shrink-0 items-center justify-center rounded-xl border border-emerald-300 bg-white px-3.5 py-1.5 text-xs font-bold text-emerald-900 hover:bg-emerald-100 transition-colors cursor-pointer" onClick={() => setLevel('all')}><BilingualText vi="Xem tất cả trình độ" en="View all levels" /></button>
         </section>
       )}
 
       {/* Alphabet Entry Banner */}
       <Link
         to="/alphabet"
-        className="card alphabet-course-entry flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FFF7E8] to-[#FFF0DC] border border-[#E8E5DF] hover:border-[#FF7A00] shadow-2xs hover:shadow-md transition-all text-decoration-none group"
+        className="alphabet-course-banner group flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-white hover:bg-[#FFFDF9] border border-[#E8E5DF] hover:border-[#FDBA74] shadow-2xs hover:shadow-xs transition-all duration-200 text-decoration-none"
       >
-        <div className="flex items-center gap-3.5">
-          <span className="w-11 h-11 rounded-2xl bg-[#FF7A00] text-white flex items-center justify-center font-black text-lg shadow-sm group-hover:scale-105 transition-transform">
+        <div className="flex items-center gap-3.5 min-w-0">
+          <div className="w-10 h-10 rounded-xl bg-[#FFF1E6] text-[#EA580C] border border-[#FED7AA]/60 flex items-center justify-center font-extrabold text-sm shadow-2xs shrink-0 group-hover:scale-105 transition-transform duration-200">
             Aa
-          </span>
-          <div>
-            <strong className="block text-sm sm:text-base font-black text-[#EA580C] group-hover:text-[#FF7A00] transition-colors">
-              <BilingualText vi="Bảng chữ cái tiếng Việt & 6 Thanh điệu →" en="Vietnamese Alphabet & 6 Tones →" />
-            </strong>
-            <span className="text-xs text-[#64748B] font-medium">
-              <BilingualText vi="29 chữ cái, ghép âm, thanh điệu đặc trưng · Tích hợp phát âm chuẩn giọng Bắc - Nam" en="29 letters, syllable combinations, tones · Northern & Southern standard pronunciation" />
-            </span>
+          </div>
+          <div className="space-y-0.5 min-w-0">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm sm:text-base font-bold text-[#1E293B] group-hover:text-[#EA580C] transition-colors m-0 truncate">
+                <BilingualText vi="Bảng chữ cái tiếng Việt & 6 Thanh điệu" en="Vietnamese Alphabet & 6 Tones" />
+              </h3>
+              <span className="hidden md:inline-flex px-2 py-0.5 rounded-full bg-[#FFF1E6] text-[#EA580C] text-[10px] font-bold">
+                <BilingualText vi="Nền tảng" en="Foundational" />
+              </span>
+            </div>
+            <p className="text-xs text-[#64748B] m-0 line-clamp-1">
+              <BilingualText
+                vi="29 chữ cái, ghép âm, thanh điệu đặc trưng · Tích hợp phát âm chuẩn giọng Bắc - Nam"
+                en="29 letters, syllable combinations, tones · Northern & Southern standard pronunciation"
+              />
+            </p>
           </div>
         </div>
-        <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-black text-[#FF7A00] group-hover:translate-x-1 transition-transform">
-          <BilingualText vi="Học phát âm ngay →" en="Learn pronunciation now →" />
-        </span>
+
+        <div className="flex items-center justify-end shrink-0">
+          <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FFF1E6] hover:bg-[#FFE4D3] text-[#EA580C] border border-[#FDBA74]/50 group-hover:border-[#EA580C]/40 text-xs font-bold transition-all shadow-2xs group-hover:shadow-xs">
+            <BilingualText vi="Học phát âm ngay" en="Learn pronunciation now" />
+            <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+          </span>
+        </div>
       </Link>
 
       {/* Main Content Area with Dynamic Filter Counts */}
@@ -187,167 +212,228 @@ export function CourseListPage() {
           });
 
           const enrolled = items.filter((i) => i.enrollment?.isEnrolled);
+          const recommendedCourses = isPersonalizedRecommendation
+            ? rankCoursesForRecommendation(items, { targetLevel: level, goalId }).slice(0, 3)
+            : [];
 
           return (
             <div className="space-y-8">
+              {recommendedCourses.length > 0 && (
+                <section className="space-y-4 rounded-3xl border border-orange-200 bg-gradient-to-br from-orange-50/90 to-white p-5 sm:p-7 shadow-sm" aria-labelledby="recommended-courses-title">
+                  <div className="max-w-3xl">
+                    <span className="text-[11px] font-black uppercase tracking-[0.16em] text-[#EA580C]"><BilingualText vi="Gợi ý từ kết quả onboarding" en="Recommended from your onboarding" /></span>
+                    <h2 id="recommended-courses-title" className="mt-1 mb-1 text-xl sm:text-2xl font-black text-[#253044]"><BilingualText vi="Nên học những khóa này trước" en="Start with these courses" /></h2>
+                    <p className="m-0 text-xs sm:text-sm leading-relaxed text-[#64748B]"><BilingualText vi={`Các khóa học được xếp hạng theo trình độ ${level} và mục tiêu “${goalProfile.titleVi}”.`} en={`Courses are ranked for level ${level} and your goal: “${goalProfile.titleEn}”.`} /></p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {recommendedCourses.map(({ course, enrollment }, index) => (
+                      <CourseCard key={`recommended-${course.id}`} course={course} enrollment={enrollment} recommendationRank={index + 1} />
+                    ))}
+                  </div>
+                </section>
+              )}
+
               {/* Modern Filter Toolbar */}
-              <section className="bg-white/85 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-4 sm:p-5 shadow-xs space-y-4">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <section className="bg-white rounded-2xl border border-[#E8E5DF] p-4 sm:p-5 shadow-2xs space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   {/* Search Bar */}
-                  <div className="relative flex-1 max-w-md">
+                  <div className="relative flex-1 max-w-full sm:max-w-md md:max-w-lg">
                     <Search
-                      size={17}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]"
+                      size={15}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]"
                     />
                     <input
                       type="text"
                       aria-label={bilingualLabel("Tìm khóa học", "Search courses")}
-                      placeholder={bilingualLabel("Tìm khóa học theo tên hoặc nội dung…")}
+                      placeholder={bilingualLabel("Tìm khóa học theo tên hoặc nội dung…", "Search courses by title or topic…")}
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      className="w-full pl-10 pr-9 py-2.5 bg-[#FFF7E8] border border-[#E8E5DF] focus:border-[#FF7A00] focus:ring-2 focus:ring-[#FF7A00]/10 rounded-xl text-xs sm:text-sm text-[#253044] placeholder-[#64748B]/60 transition-all outline-hidden"
+                      className="w-full pl-9 pr-9 py-2 bg-white border border-[#E2E8F0] focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/15 rounded-xl text-xs sm:text-sm text-[#1E293B] placeholder:text-[#94A3B8] transition-all outline-hidden shadow-2xs"
                     />
                     {search && (
                       <button
                         type="button"
                         onClick={() => setSearch('')}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#253044] p-1 cursor-pointer"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#1E293B] p-1 cursor-pointer transition-colors"
                         aria-label={bilingualLabel("Xóa tìm kiếm", "Clear search")}
                       >
-                        <X size={15} />
+                        <X size={14} />
                       </button>
                     )}
                   </div>
 
-                  <div className="text-xs font-semibold text-[#64748B] flex items-center gap-1.5 self-end md:self-center">
+                  <div className="text-xs font-medium text-[#64748B] flex items-center gap-1.5 self-start sm:self-center shrink-0">
+                    <Compass size={14} className="text-[#F97316]" />
                     <span>
                       <BilingualText>{"Khám phá kho khóa học chuẩn CEFR"}</BilingualText>
                     </span>
                   </div>
                 </div>
 
-                {/* Status Filter Tabs with Counts */}
-                <div
-                  className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-[#E8E5DF]/40"
-                  role="tablist"
-                  aria-label={bilingualLabel("Trạng thái học tập", "Learning status")}
-                >
-                  {statusOptions.map((opt) => {
-                    const isActive = statusFilter === opt.id;
-                    return (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        role="tab"
-                        aria-selected={isActive}
-                        onClick={() => setStatusFilter(opt.id)}
-                        className={`flex-shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
-                          isActive
-                            ? 'bg-[#253044] text-[#FFF7E8] shadow-xs'
-                            : 'text-[#64748B] hover:text-[#253044] hover:bg-[#F7F0E3]/70'
-                        }`}
-                      >
-                        <BilingualText vi={opt.label} en={opt.labelEn} />
-                        <span
-                          className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                            isActive
-                              ? 'bg-white/20 text-white'
-                              : 'bg-stone-200/70 text-stone-600'
-                          }`}
-                        >
-                          {opt.count}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Level Filter Pills */}
-                <div
-                  className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-none"
-                  role="tablist"
-                  aria-label={bilingualLabel("Trình độ khóa học", "Course level")}
-                >
-                  {levelOptions.map((opt) => {
-                    const isActive = level === opt.id;
-                    const dotColor = LEVEL_COLORS[opt.id] || 'bg-stone-400';
-
-                    return (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        role="tab"
-                        aria-selected={isActive}
-                        onClick={() => setLevel(opt.id)}
-                        className={`flex-shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 flex items-center gap-2 cursor-pointer ${
-                          isActive
-                            ? 'bg-[#FF7A00] text-white shadow-sm ring-1 ring-[#EA580C]'
-                            : 'bg-[#FFF7E8] text-[#64748B] hover:text-[#253044] hover:bg-[#F7F0E3] border border-[#E8E5DF]/70'
-                        }`}
-                      >
-                        {opt.id !== 'all' && (
-                          <span
-                            className={`w-2 h-2 rounded-full ${
-                              isActive ? 'bg-white' : dotColor
+                <div className="space-y-3 pt-3 border-t border-[#E8E5DF]/60">
+                  {/* Status Filter Tabs / Segmented Controls */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                    <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider min-w-[72px] shrink-0">
+                      <BilingualText vi="Trạng thái" en="Status" />
+                    </span>
+                    <div
+                      className="flex flex-wrap items-center gap-1.5"
+                      role="tablist"
+                      aria-label={bilingualLabel("Trạng thái học tập", "Learning status")}
+                    >
+                      {statusOptions.map((opt) => {
+                        const isActive = statusFilter === opt.id;
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            role="tab"
+                            aria-selected={isActive}
+                            onClick={() => setStatusFilter(opt.id)}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                              isActive
+                                ? 'bg-[#FFF1E6] text-[#EA580C] border border-[#FDBA74] shadow-2xs font-bold'
+                                : 'bg-white text-[#64748B] hover:text-[#1E293B] hover:bg-[#F8FAFC] border border-[#E2E8F0]'
                             }`}
-                          />
-                        )}
-                        <BilingualText vi={opt.label} en={opt.labelEn} />
-                      </button>
-                    );
-                  })}
+                          >
+                            <BilingualText vi={opt.label} en={opt.labelEn} />
+                            <span
+                              className={`text-[11px] px-1.5 py-0.2 rounded-full font-bold ${
+                                isActive
+                                  ? 'bg-[#EA580C]/15 text-[#EA580C]'
+                                  : 'bg-[#E2E8F0] text-[#64748B]'
+                              }`}
+                            >
+                              {opt.count}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Level Filter Chips */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                    <span className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider min-w-[72px] shrink-0">
+                      <BilingualText vi="Trình độ" en="Level" />
+                    </span>
+                    <div
+                      className="flex flex-wrap items-center gap-1.5"
+                      role="tablist"
+                      aria-label={bilingualLabel("Trình độ khóa học", "Course level")}
+                    >
+                      {levelOptions.map((opt) => {
+                        const isActive = level === opt.id;
+                        const dotColor = LEVEL_COLORS[opt.id] || 'bg-stone-400';
+
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            role="tab"
+                            aria-selected={isActive}
+                            onClick={() => setLevel(opt.id)}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+                              isActive
+                                ? 'bg-[#FFF1E6] text-[#EA580C] border border-[#FDBA74] font-bold shadow-2xs'
+                                : 'bg-white text-[#64748B] hover:text-[#1E293B] hover:bg-[#F8FAFC] border border-[#E2E8F0]'
+                            }`}
+                          >
+                            {opt.id !== 'all' && (
+                              <span
+                                className={`w-2 h-2 rounded-full shrink-0 ${
+                                  isActive ? 'bg-[#EA580C]' : dotColor
+                                }`}
+                              />
+                            )}
+                            <BilingualText vi={opt.label} en={opt.labelEn} />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </section>
 
               {/* Resume Course Strip if Enrolled (only on all filter without active search) */}
-              {enrolled.length > 0 && statusFilter === 'all' && !search && (
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-3xl bg-gradient-to-r from-[#24382B] via-[#2F4A39] to-[#3B5B47] text-[#FFF7E8] p-5 sm:p-7 shadow-md border border-[#24382B] flex flex-col sm:flex-row sm:items-center justify-between gap-5"
-                >
-                  <div className="space-y-1.5">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-[#EDF0E5] text-[#24382B] font-extrabold text-[11px] uppercase tracking-wider">
-                      <Play size={11} fill="currentColor" />
-                      <BilingualText>{"Tiếp nối hành trình học tập"}</BilingualText>
-                    </span>
-                    <h2 className="text-xl sm:text-2xl font-black text-white m-0">
-                      <BilingualText vi={enrolled[0].course.titleVi || enrolled[0].course.title} en={enrolled[0].course.title} />
-                    </h2>
-                    <p className="text-xs text-[#D5DDCB] m-0">
-                      <BilingualText>
-                        {"Khóa học bạn đang theo học gần đây nhất. Hãy tiếp tục để duy trì phản xạ!"}
-                      </BilingualText>
-                    </p>
-                  </div>
+              {enrolled.length > 0 && statusFilter === 'all' && !search && (() => {
+                const resumeItem = enrolled[0];
+                const resumeCourse = resumeItem.course;
+                const resumeEnrollment = resumeItem.enrollment;
+                const progressPercent = resumeEnrollment?.progressPercentage != null
+                  ? resumeEnrollment.progressPercentage
+                  : (resumeEnrollment?.totalLessons && resumeEnrollment?.completedLessons != null
+                      ? Math.round((resumeEnrollment.completedLessons / resumeEnrollment.totalLessons) * 100)
+                      : null);
 
-                  <Link
-                    to={`/learn/${enrolled[0].course.id}`}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#253044] font-black text-xs shadow-md transition-all self-start sm:self-center shrink-0 no-underline"
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-2xl bg-gradient-to-r from-[#FFFDF9] via-[#FFF9F0] to-[#FFF3E6] border border-[#FED7AA]/70 p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                   >
-                    <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>
-                  </Link>
-                </motion.div>
-              )}
+                    <div className="space-y-1.5 max-w-2xl">
+                      <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#EA580C]">
+                        <Play size={12} className="fill-[#EA580C]" />
+                        <BilingualText vi="Tiếp nối hành trình học tập" en="Continue your learning journey" />
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-bold text-[#1E293B] m-0">
+                        <BilingualText vi={resumeCourse.titleVi || resumeCourse.title} en={resumeCourse.title} />
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#64748B] m-0 line-clamp-1">
+                        <BilingualText
+                          vi="Bạn đang theo học khóa học này. Hãy tiếp tục để duy trì phản xạ và tiến độ nhé!"
+                          en="You are currently learning this course. Keep going to maintain your streak and fluency!"
+                        />
+                      </p>
+
+                      {progressPercent != null && (
+                        <div className="flex items-center gap-3 pt-1">
+                          <div className="w-36 sm:w-48 h-1.5 rounded-full bg-[#E2E8F0] overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-[#F97316] to-[#EA580C] transition-all duration-300"
+                              style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%` }}
+                            />
+                          </div>
+                          <span className="text-xs font-bold text-[#EA580C]">{progressPercent}%</span>
+                          {resumeEnrollment?.totalLessons && resumeEnrollment?.completedLessons != null && (
+                            <span className="text-xs text-[#94A3B8]">
+                              ({resumeEnrollment.completedLessons}/{resumeEnrollment.totalLessons} <BilingualText vi="bài" en="lessons" />)
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <Link
+                      to={`/learn/${resumeCourse.id}`}
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#F97316] hover:bg-[#EA580C] text-white font-bold text-xs shadow-xs hover:shadow transition-all self-start sm:self-center shrink-0 no-underline cursor-pointer"
+                    >
+                      <BilingualText vi="Tiếp tục học ngay" en="Continue learning now" />
+                      <ArrowRight size={14} />
+                    </Link>
+                  </motion.div>
+                );
+              })()}
 
               {/* Section Heading with Counter */}
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center justify-between pt-1">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-[#253044] tracking-tight m-0">
-                    <BilingualText>{"Một thế giới để khám phá"}</BilingualText>
+                  <h2 className="text-lg sm:text-xl font-bold text-[#1E293B] tracking-tight m-0">
+                    <BilingualText vi="Một thế giới để khám phá" en="A World to Explore" />
                   </h2>
                   <p className="text-xs text-[#64748B] mt-0.5 m-0">
-                    <BilingualText>{"Danh sách các khóa học được biên soạn chuẩn khung năng lực"}</BilingualText>
+                    <BilingualText vi="Danh sách các khóa học được biên soạn chuẩn khung năng lực" en="Standard curriculum courses designed for fluency" />
                   </p>
                 </div>
-                <span className="px-3.5 py-1 rounded-full bg-[#FFF7E8] border border-[#E8E5DF] text-xs font-black text-[#FF7A00] shadow-2xs">
-                  {filtered.length} <BilingualText>{"khóa học"}</BilingualText>
+                <span className="px-3 py-1 rounded-full bg-white border border-[#E2E8F0] text-xs font-semibold text-[#64748B] shadow-2xs">
+                  {filtered.length} <BilingualText vi="khóa học" en="courses" />
                 </span>
               </div>
 
               {/* Grid of Course Cards */}
               {filtered.length > 0 ? (
-                <div className="card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 xl:gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-6">
                   {filtered.map(({ course, enrollment }) => (
                     <CourseCard key={course.id} course={course} enrollment={enrollment} />
                   ))}
@@ -371,9 +457,9 @@ export function CourseListPage() {
                           setLevel('all');
                           setStatusFilter('all');
                         }}
-                        className="px-5 py-2.5 rounded-2xl bg-[#FF7A00] text-white font-bold text-xs shadow-xs hover:bg-[#EA580C] transition-all cursor-pointer"
+                        className="px-4 py-2 rounded-xl bg-[#F97316] text-white font-semibold text-xs shadow-2xs hover:bg-[#EA580C] transition-all cursor-pointer"
                       >
-                        <BilingualText>{"Đặt lại tất cả bộ lọc"}</BilingualText>
+                        <BilingualText vi="Đặt lại tất cả bộ lọc" en="Reset all filters" />
                       </button>
                     </div>
                   )}

@@ -5160,6 +5160,14 @@ export const UI_TRANSLATIONS = {
     "Bản nháp",
     "Draft"
   ],
+  "REVIEW": [
+    "Chờ duyệt",
+    "Pending review"
+  ],
+  "REJECTED": [
+    "Cần chỉnh sửa",
+    "Changes requested"
+  ],
   "PUBLISHED": [
     "Đã xuất bản",
     "Published"

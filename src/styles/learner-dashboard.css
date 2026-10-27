@@ -50,6 +50,68 @@
   font-size: 13px;
 }
 
+.ld-manager-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 20px 22px;
+  border: 1px solid #fed7aa;
+  border-radius: 18px;
+  background: linear-gradient(110deg, #fff7ed 0%, #ffffff 62%, #ffedd5 100%);
+  box-shadow: 0 8px 24px rgba(194, 65, 12, 0.08);
+}
+
+.ld-manager-entry__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  color: #ffffff;
+  background: var(--ld-deep);
+}
+
+.ld-manager-entry .ld-eyebrow {
+  margin-bottom: 4px;
+}
+
+.ld-manager-entry h2 {
+  margin-bottom: 4px;
+  font-size: 20px;
+  letter-spacing: -.02em;
+}
+
+.ld-manager-entry p {
+  margin-bottom: 0;
+  color: var(--ld-muted);
+  font-size: 13px;
+}
+
+.ld-button--manager {
+  color: #ffffff;
+  background: var(--ld-deep);
+  box-shadow: 0 8px 18px rgba(194, 65, 12, 0.2);
+}
+
+.ld-button--manager:hover {
+  color: #ffffff;
+  background: #9a3412;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 720px) {
+  .ld-manager-entry {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .ld-manager-entry .ld-button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
 .ld-welcome {
   display: flex;
   align-items: center;

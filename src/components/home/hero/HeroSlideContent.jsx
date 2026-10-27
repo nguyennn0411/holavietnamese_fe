@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { localizedSiteField, safeExternalUrl, safeInternalPath } from '@/application/context/SiteContentContext';
+import { localizedSiteField, safeExternalUrl, safeInternalPath } from '@/contexts/SiteContentContext';
 
 function BannerAction({ banner, label }) {
   if (!label || banner?.actionType === 'NONE') return null;

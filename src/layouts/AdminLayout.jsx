@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
-import { useAuth } from '@/application/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import { PageTransition } from '@/components/common/PageTransition';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 const groups = [
   { title: 'Tổng quan', links: [[ROUTES.ADMIN, 'Dashboard'], [ROUTES.ADMIN_USERS, 'Người dùng']] },
   { title: 'Nội dung học tập', links: [['/admin/courses', 'Khóa học'], ['/admin/lessons', 'Bài học'], [ROUTES.ADMIN_VOCABULARY, 'Từ vựng'], ['/admin/questions', 'Ngân hàng câu hỏi'], ['/admin/quizzes', 'Quiz']] },
@@ -33,9 +34,16 @@ export function AdminLayout() {
     document.addEventListener('keydown', keydown);
     return () => { document.removeEventListener('keydown', keydown); previous?.focus(); };
   }, [open]);
-  const visibleGroups = isContentManager && !isAdmin
-    ? [{ title: 'Nội dung học tập', links: [['/admin/courses', 'Biên soạn khóa học']] }]
-    : groups;
+  const vocabularyAllowed = canReadVocabulary(user);
+  const exploreAllowed = canReadExplore(user);
+  const visibleGroups = groups.map(group => ({
+    ...group,
+    links: group.links.filter(([to]) => {
+      if (to === ROUTES.ADMIN_VOCABULARY) return vocabularyAllowed;
+      if (to === ROUTES.ADMIN_DESTINATIONS) return exploreAllowed;
+      return isAdmin || (isContentManager && to === '/admin/courses');
+    }).map(([to, label]) => [to, isContentManager && !isAdmin && to === '/admin/courses' ? 'Biên soạn khóa học' : label]),
+  })).filter(group => group.links.length > 0);
   const location = useLocation();
   const contentFlowPrefixes = ['/admin/courses', '/admin/lessons', '/admin/questions', '/admin/quizzes'];
   const inContentFlow = contentFlowPrefixes.some(prefix => location.pathname === prefix || location.pathname.startsWith(prefix + '/'));
@@ -45,7 +53,7 @@ export function AdminLayout() {
   return <div className={`admin-wrapper ${open ? 'admin-menu-open' : ''}`}>
     <a className="skip-link" href="#admin-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
     <aside ref={sidebar} id="admin-navigation" className="admin-sidebar">
-      <Link to={isAdmin ? '/admin' : '/admin/courses'} className="admin-sidebar-header">hola admin<span><BilingualText>{"CONTENT & LEARNING"}</BilingualText></span></Link>
+      <Link to={isAdmin ? '/admin' : (visibleGroups[0]?.links[0]?.[0] || '/')} className="admin-sidebar-header">hola admin<span><BilingualText>{"CONTENT & LEARNING"}</BilingualText></span></Link>
       <nav className="admin-nav" aria-label={bilingualLabel("Điều hướng quản trị", "Admin navigation")}>{visibleGroups.map(group => <div className="admin-nav-group" key={group.title}><p><BilingualText>{group.title}</BilingualText></p>{group.links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/admin'} onClick={() => setOpen(false)} className={({ isActive }) => `admin-nav-item ${isActive || (isContentManager && !isAdmin && to === '/admin/courses' && inContentFlow) ? 'active' : ''}`}><BilingualText>{label}</BilingualText></NavLink>)}</div>)}</nav>
       <div className="admin-sidebar-footer"><Link to="/"><ArrowLeft size={16} aria-hidden="true"/><BilingualText>{"Giao diện học viên"}</BilingualText></Link><button className="admin-logout" onClick={logout}><LogOut size={16} aria-hidden="true"/><BilingualText>{"Đăng xuất"}</BilingualText></button></div>
     </aside>

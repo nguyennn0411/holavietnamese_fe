@@ -3,14 +3,15 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Check, CircleAlert, Clock3, Play, RefreshCw, Target, Trophy, Volume2 } from 'lucide-react';
+import { ArrowRight, Check, CircleAlert, Clock3, Play, RefreshCw, Target, Volume2 } from 'lucide-react';
 import { learnerService } from '@/services/learnerService';
 import { WORD_OF_THE_DAY } from '@/components/home/data/homeData';
 import { speakVietnamese } from '@/utils/speech';
 import { LearnerHeroCarousel } from './LearnerHeroCarousel';
 import { LearnerMotivationStrip } from './LearnerMotivationStrip';
-import '@/presentation/styles/learner-dashboard.css';
+import '@/styles/learner-dashboard.css';
 import { BuffaloMascot, MascotOnboarding, MascotSpeechBubble } from '@/components/mascot';
+import { SpotlightCard } from '@/components/common/animate/SpotlightCard';
 
 const clampPercent = (value) => Math.min(100, Math.max(0, Number(value) || 0));
 
@@ -26,9 +27,11 @@ function DashboardSkeleton() {
 
 function StatCard({ label, value, detail, tone }) {
   return (
-    <article className={`ld-stat ld-stat--${tone}`}>
+    <SpotlightCard maxTilt={3} className="h-full">
+      <article className={`ld-stat ld-stat--${tone} h-full`}>
       <div><span>{label}</span><strong>{value ?? '—'}</strong><small>{detail}</small></div>
-    </article>
+      </article>
+    </SpotlightCard>
   );
 }
 
@@ -55,13 +58,12 @@ export function LearnerDashboard({ user }) {
   const displayName = user?.fullName || user?.username || t('dashboard.learner');
   const lessonId = currentLesson?.lessonId ?? currentLesson?.id;
   const courseId = currentLesson?.courseId;
-  const continueTo = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : courseId ? `/learn/${courseId}` : '/edtech/dashboard';
+  const continueTo = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : courseId ? `/learn/${courseId}` : '/learning-path';
   const activities = Array.isArray(progress?.recentActivities) ? progress.recentActivities : [];
   const quests = Array.isArray(progress?.dailyChallenges) ? progress.dailyChallenges : [];
-  const leaderboard = Array.isArray(progress?.weeklyLeaderboard) ? progress.weeklyLeaderboard : [];
 
   const modules = useMemo(() => [
-    { to: '/edtech/dashboard', title: <BilingualText vi="Lộ trình học" en="Learning roadmap" />, text: <BilingualText vi="Bản đồ bài học tương tác từng bước" en="Step-by-step interactive lesson map." />, tone: 'red' },
+    { to: '/learning-path', title: <BilingualText vi="Lộ trình học" en="Learning roadmap" />, text: <BilingualText vi="Bản đồ bài học tương tác từng bước" en="Step-by-step interactive lesson map." />, tone: 'red' },
     { to: '/vocabulary', title: <BilingualText vi="Từ vựng" en="Vocabulary" />, text: <BilingualText vi="Ôn từ đã lưu và tăng khả năng ghi nhớ." en="Review saved words and build recall." />, tone: 'gold' },
     { to: '/courses', title: <BilingualText vi="Khóa học" en="Courses" />, text: <BilingualText vi="Danh mục khóa học đa dạng theo chủ đề" en="Diverse course catalog organized by topic." />, tone: 'blue' },
     { to: '/ai-tutor', title: <BilingualText vi="Luyện nói với AI" en="AI speaking practice" />, text: <BilingualText vi="Tự tin hơn qua hội thoại có hướng dẫn." en="Build confidence in guided conversations." />, tone: 'green' },
@@ -117,7 +119,7 @@ export function LearnerDashboard({ user }) {
                 <h2><BilingualText vi="Lộ trình học tập cá nhân hóa" en="Personalized Learning Path" /></h2>
                 <p><BilingualText vi="Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo." en="Explore the Vietnamese learning roadmap station by station, collect XP, and unlock interactive lessons." /></p>
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.25rem' }}>
-                  <Link to="/edtech/dashboard" className="ld-button ld-button--primary">
+                  <Link to="/learning-path" className="ld-button ld-button--primary">
                     <BilingualText vi="Vào lộ trình học" en="Open learning roadmap" /><ArrowRight size={16} />
                   </Link>
                   <Link to="/courses" className="ld-button" style={{ background: '#f5efe6', color: '#EA580C', border: '1px solid #ebdccb' }}>
@@ -144,11 +146,6 @@ export function LearnerDashboard({ user }) {
             <div className="ld-heading"><div><span>{t('dashboard.today')}</span><h2>{t('todayChallenges')}</h2></div><Target size={20} /></div>
             <div className="ld-daily__goal"><div><span>{t('dailyGoal')}</span><strong>{todayMinutes}{dailyGoal ? ` / ${dailyGoal}` : ''} {t('minutes')}</strong></div><div className="ld-progress"><span style={{ '--progress': `${dailyPercent}%` }} /></div></div>
             {quests.length ? <div className="ld-quest-list">{quests.slice(0, 4).map((quest, index) => <div key={quest.id ?? index} className={quest.done ? 'is-done' : ''}><span>{quest.done ? <Check size={12} /> : index + 1}</span><div><strong>{isVi ? quest.title : (quest.titleEn || quest.title)}</strong>{quest.progress && <small>{quest.progress}</small>}</div>{quest.xp != null && <b>+{quest.xp} XP</b>}</div>)}</div> : <div className="ld-empty ld-empty--compact"><Target size={23} /><p>{t('challengeEmpty')}</p></div>}
-          </section>
-
-          <section className="ld-card ld-leaderboard">
-            <div className="ld-heading"><div><span>{t('dashboard.community')}</span><h2>{t('weeklyLeaderboard')}</h2></div><Trophy size={20} /></div>
-            {leaderboard.length ? <div className="ld-leaderboard__list">{leaderboard.slice(0, 5).map((item, index) => <div key={item.id ?? item.rank ?? index} className={item.isUser ? 'is-user' : ''}><span>{item.rank ?? index + 1}</span><strong><BilingualText vi={item.name} en={item.nameEn || item.name} /></strong><b>{item.xp} XP</b></div>)}</div> : <div className="ld-empty ld-empty--compact"><Trophy size={23} /><p>{t('noLeaderboard')}</p></div>}
           </section>
 
           <section className="ld-review-card">

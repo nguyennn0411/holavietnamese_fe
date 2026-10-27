@@ -1,15 +1,7 @@
-import { BilingualText, BilingualTextProvider } from '@/components/common/BilingualText';
-import { lazy, Suspense } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from '@/application/context/AuthContext';
-import { SiteContentProvider } from '@/application/context/SiteContentContext';
-import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext';
-import { ErrorBoundary } from '@/components/common/ErrorBoundary';
-import { RequireAuth } from '@/components/common/RequireAuth';
-import { AdminRoute } from '@/components/common/AdminRoute';
-import { ROUTES } from '@/constants/routes';
-const AppToaster = lazy(() => import('@/components/common/AppToaster'));
+import { AppProviders } from '@/app/providers/AppProviders';
+import { AppRouter } from '@/app/router/AppRouter';
 
+<<<<<<< HEAD
 // Layouts
 import { MainLayout } from '@/layouts/MainLayout';
 import { AdminLayout } from '@/layouts/AdminLayout';
@@ -242,7 +234,12 @@ function App() {
         </OnboardingProvider></AuthProvider></SiteContentProvider>
       </ErrorBoundary>
     </RouteTextLanguage></BrowserRouter>
+=======
+export default function App() {
+  return (
+    <AppProviders>
+      <AppRouter />
+    </AppProviders>
+>>>>>>> 8d43116e8293d0a5196eba58e2247eab915417b2
   );
 }
-
-export default App;

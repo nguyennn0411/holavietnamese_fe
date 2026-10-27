@@ -80,8 +80,6 @@ export function AlphabetPage() {
           </div>
         </header>
 
-        <SyllableChart />
-
         <section
           className="alphabet-card alphabet-red"
           aria-labelledby="alphabet-title"
@@ -193,6 +191,8 @@ export function AlphabetPage() {
             {tiles(data.tones, "tones")}
           </div>
         </section>
+
+        <SyllableChart />
 
         <div className="alphabet-player" aria-label={bilingualLabel("Điều khiển âm thanh", "Audio controls")}>
           <span className="alphabet-player-symbol" aria-hidden="true">

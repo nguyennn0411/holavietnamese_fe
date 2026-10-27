@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { BUNDLED_BANNER_IMAGES, DEFAULT_BANNERS, DEFAULT_MENU_ITEMS } from '@/config/siteContentDefaults';
 import { siteContentService } from '@/services/siteContentService';
@@ -251,3 +252,7 @@ export function useSiteContent() {
 }
 
 export default SiteContentContext;
+=======
+export * from '@/contexts/SiteContentContext';
+export { default } from '@/contexts/SiteContentContext';
+>>>>>>> 8d43116e8293d0a5196eba58e2247eab915417b2

@@ -6,8 +6,13 @@ import { ContentImage } from '@/components/common/ContentImage';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, GraduationCap } from 'lucide-react';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
+import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 
 export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
+  const contentAdminPath = canReadVocabulary(user) ? ROUTES.ADMIN_VOCABULARY
+    : canReadExplore(user) ? ROUTES.ADMIN_DESTINATIONS
+      : canImportVocabulary(user) ? ROUTES.ADMIN_IMPORT
+        : null;
   const label = useBilingualLabel();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
@@ -114,9 +119,15 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
               </Link>
             )}
             {isContentManager && !isAdmin && (
-              <Link to="/admin/courses" onClick={closeMenu} role="menuitem" className="user-menu__admin">
+              <Link to={ROUTES.ADMIN_COURSES} onClick={closeMenu} role="menuitem" className="user-menu__admin">
                 <Shield size={16} />
-                <BilingualText vi="Quản lý khóa học" en="Course Management" />
+                <BilingualText vi="Quản lý khóa học" en="Manage Courses" />
+              </Link>
+            )}
+            {!isContentManager && contentAdminPath && !isAdmin && (
+              <Link to={contentAdminPath} onClick={closeMenu} role="menuitem" className="user-menu__admin">
+                <Shield size={16} />
+                <BilingualText vi="Quản lý nội dung" en="Content Management" />
               </Link>
             )}
             <button type="button" className="user-menu__logout" onClick={handleLogout} role="menuitem">
