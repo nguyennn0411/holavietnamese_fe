@@ -1,5 +1,5 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { learningService } from '@/services/learningService';
 import { useLearning } from '@/hooks/useLearning';
@@ -44,8 +44,11 @@ function LessonScreen({ courseId, lessonId }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const [savingWord, setSavingWord] = useState(false);
+  const [selectedWord, setSelectedWord] = useState('');
+  const [selectionAction, setSelectionAction] = useState(null);
   const [message, setMessage] = useState('');
   const [contentLesson, setContentLesson] = useState(null);
+  const lessonContentRef = useRef(null);
 
   // Trạng thái mở/đóng thanh bên (Sidebar danh sách bài học)
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -56,6 +59,49 @@ function LessonScreen({ courseId, lessonId }) {
       setSidebarOpen(true);
     }
   }, []);
+
+  useEffect(() => {
+    setSelectionAction(null);
+    setSelectedWord('');
+  }, [lessonId]);
+
+  function captureSelectedVocabulary() {
+    window.setTimeout(() => {
+      const selection = window.getSelection();
+      if (!selection || selection.isCollapsed || selection.rangeCount === 0) {
+        setSelectionAction(null);
+        return;
+      }
+
+      const range = selection.getRangeAt(0);
+      if (!lessonContentRef.current?.contains(range.commonAncestorContainer)) {
+        setSelectionAction(null);
+        return;
+      }
+
+      const word = selection.toString().replace(/\s+/g, ' ').trim();
+      if (!word || word.length > 200) {
+        setSelectionAction(null);
+        return;
+      }
+
+      const rect = range.getBoundingClientRect();
+      if (!rect.width && !rect.height) return;
+      setSelectionAction({
+        word,
+        left: Math.min(Math.max(rect.left + rect.width / 2, 88), window.innerWidth - 88),
+        top: Math.max(rect.top - 12, 56),
+      });
+    }, 0);
+  }
+
+  function openSelectionVocabularyForm(word = selectionAction?.word) {
+    if (!word) return;
+    setSelectedWord(word);
+    setSelectionAction(null);
+    setSavingWord(true);
+    window.getSelection()?.removeAllRanges();
+  }
 
   async function complete() {
     setPending(true);
@@ -193,7 +239,12 @@ function LessonScreen({ courseId, lessonId }) {
                 )}
 
                 {/* 2. Nội dung bài học chính */}
-                <main className="flex-1 min-w-0 space-y-4">
+                <main
+                  ref={lessonContentRef}
+                  className="flex-1 min-w-0 space-y-4"
+                  onMouseUp={captureSelectedVocabulary}
+                  onTouchEnd={captureSelectedVocabulary}
+                >
                   {/* Hoạt động bài học (Activities) */}
                   <LessonActivities
                     onLoadedLesson={setContentLesson}
@@ -250,13 +301,36 @@ function LessonScreen({ courseId, lessonId }) {
               )}
             </div>
 
+            {selectionAction && (
+              <button
+                type="button"
+                className="fixed z-[70] -translate-x-1/2 -translate-y-full inline-flex items-center gap-1.5 rounded-xl border border-amber-300 bg-white px-3 py-2 text-xs font-bold text-stone-800 shadow-xl hover:bg-amber-50"
+                style={{ left: selectionAction.left, top: selectionAction.top }}
+                onPointerDown={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  openSelectionVocabularyForm(selectionAction.word);
+                }}
+                onClick={() => openSelectionVocabularyForm(selectionAction.word)}
+                aria-label={bilingualLabel(`Lưu “${selectionAction.word}” vào sổ tay`, `Save “${selectionAction.word}” to notebook`)}
+              >
+                <Bookmark size={14} className="text-amber-600" />
+                <BilingualText vi="Lưu vào sổ tay" en="Save to notebook" />
+              </button>
+            )}
+
             {/* Modal lưu từ vựng */}
             {savingWord && (
               <VocabularyForm
                 lessonId={lesson.id}
-                onClose={() => setSavingWord(false)}
+                initialValues={selectedWord ? { word: selectedWord } : undefined}
+                onClose={() => {
+                  setSavingWord(false);
+                  setSelectedWord('');
+                }}
                 onSaved={() => {
                   setSavingWord(false);
+                  setSelectedWord('');
                   setMessage(bilingualLabel('Đã lưu thành công vào sổ tay từ vựng.', 'Saved successfully to your vocabulary notebook.'));
                   setTimeout(() => setMessage(''), 4000);
                 }}
