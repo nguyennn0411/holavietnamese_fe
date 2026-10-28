@@ -239,14 +239,17 @@ body.ai-quiz-active .ai-tutor-widget {
 .ai-tutor-message--user {
   width: fit-content !important;
   max-width: min(65%, 520px) !important;
+  min-width: 76px !important;
   min-height: 32px;
   display: block !important;
-  padding: 7px 11px !important;
-  font-size: 12px !important;
+  padding: 9px 15px !important;
+  font-size: 13.5px !important;
   line-height: 1.4 !important;
-  border-radius: 9px 4px 9px 9px !important;
-  overflow-wrap: anywhere;
-  box-shadow: 0 4px 14px rgba(159, 45, 32, .18) !important;
+  border-radius: 16px 16px 4px 16px !important;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.28) !important;
 }
 
 .ai-tutor-message--user > div:first-child {
@@ -259,7 +262,7 @@ body.ai-quiz-active .ai-tutor-widget {
 
 .ai-tutor-copy-button {
   min-height: 32px !important;
-  padding: 7px 11px !important;
+  padding: 9px 15px !important;
   border: 1px solid rgba(222, 203, 180, .6) !important;
   border-radius: 9px !important;
   background: #FAF8F5 !important;
@@ -279,7 +282,7 @@ body.ai-quiz-active .ai-tutor-widget {
 
 .ai-tutor-speak-button {
   min-height: 32px !important;
-  padding: 7px 11px !important;
+  padding: 9px 15px !important;
   border-radius: 9px !important;
 }
 
@@ -362,7 +365,7 @@ body.ai-quiz-active .ai-tutor-widget {
   opacity: 1;
 }
 
-.ai-tutor-history .group .flex.items-center.gap-1.opacity-0 button {
+.ai-tutor-history .group button {
   display: grid;
   width: 32px;
   height: 32px;
@@ -375,7 +378,7 @@ body.ai-quiz-active .ai-tutor-widget {
   color: #DA251D;
 }
 
-.ai-tutor-history .group .flex.items-center.gap-1.opacity-0 button:hover {
+.ai-tutor-history .group button:hover {
   border-color: #DA251D;
   background: #FFF0EE;
 }
@@ -561,4 +564,79 @@ body.ai-quiz-active .ai-tutor-widget {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+
+/* ==========================================================================
+   AI COACH MATCHING CHAT BUBBLES FOR AI TUTOR
+   ========================================================================== */
+.ai-tutor-message--user {
+  background: #ea580c !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 16px 16px 4px 16px !important;
+  padding: 10px 16px !important;
+  font-size: 0.88rem !important;
+  line-height: 1.5 !important;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.28) !important;
+  min-width: 76px !important;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: normal;
+  overflow-wrap: break-word;
+  max-width: min(78%, 560px) !important;
+}
+
+.ai-tutor-message--ai {
+  background: #ecfdf5 !important;
+  color: #1e293b !important;
+  border: 1px solid rgba(213, 221, 203, 0.85) !important;
+  border-radius: 16px 16px 16px 4px !important;
+  padding: 14px 18px !important;
+  font-size: 0.88rem !important;
+  line-height: 1.6 !important;
+  box-shadow: 0 2px 5px rgba(67, 25, 20, 0.04) !important;
+  word-break: break-word;
+}
+
+.ai-tutor-message--ai::before {
+  display: none !important;
+}
+
+.ai-tutor-message__label {
+  display: none !important;
+}
+
+.ai-tutor-message--ai .space-y-1\.5 {
+  color: #1e293b !important;
+  font-size: 0.88rem !important;
+  line-height: 1.6 !important;
+}
+
+.ai-coach-coursera__msg-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-top: 6px !important;
+  margin-left: 4px !important;
+}
+
+.ai-coach-coursera__action-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #78716c !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: color 0.15s ease !important;
+}
+
+.ai-coach-coursera__action-btn:hover {
+  color: #ea580c !important;
 }

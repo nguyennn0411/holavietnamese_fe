@@ -54,6 +54,12 @@ export const ROUTES = {
   QUIZ: '/quizzes/:quizId',
   QUIZ_ATTEMPT: '/quiz-attempts/:attemptId',
   QUIZ_RESULT: '/quiz-attempts/:attemptId/result',
+  COURSE_QUIZ: '/courses/:courseId/quizzes/:quizId',
+  COURSE_QUIZ_ATTEMPT: '/courses/:courseId/quiz-attempts/:attemptId',
+  COURSE_QUIZ_RESULT: '/courses/:courseId/quiz-attempts/:attemptId/result',
+  COURSE_LESSON_QUIZ: '/courses/:courseId/lesson/:lessonId/quizzes/:quizId',
+  COURSE_LESSON_QUIZ_ATTEMPT: '/courses/:courseId/lesson/:lessonId/quiz-attempts/:attemptId',
+  COURSE_LESSON_QUIZ_RESULT: '/courses/:courseId/lesson/:lessonId/quiz-attempts/:attemptId/result',
 
   // Văn hóa & AI Tutor & Roleplay (Người 4)
   CULTURE: '/culture',

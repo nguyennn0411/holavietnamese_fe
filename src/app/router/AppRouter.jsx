@@ -184,6 +184,15 @@ export function AppRouter() {
                 <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsPage />} />
                 <Route path={ROUTES.LEARN_RESUME} element={<ResumeCoursePage />} />
                 <Route path={ROUTES.LEARN_LESSON} element={<LessonLearningPage />} />
+                {/* Course Quizzes & Attempts */}
+                <Route path={ROUTES.COURSE_LESSON_QUIZ_RESULT} element={<QuizResultPage />} />
+                <Route path={ROUTES.COURSE_QUIZ_RESULT} element={<QuizResultPage />} />
+                <Route path={ROUTES.COURSE_LESSON_QUIZ_ATTEMPT} element={<QuizAttemptPage />} />
+                <Route path={ROUTES.COURSE_QUIZ_ATTEMPT} element={<QuizAttemptPage />} />
+                <Route path={ROUTES.COURSE_LESSON_QUIZ} element={<QuizPage />} />
+                <Route path={ROUTES.COURSE_QUIZ} element={<QuizPage />} />
+                <Route path="/courses/:courseId/lesson/:lessonId/quiz/:quizId" element={<QuizPage />} />
+                <Route path="/courses/:courseId/quiz/:quizId" element={<QuizPage />} />
                 <Route path={ROUTES.QUIZ} element={<QuizPage />} />
                 <Route path={ROUTES.QUIZ_ATTEMPT} element={<QuizAttemptPage />} />
                 <Route path={ROUTES.QUIZ_RESULT} element={<QuizResultPage />} />

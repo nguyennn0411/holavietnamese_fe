@@ -9,6 +9,7 @@ import { LessonContent } from '@/components/learning/LessonContent';
 import { LessonNavigation } from '@/components/learning/LessonNavigation';
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm';
 import { LessonActivities } from '@/components/learning/LessonActivities';
+import { AiCoachPanel } from '@/components/ai-coach';
 import { useAiSidebar } from '@/contexts/AiSidebarContext';
 import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check, Bot } from 'lucide-react';
 
@@ -34,15 +35,16 @@ export function LessonLearningPage() {
 function LessonScreen({ courseId, lessonId }) {
   const navigate = useNavigate();
   const resource = useLearning(courseId, lessonId);
-  const { openAiSidebar, setLearningContext } = useAiSidebar();
+  const { openAiSidebar } = useAiSidebar();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const [savingWord, setSavingWord] = useState(false);
   const [message, setMessage] = useState('');
   const [contentLesson, setContentLesson] = useState(null);
 
-  // Trạng thái mở/đóng thanh bên (Sidebar)
+  // Trạng thái mở/đóng thanh bên (Sidebar) & AI Coach panel
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [aiCoachOpen, setAiCoachOpen] = useState(false);
 
   // Mặc định mở thanh bên trên màn hình lớn
   useEffect(() => {
@@ -67,70 +69,74 @@ function LessonScreen({ courseId, lessonId }) {
   return (
     <ResourceState resource={resource}>
       {({ course, lesson, lessons, progress }) => {
-        const completedCount = progress?.completedLessons ?? 0;
-        const totalCount = progress?.totalLessons ?? lessons.length;
-        const progressPercentage = progress?.progressPercentage ?? 0;
-        const isSwitchingLesson = resource.isValidating || String(lesson.id) !== String(lessonId);
-
         return (
-          <div className="lesson-learning-screen w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-6 space-y-6">
+          <>
+            <LessonContextSyncer lesson={lesson} course={course} />
+          <div className={`lesson-learning-screen ${aiCoachOpen ? 'max-w-[1680px]' : 'max-w-7xl'} mx-auto space-y-4 transition-all duration-300`}>
             {/* ===================== TOP HEADER BAR ===================== */}
-            <header className="relative sticky top-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-3.5 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden">
-              {/* Subtle top indicator during lesson transitions */}
-              {isSwitchingLesson && (
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7A00] via-[#FFCD00] to-[#FF7A00] animate-pulse z-50" />
-              )}
-              {/* Bên trái: Nút quay lại & Tiêu đề bài học */}
+            <header className="bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-3 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs sticky top-2 z-30 transition-all">
+              {/* Cụm trái: Nút quay lại & Tiêu đề bài học */}
               <div className="flex items-center gap-3 min-w-0">
                 <Link
                   to={`/courses/${courseId}`}
-                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#FFF7E8] hover:bg-[#FFF2D6] text-[#FF7A00] text-xs font-bold border border-[#E8E5DF]/60 transition-colors shrink-0 no-underline"
-                  title={bilingualLabel("Quay lại khóa học", "Back to course")}
+                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition-colors no-underline shrink-0"
                 >
                   <ArrowLeft size={14} />
-                  <span className="hidden sm:inline"><BilingualText vi="Khóa học" en="Course" /></span>
+                  <span className="hidden sm:inline">
+                    <BilingualText vi="Khóa học" en="Course" />
+                  </span>
                 </Link>
 
-                <div className="h-5 w-[1px] bg-stone-200 hidden sm:block" />
+                <div className="h-4 w-[1px] bg-stone-200 hidden sm:block shrink-0" />
 
-                <div className="truncate">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-[#FFF2D6] text-[#EA580C] font-bold text-[10px] uppercase shrink-0">
-                      <BilingualText vi={`Bài ${lesson.lessonOrder || 1}`} en={`Lesson ${lesson.lessonOrder || 1}`} />
-                    </span>
-                    <h1 className="text-sm sm:text-base font-black text-[#253044] truncate m-0">
-                      <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
-                    </h1>
-                  </div>
+                <div className="min-w-0 flex items-center gap-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60 shrink-0">
+                    <BilingualText
+                      vi={`BÀI ${lesson.lessonOrder || ''}`}
+                      en={`LESSON ${lesson.lessonOrder || ''}`}
+                    />
+                  </span>
+                  <h1 className="text-sm sm:text-base font-extrabold text-stone-900 truncate tracking-tight m-0">
+                    {lesson.titleVi || lesson.title}
+                  </h1>
                 </div>
               </div>
 
-              {/* Ở giữa / Phải: Tiến độ & Nút chức năng */}
-              <div className="flex items-center justify-between md:justify-end gap-3 shrink-0">
-                {/* Thanh tiến độ tóm tắt */}
-                <div className="flex items-center gap-2 bg-[#FFF7E8] py-1.5 px-3 rounded-xl border border-[#E8E5DF]/60 text-xs font-bold text-[#64748B]">
-                  <CheckCircle2 size={13} className="text-emerald-600" />
-                  <span><BilingualText vi={`${completedCount}/${totalCount} bài`} en={`${completedCount}/${totalCount} lessons`} /></span>
-                  <div className="w-16 h-2 rounded-full bg-stone-200 overflow-hidden ml-1">
+              {/* Cụm phải: Tiến độ học & Nút tiện ích */}
+              <div className="flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-stone-100">
+                {/* Chỉ số tiến độ hoàn thành khóa học */}
+                <div
+                  className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-stone-50 border border-stone-200/60 text-xs font-medium text-stone-600"
+                  title={`${progress?.completedLessons || 0}/${progress?.totalLessons || 0} bài đã xong`}
+                >
+                  <CheckCircle2 size={14} className="text-emerald-600" />
+                  <span>
+                    {progress?.completedLessons || 0}/{progress?.totalLessons || 0}{' '}
+                    <span className="hidden lg:inline">
+                      <BilingualText vi="bài" en="lessons" />
+                    </span>
+                  </span>
+                  <div className="w-12 h-1.5 bg-stone-200 rounded-full overflow-hidden hidden sm:block ml-0.5">
                     <div
-                      className="h-full bg-[#FF7A00] rounded-full transition-all duration-300"
-                      style={{ width: `${progressPercentage}%` }}
+                      className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                      style={{ width: `${progress?.progressPercentage || 0}%` }}
                     />
                   </div>
                 </div>
 
-                {/* Nút lưu nhanh từ vựng */}
+                {/* Nút mở modal lưu từ vựng */}
                 <button
                   type="button"
                   onClick={() => setSavingWord(true)}
-                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 text-[#253044] border border-[#E8E5DF] text-xs font-bold shadow-2xs transition-colors cursor-pointer"
-                  title={bilingualLabel("Thêm từ vựng mới vào sổ tay", "Add new word to notebook")}
+                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold border border-[#E8E5DF] transition-colors cursor-pointer"
                 >
-                  <Bookmark size={13} className="text-[#FF7A00]" />
-                  <span className="hidden sm:inline"><BilingualText vi="Lưu từ vựng" en="Save word" /></span>
+                  <Bookmark size={14} className="text-amber-600" />
+                  <span className="hidden sm:inline">
+                    <BilingualText vi="Lưu từ vựng" en="Save word" />
+                  </span>
                 </button>
 
-                {/* Nút bật/tắt Sidebar */}
+                {/* Nút ẩn/hiện thanh bên danh sách bài */}
                 <button
                   type="button"
                   onClick={() => setSidebarOpen((v) => !v)}
@@ -147,17 +153,27 @@ function LessonScreen({ courseId, lessonId }) {
                   </span>
                 </button>
 
+                {/* Nút mở AI Coach */}
                 <button
                   type="button"
-                  onClick={() => openAiSidebar(bilingualLabel(
-                    `Tôi đang học bài "${lesson.titleVi || lesson.title}". Hãy giải thích trọng tâm bài học và những cấu trúc ngữ pháp quan trọng trong bài này.`,
-                    `I am studying "${lesson.title}". Please explain the key lesson takeaways and important grammar points.`
-                  ))}
-                  className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#24382B] hover:bg-[#1a291f] text-white text-xs font-bold border border-[#24382B] shadow-2xs transition-colors cursor-pointer"
-                  title={bilingualLabel("Mở Trợ lý AI hỏi về bài học này", "Ask AI Coach about this lesson")}
+                  onClick={() => {
+                    setAiCoachOpen((prev) => !prev);
+                    openAiSidebar?.(bilingualLabel(
+                      `Tôi đang học bài "${lesson.titleVi || lesson.title}". Hãy giải thích trọng tâm bài học và những cấu trúc ngữ pháp quan trọng trong bài này.`,
+                      `I am studying "${lesson.title}". Please explain the key lesson takeaways and important grammar points.`
+                    ));
+                  }}
+                  className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
+                    aiCoachOpen
+                      ? 'bg-[#b42318] text-white border-[#b42318] shadow-sm'
+                      : 'bg-[#24382B] hover:bg-[#1a291f] text-white border-[#24382B] shadow-2xs'
+                  }`}
+                  title={aiCoachOpen ? bilingualLabel('Đóng Hola AI', 'Close Hola AI') : bilingualLabel('Hỏi Hola AI', 'Ask Hola AI')}
                 >
                   <Bot size={14} />
-                  <span className="hidden sm:inline"><BilingualText vi="Hỏi AI" en="Ask AI" /></span>
+                  <span className="hidden sm:inline">
+                    {aiCoachOpen ? <BilingualText vi="Đóng Hola AI" en="Close Hola AI" /> : <BilingualText vi="Hỏi Hola AI" en="Ask Hola AI" />}
+                  </span>
                 </button>
               </div>
             </header>
@@ -182,17 +198,10 @@ function LessonScreen({ courseId, lessonId }) {
 
             {/* ===================== MAIN LAYOUT ===================== */}
             <div className="relative">
-              {/* Bố cục có Sidebar hoặc Full-width */}
-              <div
-                className={`transition-all ${
-                  sidebarOpen
-                    ? 'grid grid-cols-1 lg:grid-cols-[330px_1fr] xl:grid-cols-[360px_1fr] gap-8 items-start'
-                    : 'max-w-4xl mx-auto space-y-6'
-                }`}
-              >
-                {/* 1. Sidebar trên Desktop */}
+              <div className="flex gap-4 items-start">
+                {/* 1. Sidebar máy tính để bàn (Desktop) */}
                 {sidebarOpen && (
-                  <aside className="hidden lg:block sticky top-24 self-start w-full">
+                  <aside className="w-80 shrink-0 hidden lg:block sticky top-20 self-start">
                     <LessonSidebar
                       lessons={lessons}
                       courseId={courseId}
@@ -202,11 +211,12 @@ function LessonScreen({ courseId, lessonId }) {
                   </aside>
                 )}
 
-                {/* 2. Main Lesson Content Panel */}
-                <main className={`lesson-panel space-y-6 min-w-0 transition-opacity duration-300 ${isSwitchingLesson ? 'opacity-85' : 'opacity-100'}`}>
+                {/* 2. Nội dung bài học chính */}
+                <main className="flex-1 min-w-0 space-y-4">
+                  {/* Hoạt động bài học (Activities) */}
                   <LessonActivities
-                    onLessonLoaded={setContentLesson}
-                    onProgress={(result) => {
+                    onLoadedLesson={setContentLesson}
+                    onActivityChange={(result) => {
                       if (result.completed) resource.reload();
                     }}
                     lessonId={lesson.id}
@@ -214,7 +224,7 @@ function LessonScreen({ courseId, lessonId }) {
                     nextLessonId={lesson.nextLessonId}
                     onNextLesson={() => {
                       if (lesson.nextLessonId) {
-                        navigate(`/learn/${courseId}/lesson/${lesson.nextLessonId}`);
+                        navigate(`/courses/${courseId}/lesson/${lesson.nextLessonId}`);
                       }
                     }}
                     fallback={
@@ -229,9 +239,28 @@ function LessonScreen({ courseId, lessonId }) {
                     lesson={lesson}
                     pending={pending}
                     onComplete={complete}
+                    courseId={courseId}
                     showComplete={String(contentLesson?.id) === String(lesson.id) && !contentLesson.activities?.length}
                   />
                 </main>
+
+                {/* 3. AI Course Coach Sidebar (Chuẩn Coursera Coach mở song song bên phải) */}
+                <AiCoachPanel
+                  courseId={courseId}
+                  lessonId={lesson.id}
+                  lessonTitle={lesson.titleVi || lesson.title}
+                  lessonContent={[
+                    lesson.content,
+                    lesson.objectiveVi ? `Mục tiêu bài học: ${lesson.objectiveVi}` : '',
+                    lesson.introduction?.textVi ? `Giới thiệu: ${lesson.introduction.textVi}` : '',
+                    contentLesson?.activities?.map((a, i) =>
+                      `Hoạt động ${i + 1} (${a.titleVi || a.title || ''}): ${a.instructionVi || a.instruction || ''}`
+                    ).join('\n')
+                  ].filter(Boolean).join('\n\n')}
+                  language="vi"
+                  isOpen={aiCoachOpen}
+                  onToggle={setAiCoachOpen}
+                />
               </div>
 
               {/* 3. Mobile / Tablet Drawer cho Sidebar */}
@@ -271,6 +300,7 @@ function LessonScreen({ courseId, lessonId }) {
               />
             )}
           </div>
+          </>
         );
       }}
     </ResourceState>
