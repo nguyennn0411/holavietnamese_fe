@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { learningPathService } from '@/services/learningPathService';
 
 const isCanceledRequest = reason => (
@@ -12,33 +12,31 @@ export function useLearningPath() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const loadSequence = useRef(0);
 
   const load = useCallback(async (signal) => {
+    const request = ++loadSequence.current;
     setLoading(true);
     setError('');
-    let canceled = false;
     try {
-      const result = await learningPathService.me(signal ? { signal } : {});
-      if (!signal?.aborted) {
-        setData(result);
-      }
+      const next = await learningPathService.me(signal ? { signal } : {});
+      if (loadSequence.current === request) setData(next);
     } catch (reason) {
-      if (!isCanceledRequest(reason)) {
+      if (loadSequence.current === request && !isCanceledRequest(reason)) {
         setError(reason?.message || 'Không thể tải lộ trình học tập.');
-      } else {
-        canceled = true;
       }
     } finally {
-      if (!signal?.aborted && !canceled) {
-        setLoading(false);
-      }
+      if (loadSequence.current === request) setLoading(false);
     }
   }, []);
 
   useEffect(() => {
     const controller = new AbortController();
     load(controller.signal);
-    return () => controller.abort();
+    return () => {
+      loadSequence.current += 1;
+      controller.abort();
+    };
   }, [load]);
 
   const mutate = useCallback(async action => {

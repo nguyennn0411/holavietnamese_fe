@@ -224,11 +224,9 @@ export function LearningPathPage() {
 
   const preferences = path.data?.preferences || {};
   const recommendation = path.data?.recommendation || {};
-  const recommended = recommendation.recommendedCourse;
   const recommendedPath = recommendation.recommendedPath || [];
   const exactCourses = recommendation.courses || [];
   const nearestCourses = recommendation.nearestCourses || [];
-  const active = path.data?.activeCourse;
   const roadmapCourse = path.data?.roadmapCourse;
   const progress = path.data?.progress || {};
   const continueLearning = path.data?.continueLearning || [];
@@ -258,7 +256,8 @@ export function LearningPathPage() {
     );
   }
 
-  if (path.loading || !path.data) return <LearningPathSkeleton />;
+  if (path.loading) return <LearningPathSkeleton />;
+  if (!path.data) return <LearningPathSkeleton/>;
   if (path.data?.requiresLevel) {
     return (
       <LevelRequired
