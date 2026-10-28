@@ -9,21 +9,27 @@ import { LessonContent } from '@/components/learning/LessonContent';
 import { LessonNavigation } from '@/components/learning/LessonNavigation';
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm';
 import { LessonActivities } from '@/components/learning/LessonActivities';
-import { AiCoachPanel } from '@/components/ai-coach';
 import { useAiSidebar } from '@/contexts/AiSidebarContext';
-import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check, Bot } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check } from 'lucide-react';
 
-function LessonContextSyncer({ lesson, course }) {
+function LessonContextSyncer({ lesson, course, contentLesson, courseId }) {
   const { setLearningContext } = useAiSidebar();
   useEffect(() => {
     if (lesson) {
+      const rawContent = contentLesson?.content || lesson.content || lesson.summary || lesson.description || '';
       setLearningContext({
+        courseId: courseId || course?.id,
+        courseTitle: course?.titleVi || course?.title || '',
         lessonId: lesson.id,
-        lessonTitle: lesson.titleVi || lesson.title,
-        courseTitle: course?.titleVi || course?.title,
+        lessonTitle: lesson.titleVi || lesson.title || '',
+        lessonContent: rawContent,
+        vocabulary: lesson.vocabulary || contentLesson?.vocabulary || [],
       });
     }
-  }, [lesson, course, setLearningContext]);
+    return () => {
+      setLearningContext(null);
+    };
+  }, [lesson, course, contentLesson, courseId, setLearningContext]);
   return null;
 }
 
@@ -35,16 +41,14 @@ export function LessonLearningPage() {
 function LessonScreen({ courseId, lessonId }) {
   const navigate = useNavigate();
   const resource = useLearning(courseId, lessonId);
-  const { openAiSidebar } = useAiSidebar();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const [savingWord, setSavingWord] = useState(false);
   const [message, setMessage] = useState('');
   const [contentLesson, setContentLesson] = useState(null);
 
-  // Trạng thái mở/đóng thanh bên (Sidebar) & AI Coach panel
+  // Trạng thái mở/đóng thanh bên (Sidebar danh sách bài học)
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [aiCoachOpen, setAiCoachOpen] = useState(false);
 
   // Mặc định mở thanh bên trên màn hình lớn
   useEffect(() => {
@@ -71,8 +75,8 @@ function LessonScreen({ courseId, lessonId }) {
       {({ course, lesson, lessons, progress }) => {
         return (
           <>
-            <LessonContextSyncer lesson={lesson} course={course} />
-          <div className={`lesson-learning-screen ${aiCoachOpen ? 'max-w-[1680px]' : 'max-w-7xl'} mx-auto space-y-4 transition-all duration-300`}>
+            <LessonContextSyncer lesson={lesson} course={course} contentLesson={contentLesson} courseId={courseId} />
+          <div className="lesson-learning-screen max-w-7xl mx-auto space-y-4 transition-all duration-300">
             {/* ===================== TOP HEADER BAR ===================== */}
             <header className="bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-3 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs sticky top-2 z-30 transition-all">
               {/* Cụm trái: Nút quay lại & Tiêu đề bài học */}
@@ -152,29 +156,6 @@ function LessonScreen({ courseId, lessonId }) {
                     {sidebarOpen ? <BilingualText vi="Thu gọn" en="Collapse" /> : <BilingualText vi="Bài học" en="Lessons" />}
                   </span>
                 </button>
-
-                {/* Nút mở AI Coach */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAiCoachOpen((prev) => !prev);
-                    openAiSidebar?.(bilingualLabel(
-                      `Tôi đang học bài "${lesson.titleVi || lesson.title}". Hãy giải thích trọng tâm bài học và những cấu trúc ngữ pháp quan trọng trong bài này.`,
-                      `I am studying "${lesson.title}". Please explain the key lesson takeaways and important grammar points.`
-                    ));
-                  }}
-                  className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
-                    aiCoachOpen
-                      ? 'bg-[#b42318] text-white border-[#b42318] shadow-sm'
-                      : 'bg-[#24382B] hover:bg-[#1a291f] text-white border-[#24382B] shadow-2xs'
-                  }`}
-                  title={aiCoachOpen ? bilingualLabel('Đóng Hola AI', 'Close Hola AI') : bilingualLabel('Hỏi Hola AI', 'Ask Hola AI')}
-                >
-                  <Bot size={14} />
-                  <span className="hidden sm:inline">
-                    {aiCoachOpen ? <BilingualText vi="Đóng Hola AI" en="Close Hola AI" /> : <BilingualText vi="Hỏi Hola AI" en="Ask Hola AI" />}
-                  </span>
-                </button>
               </div>
             </header>
 
@@ -243,24 +224,6 @@ function LessonScreen({ courseId, lessonId }) {
                     showComplete={String(contentLesson?.id) === String(lesson.id) && !contentLesson.activities?.length}
                   />
                 </main>
-
-                {/* 3. AI Course Coach Sidebar (Chuẩn Coursera Coach mở song song bên phải) */}
-                <AiCoachPanel
-                  courseId={courseId}
-                  lessonId={lesson.id}
-                  lessonTitle={lesson.titleVi || lesson.title}
-                  lessonContent={[
-                    lesson.content,
-                    lesson.objectiveVi ? `Mục tiêu bài học: ${lesson.objectiveVi}` : '',
-                    lesson.introduction?.textVi ? `Giới thiệu: ${lesson.introduction.textVi}` : '',
-                    contentLesson?.activities?.map((a, i) =>
-                      `Hoạt động ${i + 1} (${a.titleVi || a.title || ''}): ${a.instructionVi || a.instruction || ''}`
-                    ).join('\n')
-                  ].filter(Boolean).join('\n\n')}
-                  language="vi"
-                  isOpen={aiCoachOpen}
-                  onToggle={setAiCoachOpen}
-                />
               </div>
 
               {/* 3. Mobile / Tablet Drawer cho Sidebar */}

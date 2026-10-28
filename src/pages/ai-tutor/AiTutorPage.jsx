@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Sparkles,
@@ -128,15 +128,30 @@ function FormattedMessageText({ text, isAi }) {
 
 export function AiTutorPage() {
   const { user, accessToken } = useAuth();
+  const location = useLocation();
   const { i18n } = useTranslation();
   const isEn = (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('en');
   const activeUserKey = String(user?.userId ?? user?.id ?? user?.username ?? getCurrentUserStorageKey());
   const { confirm, confirmationDialog } = useConfirmDialog();
   const [modes, setModes] = useState(() => aiTutorService.getModes());
-  const [sessions, setSessions] = useState([]);
-  const [activeSessionId, setActiveSessionId] = useState('');
-  const [currentSession, setCurrentSession] = useState(null);
-  const [currentMode, setCurrentMode] = useState(() => aiTutorService.getModes()[0]?.id || 'tutor');
+  const [sessions, setSessions] = useState(() => aiTutorService.getAllSessions());
+  const [activeSessionId, setActiveSessionId] = useState(() => {
+    const targetId = location.state?.sessionId || aiTutorService.getActiveSessionId();
+    const all = aiTutorService.getAllSessions();
+    const target = (targetId && all.find((s) => s.id === targetId)) || all[0];
+    return target?.id || '';
+  });
+  const [currentSession, setCurrentSession] = useState(() => {
+    const targetId = location.state?.sessionId || aiTutorService.getActiveSessionId();
+    const all = aiTutorService.getAllSessions();
+    return (targetId && all.find((s) => s.id === targetId)) || all[0] || null;
+  });
+  const [currentMode, setCurrentMode] = useState(() => {
+    const targetId = location.state?.sessionId || aiTutorService.getActiveSessionId();
+    const all = aiTutorService.getAllSessions();
+    const target = (targetId && all.find((s) => s.id === targetId)) || all[0];
+    return target?.mode || aiTutorService.getModes()[0]?.id || 'tutor';
+  });
   const [inputText, setInputText] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -188,14 +203,42 @@ export function AiTutorPage() {
     let cancelled = false;
     const loadedSessions = aiTutorService.getAllSessions();
     setSessions(loadedSessions);
-    // Start on the history picker instead of reopening the last conversation.
-    // The service still keeps the persisted active id for explicit selection.
-    setActiveSessionId('');
-    setCurrentSession(null);
+    // Tự động mở sẵn phiên học mục tiêu hoặc phiên gần nhất
+
+    const targetSessionId = location.state?.sessionId || aiTutorService.getActiveSessionId();
+    let initialSession = (Array.isArray(loadedSessions) && loadedSessions.find((s) => s.id === targetSessionId)) || loadedSessions?.[0];
+
+    if (!initialSession && (!loadedSessions || loadedSessions.length === 0)) {
+      initialSession = aiTutorService.createSession('tutor');
+      setSessions([initialSession]);
+    }
+
+    if (initialSession) {
+      aiTutorService.setActiveSessionId(initialSession.id);
+      setActiveSessionId(initialSession.id);
+      setCurrentSession(initialSession);
+      if (initialSession.mode) {
+        setCurrentMode(initialSession.mode);
+      }
+    }
+
 
     aiTutorService.syncSessionsFromBackend().then((remoteSynced) => {
       if (!cancelled && Array.isArray(remoteSynced)) {
         setSessions(remoteSynced);
+        setCurrentSession((prev) => {
+          if (prev) {
+            const found = remoteSynced.find((s) => s.id === prev.id);
+            return found || prev;
+          }
+          const chosen = (targetSessionId && remoteSynced.find((s) => s.id === targetSessionId)) || remoteSynced[0];
+          if (chosen) {
+            aiTutorService.setActiveSessionId(chosen.id);
+            setActiveSessionId(chosen.id);
+            if (chosen.mode) setCurrentMode(chosen.mode);
+          }
+          return chosen || null;
+        });
       }
     });
 
@@ -215,7 +258,7 @@ export function AiTutorPage() {
       window.removeEventListener('hola-ai-settings-updated', syncModes);
       window.removeEventListener('storage', syncModes);
     };
-  }, [activeUserKey, accessToken]);
+  }, [activeUserKey, accessToken, location.state?.sessionId]);
 
   const handleSaveApiKey = async (e) => {
     e.preventDefault();
@@ -339,6 +382,7 @@ export function AiTutorPage() {
       setSessions(remaining);
       setActiveSessionId('');
       setCurrentSession(null);
+  
       showToast(isEn ? 'Conversation deleted successfully.' : 'Đã xóa hội thoại thành công.');
     }
   };

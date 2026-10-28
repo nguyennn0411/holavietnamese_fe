@@ -5,25 +5,46 @@ const AiSidebarContext = createContext(null);
 
 const STORAGE_WIDTH_KEY = 'hola:ai-sidebar-width';
 const STORAGE_OPEN_KEY = 'hola:ai-sidebar-open';
-const DEFAULT_WIDTH = 420;
-const MIN_WIDTH = 320;
+
+const getMinAllowedWidth = () => {
+  if (typeof window === 'undefined') return 420;
+  // Kích cỡ tối thiểu (min) là 22% màn hình
+  return Math.round(window.innerWidth * 0.22);
+};
+
+const getMaxAllowedWidth = () => {
+  if (typeof window === 'undefined') return 576;
+  // Kích cỡ tối đa (max) là 30% màn hình
+  return Math.round(window.innerWidth * 0.30);
+};
+
+const getDefaultWidth = () => {
+  return getMinAllowedWidth();
+};
 
 export function AiSidebarProvider({ children, isSidebarCollapsed, setIsSidebarCollapsed }) {
   const location = useLocation();
 
-  // Width is preserved across reloads
+  // Kích cỡ mặc định khi mở luôn là min (22% màn hình)
   const [width, setWidthState] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_WIDTH_KEY);
-      const parsed = Number.parseInt(saved, 10);
-      if (Number.isFinite(parsed) && parsed >= MIN_WIDTH && parsed <= 900) {
-        return parsed;
-      }
-    } catch {
-      // Ignore localStorage error
-    }
-    return DEFAULT_WIDTH;
+    return getDefaultWidth();
   });
+
+  // Đảm bảo độ rộng luôn nằm trong khoảng [22%, 30%] khi resize cửa sổ
+  useEffect(() => {
+    const handleWindowResize = () => {
+      const minW = getMinAllowedWidth();
+      const maxW = getMaxAllowedWidth();
+      setWidthState((prev) => {
+        if (prev < minW) return minW;
+        if (prev > maxW) return maxW;
+        return prev;
+      });
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, []);
 
   // Open state
   const [isOpen, setIsOpenState] = useState(() => {
@@ -46,8 +67,10 @@ export function AiSidebarProvider({ children, isSidebarCollapsed, setIsSidebarCo
   const isEligible = !isQuizRoute && !isStandaloneAiTutor;
 
   const setWidth = useCallback((newWidth) => {
-    const maxWidth = typeof window !== 'undefined' ? Math.max(MIN_WIDTH, window.innerWidth - 160) : 780;
-    const clamped = Math.max(MIN_WIDTH, Math.min(maxWidth, newWidth));
+    const minW = getMinAllowedWidth();
+    const maxW = getMaxAllowedWidth();
+    // Giới hạn trong khoảng min 22% đến max 30% màn hình
+    const clamped = Math.max(minW, Math.min(maxW, newWidth));
     setWidthState(clamped);
     try {
       localStorage.setItem(STORAGE_WIDTH_KEY, String(clamped));
@@ -60,7 +83,10 @@ export function AiSidebarProvider({ children, isSidebarCollapsed, setIsSidebarCo
     if (!isEligible) return;
     setIsOpenState(true);
     try {
+      const defaultW = getDefaultWidth();
+      localStorage.setItem(STORAGE_WIDTH_KEY, String(defaultW));
       localStorage.setItem(STORAGE_OPEN_KEY, 'true');
+      setWidthState(defaultW);
     } catch {
       // Ignore
     }
@@ -142,7 +168,7 @@ export function useAiSidebar() {
     return {
       isOpen: false,
       isEligible: false,
-      width: DEFAULT_WIDTH,
+      width: 345,
       setWidth: () => {},
       learningContext: null,
       setLearningContext: () => {},

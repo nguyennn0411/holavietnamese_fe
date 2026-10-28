@@ -41,11 +41,11 @@ export function QuizPage() {
     }
   }, [resource.data, courseId, lessonId, quizId, navigate]);
 
-  async function start() {
+  async function start(restart = false) {
     setBusy(true);
     setError('');
     try {
-      const attempt = await contentService.startQuiz(quizId);
+      const attempt = await contentService.startQuiz(quizId, restart);
       const cId = courseId || attempt.courseId || resource.data?.courseId;
       const lId = lessonId || attempt.lessonId || resource.data?.lessonId;
       const attemptUrl = cId && lId
@@ -172,6 +172,27 @@ export function QuizPage() {
                 </ul>
               </div>
 
+              {/* Active Attempt In-Progress Banner */}
+              {quiz.activeAttempt && (
+                <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-[#253044] space-y-2 relative z-10">
+                  <div className="flex items-center gap-2 text-amber-800 font-bold text-xs sm:text-sm">
+                    <AlertCircle size={16} className="text-amber-600 shrink-0" />
+                    <span>
+                      <BilingualText
+                        vi="Bạn có bài làm dở dang chưa nộp"
+                        en="You have an in-progress attempt"
+                      />
+                    </span>
+                  </div>
+                  <p className="text-xs text-amber-900/80 m-0">
+                    <BilingualText
+                      vi={`Bài làm trước đó đã lưu ${quiz.activeAttempt.answeredCount || 0} câu trả lời. Bạn có thể tiếp tục làm hoặc bắt đầu lại từ đầu.`}
+                      en={`Your previous session saved ${quiz.activeAttempt.answeredCount || 0} answers. You can resume or start fresh.`}
+                    />
+                  </p>
+                </div>
+              )}
+
               {error && (
                 <Notice kind="error">
                   <BilingualText>{error}</BilingualText>
@@ -182,22 +203,39 @@ export function QuizPage() {
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
                 <button
                   type="button"
-                  onClick={start}
+                  onClick={() => start(false)}
                   disabled={busy}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 py-3.5 px-8 rounded-2xl bg-[#F97316] hover:bg-[#C2410C] text-white font-black text-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95 disabled:opacity-60"
                 >
                   {busy ? (
                     <>
                       <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <BilingualText>{"Đang chuẩn bị đề thi…"}</BilingualText>
+                      <BilingualText vi="Đang chuẩn bị đề thi…" en="Preparing quiz…" />
+                    </>
+                  ) : quiz.activeAttempt ? (
+                    <>
+                      <Play size={16} fill="white" />
+                      <BilingualText vi="Tiếp tục bài làm →" en="Resume Quiz →" />
                     </>
                   ) : (
                     <>
                       <Play size={16} fill="white" />
-                      <BilingualText>{"Bắt đầu quiz ngay →"}</BilingualText>
+                      <BilingualText vi="Bắt đầu quiz ngay →" en="Start quiz now →" />
                     </>
                   )}
                 </button>
+
+                {quiz.activeAttempt && (
+                  <button
+                    type="button"
+                    onClick={() => start(true)}
+                    disabled={busy}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-white hover:bg-stone-50 text-[#C2410C] border border-[#F97316]/40 font-bold text-xs shadow-2xs transition-all cursor-pointer active:scale-95 disabled:opacity-60"
+                  >
+                    <RotateCcw size={14} />
+                    <BilingualText vi="Làm lại từ đầu ↻" en="Start Over ↻" />
+                  </button>
+                )}
 
                 {cId && (
                   <Link
@@ -275,6 +313,7 @@ function Attempt({ attempt, courseId, lessonId }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [confirm, setConfirm] = useState(false);
+  const [restartConfirm, setRestartConfirm] = useState(false);
   const [remaining, setRemaining] = useState(null);
 
   // Timer countdown
@@ -355,6 +394,27 @@ function Attempt({ attempt, courseId, lessonId }) {
     }
   }
 
+  async function restart() {
+    setBusy(true);
+    setError('');
+    try {
+      const newAttempt = await contentService.restartAttempt(attempt.id);
+      const cId = courseId || newAttempt.courseId || attempt.courseId;
+      const lId = lessonId || newAttempt.lessonId || attempt.lessonId;
+      const attemptUrl = cId && lId
+        ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${newAttempt.id}`
+        : cId
+        ? `/courses/${cId}/quiz-attempts/${newAttempt.id}`
+        : `/quiz-attempts/${newAttempt.id}`;
+      navigate(attemptUrl, { replace: true });
+    } catch (err) {
+      setError(err.message);
+      setRestartConfirm(false);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const answeredCount = Object.values(answers).filter(answerPresent).length;
   const isLastQuestion = index + 1 === questions.length;
   const isUrgentTimer = remaining !== null && remaining <= 60;
@@ -402,11 +462,22 @@ function Attempt({ attempt, courseId, lessonId }) {
 
           <button
             type="button"
+            onClick={() => setRestartConfirm(true)}
+            disabled={busy}
+            className="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5"
+            title={bilingualLabel("Hủy bài làm này và bắt đầu lại từ đầu", "Discard and start over")}
+          >
+            <RotateCcw size={13} />
+            <span className="hidden sm:inline"><BilingualText vi="Làm lại từ đầu" en="Start Over" /></span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setConfirm(true)}
             disabled={busy}
             className="px-3.5 py-1.5 rounded-xl bg-[#F97316] hover:bg-[#C2410C] text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
           >
-            <BilingualText>{"Nộp bài"}</BilingualText>
+            <BilingualText vi="Nộp bài" en="Submit" />
           </button>
         </div>
       </header>
@@ -615,6 +686,41 @@ function Attempt({ attempt, courseId, lessonId }) {
                 <BilingualText
                   vi={busy ? 'Đang nộp…' : 'Xác nhận nộp'}
                   en={busy ? 'Submitting…' : 'Confirm submission'}
+                />
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Restart Confirmation Modal */}
+      {restartConfirm && (
+        <Modal title={bilingualLabel("Làm lại bài từ đầu?", "Start over from scratch?")} busy={busy} onClose={() => setRestartConfirm(false)}>
+          <div className="space-y-4 py-2">
+            <p className="text-xs sm:text-sm text-[#253044] m-0 leading-relaxed">
+              <BilingualText
+                vi="Hành động này sẽ hủy bài làm hiện tại cùng tất cả câu trả lời bạn đã chọn, và mở một bài làm hoàn toàn mới. Bạn có chắc chắn muốn làm lại?"
+                en="This will discard your current attempt and all saved answers, and start a completely new session. Are you sure you want to start over?"
+              />
+            </p>
+            <div className="actions flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                className="button secondary px-4 py-2 rounded-xl text-xs font-bold text-[#253044] bg-stone-100 hover:bg-stone-200 border border-stone-300 cursor-pointer"
+                disabled={busy}
+                onClick={() => setRestartConfirm(false)}
+              >
+                <BilingualText vi="Giữ bài làm" en="Keep current attempt" />
+              </button>
+              <button
+                type="button"
+                className="button px-5 py-2 rounded-xl text-xs font-black text-white bg-rose-600 hover:bg-rose-700 shadow-sm cursor-pointer"
+                disabled={busy}
+                onClick={restart}
+              >
+                <BilingualText
+                  vi={busy ? 'Đang tạo mới…' : 'Làm lại từ đầu'}
+                  en={busy ? 'Creating new…' : 'Start over'}
                 />
               </button>
             </div>

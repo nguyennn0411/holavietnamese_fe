@@ -25,7 +25,12 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
           : [...(answer?.optionIds || []), optionId];
         onChange({ optionIds: next });
       } else {
-        onChange({ optionIds: [optionId] });
+        // Single choice: toggle to empty if already selected, otherwise select
+        if (currentOptionIds.includes(idStr)) {
+          onChange({ optionIds: [] });
+        } else {
+          onChange({ optionIds: [optionId] });
+        }
       }
     };
 

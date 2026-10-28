@@ -10,7 +10,7 @@ import { LearnerSidebar, LearnerTopbar } from '@/components/learner/LearnerShell
 import { GuestMobileDrawer, GuestSidebar, GuestTopbar } from '@/components/guest/GuestShell';
 import { AiSidebarProvider, useAiSidebar } from '@/contexts/AiSidebarContext';
 import { CourseraAiSidebar } from '@/components/ai/CourseraAiSidebar';
-import { CourseraAiDockTrigger } from '@/components/ai/CourseraAiDockTrigger';
+
 
 function MainLayoutShell({
   isAuthenticated,
@@ -78,8 +78,8 @@ function MainLayoutShell({
         />
       )}
 
-      {/* Right Edge Dock Trigger (shown when AI is closed) */}
-      <CourseraAiDockTrigger />
+
+
     </div>
   );
 }
