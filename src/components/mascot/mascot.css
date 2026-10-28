@@ -47,7 +47,7 @@
   object-fit: contain;
   user-select: none;
   pointer-events: none;
-  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.07));
+  filter: drop-shadow(0 8px 18px rgba(80, 42, 29, 0.09));
   transition: filter 0.28s ease, transform 0.28s ease;
 }
 
@@ -61,7 +61,7 @@
 }
 
 .nghe-mascot.is-animated:hover .nghe-mascot__img {
-  filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.12));
+  filter: drop-shadow(0 14px 26px rgba(80, 42, 29, 0.16));
 }
 
 .nghe-mascot--happy.is-animated {
@@ -106,7 +106,7 @@
 
 @keyframes nghe-pulse {
   50% {
-    box-shadow: 0 0 0 7px rgba(242, 140, 69, 0);
+    box-shadow: 0 0 0 7px rgba(180, 35, 24, 0);
   }
 }
 
@@ -115,13 +115,13 @@
   position: relative;
   display: inline-block;
   padding: 12px 18px;
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
-  color: #1F2937;
-  background: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ebd9c3;
+  border-radius: 18px;
+  color: #3e261d;
+  background: #fffdf9;
+  box-shadow: 0 8px 24px rgba(80, 42, 29, 0.08);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.45;
   text-align: left;
 }
@@ -130,13 +130,13 @@
 .nghe-speech--arrow-bottom:after {
   content: "";
   position: absolute;
-  bottom: -6px;
+  bottom: -7px;
   left: 32px;
-  width: 12px;
-  height: 12px;
-  background: #FFFFFF;
-  border-right: 1px solid #E5E7EB;
-  border-bottom: 1px solid #E5E7EB;
+  width: 13px;
+  height: 13px;
+  background: #fffdf9;
+  border-right: 1px solid #ebd9c3;
+  border-bottom: 1px solid #ebd9c3;
   transform: rotate(45deg);
 }
 
@@ -144,12 +144,12 @@
   content: "";
   position: absolute;
   top: 50%;
-  right: -6px;
-  width: 12px;
-  height: 12px;
-  background: #FFFFFF;
-  border-top: 1px solid #E5E7EB;
-  border-right: 1px solid #E5E7EB;
+  right: -7px;
+  width: 13px;
+  height: 13px;
+  background: #fffdf9;
+  border-top: 1px solid #ebd9c3;
+  border-right: 1px solid #ebd9c3;
   transform: translateY(-50%) rotate(45deg);
 }
 
@@ -157,12 +157,12 @@
   content: "";
   position: absolute;
   top: 50%;
-  left: -6px;
-  width: 12px;
-  height: 12px;
-  background: #FFFFFF;
-  border-bottom: 1px solid #E5E7EB;
-  border-left: 1px solid #E5E7EB;
+  left: -7px;
+  width: 13px;
+  height: 13px;
+  background: #fffdf9;
+  border-bottom: 1px solid #ebd9c3;
+  border-left: 1px solid #ebd9c3;
   transform: translateY(-50%) rotate(45deg);
 }
 
@@ -180,25 +180,55 @@
   bottom: 2px;
   width: 13px;
   height: 13px;
-  border: 2px solid #FFFFFF;
+  border: 2px solid #fff;
   border-radius: 50%;
-  background: #16A34A;
+  background: #22a45d;
   z-index: 2;
 }
 
 .nghe-tutor-avatar.is-listening > i {
-  background: #E5A928;
+  background: #e5a928;
   animation: nghe-pulse 1s infinite;
 }
 
 .nghe-tutor-avatar.is-thinking > i {
-  background: #6A7DE1;
+  background: #6a7de1;
   animation: nghe-pulse 1.3s infinite;
 }
 
 .nghe-tutor-avatar.is-speaking > i {
-  background: #F28C45;
+  background: #FF7A00;
   animation: nghe-pulse 0.7s infinite;
+}
+
+/* Face crop for the small avatars beside AI Tutor messages. */
+.nghe-tutor-avatar.nghe-tutor-avatar--face {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.nghe-tutor-avatar--face .nghe-mascot {
+  position: absolute;
+  width: 160%;
+  max-width: none;
+  top: -8%;
+  left: -30%;
+  animation: none;
+  transform: none;
+  transition: none;
+}
+
+.nghe-tutor-avatar--face .nghe-mascot__img {
+  max-width: none;
+  filter: none;
+  transform: none;
+  transition: none;
+}
+
+.nghe-tutor-avatar--face > i {
+  display: none;
 }
 
 /* Onboarding Guide Dialog */
@@ -209,66 +239,63 @@
   padding: 20px;
   display: grid;
   place-items: center;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(6px);
+  background: rgba(37, 24, 19, 0.58);
+  backdrop-filter: blur(5px);
 }
 
 .nghe-guide__card {
   position: relative;
-  width: min(700px, 100%);
+  width: min(720px, 100%);
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 210px 1fr;
   align-items: center;
   gap: 28px;
   padding: 28px;
-  border: 1px solid #E5E7EB;
-  border-radius: 20px;
-  background: #FFFFFF;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  border: 1px solid #ebd9c3;
+  border-radius: 28px;
+  background: #fffaf1;
+  box-shadow: 0 30px 80px rgba(35, 18, 13, 0.3);
 }
 
 .nghe-guide__close {
   position: absolute;
   top: 14px;
   right: 14px;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   padding: 0;
   display: grid;
   place-items: center;
   border: 0;
   border-radius: 50%;
-  background: #F3F4F6;
-  color: #6B7280;
+  background: #f5e9dc;
+  color: #5c3b31;
   cursor: pointer;
-  transition: background 0.18s, color 0.18s;
+  transition: background 0.18s;
 }
 
 .nghe-guide__close:hover {
-  background: #E5E7EB;
-  color: #1F2937;
+  background: #ebd8c6;
 }
 
 .nghe-guide__card > div > span:first-child {
-  color: #F28C45;
-  font-size: 0.75rem;
-  font-weight: 800;
+  color: #FF7A00;
+  font-size: 0.72rem;
+  font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .nghe-guide h2 {
-  margin: 6px 0 10px;
-  color: #1F2937;
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.4px;
+  margin: 7px 0 10px;
+  color: #2b1c18;
+  font-size: 1.65rem;
 }
 
 .nghe-guide p {
   margin: 0;
-  color: #4B5563;
-  line-height: 1.6;
+  color: #70584e;
+  line-height: 1.65;
 }
 
 .nghe-guide__actions {
@@ -285,98 +312,147 @@
 }
 
 .nghe-guide__actions button {
-  min-height: 38px;
-  padding: 8px 16px;
+  min-height: 39px;
+  padding: 8px 14px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1.5px solid #E5E7EB;
-  border-radius: 10px;
-  color: #374151;
-  background: #FFFFFF;
-  font-weight: 700;
+  border: 1px solid #dbc6b3;
+  border-radius: 11px;
+  color: #5c3b31;
+  background: #fff;
+  font-weight: 750;
   cursor: pointer;
   transition: background 0.18s, border-color 0.18s;
 }
 
 .nghe-guide__actions button:hover {
-  background: #F9FAFB;
-  border-color: #D1D5DB;
+  background: #fefcf9;
+  border-color: #c9ad96;
 }
 
 .nghe-guide__actions .is-primary {
-  border-color: #F28C45;
-  color: #FFFFFF;
-  background: #F28C45;
+  border-color: #a5231a;
+  color: #fff;
+  background: #a5231a;
 }
 
 .nghe-guide__actions .is-primary:hover {
-  background: #EA580C;
-  border-color: #EA580C;
+  background: #8e1c14;
 }
 
-/* Floating replay container stacked cleanly above the AI floating button */
+/* Keep the replay control above the Hola AI floating button. */
 .nghe-guide-replay-container {
   position: fixed;
   z-index: 75;
   right: clamp(16px, 3vw, 32px);
-  bottom: calc(clamp(16px, 3vw, 32px) + 72px);
+  bottom: calc(clamp(16px, 3vw, 32px) + 52px + 12px);
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
-  padding: 3px 6px 3px 4px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(10px);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 2px;
+  padding: 5px;
+  background: #fffaf4;
+  border: 1px solid #f0dfcf;
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(69, 31, 20, 0.14), 0 2px 6px rgba(69, 31, 20, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .nghe-guide-replay-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-  border-color: #FED7AA;
+  transform: translateY(-3px);
+  border-color: #e5b995;
+  box-shadow: 0 16px 38px rgba(69, 31, 20, 0.18), 0 3px 8px rgba(69, 31, 20, 0.08);
 }
 
 .nghe-guide-replay {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  min-height: 34px;
-  padding: 4px 8px 4px 4px;
+  gap: 9px;
+  min-height: 48px;
+  padding: 4px 8px 4px 5px;
   border: 0;
-  border-radius: 12px;
-  color: #374151;
-  background: transparent;
-  font-weight: 700;
+  border-radius: 14px;
+  color: #3f2921;
+  background: linear-gradient(135deg, #fffdf9 0%, #fff3e6 100%);
   font-size: 13px;
+  text-align: left;
   cursor: pointer;
-  transition: color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .nghe-guide-replay:hover {
-  color: #F28C45;
+  color: #8f2d1c;
+  background: #fff0df;
+}
+
+.nghe-guide-replay:focus-visible,
+.nghe-guide-replay__dismiss:focus-visible {
+  outline: 3px solid rgba(239, 108, 37, 0.35);
+  outline-offset: 2px;
+}
+
+.nghe-guide-replay__avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ffe2bd, #fff4e3);
+}
+
+.nghe-guide-replay__avatar .nghe-mascot {
+  --nghe-width: 38px;
+}
+
+.nghe-guide-replay__copy {
+  display: flex;
+  min-width: 112px;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.15;
+}
+
+.nghe-guide-replay__copy small {
+  color: #b46b45;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.nghe-guide-replay__copy strong {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.nghe-guide-replay__arrow {
+  margin-right: 2px;
+  color: #d35b2a;
+  transition: transform 0.15s ease;
+}
+
+.nghe-guide-replay:hover .nghe-guide-replay__arrow {
+  transform: translateX(3px);
 }
 
 .nghe-guide-replay__dismiss {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  color: #6B7280;
-  background: #F3F4F6;
+  color: #967e70;
+  background: transparent;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
 .nghe-guide-replay__dismiss:hover {
-  background: #E5E7EB;
-  color: #1F2937;
+  background: #f3e2d4;
+  color: #2b1c18;
 }
 
 /* Reduced Motion */
@@ -399,7 +475,7 @@
   }
 
   .nghe-guide__card > .nghe-mascot {
-    --nghe-width: 140px;
+    --nghe-width: 145px;
     margin: 0 auto;
   }
 
@@ -414,15 +490,26 @@
 
   .nghe-guide-replay-container {
     right: 14px;
-    bottom: 82px;
+    bottom: calc(14px + 48px + 12px);
     padding: 4px 6px;
   }
 
-  .nghe-guide-replay span {
+  .nghe-guide-replay__copy,
+  .nghe-guide-replay__arrow {
     display: none;
   }
 
-  .nghe-guide-replay .nghe-mascot {
+  .nghe-guide-replay {
+    min-height: 46px;
+    padding: 3px;
+  }
+
+  .nghe-guide-replay__avatar {
+    width: 42px;
+    height: 42px;
+  }
+
+  .nghe-guide-replay__avatar .nghe-mascot {
     --nghe-width: 36px;
   }
 }

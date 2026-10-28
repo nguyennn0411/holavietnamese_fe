@@ -1,56 +1,80 @@
 // AI Roleplay & Scenarios Service (Người 4: /ai-scenarios, /ai-scenarios/:id, /ai-roleplay/:id, /ai-sessions/:id/result)
 
 import axiosClient from '../api/axiosClient.js';
+import { detectInputLanguage, getCurrentUserStorageKey } from './aiTutorService.js';
 
 export const SCENARIO_LEVELS = [
-  { id: 'all', label: 'Tất cả trình độ' },
-  { id: 'A1', label: 'A1 - Sơ cấp 1' },
-  { id: 'A2', label: 'A2 - Sơ cấp 2' },
-  { id: 'B1', label: 'B1 - Trung cấp 1' },
-  { id: 'B2', label: 'B2 - Trung cấp 2' },
-  { id: 'C1', label: 'C1 - Nâng cao' },
+  { id: 'all', label: 'Tất cả trình độ', labelVi: 'Tất cả trình độ', labelEn: 'All Levels' },
+  { id: 'A1', label: 'A1 - Sơ cấp 1', labelVi: 'A1 - Sơ cấp 1', labelEn: 'A1 - Beginner 1' },
+  { id: 'A2', label: 'A2 - Sơ cấp 2', labelVi: 'A2 - Sơ cấp 2', labelEn: 'A2 - Beginner 2' },
+  { id: 'B1', label: 'B1 - Trung cấp 1', labelVi: 'B1 - Trung cấp 1', labelEn: 'B1 - Intermediate 1' },
+  { id: 'B2', label: 'B2 - Trung cấp 2', labelVi: 'B2 - Trung cấp 2', labelEn: 'B2 - Intermediate 2' },
+  { id: 'C1', label: 'C1 - Nâng cao', labelVi: 'C1 - Nâng cao', labelEn: 'C1 - Advanced' },
 ];
 
 export const SCENARIO_TOPICS = [
-  { id: 'all', label: 'Tất cả chủ đề' },
-  { id: 'dining', label: '🍜 Ẩm thực & Quán xá' },
-  { id: 'shopping', label: '🛍️ Mua sắm & Mặc cả' },
-  { id: 'travel', label: '🛵 Di chuyển & Du lịch' },
-  { id: 'hospitality', label: '🏨 Khách sạn & Nghỉ dưỡng' },
-  { id: 'social', label: '🏡 Gia đình & Bạn bè' },
-  { id: 'work', label: '💼 Giao tiếp công sở' },
+  { id: 'all', label: 'Tất cả chủ đề', labelVi: 'Tất cả chủ đề', labelEn: 'All Topics' },
+  { id: 'dining', label: '🍜 Ẩm thực & Quán xá', labelVi: '🍜 Ẩm thực & Quán xá', labelEn: '🍜 Dining & Eateries' },
+  { id: 'shopping', label: '🛍️ Mua sắm & Mặc cả', labelVi: '🛍️ Mua sắm & Mặc cả', labelEn: '🛍️ Shopping & Bargaining' },
+  { id: 'travel', label: '🛵 Di chuyển & Du lịch', labelVi: '🛵 Di chuyển & Du lịch', labelEn: '🛵 Travel & Transport' },
+  { id: 'hospitality', label: '🏨 Khách sạn & Nghỉ dưỡng', labelVi: '🏨 Khách sạn & Nghỉ dưỡng', labelEn: '🏨 Hotel & Lodging' },
+  { id: 'social', label: '🏡 Gia đình & Bạn bè', labelVi: '🏡 Gia đình & Bạn bè', labelEn: '🏡 Family & Friends' },
+  { id: 'work', label: '💼 Giao tiếp công sở', labelVi: '💼 Giao tiếp công sở', labelEn: '💼 Workplace & Business' },
 ];
 
 export const SCENARIOS = [
   {
     id: 'goi-mon-pho-ha-noi',
     title: 'Gọi món tại quán Phở gia truyền Hà Nội',
+    titleVi: 'Gọi món tại quán Phở gia truyền Hà Nội',
+    titleEn: 'Ordering at a Traditional Hanoi Pho Shop',
     level: 'A1',
     levelLabel: 'A1 • Sơ cấp 1',
+    levelLabelVi: 'A1 • Sơ cấp 1',
+    levelLabelEn: 'A1 • Beginner 1',
     topic: 'dining',
     topicLabel: 'Ẩm thực & Quán xá',
+    topicLabelVi: 'Ẩm thực & Quán xá',
+    topicLabelEn: 'Dining & Eateries',
     destination: 'Hà Nội',
+    destinationVi: 'Hà Nội',
+    destinationEn: 'Hanoi',
     difficulty: 'Dễ',
+    difficultyVi: 'Dễ',
+    difficultyEn: 'Easy',
     duration: '5-10 phút',
+    durationVi: '5-10 phút',
+    durationEn: '5-10 mins',
     thumbnail: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn vừa đặt chân đến phố cổ Hà Nội vào một buổi sáng sớm se lạnh và ghé vào một quán phở bò gia truyền đông đúc trên phố Bát Đàn.',
+    overviewVi: 'Bạn vừa đặt chân đến phố cổ Hà Nội vào một buổi sáng sớm se lạnh và ghé vào một quán phở bò gia truyền đông đúc trên phố Bát Đàn.',
+    overviewEn: 'You have just arrived in Hanoi Old Quarter on a chilly early morning and walked into a crowded traditional beef pho restaurant on Bat Dan Street.',
     aiRole: {
       name: 'Cô Mai (Chủ quán Phở)',
+      nameEn: 'Auntie Mai (Pho Shop Owner)',
       role: 'Chủ quán phở Hà Nội nhanh nhẹn, xưng hô "cô - cháu"',
+      roleVi: 'Chủ quán phở Hà Nội nhanh nhẹn, xưng hô "cô - cháu"',
+      roleEn: 'Energetic Hanoi pho shop owner, addressing with "Auntie - Niece/Nephew"',
       avatar: '👩‍🍳',
       tone: 'Thân thiện, xởi lởi, giọng Bắc chuẩn Tràng An, phục vụ nhanh nhẹn',
+      toneVi: 'Thân thiện, xởi lởi, giọng Bắc chuẩn Tràng An, phục vụ nhanh nhẹn',
+      toneEn: 'Friendly, welcoming, authentic Hanoi accent, quick service',
       initialGreeting: 'Chào cháu! Quán cô đang có bàn trống trong góc kìa, vào ngồi đi cháu! Hôm nay cháu muốn ăn phở bò tái, chín, hay nạm gầu nào?',
     },
     learnerRole: {
       role: 'Du khách lần đầu thưởng thức phở truyền thống',
+      roleVi: 'Du khách lần đầu thưởng thức phở truyền thống',
+      roleEn: 'Tourist tasting traditional pho for the first time',
       context: 'Bạn cần tìm chỗ ngồi, gọi một bát phở bò theo khẩu vị riêng (ít hành, không cay) và gọi thêm đồ uống.',
+      contextVi: 'Bạn cần tìm chỗ ngồi, gọi một bát phở bò theo khẩu vị riêng (ít hành, không cay) và gọi thêm đồ uống.',
+      contextEn: 'Find a seat, order a bowl of beef pho tailored to your taste (less scallion, not spicy), and order drinks.',
     },
     objectives: [
-      { id: 'task-1', label: 'Chào hỏi và xác nhận chỗ ngồi tại quán', completed: false },
-      { id: 'task-2', label: 'Gọi một bát phở bò (tái/chín) kèm yêu cầu đặc biệt (ít hành/ớt)', completed: false },
-      { id: 'task-3', label: 'Gọi thêm đồ uống (trà đá/sữa đậu nành) và quẩy giòn', completed: false },
-      { id: 'task-4', label: 'Hỏi giá tiền và cảm ơn thanh toán', completed: false },
+      { id: 'task-1', label: 'Chào hỏi và xác nhận chỗ ngồi tại quán', labelVi: 'Chào hỏi và xác nhận chỗ ngồi tại quán', labelEn: 'Greet and confirm an available table', completed: false },
+      { id: 'task-2', label: 'Gọi một bát phở bò (tái/chín) kèm yêu cầu đặc biệt (ít hành/ớt)', labelVi: 'Gọi một bát phở bò (tái/chín) kèm yêu cầu đặc biệt (ít hành/ớt)', labelEn: 'Order beef pho with special requests (less scallion/chili)', completed: false },
+      { id: 'task-3', label: 'Gọi thêm đồ uống (trà đá/sữa đậu nành) và quẩy giòn', labelVi: 'Gọi thêm đồ uống (trà đá/sữa đậu nành) và quẩy giòn', labelEn: 'Order drinks (iced tea/soy milk) and fried dough sticks', completed: false },
+      { id: 'task-4', label: 'Hỏi giá tiền và cảm ơn thanh toán', labelVi: 'Hỏi giá tiền và cảm ơn thanh toán', labelEn: 'Ask for the bill and thank the host', completed: false },
     ],
     vocabularyHints: [
       { word: 'Bát phở tái chín', meaning: 'Bowl of pho with rare and well-done beef' },
@@ -60,36 +84,61 @@ export const SCENARIOS = [
       { word: 'Hết bao nhiêu tiền ạ?', meaning: 'How much does it cost in total?' },
     ],
     culturalTip: 'Tại các quán phở truyền thống miền Bắc, quẩy được nhúng trực tiếp vào nước dùng phở để hút trọn vị ngọt béo của xương bò.',
+    culturalTipVi: 'Tại các quán phở truyền thống miền Bắc, quẩy được nhúng trực tiếp vào nước dùng phở để hút trọn vị ngọt béo của xương bò.',
+    culturalTipEn: 'At traditional Northern pho shops, fried dough sticks (quẩy) are dipped directly into the hot broth to absorb the savory beef marrow flavors.',
   },
   {
     id: 'tra-gia-cho-ben-thanh',
     title: 'Trả giá quà lưu niệm tại Chợ Bến Thành',
+    titleVi: 'Trả giá quà lưu niệm tại Chợ Bến Thành',
+    titleEn: 'Bargaining for Souvenirs at Ben Thanh Market',
     level: 'A2',
     levelLabel: 'A2 • Sơ cấp 2',
+    levelLabelVi: 'A2 • Sơ cấp 2',
+    levelLabelEn: 'A2 • Beginner 2',
     topic: 'shopping',
     topicLabel: 'Mua sắm & Mặc cả',
+    topicLabelVi: 'Mua sắm & Mặc cả',
+    topicLabelEn: 'Shopping & Bargaining',
     destination: 'TP. Hồ Chí Minh',
+    destinationVi: 'TP. Hồ Chí Minh',
+    destinationEn: 'Ho Chi Minh City',
     difficulty: 'Trung bình',
+    difficultyVi: 'Trung bình',
+    difficultyEn: 'Medium',
     duration: '8-12 phút',
+    durationVi: '8-12 phút',
+    durationEn: '8-12 mins',
     thumbnail: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn ghé thăm chợ Bến Thành ở Sài Gòn để mua quà lưu niệm cho bạn bè: nón lá vẽ tay và cà phê Robusta rang xay thơm lừng.',
+    overviewVi: 'Bạn ghé thăm chợ Bến Thành ở Sài Gòn để mua quà lưu niệm cho bạn bè: nón lá vẽ tay và cà phê Robusta rang xay thơm lừng.',
+    overviewEn: 'You visit Saigon Ben Thanh Market to buy souvenirs for friends: hand-painted conical hats and fragrant roasted Robusta coffee.',
     aiRole: {
       name: 'Chị Ba Bến Thành',
+      nameEn: 'Sister Ba (Ben Thanh Vendor)',
       role: 'Tiểu thương sành sỏi, hoạt ngôn, xưng hô "chị - em"',
+      roleVi: 'Tiểu thương sành sỏi, hoạt ngôn, xưng hô "chị - em"',
+      roleEn: 'Experienced and articulate vendor, addressing with "Older sister - Younger sibling"',
       avatar: '🧣',
       tone: 'Niềm nở, dẻo miệng, giọng Nam Bộ ngọt ngào nhưng báo giá hơi cao',
+      toneVi: 'Niềm nở, dẻo miệng, giọng Nam Bộ ngọt ngào nhưng báo giá hơi cao',
+      toneEn: 'Welcoming, persuasive, sweet Southern accent, initially quoting high prices',
       initialGreeting: 'Ủa em trai / em gái, ghé sạp chị Ba coi nón lá với cà phê nè! Hàng xịn thủ công loại một đó cưng, mở hàng cho chị một món lấy hên đi!',
     },
     learnerRole: {
       role: 'Khách du lịch muốn mua quà lưu niệm với giá hợp lý',
+      roleVi: 'Khách du lịch muốn mua quà lưu niệm với giá hợp lý',
+      roleEn: 'Tourist looking for souvenirs at a reasonable price',
       context: 'Hỏi giá, khen sản phẩm đẹp, nhưng khéo léo thương lượng giảm từ 20-30% hoặc mua combo để được giá tốt.',
+      contextVi: 'Hỏi giá, khen sản phẩm đẹp, nhưng khéo léo thương lượng giảm từ 20-30% hoặc mua combo để được giá tốt.',
+      contextEn: 'Ask for prices, compliment items, and politely negotiate a 20-30% discount or combo deal.',
     },
     objectives: [
-      { id: 'task-1', label: 'Hỏi giá món đồ lưu niệm bằng tiếng Việt', completed: false },
-      { id: 'task-2', label: 'Khen món đồ và đưa ra đề xuất giảm giá lịch sự', completed: false },
-      { id: 'task-3', label: 'Đàm phán mua số lượng 2 món để được bớt thêm', completed: false },
-      { id: 'task-4', label: 'Chốt giá thân thiện và hoàn tất thanh toán', completed: false },
+      { id: 'task-1', label: 'Hỏi giá món đồ lưu niệm bằng tiếng Việt', labelVi: 'Hỏi giá món đồ lưu niệm bằng tiếng Việt', labelEn: 'Ask the price of souvenirs in Vietnamese', completed: false },
+      { id: 'task-2', label: 'Khen món đồ và đưa ra đề xuất giảm giá lịch sự', labelVi: 'Khen món đồ và đưa ra đề xuất giảm giá lịch sự', labelEn: 'Compliment the item and propose a polite discount', completed: false },
+      { id: 'task-3', label: 'Đàm phán mua số lượng 2 món để được bớt thêm', labelVi: 'Đàm phán mua số lượng 2 món để được bớt thêm', labelEn: 'Negotiate buying 2 items for extra savings', completed: false },
+      { id: 'task-4', label: 'Chốt giá thân thiện và hoàn tất thanh toán', labelVi: 'Chốt giá thân thiện và hoàn tất thanh toán', labelEn: 'Agree on a friendly price and complete payment', completed: false },
     ],
     vocabularyHints: [
       { word: 'Cái nón này bao nhiêu tiền chị?', meaning: 'How much is this conical hat, sister?' },
@@ -98,36 +147,61 @@ export const SCENARIOS = [
       { word: 'Giá hữu nghị / Giá mở hàng', meaning: 'Friendly price / First-sale good luck price' },
     ],
     culturalTip: 'Ở miền Nam, nụ cười tươi và cách xưng hô thân mật "Chị Ba ơi, bớt em xíu nghen" luôn là vũ khí trả giá hiệu quả nhất!',
+    culturalTipVi: 'Ở miền Nam, nụ cười tươi và cách xưng hô thân mật "Chị Ba ơi, bớt em xíu nghen" luôn là vũ khí trả giá hiệu quả nhất!',
+    culturalTipEn: 'In the South, a warm smile and affectionate address like "Chị Ba ơi, bớt em xíu nghen" (Sister Ba, give me a little discount please) is the most effective bargaining tactic!',
   },
   {
     id: 'bat-xe-om-cong-nghe',
     title: 'Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn',
+    titleVi: 'Đón xe ôm công nghệ & Chỉ đường đến điểm hẹn',
+    titleEn: 'Catching a Ride-Hailing Motorbike & Giving Directions',
     level: 'A2',
     levelLabel: 'A2 • Sơ cấp 2',
+    levelLabelVi: 'A2 • Sơ cấp 2',
+    levelLabelEn: 'A2 • Beginner 2',
     topic: 'travel',
     topicLabel: 'Di chuyển & Du lịch',
-    destination: 'Hà Nội / Sài Gòn',
+    topicLabelVi: 'Di chuyển & Du lịch',
+    topicLabelEn: 'Travel & Transport',
+    destination: 'Hà Nội / TP.HCM',
+    destinationVi: 'Hà Nội / TP.HCM',
+    destinationEn: 'Hanoi / HCMC',
     difficulty: 'Dễ - Trung bình',
+    difficultyVi: 'Dễ - Trung bình',
+    difficultyEn: 'Easy - Medium',
     duration: '6-10 phút',
+    durationVi: '6-10 phút',
+    durationEn: '6-10 mins',
     thumbnail: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn vừa đặt một chuyến xe ôm công nghệ trên app và bác tài xế gọi điện thoại xác nhận điểm đón.',
+    overviewVi: 'Bạn vừa đặt một chuyến xe ôm công nghệ trên app và bác tài xế gọi điện thoại xác nhận điểm đón.',
+    overviewEn: 'You have just booked a ride-hailing motorbike trip on the app and the driver calls to confirm your pickup spot.',
     aiRole: {
       name: 'Bác Hùng (Tài xế công nghệ)',
+      nameEn: 'Uncle Hung (Ride-Hailing Driver)',
       role: 'Tài xế xe ôm nhiều năm kinh nghiệm, nhiệt tình và mến khách',
+      roleVi: 'Tài xế xe ôm nhiều năm kinh nghiệm, nhiệt tình và mến khách',
+      roleEn: 'Experienced ride-hailing driver, helpful and hospitable',
       avatar: '🛵',
       tone: 'Chân chất, hào sảng, xưng "chú - cháu/con"',
+      toneVi: 'Chân chất, hào sảng, xưng "chú - cháu/con"',
+      toneEn: 'Down-to-earth, cheerful, addressing with "Uncle - Niece/Nephew"',
       initialGreeting: 'A lô, cháu có phải là người đặt chuyến xe đi Bảo tàng Lịch sử không? Chú đang chạy tới gần rồi, cháu mặc áo màu gì, đứng chỗ nào để chú tấp vào đón?',
     },
     learnerRole: {
       role: 'Hành khách đang chờ đón ở cổng địa điểm',
+      roleVi: 'Hành khách đang chờ đón ở cổng địa điểm',
+      roleEn: 'Passenger waiting at the gate for pickup',
       context: 'Mô tả vị trí đang đứng, nhận diện biển số xe, yêu cầu tài xế chạy cẩn thận và hỏi han giao thông trên đường.',
+      contextVi: 'Mô tả vị trí đang đứng, nhận diện biển số xe, yêu cầu tài xế chạy cẩn thận và hỏi han giao thông trên đường.',
+      contextEn: 'Describe your location, confirm the license plate, ask for a safe ride, and chat about traffic.',
     },
     objectives: [
-      { id: 'task-1', label: 'Mô tả vị trí và trang phục nhận diện cho tài xế', completed: false },
-      { id: 'task-2', label: 'Xác nhận biển số xe và đội mũ bảo hiểm', completed: false },
-      { id: 'task-3', label: 'Trò chuyện ngắn về đường xá hoặc thời tiết hôm nay', completed: false },
-      { id: 'task-4', label: 'Hỏi quét mã QR thanh toán và gửi lời cảm ơn', completed: false },
+      { id: 'task-1', label: 'Mô tả vị trí và trang phục nhận diện cho tài xế', labelVi: 'Mô tả vị trí và trang phục nhận diện cho tài xế', labelEn: 'Describe your location and clothing to the driver', completed: false },
+      { id: 'task-2', label: 'Xác nhận biển số xe và đội mũ bảo hiểm', labelVi: 'Xác nhận biển số xe và đội mũ bảo hiểm', labelEn: 'Confirm license plate and put on helmet', completed: false },
+      { id: 'task-3', label: 'Trò chuyện ngắn về đường xá hoặc thời tiết hôm nay', labelVi: 'Trò chuyện ngắn về đường xá hoặc thời tiết hôm nay', labelEn: 'Short chat about road traffic or weather today', completed: false },
+      { id: 'task-4', label: 'Hỏi quét mã QR thanh toán và gửi lời cảm ơn', labelVi: 'Hỏi quét mã QR thanh toán và gửi lời cảm ơn', labelEn: 'Ask to scan QR code for payment and thank the driver', completed: false },
     ],
     vocabularyHints: [
       { word: 'Cháu đang đứng trước cổng', meaning: 'I am standing in front of the gate' },
@@ -136,36 +210,61 @@ export const SCENARIOS = [
       { word: 'Cháu quét mã QR chuyển khoản nhé', meaning: 'I will scan the QR code to transfer money' },
     ],
     culturalTip: 'Các bác tài xế xe ôm Việt Nam rất thích trò chuyện vui vẻ về cuộc sống và sẵn sàng chỉ cho bạn các quán ăn địa phương ngon nhất.',
+    culturalTipVi: 'Các bác tài xế xe ôm Việt Nam rất thích trò chuyện vui vẻ về cuộc sống và sẵn sàng chỉ cho bạn các quán ăn địa phương ngon nhất.',
+    culturalTipEn: 'Vietnamese motorbike drivers love casual chats about life and are delighted to recommend hidden local food gems.',
   },
   {
     id: 'checkin-khach-san-da-nang',
     title: 'Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng',
+    titleVi: 'Nhận phòng khách sạn & Hỏi dịch vụ tại Đà Nẵng',
+    titleEn: 'Hotel Check-in & Inquiring Services in Da Nang',
     level: 'B1',
     levelLabel: 'B1 • Trung cấp 1',
+    levelLabelVi: 'B1 • Trung cấp 1',
+    levelLabelEn: 'B1 • Intermediate 1',
     topic: 'hospitality',
     topicLabel: 'Khách sạn & Nghỉ dưỡng',
+    topicLabelVi: 'Khách sạn & Nghỉ dưỡng',
+    topicLabelEn: 'Hotel & Lodging',
     destination: 'Đà Nẵng',
+    destinationVi: 'Đà Nẵng',
+    destinationEn: 'Da Nang',
     difficulty: 'Trung bình',
+    difficultyVi: 'Trung bình',
+    difficultyEn: 'Medium',
     duration: '8-12 phút',
+    durationVi: '8-12 phút',
+    durationEn: '8-12 mins',
     thumbnail: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn vừa đến khách sạn 4 sao ven biển Mỹ Khê Đà Nẵng sau chuyến bay dài và làm thủ tục check-in tại quầy lễ tân.',
+    overviewVi: 'Bạn vừa đến khách sạn 4 sao ven biển Mỹ Khê Đà Nẵng sau chuyến bay dài và làm thủ tục check-in tại quầy lễ tân.',
+    overviewEn: 'You have just arrived at a 4-star hotel along My Khe beach in Da Nang after a long flight and are checking in at reception.',
     aiRole: {
       name: 'Lễ tân Như Ý',
+      nameEn: 'Receptionist Nhu Y',
       role: 'Nhân viên lễ tân khách sạn Đà Nẵng chuyên nghiệp, chu đáo',
+      roleVi: 'Nhân viên lễ tân khách sạn Đà Nẵng chuyên nghiệp, chu đáo',
+      roleEn: 'Professional and attentive Da Nang hotel receptionist',
       avatar: '🛎️',
       tone: 'Lịch thiệp, chuẩn mực dịch vụ, giọng miền Trung nhẹ nhàng dễ thương',
+      toneVi: 'Lịch thiệp, chuẩn mực dịch vụ, giọng miền Trung nhẹ nhàng dễ thương',
+      toneEn: 'Polite, professional service standards, gentle Central Vietnamese accent',
       initialGreeting: 'Dạ em chào quý khách! Chào mừng anh/chị đã đến với Danang Sun Beach Hotel. Em có thể hỗ trợ anh/chị nhận phòng hoặc ký gửi hành lý ạ?',
     },
     learnerRole: {
       role: 'Khách du lịch đã đặt phòng trực tuyến',
+      roleVi: 'Khách du lịch đã đặt phòng trực tuyến',
+      roleEn: 'Tourist who has booked a room online',
       context: 'Cung cấp mã đặt phòng, đề xuất đổi sang phòng tầng cao ngắm biển, hỏi thời gian buffet sáng và xin tư vấn thuê xe máy.',
+      contextVi: 'Cung cấp mã đặt phòng, đề xuất đổi sang phòng tầng cao ngắm biển, hỏi thời gian buffet sáng và xin tư vấn thuê xe máy.',
+      contextEn: 'Provide booking code, request a high-floor sea view room, ask about breakfast buffet hours, and inquire about motorbike rental.',
     },
     objectives: [
-      { id: 'task-1', label: 'Cung cấp tên và mã đặt phòng kèm giấy tờ tùy thân', completed: false },
-      { id: 'task-2', label: 'Yêu cầu phòng tầng cao có ban công hướng biển', completed: false },
-      { id: 'task-3', label: 'Hỏi giờ phục vụ ăn sáng và mật khẩu WiFi', completed: false },
-      { id: 'task-4', label: 'Hỏi thủ tục thuê xe máy vi vu bán đảo Sơn Trà', completed: false },
+      { id: 'task-1', label: 'Cung cấp tên và mã đặt phòng kèm giấy tờ tùy thân', labelVi: 'Cung cấp tên và mã đặt phòng kèm giấy tờ tùy thân', labelEn: 'Provide guest name, booking code, and passport/ID', completed: false },
+      { id: 'task-2', label: 'Yêu cầu phòng tầng cao có ban công hướng biển', labelVi: 'Yêu cầu phòng tầng cao có ban công hướng biển', labelEn: 'Request a high-floor room with sea view balcony', completed: false },
+      { id: 'task-3', label: 'Hỏi giờ phục vụ ăn sáng và mật khẩu WiFi', labelVi: 'Hỏi giờ phục vụ ăn sáng và mật khẩu WiFi', labelEn: 'Ask breakfast buffet hours and WiFi password', completed: false },
+      { id: 'task-4', label: 'Hỏi thủ tục thuê xe máy vi vu bán đảo Sơn Trà', labelVi: 'Hỏi thủ tục thuê xe máy vi vu bán đảo Sơn Trà', labelEn: 'Inquire about motorbike rental to explore Son Tra peninsula', completed: false },
     ],
     vocabularyHints: [
       { word: 'Tôi đã đặt phòng qua mạng', meaning: 'I have booked a room online' },
@@ -174,36 +273,61 @@ export const SCENARIOS = [
       { word: 'Khách sạn có dịch vụ thuê xe máy không?', meaning: 'Does the hotel offer motorbike rental service?' },
     ],
     culturalTip: 'Người Đà Nẵng nổi tiếng thân thiện và mến khách bậc nhất cả nước, luôn sẵn sàng hướng dẫn bạn các quán hải sản người bản địa hay ăn.',
+    culturalTipVi: 'Người Đà Nẵng nổi tiếng thân thiện và mến khách bậc nhất cả nước, luôn sẵn sàng hướng dẫn bạn các quán hải sản người bản địa hay ăn.',
+    culturalTipEn: 'Da Nang locals are famous for being extraordinarily friendly and welcoming, always ready to point you to authentic local seafood joints.',
   },
   {
     id: 'ra-mat-gia-dinh-ban',
     title: 'Gặp gỡ và chào hỏi gia đình bạn người Việt',
+    titleVi: 'Gặp gỡ và chào hỏi gia đình bạn người Việt',
+    titleEn: 'Meeting & Greeting a Vietnamese Friend\'s Family',
     level: 'B2',
     levelLabel: 'B2 • Trung cấp 2',
+    levelLabelVi: 'B2 • Trung cấp 2',
+    levelLabelEn: 'B2 • Intermediate 2',
     topic: 'social',
     topicLabel: 'Gia đình & Bạn bè',
+    topicLabelVi: 'Gia đình & Bạn bè',
+    topicLabelEn: 'Family & Friends',
     destination: 'Toàn quốc',
+    destinationVi: 'Toàn quốc',
+    destinationEn: 'Nationwide',
     difficulty: 'Nâng cao',
+    difficultyVi: 'Nâng cao',
+    difficultyEn: 'Advanced',
     duration: '10-15 phút',
+    durationVi: '10-15 phút',
+    durationEn: '10-15 mins',
     thumbnail: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn được một người bạn thân mời về thăm nhà dùng cơm trưa nhân dịp cuối tuần. Đây là lần đầu bạn gặp mặt bố mẹ của bạn mình.',
+    overviewVi: 'Bạn được một người bạn thân mời về thăm nhà dùng cơm trưa nhân dịp cuối tuần. Đây là lần đầu bạn gặp mặt bố mẹ của bạn mình.',
+    overviewEn: 'You are invited by a close friend to visit their family for weekend lunch. This is your first time meeting your friend\'s parents.',
     aiRole: {
       name: 'Bác Hai (Bố của bạn)',
+      nameEn: 'Uncle Hai (Friend\'s Father)',
       role: 'Chủ nhà nồng hậu, quý mến bạn của con cái',
+      roleVi: 'Chủ nhà nồng hậu, quý mến bạn của con cái',
+      roleEn: 'Warm host who warmly welcomes his child\'s foreign friend',
       avatar: '👴',
       tone: 'Ấm áp, ân cần, coi trọng lễ nghĩa gia phong',
+      toneVi: 'Ấm áp, ân cần, coi trọng lễ nghĩa gia phong',
+      toneEn: 'Warm, caring, valuing traditional family etiquette',
       initialGreeting: 'Dạ chào cháu! Bác nghe Nam kể nhiều về cháu lắm rồi, hôm nay mới có dịp gặp mặt. Vào nhà uống nước xơi trầu cho mát nhé cháu!',
     },
     learnerRole: {
       role: 'Người bạn ngoại quốc đến thăm nhà dùng cơm',
+      roleVi: 'Người bạn ngoại quốc đến thăm nhà dùng cơm',
+      roleEn: 'Foreign friend visiting family for lunch',
       context: 'Chào hỏi lễ phép với kính ngữ chuẩn mực, trao món quà nhỏ kèm lời chúc, khen ngợi món ăn và mời cơm đúng phép tắc.',
+      contextVi: 'Chào hỏi lễ phép với kính ngữ chuẩn mực, trao món quà nhỏ kèm lời chúc, khen ngợi món ăn và mời cơm đúng phép tắc.',
+      contextEn: 'Greet respectfully with proper honorifics, present a small gift with warm wishes, compliment the food, and follow dining etiquette.',
     },
     objectives: [
-      { id: 'task-1', label: 'Chào hỏi bằng kính ngữ "Dạ con chào hai bác ạ"', completed: false },
-      { id: 'task-2', label: 'Tặng quà lưu niệm và giải thích ý nghĩa lịch sự', completed: false },
-      { id: 'task-3', label: 'Mời cơm người lớn trước khi cầm đũa', completed: false },
-      { id: 'task-4', label: 'Cảm ơn lòng hiếu khách trước khi xin phép ra về', completed: false },
+      { id: 'task-1', label: 'Chào hỏi bằng kính ngữ "Dạ con chào hai bác ạ"', labelVi: 'Chào hỏi bằng kính ngữ "Dạ con chào hai bác ạ"', labelEn: 'Greet using polite honorific "Dạ con chào hai bác ạ"', completed: false },
+      { id: 'task-2', label: 'Tặng quà lưu niệm và giải thích ý nghĩa lịch sự', labelVi: 'Tặng quà lưu niệm và giải thích ý nghĩa lịch sự', labelEn: 'Present a small gift and politely explain its meaning', completed: false },
+      { id: 'task-3', label: 'Mời cơm người lớn trước khi cầm đũa', labelVi: 'Mời cơm người lớn trước khi cầm đũa', labelEn: 'Invite elders to dine before picking up chopsticks', completed: false },
+      { id: 'task-4', label: 'Cảm ơn lòng hiếu khách trước khi xin phép ra về', labelVi: 'Cảm ơn lòng hiếu khách trước khi xin phép ra về', labelEn: 'Thank the hosts for their hospitality before departing', completed: false },
     ],
     vocabularyHints: [
       { word: 'Dạ, con chào hai bác ạ!', meaning: 'Polite greeting to the host parents' },
@@ -212,36 +336,61 @@ export const SCENARIOS = [
       { word: 'Bác gái nấu ăn ngon quá ạ!', meaning: 'Auntie cooks so deliciously!' },
     ],
     culturalTip: 'Khi đến thăm nhà người Việt, mang theo một giỏ trái cây tươi hoặc trà ngon làm quà biếu là hành động cực kỳ tinh tế và được quý trọng.',
+    culturalTipVi: 'Khi đến thăm nhà người Việt, mang theo một giỏ trái cây tươi hoặc trà ngon làm quà biếu là hành động cực kỳ tinh tế và được quý trọng.',
+    culturalTipEn: 'When visiting a Vietnamese home, bringing fresh fruits or fine tea as a gift is considered very thoughtful and respectful.',
   },
   {
     id: 'phong-van-xin-viec-cong-so',
     title: 'Phỏng vấn xin việc tại doanh nghiệp Việt Nam',
+    titleVi: 'Phỏng vấn xin việc tại doanh nghiệp Việt Nam',
+    titleEn: 'Job Interview at a Vietnamese Enterprise',
     level: 'C1',
     levelLabel: 'C1 • Nâng cao',
+    levelLabelVi: 'C1 • Nâng cao',
+    levelLabelEn: 'C1 • Advanced',
     topic: 'work',
     topicLabel: 'Giao tiếp công sở',
+    topicLabelVi: 'Giao tiếp công sở',
+    topicLabelEn: 'Workplace & Business',
     destination: 'Hà Nội / TP.HCM',
+    destinationVi: 'Hà Nội / TP.HCM',
+    destinationEn: 'Hanoi / HCMC',
     difficulty: 'Thử thách',
+    difficultyVi: 'Thử thách',
+    difficultyEn: 'Challenging',
     duration: '12-18 phút',
+    durationVi: '12-18 phút',
+    durationEn: '12-18 mins',
     thumbnail: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80',
     overview: 'Bạn đang tham gia vòng phỏng vấn chuyên sâu cho vị trí Chuyên viên Hợp tác Quốc tế tại một tập đoàn công nghệ lớn ở Việt Nam.',
+    overviewVi: 'Bạn đang tham gia vòng phỏng vấn chuyên sâu cho vị trí Chuyên viên Hợp tác Quốc tế tại một tập đoàn công nghệ lớn ở Việt Nam.',
+    overviewEn: 'You are attending an in-depth interview for an International Cooperation Specialist position at a major tech corporation in Vietnam.',
     aiRole: {
       name: 'Chị Lan Hương (Giám đốc Nhân sự)',
+      nameEn: 'Ms. Lan Huong (HR Director)',
       role: 'Nhà tuyển dụng chuyên nghiệp, đặt câu hỏi logic và tình huống thực tế',
+      roleVi: 'Nhà tuyển dụng chuyên nghiệp, đặt câu hỏi logic và tình huống thực tế',
+      roleEn: 'Professional interviewer asking analytical and situational questions',
       avatar: '💼',
       tone: 'Trang trọng, chuyên nghiệp, đánh giá cao sự lưu loát và hòa nhập văn hóa',
+      toneVi: 'Trang trọng, chuyên nghiệp, đánh giá cao sự lưu loát và hòa nhập văn hóa',
+      toneEn: 'Formal, professional, highly valuing fluency and cultural adaptability',
       initialGreeting: 'Chào bạn. Cảm ơn bạn đã quan tâm đến cơ hội nghề nghiệp tại công ty chúng tôi. Trước hết, bạn vui lòng giới thiệu ngắn gọn về bản thân và lý do bạn muốn làm việc tại Việt Nam nhé.',
     },
     learnerRole: {
       role: 'Ứng viên sáng giá cho vị trí công việc chuyên nghiệp',
+      roleVi: 'Ứng viên sáng giá cho vị trí công việc chuyên nghiệp',
+      roleEn: 'Candidate for a professional role',
       context: 'Trình bày bản thân bằng tiếng Việt chuẩn mực, nêu bật kỹ năng thế mạnh, cách thích nghi môi trường đa văn hóa và hỏi lại nhà tuyển dụng.',
+      contextVi: 'Trình bày bản thân bằng tiếng Việt chuẩn mực, nêu bật kỹ năng thế mạnh, cách thích nghi môi trường đa văn hóa và hỏi lại nhà tuyển dụng.',
+      contextEn: 'Present yourself in standard Vietnamese, highlight core competencies, discuss multicultural adaptability, and ask thoughtful questions.',
     },
     objectives: [
-      { id: 'task-1', label: 'Tự giới thiệu bản thân và kinh nghiệm chuyên môn lưu loát', completed: false },
-      { id: 'task-2', label: 'Trình bày động lực làm việc và tình cảm với môi trường Việt Nam', completed: false },
-      { id: 'task-3', label: 'Trả lời câu hỏi xử lý bất đồng văn hóa trong làm việc nhóm', completed: false },
-      { id: 'task-4', label: 'Đặt câu hỏi thông minh về định hướng phát triển của công ty', completed: false },
+      { id: 'task-1', label: 'Tự giới thiệu bản thân và kinh nghiệm chuyên môn lưu loát', labelVi: 'Tự giới thiệu bản thân và kinh nghiệm chuyên môn lưu loát', labelEn: 'Introduce yourself and relevant professional experience fluently', completed: false },
+      { id: 'task-2', label: 'Trình bày động lực làm việc và tình cảm với môi trường Việt Nam', labelVi: 'Trình bày động lực làm việc và tình cảm với môi trường Việt Nam', labelEn: 'Express career motivation and affinity for working in Vietnam', completed: false },
+      { id: 'task-3', label: 'Trả lời câu hỏi xử lý bất đồng văn hóa trong làm việc nhóm', labelVi: 'Trả lời câu hỏi xử lý bất đồng văn hóa trong làm việc nhóm', labelEn: 'Answer situational question about managing cross-cultural team conflicts', completed: false },
+      { id: 'task-4', label: 'Đặt câu hỏi thông minh về định hướng phát triển của công ty', labelVi: 'Đặt câu hỏi thông minh về định hướng phát triển của công ty', labelEn: 'Ask an insightful question about the company\'s strategic direction', completed: false },
     ],
     vocabularyHints: [
       { word: 'Kinh nghiệm chuyên môn', meaning: 'Professional expertise and experience' },
@@ -250,14 +399,18 @@ export const SCENARIOS = [
       { word: 'Đóng góp vào sự phát triển', meaning: 'Contribute to the growth/development' },
     ],
     culturalTip: 'Trong văn hóa doanh nghiệp Việt Nam, sự tôn trọng đồng nghiệp, tinh thần đoàn kết và tính khiêm tốn được đánh giá cao ngang bằng với năng lực chuyên môn.',
+    culturalTipVi: 'Trong văn hóa doanh nghiệp Việt Nam, sự tôn trọng đồng nghiệp, tinh thần đoàn kết và tính khiêm tốn được đánh giá cao ngang bằng với năng lực chuyên môn.',
+    culturalTipEn: 'In Vietnamese corporate culture, mutual respect, solidarity, and humility are valued as much as professional expertise.',
   },
 ];
 
-const ROLEPLAY_SESSION_STORAGE = 'hola_ai_roleplay_session_';
-const ROLEPLAY_RESULT_STORAGE = 'hola_ai_roleplay_result_';
-const AI_PROVIDER = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_PROVIDER) || 'openrouter';
-const AI_MODEL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_MODEL) || 'openrouter/free';
-const AI_REQUEST_TIMEOUT_MS = Math.max(5000, Number(typeof import.meta !== 'undefined' && import.meta.env?.VITE_AI_REQUEST_TIMEOUT_MS) || 30000);
+const ROLEPLAY_SESSION_STORAGE = 'hola_ai_roleplay_session_v2_';
+const ROLEPLAY_RESULT_STORAGE = 'hola_ai_roleplay_result_v2_';
+const getRoleplaySessionKey = (scenarioId) => `${ROLEPLAY_SESSION_STORAGE}${getCurrentUserStorageKey()}_${scenarioId}`;
+const getRoleplayResultKey = (scenarioId) => `${ROLEPLAY_RESULT_STORAGE}${getCurrentUserStorageKey()}_${scenarioId}`;
+const AI_PROVIDER = import.meta?.env?.VITE_AI_PROVIDER || 'openrouter';
+const AI_MODEL = import.meta?.env?.VITE_AI_MODEL || 'openrouter/free';
+const AI_REQUEST_TIMEOUT_MS = Math.max(5000, Number(import.meta?.env?.VITE_AI_REQUEST_TIMEOUT_MS) || 30000);
 
 const unwrapAiPayload = (response) => response?.result ?? response?.data ?? response ?? {};
 
@@ -287,7 +440,7 @@ const normalizeAiPayload = (payload) => {
   }
 };
 
-const buildRoleplayContext = (scenario, session) => {
+const buildRoleplayContext = (scenario, session, lang = 'vi') => {
   const completed = new Set(session.completedTasks || []);
   const remainingObjectives = (scenario.objectives || [])
     .filter(objective => !completed.has(objective.id))
@@ -312,7 +465,9 @@ const buildRoleplayContext = (scenario, session) => {
     `LƯU Ý VĂN HÓA: ${scenario.culturalTip}`,
     'LỊCH SỬ GẦN ĐÂY:',
     recentMessages,
-    'QUY TẮC: Luôn ở trong vai và bám kịch bản. Nếu học viên nói lệch chủ đề, trả lời ngắn tối đa một câu rồi kéo họ về mục tiêu gần nhất bằng câu hỏi/gợi ý tiếng Việt. Không đổi vai, không mở chủ đề mới, không giảng dài. Trả JSON hợp lệ gồm text, translation, explanation, completedTasks; không bọc markdown.',
+    lang === 'en'
+      ? 'QUY TẮC: Học viên vừa hỏi/nói bằng TIẾNG ANH. Hãy ở trong vai và trả lời bằng TIẾNG ANH (có thể kèm cụm từ tiếng Việt ngắn trong ngoặc). Bám sát kịch bản, trả JSON hợp lệ gồm text, translation, explanation, completedTasks; không bọc markdown.'
+      : 'QUY TẮC: Học viên vừa hỏi/nói bằng TIẾNG VIỆT. Luôn ở trong vai, trả lời bằng TIẾNG VIỆT và bám kịch bản. Nếu học viên nói lệch chủ đề, trả lời ngắn tối đa một câu rồi kéo họ về mục tiêu gần nhất. Trả JSON hợp lệ gồm text, translation, explanation, completedTasks; không bọc markdown.',
   ].join('\\n');
 };
 
@@ -532,7 +687,7 @@ export const aiRoleplayService = {
   getRoleplaySession(scenarioId) {
     const scenario = this.getScenario(scenarioId);
     try {
-      const stored = localStorage.getItem(ROLEPLAY_SESSION_STORAGE + scenarioId);
+      const stored = localStorage.getItem(getRoleplaySessionKey(scenarioId));
       if (stored) {
         const parsed = JSON.parse(stored);
         let completed = parsed.completedTasks || [];
@@ -576,7 +731,7 @@ export const aiRoleplayService = {
 
   saveRoleplaySession(scenarioId, session) {
     try {
-      localStorage.setItem(ROLEPLAY_SESSION_STORAGE + scenarioId, JSON.stringify(session));
+      localStorage.setItem(getRoleplaySessionKey(scenarioId), JSON.stringify(session));
     } catch (e) {
       console.error('Failed to save roleplay session', e);
     }
@@ -599,8 +754,9 @@ export const aiRoleplayService = {
     return session;
   },
 
-  resetRoleplaySession(scenarioId) { localStorage.removeItem(ROLEPLAY_RESULT_STORAGE + scenarioId);
-    localStorage.removeItem(ROLEPLAY_SESSION_STORAGE + scenarioId);
+  resetRoleplaySession(scenarioId) {
+    localStorage.removeItem(getRoleplayResultKey(scenarioId));
+    localStorage.removeItem(getRoleplaySessionKey(scenarioId));
     return this.getRoleplaySession(scenarioId);
   },
 
@@ -684,7 +840,8 @@ export const aiRoleplayService = {
               provider: AI_PROVIDER,
               model: AI_MODEL,
               scenarioId,
-              scenarioContext: buildRoleplayContext(scenario, session),
+              language: detectInputLanguage(userMsg.text),
+              scenarioContext: buildRoleplayContext(scenario, session, detectInputLanguage(userMsg.text)),
             },
             { timeout: AI_REQUEST_TIMEOUT_MS },
           );
@@ -729,6 +886,7 @@ export const aiRoleplayService = {
     await new Promise(r => setTimeout(r, 400));
 
     const totalUserMsgs = session.messages.filter(m => m.sender === 'user').length + 1;
+    const isEn = detectInputLanguage(userMsg.text) === 'en';
     let aiText = '';
     let translation = '';
     let explanation = '';
@@ -737,25 +895,33 @@ export const aiRoleplayService = {
     // Evaluate tasks based on message content & turn
     if (scenarioId === 'goi-mon-pho-ha-noi') {
       if (totalUserMsgs === 1) {
-        aiText = 'Được rồi cháu ơi! Một bát tái chín ít hành nhé. Cháu có muốn dùng thêm quẩy giòn nhúng nước dùng hay uống trà đá mát lạnh không? Quẩy nhà cô vừa mới rán giòn tan luôn!';
+        aiText = isEn
+          ? 'Alright! One rare and well-done pho with less scallions coming right up. Would you like crispy dough sticks (quẩy giòn) or cold iced green tea (trà đá)? Our dough sticks are freshly fried!'
+          : 'Được rồi cháu ơi! Một bát tái chín ít hành nhé. Cháu có muốn dùng thêm quẩy giòn nhúng nước dùng hay uống trà đá mát lạnh không? Quẩy nhà cô vừa mới rán giòn tan luôn!';
         translation = 'Alright! One rare and well-done pho with less scallions. Would you like crispy dough sticks or cold iced green tea? Our sticks are freshly fried and very crispy!';
         explanation = 'Cô Mai đã ghi nhận món ăn và chủ động gợi ý đồ ăn kèm (quẩy) cùng thức uống (trà đá). Bạn hãy gọi thêm món nhé!';
         if (!newCompletedTasks.includes('task-1')) newCompletedTasks.push('task-1');
         if (!newCompletedTasks.includes('task-2')) newCompletedTasks.push('task-2');
       } else if (totalUserMsgs === 2) {
-        aiText = 'Có ngay đây cháu! Một đĩa quẩy vàng ruộm và cốc trà đá bớt ngọt đây. Cháu ăn thử miếng thịt bò xem có vừa miệng không, bên cạnh có dấm tỏi với tương ớt cay đấy nhé!';
+        aiText = isEn
+          ? 'Here you go! One golden plate of crispy dough sticks and an iced green tea. Try the beef and see if it fits your taste—garlic vinegar and chili sauce are right beside you!'
+          : 'Có ngay đây cháu! Một đĩa quẩy vàng ruộm và cốc trà đá bớt ngọt đây. Cháu ăn thử miếng thịt bò xem có vừa miệng không, bên cạnh có dấm tỏi với tương ớt cay đấy nhé!';
         translation = 'Here you go! One golden plate of crispy dough sticks and a green tea. Try the beef and see if it fits your taste, garlic vinegar and chili sauce are right beside you!';
         explanation = 'Cô Mai mang đồ ăn ra và dặn bạn cách nêm nếm gia vị chuẩn Hà Nội (dấm tỏi, tương ớt). Bạn có thể khen ngon và chuẩn bị xin thanh toán.';
         if (!newCompletedTasks.includes('task-3')) newCompletedTasks.push('task-3');
       } else {
-        aiText = 'Của cháu bát phở bốn mươi lăm nghìn, quẩy mười nghìn, trà đá năm nghìn, tất cả tròn sáu mươi nghìn đồng cháu nhé! Cảm ơn cháu nhiều, chúc cháu có chuyến đi chơi Hà Nội vui vẻ nha!';
+        aiText = isEn
+          ? 'Your bill is 45,000 VND for pho, 10,000 VND for dough sticks, and 5,000 VND for iced tea—60,000 VND in total! Thank you so much, and have a wonderful trip in Hanoi!'
+          : 'Của cháu bát phở bốn mươi lăm nghìn, quẩy mười nghìn, trà đá năm nghìn, tất cả tròn sáu mươi nghìn đồng cháu nhé! Cảm ơn cháu nhiều, chúc cháu có chuyến đi chơi Hà Nội vui vẻ nha!';
         translation = 'Your bill is 45k for pho, 10k for dough sticks, 5k for iced tea, total is exactly 60,000 VND! Thank you very much, have a wonderful trip in Hanoi!';
         explanation = 'Cô Mai đã báo chi tiết từng món và tổng tiền rất rõ ràng. Nhiệm vụ thanh toán hoàn tất xuất sắc!';
         if (!newCompletedTasks.includes('task-4')) newCompletedTasks.push('task-4');
       }
     } else {
       // Generic smart roleplay
-      aiText = `Hay quá bạn ơi! Nghe bạn nói bằng tiếng Việt tự nhiên thế này tôi mừng lắm. Tôi rất tán thành ý của bạn. Bạn còn thắc mắc hay muốn tìm hiểu thêm điều gì nữa không?`;
+      aiText = isEn
+        ? `Awesome! I completely understand and agree with your point. Do you have any other questions or requests for me in this scenario?`
+        : `Hay quá bạn ơi! Nghe bạn nói bằng tiếng Việt tự nhiên thế này tôi mừng lắm. Tôi rất tán thành ý của bạn. Bạn còn thắc mắc hay muốn tìm hiểu thêm điều gì nữa không?`;
       translation = `Awesome! Hearing you speak Vietnamese so naturally makes me so glad. I completely agree with your point. Do you have any other questions or things you want to know?`;
       explanation = `Đối phương tiếp nhận phản hồi của bạn rất tích cực và cởi mở. Bạn đang hoàn thành rất tốt vai diễn của mình!`;
       if (totalUserMsgs >= 1 && !newCompletedTasks.includes('task-1')) newCompletedTasks.push('task-1');
@@ -789,7 +955,7 @@ export const aiRoleplayService = {
     // (deduplicated: skipped if progress already reported 100% for this session)
     await this.reportCompletion(scenarioId, result.totalScore);
 
-    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
+    localStorage.setItem(getRoleplayResultKey(scenarioId), JSON.stringify(result));
     return result;
   },
 
@@ -862,13 +1028,13 @@ export const aiRoleplayService = {
 
   getResult(scenarioId) {
     try {
-      const stored = localStorage.getItem(ROLEPLAY_RESULT_STORAGE + scenarioId);
+      localStorage.getItem(getRoleplayResultKey(scenarioId));
       // Always recompute result from current session so score is never stuck on stale cache
     } catch {
       // fallback
     }
     const result = this.buildRoleplayResult(scenarioId);
-    localStorage.setItem(ROLEPLAY_RESULT_STORAGE + scenarioId, JSON.stringify(result));
+    localStorage.setItem(getRoleplayResultKey(scenarioId), JSON.stringify(result));
     return result;
   },
 
