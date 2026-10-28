@@ -1,4 +1,4 @@
-﻿import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { moveItem } from './answerUtils';
 import { ContentImage } from '@/components/common/ContentImage';
 import { MediaPlayer } from './MediaPlayer';
@@ -89,7 +89,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
                 )}
 
                 <div className="text-sm sm:text-base font-bold text-[#253044] group-hover:text-[#FF7A00] transition-colors leading-snug">
-                  <BilingualText vi={option.textVi || option.text || option.textEn} en={option.textEn} />
+                  {option.textEn ? (<BilingualText vi={option.textVi || option.text} en={option.textEn} />) : (<span>{option.textVi || option.text || option.id}</span>)}
                 </div>
 
                 {option.audioUrl && (
@@ -171,7 +171,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
         {/* Available Word Bank */}
         <div className="space-y-2">
           <label className="text-xs font-bold uppercase tracking-wider text-[#64748B] block">
-            <BilingualText>{"Kho từ vựng có sẵn:"}</BilingualText>
+            Kho từ vựng có sẵn:
           </label>
           <div className="actions flex flex-wrap gap-2.5 p-3 rounded-2xl bg-white border border-[#E8E5DF]/80 shadow-2xs">
             {unusedOptions.length > 0 ? (
@@ -183,7 +183,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
                   onClick={() => handleAddWord(opt.id)}
                   className="px-4 py-2.5 rounded-xl bg-[#FFF7E8] text-[#253044] hover:bg-[#FFF2D6] font-bold text-sm border border-[#E8E5DF] hover:border-[#FFCD00] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
                 >
-                  <BilingualText vi={opt.textVi || opt.text || opt.textEn} en={opt.textEn} />
+                  <span>{opt.textVi || opt.text || opt.textEn || opt.id}</span>
                 </button>
               ))
             ) : (
@@ -250,7 +250,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
             {targets.map((option, index) => (
               <div key={option.id} className="p-3.5 rounded-2xl bg-[#FFF7E8] border border-[#E8E5DF] space-y-2 shadow-2xs">
                 <strong className="block text-xs font-bold text-[#253044]">
-                  <BilingualText vi={option.textVi || option.text || option.textEn || `Lựa chọn ${index + 1}`} en={option.textEn} />
+                  {option.textEn ? (<BilingualText vi={option.textVi || option.text || `Lựa chọn ${index + 1}`} en={option.textEn} />) : (<span>{option.textVi || option.text || `Lựa chọn ${index + 1}`}</span>)}
                 </strong>
                 <OptionMedia option={option} index={index} />
               </div>
@@ -266,7 +266,7 @@ export function QuestionInput({ question, answer = {}, onChange, disabled = fals
             >
               <div className="space-y-1 min-w-0">
                 <span className="font-bold text-sm text-[#253044] block">
-                  <BilingualText vi={option.textVi || option.text || option.textEn || `Mục ${index + 1}`} en={option.textEn} />
+                  {option.textEn ? (<BilingualText vi={option.textVi || option.text || `Mục ${index + 1}`} en={option.textEn} />) : (<span>{option.textVi || option.text || `Mục ${index + 1}`}</span>)}
                 </span>
                 <OptionMedia option={option} index={index} />
               </div>

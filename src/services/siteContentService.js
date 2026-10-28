@@ -9,9 +9,24 @@ const listOf = (response) => {
 
 const enabledBody = (enabled) => ({ enabled: Boolean(enabled) });
 
+let inFlightPublicRequest = null;
+
 export const siteContentService = {
   async getPublic(options = {}) {
-    const response = await httpClient('/site-content', { method: 'GET', ...options });
+    if (inFlightPublicRequest && !options.force) {
+      return inFlightPublicRequest;
+    }
+    const requestPromise = (async () => {
+      try {
+        const response = await httpClient('/site-content', { method: 'GET', ...options });
+              } finally {
+        if (inFlightPublicRequest === requestPromise) {
+          inFlightPublicRequest = null;
+        }
+      }
+    })();
+    inFlightPublicRequest = requestPromise;
+    return requestPromise;
     return resultOf(response) ?? {};
   },
 

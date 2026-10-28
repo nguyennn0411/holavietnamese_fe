@@ -132,9 +132,9 @@ const DEFAULT_CURRICULUM_LESSONS: AnyRecord[] = [
     title: 'Bài 7: Luyện phản xạ hội thoại AI',
     titleVi: 'Bài 7: Luyện phản xạ hội thoại AI',
     titleEn: 'Lesson 7: Conversational AI Reflex Practice',
-    description: 'Thực hành tương tác trực tiếp với Gia sư AI thông minh để kiểm tra phản xạ nói và nhận phản hồi phát âm chuẩn xác.',
-    descriptionVi: 'Thực hành tương tác trực tiếp với Gia sư AI thông minh để kiểm tra phản xạ nói và nhận phản hồi phát âm chuẩn xác.',
-    descriptionEn: 'Engage in open-ended conversations with the smart AI Tutor to test speaking reflexes and get instant feedback.',
+    description: 'Thực hành tương tác trực tiếp với Hola AI thông minh để kiểm tra phản xạ nói và nhận phản hồi phát âm chuẩn xác.',
+    descriptionVi: 'Thực hành tương tác trực tiếp với Hola AI thông minh để kiểm tra phản xạ nói và nhận phản hồi phát âm chuẩn xác.',
+    descriptionEn: 'Engage in open-ended conversations with the smart Hola AI to test speaking reflexes and get instant feedback.',
     estimatedDuration: 15,
     xpReward: 50,
     objectives: ['Luyện nói phản xạ không cần kịch bản', 'Nhận chấm điểm phát âm AI theo thời gian thực', 'Tự tin hội thoại thực tế'],
@@ -226,21 +226,21 @@ const UNITS_DATA: UnitConfig[] = [
     unitNumber: 3,
     title: 'Phản Xạ AI & Về Đích Chặng Sơ Cấp A1',
     titleEn: 'AI Reflexes & A1 Elementary Milestone',
-    description: 'Thực hành tương tác trực tiếp với Gia sư AI và hoàn thành thử thách chứng chỉ.',
-    descriptionEn: 'Practice live interactions with the AI Tutor and complete the certificate challenge.',
+    description: 'Thực hành tương tác trực tiếp với Hola AI và hoàn thành thử thách chứng chỉ.',
+    descriptionEn: 'Practice live interactions with the Hola AI and complete the certificate challenge.',
     gradient: 'linear-gradient(135deg, #B45309 0%, #F59E0B 100%)',
     depthColor: '#78350F',
     lessonRange: [6, 7], // Lessons 7, 8
     guidebook: {
-      summary: 'Rèn luyện phản xạ phát âm chuẩn xác với Gia sư AI và tổng kết toàn bộ chặng Sơ cấp.',
-      summaryEn: 'Sharpen accurate pronunciation reflexes with AI Tutor and review the entire Elementary stage.',
+      summary: 'Rèn luyện phản xạ phát âm chuẩn xác với Hola AI và tổng kết toàn bộ chặng Sơ cấp.',
+      summaryEn: 'Sharpen accurate pronunciation reflexes with Hola AI and review the entire Elementary stage.',
       tips: [
-        'Đừng sợ phát âm sai: Gia sư AI luôn kiên nhẫn sửa từng âm tiết và cao độ thanh điệu.',
+        'Đừng sợ phát âm sai: Hola AI luôn kiên nhẫn sửa từng âm tiết và cao độ thanh điệu.',
         'Hãy luyện nói thành tiếng to, rõ ràng theo nhịp điệu tự nhiên.',
         'Hoàn thành bài 8 để nhận chứng chỉ điện tử A1 và mở khóa chặng Trung cấp!',
       ],
       tipsEn: [
-        'Do not fear mispronunciation: AI Tutor is always patient, guiding each syllable and tone contour.',
+        'Do not fear mispronunciation: Hola AI is always patient, guiding each syllable and tone contour.',
         'Practice speaking out loud clearly with a natural conversational rhythm.',
         'Complete lesson 8 to receive your digital A1 Certificate and unlock the Intermediate stage!',
       ],
@@ -795,7 +795,7 @@ export const DashboardScreen: React.FC = () => {
                   </span>
                   <div className="flex-1">
                     <div className="flex justify-between text-xs font-extrabold text-[#251B18] mb-1">
-                      <span><BilingualText vi="Luyện phản xạ với Gia sư AI" en="Reflex practice with AI Tutor" /></span>
+                      <span><BilingualText vi="Luyện phản xạ với Hola AI" en="Reflex practice with Hola AI" /></span>
                       <span>0 / 1</span>
                     </div>
                     <div className="h-2 w-full bg-[#E5E7EB] rounded-full overflow-hidden">

@@ -7,120 +7,197 @@ export const TUTOR_MODES = [
   {
     id: 'tutor',
     name: 'Tutor',
+    nameEn: 'Tutor',
     title: 'Gia sư toàn diện',
+    titleEn: 'Comprehensive Tutor',
     icon: '🎓',
     badge: 'Toàn diện',
+    badgeEn: 'Comprehensive',
     color: '#245c48',
     bg: '#edf4ef',
     description: 'Hỏi đáp mọi thắc mắc về tiếng Việt: giải thích từ vựng, ngữ pháp, ngữ cảnh và cách dùng tự nhiên.',
+    descriptionEn: 'Ask any question about Vietnamese: vocabulary, grammar explanations, context, and natural usage.',
     placeholder: 'Hỏi bất kỳ điều gì về tiếng Việt (ví dụ: "Phân biệt từ \'được\' và \'bị\'")',
+    placeholderEn: 'Ask anything about Vietnamese (e.g. "Difference between \'được\' and \'bị\'")',
     quickPrompts: [
       'Giải thích sự khác nhau giữa "được" và "bị"',
       'Cách sử dụng hệ thống đại từ xưng hô tiếng Việt (anh, chị, em, cô, chú...)',
       'Làm thế nào để phân biệt dấu hỏi (?) và dấu ngã (~)?',
       'Cho tôi 5 cách chào hỏi thông dụng ngoài "Xin chào"',
     ],
+    quickPromptsEn: [
+      'Explain the difference between "được" and "bị"',
+      'How to use Vietnamese kinship pronouns (anh, chị, em, cô, chú...)',
+      'How to distinguish between hỏi (?) and ngã (~) tones?',
+      'Give me 5 common Vietnamese greetings besides "Xin chào"',
+    ],
   },
   {
     id: 'grammar',
     name: 'Grammar',
+    nameEn: 'Grammar',
     title: 'Ngữ pháp & Sửa câu',
+    titleEn: 'Grammar & Correction',
     icon: '📝',
     badge: 'Chuyên sâu',
+    badgeEn: 'In-Depth',
     color: '#8b4513',
     bg: '#fcf3eb',
     description: 'Sửa lỗi ngữ pháp, cải thiện câu văn, giải thích trật tự từ và các cấu trúc câu tiếng Việt chuẩn xác.',
+    descriptionEn: 'Grammar error checking, sentence improvement, word order explanations, and standard syntax.',
     placeholder: 'Nhập câu tiếng Việt của bạn để kiểm tra và sửa lỗi...',
+    placeholderEn: 'Enter your Vietnamese sentence to check and correct...',
     quickPrompts: [
       'Sửa giúp tôi câu: "Hôm qua tôi đi mua hai quả chuối rất to và ăn nó ngon."',
       'Cấu trúc so sánh hơn và so sánh nhất trong tiếng Việt',
       'Cách dùng đúng các từ nối: "tuy... nhưng", "vì... nên", "nếu... thì"',
       'Tại sao người Việt nói "nhà tôi có 3 người" mà không dùng từ "tồn tại"?',
     ],
+    quickPromptsEn: [
+      'Correct my sentence: "Hôm qua tôi đi mua hai quả chuối rất to và ăn nó ngon."',
+      'Comparative and superlative structures in Vietnamese',
+      'How to properly use conjunctions: "tuy... nhưng", "vì... nên", "nếu... thì"',
+      'Why do Vietnamese say "nhà tôi có 3 người" instead of "exist"?',
+    ],
   },
   {
     id: 'translation',
     name: 'Translation',
+    nameEn: 'Translation',
     title: 'Dịch thuật ngữ cảnh',
+    titleEn: 'Contextual Translation',
     icon: '🌐',
     badge: '2 chiều',
+    badgeEn: '2-Way',
     color: '#1a5f7a',
     bg: '#e8f4f8',
     description: 'Dịch chuẩn xác giữa tiếng Việt và tiếng Anh/ngoại ngữ, kèm phân tích sắc thái biểu đạt và từ tương đương.',
+    descriptionEn: 'Accurate translation between Vietnamese and English/other languages with nuanced expressions.',
     placeholder: 'Nhập câu hoặc đoạn văn cần dịch (tiếng Việt hoặc tiếng Anh)...',
+    placeholderEn: 'Enter text to translate (Vietnamese or English)...',
     quickPrompts: [
       'Dịch sang tiếng Việt tự nhiên: "Could you please make it less spicy for me?"',
       'Từ "duyên" trong tiếng Việt dịch sang tiếng Anh thế nào cho trọn nghĩa?',
       'Dịch lịch sự câu từ chối lời mời ăn tối: "Cảm ơn bạn, nhưng tối nay tôi có việc bận mất rồi."',
       'Cách nói "I feel at home here" bằng tiếng Việt mộc mạc nhất',
     ],
+    quickPromptsEn: [
+      'Natural Vietnamese translation: "Could you please make it less spicy for me?"',
+      'How to translate the cultural word "duyên" into English?',
+      'Politely decline a dinner invite: "Cảm ơn bạn, nhưng tối nay tôi có việc bận mất rồi."',
+      'How to say "I feel at home here" most naturally in Vietnamese?',
+    ],
   },
   {
     id: 'conversation',
     name: 'Conversation',
+    nameEn: 'Conversation',
     title: 'Luyện hội thoại phản xạ',
+    titleEn: 'Conversational Fluency',
     icon: '💬',
     badge: 'Giao tiếp',
+    badgeEn: 'Speaking',
     color: '#2e7d32',
     bg: '#edf7ed',
     description: 'Trò chuyện 2 chiều tự nhiên như người bản xứ. AI sẽ đóng vai bạn trò chuyện và gợi ý câu trả lời.',
-    placeholder: 'Gõ tin nhắn để bắt đầu trò chuyện cùng AI Tutor...',
+    descriptionEn: 'Interactive 2-way conversation practice. AI acts as a native partner and suggests natural responses.',
+    placeholder: 'Gõ tin nhắn để bắt đầu trò chuyện cùng Hola AI...',
+    placeholderEn: 'Type a message to start chatting with Hola AI...',
     quickPrompts: [
       'Chào bạn! Hôm nay thời tiết ở chỗ bạn thế nào?',
       'Hãy đóng vai một người bạn Việt Nam rủ tôi đi cà phê trứng cuối tuần.',
       'Luyện tập đối thoại: Lần đầu tiên gặp gỡ và làm quen tại lớp học',
       'Gợi ý cho tôi các chủ đề nói chuyện phiếm (small talk) quen thuộc của người Việt',
     ],
+    quickPromptsEn: [
+      'Hi there! How is the weather where you are today?',
+      'Roleplay as a Vietnamese friend inviting me for egg coffee this weekend.',
+      'Dialogue practice: First time meeting and introducing oneself in class',
+      'Suggest common Vietnamese small-talk topics',
+    ],
   },
   {
     id: 'culture_guide',
     name: 'Culture Guide',
+    nameEn: 'Culture Guide',
     title: 'Chỉ dẫn văn hóa',
+    titleEn: 'Cultural Guide',
     icon: '🏮',
     badge: 'Phong tục',
+    badgeEn: 'Customs',
     color: '#9f2d20',
     bg: '#fcedeb',
     description: 'Khám phá văn hóa, phong tục, nghi lễ, thói quen sinh hoạt và các quy tắc ứng xử tế nhị của người Việt.',
+    descriptionEn: 'Explore Vietnamese culture, customs, traditions, lifestyle, and social etiquette.',
     placeholder: 'Hỏi về phong tục, văn hóa, ngày lễ hoặc cách cư xử Việt Nam...',
+    placeholderEn: 'Ask about Vietnamese culture, customs, festivals, or social etiquette...',
     quickPrompts: [
       'Quy tắc ứng xử khi được mời đến nhà người Việt dùng cơm',
       'Ý nghĩa của mâm ngũ quả và tục xông đất ngày Tết Nguyên Đán',
       'Tại sao người Việt hay hỏi "Ăn cơm chưa?" khi chào nhau?',
       'Những điều nên và không nên làm khi vào thăm chùa chiền ở Việt Nam',
     ],
+    quickPromptsEn: [
+      'Dining etiquette when invited to a Vietnamese home',
+      'Significance of the five-fruit tray and Tết first-footer tradition',
+      'Why do Vietnamese ask "Have you eaten?" as a greeting?',
+      'Dos and Don\'ts when visiting pagodas and temples in Vietnam',
+    ],
   },
   {
     id: 'travel',
     name: 'Travel',
+    nameEn: 'Travel',
     title: 'Du lịch & Sinh tồn',
+    titleEn: 'Travel & Survival',
     icon: '✈️',
     badge: 'Thực tế',
+    badgeEn: 'Practical',
     color: '#d97706',
     bg: '#fef3c7',
     description: 'Các mẫu câu và tình huống du lịch sinh tồn: hỏi đường, mặc cả giá, đặt phòng, gọi món ăn đường phố.',
+    descriptionEn: 'Essential phrases and survival skills: directions, bargaining, booking rooms, street food.',
     placeholder: 'Cần hỗ trợ tình huống du lịch nào tại Việt Nam?',
+    placeholderEn: 'Need travel phrases or survival help in Vietnam?',
     quickPrompts: [
       'Mẫu câu hỏi đường và bắt xe ôm/taxi khi đi du lịch',
       'Cách mặc cả lịch sự nhưng hiệu quả tại chợ đêm hoặc chợ Bến Thành',
       'Các câu tiếng Việt cần thiết khi vào quán phở/bún bò gọi món theo sở thích',
       'Cách nói khi tôi bị dị ứng đậu phộng hoặc hải sản',
     ],
+    quickPromptsEn: [
+      'Asking for directions and taking a motorbike taxi / Grab',
+      'How to bargain politely and effectively at night markets or Bến Thành market',
+      'Essential Vietnamese phrases when ordering at a phở/bún bò stall',
+      'How to say I am allergic to peanuts or seafood',
+    ],
   },
   {
     id: 'regional',
     name: 'Regional Vietnamese',
+    nameEn: 'Regional Vietnamese',
     title: 'Tiếng Việt vùng miền',
+    titleEn: 'Regional Vietnamese',
     icon: '🗺️',
     badge: 'Bắc • Trung • Nam',
+    badgeEn: 'North • Central • South',
     color: '#7c3aed',
     bg: '#f3e8ff',
     description: 'Tìm hiểu từ vựng, ngữ điệu và cách dùng từ đặc trưng của 3 miền Bắc - Trung - Nam Việt Nam.',
+    descriptionEn: 'Learn dialect words, accents, and unique expressions of Northern, Central, and Southern Vietnam.',
     placeholder: 'Tìm hiểu từ địa phương hoặc ngữ điệu vùng miền (Bắc/Trung/Nam)...',
+    placeholderEn: 'Explore regional slang, dialects, or accents (North/Central/South)...',
     quickPrompts: [
       'So sánh từ vựng hàng ngày giữa miền Bắc và miền Nam (muỗng - thìa, heo - lợn...)',
       'Giải thích các từ địa phương miền Trung đặc trưng: "mô, tê, răng, rứa"',
       'Đại từ nhân xưng thân mật ở miền Tây Nam Bộ: "chế", "hai", "út", "tía"',
       'Khác biệt giữa từ "chè" ở miền Bắc (uống) và miền Nam (món tráng miệng)',
+    ],
+    quickPromptsEn: [
+      'Daily vocabulary differences between Northern and Southern Vietnam (spoon, pork...)',
+      'Explain unique Central dialect words: "mô, tê, răng, rứa"',
+      'Affectionate pronouns in the Mekong Delta: "chế", "hai", "út", "tía"',
+      'Difference between "chè" in the North (tea) vs the South (sweet dessert)',
     ],
   },
 ];
@@ -336,6 +413,21 @@ export const enforceLanguageConsistency = (value, lang = 'vi') => {
       'Hay muốn mình giúp phát âm?');
 };
 
+const getSessionTimestamp = (session) => {
+  if (!session) return 0;
+  const lastMsg = Array.isArray(session.messages) && session.messages.length > 0
+    ? session.messages[session.messages.length - 1]
+    : null;
+  const rawDate = session.updatedAt || lastMsg?.timestamp || session.createdAt;
+  const time = rawDate ? new Date(rawDate).getTime() : 0;
+  return Number.isNaN(time) ? 0 : time;
+};
+
+const sortSessionsByLatest = (sessions = []) => {
+  if (!Array.isArray(sessions)) return [];
+  return [...sessions].sort((a, b) => getSessionTimestamp(b) - getSessionTimestamp(a));
+};
+
 const normalizeSessionMessages = (sessions = []) => sessions.map(session => {
   const msgs = Array.isArray(session.messages) ? session.messages : [];
   const normalizedMessages = msgs.map((msg, idx) => {
@@ -391,6 +483,24 @@ function conversationalReply(query, messages = [], lang = null) {
   const normalized = normalizeText(query);
   const lower = query.toLowerCase();
   const isEn = (lang || detectInputLanguage(query)) === 'en';
+
+  // 0. Pronouns & Kinship Terms: "đại từ xưng hô", "xưng hô", "anh, chị, em, cô, chú"
+  if (normalized.includes('dai tu xung ho') || normalized.includes('xung ho') || (normalized.includes('dai tu') && (normalized.includes('anh') || normalized.includes('em') || normalized.includes('co') || normalized.includes('chu'))) || (isEn && (lower.includes('pronoun') || lower.includes('address')))) {
+    return {
+      text: isEn
+        ? `### 🏮 Vietnamese Kinship Pronoun System\n\nUnlike English which relies on generic *"I"* and *"you"*, Vietnamese addresses people like extended family based on relative age and social intimacy:\n\n| Person You Speak To | Call Them | Refer to Yourself As |\n| :--- | :--- | :--- |\n| **Male slightly older** | **Anh** | **Em** |\n| **Female slightly older** | **Chị** | **Em** |\n| **Someone younger** | **Em** | **Anh / Chị** |\n| **Woman parent's age** | **Cô** (or *Bác*) | **Cháu** (or *Con*) |\n| **Man parent's age** | **Chú** (or *Bác*) | **Cháu** |\n| **Elderly person** | **Ông / Bà** | **Cháu** |\n| **Peers of same age** | **Bạn / Cậu** | **Mình / Tôi / Tớ** |\n\n💡 **Golden Rule:** When shopping, dining, or asking directions, calling the other person **"Anh / Chị"** and referring to yourself as **"Em"** is always considered polite and flattering!`
+        : `### 🏮 Hướng dẫn sử dụng Hệ thống Đại từ Xưng hô tiếng Việt\n\nHệ thống xưng hô là nét văn hóa đặc sắc và tinh tế bậc nhất của tiếng Việt, nơi mọi người đối đãi với nhau ấm áp như người trong một gia đình:\n\n| Người bạn nói chuyện | Gọi họ là | Tự xưng là |\n| :--- | :--- | :--- |\n| Nam lớn hơn một chút | **Anh** | **Em** |\n| Nữ lớn hơn một chút | **Chị** | **Em** |\n| Người nhỏ hơn bạn | **Em** | **Anh / Chị** |\n| Phụ nữ trạc tuổi cha mẹ | **Cô** (hoặc *Bác*) | **Cháu** (hoặc *Con*) |\n| Đàn ông trạc tuổi cha mẹ | **Chú** (hoặc *Bác*) | **Cháu** |\n| Người già ngang tuổi ông bà | **Ông / Bà** | **Cháu** |\n| Bạn bè cùng trang lứa | **Bạn / Cậu** | **Mình / Tôi / Tớ** |\n\n---\n\n💡 **Mẹo vàng giao tiếp thực tế:**\n1. **Khi vào quán xá / đi đường:** Luôn chủ động gọi người phục vụ hoặc người đối diện là **"Anh / Chị"** và xưng **"Em"** (ví dụ: *"Anh ơi cho em xem thực đơn với nhé!"*).\n2. **Kính ngữ cuối câu:** Luôn thêm chữ **"ạ"** ở cuối câu với người lớn hơn (ví dụ: *"Dạ em cảm ơn chị ạ!"*).`,
+      nativeAlternative: 'Dạ anh ơi, cho em hỏi thăm đường này đi đâu ạ?',
+      culturalNote: isEn
+        ? 'Using kinship pronouns shows warmth, respect, and instantly bridges social distance in Vietnam.'
+        : 'Xưng hô theo ngôi thứ thể hiện sự kính trọng, lễ phép và tinh thần gắn bó cộng đồng của người Việt.',
+      savedWords: [
+        { word: 'Đại từ xưng hô', meaning: 'Kinship pronouns / forms of address' },
+        { word: 'Dạ / Ạ', meaning: 'Polite words used at start or end of sentence' },
+        { word: 'Kính trên nhường dưới', meaning: 'Respecting elders and caring for youngsters' },
+      ],
+    };
+  }
 
   // 1. Age error: "tôi có 20 tuổi"
   if (/.*(toi|minh|em)\s+(co|la)\s+\d+\s+tuoi.*/.test(normalized) || lower.includes('có 20 tuổi') || lower.includes('có 18 tuổi') || lower.includes('có 25 tuổi')) {
@@ -541,7 +651,7 @@ function conversationalReply(query, messages = [], lang = null) {
 function createDefaultSessions() {
   const initialSession = {
     id: getWelcomeSessionId(),
-    title: 'Làm quen với AI Tutor',
+    title: 'Làm quen với Hola AI',
     mode: 'tutor',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -550,7 +660,7 @@ function createDefaultSessions() {
         id: 'msg-1',
         sender: 'ai',
         mode: 'tutor',
-        text: 'Xin chào bạn! 👋 Tôi là Hola AI Tutor – người bạn đồng hành cùng bạn chinh phục tiếng Việt.\n\nTôi có thể giúp bạn ở 7 chế độ chuyên biệt:\n- 🎓 **Tutor**: Giải đáp từ vựng, ngữ pháp toàn diện\n- 📝 **Grammar**: Soát lỗi ngữ pháp và viết câu tự nhiên\n- 🌐 **Translation**: Dịch thuật 2 chiều kèm giải thích sắc thái\n- 💬 **Conversation**: Luyện phản xạ đối thoại đời thường\n- 🏮 **Culture Guide**: Khám phá phong tục & văn hóa Việt Nam\n- ✈️ **Travel**: Tình huống du lịch, hỏi đường, ăn uống, trả giá\n- 🗺️ **Regional Vietnamese**: Tiếng Việt 3 miền Bắc – Trung – Nam\n\nBạn muốn bắt đầu với chủ đề nào hôm nay?',
+        text: 'Xin chào bạn! 👋 Tôi là Hola AI – người bạn đồng hành cùng bạn chinh phục tiếng Việt.\n\nTôi có thể giúp bạn ở 7 chế độ chuyên biệt:\n- 🎓 **Tutor**: Giải đáp từ vựng, ngữ pháp toàn diện\n- 📝 **Grammar**: Soát lỗi ngữ pháp và viết câu tự nhiên\n- 🌐 **Translation**: Dịch thuật 2 chiều kèm giải thích sắc thái\n- 💬 **Conversation**: Luyện phản xạ đối thoại đời thường\n- 🏮 **Culture Guide**: Khám phá phong tục & văn hóa Việt Nam\n- ✈️ **Travel**: Tình huống du lịch, hỏi đường, ăn uống, trả giá\n- 🗺️ **Regional Vietnamese**: Tiếng Việt 3 miền Bắc – Trung – Nam\n\nBạn muốn bắt đầu với chủ đề nào hôm nay?',
         timestamp: new Date().toISOString(),
       },
     ],
@@ -609,7 +719,7 @@ export const aiTutorService = {
         localStorage.setItem(key, JSON.stringify(defaults));
         return defaults;
       }
-      return normalizeSessionMessages(parsed);
+      return sortSessionsByLatest(normalizeSessionMessages(parsed));
     } catch {
       return createDefaultSessions();
     }
@@ -617,7 +727,8 @@ export const aiTutorService = {
 
   saveSessions(sessions) {
     try {
-      localStorage.setItem(getStorageKey(), JSON.stringify(sessions));
+      const sorted = sortSessionsByLatest(sessions);
+      localStorage.setItem(getStorageKey(), JSON.stringify(sorted));
     } catch (e) {
       console.error('Failed to save sessions:', e);
     }
@@ -662,7 +773,7 @@ export const aiTutorService = {
         });
 
       if (normalizedRemote.length > 0) {
-        const finalSessions = normalizeSessionMessages(normalizedRemote);
+        const finalSessions = sortSessionsByLatest(normalizeSessionMessages(normalizedRemote));
         this.saveSessions(finalSessions);
         return finalSessions;
       }
@@ -670,7 +781,7 @@ export const aiTutorService = {
       // User has 0 sessions on backend: keep local user-scoped sessions if any, otherwise default welcome session
       return this.getAllSessions();
     } catch (err) {
-      console.warn('[AI Tutor] Không thể đồng bộ lịch sử từ backend:', err?.message || err);
+      console.warn('[Hola AI] Không thể đồng bộ lịch sử từ backend:', err?.message || err);
       return this.getAllSessions();
     }
   },
@@ -747,7 +858,7 @@ export const aiTutorService = {
       const res = await axiosClient.get('/api/ai/status', { timeout: 2500 });
       return unwrapAiPayload(res);
     } catch (error) {
-      console.warn('[AI Tutor] Không đọc được trạng thái AI từ backend:', error.message);
+      console.warn('[Hola AI] Không đọc được trạng thái AI từ backend:', error.message);
       return { isLiveCall: false, provider: AI_PROVIDER, activeModel: AI_MODEL, apiKeyConfigured: false };
     }
   },
@@ -764,9 +875,13 @@ export const aiTutorService = {
   createSession(mode = 'tutor', title = '') {
     const modeConfig = this.getMode(mode);
     const userSuffix = getCurrentUserStorageKey();
+    const titleVi = title || `Hội thoại mới (${modeConfig.name})`;
+    const titleEn = title || `New Chat (${modeConfig.nameEn || modeConfig.name})`;
     const newSession = {
       id: `session-${Date.now()}-${userSuffix}`,
-      title: title || `Hội thoại mới (${modeConfig.name})`,
+      title: titleVi,
+      titleVi: titleVi,
+      titleEn: titleEn,
       mode: mode,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -776,6 +891,8 @@ export const aiTutorService = {
           sender: 'ai',
           mode: mode,
           text: `Chào mừng bạn đến với chế độ **${modeConfig.title}**! ${modeConfig.icon}\n\n${modeConfig.description}\n\nHãy gửi câu hỏi hoặc chọn một trong các gợi ý bên dưới để chúng ta cùng luyện tập nhé!`,
+          textVi: `Chào mừng bạn đến với chế độ **${modeConfig.title}**! ${modeConfig.icon}\n\n${modeConfig.description}\n\nHãy gửi câu hỏi hoặc chọn một trong các gợi ý bên dưới để chúng ta cùng luyện tập nhé!`,
+          textEn: `Welcome to **${modeConfig.titleEn || modeConfig.name}** mode! ${modeConfig.icon}\n\n${modeConfig.descriptionEn || modeConfig.description}\n\nAsk a question or pick one of the suggestions below to start practicing together!`,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -789,7 +906,7 @@ export const aiTutorService = {
     ).catch((error) => {
       // A pre-existing backend record is safe; the message request can continue.
       if (error?.response?.status !== 409 && error?.status !== 409) {
-        console.warn('[AI Tutor] Không đồng bộ được phiên mới lên backend:', error?.message || error);
+        console.warn('[Hola AI] Không đồng bộ được phiên mới lên backend:', error?.message || error);
       }
     }).finally(() => {
       pendingSessionCreations.delete(newSession.id);
@@ -844,7 +961,7 @@ export const aiTutorService = {
         let updatedTitle = s.title;
 
         if (!hasUserMessages) {
-          if (s.title.startsWith('Hội thoại mới') || s.title === 'Làm quen với AI Tutor') {
+          if (s.title.startsWith('Hội thoại mới') || /^Làm quen với (?:AI Tutor|Hola AI)$/.test(s.title)) {
             updatedTitle = `Hội thoại mới (${modeConfig.name})`;
           }
           updatedMessages = [
@@ -947,7 +1064,7 @@ export const aiTutorService = {
         }
       } catch (apiErr) {
         backendError = apiErr;
-        console.warn('[AI Tutor] Backend AI request failed:', {
+        console.warn('[Hola AI] Backend AI request failed:', {
           status: apiErr.status,
           code: apiErr.code,
           message: apiErr.message,
@@ -970,16 +1087,16 @@ export const aiTutorService = {
         }
         if (backendError?.status) {
           const statusLabel = backendError.status === 401
-            ? 'Bạn cần đăng nhập lại để sử dụng AI Tutor.'
+            ? 'Bạn cần đăng nhập lại để sử dụng Hola AI.'
             : backendError.status === 403
-              ? 'Tài khoản hiện không có quyền sử dụng AI Tutor.'
+              ? 'Tài khoản hiện không có quyền sử dụng Hola AI.'
               : `Backend AI trả về HTTP ${backendError.status}.`;
           throw new Error(`${statusLabel}${backendError.message ? ` ${backendError.message}` : ''}`);
         }
         throw new Error('Backend AI không trả về câu trả lời hợp lệ. Hãy kiểm tra request /api/ai/sessions/{id}/messages trong DevTools.');
       }
 
-      console.warn('[AI Tutor] Backend returned no usable text; using local engine because VITE_AI_ALLOW_OFFLINE_FALLBACK=true.');
+      console.warn('[Hola AI] Backend returned no usable text; using local engine because VITE_AI_ALLOW_OFFLINE_FALLBACK=true.');
       const aiResponseData = await this.generateResponse(text, currentMode, session.messages || [], detectedLanguage);
       aiMsg = {
         id: `msg-${Date.now()}-ai`,
@@ -1009,7 +1126,8 @@ export const aiTutorService = {
       messages: [...(session.messages || []), userMsg, aiMsg],
     };
 
-    const updatedSessions = this.getAllSessions().map(s => (s.id === sessionId ? updatedSession : s));
+    const otherSessions = this.getAllSessions().filter(s => s.id !== sessionId);
+    const updatedSessions = [updatedSession, ...otherSessions];
     this.saveSessions(updatedSessions);
     if (newTitle !== session.title && localStorage.getItem('token')) {
       axiosClient.patch(`/api/ai/sessions/${sessionId}`, { title: newTitle, mode: currentMode }).catch(() => {});

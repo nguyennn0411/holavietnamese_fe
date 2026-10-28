@@ -2472,9 +2472,9 @@ export const UI_TRANSLATIONS = {
     "Email hỗ trợ hệ thống",
     "Support email"
   ],
-  "Nhà cung cấp AI Tutor (Hội thoại & Gợi ý phản hồi)": [
-    "Nhà cung cấp AI Tutor (Hội thoại & Gợi ý phản hồi)",
-    "AI Tutor provider (conversation and suggested replies)"
+  "Nhà cung cấp Hola AI (Hội thoại & Gợi ý phản hồi)": [
+    "Nhà cung cấp Hola AI (Hội thoại & Gợi ý phản hồi)",
+    "Hola AI provider (conversation and suggested replies)"
   ],
   "Cho phép đăng ký tài khoản mới": [
     "Cho phép đăng ký tài khoản mới",
@@ -2704,9 +2704,9 @@ export const UI_TRANSLATIONS = {
     "Một cuộc trò chuyện nhỏ, một bước tiến xa.",
     "A small conversation. A big step forward."
   ],
-  "Gia sư AI thông minh chuyên sâu tiếng Việt. Chọn chế độ phù hợp từ ngữ pháp, dịch thuật, hội thoại đời thường cho đến văn hóa và tiếng Việt 3 miền.": [
-    "Gia sư AI thông minh chuyên sâu tiếng Việt. Chọn chế độ phù hợp từ ngữ pháp, dịch thuật, hội thoại đời thường cho đến văn hóa và tiếng Việt 3 miền.",
-    "A specialized Vietnamese AI tutor. Choose grammar, translation, daily conversation, culture or regional Vietnamese."
+  "Hola AI thông minh chuyên sâu tiếng Việt. Chọn chế độ phù hợp từ ngữ pháp, dịch thuật, hội thoại đời thường cho đến văn hóa và tiếng Việt 3 miền.": [
+    "Hola AI thông minh chuyên sâu tiếng Việt. Chọn chế độ phù hợp từ ngữ pháp, dịch thuật, hội thoại đời thường cho đến văn hóa và tiếng Việt 3 miền.",
+    "A specialized Vietnamese Hola AI. Choose grammar, translation, daily conversation, culture or regional Vietnamese."
   ],
   "💬 Lịch sử trò chuyện": [
     "💬 Lịch sử trò chuyện",
@@ -2984,9 +2984,9 @@ export const UI_TRANSLATIONS = {
     "Một câu hỏi, một từ mới hay một chút luyện tập.",
     "A question, a new word or a little practice."
   ],
-  "Hỏi AI Tutor": [
-    "Hỏi AI Tutor",
-    "Ask AI Tutor"
+  "Hỏi Hola AI": [
+    "Hỏi Hola AI",
+    "Ask Hola AI"
   ],
   "Những câu chuyện từ Việt Nam": [
     "Những câu chuyện từ Việt Nam",
@@ -3076,13 +3076,13 @@ export const UI_TRANSLATIONS = {
     "Muốn biết thêm về câu chuyện?",
     "Want to learn more about this story?"
   ],
-  "Cùng AI Tutor tìm hiểu về văn hóa Việt Nam.": [
-    "Cùng AI Tutor tìm hiểu về văn hóa Việt Nam.",
-    "Explore Vietnamese culture with AI Tutor."
+  "Cùng Hola AI tìm hiểu về văn hóa Việt Nam.": [
+    "Cùng Hola AI tìm hiểu về văn hóa Việt Nam.",
+    "Explore Vietnamese culture with Hola AI."
   ],
-  "Hỏi AI Tutor →": [
-    "Hỏi AI Tutor →",
-    "Ask AI Tutor →"
+  "Hỏi Hola AI →": [
+    "Hỏi Hola AI →",
+    "Ask Hola AI →"
   ],
   "Góc văn hóa": [
     "Góc văn hóa",
@@ -3212,9 +3212,9 @@ export const UI_TRANSLATIONS = {
     "· Tiếng Việt miền Trung",
     "· Central Vietnamese"
   ],
-  "Luyện tiếng Việt với AI Tutor →": [
-    "Luyện tiếng Việt với AI Tutor →",
-    "Practice Vietnamese with AI Tutor →"
+  "Luyện tiếng Việt với Hola AI →": [
+    "Luyện tiếng Việt với Hola AI →",
+    "Practice Vietnamese with Hola AI →"
   ],
   "Câu chuyện từ": [
     "Câu chuyện từ",
@@ -4048,9 +4048,9 @@ export const UI_TRANSLATIONS = {
     "🏮 Phù hợp văn hóa (Culture)",
     "Cultural appropriateness"
   ],
-  "🤖 Nhận xét từ AI Tutor:": [
-    "🤖 Nhận xét từ AI Tutor:",
-    "AI Tutor feedback:"
+  "🤖 Nhận xét từ Hola AI:": [
+    "🤖 Nhận xét từ Hola AI:",
+    "Hola AI feedback:"
   ],
   "Lỗi cần sửa & Cách nói tự nhiên hơn": [
     "Lỗi cần sửa & Cách nói tự nhiên hơn",
@@ -4596,9 +4596,9 @@ export const UI_TRANSLATIONS = {
     "Văn hóa",
     "Culture"
   ],
-  "AI Tutor ✣": [
-    "AI Tutor ✣",
-    "AI Tutor"
+  "Hola AI ✣": [
+    "Hola AI ✣",
+    "Hola AI"
   ],
   "Góc học tập": [
     "Góc học tập",
@@ -5840,9 +5840,9 @@ export const UI_TRANSLATIONS = {
     "Đang lắng nghe giọng nói của bạn... Hãy nói tiếng Việt!",
     "Listening... Please speak Vietnamese!"
   ],
-  "Học từ AI Tutor": [
-    "Học từ AI Tutor",
-    "Learn with AI Tutor"
+  "Học từ Hola AI": [
+    "Học từ Hola AI",
+    "Learn with Hola AI"
   ],
   "Thành công!": [
     "Thành công!",
@@ -6284,9 +6284,9 @@ export const UI_TRANSLATIONS = {
     "Trò chuyện 2 chiều tự nhiên như người bản xứ. AI sẽ đóng vai bạn trò chuyện và gợi ý câu trả lời.",
     "Chat naturally with an AI conversation partner and receive suggested replies."
   ],
-  "Gõ tin nhắn để bắt đầu trò chuyện cùng AI Tutor...": [
-    "Gõ tin nhắn để bắt đầu trò chuyện cùng AI Tutor...",
-    "Type a message to start chatting with AI Tutor..."
+  "Gõ tin nhắn để bắt đầu trò chuyện cùng Hola AI...": [
+    "Gõ tin nhắn để bắt đầu trò chuyện cùng Hola AI...",
+    "Type a message to start chatting with Hola AI..."
   ],
   "Chào bạn! Hôm nay thời tiết ở chỗ bạn thế nào?": [
     "Chào bạn! Hôm nay thời tiết ở chỗ bạn thế nào?",
@@ -6616,9 +6616,9 @@ export const UI_TRANSLATIONS = {
     "Đến lượt bạn luyện nói & trò chuyện",
     "Your turn to speak & converse"
   ],
-  "Thực hành cùng AI Tutor trong môi trường đàm thoại trực tiếp.": [
-    "Thực hành cùng AI Tutor trong môi trường đàm thoại trực tiếp.",
-    "Practice with AI Tutor in a real-time conversation setting."
+  "Thực hành cùng Hola AI trong môi trường đàm thoại trực tiếp.": [
+    "Thực hành cùng Hola AI trong môi trường đàm thoại trực tiếp.",
+    "Practice with Hola AI in a real-time conversation setting."
   ],
   "Bắt đầu luyện tập cùng AI →": [
     "Bắt đầu luyện tập cùng AI →",
@@ -7004,9 +7004,9 @@ export const UI_TRANSLATIONS = {
     "Muốn tìm hiểu sâu hơn về câu chuyện này?",
     "Want to explore this story deeper?"
   ],
-  "Cùng AI Tutor trò chuyện, giải đáp thắc mắc phong tục và tập quán Việt Nam.": [
-    "Cùng AI Tutor trò chuyện, giải đáp thắc mắc phong tục và tập quán Việt Nam.",
-    "Chat with AI Tutor to learn more about Vietnamese customs and traditions."
+  "Cùng Hola AI trò chuyện, giải đáp thắc mắc phong tục và tập quán Việt Nam.": [
+    "Cùng Hola AI trò chuyện, giải đáp thắc mắc phong tục và tập quán Việt Nam.",
+    "Chat with Hola AI to learn more about Vietnamese customs and traditions."
   ],
   "Từng câu chuyện nhỏ giúp ngôn ngữ trở nên gần gũi và sâu sắc hơn.": [
     "Từng câu chuyện nhỏ giúp ngôn ngữ trở nên gần gũi và sâu sắc hơn.",
@@ -7184,9 +7184,9 @@ export const UI_TRANSLATIONS = {
     "Phù hợp văn hóa (Culture)",
     "Cultural appropriateness"
   ],
-  "Nhận xét từ AI Tutor:": [
-    "Nhận xét từ AI Tutor:",
-    "Feedback from AI Tutor:"
+  "Nhận xét từ Hola AI:": [
+    "Nhận xét từ Hola AI:",
+    "Feedback from Hola AI:"
   ],
   "Thử lại kịch bản này": [
     "Thử lại kịch bản này",
@@ -7884,9 +7884,9 @@ export const UI_TRANSLATIONS = {
     "Lộ trình theo chuẩn CEFR",
     "CEFR standard curriculum"
   ],
-  "Hội thoại thực tế & AI Tutor": [
-    "Hội thoại thực tế & AI Tutor",
-    "Real-life dialogues & AI Tutor"
+  "Hội thoại thực tế & Hola AI": [
+    "Hội thoại thực tế & Hola AI",
+    "Real-life dialogues & Hola AI"
   ],
   "Luyện tập & Đánh giá tức thì": [
     "Luyện tập & Đánh giá tức thì",
@@ -7896,9 +7896,9 @@ export const UI_TRANSLATIONS = {
     "Truy cập trọn đời trên máy tính & điện thoại",
     "Lifetime access on desktop & mobile"
   ],
-  "Tương tác AI Tutor luyện nói & sửa phát âm 24/7": [
-    "Tương tác AI Tutor luyện nói & sửa phát âm 24/7",
-    "24/7 interactive AI Tutor for speaking & pronunciation"
+  "Tương tác Hola AI luyện nói & sửa phát âm 24/7": [
+    "Tương tác Hola AI luyện nói & sửa phát âm 24/7",
+    "24/7 interactive Hola AI for speaking & pronunciation"
   ],
   "Cấp chứng nhận hoàn thành khóa học": [
     "Cấp chứng nhận hoàn thành khóa học",
@@ -8132,9 +8132,9 @@ export const UI_TRANSLATIONS = {
     "Cấu hình OpenAI API",
     "OpenAI API configuration"
   ],
-  "Kích hoạt LLM trực tiếp cho AI Tutor": [
-    "Kích hoạt LLM trực tiếp cho AI Tutor",
-    "Enable direct LLM for AI Tutor"
+  "Kích hoạt LLM trực tiếp cho Hola AI": [
+    "Kích hoạt LLM trực tiếp cho Hola AI",
+    "Enable direct LLM for Hola AI"
   ],
   "AI Speaking Partner • 7 Chế Độ Học": [
     "AI Speaking Partner • 7 Chế Độ Học",
@@ -8336,9 +8336,9 @@ export const UI_TRANSLATIONS = {
     "Chọn câu trả lời thử:",
     "Choose sample reply:"
   ],
-  "Vào phòng đàm thoại AI Tutor": [
-    "Vào phòng đàm thoại AI Tutor",
-    "Enter AI Tutor conversation"
+  "Vào phòng đàm thoại Hola AI": [
+    "Vào phòng đàm thoại Hola AI",
+    "Enter Hola AI conversation"
   ],
   "Không cần Unikey": [
     "Không cần Unikey",

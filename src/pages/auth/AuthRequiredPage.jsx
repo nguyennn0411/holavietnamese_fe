@@ -12,12 +12,12 @@ import { hasExistingAccount } from '@/utils/userState';
 const FEATURE_CONFIGS = {
   'ai-tutor': {
     id: 'ai-tutor',
-    badgeVi: 'AI Tutor • Gia sư ảo 24/7',
-    badgeEn: 'AI Tutor • 24/7 Virtual Tutor',
-    titleVi: 'Cần đăng nhập để luyện nói với AI Tutor',
-    titleEn: 'Sign in to practice speaking with AI Tutor',
+    badgeVi: 'Hola AI • Gia sư ảo 24/7',
+    badgeEn: 'Hola AI • 24/7 Virtual Tutor',
+    titleVi: 'Cần đăng nhập để luyện nói với Hola AI',
+    titleEn: 'Sign in to practice speaking with Hola AI',
     descVi: 'Trò chuyện đối thoại phản xạ, nhận phản hồi chuẩn xác về thanh điệu và ngữ pháp tiếng Việt từ gia sư thông minh.',
-    descEn: 'Engage in smart conversation drills, receive tonal analysis and instant feedback from your personal AI tutor.',
+    descEn: 'Engage in smart conversation drills, receive tonal analysis and instant feedback from your personal Hola AI.',
     mascotVariant: 'speaking',
     mascotBubbleVi: 'Úi! Đăng nhập để cùng Nghé đàm thoại tiếng Việt và sửa lỗi phát âm trực tiếp nha!',
     mascotBubbleEn: 'Oops! Sign in so Nghé can converse with you and coach your pronunciation!',

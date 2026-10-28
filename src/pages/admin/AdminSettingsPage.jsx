@@ -61,7 +61,7 @@ export function AdminSettingsPage() {
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '6px' }}><BilingualText>{"Nhà cung cấp AI Tutor (Hội thoại & Gợi ý phản hồi)"}</BilingualText></label>
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '6px' }}><BilingualText>{"Nhà cung cấp Hola AI (Hội thoại & Gợi ý phản hồi)"}</BilingualText></label>
           <input
             type="text"
             value={settings.aiTutorProvider}

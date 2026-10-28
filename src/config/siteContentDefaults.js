@@ -51,8 +51,8 @@ export const DEFAULT_MENU_ITEMS = Object.freeze([
     path: '/blog', iconKey: 'newspaper', displayOrder: 80, enabled: false, authRequired: false, mobilePrimary: false, featureKey: 'BLOG',
   },
   {
-    code: 'GUEST_AI_TUTOR', placement: MENU_PLACEMENTS.GUEST, labelVi: 'Gia sư AI', labelEn: 'AI Tutor',
-    path: '/ai-tutor', iconKey: 'bot', displayOrder: 90, enabled: true, authRequired: true, mobilePrimary: false, featureKey: 'AI_TUTOR',
+    code: 'GUEST_AI_TUTOR', placement: MENU_PLACEMENTS.GUEST, labelVi: 'Hola AI', labelEn: 'Hola AI',
+    path: '/ai-tutor', iconKey: 'bot', displayOrder: 90, enabled: false, authRequired: true, mobilePrimary: false, featureKey: 'AI_TUTOR',
   },
   {
     code: 'LEARNER_HOME', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Học tập', labelEn: 'Learn',
@@ -100,7 +100,7 @@ export const DEFAULT_MENU_ITEMS = Object.freeze([
     path: '/ai-scenarios', iconKey: 'graduation-cap', displayOrder: 110, enabled: true, authRequired: true, mobilePrimary: false, featureKey: 'AI_SPEAKING',
   },
   {
-    code: 'LEARNER_AI_CONVERSATION', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Hội thoại AI', labelEn: 'AI Conversation',
+    code: 'LEARNER_AI_CONVERSATION', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Hola AI', labelEn: 'Hola AI',
     path: '/ai-tutor', iconKey: 'bot', displayOrder: 120, enabled: true, authRequired: true, mobilePrimary: false, featureKey: 'AI_TUTOR',
   },
 ]);

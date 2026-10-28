@@ -33,10 +33,16 @@ export function MascotOnboarding() {
             setStep(0);
             setOpen(true);
           }}
-          title={t('mascot.guide.replay')}
+          aria-label={t('mascot.guide.replay')}
         >
-          <BuffaloMascot variant="welcome" size="tiny" animated />
-          <span>{t('mascot.guide.replay')}</span>
+          <span className="nghe-guide-replay__avatar" aria-hidden="true">
+            <BuffaloMascot variant="welcome" size="tiny" animated />
+          </span>
+          <span className="nghe-guide-replay__copy">
+            <small>QUICK TOUR</small>
+            <strong>{t('mascot.guide.replay')}</strong>
+          </span>
+          <ArrowRight className="nghe-guide-replay__arrow" size={16} aria-hidden="true" />
         </button>
         <button
           type="button"

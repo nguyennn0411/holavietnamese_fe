@@ -131,14 +131,14 @@ function formatDuration(minutes) {
 const DEFAULT_OUTCOMES_BY_LEVEL = {
   A0: [
     'Nắm vững 29 chữ cái tiếng Việt và các quy tắc ghép vần chuẩn xác',
-    'Phát âm chuẩn xác 6 thanh điệu đặc trưng cùng trợ lý AI Tutor',
+    'Phát âm chuẩn xác 6 thanh điệu đặc trưng cùng trợ lý Hola AI',
     'Tự tin đọc và nhận biết các từ vựng căn bản trong đời sống hàng ngày',
     'Giao tiếp những câu chào hỏi, cảm ơn và xin lỗi sơ đẳng',
   ],
   A1: [
     'Tự tin giao tiếp các chủ đề thông dụng: Chào hỏi, giới thiệu bản thân, mua sắm',
     'Làm chủ hơn 300 từ vựng cốt lõi và các cấu trúc câu giao tiếp căn bản',
-    'Luyện phát âm chuẩn giọng Bắc - Nam với sự trợ giúp của AI Tutor',
+    'Luyện phát âm chuẩn giọng Bắc - Nam với sự trợ giúp của Hola AI',
     'Hiểu nét văn hóa xưng hô lễ phép đặc trưng của người Việt Nam',
   ],
   A2: [
@@ -480,8 +480,8 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
   // Đường dẫn tiếp tục học
   const continueLearnUrl = activeLessonId
-    ? `/learn/${targetCourseId}/lesson/${activeLessonId}`
-    : `/learn/${targetCourseId}`;
+    ? `/courses/${targetCourseId}/lesson/${activeLessonId}`
+    : `/courses/${targetCourseId}/learn`;
 
   return (
     <div className="course-detail-view w-full space-y-8">
@@ -567,7 +567,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 <BilingualText vi="Lộ trình theo chuẩn CEFR" en="CEFR standard roadmap" />
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
-                <BilingualText vi="Hội thoại thực tế & AI Tutor" en="Real conversation & AI Tutor" />
+                <BilingualText vi="Hội thoại thực tế & Hola AI" en="Real conversation & Hola AI" />
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white/70 border border-[#E8E5DF]/50 text-xs font-semibold text-[#253044]">
                 <BilingualText vi="Luyện tập & Đánh giá tức thì" en="Practice & instant assessment" />
@@ -827,7 +827,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                               return (
                                 <Link
                                   key={lessonUniqueKey}
-                                  to={`/learn/${targetCourseId}/lesson/${lesson.id}`}
+                                  to={`/courses/${targetCourseId}/lesson/${lesson.id}`}
                                   className="flex items-center justify-between p-3.5 rounded-xl bg-[#FFFDF9] hover:bg-white border border-[#E8E5DF]/60 hover:border-[#FF7A00] text-xs sm:text-sm cursor-pointer transition-all shadow-2xs hover:shadow-sm group"
                                 >
                                   <div className="flex items-center gap-3 min-w-0">
@@ -1026,7 +1026,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 <span><BilingualText vi="Truy cập trọn đời trên máy tính & điện thoại" en="Lifetime access on desktop & mobile" /></span>
               </div>
               <div className="flex items-center gap-2">
-                <span><BilingualText vi="Tương tác AI Tutor luyện nói & sửa phát âm 24/7" en="24/7 AI Tutor speaking & pronunciation practice" /></span>
+                <span><BilingualText vi="Tương tác Hola AI luyện nói & sửa phát âm 24/7" en="24/7 Hola AI speaking & pronunciation practice" /></span>
               </div>
               <div className="flex items-center gap-2">
                 <span><BilingualText vi="Cấp chứng nhận hoàn thành khóa học" en="Certificate of completion awarded" /></span>

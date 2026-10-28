@@ -77,7 +77,7 @@ export function ScenarioListPage() {
                 to="/ai-tutor"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] text-[#253044] hover:text-[#FF7A00] text-xs font-bold shadow-2xs transition-all"
               >
-                <span><BilingualText vi="Trò chuyện tự do với AI Tutor →" en="Free Chat with AI Tutor →" /></span>
+                <span><BilingualText vi="Trò chuyện tự do với Hola AI →" en="Free Chat with Hola AI →" /></span>
               </Link>
             </div>
           </div>

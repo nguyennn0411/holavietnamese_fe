@@ -199,7 +199,7 @@ export function BlogDetailPage() {
           />
         </p>
         <Link className="button secondary" to="/ai-tutor">
-          <BilingualText vi="Hỏi AI Tutor" en="Ask AI Tutor" />
+          <BilingualText vi="Hỏi Hola AI" en="Ask Hola AI" />
         </Link>
       </div>
     </article>

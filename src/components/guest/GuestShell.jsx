@@ -13,7 +13,9 @@ function useGuestItems() {
   const { i18n } = useTranslation();
   const { getMenuItems } = useSiteContent();
   const language = i18n.resolvedLanguage || i18n.language || 'en';
-  return useMemo(() => getMenuItems(MENU_PLACEMENTS.GUEST).map((item) => ({
+  return useMemo(() => getMenuItems(MENU_PLACEMENTS.GUEST)
+    .filter((item) => item?.path !== '/ai-tutor' && item?.code !== 'GUEST_AI_TUTOR' && item?.featureKey !== 'AI_TUTOR')
+    .map((item) => ({
     ...item,
     to: safeInternalPath(item.path),
     label: localizedSiteField(item, 'label', language),

@@ -280,8 +280,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         <Link
                           to={
                             activeCourse.lastAccessedLessonId
-                              ? `/learn/${activeCourse.id}/lesson/${activeCourse.lastAccessedLessonId}`
-                              : `/learn/${activeCourse.id}`
+                              ? `/courses/${activeCourse.id}/lesson/${activeCourse.lastAccessedLessonId}`
+                              : `/courses/${activeCourse.id}/learn`
                           }
                           className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#253044] font-black text-xs shadow-md transition-all"
                         >
@@ -358,8 +358,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                       {filteredCourses.map((course) => {
                         const isCompleted = course.progressPercentage >= 100 || course.status === 'COMPLETED';
                         const continueUrl = course.lastAccessedLessonId
-                          ? `/learn/${course.id}/lesson/${course.lastAccessedLessonId}`
-                          : `/learn/${course.id}`;
+                          ? `/courses/${course.id}/lesson/${course.lastAccessedLessonId}`
+                          : `/courses/${course.id}/learn`;
 
                         return (
                           <motion.article
@@ -630,7 +630,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                             </span>
                             <Link
                               className="text-link text-xs font-bold text-[#EA580C] hover:underline"
-                              to={`/quiz-attempts/${quiz.id}/result`}
+                              to={quiz.courseId && quiz.lessonId ? `/courses/${quiz.courseId}/lesson/${quiz.lessonId}/quiz-attempts/${quiz.id}/result` : quiz.courseId ? `/courses/${quiz.courseId}/quiz-attempts/${quiz.id}/result` : `/quiz-attempts/${quiz.id}/result`}
                             >
                               <BilingualText>{"Xem kết quả →"}</BilingualText>
                             </Link>

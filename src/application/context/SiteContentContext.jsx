@@ -37,7 +37,9 @@ function normalizeFeatures(value) {
 }
 
 function normalizeMenuItems(value, fallback = DEFAULT_MENU_ITEMS) {
-  if (!Array.isArray(value)) return [...fallback];
+  // menu items fallback
+  if (!Array.isArray(value) || value.length === 0) return [...fallback];
+
   return value.map((item) => {
     const defaults = fallbackMenusByCode.get(normalizedKey(item?.code)) || {};
     return { ...defaults, ...item };
@@ -45,7 +47,13 @@ function normalizeMenuItems(value, fallback = DEFAULT_MENU_ITEMS) {
 }
 
 function normalizeBanners(value, fallback = DEFAULT_BANNERS) {
-  if (!Array.isArray(value)) return [...fallback];
+  if (!Array.isArray(value) || value.length === 0) {
+    return fallback.map((banner) => ({
+      ...banner,
+      bundledImageUrl: banner.imageUrl || BUNDLED_BANNER_IMAGES[normalizedKey(banner?.code)] || null,
+    }));
+  }
+
   return value.map((item) => {
     const defaults = fallbackBannersByCode.get(normalizedKey(item?.code))
       || fallbackBannersBySlot.get(`${item?.placement}:${item?.displayOrder}`)
@@ -57,6 +65,7 @@ function normalizeBanners(value, fallback = DEFAULT_BANNERS) {
       ...item,
       bundledImageUrl,
     };
+
   }).sort(byDisplayOrder);
 }
 
@@ -78,6 +87,7 @@ function scheduledNow(item, now = Date.now()) {
 
 export function localizedSiteField(item, field, language = 'en') {
   if (!item) return '';
+  if (field === 'label' && item.path?.split(/[?#]/)[0] === '/ai-tutor') return 'Hola AI';
   const vietnamese = String(language || '').toLowerCase().startsWith('vi');
   const preferred = item[`${field}${vietnamese ? 'Vi' : 'En'}`];
   const alternate = item[`${field}${vietnamese ? 'En' : 'Vi'}`];
@@ -176,6 +186,7 @@ export function SiteContentProvider({ children }) {
         features: normalizeFeatures(result?.features),
         source: 'remote',
       };
+  
       setContent(next);
       setError(null);
       return next;
@@ -192,12 +203,12 @@ export function SiteContentProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    const controller = new AbortController();
-    refresh({ signal: controller.signal });
-    return () => {
-      controller.abort();
-      requestRef.current += 1;
-    };
+
+    refresh();
+
+
+
+
   }, [refresh]);
 
   const isFeatureEnabled = useCallback(
@@ -212,6 +223,7 @@ export function SiteContentProvider({ children }) {
       && normalizedKey(item?.featureKey) !== 'BLOG'
       && normalizedKey(item?.code) !== 'GUEST_BLOG'
       && normalizedKey(item?.code) !== 'LEARNER_BLOG'
+      && (normalizedKey(placement) !== 'GUEST_SIDEBAR' || (item?.path !== '/ai-tutor' && normalizedKey(item?.featureKey) !== 'AI_TUTOR' && normalizedKey(item?.code) !== 'GUEST_AI_TUTOR'))
       && (includeDisabled || item?.enabled !== false)
       && (includeDisabled || featureEnabled(content.features, item?.featureKey, true))
     )).sort(byDisplayOrder)
@@ -225,6 +237,7 @@ export function SiteContentProvider({ children }) {
       && normalizedKey(item?.featureKey) !== 'BLOG'
       && normalizedKey(item?.code) !== 'GUEST_BLOG'
       && normalizedKey(item?.code) !== 'LEARNER_BLOG'
+      && (normalizedKey(placement) !== 'GUEST_SIDEBAR' || (item?.path !== '/ai-tutor' && normalizedKey(item?.featureKey) !== 'AI_TUTOR' && normalizedKey(item?.code) !== 'GUEST_AI_TUTOR'))
       && (includeDisabled || item?.enabled !== false)
       && (includeDisabled || featureEnabled(content.features, item?.featureKey, true))
       && (includeDisabled || scheduledNow(item, now))

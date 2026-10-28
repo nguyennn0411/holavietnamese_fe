@@ -731,6 +731,16 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
 
   // 1. RENDERER CHO QUIZ
   if (type === 'QUIZ') {
+    const cId = lesson?.courseId;
+    const lId = lessonId || lesson?.id;
+    const quizUrl = preview
+      ? `/admin/quizzes/${activity.quizId}/preview`
+      : cId && lId
+      ? `/courses/${cId}/lesson/${lId}/quizzes/${activity.quizId}`
+      : cId
+      ? `/courses/${cId}/quizzes/${activity.quizId}`
+      : `/quizzes/${activity.quizId}`;
+
     return (
       <div className="quiz-gate text-center py-10 px-4 space-y-4 bg-gradient-to-br from-[#FFF7E8] to-white rounded-2xl border border-[#E8E5DF]">
         <h2 className="text-xl sm:text-2xl font-black text-[#253044]">
@@ -743,7 +753,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
           {activity.quizId ? (
             <Link
               className="button inline-flex items-center gap-2 py-3 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-sm shadow-md"
-              to={preview ? `/admin/quizzes/${activity.quizId}/preview` : `/quizzes/${activity.quizId}`}
+              to={quizUrl}
             >
               <BilingualText>{"Bắt đầu quiz ngay →"}</BilingualText>
             </Link>
@@ -763,7 +773,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
           <BilingualText>{"Đến lượt bạn luyện nói & trò chuyện"}</BilingualText>
         </h2>
         <p className="text-sm text-[#64748B] max-w-md mx-auto">
-          <BilingualText>{"Thực hành cùng AI Tutor trong môi trường đàm thoại trực tiếp."}</BilingualText>
+          <BilingualText>{"Thực hành cùng Hola AI trong môi trường đàm thoại trực tiếp."}</BilingualText>
         </p>
         <div className="pt-2">
           <Link

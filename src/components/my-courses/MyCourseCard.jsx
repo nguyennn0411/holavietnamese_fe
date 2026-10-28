@@ -1,4 +1,4 @@
-﻿import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { CheckCircle2, ArrowRight, Play, BookOpen } from 'lucide-react';
@@ -18,8 +18,8 @@ export function MyCourseCard({ course }) {
   const isCompleted = course.progressPercentage === 100;
   const levelClass = LEVEL_BADGES[course.level] || 'bg-[#24382B] text-[#FFF7E8] border-[#1b2b21]';
   const continueUrl = course.lastAccessedLessonId
-    ? `/learn/${course.courseId || course.id}/lesson/${course.lastAccessedLessonId}`
-    : `/learn/${course.courseId || course.id}`;
+    ? `/courses/${course.courseId || course.id}/lesson/${course.lastAccessedLessonId}`
+    : `/courses/${course.courseId || course.id}/learn`;
 
   return (
     <motion.article

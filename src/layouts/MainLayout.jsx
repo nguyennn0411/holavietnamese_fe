@@ -1,11 +1,11 @@
 import { BilingualText } from '@/components/common/BilingualText';
 import { useCallback, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
+
 import { useAuth } from '@/application/context/AuthContext';
 import { AppFooter, LayoutToast } from '@/components/layout';
 import { learnerService } from '@/services/learnerService';
-import { PageTransition } from '@/components/common/PageTransition';
+
 import { LearnerSidebar, LearnerTopbar } from '@/components/learner/LearnerShell';
 import { GuestMobileDrawer, GuestSidebar, GuestTopbar } from '@/components/guest/GuestShell';
 import { AiTutorFloatingButton } from '@/components/common/AiTutorFloatingButton';
@@ -61,8 +61,9 @@ export function MainLayout() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-    document.getElementById('main-content')?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    document.getElementById('main-content')?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    const main = document.getElementById('main-content');
+    if (main) main.scrollTop = 0;
+
   }, [location.pathname]);
 
   return (
@@ -87,9 +88,9 @@ export function MainLayout() {
           className={`layout-main ${isGuestHome ? 'layout-main--full' : ''} ${isAuthenticated ? 'learner-app__main' : 'guest-app__main'}`}
           id="main-content"
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <PageTransition key={location.pathname}><Outlet /></PageTransition>
-          </AnimatePresence>
+
+          <Outlet />
+
         </main>
         {isAuthenticated ? (
           <div className="learner-app__footer">
@@ -101,7 +102,7 @@ export function MainLayout() {
           </div>
         )}
       </div>
-      <AiTutorFloatingButton />
+      {isAuthenticated && <AiTutorFloatingButton />}
     </div>
   );
 }

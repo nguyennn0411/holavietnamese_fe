@@ -191,14 +191,14 @@ export function CultureDetailPage() {
                 <BilingualText>{"Muốn tìm hiểu sâu hơn về câu chuyện này?"}</BilingualText>
               </h3>
               <p className="muted text-xs sm:text-sm text-[#64748B]">
-                <BilingualText>{"Cùng AI Tutor trò chuyện, giải đáp thắc mắc phong tục và tập quán Việt Nam."}</BilingualText>
+                <BilingualText>{"Cùng Hola AI trò chuyện, giải đáp thắc mắc phong tục và tập quán Việt Nam."}</BilingualText>
               </p>
             </div>
             <button
               onClick={ask}
               className="px-5 py-3 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-xs sm:text-sm shadow-md transition-all shrink-0"
             >
-              <BilingualText>{"Hỏi AI Tutor →"}</BilingualText>
+              <BilingualText>{"Hỏi Hola AI →"}</BilingualText>
             </button>
           </div>
         </div>

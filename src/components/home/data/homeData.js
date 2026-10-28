@@ -109,7 +109,7 @@ export const EXPAT_TESTIMONIALS = [
     role: 'Giám đốc sáng tạo • Sống tại Hà Nội',
     code: 'FR',
     quote:
-      'AI Tutor tạo cảm giác trò chuyện vô cùng tự nhiên. Tôi có thể thực hành nói trước khi ra chợ hoa quả mà không sợ bị ngại ngùng.',
+      'Hola AI tạo cảm giác trò chuyện vô cùng tự nhiên. Tôi có thể thực hành nói trước khi ra chợ hoa quả mà không sợ bị ngại ngùng.',
     favPhrase: '“Bao nhiêu một cân thanh long ạ?”',
   },
   {

@@ -21,12 +21,12 @@ export function AiTutorPreviewCard() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="px-3 py-1 rounded-full bg-[#FFF0DC] text-[#F97316] border border-[#F97316]/30 text-xs font-bold uppercase tracking-wider">
-            AI Tutor 24/7
+            Hola AI 24/7
           </span>
           <span className="text-[11px] text-[#F97316] font-bold"><BilingualText vi="Tự động sửa lỗi" en="Auto Error Correction" /></span>
         </div>
         <h3 className="text-xl sm:text-2xl font-black text-[#253044]">
-          <BilingualText vi="Luyện phản xạ với AI Gia sư" en="Build Conversational Reflexes with AI Tutor" />
+          <BilingualText vi="Luyện phản xạ với Hola AI" en="Build Conversational Reflexes with Hola AI" />
         </h3>
         <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
           <BilingualText vi="Trò chuyện không áp lực. AI phân tích giọng đọc, gợi ý câu giao tiếp tự nhiên và giải thích ngữ pháp tức thì." en="Practice speaking without pressure. AI analyzes pronunciation, suggests natural phrases, and clarifies grammar instantly." />
@@ -103,7 +103,7 @@ export function AiTutorPreviewCard() {
         to="/ai-tutor"
         className="w-full py-3 px-4 rounded-xl bg-[#F97316] hover:bg-[#C2410C] text-white font-black text-xs text-center shadow-[0_4px_0_#C2410C] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 no-underline"
       >
-        <span><BilingualText vi="Vào phòng đàm thoại AI Tutor" en="Enter AI Tutor Conversation" /></span>
+        <span><BilingualText vi="Vào phòng đàm thoại Hola AI" en="Enter Hola AI Conversation" /></span>
         <ArrowRight size={14} />
       </Link>
     </motion.div>

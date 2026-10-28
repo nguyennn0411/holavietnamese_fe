@@ -28,7 +28,7 @@ export function LearnerHeroBanner({
   const progress = currentLesson?.progressPercent ?? currentLesson?.progress ?? 0;
   const lessonId = currentLesson?.lessonId ?? currentLesson?.id;
   const courseId = currentLesson?.courseId;
-  const lessonRoute = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : '/edtech/dashboard';
+  const lessonRoute = courseId && lessonId ? `/courses/${courseId}/lesson/${lessonId}` : '/edtech/dashboard';
   // Compute greeting internally so the parent doesn't need to pass it
   const hour = new Date().getHours();
   const greeting = greetingProp ?? (hour < 12 ? t('hero.morning') : hour < 18 ? t('hero.afternoon') : t('hero.evening'));

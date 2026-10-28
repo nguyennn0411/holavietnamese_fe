@@ -29,7 +29,7 @@ export function EnrollButton({ courseId, enrollment, onEnrolled }) {
     return (
       <Link
         className="button inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all no-underline"
-        to={`/learn/${courseId}`}
+        to={`/courses/${courseId}/learn`}
       >
         <Play size={15} fill="white" />
         <BilingualText>{"Tiếp tục học →"}</BilingualText>

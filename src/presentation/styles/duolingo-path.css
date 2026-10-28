@@ -259,6 +259,12 @@
   position: absolute;
   top: -46px;
   left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  min-height: 32px;
+  box-sizing: border-box;
   transform: translateX(-50%);
   background: #253044;
   color: #FFFFFF;
@@ -272,6 +278,13 @@
   animation: duo-bounce 1.6s ease-in-out infinite;
   pointer-events: none;
   z-index: 10;
+}
+
+.duo-floating-badge .bilingual-text {
+  display: inline-block;
+  flex-shrink: 0;
+  max-width: none;
+  white-space: nowrap;
 }
 
 .duo-floating-badge::after {

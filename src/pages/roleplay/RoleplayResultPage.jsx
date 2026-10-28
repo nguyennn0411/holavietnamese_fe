@@ -35,11 +35,11 @@ export function RoleplayResultPage() {
       await vocabularyService.add({
         word: item.phrase,
         meaning: item.meaning,
-        notes: `Biểu thức Roleplay: ${result.scenarioTitle}`,
+        notes: isVi ? `Biểu thức Roleplay: ${result.scenarioTitle}` : `Roleplay Expression: ${result.scenarioTitle}`,
       });
-      showToast(`Đã lưu "${item.phrase}" vào Sổ từ vựng!`);
+      showToast(isVi ? `Đã lưu "${item.phrase}" vào Sổ từ vựng!` : `Saved "${item.phrase}" to Notebook!`);
     } catch (e) {
-      showToast(`Lưu từ vựng: ${e.message || 'Không thể lưu từ vựng.'}`);
+      showToast(isVi ? `Lưu từ vựng: ${e.message || 'Không thể lưu từ vựng.'}` : `Save vocabulary: ${e.message || 'Could not save.'}`);
     }
   };
 
@@ -129,7 +129,7 @@ export function RoleplayResultPage() {
           </div>
 
           <div style={{ marginTop: '16px', padding: '14px 18px', background: 'var(--color-surface)', borderRadius: '14px', border: '1px solid var(--color-border)', fontSize: '13.5px', color: 'var(--color-ink)', lineHeight: 1.6 }}>
-            <strong><BilingualText vi="Nhận xét từ AI Tutor:" en="Feedback from AI Tutor:" /></strong> {isVi ? (result.aiFeedbackVi || result.aiFeedback) : (result.aiFeedbackEn || result.aiFeedback)}
+            <strong><BilingualText vi="Nhận xét từ Hola AI:" en="Feedback from Hola AI:" /></strong> {isVi ? (result.aiFeedbackVi || result.aiFeedback) : (result.aiFeedbackEn || result.aiFeedback)}
           </div>
         </div>
       </div>

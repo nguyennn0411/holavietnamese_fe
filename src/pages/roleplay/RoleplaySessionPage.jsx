@@ -81,7 +81,7 @@ export function RoleplaySessionPage() {
     aiRoleplayService.reportCompletion(id).then(res => {
       setSession(aiRoleplayService.getRoleplaySession(id));
       if (res && !res.alreadyReported) {
-        showToast('🎉 Bạn đã hoàn thành 100% mục tiêu! Tiến độ đã được ghi nhận.');
+        showToast(isVi ? '🎉 Bạn đã hoàn thành 100% mục tiêu! Tiến độ đã được ghi nhận.' : '🎉 You completed 100% of objectives! Progress saved.');
       }
     }).catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps

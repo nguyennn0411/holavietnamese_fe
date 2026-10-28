@@ -19,7 +19,7 @@ import { Award, Clock, RotateCcw, BookOpen, CheckCircle2, ArrowRight, ArrowLeft,
  * =========================================================================
  */
 export function QuizPage() {
-  const { quizId } = useParams();
+  const { courseId, lessonId, quizId } = useParams();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -28,12 +28,32 @@ export function QuizPage() {
     useCallback((signal) => contentService.quiz(quizId, signal), [quizId])
   );
 
+  useEffect(() => {
+    if (resource.data) {
+      const cId = courseId || resource.data.courseId;
+      const lId = lessonId || resource.data.lessonId;
+      if (!courseId && cId) {
+        const canonical = lId
+          ? `/courses/${cId}/lesson/${lId}/quizzes/${quizId}`
+          : `/courses/${cId}/quizzes/${quizId}`;
+        navigate(canonical, { replace: true });
+      }
+    }
+  }, [resource.data, courseId, lessonId, quizId, navigate]);
+
   async function start() {
     setBusy(true);
     setError('');
     try {
       const attempt = await contentService.startQuiz(quizId);
-      navigate(`/quiz-attempts/${attempt.id}`);
+      const cId = courseId || attempt.courseId || resource.data?.courseId;
+      const lId = lessonId || attempt.lessonId || resource.data?.lessonId;
+      const attemptUrl = cId && lId
+        ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${attempt.id}`
+        : cId
+        ? `/courses/${cId}/quiz-attempts/${attempt.id}`
+        : `/quiz-attempts/${attempt.id}`;
+      navigate(attemptUrl);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -44,7 +64,13 @@ export function QuizPage() {
   return (
     <ResourceState resource={resource}>
       {(quiz) => {
-        const backUrl = quiz.courseId ? `/courses/${quiz.courseId}` : '/my-learning';
+        const cId = courseId || quiz.courseId;
+        const lId = lessonId || quiz.lessonId;
+        const backUrl = lId && cId
+          ? `/courses/${cId}/lesson/${lId}`
+          : cId
+          ? `/courses/${cId}`
+          : '/my-learning';
 
         return (
           <section className="quiz-start-screen w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -56,7 +82,7 @@ export function QuizPage() {
               >
                 <ArrowLeft size={14} />
                 <span>
-                  <BilingualText>{quiz.courseId ? 'Về khóa học' : 'Về góc học tập'}</BilingualText>
+                  <BilingualText>{lId ? 'Về bài học' : cId ? 'Về khóa học' : 'Về góc học tập'}</BilingualText>
                 </span>
               </Link>
             </div>
@@ -170,12 +196,12 @@ export function QuizPage() {
                   )}
                 </button>
 
-                {quiz.courseId && (
+                {cId && (
                   <Link
-                    to={`/courses/${quiz.courseId}`}
+                    to={lId ? `/courses/${cId}/lesson/${lId}` : `/courses/${cId}`}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-white hover:bg-stone-50 text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-all no-underline"
                   >
-                    <BilingualText>{"← Về khóa học"}</BilingualText>
+                    <BilingualText>{lId ? '← Về bài học' : '← Về khóa học'}</BilingualText>
                   </Link>
                 )}
               </div>
@@ -193,25 +219,47 @@ export function QuizPage() {
  * =========================================================================
  */
 export function QuizAttemptPage() {
-  const { attemptId } = useParams();
+  const { courseId, lessonId, attemptId } = useParams();
+  const navigate = useNavigate();
   const resource = useAsyncResource(
     useCallback((signal) => contentService.attempt(attemptId, signal), [attemptId])
   );
 
+  useEffect(() => {
+    if (resource.data && resource.data.status !== 'SUBMITTED') {
+      const cId = courseId || resource.data.courseId;
+      const lId = lessonId || resource.data.lessonId;
+      if (!courseId && cId) {
+        const canonical = lId
+          ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${attemptId}`
+          : `/courses/${cId}/quiz-attempts/${attemptId}`;
+        navigate(canonical, { replace: true });
+      }
+    }
+  }, [resource.data, courseId, lessonId, attemptId, navigate]);
+
   return (
     <ResourceState resource={resource}>
-      {(attempt) =>
-        attempt.status === 'SUBMITTED' ? (
-          <Navigate to={`/quiz-attempts/${attempt.id}/result`} replace />
+      {(attempt) => {
+        const cId = courseId || attempt.courseId;
+        const lId = lessonId || attempt.lessonId;
+        const resultUrl = cId && lId
+          ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${attempt.id}/result`
+          : cId
+          ? `/courses/${cId}/quiz-attempts/${attempt.id}/result`
+          : `/quiz-attempts/${attempt.id}/result`;
+
+        return attempt.status === 'SUBMITTED' ? (
+          <Navigate to={resultUrl} replace />
         ) : (
-          <Attempt key={attempt.id} attempt={attempt} />
-        )
-      }
+          <Attempt key={attempt.id} attempt={attempt} courseId={cId} lessonId={lId} />
+        );
+      }}
     </ResourceState>
   );
 }
 
-function Attempt({ attempt }) {
+function Attempt({ attempt, courseId, lessonId }) {
   const navigate = useNavigate();
   const questions = attempt.questions || [];
   const [index, setIndex] = useState(0);
@@ -242,8 +290,8 @@ function Attempt({ attempt }) {
   if (!questions.length) {
     return (
       <EmptyState title={bilingualLabel("Quiz chưa có câu hỏi", "Quiz has no questions")}>
-        <Link className="button secondary" to="/my-learning">
-          <BilingualText>{"Về góc học tập"}</BilingualText>
+        <Link className="button secondary" to={courseId && lessonId ? `/courses/${courseId}/lesson/${lessonId}` : courseId ? `/courses/${courseId}` : '/my-learning'}>
+          <BilingualText>{lessonId ? 'Về bài học' : courseId ? 'Về khóa học' : 'Về góc học tập'}</BilingualText>
         </Link>
       </EmptyState>
     );
@@ -282,7 +330,14 @@ function Attempt({ attempt }) {
     try {
       if (!expired) await saveCurrent();
       const result = await contentService.submit(attempt.id);
-      navigate(`/quiz-attempts/${result.id}/result`);
+      const cId = courseId || result.courseId || attempt.courseId;
+      const lId = lessonId || result.lessonId || attempt.lessonId;
+      const resultUrl = cId && lId
+        ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${result.id}/result`
+        : cId
+        ? `/courses/${cId}/quiz-attempts/${result.id}/result`
+        : `/quiz-attempts/${result.id}/result`;
+      navigate(resultUrl);
     } catch (err) {
       setError(err.message);
       setConfirm(false);
@@ -563,28 +618,52 @@ function Attempt({ attempt }) {
  * =========================================================================
  */
 export function QuizResultPage() {
-  const { attemptId } = useParams();
+  const { courseId, lessonId, attemptId } = useParams();
+  const navigate = useNavigate();
   const resource = useAsyncResource(
     useCallback((signal) => contentService.result(attemptId, signal), [attemptId])
   );
 
+  useEffect(() => {
+    if (resource.data) {
+      const cId = courseId || resource.data.courseId;
+      const lId = lessonId || resource.data.lessonId;
+      if (!courseId && cId) {
+        const canonical = lId
+          ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${attemptId}/result`
+          : `/courses/${cId}/quiz-attempts/${attemptId}/result`;
+        navigate(canonical, { replace: true });
+      }
+    }
+  }, [resource.data, courseId, lessonId, attemptId, navigate]);
+
   return (
     <ResourceState resource={resource}>
-      {(result) => <Result result={result} />}
+      {(result) => <Result result={result} courseId={courseId} lessonId={lessonId} />}
     </ResourceState>
   );
 }
 
-function Result({ result }) {
+function Result({ result, courseId, lessonId }) {
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+
+  const cId = courseId || result.courseId;
+  const lId = lessonId || result.lessonId;
 
   async function retry() {
     setBusy(true);
     try {
       const attempt = await contentService.startQuiz(result.quizId);
-      navigate(`/quiz-attempts/${attempt.id}`);
+      const targetCId = cId || attempt.courseId;
+      const targetLId = lId || attempt.lessonId;
+      const attemptUrl = targetCId && targetLId
+        ? `/courses/${targetCId}/lesson/${targetLId}/quiz-attempts/${attempt.id}`
+        : targetCId
+        ? `/courses/${targetCId}/quiz-attempts/${attempt.id}`
+        : `/quiz-attempts/${attempt.id}`;
+      navigate(attemptUrl);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -593,10 +672,10 @@ function Result({ result }) {
   }
 
   const back =
-    result.lessonId && result.courseId
-      ? `/learn/${result.courseId}/lesson/${result.lessonId}`
-      : result.courseId
-      ? `/courses/${result.courseId}`
+    lId && cId
+      ? `/courses/${cId}/lesson/${lId}`
+      : cId
+      ? `/courses/${cId}`
       : '/my-learning';
 
   const percentage = Math.round(Number(result.percentage || 0));
@@ -612,7 +691,7 @@ function Result({ result }) {
         >
           <ArrowLeft size={14} />
           <span>
-            <BilingualText>{result.courseId ? 'Về khóa học' : 'Về góc học tập'}</BilingualText>
+            <BilingualText>{lId ? 'Về bài học' : cId ? 'Về khóa học' : 'Về góc học tập'}</BilingualText>
           </span>
         </Link>
       </div>

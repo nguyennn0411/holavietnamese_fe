@@ -322,7 +322,7 @@ export function CourseListPage() {
                   </div>
 
                   <Link
-                    to={`/learn/${enrolled[0].course.id}`}
+                    to={`/courses/${enrolled[0].course.id}/learn`}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#253044] font-black text-xs shadow-md transition-all self-start sm:self-center shrink-0 no-underline"
                   >
                     <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>

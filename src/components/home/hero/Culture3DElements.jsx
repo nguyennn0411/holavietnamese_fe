@@ -104,7 +104,7 @@ export function Culture3DElements({ slideIndex = 0 }) {
     [
       {
         icon: '🤖',
-        label: 'AI Tutor 24/7',
+        label: 'Hola AI 24/7',
         sub: 'Sửa lỗi tức thì',
         pos: 'top-6 -left-3 sm:-left-6',
         delay: 0.2,

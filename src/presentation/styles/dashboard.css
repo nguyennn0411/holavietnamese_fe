@@ -955,7 +955,22 @@
 .guest-cultural-banner__pagination>button.is-active>span { width: 43px; background: rgba(91,48,37,.2); }
 .guest-cultural-banner__pagination i { position: absolute; inset: 0 auto 0 0; width: 100%; border-radius: inherit; background: #a42b21; transform-origin: left; animation: guest-banner-progress 5.6s linear forwards; }
 .guest-cultural-banner__pagination i.is-paused { animation-play-state: paused; }
-.guest-cultural-banner__pause { width: 30px; height: 30px; margin-left: 4px; border-radius: 50%; }
+.guest-cultural-banner__pause {
+  width: 34px;
+  height: 34px;
+  margin-left: 6px;
+  padding: 0;
+  border-radius: 11px;
+  color: #9d281e;
+  background: rgba(255, 252, 245, .94);
+  transition: color .18s, background .18s, transform .18s, box-shadow .18s;
+}
+.guest-cultural-banner__pause:hover {
+  color: #fff;
+  background: #9d281e;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(58, 31, 23, .18);
+}
 .guest-cultural-banner button:focus-visible,
 .guest-cultural-copy>a:focus-visible { outline: 3px solid #e49d3c; outline-offset: 3px; }
 @keyframes guest-banner-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }

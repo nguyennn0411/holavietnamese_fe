@@ -1,4 +1,4 @@
-﻿import { BilingualText } from '@/components/common/BilingualText';
+import { BilingualText } from '@/components/common/BilingualText';
 import { Link } from 'react-router-dom';
 import { useLessons } from '@/hooks/useLearning';
 import { ResourceState } from '@/components/common/ResourceState';
@@ -23,7 +23,7 @@ export function CourseCurriculum({ courseId }) {
               {lessons.map((l, index) => (
                 <li key={l.id}>
                   <Link
-                    to={`/learn/${courseId}/lesson/${l.id}`}
+                    to={`/courses/${courseId}/lesson/${l.id}`}
                     className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#FFFDF9] hover:bg-[#FFF7E8] border border-[#E8E5DF]/60 hover:border-[#FF7A00] text-xs sm:text-sm font-semibold transition-all shadow-2xs hover:shadow-xs no-underline text-inherit group"
                   >
                     <div className="flex items-center gap-3 min-w-0">

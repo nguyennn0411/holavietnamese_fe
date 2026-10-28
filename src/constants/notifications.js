@@ -75,8 +75,8 @@ export const DEFAULT_NOTIFICATIONS = [
     createdAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
     read: false,
     isRead: false,
-    link: '/learn/1/lesson/101',
-    linkUrl: '/learn/1/lesson/101',
+    link: '/courses/1/lesson/101',
+    linkUrl: '/courses/1/lesson/101',
     xpReward: '+15 XP',
   },
   {
@@ -110,8 +110,8 @@ export const DEFAULT_NOTIFICATIONS = [
   {
     id: 4,
     type: 'system',
-    title: 'Khám phá phòng đàm thoại AI Tutor',
-    titleVi: 'Khám phá phòng đàm thoại AI Tutor',
+    title: 'Khám phá phòng đàm thoại Hola AI',
+    titleVi: 'Khám phá phòng đàm thoại Hola AI',
     message: 'Trò chuyện tự nhiên với trợ lý AI bản xứ mọi lúc, sửa lỗi phát âm và phản xạ tức thì.',
     time: '3 ngày trước',
     createdAt: new Date(Date.now() - 3 * 24 * 3600 * 1000).toISOString(),

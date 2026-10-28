@@ -59,7 +59,7 @@ export function AppFooter() {
           <strong><BilingualText vi="Kỹ năng & Công cụ" en="Skills & Tools" /></strong>
           <Link to={ROUTES.ALPHABET}><BilingualText vi="Bảng chữ cái & Âm điệu" en="Alphabet & Tones" /></Link>
           <Link to={ROUTES.VOCABULARY}><BilingualText vi="Kho từ vựng SRS" en="Vocabulary SRS" /></Link>
-          <Link to="/ai-tutor"><BilingualText vi="AI Gia sư 24/7" en="AI Tutor 24/7" /></Link>
+          <Link to="/ai-tutor"><BilingualText vi="Hola AI 24/7" en="Hola AI 24/7" /></Link>
           <Link to="/ai-scenarios"><BilingualText vi="Luyện hội thoại thực tế" en="Real-life Scenarios" /></Link>
         </nav>
 

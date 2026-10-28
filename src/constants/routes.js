@@ -30,8 +30,10 @@ export const ROUTES = {
   ALPHABET: '/alphabet',
   COURSE_DETAIL: '/courses/:courseId',
   MY_COURSES: '/my-courses',
-  LEARN_RESUME: '/learn/:courseId',
-  LEARN_LESSON: '/learn/:courseId/lesson/:lessonId',
+  LEARN_RESUME: '/courses/:courseId/learn',
+  LEARN_LESSON: '/courses/:courseId/lesson/:lessonId',
+  LEGACY_LEARN_RESUME: '/learn/:courseId',
+  LEGACY_LEARN_LESSON: '/learn/:courseId/lesson/:lessonId',
 
   // Vocabulary (Người 3)
   VOCABULARY: '/vocabulary',
@@ -53,6 +55,12 @@ export const ROUTES = {
   QUIZ: '/quizzes/:quizId',
   QUIZ_ATTEMPT: '/quiz-attempts/:attemptId',
   QUIZ_RESULT: '/quiz-attempts/:attemptId/result',
+  COURSE_QUIZ: '/courses/:courseId/quizzes/:quizId',
+  COURSE_QUIZ_ATTEMPT: '/courses/:courseId/quiz-attempts/:attemptId',
+  COURSE_QUIZ_RESULT: '/courses/:courseId/quiz-attempts/:attemptId/result',
+  COURSE_LESSON_QUIZ: '/courses/:courseId/lesson/:lessonId/quizzes/:quizId',
+  COURSE_LESSON_QUIZ_ATTEMPT: '/courses/:courseId/lesson/:lessonId/quiz-attempts/:attemptId',
+  COURSE_LESSON_QUIZ_RESULT: '/courses/:courseId/lesson/:lessonId/quiz-attempts/:attemptId/result',
 
   // Văn hóa & AI Tutor & Roleplay (Người 4)
   CULTURE: '/culture',

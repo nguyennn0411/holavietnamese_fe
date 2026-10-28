@@ -262,7 +262,7 @@ const INITIAL_AI_SETTINGS = {
   promptVersionsHistory: [
     { version: 'v2.2.0-stable', releasedAt: '2026-03-20', author: 'AI Team Leader', note: 'Thêm quy tắc: Tuyệt đối không sinh điểm phát âm giả nếu không có phân tích âm thanh thực tế.' },
     { version: 'v2.1.0', releasedAt: '2026-02-15', author: 'Senior Engineer', note: 'Cải tiến phân loại từ vựng Bắc - Trung - Nam.' },
-    { version: 'v2.0.0', releasedAt: '2026-01-10', author: 'AI Architect', note: 'Ra mắt 7 chế độ AI Tutor.' },
+    { version: 'v2.0.0', releasedAt: '2026-01-10', author: 'AI Architect', note: 'Ra mắt 7 chế độ Hola AI.' },
   ],
   limits: {
     maxTurnsPerSession: 25,

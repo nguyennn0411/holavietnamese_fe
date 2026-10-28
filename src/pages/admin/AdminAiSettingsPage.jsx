@@ -229,12 +229,12 @@ export function AdminAiSettingsPage() {
               vi={
                 activeTab === 'usage'
                   ? 'Theo dõi số phiên hội thoại, lượt gọi API, phân bổ theo chế độ học và nhật ký phản hồi thực tế.'
-                  : 'Quản trị mô hình ngôn ngữ lớn (LLM), chế độ học AI Tutor của học viên và giới hạn tần suất phiên.'
+                  : 'Quản trị mô hình ngôn ngữ lớn (LLM), chế độ học Hola AI của học viên và giới hạn tần suất phiên.'
               }
               en={
                 activeTab === 'usage'
                   ? 'Monitor conversation sessions, API calls, mode distribution and real-time response logs.'
-                  : 'Manage Large Language Models (LLM), learner AI Tutor modes and session rate limits.'
+                  : 'Manage Large Language Models (LLM), learner Hola AI modes and session rate limits.'
               }
             />
           </p>
@@ -430,7 +430,7 @@ export function AdminAiSettingsPage() {
                   </h2>
 
                   <label>
-                    <span>{label('Số lượt hội thoại tối đa mỗi phiên (Đồng bộ AI Tutor):', 'Max conversation turns per session (Synced with AI Tutor):')}</span>
+                    <span>{label('Số lượt hội thoại tối đa mỗi phiên (Đồng bộ Hola AI):', 'Max conversation turns per session (Synced with Hola AI):')}</span>
                     <input
                       type="number"
                       min={10}
@@ -477,12 +477,12 @@ export function AdminAiSettingsPage() {
                 {/* Enabled AI Tutor Modes for Learner */}
                 <div className="admin-card">
                   <h2 style={{ margin: '0 0 6px 0', fontSize: '18px', color: 'var(--color-ink)' }}>
-                    <BilingualText vi="4. Chế độ AI Tutor mở cho Học viên" en="4. Enabled AI Tutor Modes for Learners" />
+                    <BilingualText vi="4. Chế độ Hola AI mở cho Học viên" en="4. Enabled Hola AI Modes for Learners" />
                   </h2>
                   <p style={{ margin: '0 0 14px 0', fontSize: '12.5px', color: 'var(--color-forest)' }}>
                     <BilingualText
-                      vi="Bật/tắt các chế độ học hiển thị trên trang Gia sư AI (/ai-tutor) của học viên."
-                      en="Enable or disable learning modes available on the Learner AI Tutor (/ai-tutor) page."
+                      vi="Bật/tắt các chế độ học hiển thị trên trang Hola AI (/ai-tutor) của học viên."
+                      en="Enable or disable learning modes available on the Learner Hola AI (/ai-tutor) page."
                     />
                   </p>
 

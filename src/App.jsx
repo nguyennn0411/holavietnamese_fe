@@ -1,6 +1,6 @@
 import { BilingualText, BilingualTextProvider } from '@/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { AuthProvider } from '@/application/context/AuthContext';
 import { SiteContentProvider } from '@/application/context/SiteContentContext';
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext';
@@ -106,6 +106,16 @@ const AdminQuestionBankPage = lazy(() => import('@/pages/admin/AdminQuizPages').
 const AdminQuizBuilderPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizBuilderPage })));
 const AdminQuizPreviewPage = lazy(() => import('@/pages/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizPreviewPage })));
 
+function LegacyLessonRedirect() {
+  const { courseId, lessonId } = useParams();
+  return <Navigate to={`/courses/${courseId}/lesson/${lessonId}`} replace />;
+}
+
+function LegacyResumeRedirect() {
+  const { courseId } = useParams();
+  return <Navigate to={`/courses/${courseId}/learn`} replace />;
+}
+
 function RouteTextLanguage({ children }) {
   return <BilingualTextProvider>{children}</BilingualTextProvider>;
 }
@@ -186,6 +196,17 @@ function App() {
                 <Route path={ROUTES.NOTIFICATIONS} element={<NotificationsPage />} />
                 <Route path={ROUTES.LEARN_RESUME} element={<ResumeCoursePage />} />
                 <Route path={ROUTES.LEARN_LESSON} element={<LessonLearningPage />} />
+                <Route path="/learn/:courseId/lesson/:lessonId" element={<LegacyLessonRedirect />} />
+                <Route path="/learn/:courseId" element={<LegacyResumeRedirect />} />
+                {/* Course Quizzes & Attempts */}
+                <Route path={ROUTES.COURSE_LESSON_QUIZ_RESULT} element={<QuizResultPage />} />
+                <Route path={ROUTES.COURSE_QUIZ_RESULT} element={<QuizResultPage />} />
+                <Route path={ROUTES.COURSE_LESSON_QUIZ_ATTEMPT} element={<QuizAttemptPage />} />
+                <Route path={ROUTES.COURSE_QUIZ_ATTEMPT} element={<QuizAttemptPage />} />
+                <Route path={ROUTES.COURSE_LESSON_QUIZ} element={<QuizPage />} />
+                <Route path={ROUTES.COURSE_QUIZ} element={<QuizPage />} />
+                <Route path="/courses/:courseId/lesson/:lessonId/quiz/:quizId" element={<QuizPage />} />
+                <Route path="/courses/:courseId/quiz/:quizId" element={<QuizPage />} />
                 <Route path={ROUTES.QUIZ} element={<QuizPage />} />
                 <Route path={ROUTES.QUIZ_ATTEMPT} element={<QuizAttemptPage />} />
                 <Route path={ROUTES.QUIZ_RESULT} element={<QuizResultPage />} />
