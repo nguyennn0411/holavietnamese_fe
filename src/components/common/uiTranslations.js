@@ -8544,4 +8544,48 @@ export const UI_TRANSLATIONS = {
     "Kết quả đã sẵn sàng. HolaVietnamese sẽ dùng trình độ này để gợi ý các khóa học phù hợp với bạn.",
     "Your results are ready. HolaVietnamese will recommend courses matching your level."
   ],
+  "Xác nhận nộp": [
+    "Xác nhận nộp",
+    "Confirm submission"
+  ],
+  "Đang nộp…": [
+    "Đang nộp…",
+    "Submitting…"
+  ],
+  "Sau khi nộp, hệ thống sẽ tự động chấm điểm và cung cấp giải thích chi tiết cho từng câu.": [
+    "Sau khi nộp, hệ thống sẽ tự động chấm điểm và cung cấp giải thích chi tiết cho từng câu.",
+    "After submitting, the system will automatically grade and provide detailed explanations for each question."
+  ],
+  "Về bài học": [
+    "Về bài học",
+    "Back to lesson"
+  ],
+  "← Về bài học": [
+    "← Về bài học",
+    "← Back to lesson"
+  ],
+  "← Về khóa học": [
+    "← Về khóa học",
+    "← Back to course"
+  ],
+  "Hoàn thành xuất sắc": [
+    "Hoàn thành xuất sắc",
+    "Passed"
+  ],
+  "Cần ôn tập thêm": [
+    "Cần ôn tập thêm",
+    "Keep Trying"
+  ],
+  "Hoàn thành xuất sắc • Passed": [
+    "Hoàn thành xuất sắc • Passed",
+    "Passed"
+  ],
+  "Cần ôn tập thêm • Keep Trying": [
+    "Cần ôn tập thêm • Keep Trying",
+    "Keep Trying"
+  ],
+  "Kiểm tra năng lực": [
+    "Kiểm tra năng lực",
+    "Knowledge Check"
+  ]
 };

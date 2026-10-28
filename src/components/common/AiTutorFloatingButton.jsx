@@ -191,10 +191,6 @@ export function AiTutorFloatingButton() {
         <section className="ai-tutor-chat" aria-label={isEn ? "Chat with Hola AI" : "Chat với Hola AI"}>
           <header className="ai-tutor-chat__header">
             <div className="ai-tutor-chat__identity">
-              <div className="ai-tutor-chat__avatar">
-                <img src={ngheIdleMascot} alt="Bé Trâu Mascot" />
-                <span className="ai-tutor-chat__status-dot" aria-hidden="true" />
-              </div>
               <div>
                 <strong>Hola AI</strong>
                 <small>{isEn ? 'Lesson assistant' : 'Hỏi nhanh trong lúc học'}</small>

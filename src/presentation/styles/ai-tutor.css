@@ -143,8 +143,8 @@ body.ai-quiz-active .ai-tutor-widget {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 76px;
-  padding: 15px 15px 14px 18px;
+  min-height: 60px;
+  padding: 12px 18px;
   color: var(--color-surface);
   background:
     radial-gradient(circle at 88% 12%, rgba(255, 205, 0, 0.3), transparent 34%),

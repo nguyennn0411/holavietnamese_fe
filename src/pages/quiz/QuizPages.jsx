@@ -82,7 +82,10 @@ export function QuizPage() {
               >
                 <ArrowLeft size={14} />
                 <span>
-                  <BilingualText>{lId ? 'Về bài học' : cId ? 'Về khóa học' : 'Về góc học tập'}</BilingualText>
+                  <BilingualText
+                    vi={lId ? 'Về bài học' : cId ? 'Về khóa học' : 'Về góc học tập'}
+                    en={lId ? 'Back to lesson' : cId ? 'Back to course' : 'Back to My Learning'}
+                  />
                 </span>
               </Link>
             </div>
@@ -97,7 +100,7 @@ export function QuizPage() {
               {/* Title & Badge */}
               <div className="text-center space-y-3 max-w-2xl mx-auto relative z-10">
                 <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] text-[#C2410C] border border-[#FFCD00]/50 font-extrabold text-xs uppercase tracking-wider shadow-2xs">
-                  <BilingualText>{"Kiểm tra năng lực • Knowledge Check"}</BilingualText>
+                  <BilingualText vi="Kiểm tra năng lực" en="Knowledge Check" />
                 </div>
 
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#253044] tracking-tight leading-tight">
@@ -201,7 +204,10 @@ export function QuizPage() {
                     to={lId ? `/courses/${cId}/lesson/${lId}` : `/courses/${cId}`}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-white hover:bg-stone-50 text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-all no-underline"
                   >
-                    <BilingualText>{lId ? '← Về bài học' : '← Về khóa học'}</BilingualText>
+                    <BilingualText
+                      vi={lId ? '← Về bài học' : '← Về khóa học'}
+                      en={lId ? '← Back to lesson' : '← Back to course'}
+                    />
                   </Link>
                 )}
               </div>
@@ -291,7 +297,10 @@ function Attempt({ attempt, courseId, lessonId }) {
     return (
       <EmptyState title={bilingualLabel("Quiz chưa có câu hỏi", "Quiz has no questions")}>
         <Link className="button secondary" to={courseId && lessonId ? `/courses/${courseId}/lesson/${lessonId}` : courseId ? `/courses/${courseId}` : '/my-learning'}>
-          <BilingualText>{lessonId ? 'Về bài học' : courseId ? 'Về khóa học' : 'Về góc học tập'}</BilingualText>
+          <BilingualText
+            vi={lessonId ? 'Về bài học' : courseId ? 'Về khóa học' : 'Về góc học tập'}
+            en={lessonId ? 'Back to lesson' : courseId ? 'Back to course' : 'Back to My Learning'}
+          />
         </Link>
       </EmptyState>
     );
@@ -582,9 +591,10 @@ function Attempt({ attempt, courseId, lessonId }) {
             </div>
 
             <p className="text-xs text-[#64748B] m-0">
-              <BilingualText>
-                {"Sau khi nộp, hệ thống sẽ tự động chấm điểm và cung cấp giải thích chi tiết cho từng câu."}
-              </BilingualText>
+              <BilingualText
+                vi="Sau khi nộp, hệ thống sẽ tự động chấm điểm và cung cấp giải thích chi tiết cho từng câu."
+                en="After submitting, the system will automatically grade and provide detailed explanations for each question."
+              />
             </p>
 
             <div className="actions flex items-center justify-end gap-3 pt-2">
@@ -594,7 +604,7 @@ function Attempt({ attempt, courseId, lessonId }) {
                 disabled={busy}
                 onClick={() => setConfirm(false)}
               >
-                <BilingualText>{"Kiểm tra lại bài"}</BilingualText>
+                <BilingualText vi="Kiểm tra lại bài" en="Review quiz" />
               </button>
               <button
                 type="button"
@@ -602,7 +612,10 @@ function Attempt({ attempt, courseId, lessonId }) {
                 disabled={busy}
                 onClick={finish}
               >
-                <BilingualText>{busy ? 'Đang nộp…' : 'Xác nhận nộp'}</BilingualText>
+                <BilingualText
+                  vi={busy ? 'Đang nộp…' : 'Xác nhận nộp'}
+                  en={busy ? 'Submitting…' : 'Confirm submission'}
+                />
               </button>
             </div>
           </div>
@@ -691,7 +704,10 @@ function Result({ result, courseId, lessonId }) {
         >
           <ArrowLeft size={14} />
           <span>
-            <BilingualText>{lId ? 'Về bài học' : cId ? 'Về khóa học' : 'Về góc học tập'}</BilingualText>
+            <BilingualText
+              vi={lId ? 'Về bài học' : cId ? 'Về khóa học' : 'Về góc học tập'}
+              en={lId ? 'Back to lesson' : cId ? 'Back to course' : 'Back to My Learning'}
+            />
           </span>
         </Link>
       </div>
@@ -707,7 +723,10 @@ function Result({ result, courseId, lessonId }) {
           }}
         >
           {passed ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
-          <BilingualText>{passed ? 'Hoàn thành xuất sắc • Passed' : 'Cần ôn tập thêm • Keep Trying'}</BilingualText>
+          <BilingualText
+            vi={passed ? 'Hoàn thành xuất sắc' : 'Cần ôn tập thêm'}
+            en={passed ? 'Passed' : 'Keep Trying'}
+          />
         </div>
 
         <h1 className="text-2xl sm:text-3xl font-black text-[#253044] tracking-tight">
@@ -777,14 +796,14 @@ function Result({ result, courseId, lessonId }) {
             to={back}
             className="button inline-flex items-center gap-2 py-3 px-6 rounded-2xl bg-[#F97316] hover:bg-[#C2410C] text-white font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all no-underline cursor-pointer"
           >
-            <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>
+            <BilingualText vi="Tiếp tục học ngay →" en="Continue learning →" />
           </Link>
 
           <a
             href="#review-answers"
             className="button secondary inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-white hover:bg-stone-50 text-[#253044] border border-[#E8E5DF] font-bold text-xs sm:text-sm shadow-2xs transition-all no-underline"
           >
-            <BilingualText>{"Xem chi tiết đáp án ↓"}</BilingualText>
+            <BilingualText vi="Xem chi tiết đáp án ↓" en="View detailed answers ↓" />
           </a>
 
           <button
@@ -794,7 +813,10 @@ function Result({ result, courseId, lessonId }) {
             className="secondary inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-[#FFFCF7] hover:bg-[#FFF0DC] text-[#253044] border border-[#E8E5DF] font-bold text-xs sm:text-sm disabled:opacity-40 transition-all cursor-pointer"
           >
             <RotateCcw size={14} className={busy ? 'animate-spin' : ''} />
-            <BilingualText>{busy ? 'Đang chuẩn bị…' : 'Làm lại quiz'}</BilingualText>
+            <BilingualText
+              vi={busy ? 'Đang chuẩn bị…' : 'Làm lại quiz'}
+              en={busy ? 'Preparing…' : 'Retake quiz'}
+            />
           </button>
         </div>
       </div>
@@ -805,10 +827,10 @@ function Result({ result, courseId, lessonId }) {
           <BookOpen size={20} className="text-[#F97316]" />
           <div>
             <h2 className="text-lg sm:text-xl font-black text-[#253044] m-0">
-              <BilingualText>{"Xem lại câu trả lời và giải thích chi tiết"}</BilingualText>
+              <BilingualText vi="Xem lại câu trả lời và giải thích chi tiết" en="Review answers and detailed explanations" />
             </h2>
             <p className="text-xs text-[#64748B] m-0">
-              <BilingualText>{"Đối chiếu câu trả lời của bạn với đáp án chính xác của hệ thống."}</BilingualText>
+              <BilingualText vi="Đối chiếu câu trả lời của bạn với đáp án chính xác của hệ thống." en="Compare your answers with the correct solutions." />
             </p>
           </div>
         </div>
@@ -863,7 +885,7 @@ function Result({ result, courseId, lessonId }) {
                   {/* Learner's Answer */}
                   <div className="p-3 rounded-xl bg-stone-50 border border-stone-200">
                     <strong className="text-stone-600 block text-[11px] uppercase tracking-wider mb-0.5">
-                      <BilingualText>{"Bạn trả lời:"}</BilingualText>
+                      <BilingualText vi="Bạn trả lời:" en="Your answer:" />
                     </strong>
                     <span className={`font-bold ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
                       {answerLabel(question.answer, question.options)}
@@ -874,7 +896,7 @@ function Result({ result, courseId, lessonId }) {
                   {!isCorrect && (
                     <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
                       <strong className="text-emerald-800 block text-[11px] uppercase tracking-wider mb-0.5">
-                        <BilingualText>{"Đáp án chính xác:"}</BilingualText>
+                        <BilingualText vi="Đáp án chính xác:" en="Correct answer:" />
                       </strong>
                       <span className="font-bold text-emerald-900">
                         {answerLabel(question.correctAnswer, question.options)}
@@ -890,7 +912,10 @@ function Result({ result, courseId, lessonId }) {
                           <BilingualText vi="Giải thích:" en="Explanation:" />
                         </strong>
                         <p className="text-xs text-[#64748B] m-0 leading-relaxed">
-                          {question.explanationVi || question.explanation}
+                          <BilingualText
+                            vi={question.explanationVi || question.explanation}
+                            en={question.explanation || question.explanationVi}
+                          />
                         </p>
                       </div>
                     </div>
