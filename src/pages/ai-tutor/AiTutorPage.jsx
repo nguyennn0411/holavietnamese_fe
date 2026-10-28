@@ -23,7 +23,6 @@ import {
   Globe,
   Award,
   Flame,
-  Zap,
   VolumeX,
   Calendar,
   ChevronDown,
@@ -61,7 +60,7 @@ function FormattedMessageText({ text, isAi }) {
   const isEn = (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('en');
   let displayText = getDisplayMessageText(text);
   if (isAi && isEn && displayText && displayText.startsWith('Chào mừng bạn đến với chế độ')) {
-    displayText = "Welcome to Hola AI! 🎓\n\nAsk any question about Vietnamese: explain vocabulary, grammar patterns, context, and natural usage.\n\nSend a question or pick one of the suggestions below to start practicing together!";
+    displayText = "Welcome to Hola AI!\n\nAsk any question about Vietnamese: explain vocabulary, grammar patterns, context, and natural usage.\n\nSend a question or pick one of the suggestions below to start practicing together!";
   }
   if (!displayText) return null;
 
@@ -556,7 +555,7 @@ export function AiTutorPage() {
                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${
                         aiStatus.isLiveCall ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                       }`}>
-                        {aiStatus.isLiveCall ? `🟢 Live ${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : '⚡ Smart NLP Engine'}
+                        {aiStatus.isLiveCall ? `🟢 Live ${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : 'Smart NLP Engine'}
                       </span>
                     </div>
                     {aiStatus.apiKeyMasked && (
@@ -713,9 +712,6 @@ export function AiTutorPage() {
                   }`}
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1" style={{ minWidth: 0, flex: 1 }}>
-                    <span className="w-8 h-8 rounded-xl bg-white border border-[#DECBB4]/60 flex items-center justify-center text-base shrink-0 shadow-2xs">
-                      {sessionMode?.icon || '💬'}
-                    </span>
                     <div className="min-w-0 flex-1" style={{ minWidth: 0, flex: 1 }}>
                       {isEditing ? (
                         <input
@@ -749,7 +745,6 @@ export function AiTutorPage() {
                           className="session-card__date"
                           title={isEn ? `Conversation date: ${dateText} • ${timeText}` : `Ngày hội thoại: ${dateText} • ${timeText}`}
                         >
-                          <Calendar size={11} aria-hidden="true" />
                           {dateText}
                         </span>
                       </div>
@@ -838,53 +833,29 @@ export function AiTutorPage() {
           {/* Top Console Bar with Mode Info & Speed Toggle */}
           <div className="p-4 sm:p-5 border-b border-[#DECBB4]/60 bg-gradient-to-r from-[#FFF9EE] via-white to-[#FFF9EE] space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              {/* Mascot Status */}
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <TutorMascotAvatar state={isListening ? 'listening' : isSending ? 'thinking' : speakingMessageId ? 'speaking' : 'idle'} size="small" />
+              {/* Mode Info & Heading */}
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-black text-[#202124]">
+                    Hola AI
+                  </h3>
                   <span
-                    className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white"
-                    title={bilingualLabel("Online • Sẵn sàng giải đáp", "Online • Ready to assist")}
-                  />
+                    className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider"
+                    style={{
+                      background: activeModeConfig.bg,
+                      color: activeModeConfig.color,
+                    }}
+                  >
+                    {isEn ? (activeModeConfig.badgeEn || activeModeConfig.badge) : activeModeConfig.badge}
+                  </span>
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base font-black text-[#202124]">
-                      Hola AI
-                    </h3>
-                    <span
-                      className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase"
-                      style={{
-                        background: activeModeConfig.bg,
-                        color: activeModeConfig.color,
-                      }}
-                    >
-                      {isEn ? (activeModeConfig.badgeEn || activeModeConfig.badge) : activeModeConfig.badge}
-                    </span>
-                  </div>
-                  <p className="text-xs text-[#78685B] leading-tight mt-0.5">
-                    {(isEn ? (activeModeConfig.titleEn || activeModeConfig.title) : activeModeConfig.title)} — {(isEn ? (activeModeConfig.descriptionEn || activeModeConfig.description) : activeModeConfig.description)}
-                  </p>
-                </div>
+                <p className="text-xs text-[#78685B] leading-tight mt-1">
+                  {(isEn ? (activeModeConfig.titleEn || activeModeConfig.title) : activeModeConfig.title)} — {(isEn ? (activeModeConfig.descriptionEn || activeModeConfig.description) : activeModeConfig.description)}
+                </p>
               </div>
 
-              {/* AI Engine Status & Key Modal Trigger & Speed Controller */}
-              <div className="flex items-center gap-2 shrink-0 self-end sm:self-center flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => showToast(isEn ? 'Hola AI is using backend system API configuration.' : 'Hola AI đang dùng cấu hình API hệ thống từ backend.')}
-                  className={`px-3 py-1 rounded-xl border text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer ${
-                    aiStatus.isLiveCall
-                      ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
-                      : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
-                  }`}
-                  title={bilingualLabel("Cấu hình OpenAI API Key để kích hoạt Live AI trực tiếp", "Configure OpenAI API Key to enable Live AI")}
-                >
-                  <span className={`w-2 h-2 rounded-full ${aiStatus.isLiveCall ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-                  <span>{aiStatus.isLiveCall ? `${aiStatus.provider || 'OpenAI'} · ${aiStatus.activeModel || 'gpt-5-mini'}` : 'Smart NLP Engine'}</span>
-                  <Zap size={12} className={aiStatus.isLiveCall ? 'text-emerald-600' : 'text-amber-600'} />
-                </button>
-
+              {/* Speed Controller */}
+              <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                 <button
                   type="button"
                   onClick={() => {
@@ -893,10 +864,13 @@ export function AiTutorPage() {
                     audioFeedback.playTap();
                     showToast(isEn ? `Speech speed: ${newRate}x` : `Tốc độ phát âm: ${newRate}x`);
                   }}
-                  className="px-2.5 py-1 rounded-xl bg-white border border-[#DECBB4] text-[#DA251D] text-xs font-bold hover:bg-[#FFF9EE] transition-colors shadow-2xs cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-white border border-[#DECBB4] text-[#78685B] hover:text-[#202124] text-xs font-bold hover:bg-[#FFF9EE] transition-colors shadow-2xs cursor-pointer"
                   title={isEn ? "Toggle speech speed (1.0x Normal / 0.65x Slow)" : "Chuyển đổi tốc độ phát âm (1.0x Chuẩn / 0.65x Chậm)"}
                 >
-                  {speechRate === 0.95 ? (isEn ? '⚡ 1.0x Normal' : '⚡ 1.0x Chuẩn') : (isEn ? '🐢 0.65x Slow' : '🐢 0.65x Chậm')}
+                  <BilingualText
+                    vi={speechRate === 0.95 ? "Tốc độ: 1.0x (Chuẩn)" : "Tốc độ: 0.65x (Chậm)"}
+                    en={speechRate === 0.95 ? "Speed: 1.0x (Normal)" : "Speed: 0.65x (Slow)"}
+                  />
                 </button>
               </div>
             </div>
@@ -916,7 +890,6 @@ export function AiTutorPage() {
                   aria-labelledby="tutor-mode-select-label tutor-mode-select"
                   onClick={() => setIsModeMenuOpen((open) => !open)}
                 >
-                  <span className="tutor-mode-select-icon" aria-hidden="true">{activeModeConfig.icon}</span>
                   <span className="tutor-mode-select-current">{isEn ? (activeModeConfig.nameEn || activeModeConfig.name) : activeModeConfig.name}</span>
                   <ChevronDown className="tutor-mode-select-chevron" size={16} strokeWidth={2.2} aria-hidden="true" />
                 </button>
@@ -945,7 +918,6 @@ export function AiTutorPage() {
                               setIsModeMenuOpen(false);
                             }}
                           >
-                            <span className="tutor-mode-option-icon" aria-hidden="true">{mode.icon}</span>
                             <span className="tutor-mode-option-copy">
                               <span className="tutor-mode-option-name">{isEn ? (mode.nameEn || mode.name) : mode.name}</span>
                               <span className="tutor-mode-option-description">{isEn ? (mode.descriptionEn || mode.description) : mode.description}</span>
@@ -974,10 +946,7 @@ export function AiTutorPage() {
             }`}
           >
             {!currentSession ? (
-              <div className="w-full flex flex-col items-center justify-center text-center px-6">
-                <div className="w-20 h-20 rounded-3xl bg-[#F5E1D8] border border-[#E7B59D] flex items-center justify-center text-4xl shadow-sm mb-4">
-                  💬
-                </div>
+              <div className="w-full flex flex-col items-center justify-center text-center px-6 py-16">
                 <h2 className="text-xl font-black text-[#202124] mb-2">
                   <BilingualText vi="Chọn một cuộc trò chuyện để bắt đầu" en="Select a conversation to get started" />
                 </h2>
@@ -1075,7 +1044,7 @@ export function AiTutorPage() {
                     {isAi && msg.culturalNote && (
                       <div className="mt-2.5 p-3 rounded-2xl bg-[#FFF9EE] border border-[#DECBB4] text-[#431914] text-xs space-y-1 shadow-2xs">
                         <div className="flex items-center gap-1.5 font-bold text-[#DA251D]">
-                          <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>🏮</span>
+                          
                           <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}><BilingualText vi="Lưu ý văn hóa & Ngữ cảnh ứng xử:" en="Cultural nuance & social context:" /></span>
                         </div>
                         <p className="text-[#431914]/90 leading-relaxed">
@@ -1255,8 +1224,7 @@ export function AiTutorPage() {
 
           {/* Quick Prompts Chips Carousel */}
           <div className="p-3 bg-[#FAF8F5] border-t border-[#DECBB4]/60 flex items-center gap-2 overflow-x-auto scrollbar-none">
-            <span className="text-[11px] font-black uppercase text-[#DA251D] shrink-0 pl-1 flex items-center gap-1">
-              <Sparkles size={12} />
+            <span className="text-[11px] font-black uppercase text-[#DA251D] shrink-0 pl-1">
               <span><BilingualText vi="Gợi ý:" en="Suggestions:" /></span>
             </span>
             {((isEn && activeModeConfig.quickPromptsEn) ? activeModeConfig.quickPromptsEn : activeModeConfig.quickPrompts).map((prompt, idx) => (
