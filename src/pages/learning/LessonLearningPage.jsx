@@ -10,7 +10,22 @@ import { LessonNavigation } from '@/components/learning/LessonNavigation';
 import { VocabularyForm } from '@/components/vocabulary/VocabularyForm';
 import { LessonActivities } from '@/components/learning/LessonActivities';
 import { AiCoachPanel } from '@/components/ai-coach';
+import { useAiSidebar } from '@/contexts/AiSidebarContext';
 import { ArrowLeft, CheckCircle2, Bookmark, PanelLeftClose, PanelLeft, Check, Bot } from 'lucide-react';
+
+function LessonContextSyncer({ lesson, course }) {
+  const { setLearningContext } = useAiSidebar();
+  useEffect(() => {
+    if (lesson) {
+      setLearningContext({
+        lessonId: lesson.id,
+        lessonTitle: lesson.titleVi || lesson.title,
+        courseTitle: course?.titleVi || course?.title,
+      });
+    }
+  }, [lesson, course, setLearningContext]);
+  return null;
+}
 
 export function LessonLearningPage() {
   const { courseId, lessonId } = useParams();
@@ -20,6 +35,7 @@ export function LessonLearningPage() {
 function LessonScreen({ courseId, lessonId }) {
   const navigate = useNavigate();
   const resource = useLearning(courseId, lessonId);
+  const { openAiSidebar } = useAiSidebar();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const [savingWord, setSavingWord] = useState(false);
@@ -54,6 +70,8 @@ function LessonScreen({ courseId, lessonId }) {
     <ResourceState resource={resource}>
       {({ course, lesson, lessons, progress }) => {
         return (
+          <>
+            <LessonContextSyncer lesson={lesson} course={course} />
           <div className={`lesson-learning-screen ${aiCoachOpen ? 'max-w-[1680px]' : 'max-w-7xl'} mx-auto space-y-4 transition-all duration-300`}>
             {/* ===================== TOP HEADER BAR ===================== */}
             <header className="bg-white/95 backdrop-blur-md rounded-2xl border border-[#E8E5DF] p-3 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs sticky top-2 z-30 transition-all">
@@ -138,7 +156,13 @@ function LessonScreen({ courseId, lessonId }) {
                 {/* Nút mở AI Coach */}
                 <button
                   type="button"
-                  onClick={() => setAiCoachOpen((prev) => !prev)}
+                  onClick={() => {
+                    setAiCoachOpen((prev) => !prev);
+                    openAiSidebar?.(bilingualLabel(
+                      `Tôi đang học bài "${lesson.titleVi || lesson.title}". Hãy giải thích trọng tâm bài học và những cấu trúc ngữ pháp quan trọng trong bài này.`,
+                      `I am studying "${lesson.title}". Please explain the key lesson takeaways and important grammar points.`
+                    ));
+                  }}
                   className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
                     aiCoachOpen
                       ? 'bg-[#b42318] text-white border-[#b42318] shadow-sm'
@@ -276,6 +300,7 @@ function LessonScreen({ courseId, lessonId }) {
               />
             )}
           </div>
+          </>
         );
       }}
     </ResourceState>
