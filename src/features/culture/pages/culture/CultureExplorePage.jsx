@@ -8,9 +8,44 @@ import { useTranslation } from 'react-i18next';
 import { cultureService } from '@/features/culture/api/cultureService';
 import { EmptyState } from '@/shared/components/common/Ui';
 
+const DESTINATION_LOCALES = {
+  all: { vi: 'Toàn quốc', en: 'Nationwide' },
+  hanoi: { vi: 'Hà Nội', en: 'Hanoi' },
+  hue: { vi: 'Huế', en: 'Hue' },
+  hoian: { vi: 'Hội An', en: 'Hoi An' },
+  hcmc: { vi: 'TP. Hồ Chí Minh', en: 'Ho Chi Minh City' },
+  mientay: { vi: 'Miền Tây', en: 'Mekong Delta' },
+  sapa: { vi: 'Sa Pa', en: 'Sa Pa' },
+  danang: { vi: 'Đà Nẵng', en: 'Da Nang' },
+};
+
+const getDestName = (dest, lang) => {
+  if (!dest) return lang === 'vi' ? 'Toàn quốc' : 'Nationwide';
+  const id = (dest.id || '').toLowerCase();
+  const known = DESTINATION_LOCALES[id];
+  if (lang === 'vi') {
+    return known?.vi || dest.labelVi || dest.nameVi || dest.label || dest.name || 'Toàn quốc';
+  }
+  return known?.en || dest.labelEn || dest.nameEn || dest.label || dest.name || 'Nationwide';
+};
+
 export function CultureExplorePage() {
   const { i18n } = useTranslation();
-  const isVi = (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('vi');
+  const [currentLang, setCurrentLang] = useState(
+    () => (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('vi') ? 'vi' : 'en'
+  );
+
+  useEffect(() => {
+    const handleLangChange = (lng) => {
+      setCurrentLang(lng?.startsWith('vi') ? 'vi' : 'en');
+    };
+    i18n.on('languageChanged', handleLangChange);
+    return () => {
+      i18n.off('languageChanged', handleLangChange);
+    };
+  }, [i18n]);
+
+  const isVi = currentLang === 'vi';
 
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -311,13 +346,10 @@ export function CultureExplorePage() {
               >
                 <MapPin size={15} className="text-[#F97316] flex-shrink-0" />
                 <span className="text-xs text-[#64748B] font-medium whitespace-nowrap">
-                  <BilingualText vi="Điểm đến:" en="Destination:" />
+                  {isVi ? 'Điểm đến:' : 'Destination:'}
                 </span>
                 <span className="text-xs font-bold text-[#1E293B] whitespace-nowrap">
-                  <BilingualText
-                    vi={currentDestination.labelVi || currentDestination.nameVi || currentDestination.name || currentDestination.label || 'Toàn quốc'}
-                    en={currentDestination.labelEn || currentDestination.nameEn || currentDestination.name || currentDestination.label || 'Nationwide'}
-                  />
+                  {isVi ? getDestName(currentDestination, 'vi') : getDestName(currentDestination, 'en')}
                 </span>
                 <ChevronDown
                   size={14}
@@ -362,7 +394,7 @@ export function CultureExplorePage() {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <span><BilingualText vi="Địa phương / Khu vực" en="Region / Destination" /></span>
+                    <span>{isVi ? 'ĐỊA PHƯƠNG / KHU VỰC' : 'REGION / DESTINATION'}</span>
                     <span style={{ fontSize: '10px', color: '#CBD5E1', fontWeight: 600 }}>
                       {destinations.length}
                     </span>
@@ -370,11 +402,11 @@ export function CultureExplorePage() {
 
                   {destinations.map((destination) => {
                     const isSelected = selectedDestination === destination.id;
-                    const nameVi = destination.labelVi || destination.nameVi || destination.name || destination.label;
-                    const nameEn = destination.labelEn || destination.nameEn || destination.name || destination.label;
-                    const primaryName = isVi ? nameVi : (nameEn || nameVi);
+                    const nameVi = getDestName(destination, 'vi');
+                    const nameEn = getDestName(destination, 'en');
+                    const primaryName = isVi ? nameVi : nameEn;
                     const secondaryName = isVi ? nameEn : nameVi;
-                    const hasSecondary = secondaryName && secondaryName !== primaryName;
+                    const hasSecondary = secondaryName && secondaryName.toLowerCase() !== primaryName.toLowerCase();
 
                     return (
                       <button

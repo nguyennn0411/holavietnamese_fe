@@ -28,30 +28,34 @@ export function AdminCultureCategoriesPage() {
         const articleList = Array.isArray(articlesRes) ? articlesRes : [];
 
         const computed = catList.map((cat) => {
+          const catId = String(cat.id || '').trim().toLowerCase();
+          const catSlug = String(cat.slug || '').trim().toLowerCase();
+          const catName = String(cat.name || '').trim().toLowerCase();
+          const catNameVi = String(cat.nameVi || '').trim().toLowerCase();
+          const catNameEn = String(cat.nameEn || '').trim().toLowerCase();
+
           const matchedArticles = articleList.filter((a) => {
             const aCat = String(a.category || a.categoryId || '').trim().toLowerCase();
             const aCatName = String(a.categoryName || a.categoryNameVi || a.categoryNameEn || '').trim().toLowerCase();
-            const catId = String(cat.id || '').trim().toLowerCase();
-            const catSlug = String(cat.slug || '').trim().toLowerCase();
-            const catName = String(cat.name || '').trim().toLowerCase();
-            const catNameVi = String(cat.nameVi || '').trim().toLowerCase();
-            const catNameEn = String(cat.nameEn || '').trim().toLowerCase();
 
             return (
               (aCat && (aCat === catId || aCat === catSlug)) ||
-              (aCatName &&
-                (aCatName === catName ||
-                  aCatName === catNameVi ||
-                  aCatName === catNameEn ||
-                  aCatName === catId ||
-                  aCatName === catSlug))
+              (aCatName && (
+                aCatName === catName ||
+                aCatName === catNameVi ||
+                aCatName === catNameEn ||
+                aCatName === catId ||
+                aCatName === catSlug ||
+                (catName && aCatName.includes(catName)) ||
+                (catNameVi && aCatName.includes(catNameVi)) ||
+                (catNameEn && aCatName.includes(catNameEn))
+              ))
             );
           });
 
-          const count =
-            typeof cat.articleCount === 'number' && cat.articleCount > 0
-              ? Math.max(cat.articleCount, matchedArticles.length)
-              : matchedArticles.length;
+          const count = matchedArticles.length > 0
+            ? Math.max(typeof cat.articleCount === 'number' ? cat.articleCount : 0, matchedArticles.length)
+            : (typeof cat.articleCount === 'number' ? cat.articleCount : 0);
 
           return {
             ...cat,

@@ -36,8 +36,8 @@ export function scenarioFromApi(data) {
 
 // Initial Mock Categories
 const INITIAL_CATEGORIES = [
-  { id: 'culinary', name: 'Ẩm thực', nameVi: 'Ẩm thực', nameEn: 'Food & Cuisine', slug: 'culinary', icon: '🍜', description: 'Món ăn, đồ uống, văn hóa ẩm thực và nghệ thuật thưởng vị 3 miền.', order: 1, articleCount: 1 },
-  { id: 'tradition', name: 'Lễ hội & Phong tục', nameVi: 'Lễ hội & Phong tục', nameEn: 'Festivals & Traditions', slug: 'tradition', icon: '🏮', description: 'Tết Nguyên Đán, Trung Thu, hội làng và phong tục tập quán truyền thống.', order: 2, articleCount: 0 },
+  { id: 'culinary', name: 'Ẩm thực', nameVi: 'Ẩm thực', nameEn: 'Food & Cuisine', slug: 'culinary', icon: '🍜', description: 'Món ăn, đồ uống, văn hóa ẩm thực và nghệ thuật thưởng vị 3 miền.', order: 1, articleCount: 2 },
+  { id: 'tradition', name: 'Lễ hội & Phong tục', nameVi: 'Lễ hội & Phong tục', nameEn: 'Festivals & Traditions', slug: 'tradition', icon: '🏮', description: 'Tết Nguyên Đán, Trung Thu, hội làng và phong tục tập quán truyền thống.', order: 2, articleCount: 1 },
   { id: 'daily-life', name: 'Đời sống thường nhật', nameVi: 'Đời sống thường nhật', nameEn: 'Daily Life', slug: 'daily-life', icon: '☕', description: 'Cà phê vỉa hè, xe máy phố thị, nếp sinh hoạt quen thuộc của người Việt.', order: 3, articleCount: 1 },
   { id: 'art', name: 'Nghệ thuật & Di sản', nameVi: 'Nghệ thuật & Di sản', nameEn: 'Arts & Heritage', slug: 'art', icon: '🎭', description: 'Áo dài, tranh Đông Hồ, nhã nhạc cung đình Huế, ca trù và làng nghề truyền thống.', order: 4, articleCount: 0 },
   { id: 'travel-spots', name: 'Danh lam & Điểm đến', nameVi: 'Danh lam & Điểm đến', nameEn: 'Destinations & Sights', slug: 'travel-spots', icon: '🗺️', description: 'Phố cổ Hội An, Cố đô Huế, Hoàng thành Thăng Long, sông nước miền Tây.', order: 5, articleCount: 1 },
@@ -49,8 +49,8 @@ const INITIAL_ARTICLES = [
   {
     id: 'van-hoa-ca-phe-viet-nam',
     title: 'Văn hóa cà phê Việt Nam: Từ Cà phê phin đến Cà phê trứng nức tiếng',
-    category: 'lifestyle',
-    categoryName: 'Lifestyle (Phong cách sống)',
+    category: 'daily-life',
+    categoryName: 'Đời sống thường nhật',
     author: 'Nguyễn Thanh Thảo',
     region: 'Toàn quốc',
     destination: 'Hà Nội & TP.HCM',
