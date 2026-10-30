@@ -28,7 +28,7 @@ export const DEFAULT_MENU_ITEMS = Object.freeze([
   },
   {
     code: 'GUEST_COURSES', placement: MENU_PLACEMENTS.GUEST, labelVi: 'Khóa học', labelEn: 'Courses',
-    path: '/courses', iconKey: 'graduation-cap', displayOrder: 30, enabled: true, authRequired: false, mobilePrimary: false, featureKey: 'COURSES',
+    path: '/courses', iconKey: 'graduation-cap', displayOrder: 30, enabled: true, authRequired: true, mobilePrimary: false, featureKey: 'COURSES',
   },
   {
     code: 'GUEST_ALPHABET', placement: MENU_PLACEMENTS.GUEST, labelVi: 'Bảng chữ cái tiếng Việt', labelEn: 'Vietnamese Alphabet',
@@ -64,7 +64,7 @@ export const DEFAULT_MENU_ITEMS = Object.freeze([
   },
   {
     code: 'LEARNER_COURSES', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Khóa học', labelEn: 'Courses',
-    path: '/courses', iconKey: 'book-open', displayOrder: 30, enabled: true, authRequired: false, mobilePrimary: true, featureKey: 'COURSES',
+    path: '/courses', iconKey: 'book-open', displayOrder: 30, enabled: true, authRequired: true, mobilePrimary: true, featureKey: 'COURSES',
   },
   {
     code: 'LEARNER_MY_LEARNING', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Góc học tập', labelEn: 'My learning',

@@ -1,7 +1,7 @@
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
+
 import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ROUTES } from '@/constants/routes';
@@ -58,6 +58,6 @@ export function AdminLayout() {
       <div className="admin-sidebar-footer"><Link to="/"><ArrowLeft size={16} aria-hidden="true"/><BilingualText>{"Giao diện học viên"}</BilingualText></Link><button className="admin-logout" onClick={logout}><LogOut size={16} aria-hidden="true"/><BilingualText>{"Đăng xuất"}</BilingualText></button></div>
     </aside>
     {open && <button className="admin-menu-backdrop" aria-label={bilingualLabel("Đóng menu", "Close menu")} onClick={() => setOpen(false)} />}
-    <div className="admin-main-area"><header className="admin-topbar"><button className="mobile-menu-button secondary" aria-label={bilingualLabel("Mở menu quản trị", "Open admin menu")} aria-controls="admin-navigation" aria-expanded={open} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><span><BilingualText>{"Quản trị /"}</BilingualText><strong><BilingualText>{current}</BilingualText></strong></span><LanguageSwitcher compact /><span className="admin-identity"><BilingualText>{user?.fullName || user?.username || (isAdmin ? 'Quản trị viên' : 'Người quản lý nội dung')}</BilingualText> <span className="badge"><BilingualText>{isAdmin ? 'ADMIN' : 'CONTENT MANAGER'}</BilingualText></span></span></header><main className="admin-content" id="admin-content"><AnimatePresence mode="wait" initial={false}><PageTransition key={location.pathname}><Outlet /></PageTransition></AnimatePresence></main></div>
+    <div className="admin-main-area"><header className="admin-topbar"><button className="mobile-menu-button secondary" aria-label={bilingualLabel("Mở menu quản trị", "Open admin menu")} aria-controls="admin-navigation" aria-expanded={open} onClick={() => setOpen(value => !value)}>{open ? <X size={20}/> : <Menu size={20}/>}</button><span><BilingualText>{"Quản trị /"}</BilingualText><strong><BilingualText>{current}</BilingualText></strong></span><LanguageSwitcher compact /><span className="admin-identity"><BilingualText>{user?.fullName || user?.username || (isAdmin ? 'Quản trị viên' : 'Người quản lý nội dung')}</BilingualText> <span className="badge"><BilingualText>{isAdmin ? 'ADMIN' : 'CONTENT MANAGER'}</BilingualText></span></span></header><main className="admin-content" id="admin-content"><PageTransition key={location.pathname}><Outlet /></PageTransition></main></div>
   </div>;
 }

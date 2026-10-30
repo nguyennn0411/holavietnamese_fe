@@ -7,7 +7,10 @@ import { useTranslation } from 'react-i18next';
  */
 export function AnimatedMarquee() {
   const { t } = useTranslation('home');
-  const marqueeItems = t('marquee', { returnObjects: true });
+  const rawItems = t('marquee', { returnObjects: true });
+  const marqueeItems = Array.isArray(rawItems) && rawItems.length > 0
+    ? rawItems
+    : ['HỌC TIẾNG VIỆT', 'NÓI THẬT TỰ TIN', 'KHÁM PHÁ VĂN HÓA', 'LUYỆN TẬP VỚI AI', 'KHÁM PHÁ VIỆT NAM', 'TIẾNG VIỆT ĐỜI THỰC', 'LÀM CHỦ 6 THANH ĐIỆU'];
 
   return (
     <section

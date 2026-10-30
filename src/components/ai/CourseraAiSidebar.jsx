@@ -23,6 +23,7 @@ import { useAiSidebar } from '@/contexts/AiSidebarContext';
 import { aiTutorService } from '@/services/aiTutorService';
 import aiCourseCoachService from '@/services/aiCourseCoachService';
 import ngheIdleMascot from '@/assets/mascot/nghe-idle.webp';
+import { TutorMascotAvatar } from '@/components/mascot';
 
 function cleanAiText(value) {
   if (typeof value !== 'string') return '';
@@ -334,6 +335,7 @@ export function CourseraAiSidebar({ width, onResize, onClose }) {
   const [isSending, setIsSending] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
+  const [speakingId, setSpeakingId] = useState(null);
   const [isListening, setIsListening] = useState(false);
   const [showBanner, setShowBanner] = useState(() => {
     try {
@@ -617,13 +619,20 @@ Pick a suggested question below or ask me anything!`,
   };
 
   // Text-to-speech pronunciation
-  const handleSpeak = (text) => {
+  const handleSpeak = (id, text) => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
+      if (speakingId === id) {
+        setSpeakingId(null);
+        return;
+      }
       const clean = text.replace(/[*_#`]/g, '');
       const utterance = new SpeechSynthesisUtterance(clean);
       utterance.lang = 'vi-VN';
       utterance.rate = 0.95;
+      utterance.onend = () => setSpeakingId(null);
+      utterance.onerror = () => setSpeakingId(null);
+      setSpeakingId(id);
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -898,7 +907,7 @@ Pick a suggested question below or ask me anything!`,
               >
                 {msg.sender === 'ai' && (
                   <div className="coursera-ai-msg__avatar">
-                    <img src={ngheIdleMascot} alt="Nghé" />
+                    <TutorMascotAvatar state={speakingId === msg.id ? 'speaking' : 'idle'} size="tiny" className="nghe-tutor-avatar--face" />
                   </div>
                 )}
 
@@ -938,7 +947,7 @@ Pick a suggested question below or ask me anything!`,
                         <button
                           type="button"
                           className="coursera-ai-msg__action"
-                          onClick={() => handleSpeak(msg.text)}
+                          onClick={() => handleSpeak(msg.id, msg.text)}
                           title={isVi ? 'Nghe phát âm tiếng Việt' : 'Listen pronunciation'}
                         >
                           <Volume2 size={12} />
@@ -954,7 +963,7 @@ Pick a suggested question below or ask me anything!`,
             {isSending && (
               <div className="coursera-ai-msg--ai">
                 <div className="coursera-ai-msg__avatar">
-                  <img src={ngheIdleMascot} alt="Bé Nghé" />
+                  <TutorMascotAvatar state="thinking" size="tiny" className="nghe-tutor-avatar--face" />
                 </div>
                 <div className="coursera-ai-thinking">
                   <div className="coursera-ai-thinking__dot" />
