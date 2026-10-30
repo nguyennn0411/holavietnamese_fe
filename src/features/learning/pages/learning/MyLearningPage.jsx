@@ -2,7 +2,7 @@ import { BilingualText, bilingualLabel } from '@/shared/components/common/Biling
 import { useCallback, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { BookOpen, Languages, MapPin, Award, ArrowRight, Plus, CheckCircle2, Calendar, Flame, Clock, Play } from 'lucide-react';
+import { BookOpen, Languages, Award, ArrowRight, Plus, CheckCircle2, Calendar, Flame, Clock, Play } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { learnerService } from '@/features/learning/api/learnerService';
 import { courseService } from '@/features/learning/api/courseService';
@@ -13,7 +13,7 @@ import { ProgressBar } from '@/shared/components/common/ProgressBar';
 import { ContentImage } from '@/shared/components/common/ContentImage';
 import { getCourseCover } from '@/features/learning/components/course/CourseInfo';
 
-const LEARNING_TABS = new Set(['courses', 'vocabulary', 'journey', 'quiz']);
+const LEARNING_TABS = new Set(['courses', 'vocabulary', 'quiz']);
 
 function formatQuizDate(dateStr) {
   if (!dateStr) return '';
@@ -209,7 +209,6 @@ export function MyLearningPage({ initialTab = 'courses' }) {
   const tabItems = [
     { id: 'courses', labelVi: 'Khóa học của tôi', labelEn: 'My Courses', icon: BookOpen },
     { id: 'vocabulary', labelVi: 'Từ vựng đã lưu', labelEn: 'Saved Words', icon: Languages },
-    { id: 'journey', labelVi: 'Khám phá Việt Nam', labelEn: 'Explore Vietnam', icon: MapPin },
     { id: 'quiz', labelVi: 'Lịch sử quiz', labelEn: 'Quiz History', icon: Award },
   ];
 
@@ -710,117 +709,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                 </section>
               )}
 
-              {/* TAB 3: Free destination discovery with Real Tourism Photographs */}
-              {tab === 'journey' && (
-                <div className="space-y-6">
-                  {/* Hero Destination Banner */}
-                  <div className="explore-learning card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-center gap-8">
-                    <div className="w-full md:w-80 h-56 shrink-0 rounded-2xl overflow-hidden border border-[#E8E5DF] shadow-md relative group bg-stone-900">
-                      <img
-                        src="/design/hero/vietnam-hoi-an-banner.jpg"
-                        alt="Phố cổ Hội An"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
-                        <span className="text-amber-300 text-xs font-extrabold uppercase tracking-wider">
-                          Di sản văn hóa UNESCO
-                        </span>
-                        <strong className="text-white text-base font-black">
-                          Hội An, Quảng Nam
-                        </strong>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4 flex-1">
-                      <div>
-                        <span className="eyebrow text-xs font-bold uppercase tracking-wider text-[#EA580C]">
-                          <BilingualText vi="Khám phá điểm đến" en="Discover destinations" />
-                        </span>
-                        <h2 className="text-2xl sm:text-3xl font-black text-[#253044] mt-1">
-                          <BilingualText vi="Khám phá 15 điểm đến Việt Nam" en="Explore 15 Destinations in Vietnam" />
-                        </h2>
-                      </div>
-
-                      <p className="text-sm text-[#64748B] leading-relaxed">
-                        <BilingualText
-                          vi="Trải nghiệm văn hóa bản địa, giọng nói từng vùng miền Bắc - Trung - Nam và thực hành giao tiếp thực tế qua các tình huống du lịch sống động."
-                          en="Experience local culture, North - Central - South regional dialects, and practice real-life communication in authentic travel scenarios."
-                        />
-                      </p>
-
-                      <div className="actions flex flex-wrap items-center gap-3 pt-2">
-                        <Link
-                          className="button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] hover:!text-[#C2410C] border-2 border-[#EA580C] font-bold text-xs shadow-xs transition-all active:!bg-white active:!text-[#EA580C]"
-                          to={ROUTES.EXPLORE}
-                        >
-                          <BilingualText>{"Mở bản đồ khám phá toàn cảnh →"}</BilingualText>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 4 Real Destination Photo Cards */}
-                  <div>
-                    <h3 className="text-lg font-black text-[#253044] mb-4">
-                      <BilingualText vi="Điểm đến thực tế nổi bật dành cho bạn" en="Featured Real Destinations For You" />
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                      {[
-                        {
-                          nameVi: 'Hà Nội',
-                          nameEn: 'Hanoi',
-                          region: 'Miền Bắc',
-                          img: 'https://images.vietnam.travel/2017-06/vietnam-travel-5.jpg',
-                          link: '/destinations/ha-noi',
-                        },
-                        {
-                          nameVi: 'Vịnh Hạ Long',
-                          nameEn: 'Ha Long Bay',
-                          region: 'Miền Bắc',
-                          img: 'https://images.vietnam.travel/2017-06/visitvietnam-3.jpg',
-                          link: '/destinations/vinh-ha-long',
-                        },
-                        {
-                          nameVi: 'Hội An',
-                          nameEn: 'Hoi An',
-                          region: 'Miền Trung',
-                          img: 'https://images.vietnam.travel/2021-12/shutterstock_1506184586_resize_0.jpg',
-                          link: '/destinations/hoi-an',
-                        },
-                        {
-                          nameVi: 'TP. Hồ Chí Minh',
-                          nameEn: 'Ho Chi Minh City',
-                          region: 'Miền Nam',
-                          img: 'https://images.vietnam.travel/2017-07/vietnam-tourism-4.jpg',
-                          link: '/destinations/thanh-pho-ho-chi-minh',
-                        },
-                      ].map((item, idx) => (
-                        <Link
-                          key={idx}
-                          to={item.link}
-                          className="group relative rounded-2xl overflow-hidden aspect-[4/3] border border-[#E8E5DF] shadow-xs hover:shadow-lg transition-all"
-                        >
-                          <img
-                            src={item.img}
-                            alt={item.nameVi}
-                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex flex-col justify-end p-3.5">
-                            <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-300">
-                              {item.region}
-                            </span>
-                            <strong className="text-white text-base font-black">
-                              <BilingualText vi={item.nameVi} en={item.nameEn} />
-                            </strong>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 4: Quiz History */}
+              {/* TAB 3: Quiz History */}
               {tab === 'quiz' && (
                 <section className="card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
                   <div className="border-b border-[#E8E5DF]/60 pb-4">

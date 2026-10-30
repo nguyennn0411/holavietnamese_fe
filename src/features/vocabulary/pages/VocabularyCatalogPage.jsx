@@ -24,7 +24,7 @@ export function VocabularyCatalogPage() {
     [query.keyword, query.page]));
   function filter(key, value) { const next = new URLSearchParams(); if (query.keyword) next.set('keyword', query.keyword); next.set(key, String(value)); setParams(next); }
   return <section className="vocabulary-ui dictionary-page">
-    <header className="dictionary-intro">
+    <header className="dictionary-intro dictionary-intro-framed">
       <div><p className="eyebrow"><BilingualText vi="TỪ ĐIỂN TIẾNG VIỆT" en="VIETNAMESE DICTIONARY" /></p>
         <h1><BilingualText vi={<>Mỗi từ, <em>một cách hiểu.</em></>} en={<>Every word, <em>a new understanding.</em></>} /></h1><p><BilingualText vi="Tra từ tiếng Việt hoặc nghĩa tiếng Anh để tìm hiểu nghĩa và cách dùng." en="Search a Vietnamese word or its English meaning to discover definitions and usage." /></p>
       </div><div className="dictionary-letter-art" aria-hidden="true"><span>ă â ê</span><strong>Tiếng<br />Việt.</strong><span>ô ơ ư đ</span></div>
