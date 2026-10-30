@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { ContentImage } from '../src/components/common/ContentImage';
-import { CourseThumbnail } from '../src/components/course/CourseInfo';
-import { QuestionInput } from '../src/components/learning/QuestionInput';
-import { MediaPlayer } from '../src/components/learning/MediaPlayer';
-import { SpeakButton } from '../src/components/common/Ui';
+import { ContentImage } from '../src/shared/components/common/ContentImage';
+import { CourseThumbnail } from '../src/features/learning/components/course/CourseInfo';
+import { QuestionInput } from '../src/features/learning/components/learning/QuestionInput';
+import { MediaPlayer } from '../src/features/learning/components/learning/MediaPlayer';
+import { SpeakButton } from '../src/shared/components/common/Ui';
 
 // QA-only failures exercise recovery without altering any application data.
 export function MediaCheck() {

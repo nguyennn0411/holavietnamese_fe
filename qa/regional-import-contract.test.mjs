@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import axios from 'axios';
-import { regionalDraft, regionalPayload } from '../src/models/RegionalVocabulary.js';
+import { regionalDraft, regionalPayload } from '../src/features/explore/regional/models/RegionalVocabulary.js';
 import { ROUTES } from '../src/constants/routes.js';
 
 globalThis.__regionalImportContract = { axios };
 globalThis.localStorage = { getItem: key => key === 'token' ? 'regional-import-test-token' : null };
 const load = source => import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
-const clientSource = (await fs.readFile(new URL('../src/api/axiosClient.js', import.meta.url), 'utf8'))
+const clientSource = (await fs.readFile(new URL('../src/shared/api/axiosClient.js', import.meta.url), 'utf8'))
   .replace("import axios from 'axios';", 'const { axios } = globalThis.__regionalImportContract;')
   .replace('import.meta.env.VITE_API_BASE_URL', '({}).VITE_API_BASE_URL');
 const { default: client } = await load(clientSource);
@@ -20,8 +20,8 @@ client.defaults.adapter = async config => {
   assert.equal(config.headers.Authorization, 'Bearer regional-import-test-token');
   return { config, status: 200, statusText: 'OK', headers: {}, data: rejectEnvelope ? { code: 9999, message: 'Rejected operation' } : { code: 1000, result } };
 };
-const service = async file => load((await fs.readFile(new URL(`../src/services/${file}.js`, import.meta.url), 'utf8'))
-  .replace("import axiosClient from '@/api/axiosClient';", 'const axiosClient = globalThis.__regionalImportContract.client;'));
+const service = async file => load((await fs.readFile(new URL(file === 'contentImportService' ? `../src/features/content-import/api/${file}.js` : `../src/features/explore/regional/api/${file}.js`, import.meta.url), 'utf8'))
+  .replace(/import axiosClient from [^;\n]+;?/, 'const axiosClient = globalThis.__regionalImportContract.client;'));
 const { regionalVocabularyService, adminRegionalVocabularyService } = await service('regionalVocabularyService');
 const { contentImportService } = await service('contentImportService');
 const jobId = 'e7c658d0-7bc0-49d0-9ac0-221e5538d0ca';

@@ -1,4 +1,4 @@
-import { UI_TRANSLATIONS } from '@/components/common/uiTranslations';
+import { UI_TRANSLATIONS } from '@/shared/components/common/uiTranslations';
 
 const fromLegacyCatalog = (index) => Object.fromEntries(
   Object.entries(UI_TRANSLATIONS).map(([key, pair]) => [key, pair[index] ?? key]),

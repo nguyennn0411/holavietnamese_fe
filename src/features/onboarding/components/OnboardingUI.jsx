@@ -1,10 +1,10 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ArrowLeft, Check, RotateCcw, Volume2, VolumeX, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { BuffaloMascot } from '@/components/mascot';
+import { BuffaloMascot } from '@/shared/components/mascot';
 import { useOnboarding } from '../context/OnboardingContext';
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
+import { LanguageSwitcher } from '@/shared/components/common/LanguageSwitcher';
 
 const steps = [
   '/onboarding/reason', '/onboarding/level', '/onboarding/benefits',

@@ -84,7 +84,7 @@ test('đăng nhập tài khoản chưa xác minh chuyển email sang luồng OTP
 });
 
 test('auth API khai báo đúng ba endpoint OTP', async () => {
-  const source = await fs.readFile(new URL('../src/api/authApi.js', import.meta.url), 'utf8');
+  const source = await fs.readFile(new URL('../src/shared/api/authApi.js', import.meta.url), 'utf8');
   assert.match(source, /post\('\/api\/auth\/register'/);
   assert.match(source, /post\('\/api\/auth\/verify-email\/otp'/);
   assert.match(source, /post\('\/api\/auth\/verify-email\/resend'/);

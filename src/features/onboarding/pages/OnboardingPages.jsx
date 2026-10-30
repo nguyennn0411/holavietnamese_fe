@@ -7,9 +7,9 @@ import { useOnboarding } from '../context/OnboardingContext';
 import { Brand, Confetti, LessonHeader, Mascot, OnboardingLayout, PrimaryButton, SelectionCard } from '../components/OnboardingUI';
 import { buildLearningPathPath, buildOnboardingRecommendation } from '../services/recommendationEngine';
 import { onboardingService } from '../services/onboardingService';
-import { useAuth } from '@/contexts/AuthContext';
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { useAuth } from '@/features/auth/context/AuthContext';
+import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
+import { LanguageSwitcher } from '@/shared/components/common/LanguageSwitcher';
 
 const speak = (text) => {
   if (!('speechSynthesis' in window)) return false;

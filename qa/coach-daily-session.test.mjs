@@ -27,11 +27,11 @@ test('daily Coach sessions reuse today, preserve yesterday and isolate users and
   };
   globalThis.__coachDailyTest = { client, day: () => day, user: () => user };
   try {
-    let source = await readFile(new URL('../src/services/aiCourseCoachService.js', import.meta.url), 'utf8');
+    let source = await readFile(new URL('../src/features/ai/api/aiCourseCoachService.js', import.meta.url), 'utf8');
     source = source
-      .replace("import axiosClient from '../api/axiosClient.js';", 'const axiosClient = globalThis.__coachDailyTest.client;')
+      .replace("import axiosClient from '@/shared/api/axiosClient.js';", 'const axiosClient = globalThis.__coachDailyTest.client;')
       .replace("import { getCurrentUserStorageKey } from './aiTutorService.js';", 'const getCurrentUserStorageKey = globalThis.__coachDailyTest.user;')
-      .replace("import { getCoachDay } from '../utils/coachDay.js';", 'const getCoachDay = globalThis.__coachDailyTest.day;');
+      .replace("import { getCoachDay } from '../../../utils/coachDay.js';", 'const getCoachDay = globalThis.__coachDailyTest.day;');
     const { default: service } = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
     const context = { courseId: 1, lessonId: 2, lessonTitle: 'Pronunciation' };
     const [first, duplicate] = await Promise.all([

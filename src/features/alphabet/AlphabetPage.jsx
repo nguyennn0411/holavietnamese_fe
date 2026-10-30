@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, AudioLines, Headphones, Play, RotateCcw, Square, Volume2 } from 'lucide-react';
@@ -259,7 +259,6 @@ export function AlphabetPage() {
             <ArrowLeft size={16} aria-hidden="true" />
             <BilingualText vi="Về khóa học" en="Back to courses" />
           </Link>
-          <span><BilingualText vi="Âm mẫu VietSyllables · Dự phòng bằng giọng tiếng Việt trên thiết bị" en="VietSyllables sample audio · Fallback using device Vietnamese TTS" /></span>
         </footer>
       </div>
     </div>

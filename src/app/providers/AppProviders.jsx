@@ -1,12 +1,12 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { BilingualTextProvider } from '@/components/common/BilingualText';
-import { ErrorBoundary } from '@/components/common/ErrorBoundary';
-import { AuthProvider } from '@/contexts/AuthContext';
-import { SiteContentProvider } from '@/contexts/SiteContentContext';
+import { BilingualTextProvider } from '@/shared/components/common/BilingualText';
+import { ErrorBoundary } from '@/shared/components/common/ErrorBoundary';
+import { AuthProvider } from '@/features/auth/context/AuthContext';
+import { SiteContentProvider } from '@/features/admin/context/SiteContentContext';
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext';
 
-const AppToaster = lazy(() => import('@/components/common/AppToaster'));
+const AppToaster = lazy(() => import('@/shared/components/common/AppToaster'));
 
 export function AppProviders({ children }) {
   return (

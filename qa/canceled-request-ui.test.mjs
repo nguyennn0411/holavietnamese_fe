@@ -6,9 +6,9 @@ const read = path => fs.readFile(new URL(path, import.meta.url), 'utf8');
 
 test('canceled requests retain their type and never become Learning Path errors', async () => {
   const [client, hook, page] = await Promise.all([
-    read('../src/api/axiosClient.js'),
-    read('../src/hooks/useLearningPath.js'),
-    read('../src/pages/learning-path/LearningPathPage.jsx'),
+    read('../src/shared/api/axiosClient.js'),
+    read('../src/features/learning/hooks/useLearningPath.js'),
+    read('../src/features/learning/pages/learning-path/LearningPathPage.jsx'),
   ]);
 
   assert.match(client, /axios\.isCancel\(error\)/);

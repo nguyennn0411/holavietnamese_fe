@@ -2,7 +2,7 @@ import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 
-const source = await fs.readFile(new URL('../src/api/httpClient.js', import.meta.url), 'utf8');
+const source = await fs.readFile(new URL('../src/shared/api/httpClient.js', import.meta.url), 'utf8');
 const originalFetch = globalThis.fetch;
 const originalStorage = globalThis.localStorage;
 let sequence = 0;

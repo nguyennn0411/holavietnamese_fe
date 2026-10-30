@@ -75,8 +75,8 @@ export const DEFAULT_NOTIFICATIONS = [
     createdAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
     read: false,
     isRead: false,
-    link: '/learn/1/lesson/101',
-    linkUrl: '/learn/1/lesson/101',
+    link: '/courses/1/lessons/101',
+    linkUrl: '/courses/1/lessons/101',
     xpReward: '+15 XP',
   },
   {

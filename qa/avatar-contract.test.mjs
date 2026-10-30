@@ -6,8 +6,8 @@ const read = (path) => readFile(new URL(`../${path}`, import.meta.url), 'utf8');
 
 test('avatar uses the signed direct-to-Cloudinary flow and client validation', async () => {
   const [service, profile] = await Promise.all([
-    read('src/services/learnerService.js'),
-    read('src/pages/profile/ProfilePage.jsx'),
+    read('src/features/learning/api/learnerService.js'),
+    read('src/features/account/pages/profile/ProfilePage.jsx'),
   ]);
 
   assert.match(service, /post\(['"]\/api\/users\/me\/avatar\/signature['"]\)/);
