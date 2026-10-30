@@ -890,6 +890,26 @@ body.ai-quiz-active .ai-tutor-widget {
   opacity: 1;
 }
 
+.conversation-history-select { width: 100%; min-width: 0; }
+.conversation-history-select .tutor-mode-menu {
+  width: 100%;
+  min-width: 0;
+  max-height: min(420px, 50vh);
+  overflow-y: auto;
+}
+.conversation-kind-help { color: #78685b; font-size: 11px; line-height: 1.5; }
+.session-kind-badge {
+  display: inline-flex;
+  margin-bottom: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+.session-kind-badge--tutor { background: #fff0e2; color: #9a3412; }
+.session-kind-badge--coach { background: #e0f2fe; color: #075985; }
+
 /* Compact conversation metadata: keep the date readable without competing with actions. */
 .session-card__meta {
   display: flex;

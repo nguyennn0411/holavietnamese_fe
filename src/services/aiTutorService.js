@@ -764,6 +764,11 @@ export const aiTutorService = {
           }));
           return {
             id: item.id,
+            kind: item.kind,
+            sessionType: item.sessionType,
+            type: item.type,
+            courseId: item.courseId,
+            lessonId: item.lessonId,
             title: item.title || `Hội thoại AI (${this.getMode(item.mode).name})`,
             mode: item.mode || 'tutor',
             createdAt: item.createdAt || new Date().toISOString(),
@@ -787,11 +792,42 @@ export const aiTutorService = {
   },
 
   getActiveSessionId() {
-    return localStorage.getItem(getActiveSessionKey()) || getWelcomeSessionId();
+    try {
+      const raw = localStorage.getItem(getActiveSessionKey());
+      if (!raw) return '';
+      if (raw.startsWith('{')) {
+        const parsed = JSON.parse(raw);
+        const todayKey = getLocalDateKey(new Date());
+        if (parsed.dateKey === todayKey && parsed.sessionId) {
+          return parsed.sessionId;
+        }
+        localStorage.removeItem(getActiveSessionKey());
+        return '';
+      }
+      return raw;
+    } catch {
+      return '';
+    }
   },
 
   setActiveSessionId(id) {
-    localStorage.setItem(getActiveSessionKey(), id);
+    if (!id) {
+      try {
+        localStorage.removeItem(getActiveSessionKey());
+      } catch {
+        // ignore
+      }
+      return;
+    }
+    try {
+      const data = {
+        sessionId: id,
+        dateKey: getLocalDateKey(new Date()),
+      };
+      localStorage.setItem(getActiveSessionKey(), JSON.stringify(data));
+    } catch {
+      localStorage.setItem(getActiveSessionKey(), id);
+    }
   },
 
   getSession(id) {

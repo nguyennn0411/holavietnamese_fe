@@ -13,7 +13,7 @@ import './styles/ai-tutor.css'
 import './styles/design-system.css'
 import './styles/heritage.css'
 import './styles/auth.css'
-import './styles/coursera-ai-sidebar.css'
+import './styles/coach-ai-sidebar.css'
 import './features/onboarding/styles/onboarding.css'
 
 createRoot(document.getElementById('root')).render(

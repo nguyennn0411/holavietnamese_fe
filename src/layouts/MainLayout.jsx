@@ -1,5 +1,5 @@
 import { BilingualText } from '@/components/common/BilingualText';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '@/contexts/AuthContext';
@@ -28,11 +28,27 @@ function MainLayoutShell({
   const location = useLocation();
   const isGuestHome = (location.pathname === '/' || location.pathname === '') && !isAuthenticated;
   const { isOpen: isAiOpen, width: aiWidth, setWidth: setAiWidth, closeAiSidebar } = useAiSidebar();
+  const bodyRef = useRef(null);
+  const [topbarHeight, setTopbarHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const topbar = bodyRef.current?.querySelector('.learner-topbar, .guest-topbar');
+    if (!topbar) return undefined;
+
+    const updateHeight = () => setTopbarHeight(topbar.getBoundingClientRect().height);
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(topbar);
+    return () => observer.disconnect();
+  }, [isAuthenticated]);
 
   return (
     <div
       className={`layout-shell ${isAuthenticated ? 'learner-app' : 'guest-app'} ${isSidebarCollapsed ? 'is-sidebar-collapsed' : ''} ${isAiOpen ? 'has-ai-sidebar' : ''}`}
-      style={isAiOpen ? { '--ai-sidebar-width': `${aiWidth}px` } : undefined}
+      style={{
+        '--ai-sidebar-width': `${aiWidth}px`,
+        '--layout-topbar-height': `${topbarHeight}px`,
+      }}
     >
       <a className="skip-link" href="#main-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
       <LayoutToast message={toastError} onClose={() => setToastError(null)} />
@@ -44,7 +60,7 @@ function MainLayoutShell({
           <GuestMobileDrawer open={guestDrawerOpen} onClose={closeGuestDrawer} />
         </>
       )}
-      <div className="layout-shell__body">
+      <div className="layout-shell__body" ref={bodyRef}>
         {isAuthenticated ? (
           <LearnerTopbar user={user} stats={learnerStats} onLogout={logout} />
         ) : (

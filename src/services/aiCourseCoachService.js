@@ -1,18 +1,10 @@
 import axiosClient from '../api/axiosClient.js';
 
-const STORAGE_PREFIX = 'hola_ai_coach_';
+import { getCurrentUserStorageKey } from './aiTutorService.js';
+import { getCoachDay } from '../utils/coachDay.js';
 
-function getSessionKey(courseId, lessonId) {
-  return `${STORAGE_PREFIX}session_${courseId}_${lessonId}`;
-}
-
-function getCachedSessionId(courseId, lessonId) {
-  return localStorage.getItem(getSessionKey(courseId, lessonId));
-}
-
-function cacheSessionId(courseId, lessonId, sessionId) {
-  localStorage.setItem(getSessionKey(courseId, lessonId), sessionId);
-}
+const pendingSessions = new Map();
+const unwrap = response => response?.result ?? response?.data ?? response;
 
 export const COACH_MODES = [
   {
@@ -100,22 +92,30 @@ function truncateContent(content, maxChars = 2000) {
 
 const aiCourseCoachService = {
   async getOrCreateSession({ courseId, lessonId, lessonTitle }) {
-    const cachedId = getCachedSessionId(courseId, lessonId);
-    try {
-      const params = new URLSearchParams({ courseId, lessonId });
-      if (lessonTitle) params.set('lessonTitle', lessonTitle);
-      const res = await axiosClient.get(`/api/ai/coach/sessions?${params}`);
-      const session = res?.result ?? res?.data ?? res;
-      if (session?.id) cacheSessionId(courseId, lessonId, session.id);
-      return session;
-    } catch (err) {
-      console.warn('[AiCourseCoach] getOrCreateSession fallback:', err?.message || err);
-      const stubId = cachedId || `coach-${courseId}-${lessonId}-local`;
-      return { id: stubId, messages: [], mode: 'course_coach', title: `Hola AI – ${lessonTitle || ''}` };
-    }
+    const day = getCoachDay();
+    const id = `coach-${courseId}-${lessonId}-${day}-u${encodeURIComponent(getCurrentUserStorageKey())}`;
+    if (pendingSessions.has(id)) return pendingSessions.get(id);
+    const request = (async () => {
+      // The legacy Coach endpoint always reuses one session per lesson.
+      // Use the existing general creation endpoint with a daily Coach ID.
+      const sessions = unwrap(await axiosClient.get('/api/ai/sessions'));
+      const existing = Array.isArray(sessions) ? sessions.find(session => session.id === id) : null;
+      const session = existing || unwrap(await axiosClient.post('/api/ai/sessions', {
+        id,
+        mode: 'course_coach',
+        title: `AI Coach ? ${lessonTitle || lessonId} ? ${day}`,
+      }));
+      if (!session?.id) throw new Error('Coach session was not created');
+      return { ...session, coachDay: day, courseId, lessonId };
+    })();
+    pendingSessions.set(id, request);
+    try { return await request; }
+    finally { pendingSessions.delete(id); }
   },
 
   async sendMessage({ sessionId, text, coachMode = 'ask', language = 'vi', courseId, lessonId, lessonTitle, lessonContent }) {
+    const dailySession = await this.getOrCreateSession({ courseId, lessonId, lessonTitle });
+    sessionId = dailySession.id;
     const lessonContentSnippet = truncateContent(lessonContent);
     const body = { text, coachMode, language, courseId, lessonId, lessonTitle, lessonContentSnippet };
     const res = await axiosClient.post(`/api/ai/coach/sessions/${sessionId}/messages`, body);

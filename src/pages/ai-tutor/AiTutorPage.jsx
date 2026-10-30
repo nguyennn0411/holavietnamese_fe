@@ -29,7 +29,8 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
-import { aiTutorService, getCurrentUserStorageKey } from '@/services/aiTutorService';
+import { aiTutorService, getCurrentUserStorageKey, TUTOR_MODES } from '@/services/aiTutorService';
+import { getAiSessionKind, getAiSessionMode } from '@/utils/aiSessionKind';
 import { useAuth } from '@/application/context/AuthContext';
 import { vocabularyService } from '@/services/vocabularyService';
 import { useConfirmDialog } from '@/components/common/ConfirmDialog';
@@ -136,21 +137,26 @@ export function AiTutorPage() {
   const [modes, setModes] = useState(() => aiTutorService.getModes());
   const [sessions, setSessions] = useState(() => aiTutorService.getAllSessions());
   const [activeSessionId, setActiveSessionId] = useState(() => {
-    const targetId = location.state?.sessionId || aiTutorService.getActiveSessionId();
+    const targetId = location.state?.sessionId;
+    if (!targetId) return '';
     const all = aiTutorService.getAllSessions();
-    const target = (targetId && all.find((s) => s.id === targetId)) || all[0];
+    const target = all.find((s) => s.id === targetId);
     return target?.id || '';
   });
   const [currentSession, setCurrentSession] = useState(() => {
-    const targetId = location.state?.sessionId || aiTutorService.getActiveSessionId();
+    const targetId = location.state?.sessionId;
+    if (!targetId) return null;
     const all = aiTutorService.getAllSessions();
-    return (targetId && all.find((s) => s.id === targetId)) || all[0] || null;
+    return all.find((s) => s.id === targetId) || null;
   });
   const [currentMode, setCurrentMode] = useState(() => {
-    const targetId = location.state?.sessionId || aiTutorService.getActiveSessionId();
-    const all = aiTutorService.getAllSessions();
-    const target = (targetId && all.find((s) => s.id === targetId)) || all[0];
-    return target?.mode || aiTutorService.getModes()[0]?.id || 'tutor';
+    const targetId = location.state?.sessionId;
+    if (targetId) {
+      const all = aiTutorService.getAllSessions();
+      const target = all.find((s) => s.id === targetId);
+      if (target?.mode) return target.mode;
+    }
+    return aiTutorService.getModes()[0]?.id || 'tutor';
   });
   const [inputText, setInputText] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -159,6 +165,28 @@ export function AiTutorPage() {
   const [editingTitleId, setEditingTitleId] = useState(null);
   const [newTitleInput, setNewTitleInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [historyKind, setHistoryKind] = useState('all');
+  const [isHistoryMenuOpen, setIsHistoryMenuOpen] = useState(false);
+  const historyMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (!isHistoryMenuOpen) return undefined;
+    const closeOutside = (event) => {
+      if (!historyMenuRef.current?.contains(event.target)) setIsHistoryMenuOpen(false);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setIsHistoryMenuOpen(false);
+        historyMenuRef.current?.querySelector('button')?.focus();
+      }
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', closeOutside);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [isHistoryMenuOpen]);
   const [speakingMessageId, setSpeakingMessageId] = useState(null);
   const [speechRate, setSpeechRate] = useState(0.95);
   const [copiedId, setCopiedId] = useState(null);
@@ -205,21 +233,28 @@ export function AiTutorPage() {
     setSessions(loadedSessions);
     // Tự động mở sẵn phiên học mục tiêu hoặc phiên gần nhất
 
-    const targetSessionId = location.state?.sessionId || aiTutorService.getActiveSessionId();
-    let initialSession = (Array.isArray(loadedSessions) && loadedSessions.find((s) => s.id === targetSessionId)) || loadedSessions?.[0];
+    const explicitTargetId = location.state?.sessionId;
+    const explicitSession = explicitTargetId
+      ? (Array.isArray(loadedSessions) && loadedSessions.find((s) => s.id === explicitTargetId)) || null
+      : null;
 
-    if (!initialSession && (!loadedSessions || loadedSessions.length === 0)) {
-      initialSession = aiTutorService.createSession('tutor');
-      setSessions([initialSession]);
-    }
-
-    if (initialSession) {
-      aiTutorService.setActiveSessionId(initialSession.id);
-      setActiveSessionId(initialSession.id);
-      setCurrentSession(initialSession);
-      if (initialSession.mode) {
-        setCurrentMode(initialSession.mode);
+    if (explicitSession) {
+      aiTutorService.setActiveSessionId(explicitSession.id);
+      setActiveSessionId(explicitSession.id);
+      setCurrentSession(explicitSession);
+      if (explicitSession.mode) {
+        setCurrentMode(explicitSession.mode);
       }
+      try {
+        window.history.replaceState({}, document.title);
+      } catch {
+        // ignore
+      }
+    } else {
+      // Khi khởi động lại hệ thống hoặc sang ngày mới: không tự động mở phiên gần nhất, để learner chọn tự mở
+      aiTutorService.setActiveSessionId('');
+      setActiveSessionId('');
+      setCurrentSession(null);
     }
 
 
@@ -231,13 +266,16 @@ export function AiTutorPage() {
             const found = remoteSynced.find((s) => s.id === prev.id);
             return found || prev;
           }
-          const chosen = (targetSessionId && remoteSynced.find((s) => s.id === targetSessionId)) || remoteSynced[0];
-          if (chosen) {
-            aiTutorService.setActiveSessionId(chosen.id);
-            setActiveSessionId(chosen.id);
-            if (chosen.mode) setCurrentMode(chosen.mode);
+          if (explicitTargetId) {
+            const chosen = remoteSynced.find((s) => s.id === explicitTargetId);
+            if (chosen) {
+              aiTutorService.setActiveSessionId(chosen.id);
+              setActiveSessionId(chosen.id);
+              if (chosen.mode) setCurrentMode(chosen.mode);
+              return chosen;
+            }
           }
-          return chosen || null;
+          return null;
         });
       }
     });
@@ -345,27 +383,17 @@ export function AiTutorPage() {
     setActiveSessionId(newSession.id);
     setCurrentSession(newSession);
     setCurrentMode(newSession.mode);
+    setHistoryKind(modeToUse);
+    setSearchQuery('');
+    setInputText('');
     showToast(
       isEn ? `Started new conversation in ${aiTutorService.getMode(modeToUse).nameEn || aiTutorService.getMode(modeToUse).name} mode!` : `Đã tạo phiên trò chuyện mới với chế độ ${aiTutorService.getMode(modeToUse).name}!`
     );
   };
 
   const handleSwitchMode = (modeId) => {
-    audioFeedback.playTap();
-    setCurrentMode(modeId);
-    let sessionToUpdate = currentSession;
-    if (!sessionToUpdate) {
-      sessionToUpdate = aiTutorService.createSession(modeId);
-      setCurrentSession(sessionToUpdate);
-      setActiveSessionId(sessionToUpdate.id);
-      setSessions(aiTutorService.getAllSessions());
-      showToast(isEn ? `Switched to ${aiTutorService.getMode(modeId).titleEn || aiTutorService.getMode(modeId).title} mode!` : `Đã chuyển sang chế độ ${aiTutorService.getMode(modeId).title}!`);
-      return;
-    }
-    const updated = aiTutorService.updateSessionMode(sessionToUpdate.id, modeId);
-    setCurrentSession(updated);
-    setSessions(aiTutorService.getAllSessions());
-    showToast(isEn ? `Switched to ${aiTutorService.getMode(modeId).titleEn || aiTutorService.getMode(modeId).title} mode!` : `Đã chuyển sang chế độ ${aiTutorService.getMode(modeId).title}!`);
+    if (modeId === currentMode || isSending) return;
+    handleCreateNewChat(modeId);
   };
 
   const handleDeleteSession = async (e, id) => {
@@ -541,9 +569,20 @@ export function AiTutorPage() {
   }, [sessions]);
 
   const filteredSessions = sortedSessions.filter((s) => {
-    const title = (s.titleVi || s.title || '').toLowerCase();
-    return title.includes(searchQuery.toLowerCase());
+    const title = [s.titleVi, s.titleEn, s.title].filter(Boolean).join(' ').toLowerCase();
+    return (historyKind === 'all' || getAiSessionMode(s) === historyKind)
+      && title.includes(searchQuery.trim().toLowerCase());
   });
+  const historyOptions = [
+    { id: 'all', label: isEn ? 'All conversations' : 'Tất cả hội thoại', description: isEn ? 'Browse Tutor and Coach conversations' : 'Xem hội thoại Tutor và Coach' },
+    ...TUTOR_MODES.map(mode => ({
+      id: mode.id,
+      label: mode.id === 'tutor' ? 'AI Tutor' : (isEn ? (mode.nameEn || mode.name) : mode.name),
+      description: isEn ? (mode.descriptionEn || mode.description) : mode.description,
+    })),
+    { id: 'coach', label: 'AI Coach', description: isEn ? 'Support for your lessons' : 'Hỗ trợ bài học của bạn' },
+  ].map(option => ({ ...option, count: sessions.filter(session => option.id === 'all' || getAiSessionMode(session) === option.id).length }));
+  const selectedHistoryOption = historyOptions.find(option => option.id === historyKind);
 
   return (
     <div className="ai-tutor-screen-root relative w-full min-h-[calc(100vh-80px)] overflow-hidden">
@@ -732,10 +771,48 @@ export function AiTutorPage() {
             </span>
           </div>
 
+          <div
+            className={`tutor-mode-select-wrap conversation-history-select ${isHistoryMenuOpen ? 'is-open' : ''}`}
+            ref={historyMenuRef}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setIsHistoryMenuOpen(false);
+            }}
+          >
+            <button type="button" className="tutor-mode-select-trigger" aria-expanded={isHistoryMenuOpen} aria-controls="conversation-history-options" onClick={() => setIsHistoryMenuOpen(open => !open)}>
+              <span className="tutor-mode-select-current">{selectedHistoryOption.label} · {selectedHistoryOption.count}</span>
+              <ChevronDown className="tutor-mode-select-chevron" size={16} aria-hidden="true" />
+            </button>
+            {isHistoryMenuOpen && (
+              <div className="tutor-mode-menu" id="conversation-history-options" role="group" aria-label={isEn ? 'Conversation type' : 'Loại hội thoại'}>
+                {historyOptions.map(option => (
+                  <button key={option.id} type="button" className={`tutor-mode-option ${historyKind === option.id ? 'is-active' : ''}`} aria-pressed={historyKind === option.id} onClick={() => {
+                    setHistoryKind(option.id);
+                    setIsHistoryMenuOpen(false);
+                    historyMenuRef.current?.querySelector('button')?.focus();
+                  }}>
+                    <span className="tutor-mode-option-copy">
+                      <span className="tutor-mode-option-name">{option.label} · {option.count}</span>
+                      <span className="tutor-mode-option-description">{option.description}</span>
+                    </span>
+                    {historyKind === option.id && <Check size={15} strokeWidth={3} aria-hidden="true" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <p className="conversation-kind-help">
+            {selectedHistoryOption.description}
+          </p>
+
           {/* Session Cards Stream */}
           <div className="space-y-2 max-h-[calc(100vh-360px)] overflow-y-auto pr-1">
+            {filteredSessions.length === 0 && (
+              <p className="conversation-kind-help" role="status">
+                {isEn ? 'No matching conversations.' : 'Không có hội thoại phù hợp.'}
+              </p>
+            )}
             {filteredSessions.map((s) => {
-              const sessionMode = aiTutorService.getMode(s.mode);
+              const sessionKind = getAiSessionKind(s);
               const isActive = s.id === activeSessionId;
               const isEditing = editingTitleId === s.id;
               const rawDate = s.updatedAt || s.createdAt;
@@ -757,6 +834,9 @@ export function AiTutorPage() {
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1" style={{ minWidth: 0, flex: 1 }}>
                     <div className="min-w-0 flex-1" style={{ minWidth: 0, flex: 1 }}>
+                      <span className={`session-kind-badge session-kind-badge--${sessionKind}`}>
+                        {historyOptions.find(option => option.id === getAiSessionMode(s))?.label || 'AI Tutor'}
+                      </span>
                       {isEditing ? (
                         <input
                           type="text"
@@ -778,10 +858,6 @@ export function AiTutorPage() {
                         </h4>
                       )}
                       <div className="session-card__meta">
-                        <span className="font-semibold text-[#DA251D]">
-                          {isEn ? (sessionMode?.nameEn || sessionMode?.name) : (sessionMode?.title || sessionMode?.name)}
-                        </span>
-                        <span className="session-card__separator">•</span>
                         <span className="session-card__messages">
                           <BilingualText vi={`${s.messages?.length || 0} tin nhắn`} en={`${s.messages?.length || 0} messages`} />
                         </span>
@@ -928,6 +1004,7 @@ export function AiTutorPage() {
                 <button
                   type="button"
                   id="tutor-mode-select"
+                  disabled={isSending}
                   className="tutor-mode-select-trigger"
                   aria-haspopup="listbox"
                   aria-expanded={isModeMenuOpen}

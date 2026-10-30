@@ -1,3 +1,4 @@
+import { useCoachDay } from '@/hooks/useCoachDay';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -333,6 +334,7 @@ export function CourseraAiSidebar({ width, onResize, onClose }) {
   });
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const coachDay = useCoachDay(isSending);
   const [isResizing, setIsResizing] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
   const [speakingId, setSpeakingId] = useState(null);
@@ -430,7 +432,7 @@ Pick a suggested question below or ask me anything!`,
     return () => {
       isCancelled = true;
     };
-  }, [learningContext?.lessonId, learningContext?.lessonTitle, isVi]);
+  }, [learningContext?.courseId, learningContext?.lessonId, learningContext?.lessonTitle, isVi, coachDay]);
 
   // Handle incoming pending prompt (e.g. from lesson page)
   useEffect(() => {
@@ -526,16 +528,19 @@ Pick a suggested question below or ask me anything!`,
       timestamp: new Date().toISOString(),
     };
 
-    setSession((prev) => ({
-      ...prev,
-      messages: [...(prev?.messages || []), tempUserMsg],
-    }));
-
     try {
+      let activeSession = session;
+      if (learningContext?.lessonId) {
+        activeSession = await aiCourseCoachService.getOrCreateSession(learningContext);
+      }
+      setSession({
+        ...activeSession,
+        messages: [...(activeSession?.messages || []), tempUserMsg],
+      });
       if (learningContext?.lessonId) {
         // Gửi câu hỏi kèm toàn bộ ngữ cảnh bài học (tiêu đề, nội dung học liệu)
         const response = await aiCourseCoachService.sendMessage({
-          sessionId: session?.id || `coach-${learningContext.courseId}-${learningContext.lessonId}`,
+          sessionId: activeSession.id,
           text: messageText,
           courseId: learningContext.courseId,
           lessonId: learningContext.lessonId,

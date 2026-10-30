@@ -1,3 +1,4 @@
+import { useCoachDay } from '@/hooks/useCoachDay';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Send,
@@ -156,13 +157,14 @@ export function AiCoachPanel({
   const [activeMode, setActiveMode] = useState('ask');
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const coachDay = useCoachDay(loading);
   const [sessionLoading, setSessionLoading] = useState(false);
   const chatBodyRef = useRef(null);
 
   // Load session when panel opens
   useEffect(() => {
     if (!isOpen || !courseId || !lessonId) return;
-    if (session) return;
+    if (session?.coachDay === coachDay) return;
     setSessionLoading(true);
     aiCourseCoachService
       .getOrCreateSession({ courseId, lessonId, lessonTitle })
@@ -178,10 +180,10 @@ export function AiCoachPanel({
       .catch((err) => {
         console.warn('Failed to get coach session, falling back to local session', err);
         const fallback = { id: `coach-${courseId}-${lessonId}-fallback`, messages: [] };
-        setSession(fallback);
+        setSession({ ...fallback, coachDay });
       })
       .finally(() => setSessionLoading(false));
-  }, [isOpen, courseId, lessonId, lessonTitle, session]);
+  }, [isOpen, courseId, lessonId, lessonTitle, session, coachDay]);
 
   // Reset when lesson changes
   useEffect(() => {
@@ -228,12 +230,15 @@ export function AiCoachPanel({
     if (!text.trim() || loading) return;
     const currentSessionId = session?.id || `coach-${courseId}-${lessonId}-default`;
     const userMsg = { id: `u-${Date.now()}`, sender: 'user', text: text.trim() };
-    setMessages(prev => [...prev, userMsg]);
+
     setInput('');
     setLoading(true);
     try {
+      const dailySession = await aiCourseCoachService.getOrCreateSession({ courseId, lessonId, lessonTitle });
+      setSession(dailySession);
+      setMessages([...(dailySession.messages || []), userMsg]);
       const aiMsg = await aiCourseCoachService.sendMessage({
-        sessionId: currentSessionId,
+        sessionId: dailySession.id,
         text: text.trim(),
         coachMode: mode,
         language: currentLangCode,

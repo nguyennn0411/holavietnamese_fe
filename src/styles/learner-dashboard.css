@@ -766,6 +766,8 @@
 }
 
 .learner-carousel {
+  container-type: inline-size;
+  container-name: learner-carousel;
   position: relative;
   margin-bottom: 24px;
   overflow: hidden;
@@ -778,24 +780,26 @@
 
 .learner-carousel__viewport {
   position: relative;
-  height: 350px;
+  min-height: 350px;
   overflow: hidden;
 }
 
 .learner-carousel__slide {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  min-height: inherit;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   background: #FFFFFF;
 }
 
 .learner-carousel__copy {
+  min-width: 0;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
-  padding: clamp(28px, 4vw, 52px);
+  padding: clamp(24px, 3.5cqi, 52px);
+  padding-bottom: 72px;
   background: linear-gradient(135deg, #FFFFFF, #FFFCF7);
 }
 
@@ -810,21 +814,23 @@
 
 .learner-carousel__copy h2 {
   max-width: 530px;
-  margin-bottom: 13px;
-  font-size: clamp(29px, 3.1vw, 43px);
+  margin: 0 0 13px;
+  font-size: clamp(26px, 3.3cqi, 43px);
+  overflow-wrap: anywhere;
   line-height: 1.08;
   letter-spacing: -.045em;
 }
 
 .learner-carousel__copy p {
   max-width: 520px;
-  margin-bottom: 22px;
+  margin: 0 0 22px;
   color: var(--ld-muted);
   font-size: 13px;
   line-height: 1.65;
 }
 
 .learner-carousel__copy a {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -860,6 +866,8 @@
 }
 
 .learner-carousel__photo img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -994,14 +1002,14 @@
     padding-top: 2px;
   }
   .learner-carousel__viewport {
-    height: 510px;
+    min-height: 510px;
   }
   .learner-carousel__slide {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(245px, 1fr) 210px;
+    grid-template-rows: 245px auto;
   }
   .learner-carousel__copy {
-    padding: 28px 24px 46px;
+    padding: 28px 24px 72px;
   }
   .learner-carousel__copy h2 {
     font-size: clamp(27px, 7vw, 36px);
@@ -1046,14 +1054,14 @@
     border-radius: 18px;
   }
   .learner-carousel__viewport {
-    height: 500px;
+    min-height: 500px;
   }
   .learner-carousel__slide {
-    grid-template-rows: 220px 280px;
+    grid-template-rows: 220px auto;
   }
   .learner-carousel__copy {
     justify-content: flex-start;
-    padding: 22px 18px 54px;
+    padding: 22px 18px 64px;
   }
   .learner-carousel__copy > span {
     margin-bottom: 8px;
@@ -1144,6 +1152,27 @@
 
 .ld-nghe .nghe-speech {
   max-width: 230px;
+}
+
+/* Respond to the space left by the AI panel, including on wide screens. */
+@container learner-carousel (max-width: 680px) {
+  .learner-carousel__slide {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: clamp(180px, 38cqi, 245px) auto;
+  }
+
+  .learner-carousel__photo {
+    grid-row: 1;
+  }
+
+  .learner-carousel__copy {
+    grid-row: 2;
+    padding: 24px 22px 72px;
+  }
+
+  .learner-carousel__copy h2 {
+    font-size: clamp(25px, 5cqi, 34px);
+  }
 }
 
 .ld-nghe .nghe-mascot {
