@@ -1,4 +1,4 @@
-import { BilingualText } from '@/shared/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { useState, useMemo } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
