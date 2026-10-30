@@ -1,7 +1,6 @@
 import { BilingualText } from '@/shared/components/common/BilingualText';
 import { useCallback, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { AppFooter, LayoutToast } from '@/shared/components/layout';
 import { learnerService } from '@/features/learning/api/learnerService';
@@ -54,9 +53,9 @@ function MainLayoutShell({
           className={`layout-main ${isGuestHome ? 'layout-main--full' : ''} ${isAuthenticated ? 'learner-app__main' : 'guest-app__main'}`}
           id="main-content"
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <PageTransition key={location.pathname}><Outlet /></PageTransition>
-          </AnimatePresence>
+
+          <PageTransition key={location.pathname}><Outlet /></PageTransition>
+
         </main>
         {isAuthenticated ? (
           <div className="learner-app__footer">

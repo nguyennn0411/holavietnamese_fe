@@ -135,9 +135,9 @@ export function AppRouter() {
             {/* Learner Main Layout */}
             <Route element={<MainLayout />}>
               <Route path={ROUTES.HOME} element={<HomePage />} />
-              <Route path={ROUTES.COURSES} element={<CourseListPage />} />
+
               <Route path={ROUTES.ALPHABET} element={<AlphabetPage />} />
-              <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
+
               <Route path={ROUTES.BLOG} element={<BlogHomePage />} />
               <Route path={ROUTES.BLOG_DETAIL} element={<BlogDetailPage />} />
               <Route path={ROUTES.LOGIN_REQUIRED} element={<AuthRequiredPage />} />
@@ -151,8 +151,10 @@ export function AppRouter() {
                 </Route>
               </Route>
 
-              {/* Protected Features: AI Tutor, Từ vựng, Khám phá Việt Nam, Văn hóa & Học viên */}
+              {/* Protected Features: Khóa học, AI Tutor, Từ vựng, Khám phá Việt Nam, Văn hóa & Học viên */}
               <Route element={<RequireAuth />}>
+                <Route path={ROUTES.COURSES} element={<CourseListPage />} />
+                <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
                 <Route path={ROUTES.EDTECH_VOCABULARY} element={<Navigate to={ROUTES.VOCABULARY} replace />} />
                 <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
                 <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />

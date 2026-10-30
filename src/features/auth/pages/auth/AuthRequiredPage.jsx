@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Lock, Bot, BookOpen, Compass, Palette, LogIn, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Lock, Bot, BookOpen, Compass, Palette, LogIn, ArrowLeft, ArrowRight, CheckCircle2, GraduationCap } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { BuffaloMascot, MascotSpeechBubble } from '@/shared/components/mascot';
 import { BilingualText } from '@/shared/components/common/BilingualText';
@@ -90,6 +90,26 @@ const FEATURE_CONFIGS = {
       { vi: 'Trắc nghiệm văn hóa thú vị giúp tích lũy điểm kinh nghiệm XP', en: 'Interactive cultural quizzes with bonus XP and knowledge rewards' },
     ],
   },
+  courses: {
+    id: 'courses',
+    badgeVi: 'Khóa học • Lộ trình bài bản',
+    badgeEn: 'Courses • Structured Curriculum',
+    titleVi: 'Cần đăng nhập để tham gia Khóa học',
+    titleEn: 'Sign in to access Vietnamese Courses',
+    descVi: 'Hệ thống bài học thiết kế theo khung CEFR từ cơ bản đến nâng cao, tích hợp luyện phát âm, từ vựng và đàm thoại thực tế.',
+    descEn: 'Comprehensive lesson curriculum from beginner to advanced, covering pronunciation, vocabulary, and practical dialogues.',
+    mascotVariant: 'teaching',
+    mascotBubbleVi: 'Đăng nhập tài khoản để cùng Nghé học tập và theo dõi tiến độ từng bài học nhé!',
+    mascotBubbleEn: 'Sign in to study with Nghé and track your progress across all lessons!',
+    icon: GraduationCap,
+    badgeColor: 'bg-orange-100 text-orange-900 border-orange-300',
+    iconBg: 'bg-gradient-to-br from-[#FF7A00] to-[#C2410C] text-white',
+    highlights: [
+      { vi: 'Giáo trình tiếng Việt chuẩn hóa theo khung tham chiếu CEFR A1 - C1', en: 'Standardized Vietnamese curriculum aligned with CEFR A1 - C1' },
+      { vi: 'Lưu tiến độ từng bài học, bài tập thực hành và kết quả quiz kiểm tra', en: 'Track lesson progress, practice exercises, and quiz performance' },
+      { vi: 'Tích hợp trợ lý AI đồng hành giải đáp thắc mắc ngay trong mỗi bài học', en: 'Built-in AI coach assisting you right inside every lesson' },
+    ],
+  },
   learning: {
     id: 'learning',
     badgeVi: 'Lộ trình học tập • Không gian cá nhân',
@@ -145,6 +165,9 @@ export function detectFeatureKey(path = '') {
   }
   if (normalized.includes('culture')) {
     return 'culture';
+  }
+  if (normalized.includes('course')) {
+    return 'courses';
   }
   if (normalized.includes('edtech') || normalized.includes('dashboard') || normalized.includes('learning')) {
     return 'learning';
