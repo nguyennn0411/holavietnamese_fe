@@ -3,7 +3,20 @@ import { useEffect, useRef, useState } from 'react';
 import { learnerService } from '@/features/learning/api/learnerService';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { ContentImage } from '@/shared/components/common/ContentImage';
-import { Camera, LoaderCircle, Upload } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
+import {
+  Camera,
+  LoaderCircle,
+  Upload,
+  TrendingUp,
+  Award,
+  Flame,
+  Zap,
+  Clock,
+  BookOpen,
+  Languages,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 const AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -13,6 +26,7 @@ export function ProfilePage() {
   const { fetchProfile, updateCurrentUser } = useAuth();
   const avatarInputRef = useRef(null);
   const [profile, setProfile] = useState(null);
+  const [progress, setProgress] = useState(null);
   const [form, setForm] = useState({});
   const [editing, setEditing] = useState(false);
   const [state, setState] = useState({ loading: true, error: '', message: '' });
@@ -108,7 +122,7 @@ export function ProfilePage() {
   };
 
   return (
-    <div className="account-page">
+    <div className="account-page space-y-6">
       <div className="account-header">
         <span className="account-pill"><BilingualText>{"👤 Thông tin cá nhân"}</BilingualText></span>
         <h1 className="account-title"><BilingualText>{"Hồ sơ người học"}</BilingualText></h1>
@@ -141,12 +155,84 @@ export function ProfilePage() {
         </div>
         <button
           type="button"
-          className="account-outline-btn"
+          className="account-outline-btn !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] border-2 border-[#EA580C] font-bold"
           onClick={() => setEditing((v) => !v)}
         >
           <BilingualText>{editing ? 'Hủy bỏ' : '✏️ Chỉnh sửa'}</BilingualText>
         </button>
       </section>
+
+            {/* Learning Progress Section right inside Profile page */}
+      {progress && (
+        <section className="p-6 rounded-2xl bg-gradient-to-br from-[#FFF7E8] via-[#FFFCF7] to-[#F7F0E3] border border-[#E8E5DF] shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E5DF]/70 pb-4">
+            <div>
+              <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider block">
+                <BilingualText vi="Tiến trình học tập" en="Learning Progress" />
+              </span>
+              <h2 className="text-xl font-black text-[#253044] mt-0.5">
+                <BilingualText
+                  vi={`Cấp độ ${progress.currentLevel ?? 1}: ${progress.levelTitle || 'Tập Sự Khởi Đầu'}`}
+                  en={`Level ${progress.currentLevel ?? 1}: ${progress.levelTitleEn || 'Novice Beginner'}`}
+                />
+              </h2>
+            </div>
+            <Link
+              to={ROUTES.PROGRESS}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] border-2 border-[#EA580C] font-bold text-xs shadow-xs transition-all active:!bg-white"
+            >
+              <TrendingUp size={14} />
+              <BilingualText vi="Xem chi tiết tiến trình →" en="View Detailed Progress →" />
+            </Link>
+          </div>
+
+          {/* KPIs Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { labelVi: 'Cấp độ', labelEn: 'Level', value: `Lv.${progress.currentLevel ?? 1}`, icon: Award },
+              { labelVi: 'Chuỗi học', labelEn: 'Streak', value: `${progress.streakCount ?? 1} ngày`, icon: Flame },
+              { labelVi: 'Tổng XP', labelEn: 'Total XP', value: `${progress.totalXp ?? 0} XP`, icon: Zap },
+              { labelVi: 'Bài đã học', labelEn: 'Lessons', value: `${progress.completedLessonsCount ?? 0} bài`, icon: BookOpen },
+              { labelVi: 'Từ đã thuộc', labelEn: 'Vocab', value: `${progress.learnedVocabulariesCount ?? 0} từ`, icon: Languages },
+              { labelVi: 'Thời gian', labelEn: 'Time', value: `${progress.totalTimeMinutes ?? 45} phút`, icon: Clock },
+            ].map((kpi, idx) => {
+              const Icon = kpi.icon;
+              return (
+                <div key={idx} className="p-3.5 rounded-xl bg-white border border-[#E8E5DF] shadow-2xs">
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#64748B] mb-1">
+                    <Icon size={13} className="text-[#EA580C]" />
+                    <BilingualText vi={kpi.labelVi} en={kpi.labelEn} />
+                  </div>
+                  <strong className="text-base font-black text-[#253044] block">
+                    {kpi.value}
+                  </strong>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Progress Bar to Next Level */}
+          <div className="p-4 rounded-xl bg-white border border-[#E8E5DF] shadow-2xs space-y-2">
+            <div className="flex items-center justify-between text-xs font-bold">
+              <span className="text-[#253044]">
+                <BilingualText
+                  vi="Tiến độ nâng cấp độ tiếp theo"
+                  en="Progress to next level"
+                />
+              </span>
+              <span className="text-[#EA580C]">
+                {progress.levelProgressPercent ?? 0}% ({progress.totalXp ?? 0}/{progress.nextLevelRequiredXp ?? 100} XP)
+              </span>
+            </div>
+            <div className="w-full h-2.5 rounded-full bg-[#E8E5DF]/60 overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-amber-500 to-[#EA580C] rounded-full transition-all duration-300"
+                style={{ width: `${Math.min(100, Math.max(5, progress.levelProgressPercent ?? 10))}%` }}
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Edit Form vs Display List */}
       {editing ? (
@@ -221,7 +307,11 @@ export function ProfilePage() {
             </select>
           </label>
 
-          <button type="submit" disabled={state.loading}>
+          <button
+            type="submit"
+            disabled={state.loading}
+            className="!bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] border-2 border-[#EA580C] font-bold py-2.5 px-6 rounded-xl shadow-xs transition-all active:!bg-white"
+          >
             <BilingualText>{state.loading ? 'Đang lưu…' : 'Lưu thay đổi hồ sơ'}</BilingualText>
           </button>
         </form>

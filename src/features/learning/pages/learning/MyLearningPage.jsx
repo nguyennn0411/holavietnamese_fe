@@ -8,11 +8,58 @@ import { learnerService } from '@/features/learning/api/learnerService';
 import { courseService } from '@/features/learning/api/courseService';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
 import { ResourceState } from '@/shared/components/common/ResourceState';
-import { EmptyState, Artwork, SpeakButton } from '@/shared/components/common/Ui';
+import { EmptyState, SpeakButton } from '@/shared/components/common/Ui';
 import { ProgressBar } from '@/shared/components/common/ProgressBar';
 import { ContentImage } from '@/shared/components/common/ContentImage';
+import { getCourseCover } from '@/features/learning/components/course/CourseInfo';
 
 const LEARNING_TABS = new Set(['courses', 'vocabulary', 'journey', 'quiz']);
+
+function formatQuizDate(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return String(dateStr);
+    return d.toLocaleDateString('vi-VN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  } catch {
+    return String(dateStr);
+  }
+}
+
+function getQuizBilingualTitle(quiz) {
+  const raw = quiz.quizName || quiz.quiz_name || 'Bài kiểm tra';
+  if (/pronunciation/i.test(raw)) {
+    return { vi: 'Kiểm tra: Phát âm cơ bản', en: 'Quiz: Basic Pronunciation' };
+  }
+  if (/personal names|learning goals/i.test(raw)) {
+    return { vi: 'Kiểm tra: Mục tiêu học tập & Tên người', en: 'Learning Goals & Personal Names - check' };
+  }
+  if (/country|countries|language/i.test(raw)) {
+    return { vi: 'Kiểm tra: Quốc gia & Ngôn ngữ', en: 'Quiz: Countries and Languages' };
+  }
+  if (/number|count/i.test(raw)) {
+    return { vi: 'Kiểm tra: Số đếm', en: 'Quiz: Numbers and Counting' };
+  }
+  if (/time/i.test(raw)) {
+    return { vi: 'Kiểm tra: Xem giờ', en: 'Quiz: Telling the Time' };
+  }
+  if (/date|day/i.test(raw)) {
+    return { vi: 'Kiểm tra: Thứ, ngày và tháng', en: 'Quiz: Days and Dates' };
+  }
+  if (/family/i.test(raw)) {
+    return { vi: 'Kiểm tra: Gia đình', en: 'Quiz: Family' };
+  }
+  if (/weather/i.test(raw)) {
+    return { vi: 'Kiểm tra: Thời tiết', en: 'Quiz: Weather' };
+  }
+  return { vi: raw, en: raw };
+}
 
 export function MyLearningPage({ initialTab = 'courses' }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,68 +78,130 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
   const resource = useAsyncResource(
     useCallback(async () => {
-      const [overview, coursesResult] = await Promise.all([
+      const [overview, coursesResult, catalogResult] = await Promise.all([
         learnerService.getMyLearningOverview().catch(() => ({})),
         courseService.myCourses().catch(() => []),
+        courseService.list().catch(() => []),
       ]);
 
       const myCoursesList = Array.isArray(coursesResult) ? coursesResult : (coursesResult?.content || []);
       const overviewCourses = overview?.enrolledCourses || [];
+      const catalogList = Array.isArray(catalogResult) ? catalogResult : (catalogResult?.content || []);
 
-      // Hợp nhất dữ liệu các khóa học đã đăng ký
+      // Bảng tra cứu thông tin khóa học chuẩn từ catalog
+      const catalogMap = new Map();
+      catalogList.forEach((c) => {
+        if (c && c.id) {
+          catalogMap.set(String(c.id), c);
+        }
+      });
+
       const courseMap = new Map();
 
-      // 1. Dữ liệu chi tiết từ /api/me/courses
+      // 1. Dữ liệu chi tiết từ /api/me/courses kết hợp thông tin catalog
       myCoursesList.forEach((c) => {
         const id = c.courseId || c.id;
-        courseMap.set(String(id), {
+        const key = String(id);
+        const cat = catalogMap.get(key);
+        const progressPercentage = Number(c.progressPercentage) || 0;
+        const completedLessons = Number(c.completedLessons) || 0;
+        const totalLessons = Number(c.totalLessons || cat?.lessonCount || cat?.lesson_count || 0);
+        const isCompleted = progressPercentage >= 100 || c.status === 'COMPLETED';
+        const hasStarted = progressPercentage > 0 || Boolean(c.lastAccessedLessonId);
+        const rawCover = cat?.thumbnailUrl || c.thumbnailUrl || c.image;
+
+        courseMap.set(key, {
           id,
           courseId: id,
-          title: c.title,
-          titleVi: c.titleVi || c.title,
-          image: c.thumbnailUrl || c.image,
-          thumbnailUrl: c.thumbnailUrl || c.image,
-          level: c.level || 'A1',
-          totalLessons: Number(c.totalLessons) || 0,
-          completedLessons: Number(c.completedLessons) || 0,
-          progressPercentage: Number(c.progressPercentage) || 0,
-          status: c.status,
+          enrollmentId: c.enrollmentId,
+          title: cat?.title || c.title,
+          titleVi: cat?.titleVi || cat?.title_vi || c.titleVi || c.title,
+          description: cat?.description || c.description,
+          descriptionVi: cat?.descriptionVi || cat?.description_vi || c.descriptionVi,
+          image: rawCover,
+          thumbnailUrl: rawCover,
+          level: cat?.level || c.level || 'A1',
+          totalLessons,
+          completedLessons,
+          progressPercentage,
+          status: isCompleted ? 'COMPLETED' : (hasStarted ? 'IN_PROGRESS' : 'NOT_STARTED'),
           lastAccessedLessonId: c.lastAccessedLessonId,
-          nextLesson: c.progressPercentage === 100 ? 'Đã hoàn thành' : 'Tiếp tục bài học',
+          hasStarted,
+          nextLesson: isCompleted ? 'Đã hoàn thành' : (c.lastAccessedLessonId ? 'Tiếp tục bài học' : 'Bắt đầu bài học'),
         });
       });
 
-      // 2. Bổ sung từ overview nếu chưa có
+      // 2. Bổ sung từ overview nếu chưa có trong danh sách
       overviewCourses.forEach((c) => {
         const id = c.id || c.courseId;
         const key = String(id);
+        const cat = catalogMap.get(key);
+        const progress = Number(c.progress || c.progressPercentage) || 0;
+        const isCompleted = progress >= 100 || c.status === 'COMPLETED';
+        const hasStarted = progress > 0 || Boolean(c.lastAccessedLessonId);
+        const rawCover = cat?.thumbnailUrl || c.image || c.thumbnailUrl;
+
         if (!courseMap.has(key)) {
           courseMap.set(key, {
             id,
             courseId: id,
-            title: c.title,
-            titleVi: c.titleVi || c.title,
-            image: c.image || c.thumbnailUrl,
-            thumbnailUrl: c.image || c.thumbnailUrl,
-            level: c.level || 'A1',
-            totalLessons: Number(c.totalLessons) || 0,
+            title: cat?.title || c.title,
+            titleVi: cat?.titleVi || cat?.title_vi || c.titleVi || c.title,
+            description: cat?.description || c.description,
+            descriptionVi: cat?.descriptionVi || cat?.description_vi || c.descriptionVi,
+            image: rawCover,
+            thumbnailUrl: rawCover,
+            level: cat?.level || c.level || 'A1',
+            totalLessons: Number(c.totalLessons || cat?.lessonCount || 0),
             completedLessons: Number(c.completedLessons) || 0,
-            progressPercentage: Number(c.progress) || 0,
-            status: c.progress >= 100 ? 'COMPLETED' : 'IN_PROGRESS',
+            progressPercentage: progress,
+            status: isCompleted ? 'COMPLETED' : (hasStarted ? 'IN_PROGRESS' : 'NOT_STARTED'),
             lastAccessedLessonId: c.lastAccessedLessonId,
-            nextLesson: c.nextLesson,
+            hasStarted,
+            nextLesson: isCompleted ? 'Đã hoàn thành' : (c.lastAccessedLessonId ? 'Tiếp tục bài học' : 'Bắt đầu bài học'),
           });
+        } else {
+          const item = courseMap.get(key);
+          if (!item.titleVi && cat?.titleVi) item.titleVi = cat.titleVi;
+          if (!item.image && rawCover) item.image = rawCover;
         }
       });
 
-      const mergedCourses = Array.from(courseMap.values());
+      // 3. Sắp xếp danh sách khóa học theo ưu tiên thực tế:
+      // - Các khóa đang học (có bài vừa truy cập hoặc tiến độ > 0) đưa lên đầu
+      // - Khóa có lastAccessedLessonId ưu tiên cao nhất
+      // - Các khóa chưa học và đã hoàn thành xếp tiếp theo
+      const mergedCourses = Array.from(courseMap.values()).sort((a, b) => {
+        const aCompleted = a.status === 'COMPLETED';
+        const bCompleted = b.status === 'COMPLETED';
+        if (aCompleted && !bCompleted) return 1;
+        if (!aCompleted && bCompleted) return -1;
+
+        if (a.hasStarted && !b.hasStarted) return -1;
+        if (!a.hasStarted && b.hasStarted) return 1;
+
+        if (a.hasStarted && b.hasStarted) {
+          if (a.lastAccessedLessonId && !b.lastAccessedLessonId) return -1;
+          if (!a.lastAccessedLessonId && b.lastAccessedLessonId) return 1;
+          if (b.progressPercentage !== a.progressPercentage) {
+            return b.progressPercentage - a.progressPercentage;
+          }
+        }
+
+        return Number(a.id) - Number(b.id);
+      });
+
+      const completedCount = mergedCourses.filter((c) => c.status === 'COMPLETED' || c.progressPercentage >= 100).length;
+      const inProgressCount = mergedCourses.filter((c) => c.status !== 'COMPLETED' && c.progressPercentage < 100 && c.hasStarted).length;
+      const realCompletedLessons = mergedCourses.reduce((sum, c) => sum + (c.completedLessons || 0), 0);
 
       return {
         ...overview,
         enrolledCourses: mergedCourses,
         totalEnrolled: mergedCourses.length,
-        completedCoursesCount: mergedCourses.filter((c) => c.progressPercentage >= 100 || c.status === 'COMPLETED').length,
-        inProgressCoursesCount: mergedCourses.filter((c) => c.progressPercentage < 100 && c.status !== 'COMPLETED').length,
+        completedCoursesCount: completedCount,
+        inProgressCoursesCount: inProgressCount,
+        completedLessonsCount: Math.max(overview?.completedLessons || 0, realCompletedLessons),
       };
     }, [])
   );
@@ -106,10 +215,10 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
   return (
     <div className="mylearning-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8">
-      {/* Hero Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-10 shadow-sm">
+      {/* Hero Header With Authentic Vietnam Study Photo */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-6 sm:p-8 lg:p-10 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-8">
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FFF0DC] border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-white border border-[#E7B59D] text-[#EA580C] text-xs font-bold uppercase tracking-wider shadow-xs">
             <BilingualText vi="Hành trình của riêng bạn" en="Personal Learning Space" />
           </div>
 
@@ -126,22 +235,36 @@ export function MyLearningPage({ initialTab = 'courses' }) {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
               to="/courses"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-xs transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] hover:!text-[#C2410C] border-2 border-[#EA580C] font-bold text-xs shadow-xs transition-all active:!bg-white"
             >
               <BilingualText>{"Khám phá thêm khóa học →"}</BilingualText>
             </Link>
 
             <Link
               to="/edtech/dashboard"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/90 hover:bg-white text-[#253044] border border-[#E8E5DF] font-semibold text-xs shadow-xs transition-all hover:border-[#EA580C]"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl !bg-white hover:!bg-[#FFF7E8] text-[#253044] hover:text-[#EA580C] border border-[#E8E5DF] hover:border-[#EA580C] font-semibold text-xs shadow-xs transition-all active:!bg-white"
             >
               <BilingualText>{"Đến Lộ trình học tương tác (EdTech) →"}</BilingualText>
             </Link>
           </div>
         </div>
+
+        {/* Real photo showcase */}
+        <div className="hidden lg:block relative shrink-0 w-80 h-48 xl:w-96 xl:h-52 rounded-2xl overflow-hidden border-2 border-white/90 shadow-md">
+          <img
+            src="/design/hero/hero_real_cafe_study.jpg"
+            alt="Thực hành giao tiếp tiếng Việt thực tế"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3.5">
+            <span className="text-white text-xs font-bold drop-shadow-sm">
+              <BilingualText vi="Thực hành tiếng Việt tự nhiên trong đời sống" en="Natural real-life Vietnamese practice" />
+            </span>
+          </div>
+        </div>
       </section>
 
-      {/* Modern Tabs Bar */}
+      {/* Modern Tabs Bar with pure white active & neutral inactive */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-[#E8E5DF] scrollbar-none" role="tablist" aria-label={bilingualLabel("Góc học tập", "My Learning")}>
         {tabItems.map((item) => {
           const Icon = item.icon;
@@ -153,12 +276,13 @@ export function MyLearningPage({ initialTab = 'courses' }) {
               role="tab"
               aria-selected={isActive}
               onClick={() => selectTab(item.id)}
-              className={`flex-shrink-0 px-4 py-3 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition-all duration-200 cursor-pointer ${
+              className={`flex-shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all duration-200 cursor-pointer ${
                 isActive
-                  ? 'border-[#EA580C] text-[#EA580C] bg-[#FFF7E8]'
-                  : 'border-transparent text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8]/50'
-              }`}
+                  ? '!bg-white !text-[#EA580C] !border-2 !border-[#EA580C] shadow-xs'
+                  : '!bg-white/80 !text-[#64748B] hover:!text-[#EA580C] hover:!bg-white border border-[#E8E5DF]'
+              } active:!bg-white active:!text-[#EA580C]`}
             >
+              <Icon size={16} className={isActive ? 'text-[#EA580C]' : 'text-[#64748B]'} />
               <BilingualText vi={item.labelVi} en={item.labelEn} />
             </button>
           );
@@ -169,7 +293,13 @@ export function MyLearningPage({ initialTab = 'courses' }) {
       <ResourceState resource={resource}>
         {(data) => {
           const allCourses = data.enrolledCourses || [];
-          const activeCourse = allCourses.find((c) => c.progressPercentage < 100 && c.status !== 'COMPLETED') || allCourses[0];
+
+          // Khóa học đang học tích cực nhất (ưu tiên bài học truy cập gần nhất)
+          const activeCourse =
+            allCourses.find((c) => c.status === 'IN_PROGRESS' && c.lastAccessedLessonId) ||
+            allCourses.find((c) => c.status !== 'COMPLETED' && c.hasStarted) ||
+            allCourses.find((c) => c.status !== 'COMPLETED') ||
+            allCourses[0];
 
           // Lọc danh sách khóa học theo bộ lọc con
           const filteredCourses = allCourses.filter((c) => {
@@ -192,7 +322,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                       <BilingualText vi="Bài đã học" en="Completed lessons" />
                     </span>
                     <strong className="text-lg sm:text-xl font-black text-[#253044]">
-                      {data.completedLessons ?? data.completedLessonsCount ?? 0}
+                      {data.completedLessonsCount ?? data.completedLessons ?? 0}
                     </strong>
                   </div>
                 </div>
@@ -243,36 +373,47 @@ export function MyLearningPage({ initialTab = 'courses' }) {
               {/* TAB 1: Enrolled Courses */}
               {tab === 'courses' && (
                 <div className="space-y-6">
-                  {/* Hero Continue Learning Card if active course exists */}
+                  {/* Hero Continue Learning Card with Real Photo */}
                   {activeCourse && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="rounded-3xl bg-gradient-to-r from-[#24382B] via-[#2F4A39] to-[#3B5B47] text-[#FFF7E8] p-6 sm:p-8 shadow-md border border-[#24382B] flex flex-col md:flex-row md:items-center justify-between gap-6"
                     >
-                      <div className="space-y-2 max-w-xl">
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EDF0E5] text-[#24382B] font-extrabold text-[11px] uppercase tracking-wider">
-                          <Play size={12} fill="currentColor" />
-                          <BilingualText>{"Tiếp tục hành trình học tập"}</BilingualText>
-                        </div>
-                        <h2 className="text-2xl sm:text-3xl font-black text-white">
-                          <BilingualText vi={activeCourse.titleVi || activeCourse.title} en={activeCourse.title} />
-                        </h2>
-                        <div className="flex items-center gap-3 text-xs text-[#D5DDCB]">
-                          <span className="font-bold text-amber-300">{activeCourse.level}</span>
-                          <span>•</span>
-                          <span>
-                            <BilingualText
-                              vi={`Đã hoàn thành ${activeCourse.completedLessons}/${activeCourse.totalLessons || '—'} bài học (${activeCourse.progressPercentage}%)`}
-                              en={`Completed ${activeCourse.completedLessons}/${activeCourse.totalLessons || '—'} lessons (${activeCourse.progressPercentage}%)`}
-                            />
-                          </span>
-                        </div>
-                        <div className="w-full max-w-md h-2 rounded-full bg-white/20 overflow-hidden mt-1">
-                          <div
-                            className="h-full bg-amber-400 rounded-full transition-all duration-300"
-                            style={{ width: `${activeCourse.progressPercentage}%` }}
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 max-w-2xl">
+                        {/* Real course photo thumbnail */}
+                        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-white/20 shadow-md shrink-0 bg-stone-900">
+                          <img
+                            src={getCourseCover(activeCourse)}
+                            alt={activeCourse.title}
+                            className="w-full h-full object-cover"
                           />
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#24382B] font-extrabold text-[11px] uppercase tracking-wider shadow-xs">
+                            <Play size={12} fill="currentColor" />
+                            <BilingualText>{"Tiếp tục hành trình học tập"}</BilingualText>
+                          </div>
+                          <h2 className="text-2xl sm:text-3xl font-black text-white">
+                            <BilingualText vi={activeCourse.titleVi || activeCourse.title} en={activeCourse.title} />
+                          </h2>
+                          <div className="flex items-center gap-3 text-xs text-[#D5DDCB]">
+                            <span className="font-bold text-amber-300">{activeCourse.level}</span>
+                            <span>•</span>
+                            <span>
+                              <BilingualText
+                                vi={`Đã hoàn thành ${activeCourse.completedLessons}/${activeCourse.totalLessons || '—'} bài học (${activeCourse.progressPercentage}%)`}
+                                en={`Completed ${activeCourse.completedLessons}/${activeCourse.totalLessons || '—'} lessons (${activeCourse.progressPercentage}%)`}
+                              />
+                            </span>
+                          </div>
+                          <div className="w-full max-w-md h-2 rounded-full bg-white/20 overflow-hidden mt-1">
+                            <div
+                              className="h-full bg-amber-400 rounded-full transition-all duration-300"
+                              style={{ width: `${activeCourse.progressPercentage}%` }}
+                            />
+                          </div>
                         </div>
                       </div>
 
@@ -283,14 +424,14 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                               ? `/learn/${activeCourse.id}/lesson/${activeCourse.lastAccessedLessonId}`
                               : `/learn/${activeCourse.id}`
                           }
-                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#E1B65B] hover:bg-[#d4a849] text-[#253044] font-black text-xs shadow-md transition-all"
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] hover:!text-[#C2410C] border-2 border-[#EA580C] font-black text-xs shadow-md transition-all active:!bg-white active:!text-[#EA580C]"
                         >
                           <Play size={15} fill="currentColor" />
                           <BilingualText>{"Tiếp tục học ngay →"}</BilingualText>
                         </Link>
                         <Link
                           to={`/courses/${activeCourse.id}`}
-                          className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all"
+                          className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl !bg-white/10 hover:!bg-white hover:!text-[#24382B] text-white font-bold text-xs border border-white/30 transition-all active:!bg-white active:!text-[#24382B]"
                         >
                           <BilingualText>{"Chi tiết khóa"}</BilingualText>
                         </Link>
@@ -308,9 +449,9 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         onClick={() => setCourseFilter('all')}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           courseFilter === 'all'
-                            ? 'bg-[#EA580C] text-white shadow-xs'
-                            : 'bg-white text-[#64748B] hover:text-[#253044] border border-[#E8E5DF]'
-                        }`}
+                            ? '!bg-white !text-[#EA580C] !border-2 !border-[#EA580C] shadow-xs'
+                            : '!bg-white/90 !text-[#64748B] hover:!text-[#EA580C] hover:!bg-white border border-[#E8E5DF]'
+                        } active:!bg-white active:!text-[#EA580C]`}
                       >
                         <BilingualText>{"Tất cả"}</BilingualText> ({allCourses.length})
                       </button>
@@ -322,9 +463,9 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         onClick={() => setCourseFilter('in_progress')}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           courseFilter === 'in_progress'
-                            ? 'bg-[#EA580C] text-white shadow-xs'
-                            : 'bg-white text-[#64748B] hover:text-[#253044] border border-[#E8E5DF]'
-                        }`}
+                            ? '!bg-white !text-[#EA580C] !border-2 !border-[#EA580C] shadow-xs'
+                            : '!bg-white/90 !text-[#64748B] hover:!text-[#EA580C] hover:!bg-white border border-[#E8E5DF]'
+                        } active:!bg-white active:!text-[#EA580C]`}
                       >
                         <BilingualText>{"Đang học"}</BilingualText> ({data.inProgressCoursesCount ?? 0})
                       </button>
@@ -336,9 +477,9 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         onClick={() => setCourseFilter('completed')}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                           courseFilter === 'completed'
-                            ? 'bg-[#EA580C] text-white shadow-xs'
-                            : 'bg-white text-[#64748B] hover:text-[#253044] border border-[#E8E5DF]'
-                        }`}
+                            ? '!bg-white !text-[#EA580C] !border-2 !border-[#EA580C] shadow-xs'
+                            : '!bg-white/90 !text-[#64748B] hover:!text-[#EA580C] hover:!bg-white border border-[#E8E5DF]'
+                        } active:!bg-white active:!text-[#EA580C]`}
                       >
                         <BilingualText>{"Đã hoàn thành"}</BilingualText> ({data.completedCoursesCount ?? 0})
                       </button>
@@ -346,13 +487,13 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
                     <Link
                       to="/courses"
-                      className="text-xs font-bold text-[#EA580C] hover:text-[#C2410C] inline-flex items-center gap-1"
+                      className="text-xs font-bold text-[#EA580C] hover:text-[#C2410C] inline-flex items-center gap-1 active:!bg-white"
                     >
                       <span>+ <BilingualText>{"Khám phá khóa học mới"}</BilingualText></span>
                     </Link>
                   </div>
 
-                  {/* Course Cards Grid */}
+                  {/* Course Cards Grid With Real Photographs */}
                   {filteredCourses.length > 0 ? (
                     <div className="course-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {filteredCourses.map((course) => {
@@ -360,6 +501,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         const continueUrl = course.lastAccessedLessonId
                           ? `/learn/${course.id}/lesson/${course.lastAccessedLessonId}`
                           : `/learn/${course.id}`;
+                        const realCover = getCourseCover(course);
 
                         return (
                           <motion.article
@@ -367,30 +509,30 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                             key={course.id}
                             className="card learning-course group relative flex flex-col bg-[#FFF7E8] border border-[#E8E5DF] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
                           >
-                            <div className="relative overflow-hidden aspect-[16/10] bg-[#EEE3D1]">
+                            <div className="relative overflow-hidden aspect-[16/10] bg-stone-900">
                               <ContentImage
                                 className="learning-course-image w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                src={course.image || course.thumbnailUrl}
+                                src={realCover}
                                 alt={course.title}
                                 fallback={
-                                  <Artwork
-                                    kind={course.id % 2 ? 'food' : 'village'}
-                                    alt={`Minh họa khóa học: ${course.title}`}
+                                  <img
+                                    src={realCover}
+                                    alt={`Ảnh thực tế khóa học: ${course.title}`}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                   />
                                 }
                               />
                               <div className="absolute top-3 left-3 z-10">
-                                <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#24382B] text-[#FFF7E8] shadow-sm tracking-wide">
+                                <span className="px-2.5 py-1 text-xs font-bold rounded-lg !bg-white text-[#24382B] border border-[#E8E5DF] shadow-xs tracking-wide">
                                   {course.level}
                                 </span>
                               </div>
                               <div className="absolute top-3 right-3 z-10">
                                 <span
-                                  className={`badge px-2.5 py-1 text-xs font-bold rounded-lg shadow-sm flex items-center gap-1 ${
+                                  className={`badge px-2.5 py-1 text-xs font-bold rounded-lg shadow-xs flex items-center gap-1 ${
                                     isCompleted
-                                      ? 'bg-emerald-800 text-emerald-100 border border-emerald-700'
-                                      : 'bg-[#EA580C] text-white border border-[#C2410C]'
+                                      ? '!bg-white text-emerald-700 border border-emerald-400'
+                                      : '!bg-white text-[#EA580C] border border-[#EA580C]'
                                   }`}
                                 >
                                   {isCompleted ? <CheckCircle2 size={12} /> : null}
@@ -421,7 +563,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
                               <div className="pt-2 border-t border-[#E8E5DF]/40 flex items-center gap-2">
                                 <Link
-                                  className="button flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-sm transition-all"
+                                  className="button flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] border-2 border-[#EA580C] font-bold text-xs shadow-xs transition-all active:!bg-white active:!text-[#EA580C]"
                                   to={continueUrl}
                                 >
                                   <BilingualText vi={isCompleted ? 'Xem lại khóa học' : 'Tiếp tục học →'} en={isCompleted ? 'Review course' : 'Continue learning →'} />
@@ -429,7 +571,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                                 </Link>
 
                                 <Link
-                                  className="px-3 py-2.5 rounded-xl border border-[#E8E5DF] bg-white hover:bg-[#F7F0E3] text-[#253044] text-xs font-bold transition-all"
+                                  className="px-3 py-2.5 rounded-xl border border-[#E8E5DF] !bg-white hover:!bg-[#FFF7E8] text-[#253044] hover:text-[#EA580C] hover:border-[#EA580C] text-xs font-bold transition-all active:!bg-white"
                                   to={`/courses/${course.id}`}
                                   title={bilingualLabel("Chi tiết khóa học", "Course details")}
                                 >
@@ -446,7 +588,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         whileHover={{ y: -4 }}
                         className="card learning-course-add group flex flex-col items-center justify-center text-center p-8 bg-[#FFF7E8]/70 border-2 border-dashed border-[#E8E5DF] hover:border-[#EA580C] rounded-2xl transition-all"
                       >
-                        <span className="w-12 h-12 rounded-2xl bg-[#FFF0DC] text-[#EA580C] flex items-center justify-center mb-3 shadow-xs group-hover:scale-110 transition-transform">
+                        <span className="w-12 h-12 rounded-2xl !bg-white text-[#EA580C] border border-[#E8E5DF] flex items-center justify-center mb-3 shadow-xs group-hover:scale-110 transition-transform">
                           <Plus size={24} />
                         </span>
                         <h2 className="text-lg font-bold text-[#253044] mb-1">
@@ -456,7 +598,7 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                           <BilingualText>{"Mở rộng hành trình học tập tiếng Việt theo chủ đề bạn yêu thích."}</BilingualText>
                         </p>
                         <Link
-                          className="button secondary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-[#E8E5DF] text-[#253044] font-bold text-xs hover:border-[#EA580C] transition-all"
+                          className="button secondary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl !bg-white hover:!bg-[#FFF7E8] border border-[#E8E5DF] hover:border-[#EA580C] text-[#253044] hover:text-[#EA580C] font-bold text-xs transition-all active:!bg-white"
                           to="/courses"
                         >
                           <BilingualText>{"Khám phá khóa học"}</BilingualText>
@@ -479,14 +621,14 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                           <button
                             type="button"
                             onClick={() => setCourseFilter('all')}
-                            className="px-4 py-2 rounded-xl bg-[#EA580C] text-white font-bold text-xs shadow-xs hover:bg-[#C2410C] cursor-pointer"
+                            className="px-4 py-2 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] border-2 border-[#EA580C] font-bold text-xs shadow-xs transition-all cursor-pointer active:!bg-white"
                           >
                             <BilingualText>{"Xem tất cả khóa học"}</BilingualText>
                           </button>
                         ) : (
                           <Link
                             to="/courses"
-                            className="px-5 py-2.5 rounded-xl bg-[#EA580C] text-white font-bold text-xs shadow-md hover:bg-[#C2410C]"
+                            className="px-5 py-2.5 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] border-2 border-[#EA580C] font-bold text-xs shadow-md transition-all active:!bg-white"
                           >
                             <BilingualText>{"Khám phá khóa học ngay →"}</BilingualText>
                           </Link>
@@ -512,13 +654,13 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                     </div>
                     <div className="actions flex items-center gap-3">
                       <Link
-                        className="button secondary px-4 py-2 rounded-xl bg-white border border-[#E8E5DF] text-[#253044] font-bold text-xs hover:border-[#EA580C] transition-all"
+                        className="button secondary px-4 py-2 rounded-xl !bg-white hover:!bg-[#FFF7E8] border border-[#E8E5DF] hover:border-[#EA580C] text-[#253044] hover:text-[#EA580C] font-bold text-xs transition-all active:!bg-white"
                         to={ROUTES.VOCABULARY_NOTEBOOK}
                       >
                         <BilingualText>{"Mở sổ tay"}</BilingualText>
                       </Link>
                       <Link
-                        className="button px-5 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-sm transition-all"
+                        className="button px-5 py-2 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] hover:!text-[#C2410C] border-2 border-[#EA580C] font-bold text-xs shadow-xs transition-all active:!bg-white active:!text-[#EA580C]"
                         to={ROUTES.VOCABULARY_REVIEW}
                       >
                         <BilingualText>{"Ôn tập →"}</BilingualText>
@@ -530,15 +672,15 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                     <div className="mylearning-vocab-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {data.recentVocab.map((word, index) => (
                         <div
-                          className="mylearning-word-chip bg-white/90 border border-[#E8E5DF] rounded-2xl p-4 shadow-xs hover:shadow-md transition-all space-y-2"
+                          className="mylearning-word-chip bg-white border border-[#E8E5DF] rounded-2xl p-4 shadow-xs hover:shadow-md transition-all space-y-2"
                           key={index}
                         >
                           <div className="flex items-center justify-between">
                             <span
-                              className={`badge px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
+                              className={`badge px-2 py-0.5 rounded-md text-[10px] font-bold uppercase !bg-white ${
                                 word.mastered
-                                  ? 'bg-[#EDF0E5] text-[#24382B]'
-                                  : 'bg-[#F8E6B7] text-[#253044]'
+                                  ? '!text-emerald-700 border border-emerald-400'
+                                  : '!text-amber-800 border border-amber-300'
                               }`}
                             >
                               <BilingualText>{word.mastered ? 'Đã thuộc' : 'Đang ôn tập'}</BilingualText>
@@ -551,44 +693,128 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                       ))}
                     </div>
                   ) : (
-                    <EmptyState
-                      title={bilingualLabel("Sổ tay đang chờ những từ đầu tiên", "Notebook is waiting for your first words")}
-                      description={bilingualLabel("Lưu từ mới trong bài học hoặc thêm vào sổ tay để ôn tập ngắt quãng.", "Save new words from lessons or your notebook to review with spaced repetition.")}
-                    />
+                    <div className="text-center py-8 space-y-4">
+                      <div className="w-36 h-28 rounded-2xl overflow-hidden border border-[#E8E5DF] shadow-xs mx-auto">
+                        <img
+                          src="/design/hero/hero_real_student_portrait.jpg"
+                          alt="Sổ tay từ vựng thực tế"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <EmptyState
+                        title={bilingualLabel("Sổ tay đang chờ những từ đầu tiên", "Notebook is waiting for your first words")}
+                        description={bilingualLabel("Lưu từ mới trong bài học hoặc thêm vào sổ tay để ôn tập ngắt quãng.", "Save new words from lessons or your notebook to review with spaced repetition.")}
+                      />
+                    </div>
                   )}
                 </section>
               )}
 
-              {/* TAB 3: Free destination discovery */}
+              {/* TAB 3: Free destination discovery with Real Tourism Photographs */}
               {tab === 'journey' && (
-                <div className="explore-learning card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-10 shadow-xs flex flex-col md:flex-row items-center gap-8">
-                  <div className="w-48 h-48 shrink-0 rounded-2xl overflow-hidden border border-[#E8E5DF] shadow-sm bg-white p-2">
-                    <Artwork kind="lanterns" className="w-full h-full object-cover rounded-xl" />
-                  </div>
-                  <div className="space-y-4 flex-1">
-                    <div>
-                      <span className="eyebrow text-xs font-bold uppercase tracking-wider text-[#EA580C]">
-                        <BilingualText vi="Khám phá điểm đến" en="Discover destinations" />
-                      </span>
-                      <h2 className="text-2xl sm:text-3xl font-black text-[#253044] mt-1">
-                        <BilingualText vi="Khám phá Việt Nam" en="Explore Vietnam" />
-                      </h2>
+                <div className="space-y-6">
+                  {/* Hero Destination Banner */}
+                  <div className="explore-learning card bg-[#FFF7E8] border border-[#E8E5DF] rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-center gap-8">
+                    <div className="w-full md:w-80 h-56 shrink-0 rounded-2xl overflow-hidden border border-[#E8E5DF] shadow-md relative group bg-stone-900">
+                      <img
+                        src="/design/hero/vietnam-hoi-an-banner.jpg"
+                        alt="Phố cổ Hội An"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
+                        <span className="text-amber-300 text-xs font-extrabold uppercase tracking-wider">
+                          Di sản văn hóa UNESCO
+                        </span>
+                        <strong className="text-white text-base font-black">
+                          Hội An, Quảng Nam
+                        </strong>
+                      </div>
                     </div>
 
-                    <p className="text-sm text-[#64748B]">
-                      <BilingualText
-                        vi="Chọn điểm đến bạn quan tâm để tìm hiểu văn hóa, cách nói vùng miền và thực hành giao tiếp theo kịch bản. Bạn có thể khám phá tự do bất cứ lúc nào."
-                        en="Choose a destination to discover its culture, regional language and conversation scenarios. Explore freely at any time."
-                      />
-                    </p>
+                    <div className="space-y-4 flex-1">
+                      <div>
+                        <span className="eyebrow text-xs font-bold uppercase tracking-wider text-[#EA580C]">
+                          <BilingualText vi="Khám phá điểm đến" en="Discover destinations" />
+                        </span>
+                        <h2 className="text-2xl sm:text-3xl font-black text-[#253044] mt-1">
+                          <BilingualText vi="Khám phá 15 điểm đến Việt Nam" en="Explore 15 Destinations in Vietnam" />
+                        </h2>
+                      </div>
 
-                    <div className="actions flex flex-wrap items-center gap-3 pt-2">
-                      <Link
-                        className="button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs shadow-sm transition-all"
-                        to={ROUTES.EXPLORE}
-                      >
-                        <BilingualText>{"Xem các điểm đến →"}</BilingualText>
-                      </Link>
+                      <p className="text-sm text-[#64748B] leading-relaxed">
+                        <BilingualText
+                          vi="Trải nghiệm văn hóa bản địa, giọng nói từng vùng miền Bắc - Trung - Nam và thực hành giao tiếp thực tế qua các tình huống du lịch sống động."
+                          en="Experience local culture, North - Central - South regional dialects, and practice real-life communication in authentic travel scenarios."
+                        />
+                      </p>
+
+                      <div className="actions flex flex-wrap items-center gap-3 pt-2">
+                        <Link
+                          className="button inline-flex items-center gap-2 px-5 py-2.5 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] hover:!text-[#C2410C] border-2 border-[#EA580C] font-bold text-xs shadow-xs transition-all active:!bg-white active:!text-[#EA580C]"
+                          to={ROUTES.EXPLORE}
+                        >
+                          <BilingualText>{"Mở bản đồ khám phá toàn cảnh →"}</BilingualText>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 4 Real Destination Photo Cards */}
+                  <div>
+                    <h3 className="text-lg font-black text-[#253044] mb-4">
+                      <BilingualText vi="Điểm đến thực tế nổi bật dành cho bạn" en="Featured Real Destinations For You" />
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {[
+                        {
+                          nameVi: 'Hà Nội',
+                          nameEn: 'Hanoi',
+                          region: 'Miền Bắc',
+                          img: 'https://images.vietnam.travel/2017-06/vietnam-travel-5.jpg',
+                          link: '/destinations/ha-noi',
+                        },
+                        {
+                          nameVi: 'Vịnh Hạ Long',
+                          nameEn: 'Ha Long Bay',
+                          region: 'Miền Bắc',
+                          img: 'https://images.vietnam.travel/2017-06/visitvietnam-3.jpg',
+                          link: '/destinations/vinh-ha-long',
+                        },
+                        {
+                          nameVi: 'Hội An',
+                          nameEn: 'Hoi An',
+                          region: 'Miền Trung',
+                          img: 'https://images.vietnam.travel/2021-12/shutterstock_1506184586_resize_0.jpg',
+                          link: '/destinations/hoi-an',
+                        },
+                        {
+                          nameVi: 'TP. Hồ Chí Minh',
+                          nameEn: 'Ho Chi Minh City',
+                          region: 'Miền Nam',
+                          img: 'https://images.vietnam.travel/2017-07/vietnam-tourism-4.jpg',
+                          link: '/destinations/thanh-pho-ho-chi-minh',
+                        },
+                      ].map((item, idx) => (
+                        <Link
+                          key={idx}
+                          to={item.link}
+                          className="group relative rounded-2xl overflow-hidden aspect-[4/3] border border-[#E8E5DF] shadow-xs hover:shadow-lg transition-all"
+                        >
+                          <img
+                            src={item.img}
+                            alt={item.nameVi}
+                            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex flex-col justify-end p-3.5">
+                            <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-300">
+                              {item.region}
+                            </span>
+                            <strong className="text-white text-base font-black">
+                              <BilingualText vi={item.nameVi} en={item.nameEn} />
+                            </strong>
+                          </div>
+                        </Link>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -608,35 +834,42 @@ export function MyLearningPage({ initialTab = 'courses' }) {
 
                   {data.quizHistory?.length ? (
                     <div className="space-y-3">
-                      {data.quizHistory.map((quiz) => (
-                        <div
-                          className="list-row flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/80 border border-[#E8E5DF] gap-3"
-                          key={quiz.id}
-                        >
-                          <div className="space-y-1">
-                            <strong className="block text-sm font-bold text-[#253044]">{quiz.quizName}</strong>
-                            <p className="text-[11px] text-[#64748B] flex items-center gap-1">
-                              <Calendar size={12} />
-                              {quiz.date}
-                            </p>
+                      {data.quizHistory.map((quiz) => {
+                        const titleObj = getQuizBilingualTitle(quiz);
+                        return (
+                          <div
+                            className="list-row flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white border border-[#E8E5DF] gap-3 shadow-xs hover:border-[#EA580C] transition-colors"
+                            key={quiz.id}
+                          >
+                            <div className="space-y-1">
+                              <strong className="block text-sm font-bold text-[#253044]">
+                                <BilingualText vi={titleObj.vi} en={titleObj.en} />
+                              </strong>
+                              <p className="text-[11px] text-[#64748B] flex items-center gap-1.5 font-medium">
+                                <Calendar size={13} className="text-[#EA580C]" />
+                                <span>{formatQuizDate(quiz.date)}</span>
+                              </p>
+                            </div>
+                            <div className="actions flex items-center gap-3 self-end sm:self-auto">
+                              <span
+                                className={`badge px-2.5 py-1 rounded-lg text-xs font-bold !bg-white ${
+                                  quiz.passed
+                                    ? '!text-emerald-700 border border-emerald-400'
+                                    : '!text-[#EA580C] border border-[#EA580C]'
+                                }`}
+                              >
+                                {Math.round(quiz.score)}/100 · <BilingualText>{quiz.passed ? 'Đạt' : 'Cần ôn tập'}</BilingualText>
+                              </span>
+                              <Link
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] border border-[#EA580C] text-xs font-bold shadow-xs transition-all active:!bg-white active:!text-[#EA580C]"
+                                to={`/quiz-attempts/${quiz.id}/result`}
+                              >
+                                <BilingualText>{"Xem kết quả →"}</BilingualText>
+                              </Link>
+                            </div>
                           </div>
-                          <div className="actions flex items-center gap-3 self-end sm:self-auto">
-                            <span
-                              className={`badge px-2.5 py-1 rounded-lg text-xs font-bold ${
-                                quiz.passed ? 'bg-[#EDF0E5] text-[#24382B]' : 'bg-[#FFF0DC] text-[#EA580C]'
-                              }`}
-                            >
-                              {quiz.score}/100 · <BilingualText>{quiz.passed ? 'Đạt' : 'Cần ôn tập'}</BilingualText>
-                            </span>
-                            <Link
-                              className="text-link text-xs font-bold text-[#EA580C] hover:underline"
-                              to={`/quiz-attempts/${quiz.id}/result`}
-                            >
-                              <BilingualText>{"Xem kết quả →"}</BilingualText>
-                            </Link>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : (
                     <EmptyState

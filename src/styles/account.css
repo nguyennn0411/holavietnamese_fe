@@ -940,3 +940,60 @@
 .achieve-badge-status.locked {
   color: var(--color-muted);
 }
+
+/* Gamification Badges UI */
+.achieve-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.achieve-tab-btn {
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--acc-border);
+  background: var(--acc-surface);
+  color: var(--acc-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.achieve-tab-btn:hover {
+  border-color: #FF7A00;
+  color: #FF7A00;
+}
+
+.achieve-tab-btn.active {
+  background: #FF7A00;
+  border-color: #FF7A00;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(255, 122, 0, 0.25);
+}
+
+.achieve-badge-reward {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(255, 122, 0, 0.12);
+  color: #FF7A00;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.achieve-progress-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.achieve-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF7A00, #FFAE00);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
