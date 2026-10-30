@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cloudinaryAudioSource, mediaSource } from '../src/components/common/mediaSource.js';
-import cloudinaryAudioUrls from '../src/components/common/cloudinaryAudioUrls.js';
+import { cloudinaryAudioSource, mediaSource } from '../src/shared/components/common/mediaSource.js';
+import cloudinaryAudioUrls from '../src/shared/components/common/cloudinaryAudioUrls.js';
 
 test('uploaded audio resolves to Cloudinary while unmigrated paths still work', () => {
   const local = '/media/pronunciation/sound-6.wav';

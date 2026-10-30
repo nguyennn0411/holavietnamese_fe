@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, AudioLines, Headphones, Play, RotateCcw, Square, Volume2 } from 'lucide-react';

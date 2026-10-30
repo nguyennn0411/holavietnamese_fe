@@ -6,8 +6,8 @@ const read = (path) => fs.readFile(new URL(path, import.meta.url), 'utf8');
 
 test('Learning Path reads and mutates real backend resources', async () => {
   const [service, hook] = await Promise.all([
-    read('../src/services/learningPathService.js'),
-    read('../src/hooks/useLearningPath.js'),
+    read('../src/features/learning/api/learningPathService.js'),
+    read('../src/features/learning/hooks/useLearningPath.js'),
   ]);
   assert.match(service, /\/api\/learning-path\/me/);
   assert.match(service, /\/api\/learning-path\/recommendation/);
@@ -20,15 +20,12 @@ test('Learning Path reads and mutates real backend resources', async () => {
 });
 
 test('Learning Path renders all required data-backed sections and states', async () => {
-  const [page, backend] = await Promise.all([
-    read('../src/pages/learning-path/LearningPathPage.jsx'),
-    read('../../../BE/src/main/java/com/sep490/backend/learning/path/LearningPathService.java'),
-  ]);
+  const page = await read('../src/features/learning/pages/learning-path/LearningPathPage.jsx');
   for (const label of ['Personalized Learning', 'Learning Path Progress', 'Continue Learning', 'Interactive Roadmap', 'Recommended Courses', 'Learning preferences']) {
     assert.match(page, new RegExp(label));
   }
   for (const state of ['COMPLETED', 'IN_PROGRESS', 'AVAILABLE', 'LOCKED']) {
-    assert.match(page + backend, new RegExp(state));
+    assert.match(page, new RegExp(state));
   }
   assert.match(page, /LearningPathSkeleton/);
   assert.match(page, /Unable to load Learning Path/);
@@ -38,10 +35,12 @@ test('Learning Path renders all required data-backed sections and states', async
 
 test('applying a recommendation asks for confirmation and preserves existing progress messaging', async () => {
   const [page, service] = await Promise.all([
-    read('../src/pages/learning-path/LearningPathPage.jsx'),
-    read('../src/services/learningPathService.js'),
+    read('../src/features/learning/pages/learning-path/LearningPathPage.jsx'),
+    read('../src/features/learning/api/learningPathService.js'),
   ]);
-  assert.match(page, /window\.confirm/);
+  assert.match(page, /await confirm\(/);
+  assert.match(page, /learning-path-confirm-list/);
+  assert.doesNotMatch(page, /window\.confirm/);
   assert.match(page, /path\.apply\(courseIdOf\(course\)\)/);
   assert.match(page, /path\.applyPath\(recommendedPath\.map\(courseIdOf\)\)/);
   assert.match(page, /Recommended course path/);

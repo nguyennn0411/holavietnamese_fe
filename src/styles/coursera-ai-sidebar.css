@@ -858,41 +858,6 @@ body.is-resizing-ai-sidebar * {
   color: #94a3b8;
 }
 
-/* Right-Edge Dock Trigger Button (When AI is closed) */
-.coursera-ai-dock-trigger {
-  display: none !important;
-  position: fixed;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 640;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px 10px 12px;
-  border-radius: 16px 0 0 16px;
-  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-right: none;
-  box-shadow: -4px 6px 20px rgba(234, 88, 12, 0.35);
-  font-size: 0.84rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  user-select: none;
-}
-
-.coursera-ai-dock-trigger:hover {
-  padding-left: 16px;
-  box-shadow: -6px 8px 24px rgba(234, 88, 12, 0.45);
-}
-
-.coursera-ai-dock-trigger:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: -2px;
-}
-
 /* Learner Topbar AI Button */
 .learner-topbar__ai-btn {
   display: inline-flex;
@@ -954,12 +919,6 @@ body.is-resizing-ai-sidebar * {
     display: none !important;
   }
 
-  .coursera-ai-dock-trigger {
-  display: none !important;
-    top: auto;
-    bottom: 84px;
-    transform: none;
-  }
 }
 
 @keyframes courseraFadeIn {

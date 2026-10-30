@@ -2,18 +2,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import axios from 'axios';
-import { exploreCultures, resolveExploreCultures, openableExploreScenarios } from '../src/models/DestinationExplore.js';
-import { aiRoleplayService } from '../src/services/aiRoleplayService.js';
+import { exploreCultures, resolveExploreCultures, openableExploreScenarios } from '../src/features/explore/models/DestinationExplore.js';
+import { aiRoleplayService } from '../src/features/ai/api/aiRoleplayService.js';
 
 const calls=[];
 globalThis.localStorage={ getItem: key => key === 'token' ? 'explore-token' : null, removeItem() {} };
 globalThis.window={location:{pathname:'/explore',search:'',assign() {}}};
 globalThis.__exploreContract={axios};
 const load=source => import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
-const {default:client}=await load((await fs.readFile(new URL('../src/api/axiosClient.js',import.meta.url),'utf8'))
+const {default:client}=await load((await fs.readFile(new URL('../src/shared/api/axiosClient.js',import.meta.url),'utf8'))
   .replace("import axios from 'axios';",'const {axios}=globalThis.__exploreContract;').replace('import.meta.env.VITE_API_BASE_URL','({}).VITE_API_BASE_URL'));
 globalThis.__exploreContract.client=client;
-const {destinationExploreService}=await load((await fs.readFile(new URL('../src/services/destinationExploreService.js',import.meta.url),'utf8'))
+const {destinationExploreService}=await load((await fs.readFile(new URL('../src/features/explore/api/destinationExploreService.js',import.meta.url),'utf8'))
   .replace(/import axiosClient from [^;]+;/,'const axiosClient=globalThis.__exploreContract.client;'));
 let failed=false;
 client.defaults.adapter=async config => {

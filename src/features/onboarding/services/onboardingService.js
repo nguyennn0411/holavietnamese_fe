@@ -1,5 +1,5 @@
-import { learnerService } from '@/services/learnerService';
-import { learningPathService } from '@/services/learningPathService';
+import { learnerService } from '@/features/learning/api/learnerService';
+import { learningPathService } from '@/features/learning/api/learningPathService';
 import { STORAGE_KEY } from '../context/OnboardingContext';
 import { buildOnboardingRecommendation } from './recommendationEngine';
 

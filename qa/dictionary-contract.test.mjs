@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import { dictionaryMeaning, definitionOf, dictionaryQuery, highlightedParts } from '../src/models/Dictionary.js';
-import { vocabularyDraft, vocabularyPayload } from '../src/models/AdminVocabulary.js';
+import { dictionaryMeaning, definitionOf, dictionaryQuery, highlightedParts } from '../src/features/vocabulary/models/Dictionary.js';
+import { vocabularyDraft, vocabularyPayload } from '../src/features/vocabulary/models/AdminVocabulary.js';
 
 test('Dictionary search URL keeps only bilingual keyword and pagination', () => {
   assert.deepEqual(dictionaryQuery(new URLSearchParams('keyword=bàn&partOfSpeech=noun&topicId=4&page=2')), {
@@ -45,8 +45,9 @@ test('Dictionary uses keyword and pagination; content import accepts Excel only'
   globalThis.__dictionaryClient={ get: async (path, options) => { calls.push([path,options]); return { result: { content: [], totalElements: 0 } }; },
     post: async (path, body) => { calls.push([path,body]); return { result: { canConfirm: false } }; } };
   const load=async name => {
-    const source=(await fs.readFile(new URL(`../src/services/${name}.js`,import.meta.url),'utf8'))
-      .replace("import axiosClient from '@/api/axiosClient';",'const axiosClient=globalThis.__dictionaryClient;');
+    const file = name === 'contentImportService' ? `../src/features/content-import/api/${name}.js` : `../src/features/vocabulary/api/${name}.js`;
+    const source=(await fs.readFile(new URL(file,import.meta.url),'utf8'))
+      .replace(/import axiosClient from [^;\n]+;?/, 'const axiosClient=globalThis.__dictionaryClient;');
     return import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
   };
   const { vocabularyCatalogService }=await load('vocabularyCatalogService');

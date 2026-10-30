@@ -40,10 +40,10 @@ test('beginner lesson and placement test retain clearly different experiences', 
 
 test('registration and OTP verification preserve the post-login onboarding destination', async () => {
   const [register, verify, flow, login] = await Promise.all([
-    read('../src/pages/auth/RegisterPage.jsx'),
-    read('../src/pages/auth/VerifyEmailPage.jsx'),
+    read('../src/features/auth/pages/auth/RegisterPage.jsx'),
+    read('../src/features/auth/pages/auth/VerifyEmailPage.jsx'),
     read('../src/features/auth/emailVerificationFlow.js'),
-    read('../src/pages/auth/LoginPage.jsx'),
+    read('../src/features/auth/pages/auth/LoginPage.jsx'),
   ]);
   assert.match(register, /savePostVerificationPath\(location\.state\?\.from \|\| '\/onboarding\/reason'\)/);
   assert.doesNotMatch(register, /Personalize Your Path|Cá nhân hóa lộ trình/);
@@ -60,7 +60,7 @@ test('onboarding result maps to a CEFR target and ranks personalized courses', a
     read('../src/features/onboarding/services/onboardingService.js'),
     read('../src/features/onboarding/services/recommendationEngine.js'),
     read('../src/features/onboarding/pages/OnboardingPages.jsx'),
-    read('../src/pages/courses/CourseListPage.jsx'),
+    read('../src/features/learning/pages/courses/CourseListPage.jsx'),
   ]);
   assert.match(data, /targetLevel: 'A1'/);
   assert.match(data, /targetLevel: 'A2'/);

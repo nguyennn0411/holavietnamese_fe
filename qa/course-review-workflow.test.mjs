@@ -5,9 +5,9 @@ import test from 'node:test';
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
 test('content manager and admin course review UI uses the protected workflow', () => {
-  const page = read('src/pages/admin/AdminContentPages.jsx');
-  const studio = read('src/components/admin/CourseStudio.jsx');
-  const service = read('src/services/contentService.js');
+  const page = read('src/features/admin/pages/AdminContentPages.jsx');
+  const studio = read('src/features/learning/admin/components/CourseStudio.jsx');
+  const service = read('src/features/learning/api/contentService.js');
 
   assert.match(page, /isAdmin && kind === 'courses' \? 'REVIEW' : ''/);
   assert.match(page, /Chờ Admin duyệt/);
@@ -24,8 +24,8 @@ test('content manager and admin course review UI uses the protected workflow', (
 });
 
 test('learner header exposes Manage Courses to content managers', () => {
-  const shell = read('src/components/learner/LearnerShell.jsx');
-  const menu = read('src/components/layout/UserMenu.jsx');
+  const shell = read('src/shared/components/learner/LearnerShell.jsx');
+  const menu = read('src/shared/components/layout/UserMenu.jsx');
 
   assert.match(shell, /const isContentManager = user\?\.roles\?\.includes\('CONTENT_MANAGER'\)/);
   assert.match(shell, /<UserMenu user=\{user\} isAdmin=\{isAdmin\} isContentManager=\{isContentManager\}/);

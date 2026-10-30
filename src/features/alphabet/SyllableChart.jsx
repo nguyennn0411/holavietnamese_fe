@@ -1,4 +1,4 @@
-import { BilingualText, bilingualLabel } from '@/components/common/BilingualText';
+import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { useState } from "react";
 import { Headphones, RotateCcw, Square, Volume2 } from "lucide-react";
 import { AUDIO_BASE, usePronunciationPlayer } from "./pronunciation";

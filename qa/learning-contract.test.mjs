@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
-import { answerPresent, answerLabel, moveItem } from '../src/components/learning/answerUtils.js';
+import { answerPresent, answerLabel, moveItem } from '../src/features/learning/components/learning/answerUtils.js';
 
 test('Unanswered and cleared answers remain empty for every supported input shape', () => {
   for (const answer of [null, undefined, {}, '', '  ', {text:'  '}, {optionIds:[]}, {sequence:[]}, {pairs:{a:''}}]) {
@@ -31,7 +31,7 @@ test('Reordering preserves all IDs and the input array, including boundary moves
   assert.deepEqual(original,[101,102,103]);
 });
 
-const source = await fs.readFile(new URL('../src/services/contentService.js', import.meta.url), 'utf8');
+const source = await fs.readFile(new URL('../src/features/learning/api/contentService.js', import.meta.url), 'utf8');
 const calls = [];
 const fixture = {
   session: async (path, options) => {calls.push({path,...options}); return {id:501};},

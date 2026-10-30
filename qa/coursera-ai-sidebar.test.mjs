@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const projectRoot = path.resolve('c:/Users/Admin/holavietnamese_fe');
+const projectRoot = fileURLToPath(new URL('..', import.meta.url));
 
 test('AiSidebarContext exports provider, hook, and implements required auto-collapse & resizing logic', () => {
-  const contextFile = path.join(projectRoot, 'src/contexts/AiSidebarContext.jsx');
+  const contextFile = path.join(projectRoot, 'src/features/ai/context/AiSidebarContext.jsx');
   assert.ok(fs.existsSync(contextFile), 'AiSidebarContext.jsx must exist');
 
   const content = fs.readFileSync(contextFile, 'utf8');
@@ -34,7 +35,7 @@ test('AiSidebarContext exports provider, hook, and implements required auto-coll
 });
 
 test('CourseraAiSidebar implements left resizer handle, Coursera blue banner, greeting, chips, and mic input', () => {
-  const componentFile = path.join(projectRoot, 'src/components/ai/CourseraAiSidebar.jsx');
+  const componentFile = path.join(projectRoot, 'src/features/ai/components/ai/CourseraAiSidebar.jsx');
   assert.ok(fs.existsSync(componentFile), 'CourseraAiSidebar.jsx must exist');
 
   const content = fs.readFileSync(componentFile, 'utf8');
@@ -50,7 +51,7 @@ test('CourseraAiSidebar implements left resizer handle, Coursera blue banner, gr
   // Verify Blue Announcement banner matching Coursera screenshot
   assert.ok(
     content.includes('coursera-ai-banner') &&
-    content.includes('Mới! Trợ lý AI nay đã hiểu bài học của bạn'),
+    content.includes('Mới! Hola AI đã hiểu ngữ cảnh bài học'),
     'CourseraAiSidebar must feature Coursera-style announcement card'
   );
 
@@ -64,8 +65,8 @@ test('CourseraAiSidebar implements left resizer handle, Coursera blue banner, gr
   // Verify Suggestion prompt chips
   assert.ok(
     content.includes('coursera-ai-chip') &&
-    content.includes('Hãy trò chuyện cùng tôi'),
-    'CourseraAiSidebar must have Coursera prompt chips'
+    content.includes('Gợi ý câu hỏi bài học:') && content.includes('handleSendMessage(item.text)'),
+    'CourseraAiSidebar must offer lesson question chips'
   );
 
   // Verify sticky bottom input with mic and send arrow
@@ -83,22 +84,20 @@ test('CourseraAiSidebar implements left resizer handle, Coursera blue banner, gr
   );
 });
 
-test('CourseraAiDockTrigger provides quick-open pill on right edge', () => {
-  const triggerFile = path.join(projectRoot, 'src/components/ai/CourseraAiDockTrigger.jsx');
-  assert.ok(fs.existsSync(triggerFile), 'CourseraAiDockTrigger.jsx must exist');
-
-  const content = fs.readFileSync(triggerFile, 'utf8');
-  assert.ok(content.includes('coursera-ai-dock-trigger'), 'Must render dock trigger button');
-  assert.ok(content.includes('openAiSidebar'), 'Clicking trigger must open AI sidebar and collapse left menu');
+test('Learner topbar opens the AI sidebar', () => {
+  const topbarFile = path.join(projectRoot, 'src/shared/components/learner/LearnerShell.jsx');
+  const content = fs.readFileSync(topbarFile, 'utf8');
+  assert.ok(content.includes('learner-topbar__ai-btn'), 'Learner topbar must render an AI button');
+  assert.ok(content.includes('openAiSidebar()'), 'Clicking the button must open the AI sidebar');
 });
 
 test('MainLayout coordinates 3-column CSS Grid layout and passes dynamic width style', () => {
-  const layoutFile = path.join(projectRoot, 'src/layouts/MainLayout.jsx');
+  const layoutFile = path.join(projectRoot, 'src/shared/layouts/MainLayout.jsx');
   const content = fs.readFileSync(layoutFile, 'utf8');
 
   assert.ok(content.includes('AiSidebarProvider'), 'MainLayout must wrap shell in AiSidebarProvider');
   assert.ok(content.includes('CourseraAiSidebar'), 'MainLayout must render CourseraAiSidebar');
-  assert.ok(content.includes('CourseraAiDockTrigger'), 'MainLayout must render CourseraAiDockTrigger');
+  assert.ok(content.includes('<LearnerTopbar'), 'MainLayout must expose the learner topbar trigger');
   assert.ok(content.includes("'has-ai-sidebar'"), 'Layout shell must have has-ai-sidebar class');
   assert.ok(content.includes("'--ai-sidebar-width'"), 'Layout shell must set --ai-sidebar-width custom property');
 });
@@ -114,12 +113,12 @@ test('CSS grid in coursera-ai-sidebar.css provides column 3 reflow and responsiv
 });
 
 test('LearnerTopbar and LessonLearningPage expose AI Assistant triggers', () => {
-  const topbarFile = path.join(projectRoot, 'src/components/learner/LearnerShell.jsx');
+  const topbarFile = path.join(projectRoot, 'src/shared/components/learner/LearnerShell.jsx');
   const topbarContent = fs.readFileSync(topbarFile, 'utf8');
   assert.ok(topbarContent.includes('learner-topbar__ai-btn'), 'LearnerTopbar must have AI Coach trigger button');
 
-  const lessonFile = path.join(projectRoot, 'src/pages/learning/LessonLearningPage.jsx');
+  const lessonFile = path.join(projectRoot, 'src/features/learning/pages/learning/LessonLearningPage.jsx');
   const lessonContent = fs.readFileSync(lessonFile, 'utf8');
-  assert.ok(lessonContent.includes('openAiSidebar'), 'LessonLearningPage header must have button to open AI Coach directly');
+  assert.ok(lessonContent.includes('setLearningContext'), 'LessonLearningPage must provide the active lesson to AI Coach');
   assert.ok(lessonContent.includes('LessonContextSyncer'), 'LessonLearningPage must sync lesson context with AI assistant');
 });

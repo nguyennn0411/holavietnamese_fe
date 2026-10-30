@@ -4,11 +4,11 @@ import fs from 'node:fs/promises';
 import axios from 'axios';
 import { matchRoutes } from 'react-router-dom';
 import { ROUTES } from '../src/constants/routes.js';
-import { VocabularyEntry } from '../src/models/VocabularyEntry.js';
-import { Course } from '../src/models/Course.js';
-import { Enrollment } from '../src/models/Enrollment.js';
-import { Lesson } from '../src/models/Lesson.js';
-import { LearningProgress } from '../src/models/LearningProgress.js';
+import { VocabularyEntry } from '../src/features/vocabulary/models/VocabularyEntry.js';
+import { Course } from '../src/features/learning/models/Course.js';
+import { Enrollment } from '../src/features/learning/models/Enrollment.js';
+import { Lesson } from '../src/features/learning/models/Lesson.js';
+import { LearningProgress } from '../src/features/learning/models/LearningProgress.js';
 
 const calls = [];
 const notebook = [];
@@ -27,7 +27,7 @@ const reviewResult = { entryId: 1, word: 'tạm biệt', rating: 'GOOD', reviewe
 globalThis.__vocabularyContract = { axios, VocabularyEntry, Course, Enrollment, Lesson, LearningProgress };
 globalThis.localStorage = { getItem: key => key === 'token' ? token : null };
 const load = source => import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
-const clientSource = (await fs.readFile(new URL('../src/api/axiosClient.js', import.meta.url), 'utf8'))
+const clientSource = (await fs.readFile(new URL('../src/shared/api/axiosClient.js', import.meta.url), 'utf8'))
   .replace("import axios from 'axios';", 'const { axios } = globalThis.__vocabularyContract;')
   .replace('import.meta.env.VITE_API_BASE_URL', '({}).VITE_API_BASE_URL');
 const { default: client } = await load(clientSource);
@@ -54,9 +54,9 @@ client.defaults.adapter = async config => {
   else data = notebook[0];
   return { config, status: config.method === 'post' ? 201 : config.method === 'delete' ? 204 : 200, statusText: 'OK', headers: {}, data };
 };
-const importService = async name => load((await fs.readFile(new URL(`../src/services/${name}.js`, import.meta.url), 'utf8'))
+const importService = async name => load((await fs.readFile(new URL(['courseService', 'learningService'].includes(name) ? `../src/features/learning/api/${name}.js` : `../src/features/vocabulary/api/${name}.js`, import.meta.url), 'utf8'))
   .replace(/import axiosClient from [^;\n]+;?/, 'const axiosClient = globalThis.__vocabularyContract.client;')
-  .replace(/import \{ (\w+) \} from ['"]@\/models\/[^'"\n]+['"];?/g, (_, name) => `const { ${name} } = globalThis.__vocabularyContract;`)
+  .replace(/import \{ (\w+) \} from ['"]@\/(?:models|features\/(?:vocabulary|learning)\/models)\/[^'"\n]+['"];?/g, (_, name) => `const { ${name} } = globalThis.__vocabularyContract;`)
   .replace(/import \{ httpClient \} from [^;\n]+;?/, 'const httpClient = () => { throw new Error("UNEXPECTED_COOKIE_CLIENT"); };'));
 const { vocabularyService } = await importService('vocabularyService');
 const { vocabularyCatalogService } = await importService('vocabularyCatalogService');
@@ -91,7 +91,7 @@ test('Catalog and notebook paths select separate pages without shadowing review'
     assert.equal(matchRoutes(routes, path).at(-1).route.id, expected);
   }
   const app = await fs.readFile(new URL('../src/app/router/AppRouter.jsx', import.meta.url), 'utf8');
-  assert.ok(app.includes("import('@/pages/vocabulary/VocabularyDetailPage')"));
+  assert.ok(app.includes("import('@/features/vocabulary/pages/VocabularyDetailPage')"));
   assert.ok(app.includes('path={ROUTES.VOCABULARY_CATALOG_DETAIL} element={<VocabularyDetailPage />}'));
 });
 
@@ -128,7 +128,7 @@ test('Lesson save uses the same helper, keeps lessonId and sends no Master field
   calls.length = 0;
   await vocabularyService.saveWord({ wordVi: 'cà phê', meaningEn: 'coffee', exampleVi: 'Cho tôi một cà phê.', pronunciation: '/ka fe/' }, 101);
   assert.deepEqual(calls[0].body, { lessonId: 101, word: 'cà phê', meaning: 'coffee', pronunciation: '/ka fe/', exampleSentence: 'Cho tôi một cà phê.', note: '' });
-  const lesson = await fs.readFile(new URL('../src/components/learning/LessonActivities.jsx', import.meta.url), 'utf8');
+  const lesson = await fs.readFile(new URL('../src/features/learning/components/learning/LessonActivities.jsx', import.meta.url), 'utf8');
   assert.ok(lesson.includes('vocabularyService.saveWord(item, lessonId)'));
 });
 
