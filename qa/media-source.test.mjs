@@ -1,6 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mediaSource } from '../src/components/common/mediaSource.js';
+import { cloudinaryAudioSource, mediaSource } from '../src/shared/components/common/mediaSource.js';
+import cloudinaryAudioUrls from '../src/shared/components/common/cloudinaryAudioUrls.js';
+
+test('uploaded audio resolves to Cloudinary while unmigrated paths still work', () => {
+  const local = '/media/pronunciation/sound-6.wav';
+  const remote = 'https://res.cloudinary.com/example/video/upload/v123/hola-vietnamese/audio/pronunciation/sound-6.wav';
+  assert.equal(cloudinaryAudioSource(local, { [local]: remote }), remote);
+  assert.equal(cloudinaryAudioSource('/media/foundation/other.wav', { [local]: remote }), '/media/foundation/other.wav');
+  assert.equal(mediaSource(local, 'audio'), cloudinaryAudioUrls[local] || local);
+  assert.equal(mediaSource(local, 'image'), local);
+});
 
 test('API image URLs retain paths, signed query parameters and local upload URLs', () => {
   const signed = 'https://cdn.example.test/photo.jpg?signature=a%2Bb&width=1200';

@@ -1,16 +1,13 @@
-:root { font-family: Inter, system-ui, -apple-system, sans-serif; color: var(--color-ink); background: var(--color-surface); line-height: 1.6; --green: var(--color-ink); --muted: var(--color-muted); --border: var(--color-border); }
-.alphabet-course-entry { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; text-decoration: none; margin: 0 0 24px; }
-.alphabet-course-entry strong { color: #b54438; }
-.alphabet-course-entry span { color: #606b80; }
+:root { font-family: Inter, system-ui, -apple-system, sans-serif; color: var(--color-ink); background: var(--color-surface); line-height: 1.6; --green: var(--primary-orange, #F97316); --muted: var(--color-muted); --border: var(--color-border); }
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; }
 button, input, textarea, select { font: inherit; }
 a { color: inherit; text-underline-offset: 4px; }
 button, .button { border: 1px solid var(--green); background: var(--green); color: white; border-radius: 9px; padding: 11px 19px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 8px; }
-button:hover, .button:hover { background: var(--color-ink); }
+button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):hover, .button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):hover { background: var(--orange-hover, #C2410C); }
 button:disabled { opacity: .6; cursor: default; }
 button.secondary, .button.secondary { background: transparent; color: var(--green); border-color: var(--color-border); }
-button.secondary:hover, .button.secondary:hover { background: var(--color-sage-soft); }
+button.secondary:hover, .button.secondary:hover { background: var(--bg-peach, #FFF0DC); color: var(--primary-orange, #F97316); }
 button.danger { background: var(--color-red); border-color: var(--color-red); color: white; }
 button.danger.secondary { color: var(--color-red-hover); background: white; border-color: var(--color-border); }
 :focus-visible { outline: 3px solid var(--color-gold); outline-offset: 4px; }
@@ -27,7 +24,7 @@ p { margin: 10px 0 20px; }
 .main-nav a { font-size: 14px; color: var(--color-forest); text-decoration: none; white-space: nowrap; padding: 6px 0; border-bottom: 2px solid transparent; }
 .main-nav a.active { color: var(--green); border-color: var(--green); font-weight: 700; }
 .sign-in-link { font-size: 14px; font-weight: 600; white-space: nowrap; }
-.app-main { width: min(1200px, calc(100% - 48px)); margin: 0 auto; padding: 48px 0 72px; flex: 1; }
+.app-main { width: min(1600px, calc(100% - 48px)); margin: 0 auto; padding: 48px 0 72px; flex: 1; }
 .app-footer { border-top: 1px solid var(--border); color: var(--muted); display: flex; justify-content: space-between; gap: 16px; padding: 24px max(24px, calc((100% - 1200px) / 2)); font-size: 13px; }
 .eyebrow { text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: .16em; color: var(--color-forest); margin: 0 0 10px; }
 .lead { color: var(--muted); font-size: 17px; line-height: 1.8; max-width: 650px; margin-bottom: 28px; }
@@ -59,7 +56,7 @@ p { margin: 10px 0 20px; }
 .course-card:nth-child(3n+2) .course-thumbnail { background: var(--color-sand); color: var(--color-forest); }
 .course-card:nth-child(3n+3) .course-thumbnail { background: var(--color-sage-soft); color: var(--color-forest); }
 .course-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: 11px; color: var(--muted); }
-.badge { display: inline-block; border-radius: 5px; background: var(--color-sage-soft); color: var(--color-forest); padding: 4px 8px; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.badge { display: inline-flex; align-items: center; gap: 4px; border-radius: 6px; background: var(--bg-peach, #FFF0DC); color: var(--primary-orange, #F97316); border: 1px solid rgba(249, 115, 22, 0.25); padding: 4px 8px; font-size: 11px; font-weight: 700; letter-spacing: .02em; }
 .text-link { display: inline-block; font-size: 14px; font-weight: 600; color: var(--green); padding: 10px 0; text-decoration: none; }
 .detail-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; margin-top: 30px; align-items: start; }
 .detail-grid > .course-thumbnail { height: 320px; border-radius: 18px; font-size: 48px; }
@@ -80,11 +77,24 @@ p { margin: 10px 0 20px; }
 .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .row h1 { margin-bottom: 10px; }
 .learning-grid { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 28px; margin-top: 24px; align-items: start; }
-.lesson-sidebar { background: var(--color-sage-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px 12px; position: sticky; top: 20px; }
-.lesson-sidebar h2 { font-size: 15px; padding: 0 12px; margin: 4px 0 16px; }
-.lesson-sidebar ol { list-style: none; padding: 0; margin: 0; }
-.lesson-sidebar a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 12px; font-size: 13px; text-decoration: none; border-radius: 8px; }
-.lesson-sidebar a.current { background: white; box-shadow: 0 2px 4px #203a3010; font-weight: 700; }
+/* Sleek custom scrollbar for lesson roadmap */
+.roadmap-custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #E8E5DF transparent;
+}
+.roadmap-custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.roadmap-custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.roadmap-custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #E8E5DF;
+  border-radius: 9999px;
+}
+.roadmap-custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #b59e86;
+}
 .lesson-status { flex-shrink: 0; }
 .lesson-status.completed { color: var(--color-forest); }
 .lesson-panel { padding: 32px; }
@@ -110,15 +120,446 @@ textarea { resize: vertical; }
 .success { color: var(--color-forest); font-size: 13px; }
 [role="alert"] { color: var(--color-red); }
 .state { padding: 44px 28px; background: var(--color-sage-soft); border: 1px dashed var(--color-border); border-radius: 12px; text-align: center; margin: 28px 0; }
-.modal { border: 1px solid var(--border); border-radius: 16px; padding: 28px; width: min(520px, calc(100% - 32px)); max-height: calc(100vh - 40px); overflow: auto; color: inherit; box-shadow: 0 20px 100px #10241e33; }
-.modal::backdrop { background: #17392b66; backdrop-filter: blur(3px); }
+.modal { border: 1px solid var(--border); border-radius: 16px; padding: 28px; width: min(520px, calc(100% - 32px)); max-height: calc(100vh - 40px); overflow: auto; color: inherit; box-shadow: 0 20px 100px rgba(37, 48, 68, 0.15); }
+.modal::backdrop { background: rgba(37, 48, 68, 0.5); backdrop-filter: blur(3px); }
 .modal .row { margin-bottom: 16px; }
 .modal .actions { justify-content: flex-end; }
+.course-cover-upload { margin-top: 16px; }
+.course-cover-upload small { color: var(--muted); font-weight: 400; }
+.course-cover-upload-preview { display: block; width: min(100%, 320px); aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; border: 1px solid var(--color-border); margin: 8px 0 16px; }
+.lesson-media-upload-preview { display: block; width: min(100%, 360px); max-height: 240px; object-fit: contain; border-radius: 8px; border: 1px solid var(--color-border); margin: 8px 0 16px; }
 .icon-button { border: none; background: transparent; color: var(--muted); font-size: 24px; padding: 0 8px; }
 .icon-button:hover { background: var(--color-sage-soft); }
 .auth-card { max-width: 470px; margin: 32px auto; padding: 36px; }
 .auth-card h1 { font-size: 28px; margin-bottom: 28px; }
 .auth-card form > button { width: 100%; }
 @media (max-width: 1100px) { .app-header { flex-wrap: wrap; gap: 16px; } .main-nav { order: 3; flex-basis: 100%; justify-content: flex-start; overflow-x: auto; } .sign-in-link { margin-left: auto; } .hero { gap: 32px; } .greeting-card { padding: 30px; } .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 720px) { .app-main { width: calc(100% - 32px); padding: 28px 0 48px; } .app-header { padding: 16px; } .brand { font-size: 16px; } .main-nav { gap: 20px; } .main-nav a { font-size: 12px; } .hero { grid-template-columns: 1fr; padding: 20px 0 48px; gap: 36px; } .hero h1 { font-size: 42px; } .greeting-card { margin-right: 12px; } .feature-grid { grid-template-columns: 1fr; gap: 18px; } .feature-grid p { max-width: none; } .card-grid, .detail-grid, .learning-grid, .filters { grid-template-columns: 1fr; } .stats-grid { gap: 10px; } .stat { padding: 16px 12px; } .stat strong { font-size: 28px; } .stat span { font-size: 11px; } .lesson-sidebar { position: static; } .lesson-panel { padding: 22px; } .row { flex-wrap: wrap; } .filters { gap: 0; } .app-footer { flex-direction: column; padding: 24px 16px; gap: 4px; } .detail-grid { gap: 24px; } .detail-grid > .course-thumbnail { order: -1; height: 190px; } }
+@media (max-width: 720px) { .app-main { width: calc(100% - 32px); padding: 28px 0 48px; } .app-header { padding: 16px; } .brand { font-size: 16px; } .main-nav { gap: 20px; } .main-nav a { font-size: 12px; } .hero { grid-template-columns: 1fr; padding: 20px 0 48px; gap: 36px; } .hero h1 { font-size: 42px; } .greeting-card { margin-right: 12px; } .feature-grid { grid-template-columns: 1fr; gap: 18px; } .feature-grid p { max-width: none; } .card-grid, .detail-grid, .learning-grid, .filters { grid-template-columns: 1fr; } .stats-grid { gap: 10px; } .stat { padding: 16px 12px; } .stat strong { font-size: 28px; } .stat span { font-size: 11px; } .lesson-panel { padding: 22px; } .row { flex-wrap: wrap; } .filters { gap: 0; } .app-footer { flex-direction: column; padding: 24px 16px; gap: 4px; } .detail-grid { gap: 24px; } .detail-grid > .course-thumbnail { order: -1; height: 190px; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+
+/* ==========================================================================
+   GLOBAL BULLETPROOF LOCK FOR ALL SELECTION / CHOICE / ANSWER / OPTION CARDS
+   Ensures pure white background (#FFFFFF) across the entire project
+   ========================================================================== */
+.answer-card,
+.ob-selection,
+.ob-path-card,
+.question-option,
+.selection-card,
+.choice-card,
+.option-card,
+.pref-level-btn,
+.pref-goal-chip,
+.pref-min-btn,
+.learning-path-level-tabs button,
+.review-ratings button,
+button.ob-selection,
+button.ob-path-card,
+button.pref-level-btn,
+button.pref-goal-chip,
+button.pref-min-btn,
+label.question-option,
+.ob-answer-grid button,
+.learning-path-course-list button,
+.learning-path-course-list > a,
+.learning-path-continue-list article,
+.learning-path-course-path li,
+.learning-path-lesson-box,
+.learning-path-milestone-box,
+.learning-path-preference-trigger,
+.learning-path-status-badge,
+[role="radio"].selection-card,
+[role="checkbox"].selection-card,
+[role="radio"].question-option,
+[role="checkbox"].question-option {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+
+.answer-card:hover,
+.answer-card:focus,
+.answer-card:active,
+.ob-selection:hover,
+.ob-selection:focus,
+.ob-selection:active,
+.ob-path-card:hover,
+.ob-path-card:focus,
+.ob-path-card:active,
+.question-option:hover,
+.question-option:focus,
+.question-option:active,
+.selection-card:hover,
+.selection-card:focus,
+.selection-card:active,
+.choice-card:hover,
+.choice-card:focus,
+.choice-card:active,
+.pref-level-btn:hover,
+.pref-level-btn:focus,
+.pref-goal-chip:hover,
+.pref-goal-chip:focus,
+.pref-min-btn:hover,
+.pref-min-btn:focus,
+.learning-path-level-tabs button:hover,
+.learning-path-level-tabs button:focus,
+button.ob-selection:hover,
+button.ob-path-card:hover,
+label.question-option:hover,
+.ob-answer-grid button:hover,
+.learning-path-course-list button:hover,
+.learning-path-course-list > a:hover,
+.learning-path-continue-list article:hover,
+.learning-path-course-path li:hover,
+.learning-path-preference-trigger:hover {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+
+.answer-card.selected,
+.answer-card.is-selected,
+.answer-card[aria-selected="true"],
+.answer-card[aria-pressed="true"],
+.answer-card[data-state="checked"],
+.ob-selection.selected,
+.ob-selection.is-selected,
+.ob-selection[aria-selected="true"],
+.ob-selection[aria-pressed="true"],
+.ob-selection[data-state="checked"],
+.ob-path-card.selected,
+.ob-path-card.is-selected,
+.ob-path-card[aria-selected="true"],
+.ob-path-card[data-state="checked"],
+.question-option.selected,
+.question-option[aria-selected="true"],
+.question-option[data-state="checked"],
+.selection-card.selected,
+.selection-card.is-selected,
+.selection-card[aria-selected="true"],
+.selection-card[data-state="checked"],
+.choice-card.selected,
+.choice-card.is-selected,
+.pref-level-btn.is-selected,
+.pref-goal-chip.is-active,
+.pref-min-btn.is-selected,
+.learning-path-level-tabs button.is-active,
+button.ob-selection.is-selected,
+button.ob-path-card.is-selected,
+label.question-option.selected,
+.ob-answer-grid button.is-selected,
+.ob-answer-grid button.selected {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+
+.answer-card.selected:hover,
+.answer-card.is-selected:hover,
+.ob-selection.selected:hover,
+.ob-selection.is-selected:hover,
+.question-option.selected:hover,
+.selection-card.selected:hover,
+.pref-level-btn.is-selected:hover,
+.pref-goal-chip.is-active:hover,
+.pref-min-btn.is-selected:hover,
+.learning-path-level-tabs button.is-active:hover {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+
+
+/* ==========================================================================
+   HOLAVIETNAMESE INTERACTION DESIGN SYSTEM
+   Standardizes interactive, active, clicked, and selected states to pure
+   white (#FFFFFF) with high-contrast text and warm brand orange borders.
+   ========================================================================== */
+
+/* 1. BUTTONS ON CLICK / PRESS / ACTIVE */
+button:not(:disabled):active,
+.button:not([aria-disabled="true"]):active,
+.btn-primary:not(:disabled):active,
+.auth-btn-primary:not(:disabled):active,
+.site-header__cta:active,
+.guest-topbar__cta:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border-color: #EA580C !important;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25) !important;
+}
+
+button:not(:disabled):active svg,
+.button:not([aria-disabled="true"]):active svg {
+  color: #EA580C !important;
+  stroke: #EA580C !important;
+}
+
+/* Secondary Buttons on Hover / Active / Focus */
+button.secondary:hover,
+.button.secondary:hover,
+button.secondary:active,
+.button.secondary:active,
+button.secondary:focus-visible,
+.button.secondary:focus-visible {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border-color: #EA580C !important;
+}
+
+/* Danger Buttons on Active / Click */
+button.danger:active,
+.button.danger:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #DC2626 !important;
+  border-color: #DC2626 !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25) !important;
+}
+
+/* 2. SIDEBAR & NAVIGATION ITEMS (Learner, Guest, Admin, Header) */
+.learner-sidebar__link.active,
+.learner-sidebar__link.is-active,
+.learner-sidebar__link[aria-current="page"],
+.guest-sidebar__link.active,
+.guest-sidebar__link.is-active,
+.guest-sidebar__link[aria-current="page"],
+.admin-nav-item.active,
+.admin-nav-item.is-active,
+.admin-nav-item[aria-current="page"],
+.site-nav__link.active,
+.site-nav__link.is-active,
+.site-nav__link[aria-current="page"],
+.main-nav a.active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border: 1.5px solid #EA580C !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 10px rgba(234, 88, 12, 0.12) !important;
+}
+
+.learner-sidebar__link.active svg,
+.learner-sidebar__link.active .sidebar-link__icon,
+.guest-sidebar__link.is-active svg,
+.guest-sidebar__link.is-active .sidebar-link__icon,
+.admin-nav-item.active svg,
+.site-nav__link.active svg {
+  color: #EA580C !important;
+  stroke: #EA580C !important;
+}
+
+.learner-sidebar__link:active,
+.guest-sidebar__link:active,
+.admin-nav-item:active,
+.site-nav__link:active,
+.main-nav a:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+}
+
+/* 3. TABS (UI Tabs, MyLearning Tabs, Admin Tabs, Roleplay/Category Tabs) */
+.ui-tabs button.active,
+.ui-tabs button[aria-selected="true"],
+.ui-tabs button[data-state="active"],
+.mylearning-tab-btn.active,
+.mylearning-tab-btn[aria-selected="true"],
+.category-tab-btn.active,
+.destination-pill-btn.active,
+.course-review-tabs button.is-active,
+.learning-path-level-tabs button.is-active,
+[role="tab"][aria-selected="true"] {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border-color: #EA580C !important;
+  font-weight: 700 !important;
+}
+
+.ui-tabs button:hover,
+.ui-tabs button:focus,
+.ui-tabs button:active,
+.mylearning-tab-btn:hover,
+.mylearning-tab-btn:active,
+.category-tab-btn:hover,
+.category-tab-btn:active,
+.destination-pill-btn:hover,
+.destination-pill-btn:active,
+[role="tab"]:hover,
+[role="tab"]:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+}
+
+/* 4. DROPDOWN ITEMS, MENU ITEMS, USER MENU */
+.user-menu__panel > a:hover,
+.user-menu__panel > a:focus,
+.user-menu__panel > a:active,
+.user-menu__logout:hover,
+.user-menu__logout:focus,
+.user-menu__logout:active,
+.dropdown-item:hover,
+.dropdown-item:active,
+.dropdown-item:focus,
+[role="menuitem"]:hover,
+[role="menuitem"]:focus,
+[role="menuitem"]:active,
+[role="option"]:hover,
+[role="option"]:focus,
+[role="option"]:active,
+[role="option"][aria-selected="true"],
+select option:checked {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  font-weight: 600 !important;
+}
+
+/* 5. FORM INPUTS & FOCUS RINGS */
+input:focus,
+select:focus,
+textarea:focus,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border-color: #EA580C !important;
+  outline: 2px solid rgba(234, 88, 12, 0.25) !important;
+  outline-offset: 1px !important;
+  color: #1E293B !important;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background-color: #FFFFFF !important;
+  accent-color: #EA580C !important;
+}
+
+/* 6. PAGINATION & FILTERS */
+.pagination button:hover,
+.pagination button:active,
+.pagination a:hover,
+.pagination a:active,
+.pagination button.active,
+.pagination a.active,
+.pagination .is-active,
+.filter-chip.active,
+.filter-chip:hover,
+.filter-chip:active,
+.explore-region-buttons button.active,
+.explore-region-buttons button:hover,
+.explore-region-buttons button:active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #EA580C !important;
+  border-color: #EA580C !important;
+  font-weight: 700 !important;
+}
+
+/* 7. ACCORDIONS & COLLAPSIBLES */
+summary:hover,
+summary:active,
+summary:focus,
+.accordion-trigger:hover,
+.accordion-trigger:active,
+.accordion-trigger:focus,
+.accordion-trigger[aria-expanded="true"] {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+}
+
+/* 8. AI ASSISTANT CHIPS & BUTTONS */
+.coursera-ai-chip:hover,
+.coursera-ai-chip:active,
+.coursera-ai-chip:focus,
+.prompt-chip:hover,
+.prompt-chip:active,
+.prompt-chip:focus,
+.prompt-chip.active,
+.mode-pill:hover,
+.mode-pill:active,
+.mode-pill.active,
+.tutor-history-item:hover,
+.tutor-history-item:active,
+.tutor-history-item.active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border-color: #EA580C !important;
+}
+
+/* 9. CLICKABLE CARDS ON HOVER, ACTIVE, SELECTED */
+.card-clickable:hover,
+.card-clickable:active,
+.card-clickable.is-selected,
+.card-clickable[aria-selected="true"],
+.journey-stop:hover,
+.journey-stop:active,
+.journey-stop.is-map-active {
+  background-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border-color: #EA580C !important;
+}
+
+
+/* Animations for Common Animate Components */
+@keyframes shimmerText {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+
+/* Learner Topbar AI Button Height Alignment */
+.learner-topbar__ai-btn,
+button.learner-topbar__ai-btn {
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 0 16px !important;
+  border-radius: 13px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+
+/* Language Switcher Hover Upgrade (matching Hola AI warm peach gradient) */
+.language-switcher button:not(.is-active):hover {
+  background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%) !important;
+  color: #c2410c !important;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.12) !important;
+}
+
+
+/* Active Language Switcher Button (preserves orange gradient on hover/active/focus, never turning dark red) */
+.language-switcher button.is-active,
+.language-switcher button.is-active:hover,
+.language-switcher button.is-active:focus,
+.language-switcher button.is-active:active,
+body .language-switcher button.is-active:hover,
+.admin-topbar .language-switcher button.is-active:hover,
+.learner-topbar .language-switcher button.is-active:hover {
+  background: linear-gradient(135deg, #ff7a00 0%, #ea580c 100%) !important;
+  background-color: #ea580c !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.28) !important;
+  opacity: 1 !important;
+}

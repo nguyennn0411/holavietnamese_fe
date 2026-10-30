@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import axios from 'axios';
 import { matchRoutes } from 'react-router-dom';
 import { ROUTES } from '../src/constants/routes.js';
-import { destinationDraft, destinationPayload, DESTINATION_STATUSES } from '../src/models/Destination.js';
+import { destinationDraft, destinationPayload, DESTINATION_STATUSES } from '../src/features/explore/models/Destination.js';
 
 const storage = new Map([['token', 'destination-contract-token']]);
 const redirects = [], calls = [], entries = [];
@@ -12,11 +12,11 @@ globalThis.localStorage = { getItem: key => storage.get(key) ?? null, removeItem
 globalThis.window = { location: { pathname: '/admin/destinations', search: '', assign: path => redirects.push(path) } };
 globalThis.__destinationContract = { axios };
 const load = source => import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
-const { default: client } = await load((await fs.readFile(new URL('../src/infrastructure/api/axiosClient.js', import.meta.url), 'utf8'))
+const { default: client } = await load((await fs.readFile(new URL('../src/shared/api/axiosClient.js', import.meta.url), 'utf8'))
   .replace("import axios from 'axios';", 'const { axios } = globalThis.__destinationContract;')
   .replace('import.meta.env.VITE_API_BASE_URL', '({}).VITE_API_BASE_URL'));
 globalThis.__destinationContract.client = client;
-const { destinationService, adminDestinationService } = await load((await fs.readFile(new URL('../src/services/destinationService.js', import.meta.url), 'utf8'))
+const { destinationService, adminDestinationService } = await load((await fs.readFile(new URL('../src/features/explore/api/destinationService.js', import.meta.url), 'utf8'))
   .replace(/import axiosClient from [^;]+;/, 'const axiosClient = globalThis.__destinationContract.client;'));
 let failureStatus = null, envelopeFailure = false;
 function reject(config, status, message) {

@@ -9,6 +9,7 @@ const records = [
 
 const fail = (status, message) => { const error = new Error(message); error.status = status; throw error; };
 export function requestDestination(path, body, options, fixtureMode) {
+  if (/^\/api\/destinations\/\d+\/content$/.test(path)) return { code: 1000, success: true, result: { cultureIds: [], regionalVariants: [], vocabulary: [], scenarios: [] } };
   const admin = path.startsWith('/api/admin/');
   const id = path.match(/\/(\d+)$/)?.[1];
   if (body) {

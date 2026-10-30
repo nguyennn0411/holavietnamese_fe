@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Ensure Vietnamese diacritics have breathing room and don't clip */
+  html {
+    font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@layer utilities {
+  /* 3D button active state helper */
+  .btn-3d {
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .btn-3d:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* Vietnamese diacritics readability helper */
+  .vn-diacritic-safe {
+    line-height: 1.45;
+    padding-top: 0.15em;
+    padding-bottom: 0.15em;
+  }
+}
