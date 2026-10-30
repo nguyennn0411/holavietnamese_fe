@@ -256,7 +256,7 @@ function LessonScreen({ courseId, lessonId }) {
                     nextLessonId={lesson.nextLessonId}
                     onNextLesson={() => {
                       if (lesson.nextLessonId) {
-                        navigate(`/courses/${courseId}/lesson/${lesson.nextLessonId}`);
+                        navigate(`/courses/${courseId}/lessons/${lesson.nextLessonId}`);
                       }
                     }}
                     fallback={

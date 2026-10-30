@@ -92,18 +92,47 @@ test('API failure propagates to UI rather than being converted to successful dat
   assert.equal(fixture.session,original);
 });
 
-test('Active routes keep their paths; retired vocabulary classification has no route', async () => {
+test('Active routes keep their paths except for canonical course learning routes', async () => {
   const original=execFileSync('git',['show','HEAD:src/constants/routes.js'],{encoding:'utf8'});
   const current=await fs.readFile(new URL('../src/constants/routes.js',import.meta.url),'utf8');
   const routeMap=text=>Object.fromEntries([...text.matchAll(/(\w+):\s*'([^']+)'/g)].map(([,key,path])=>[key,path]));
   const before=routeMap(original), after=routeMap(current);
+  const canonicalCourseRoutes = {
+    LEARN_RESUME: '/courses/:courseId/learn',
+    LEARN_LESSON: '/courses/:courseId/lessons/:lessonId',
+    COURSE_LESSON_QUIZ: '/courses/:courseId/lessons/:lessonId/quizzes/:quizId',
+    COURSE_LESSON_QUIZ_ATTEMPT: '/courses/:courseId/lessons/:lessonId/quiz-attempts/:attemptId',
+    COURSE_LESSON_QUIZ_RESULT: '/courses/:courseId/lessons/:lessonId/quiz-attempts/:attemptId/result',
+  };
+  const canonicalContentRoutes = {
+    ADMIN_COURSES: ['CONTENT_COURSES', '/content/courses'],
+    ADMIN_COURSE_CREATE: ['CONTENT_COURSE_CREATE', '/content/courses/new'],
+    ADMIN_COURSE_BUILDER: ['CONTENT_COURSE_BUILDER', '/content/courses/:courseId'],
+    ADMIN_COURSE_PREVIEW: ['CONTENT_COURSE_PREVIEW', '/content/courses/:courseId/preview'],
+    ADMIN_LESSONS: ['CONTENT_LESSONS', '/content/lessons'],
+    ADMIN_LESSON_BUILDER: ['CONTENT_LESSON_BUILDER', '/content/lessons/:lessonId'],
+    ADMIN_LESSON_PREVIEW: ['CONTENT_LESSON_PREVIEW', '/content/lessons/:lessonId/preview'],
+    ADMIN_QUESTIONS: ['CONTENT_QUESTIONS', '/content/questions'],
+    ADMIN_QUIZZES: ['CONTENT_QUIZZES', '/content/quizzes'],
+    ADMIN_QUIZ_BUILDER: ['CONTENT_QUIZ_BUILDER', '/content/quizzes/:quizId'],
+    ADMIN_QUIZ_PREVIEW: ['CONTENT_QUIZ_PREVIEW', '/content/quizzes/:quizId/preview'],
+  };
   for(const [key,path] of Object.entries(before)) {
     if (key === 'ADMIN_VOCABULARY_TOPICS') assert.equal(after[key],undefined);
+    else if (canonicalCourseRoutes[key]) assert.equal(after[key],canonicalCourseRoutes[key],key);
+    else if (canonicalContentRoutes[key]) {
+      const [newKey, newPath] = canonicalContentRoutes[key];
+      assert.equal(after[key], undefined, `${key} is replaced by ${newKey}`);
+      assert.equal(after[newKey], newPath, newKey);
+    }
     else assert.equal(after[key],path,key);
   }
   const app=await fs.readFile(new URL('../src/app/router/AppRouter.jsx',import.meta.url),'utf8');
   for(const key of Object.keys(after)) assert.ok(app.includes(`ROUTES.${key}`),`${key} has a Route`);
-  for (const key of ['VOCABULARY_REVIEW','EXPLORE','DESTINATION_DETAIL','BLOG','BLOG_DETAIL','QUIZ','QUIZ_ATTEMPT','QUIZ_RESULT','ADMIN_COURSES','ADMIN_COURSE_BUILDER','ADMIN_COURSE_PREVIEW','ADMIN_LESSONS','ADMIN_LESSON_BUILDER','ADMIN_LESSON_PREVIEW','ADMIN_QUESTIONS','ADMIN_QUIZZES','ADMIN_QUIZ_BUILDER','ADMIN_QUIZ_PREVIEW']) {
+  for (const legacyPath of ['/learn/:courseId','/learn/:courseId/lesson/:lessonId','/courses/:courseId/lesson/:lessonId']) {
+    assert.ok(app.includes(`path="${legacyPath}"`), `${legacyPath} keeps a compatibility redirect`);
+  }
+  for (const key of ['VOCABULARY_REVIEW','EXPLORE','DESTINATION_DETAIL','BLOG','BLOG_DETAIL','QUIZ','QUIZ_ATTEMPT','QUIZ_RESULT','CONTENT_COURSES','CONTENT_COURSE_BUILDER','CONTENT_COURSE_PREVIEW','CONTENT_LESSONS','CONTENT_LESSON_BUILDER','CONTENT_LESSON_PREVIEW','CONTENT_QUESTIONS','CONTENT_QUIZZES','CONTENT_QUIZ_BUILDER','CONTENT_QUIZ_PREVIEW']) {
     assert.ok(after[key], `${key} is available`);
   }
 });

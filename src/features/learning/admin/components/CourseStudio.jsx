@@ -40,7 +40,7 @@ const slugify = value => String(value || '').normalize('NFD').replace(/[\u0300-\
 
 export function AdminCourseCreatePage() {
   const { isContentManager, isAdmin } = useAuth();
-  if (!isContentManager || isAdmin) return <Notice><BilingualText vi="Bạn cần tài khoản Content Manager để tạo khóa học." en="You need a Content Manager account to create courses." /> <Link to="/admin/courses"><BilingualText vi="Về danh sách" en="Back to list" /></Link></Notice>;
+  if (!isContentManager || isAdmin) return <Notice><BilingualText vi="Bạn cần tài khoản Content Manager để tạo khóa học." en="You need a Content Manager account to create courses." /> <Link to="/content/courses"><BilingualText vi="Về danh sách" en="Back to list" /></Link></Notice>;
   return <CourseStudio />;
 }
 
@@ -112,7 +112,7 @@ export function CourseStudio({ course, reload = () => {} }) {
       setModal({ kind: 'linkFinalQuiz', quiz });
       await contentService.setFinalAssessment(course.id, quiz.id);
       setModal(null);
-      navigate(`/admin/quizzes/${quiz.id}?newQuestion=1`);
+      navigate(`/content/quizzes/${quiz.id}?newQuestion=1`);
       return;
     }
     setModal(null); reload(); readiness.reload(); setMessage(label('Đã lưu nội dung.'));
@@ -126,7 +126,7 @@ export function CourseStudio({ course, reload = () => {} }) {
   }
 
   return <section className="course-studio">
-    <Link className="studio-back" to="/admin/courses" onClick={event => { if (dirty.current && !window.confirm(label('Bỏ những thay đổi chưa lưu?'))) event.preventDefault(); }}><ArrowLeft size={16} /> <BilingualText>{"Tất cả khóa học"}</BilingualText></Link>
+    <Link className="studio-back" to="/content/courses" onClick={event => { if (dirty.current && !window.confirm(label('Bỏ những thay đổi chưa lưu?'))) event.preventDefault(); }}><ArrowLeft size={16} /> <BilingualText>{"Tất cả khóa học"}</BilingualText></Link>
     <header className="studio-header">
       <div>
         <p className="studio-eyebrow"><BilingualText>{"KHÔNG GIAN BIÊN SOẠN"}</BilingualText></p>
@@ -225,16 +225,16 @@ export function CourseStudio({ course, reload = () => {} }) {
             <div className="studio-lessons">{(module.lessons || []).map((lesson, lessonIndex) => <div className="studio-lesson" key={lesson.id}>
               <span className="studio-lesson-number">{String(lessonIndex + 1).padStart(2, '0')}</span>
               <div className="studio-lesson-title">
-                <Link to={canEdit ? `/admin/lessons/${lesson.id}` : `/admin/lessons/${lesson.id}/preview`}>
+                <Link to={canEdit ? `/content/lessons/${lesson.id}` : `/content/lessons/${lesson.id}/preview`}>
                   <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
                 </Link>
                 <small><Clock size={12} /> {lesson.estimatedMinutes || 0} <BilingualText vi="phút" en="min" /> <span className={`studio-status studio-status--${lesson.status}`}><BilingualText>{statusNames[lesson.status] || lesson.status}</BilingualText></span></small>
               </div>
               <div className="studio-lesson-actions">
-                <Link className="studio-icon-link" aria-label={label(`Xem trước ${lesson.titleVi || lesson.title}`)} to={`/admin/lessons/${lesson.id}/preview`}><Eye size={17} /></Link>
+                <Link className="studio-icon-link" aria-label={label(`Xem trước ${lesson.titleVi || lesson.title}`)} to={`/content/lessons/${lesson.id}/preview`}><Eye size={17} /></Link>
                 {canEdit && <>
                   <button className="secondary" disabled={busy} onClick={() => editLesson(lesson)}><BilingualText>{"Sửa"}</BilingualText></button>
-                  <Link className="button secondary" to={`/admin/lessons/${lesson.id}`}><BilingualText>{"Nội dung"}</BilingualText> <ArrowRight size={14} /></Link>
+                  <Link className="button secondary" to={`/content/lessons/${lesson.id}`}><BilingualText>{"Nội dung"}</BilingualText> <ArrowRight size={14} /></Link>
                   {module.id !== 0 && <>
                     <button className="secondary studio-icon-button" aria-label={label(`Đưa bài ${lessonIndex + 1} lên`)} disabled={busy || lessonIndex === 0} onClick={() => mutate(() => contentService.reorder(`modules/${module.id}/lessons`, moveItem(module.lessons.map(l => l.id), lessonIndex, -1)))}><ChevronUp size={15} /></button>
                     <button className="secondary studio-icon-button" aria-label={label(`Đưa bài ${lessonIndex + 1} xuống`)} disabled={busy || lessonIndex === module.lessons.length - 1} onClick={() => mutate(() => contentService.reorder(`modules/${module.id}/lessons`, moveItem(module.lessons.map(l => l.id), lessonIndex, 1)))}><ChevronDown size={15} /></button>
@@ -252,7 +252,7 @@ export function CourseStudio({ course, reload = () => {} }) {
               </div>
               {canEdit && !course.finalAssessmentQuizId && <button className="secondary" disabled={busy || !lessons.length} onClick={() => setModal({ kind: 'finalQuiz' })}><Plus size={16} /> <BilingualText>{"Tạo quiz cuối khóa"}</BilingualText></button>}
             </div>
-            {course.finalAssessmentQuizId ? <Link className="text-link" to={`/admin/quizzes/${course.finalAssessmentQuizId}`}><BilingualText>{"Quản lý câu hỏi và đáp án của quiz cuối khóa"}</BilingualText> <ArrowRight size={15} /></Link> : <small><BilingualText>{"Thêm ít nhất một bài học để tạo quiz tổng kết."}</BilingualText></small>}
+            {course.finalAssessmentQuizId ? <Link className="text-link" to={`/content/quizzes/${course.finalAssessmentQuizId}`}><BilingualText>{"Quản lý câu hỏi và đáp án của quiz cuối khóa"}</BilingualText> <ArrowRight size={15} /></Link> : <small><BilingualText>{"Thêm ít nhất một bài học để tạo quiz tổng kết."}</BilingualText></small>}
           </section>
         </>}
         {step === 'preview' && <CoursePreview course={course} />}
@@ -336,7 +336,7 @@ export function CourseStudio({ course, reload = () => {} }) {
       </aside>}
     </div>
     {canEdit && modal && modal.kind !== 'linkFinalQuiz' && <Modal title={label(modal.kind === 'module' ? (modal.initial?.id ? 'Chỉnh sửa học phần' : 'Thêm học phần') : modal.kind === 'finalQuiz' ? 'Tạo quiz cuối khóa' : (modal.initial?.id ? 'Chỉnh sửa bài học' : 'Thêm bài học'))} busy={busy} onClose={() => setModal(null)}><ContentForm kind={modal.kind === 'module' ? 'modules' : modal.kind === 'finalQuiz' ? 'quizzes' : 'lessons'} initial={modal.kind === 'finalQuiz' ? { quizType: 'COURSE', courseId: course.id, lessonId: lessons.at(-1)?.id, passingScore: 70 } : modal.initial || {}} fixedFields={modal.kind === 'finalQuiz' ? ['quizType', 'courseId', 'lessonId'] : []} onCancel={() => setModal(null)} onSave={saveModal} onBusyChange={setBusy} /></Modal>}
-    {modal?.kind === 'linkFinalQuiz' && <Modal title={label("Hoàn tất liên kết quiz")} busy={busy} onClose={() => { setModal(null); reload(); }}><p><BilingualText vi="Quiz đã được tạo. Nếu liên kết chưa hoàn tất, bạn có thể thử lại mà không tạo thêm quiz." en="Quiz has been created. If linking did not finish, you can retry without creating duplicates." /></p><button disabled={busy} onClick={() => mutate(async () => { await contentService.setFinalAssessment(course.id, modal.quiz.id); navigate(`/admin/quizzes/${modal.quiz.id}?newQuestion=1`); })}><BilingualText vi="Liên kết và thêm câu hỏi" en="Link and add questions" /></button><Link to={`/admin/quizzes/${modal.quiz.id}`}><BilingualText vi="Mở quiz đã tạo" en="Open created quiz" /></Link></Modal>}
+    {modal?.kind === 'linkFinalQuiz' && <Modal title={label("Hoàn tất liên kết quiz")} busy={busy} onClose={() => { setModal(null); reload(); }}><p><BilingualText vi="Quiz đã được tạo. Nếu liên kết chưa hoàn tất, bạn có thể thử lại mà không tạo thêm quiz." en="Quiz has been created. If linking did not finish, you can retry without creating duplicates." /></p><button disabled={busy} onClick={() => mutate(async () => { await contentService.setFinalAssessment(course.id, modal.quiz.id); navigate(`/content/quizzes/${modal.quiz.id}?newQuestion=1`); })}><BilingualText vi="Liên kết và thêm câu hỏi" en="Link and add questions" /></button><Link to={`/content/quizzes/${modal.quiz.id}`}><BilingualText vi="Mở quiz đã tạo" en="Open created quiz" /></Link></Modal>}
   </section>;
 }
 
@@ -373,7 +373,7 @@ function CourseWorkbookPanel({ canImport, importedCourseId, busy, onBusyChange, 
     <div className="studio-workbook-actions">
       <button className="secondary" type="button" disabled={locked} onClick={() => run(async () => downloadWorkbook(await contentService.courseWorkbookTemplate(), 'course-studio-template.xlsx'))}><Download size={16} /> <BilingualText vi="Tải file Excel mẫu" en="Download Excel template" /></button>
     </div>
-    {importedCourseId && <Notice kind="success"><strong><BilingualText vi="Đã tạo khóa học nháp từ file Excel." en="Draft course created from Excel file." /></strong><div className="studio-workbook-success-actions"><Link className="button" to={`/admin/courses/${importedCourseId}`}><BilingualText vi="Chỉnh sửa khóa học" en="Edit course" /> <ArrowRight size={15} /></Link><Link className="button secondary" to="/admin/courses"><BilingualText vi="Về danh sách khóa học" en="Back to courses list" /></Link></div></Notice>}
+    {importedCourseId && <Notice kind="success"><strong><BilingualText vi="Đã tạo khóa học nháp từ file Excel." en="Draft course created from Excel file." /></strong><div className="studio-workbook-success-actions"><Link className="button" to={`/content/courses/${importedCourseId}`}><BilingualText vi="Chỉnh sửa khóa học" en="Edit course" /> <ArrowRight size={15} /></Link><Link className="button secondary" to="/content/courses"><BilingualText vi="Về danh sách khóa học" en="Back to courses list" /></Link></div></Notice>}
     {canImport && <>
       <label className="studio-workbook-file"><span><BilingualText vi="Chọn file Excel đã điền (.xlsx, tối đa 10 MB)" en="Select completed Excel file (.xlsx, max 10 MB)" /></span><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled={locked} onChange={event => { setFile(event.target.files?.[0] || null); setPreview(null); setError(''); }} /></label>
       <div className="studio-workbook-actions">

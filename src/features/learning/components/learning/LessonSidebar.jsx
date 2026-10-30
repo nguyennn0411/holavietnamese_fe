@@ -170,7 +170,7 @@ export function LessonSidebar({
               >
                 <Link
                   aria-current={isCurrent ? 'page' : undefined}
-                  to={`/learn/${courseId}/lesson/${lesson.id}`}
+                  to={`/courses/${courseId}/lessons/${lesson.id}`}
                   onClick={() => onClose?.()}
                   className={`group relative flex items-center justify-between gap-3 p-3 rounded-2xl text-xs sm:text-sm transition-all no-underline ${
                     isCurrent

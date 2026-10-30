@@ -58,7 +58,7 @@ export function LearnerDashboard({ user }) {
   const displayName = user?.fullName || user?.username || t('dashboard.learner');
   const lessonId = currentLesson?.lessonId ?? currentLesson?.id;
   const courseId = currentLesson?.courseId;
-  const continueTo = courseId && lessonId ? `/learn/${courseId}/lesson/${lessonId}` : courseId ? `/learn/${courseId}` : '/learning-path';
+  const continueTo = courseId && lessonId ? `/courses/${courseId}/lessons/${lessonId}` : courseId ? `/courses/${courseId}/learn` : '/learning-path';
   const activities = Array.isArray(progress?.recentActivities) ? progress.recentActivities : [];
   const quests = Array.isArray(progress?.dailyChallenges) ? progress.dailyChallenges : [];
 

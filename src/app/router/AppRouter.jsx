@@ -1,6 +1,6 @@
 import { BilingualText } from '@/shared/components/common/BilingualText';
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { generatePath, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { RequireAuth } from '@/shared/components/common/RequireAuth';
 import { RequireLearningPathOnboarding } from '@/shared/components/common/RequireLearningPathOnboarding';
 import { AdminRoute } from '@/shared/components/common/AdminRoute';
@@ -45,7 +45,6 @@ const LearningPathPage = lazy(() => import('@/features/learning/pages/learning-p
 const CourseListPage = lazy(() => import('@/features/learning/pages/courses/CourseListPage').then(module => ({ default: module.CourseListPage })));
 const AlphabetPage = lazy(() => import('@/features/alphabet/AlphabetPage').then(module => ({ default: module.AlphabetPage })));
 const CourseDetailPage = lazy(() => import('@/features/learning/pages/courses/CourseDetailPage').then(module => ({ default: module.CourseDetailPage })));
-const MyCoursesPage = lazy(() => import('@/features/learning/pages/my-courses/MyCoursesPage').then(module => ({ default: module.MyCoursesPage })));
 const LessonLearningPage = lazy(() => import('@/features/learning/pages/learning/LessonLearningPage').then(module => ({ default: module.LessonLearningPage })));
 const ResumeCoursePage = lazy(() => import('@/features/learning/pages/learning/ResumeCoursePage').then(module => ({ default: module.ResumeCoursePage })));
 const VocabularyNotebookPage = lazy(() => import('@/features/vocabulary/pages/VocabularyNotebookPage').then(module => ({ default: module.VocabularyNotebookPage })));
@@ -105,6 +104,12 @@ const AdminQuestionBankPage = lazy(() => import('@/features/learning/admin/Admin
 const AdminQuizBuilderPage = lazy(() => import('@/features/learning/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizBuilderPage })));
 const AdminQuizPreviewPage = lazy(() => import('@/features/learning/admin/AdminQuizPages').then(module => ({ default: module.AdminQuizPreviewPage })));
 
+function LegacyRouteRedirect({ to }) {
+  const params = useParams();
+  const location = useLocation();
+  return <Navigate to={`${generatePath(to, params)}${location.search}${location.hash}`} replace />;
+}
+
 export function AppRouter() {
   return (
     <>
@@ -157,7 +162,7 @@ export function AppRouter() {
                 <Route path={ROUTES.COURSE_DETAIL} element={<CourseDetailPage />} />
                 <Route path={ROUTES.EDTECH_VOCABULARY} element={<Navigate to={ROUTES.VOCABULARY} replace />} />
                 <Route path={ROUTES.MY_LEARNING} element={<MyLearningPage />} />
-                <Route path={ROUTES.MY_COURSES} element={<MyCoursesPage />} />
+                <Route path={ROUTES.MY_COURSES} element={<Navigate to={ROUTES.MY_LEARNING} replace />} />
                 <Route path={ROUTES.VOCABULARY} element={<VocabularyCatalogPage />} />
                 <Route path={ROUTES.VOCABULARY_CATALOG_DETAIL} element={<VocabularyDetailPage />} />
                 <Route path={ROUTES.VOCABULARY_NOTEBOOK} element={<VocabularyNotebookPage />} />
@@ -193,11 +198,18 @@ export function AppRouter() {
                 <Route path={ROUTES.COURSE_QUIZ_ATTEMPT} element={<QuizAttemptPage />} />
                 <Route path={ROUTES.COURSE_LESSON_QUIZ} element={<QuizPage />} />
                 <Route path={ROUTES.COURSE_QUIZ} element={<QuizPage />} />
-                <Route path="/courses/:courseId/lesson/:lessonId/quiz/:quizId" element={<QuizPage />} />
-                <Route path="/courses/:courseId/quiz/:quizId" element={<QuizPage />} />
                 <Route path={ROUTES.QUIZ} element={<QuizPage />} />
                 <Route path={ROUTES.QUIZ_ATTEMPT} element={<QuizAttemptPage />} />
                 <Route path={ROUTES.QUIZ_RESULT} element={<QuizResultPage />} />
+                {/* Backward-compatible aliases. New links must use the canonical plural resource paths above. */}
+                <Route path="/learn/:courseId" element={<LegacyRouteRedirect to={ROUTES.LEARN_RESUME} />} />
+                <Route path="/learn/:courseId/lesson/:lessonId" element={<LegacyRouteRedirect to={ROUTES.LEARN_LESSON} />} />
+                <Route path="/courses/:courseId/lesson/:lessonId" element={<LegacyRouteRedirect to={ROUTES.LEARN_LESSON} />} />
+                <Route path="/courses/:courseId/lesson/:lessonId/quizzes/:quizId" element={<LegacyRouteRedirect to={ROUTES.COURSE_LESSON_QUIZ} />} />
+                <Route path="/courses/:courseId/lesson/:lessonId/quiz-attempts/:attemptId" element={<LegacyRouteRedirect to={ROUTES.COURSE_LESSON_QUIZ_ATTEMPT} />} />
+                <Route path="/courses/:courseId/lesson/:lessonId/quiz-attempts/:attemptId/result" element={<LegacyRouteRedirect to={ROUTES.COURSE_LESSON_QUIZ_RESULT} />} />
+                <Route path="/courses/:courseId/lesson/:lessonId/quiz/:quizId" element={<LegacyRouteRedirect to={ROUTES.COURSE_LESSON_QUIZ} />} />
+                <Route path="/courses/:courseId/quiz/:quizId" element={<LegacyRouteRedirect to={ROUTES.COURSE_QUIZ} />} />
               </Route>
 
               <Route path="*" element={<NotFoundPage />} />
@@ -206,17 +218,28 @@ export function AppRouter() {
             {/* Admin Area (Người 1) */}
             <Route element={<AdminRoute />}>
               <Route element={<AdminLayout />}>
-                <Route path={ROUTES.ADMIN_COURSES} element={<AdminContentListPage kind="courses" />} />
-                <Route path={ROUTES.ADMIN_COURSE_CREATE} element={<AdminCourseCreatePage />} />
-                <Route path={ROUTES.ADMIN_COURSE_BUILDER} element={<AdminCourseBuilderPage />} />
-                <Route path={ROUTES.ADMIN_COURSE_PREVIEW} element={<AdminCoursePreviewPage />} />
-                <Route path={ROUTES.ADMIN_LESSONS} element={<AdminContentListPage kind="lessons" />} />
-                <Route path={ROUTES.ADMIN_LESSON_BUILDER} element={<AdminLessonBuilderPage />} />
-                <Route path={ROUTES.ADMIN_LESSON_PREVIEW} element={<AdminLessonPreviewPage />} />
-                <Route path={ROUTES.ADMIN_QUESTIONS} element={<AdminQuestionBankPage />} />
-                <Route path={ROUTES.ADMIN_QUIZZES} element={<AdminContentListPage kind="quizzes" />} />
-                <Route path={ROUTES.ADMIN_QUIZ_BUILDER} element={<AdminQuizBuilderPage />} />
-                <Route path={ROUTES.ADMIN_QUIZ_PREVIEW} element={<AdminQuizPreviewPage />} />
+                <Route path={ROUTES.CONTENT_COURSES} element={<AdminContentListPage kind="courses" />} />
+                <Route path={ROUTES.CONTENT_COURSE_CREATE} element={<AdminCourseCreatePage />} />
+                <Route path={ROUTES.CONTENT_COURSE_BUILDER} element={<AdminCourseBuilderPage />} />
+                <Route path={ROUTES.CONTENT_COURSE_PREVIEW} element={<AdminCoursePreviewPage />} />
+                <Route path={ROUTES.CONTENT_LESSONS} element={<AdminContentListPage kind="lessons" />} />
+                <Route path={ROUTES.CONTENT_LESSON_BUILDER} element={<AdminLessonBuilderPage />} />
+                <Route path={ROUTES.CONTENT_LESSON_PREVIEW} element={<AdminLessonPreviewPage />} />
+                <Route path={ROUTES.CONTENT_QUESTIONS} element={<AdminQuestionBankPage />} />
+                <Route path={ROUTES.CONTENT_QUIZZES} element={<AdminContentListPage kind="quizzes" />} />
+                <Route path={ROUTES.CONTENT_QUIZ_BUILDER} element={<AdminQuizBuilderPage />} />
+                <Route path={ROUTES.CONTENT_QUIZ_PREVIEW} element={<AdminQuizPreviewPage />} />
+                <Route path="/admin/courses" element={<LegacyRouteRedirect to={ROUTES.CONTENT_COURSES} />} />
+                <Route path="/admin/courses/new" element={<LegacyRouteRedirect to={ROUTES.CONTENT_COURSE_CREATE} />} />
+                <Route path="/admin/courses/:courseId" element={<LegacyRouteRedirect to={ROUTES.CONTENT_COURSE_BUILDER} />} />
+                <Route path="/admin/courses/:courseId/preview" element={<LegacyRouteRedirect to={ROUTES.CONTENT_COURSE_PREVIEW} />} />
+                <Route path="/admin/lessons" element={<LegacyRouteRedirect to={ROUTES.CONTENT_LESSONS} />} />
+                <Route path="/admin/lessons/:lessonId" element={<LegacyRouteRedirect to={ROUTES.CONTENT_LESSON_BUILDER} />} />
+                <Route path="/admin/lessons/:lessonId/preview" element={<LegacyRouteRedirect to={ROUTES.CONTENT_LESSON_PREVIEW} />} />
+                <Route path="/admin/questions" element={<LegacyRouteRedirect to={ROUTES.CONTENT_QUESTIONS} />} />
+                <Route path="/admin/quizzes" element={<LegacyRouteRedirect to={ROUTES.CONTENT_QUIZZES} />} />
+                <Route path="/admin/quizzes/:quizId" element={<LegacyRouteRedirect to={ROUTES.CONTENT_QUIZ_BUILDER} />} />
+                <Route path="/admin/quizzes/:quizId/preview" element={<LegacyRouteRedirect to={ROUTES.CONTENT_QUIZ_PREVIEW} />} />
                 <Route path={ROUTES.ADMIN_VOCABULARY} element={<AdminVocabularyPage />} />
                 <Route path={ROUTES.ADMIN_REGIONAL_LANGUAGE} element={<AdminRegionalLanguagePage />} />
                 <Route path={ROUTES.ADMIN_IMPORT} element={<AdminImportPage />} />

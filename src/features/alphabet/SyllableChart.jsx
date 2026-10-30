@@ -1,7 +1,7 @@
 import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { useState } from "react";
 import { Headphones, RotateCcw, Square, Volume2 } from "lucide-react";
-import { AUDIO_BASE, usePronunciationPlayer } from "./pronunciation";
+import { getVietSyllablesAudioUrl, usePronunciationPlayer } from "./pronunciation";
 
 const finals = [
   ["a", "a", "simple"], ["e", "ɛ", "simple"], ["ê", "e", "simple"],
@@ -29,7 +29,7 @@ const recorded = {
   h: "ffffffffff", k: "30300f020e", kh: "fffffffdff",
   l: "ffffffffff", m: "fffffffeff", n: "ffffefffff",
   ng: "cfcff0fdf1", ngh: "30300f000e", nh: "fffffffdff",
-  p: "f0f00004d", ph: "ffffeffcff", qu: "3f1f03fc1b",
+  p: "0f0f00004d", ph: "ffffeffcff", qu: "3f1f03fc1b",
   r: "ffffe7fcff", s: "fffff7ffff", t: "fffff7ffff",
   th: "ffffffffff", tr: "ffffeffdff", v: "ffffe7efff",
   x: "fffffdffff",
@@ -59,26 +59,31 @@ function syllableFor(initial, final) {
 export function SyllableChart() {
   const { current, status, error, playQueue, stop, queueRef } = usePronunciationPlayer();
   const [filters, setFilters] = useState(["simple", "complex"]);
-  const [enabledTones, setEnabledTones] = useState(tones.map(([id]) => id));
+  const [enabledTones, setEnabledTones] = useState([]);
 
   function playSyllable(initial, final, category) {
     const selected = tones.filter(([id]) => enabledTones.includes(id) &&
       (category !== "stop" || ["acute", "dot"].includes(id)));
-    const audibleTones = selected.length ? selected : tones.filter(([id]) =>
-      id === (category === "stop" ? "acute" : "none"));
+    if (!selected.length) return;
     const syllable = syllableFor(initial, final);
-    playQueue(audibleTones.map(([id, label]) => ({
+    playQueue(selected.map(([id, label]) => ({
       key: `${initial}-${final}-${id}`,
       syllable,
       tone: label,
       toneId: id,
-      url: `${AUDIO_BASE}/${encodeURIComponent(initial)}/${encodeURIComponent(final)}_${id}.mp3`,
+      url: getVietSyllablesAudioUrl(initial, final, id),
     })));
   }
 
   function toggle(value, setter) {
     setter((values) => values.includes(value)
       ? values.filter((item) => item !== value) : [...values, value]);
+  }
+
+  function toggleTone(id) {
+    stop();
+    queueRef.current = [];
+    toggle(id, setEnabledTones);
   }
 
   const visibleFinals = finals.filter(([, , category]) => filters.includes(category));
@@ -100,10 +105,10 @@ export function SyllableChart() {
           {tones.map(([id, label, mark, labelEn]) => <button type="button" key={id}
             className={`syllable-tone${enabledTones.includes(id) ? " active" : ""}`}
             aria-label={`${label} (${mark})`} aria-pressed={enabledTones.includes(id)}
-            onClick={() => toggle(id, setEnabledTones)}><strong>{mark}</strong><small><BilingualText vi={label} en={labelEn} /></small></button>)}
+            onClick={() => toggleTone(id)}><strong>{mark}</strong><small><BilingualText vi={label} en={labelEn} /></small></button>)}
         </div>
       </div>
-      <p className="syllable-hint"><BilingualText vi="Kéo ngang để xem thêm vần ↔ · Bỏ hết dấu vẫn nghe thanh ngang; vần kết thúc bằng p, t, c, ch dùng thanh sắc." en="Scroll horizontally for more rhymes ↔ · Flat tone without marks; syllables ending in p, t, c, ch use rising tone." /></p>
+      <p className="syllable-hint"><BilingualText vi="Kéo ngang để xem thêm vần ↔ · Chọn ít nhất một thanh trước khi nghe; vần kết thúc bằng p, t, c, ch chỉ dùng thanh sắc hoặc thanh nặng." en="Scroll horizontally for more rhymes ↔ · Select at least one tone before listening; syllables ending in p, t, c, ch use only acute or dot tones." /></p>
       {visibleFinals.length ? <div className="syllable-table-scroll" role="region" aria-label={bilingualLabel("Bảng ghép phụ âm và vần", "Consonant and rhyme combination chart")} tabIndex={0}>
         <table className="syllable-table"><thead><tr><th className="syllable-corner" scope="col"><BilingualText vi={<>Vần →<br />Âm đầu ↓</>} en={<>Rhyme →<br />Initial ↓</>} /></th>
           {visibleFinals.map(([value, ipa, category]) => <th key={value} scope="col" className={`syllable-head-${category}`}><strong>{value}</strong><small>/{ipa}/</small></th>)}
@@ -111,19 +116,15 @@ export function SyllableChart() {
           {visibleFinals.map(([value, , category]) => <td key={value} className={`syllable-cell-${category}`}>
             {isAvailable(initial, value) && <button type="button"
               className={`syllable-cell-button${current?.key.startsWith(`${initial}-${value}-`) ? " selected" : ""}`}
+              disabled={!enabledTones.some((id) => category !== "stop" || ["acute", "dot"].includes(id))}
               aria-label={`Nghe ${syllableFor(initial, value)} với các thanh đã chọn`}
               onClick={() => playSyllable(initial, value, category)}>{syllableFor(initial, value)}</button>}
           </td>)}
         </tr>)}</tbody></table>
       </div> : <div className="syllable-empty"><BilingualText vi="Chọn ít nhất một nhóm vần để xem bảng âm." en="Select at least one rhyme group to view the chart." /></div>}
-        <div className="syllable-bottom"><div className="syllable-now"><Volume2 size={20} aria-hidden="true" /><span role="status" aria-live="polite"><strong>{current ? <><BilingualText vi={status === "loading" ? "Đang tải" : status === "playing" ? "Đang phát" : "Đã chọn"} en={status === "loading" ? "Loading" : status === "playing" ? "Playing" : "Selected"} />: {current.syllable}</> : <BilingualText vi="Chọn một ô để bắt đầu nghe" en="Click a cell to start listening" />}</strong><small>{current ? <>{current.tone} · {current.index}/{current.total} · {current.fallback ? <BilingualText vi="Giọng tổng hợp trên thiết bị" en="Device synthesized voice" /> : <BilingualText vi="Giọng Hà Nội" en="Hanoi voice" />}</> : <BilingualText vi="Âm tiết sẽ phát theo các thanh bạn đã chọn." en="Syllables will play with your selected tones." />}</small></span></div>
+        <div className="syllable-bottom"><div className="syllable-now"><Volume2 size={20} aria-hidden="true" /><span role="status" aria-live="polite"><strong>{current ? <><BilingualText vi={status === "loading" ? "Đang tải" : status === "playing" ? "Đang phát" : "Đã chọn"} en={status === "loading" ? "Loading" : status === "playing" ? "Playing" : "Selected"} />: {current.syllable}</> : enabledTones.length ? <BilingualText vi="Chọn một ô để bắt đầu nghe" en="Click a cell to start listening" /> : <BilingualText vi="Chọn ít nhất một thanh điệu" en="Select at least one tone" />}</strong><small>{current ? <>{current.tone} · {current.index}/{current.total} · {current.fallback ? <BilingualText vi="Giọng tổng hợp trên thiết bị" en="Device synthesized voice" /> : <BilingualText vi="Giọng Hà Nội" en="Hanoi voice" />}</> : <BilingualText vi="Âm tiết chỉ phát theo các thanh đang được chọn." en="Syllables play only with the selected tones." />}</small></span></div>
         <div className="syllable-actions"><button type="button" disabled={!queueRef.current.length} onClick={() => playQueue(queueRef.current)}><RotateCcw size={16} aria-hidden="true" /> <BilingualText vi="Nghe lại" en="Replay" /></button><button type="button" disabled={status !== "loading" && status !== "playing"} onClick={stop}><Square size={15} aria-hidden="true" /> <BilingualText vi="Dừng" en="Stop" /></button></div></div>
       {error && <p className="syllable-error" role="alert">{error}</p>}
-      <p className="syllable-credit">
-    <BilingualText vi="Âm mẫu từ " en="Sample audio from " />
-    <a href="https://vietsyllables.com/" target="_blank" rel="noreferrer">VietSyllables</a>
-    <BilingualText vi=". Nếu nguồn này không tải được, trình duyệt dùng giọng tổng hợp tiếng Việt trên thiết bị." en=". If this source fails to load, browser falls back to device Vietnamese TTS." />
-  </p>
     </section>
   );
 }

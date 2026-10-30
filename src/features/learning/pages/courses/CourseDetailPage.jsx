@@ -480,8 +480,8 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
   // Đường dẫn tiếp tục học
   const continueLearnUrl = activeLessonId
-    ? `/learn/${targetCourseId}/lesson/${activeLessonId}`
-    : `/learn/${targetCourseId}`;
+    ? `/courses/${targetCourseId}/lessons/${activeLessonId}`
+    : `/courses/${targetCourseId}/learn`;
 
   return (
     <div className="course-detail-view w-full space-y-8">
@@ -827,7 +827,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                               return (
                                 <Link
                                   key={lessonUniqueKey}
-                                  to={`/learn/${targetCourseId}/lesson/${lesson.id}`}
+                                  to={`/courses/${targetCourseId}/lessons/${lesson.id}`}
                                   className="flex items-center justify-between p-3.5 rounded-xl bg-[#FFFDF9] hover:bg-white border border-[#E8E5DF]/60 hover:border-[#FF7A00] text-xs sm:text-sm cursor-pointer transition-all shadow-2xs hover:shadow-sm group"
                                 >
                                   <div className="flex items-center gap-3 min-w-0">

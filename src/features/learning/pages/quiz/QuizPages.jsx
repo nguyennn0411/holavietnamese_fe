@@ -34,7 +34,7 @@ export function QuizPage() {
       const lId = lessonId || resource.data.lessonId;
       if (!courseId && cId) {
         const canonical = lId
-          ? `/courses/${cId}/lesson/${lId}/quizzes/${quizId}`
+          ? `/courses/${cId}/lessons/${lId}/quizzes/${quizId}`
           : `/courses/${cId}/quizzes/${quizId}`;
         navigate(canonical, { replace: true });
       }
@@ -49,7 +49,7 @@ export function QuizPage() {
       const cId = courseId || attempt.courseId || resource.data?.courseId;
       const lId = lessonId || attempt.lessonId || resource.data?.lessonId;
       const attemptUrl = cId && lId
-        ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${attempt.id}`
+        ? `/courses/${cId}/lessons/${lId}/quiz-attempts/${attempt.id}`
         : cId
         ? `/courses/${cId}/quiz-attempts/${attempt.id}`
         : `/quiz-attempts/${attempt.id}`;
@@ -67,7 +67,7 @@ export function QuizPage() {
         const cId = courseId || quiz.courseId;
         const lId = lessonId || quiz.lessonId;
         const backUrl = lId && cId
-          ? `/courses/${cId}/lesson/${lId}`
+          ? `/courses/${cId}/lessons/${lId}`
           : cId
           ? `/courses/${cId}`
           : '/my-learning';
@@ -239,7 +239,7 @@ export function QuizPage() {
 
                 {cId && (
                   <Link
-                    to={lId ? `/courses/${cId}/lesson/${lId}` : `/courses/${cId}`}
+                    to={lId ? `/courses/${cId}/lessons/${lId}` : `/courses/${cId}`}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-white hover:bg-stone-50 text-[#253044] border border-[#E8E5DF] font-bold text-xs shadow-2xs transition-all no-underline"
                   >
                     <BilingualText
@@ -275,7 +275,7 @@ export function QuizAttemptPage() {
       const lId = lessonId || resource.data.lessonId;
       if (!courseId && cId) {
         const canonical = lId
-          ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${attemptId}`
+          ? `/courses/${cId}/lessons/${lId}/quiz-attempts/${attemptId}`
           : `/courses/${cId}/quiz-attempts/${attemptId}`;
         navigate(canonical, { replace: true });
       }
@@ -288,7 +288,7 @@ export function QuizAttemptPage() {
         const cId = courseId || attempt.courseId;
         const lId = lessonId || attempt.lessonId;
         const resultUrl = cId && lId
-          ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${attempt.id}/result`
+          ? `/courses/${cId}/lessons/${lId}/quiz-attempts/${attempt.id}/result`
           : cId
           ? `/courses/${cId}/quiz-attempts/${attempt.id}/result`
           : `/quiz-attempts/${attempt.id}/result`;
@@ -335,7 +335,7 @@ function Attempt({ attempt, courseId, lessonId }) {
   if (!questions.length) {
     return (
       <EmptyState title={bilingualLabel("Quiz chưa có câu hỏi", "Quiz has no questions")}>
-        <Link className="button secondary" to={courseId && lessonId ? `/courses/${courseId}/lesson/${lessonId}` : courseId ? `/courses/${courseId}` : '/my-learning'}>
+        <Link className="button secondary" to={courseId && lessonId ? `/courses/${courseId}/lessons/${lessonId}` : courseId ? `/courses/${courseId}` : '/my-learning'}>
           <BilingualText
             vi={lessonId ? 'Về bài học' : courseId ? 'Về khóa học' : 'Về góc học tập'}
             en={lessonId ? 'Back to lesson' : courseId ? 'Back to course' : 'Back to My Learning'}
@@ -381,7 +381,7 @@ function Attempt({ attempt, courseId, lessonId }) {
       const cId = courseId || result.courseId || attempt.courseId;
       const lId = lessonId || result.lessonId || attempt.lessonId;
       const resultUrl = cId && lId
-        ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${result.id}/result`
+        ? `/courses/${cId}/lessons/${lId}/quiz-attempts/${result.id}/result`
         : cId
         ? `/courses/${cId}/quiz-attempts/${result.id}/result`
         : `/quiz-attempts/${result.id}/result`;
@@ -749,7 +749,7 @@ export function QuizResultPage() {
       const lId = lessonId || resource.data.lessonId;
       if (!courseId && cId) {
         const canonical = lId
-          ? `/courses/${cId}/lesson/${lId}/quiz-attempts/${attemptId}/result`
+          ? `/courses/${cId}/lessons/${lId}/quiz-attempts/${attemptId}/result`
           : `/courses/${cId}/quiz-attempts/${attemptId}/result`;
         navigate(canonical, { replace: true });
       }
@@ -778,7 +778,7 @@ function Result({ result, courseId, lessonId }) {
       const targetCId = cId || attempt.courseId;
       const targetLId = lId || attempt.lessonId;
       const attemptUrl = targetCId && targetLId
-        ? `/courses/${targetCId}/lesson/${targetLId}/quiz-attempts/${attempt.id}`
+        ? `/courses/${targetCId}/lessons/${targetLId}/quiz-attempts/${attempt.id}`
         : targetCId
         ? `/courses/${targetCId}/quiz-attempts/${attempt.id}`
         : `/quiz-attempts/${attempt.id}`;
@@ -792,7 +792,7 @@ function Result({ result, courseId, lessonId }) {
 
   const back =
     lId && cId
-      ? `/courses/${cId}/lesson/${lId}`
+      ? `/courses/${cId}/lessons/${lId}`
       : cId
       ? `/courses/${cId}`
       : '/my-learning';

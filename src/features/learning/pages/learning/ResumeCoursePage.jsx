@@ -301,7 +301,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
   };
 
   // Nút hành động chính
-  const resumeUrl = activeLessonId ? `/learn/${course.id}/lesson/${activeLessonId}` : null;
+  const resumeUrl = activeLessonId ? `/courses/${course.id}/lessons/${activeLessonId}` : null;
 
   return (
     <div className="course-overview-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8">
@@ -607,7 +607,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                       return (
                         <Link
                           key={uKey}
-                          to={`/learn/${course.id}/lesson/${lesson.id}`}
+                          to={`/courses/${course.id}/lessons/${lesson.id}`}
                           className="block text-decoration-none group"
                         >
                           {content}
