@@ -54,7 +54,6 @@ export function AdminRegionalLanguagePage() {
       title={<BilingualText vi="Quản lý biến thể vùng miền" en="Manage regional variants" />}
       description={<BilingualText vi="Liên kết cách nói Bắc, Trung và Nam với từ vựng chuẩn." en="Link Northern, Central, and Southern expressions with standard vocabulary." />}
       actions={<>
-        <Link className="button secondary" to={ROUTES.REGIONAL_VIETNAMESE}><BilingualText>{"Xem trang học viên"}</BilingualText></Link>
         {mayWrite && <button disabled={busy} onClick={() => setEditing({})}><BilingualText vi="+ Thêm biến thể" en="+ Add variant" /></button>}
       </>}
     />
