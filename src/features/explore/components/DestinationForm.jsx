@@ -1,11 +1,12 @@
 import { useId, useState } from 'react';
-import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
+import { BilingualText, useBilingualLabel } from '@/shared/components/common/BilingualText';
 import { ContentImage } from '@/shared/components/common/ContentImage';
 import { Notice } from '@/shared/components/common/Ui';
 import { destinationDraft, destinationPayload, DESTINATION_REGIONS } from '@/features/explore/models/Destination';
 import { adminDestinationService } from '@/features/explore/api/destinationService';
 
 export function DestinationForm({ entry, onSaved, onCancel, onBusyChange }) {
+  const label = useBilingualLabel();
   const [draft, setDraft] = useState(() => destinationDraft(entry));
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(null);
@@ -53,8 +54,8 @@ export function DestinationForm({ entry, onSaved, onCancel, onBusyChange }) {
       </label>)}
       <label htmlFor={`${formId}-region`}><BilingualText vi="Vùng miền *" en="Region" />
         <select id={`${formId}-region`} value={draft.region} onChange={event => change('region', event.target.value)} required>
-          <option value="">{bilingualLabel("Chọn vùng miền", "Select region")}</option>
-          {DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{region.vi}</option>)}
+          <option value="">{label("Chọn vùng miền", "Select region")}</option>
+          {DESTINATION_REGIONS.map(region => <option key={region.value} value={region.value}>{label(region)}</option>)}
         </select>
       </label>
       <p><strong><BilingualText>Trạng thái:</BilingualText></strong> <BilingualText>DRAFT</BilingualText></p>

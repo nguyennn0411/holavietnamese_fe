@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel, bilingualLabel } from '@/shared/components/common/BilingualText';
+import { BilingualText, useBilingualLabel } from '@/shared/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
 import { Modal } from '@/shared/components/common/Modal';
 import { adminVocabularyService } from '@/features/vocabulary/api/adminVocabularyService';
@@ -33,6 +33,7 @@ function VocabularyDetail({ entry, onEdit, canEdit }) {
 }
 
 export function AdminVocabularyModal({ mode, id, onClose, onSaved, onEdit, canEdit = false }) {
+  const label = useBilingualLabel();
   const submitting = useRef(false);
   const [entry, setEntry] = useState(null);
   const [draft, setDraft] = useState(() => vocabularyDraft());
@@ -71,7 +72,7 @@ export function AdminVocabularyModal({ mode, id, onClose, onSaved, onEdit, canEd
   }
 
   const title = mode === 'view' ? 'Chi tiết từ vựng' : mode === 'edit' ? 'Cập nhật từ vựng' : 'Thêm từ vựng';
-  return <Modal title={title} onClose={onClose} busy={pending}>
+  return <Modal title={label(title)} onClose={onClose} busy={pending}>
     {loading ? <div className="state" role="status"><BilingualText>{"Đang tải từ vựng…"}</BilingualText></div> : loadError
       ? <div className="state" role="alert"><p>{loadError}</p><button type="button" onClick={() => setRevision((value) => value + 1)}><BilingualText>{"Thử lại"}</BilingualText></button></div>
       : mode === 'view' ? <VocabularyDetail entry={entry} onEdit={onEdit} canEdit={canEdit} />
@@ -79,7 +80,7 @@ export function AdminVocabularyModal({ mode, id, onClose, onSaved, onEdit, canEd
         <fieldset disabled={pending} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
           <label><BilingualText>{"Từ vựng"}</BilingualText><input value={draft.word} onChange={(event) => change('word', event.target.value)} required maxLength={200} lang="vi" /></label>
           <label><BilingualText>{"Phiên âm"}</BilingualText><input value={draft.pronunciation} onChange={(event) => change('pronunciation', event.target.value)} maxLength={200} /></label>
-          <label><BilingualText>{"Từ loại"}</BilingualText><input value={draft.partOfSpeech} onChange={(event) => change('partOfSpeech', event.target.value)} required maxLength={40} placeholder={vietnameseLabel("Ví dụ: phrase, noun, verb")} /></label>
+          <label><BilingualText>{"Từ loại"}</BilingualText><input value={draft.partOfSpeech} onChange={(event) => change('partOfSpeech', event.target.value)} required maxLength={40} placeholder={label("Ví dụ: phrase, noun, verb")} /></label>
           <label><BilingualText>{"Audio URL"}</BilingualText><input value={draft.audioUrl} onChange={(event) => change('audioUrl', event.target.value)} maxLength={2048} /></label>
           <p><strong><BilingualText>{"Trạng thái:"}</BilingualText></strong> <BilingualText>{"DRAFT"}</BilingualText></p>
           {draft.meanings.map((meaning, meaningIndex) => <section className="admin-card" key={meaningIndex} style={{ marginBottom: 14 }}>
@@ -87,7 +88,7 @@ export function AdminVocabularyModal({ mode, id, onClose, onSaved, onEdit, canEd
             <label><BilingualText vi="Định nghĩa Việt–Việt" en="Vietnamese-Vietnamese definition" /><textarea value={meaning.definitionVi} onChange={event => changeMeaning(meaningIndex, 'definitionVi', event.target.value)} rows={4} maxLength={10000} lang="vi" /></label>
             <label><BilingualText>{"Bản dịch tiếng Anh"}</BilingualText><input value={meaning.translationEn} onChange={(event) => changeMeaning(meaningIndex, 'translationEn', event.target.value)} maxLength={500} /></label>
             <p className="muted"><BilingualText vi="Mỗi nghĩa cần định nghĩa tiếng Việt hoặc thông tin tiếng Anh có căn cứ. Không tự gán bản dịch khi chưa xác định đúng nghĩa." en="Each meaning requires a Vietnamese definition or grounded English info. Do not invent translations when meaning is uncertain." /></p>
-            <label><BilingualText vi="Nhãn cách dùng" en="Usage labels" /><input value={meaning.labelsInput ?? (meaning.labels || []).join(', ')} onChange={event => changeMeaning(meaningIndex, 'labelsInput', event.target.value)} placeholder={bilingualLabel("Nhãn từ nguồn, cách nhau bằng dấu phẩy", "Labels from source, comma separated")} /></label>
+            <label><BilingualText vi="Nhãn cách dùng" en="Usage labels" /><input value={meaning.labelsInput ?? (meaning.labels || []).join(', ')} onChange={event => changeMeaning(meaningIndex, 'labelsInput', event.target.value)} placeholder={label("Nhãn từ nguồn, cách nhau bằng dấu phẩy", "Labels from source, comma separated")} /></label>
             <label><BilingualText>{"Định nghĩa tiếng Anh"}</BilingualText><textarea value={meaning.definitionEn} onChange={(event) => changeMeaning(meaningIndex, 'definitionEn', event.target.value)} rows={2} /></label>
             <label><BilingualText>{"Ghi chú sử dụng"}</BilingualText><textarea value={meaning.usageNote} onChange={(event) => changeMeaning(meaningIndex, 'usageNote', event.target.value)} rows={2} /></label>
             <label><BilingualText>{"Thứ tự nghĩa"}</BilingualText><input type="number" min={0} step={1} value={meaning.displayOrder} onChange={(event) => changeMeaning(meaningIndex, 'displayOrder', event.target.value)} /></label>

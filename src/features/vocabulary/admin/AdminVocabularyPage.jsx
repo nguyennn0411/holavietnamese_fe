@@ -1,4 +1,4 @@
-import { BilingualText, vietnameseLabel, bilingualLabel } from '@/shared/components/common/BilingualText';
+import { BilingualText, useBilingualLabel, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { adminVocabularyService } from '@/features/vocabulary/api/adminVocabularyService';
 import { ResourceState } from '@/shared/components/common/ResourceState';
@@ -15,6 +15,7 @@ import '@/features/vocabulary/components/admin/admin-vocabulary.css';
 const emptyFilters = { keyword: '', status: '', partOfSpeech: '' };
 
 export function AdminVocabularyPage() {
+  const label = useBilingualLabel();
   const { user } = useAuth();
   const mayWrite = canWriteVocabulary(user);
   const mayImport = canImportVocabulary(user);
@@ -72,7 +73,7 @@ export function AdminVocabularyPage() {
   }
 
   return <div className="admin-vocabulary-page">
-    <Breadcrumb items={[{ label: bilingualLabel('Quản trị', 'Administration'), to: ROUTES.ADMIN }, { label: bilingualLabel('Từ vựng', 'Vocabulary') }]} />
+    <Breadcrumb items={[{ label: label('Quản trị', 'Administration'), to: ROUTES.ADMIN }, { label: label('Từ vựng', 'Vocabulary') }]} />
     <PageHeader eyebrow={<BilingualText vi="Từ vựng tiếng Việt" en="Vietnamese Vocabulary" />} title={<BilingualText vi="Quản lý từ vựng" en="Vocabulary Management" />} description={<BilingualText vi="Quản lý mục từ, nghĩa Việt–Anh và ví dụ song ngữ." en="Manage entries, Vietnamese–English definitions, and bilingual examples." />} actions={<>
       <Link className="button secondary" to={ROUTES.ADMIN_REGIONAL_LANGUAGE}><BilingualText vi="Từ ngữ vùng miền" en="Regional language" /></Link>
       {mayImport && <Link className="button secondary" to={ROUTES.ADMIN_IMPORT}><BilingualText vi="Nhập dữ liệu" en="Import data" /></Link>}
@@ -81,9 +82,9 @@ export function AdminVocabularyPage() {
     {message && <div className="success state" role="status"><BilingualText>{message}</BilingualText></div>}
     <form className="admin-card admin-vocabulary-filters" onSubmit={(event) => { event.preventDefault(); filter('keyword', keyword.trim()); }}>
       <div className="actions">
-        <label style={{ flex: '1 1 220px' }}><BilingualText>{"Tìm kiếm"}</BilingualText><input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={vietnameseLabel("Nhập từ khóa…")} /></label>
-        <label style={{ flex: '1 1 150px' }}><BilingualText>{"Trạng thái"}</BilingualText><select value={query.status} onChange={(event) => filter('status', event.target.value)}><option value="">{vietnameseLabel("Tất cả trạng thái")}</option>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{vietnameseLabel(status)}</option>)}</select></label>
-        <label style={{ flex: '1 1 140px' }}><BilingualText>{"Từ loại"}</BilingualText><input value={query.partOfSpeech} onChange={(event) => filter('partOfSpeech', event.target.value)} placeholder={vietnameseLabel("Ví dụ: phrase")} /></label>
+        <label style={{ flex: '1 1 220px' }}><BilingualText>{"Tìm kiếm"}</BilingualText><input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={label("Nhập từ khóa…")} /></label>
+        <label style={{ flex: '1 1 150px' }}><BilingualText>{"Trạng thái"}</BilingualText><select value={query.status} onChange={(event) => filter('status', event.target.value)}><option value="">{label("Tất cả trạng thái")}</option>{VOCABULARY_STATUSES.map((status) => <option key={status} value={status}>{label(status)}</option>)}</select></label>
+        <label style={{ flex: '1 1 140px' }}><BilingualText>{"Từ loại"}</BilingualText><input value={query.partOfSpeech} onChange={(event) => filter('partOfSpeech', event.target.value)} placeholder={label("Ví dụ: phrase")} /></label>
       </div>
       <div className="actions"><button type="submit"><BilingualText>{"Tìm kiếm"}</BilingualText></button><button type="button" className="secondary" onClick={() => { setPage(0); setKeyword(''); setQuery({ ...emptyFilters }); }}><BilingualText>{"Đặt lại bộ lọc"}</BilingualText></button></div>
     </form>
