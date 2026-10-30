@@ -36,12 +36,12 @@ export function scenarioFromApi(data) {
 
 // Initial Mock Categories
 const INITIAL_CATEGORIES = [
-  { id: 'culinary', name: 'Food (Ẩm thực)', slug: 'culinary', icon: '🍜', description: 'Món ăn, đồ uống, văn hóa cà phê và ẩm thực 3 miền', order: 1, articleCount: 12 },
-  { id: 'tradition', name: 'Festivals (Lễ hội & Phong tục)', slug: 'tradition', icon: '🏮', description: 'Tết cổ truyền, lễ hội dân gian, nghi thức cúng giỗ', order: 2, articleCount: 8 },
-  { id: 'history', name: 'History (Lịch sử & Di sản)', slug: 'history', icon: '🏛️', description: 'Di tích nghìn năm, Hoàng thành Thăng Long, Cố đô Huế', order: 3, articleCount: 6 },
-  { id: 'etiquette', name: 'Etiquette (Ứng xử & Xưng hô)', slug: 'etiquette', icon: '🙏', description: 'Nghệ thuật xưng hô, văn hóa mời cơm, kính trên nhường dưới', order: 4, articleCount: 9 },
-  { id: 'family', name: 'Family (Gia đình & Đời sống)', slug: 'family', icon: '🏡', description: 'Quan hệ gia tộc, sinh hoạt thường nhật trong nếp nhà Việt', order: 5, articleCount: 5 },
-  { id: 'lifestyle', name: 'Lifestyle (Phong cách sống)', slug: 'lifestyle', icon: '☕', description: 'Văn hóa vỉa hè, xe máy phố thị, chợ nổi miền Tây', order: 6, articleCount: 7 },
+  { id: 'culinary', name: 'Ẩm thực', nameVi: 'Ẩm thực', nameEn: 'Food & Cuisine', slug: 'culinary', icon: '🍜', description: 'Món ăn, đồ uống, văn hóa ẩm thực và nghệ thuật thưởng vị 3 miền.', order: 1, articleCount: 1 },
+  { id: 'tradition', name: 'Lễ hội & Phong tục', nameVi: 'Lễ hội & Phong tục', nameEn: 'Festivals & Traditions', slug: 'tradition', icon: '🏮', description: 'Tết Nguyên Đán, Trung Thu, hội làng và phong tục tập quán truyền thống.', order: 2, articleCount: 0 },
+  { id: 'daily-life', name: 'Đời sống thường nhật', nameVi: 'Đời sống thường nhật', nameEn: 'Daily Life', slug: 'daily-life', icon: '☕', description: 'Cà phê vỉa hè, xe máy phố thị, nếp sinh hoạt quen thuộc của người Việt.', order: 3, articleCount: 1 },
+  { id: 'art', name: 'Nghệ thuật & Di sản', nameVi: 'Nghệ thuật & Di sản', nameEn: 'Arts & Heritage', slug: 'art', icon: '🎭', description: 'Áo dài, tranh Đông Hồ, nhã nhạc cung đình Huế, ca trù và làng nghề truyền thống.', order: 4, articleCount: 0 },
+  { id: 'travel-spots', name: 'Danh lam & Điểm đến', nameVi: 'Danh lam & Điểm đến', nameEn: 'Destinations & Sights', slug: 'travel-spots', icon: '🗺️', description: 'Phố cổ Hội An, Cố đô Huế, Hoàng thành Thăng Long, sông nước miền Tây.', order: 5, articleCount: 1 },
+  { id: 'etiquette', name: 'Ứng xử & Xưng hô', nameVi: 'Ứng xử & Xưng hô', nameEn: 'Etiquette & Politeness', slug: 'etiquette', icon: '🙏', description: 'Nghệ thuật xưng hô, kính trên nhường dưới, văn hóa mời cơm và chào hỏi.', order: 6, articleCount: 1 },
 ];
 
 // Initial Mock Articles for Admin
@@ -401,8 +401,22 @@ export const adminCultureAiService = {
     const response = await axiosClient.patch(`/api/admin/ai/scenarios/${encodeURIComponent(id)}/status`, { status });
     return scenarioFromApi(response?.result ?? response);
   },
-  // --- CULTURE ARTICLES ---
-  getArticles(filters = {}) {
+
+  // --- CULTURE ARTICLES (REST API + Persistent Database) ---
+  async getArticles(filters = {}) {
+    try {
+      const params = {};
+      if (filters.search) params.search = filters.search;
+      if (filters.category && filters.category !== 'all') params.category = filters.category;
+      if (filters.status && filters.status !== 'all') params.status = filters.status;
+
+      const response = await axiosClient.get('/api/admin/culture/articles', { params });
+      const data = response?.result ?? response;
+      if (Array.isArray(data)) return data;
+    } catch (e) {
+      console.warn('Backend call failed, using localStorage fallback for culture articles:', e.message);
+    }
+
     let items = [];
     try {
       const stored = localStorage.getItem(STORAGE_ADMIN_CULTURE);
@@ -424,81 +438,160 @@ export const adminCultureAiService = {
     return items;
   },
 
-  getArticle(id) {
-    const list = this.getArticles();
+  async getArticle(id) {
+    if (!id) return null;
+    try {
+      const response = await axiosClient.get(`/api/admin/culture/articles/${encodeURIComponent(id)}`);
+      const data = response?.result ?? response;
+      if (data && data.id) return data;
+    } catch (e) {
+      console.warn('Backend getArticle failed, falling back:', e.message);
+    }
+    const list = await this.getArticles();
     return list.find(a => a.id === id) || null;
   },
 
-  saveArticle(articleData) {
-    const list = this.getArticles();
-    let updated;
-    const exists = list.some(a => a.id === articleData.id);
+  async saveArticle(articleData) {
+    try {
+      const isExisting = articleData.id && articleData.id !== 'new';
+      const endpoint = isExisting
+        ? `/api/admin/culture/articles/${encodeURIComponent(articleData.id)}`
+        : '/api/admin/culture/articles';
+      const method = isExisting ? axiosClient.put : axiosClient.post;
+      const response = await method(endpoint, articleData);
+      const saved = response?.result ?? response;
+      return saved || articleData;
+    } catch (e) {
+      console.warn('Backend saveArticle failed, falling back to localStorage:', e.message);
+      const list = await this.getArticles();
+      let updated;
+      const exists = list.some(a => a.id === articleData.id);
 
-    if (exists) {
-      updated = list.map(a => (a.id === articleData.id ? { ...a, ...articleData, updatedAt: new Date().toISOString() } : a));
-    } else {
-      const newArticle = {
-        ...articleData,
-        id: articleData.id || `culture-${Date.now()}`,
-        views: 0,
-        publishedAt: articleData.publishedAt || new Date().toISOString().split('T')[0],
-      };
-      updated = [newArticle, ...list];
+      if (exists) {
+        updated = list.map(a => (a.id === articleData.id ? { ...a, ...articleData, updatedAt: new Date().toISOString() } : a));
+      } else {
+        const newArticle = {
+          ...articleData,
+          id: articleData.id || `culture-${Date.now()}`,
+          views: 0,
+          publishedAt: articleData.publishedAt || new Date().toISOString().split('T')[0],
+        };
+        updated = [newArticle, ...list];
+      }
+
+      localStorage.setItem(STORAGE_ADMIN_CULTURE, JSON.stringify(updated));
+      return articleData;
     }
-
-    localStorage.setItem(STORAGE_ADMIN_CULTURE, JSON.stringify(updated));
-    return articleData;
   },
 
-  deleteArticle(id) {
-    const list = this.getArticles().filter(a => a.id !== id);
-    localStorage.setItem(STORAGE_ADMIN_CULTURE, JSON.stringify(list));
-    return list;
+  async deleteArticle(id) {
+    try {
+      await axiosClient.delete(`/api/admin/culture/articles/${encodeURIComponent(id)}`);
+    } catch (e) {
+      console.warn('Backend deleteArticle failed, falling back:', e.message);
+      const list = (await this.getArticles()).filter(a => a.id !== id);
+      localStorage.setItem(STORAGE_ADMIN_CULTURE, JSON.stringify(list));
+      return list;
+    }
+    return this.getArticles();
   },
 
-  updateArticleStatus(id, newStatus) {
-    const list = this.getArticles().map(a => (a.id === id ? { ...a, status: newStatus } : a));
-    localStorage.setItem(STORAGE_ADMIN_CULTURE, JSON.stringify(list));
-    return list.find(a => a.id === id);
+  async updateArticleStatus(id, newStatus) {
+    try {
+      const response = await axiosClient.patch(`/api/admin/culture/articles/${encodeURIComponent(id)}/status`, { status: newStatus });
+      return response?.result ?? response;
+    } catch (e) {
+      console.warn('Backend updateArticleStatus failed, falling back:', e.message);
+      const list = (await this.getArticles()).map(a => (a.id === id ? { ...a, status: newStatus } : a));
+      localStorage.setItem(STORAGE_ADMIN_CULTURE, JSON.stringify(list));
+      return list.find(a => a.id === id);
+    }
   },
 
-  // --- CULTURE CATEGORIES ---
-  getCategories() {
+  // --- CULTURE CATEGORIES (REST API + Persistent Database) ---
+  async getCategories() {
+    try {
+      const response = await axiosClient.get('/api/admin/culture/categories');
+      const data = response?.result ?? response;
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map(item => ({
+          ...item,
+          articleCount: typeof item.articleCount === 'number' ? item.articleCount : (item.articlesCount || 0)
+        }));
+      }
+    } catch (e) {
+      console.warn('Backend getCategories failed, falling back:', e.message);
+    }
     try {
       const stored = localStorage.getItem(STORAGE_ADMIN_CATEGORIES);
-      return stored ? JSON.parse(stored) : INITIAL_CATEGORIES;
+      const parsed = stored ? JSON.parse(stored) : INITIAL_CATEGORIES;
+      return Array.isArray(parsed)
+        ? parsed.map(item => ({
+            ...item,
+            articleCount: typeof item.articleCount === 'number' ? item.articleCount : (item.articlesCount || 0)
+          }))
+        : INITIAL_CATEGORIES;
     } catch {
       return INITIAL_CATEGORIES;
     }
   },
 
-  saveCategory(catData) {
-    const list = this.getCategories();
-    let updated;
-    if (catData.id && list.some(c => c.id === catData.id)) {
-      updated = list.map(c => (c.id === catData.id ? { ...c, ...catData } : c));
-    } else {
-      const newCat = {
-        ...catData,
-        id: catData.slug || `cat-${Date.now()}`,
-        order: list.length + 1,
-        articleCount: 0,
-      };
-      updated = [...list, newCat];
+  async saveCategory(catData) {
+    try {
+      const isExisting = catData.id && !catData.id.startsWith('cat-new');
+      const endpoint = isExisting
+        ? `/api/admin/culture/categories/${encodeURIComponent(catData.id)}`
+        : '/api/admin/culture/categories';
+      const method = isExisting ? axiosClient.put : axiosClient.post;
+      const response = await method(endpoint, catData);
+      return response?.result ?? response;
+    } catch (e) {
+      console.warn('Backend saveCategory failed, falling back:', e.message);
+      const list = await this.getCategories();
+      let updated;
+      if (catData.id && list.some(c => c.id === catData.id)) {
+        updated = list.map(c => (c.id === catData.id ? { ...c, ...catData } : c));
+      } else {
+        const newCat = {
+          ...catData,
+          id: catData.slug || `cat-${Date.now()}`,
+          order: list.length + 1,
+          articleCount: 0,
+        };
+        updated = [...list, newCat];
+      }
+      localStorage.setItem(STORAGE_ADMIN_CATEGORIES, JSON.stringify(updated));
+      return updated;
     }
-    localStorage.setItem(STORAGE_ADMIN_CATEGORIES, JSON.stringify(updated));
-    return updated;
   },
 
-  reorderCategories(orderedList) {
+  async reorderCategories(orderedList) {
+    try {
+      await Promise.all(
+        orderedList.map((cat, idx) =>
+          axiosClient.put(`/api/admin/culture/categories/${encodeURIComponent(cat.id)}`, {
+            ...cat,
+            displayOrder: idx + 1,
+          })
+        )
+      );
+    } catch (e) {
+      console.warn('Backend reorderCategories failed, falling back:', e.message);
+    }
     localStorage.setItem(STORAGE_ADMIN_CATEGORIES, JSON.stringify(orderedList));
     return orderedList;
   },
 
-  deleteCategory(id) {
-    const list = this.getCategories().filter(c => c.id !== id);
-    localStorage.setItem(STORAGE_ADMIN_CATEGORIES, JSON.stringify(list));
-    return list;
+  async deleteCategory(id) {
+    try {
+      await axiosClient.delete(`/api/admin/culture/categories/${encodeURIComponent(id)}`);
+    } catch (e) {
+      console.warn('Backend deleteCategory failed, falling back:', e.message);
+      const list = (await this.getCategories()).filter(c => c.id !== id);
+      localStorage.setItem(STORAGE_ADMIN_CATEGORIES, JSON.stringify(list));
+      return list;
+    }
+    return this.getCategories();
   },
 
   // --- AI SCENARIOS & BUILDER ---

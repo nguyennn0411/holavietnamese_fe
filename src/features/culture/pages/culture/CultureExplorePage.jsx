@@ -1,25 +1,90 @@
 import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { ContentImage } from '@/shared/components/common/ContentImage';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Search, X, RotateCcw } from 'lucide-react';
+import { Search, X, RotateCcw, Loader2, MapPin, ChevronDown, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cultureService } from '@/features/culture/api/cultureService';
 import { EmptyState } from '@/shared/components/common/Ui';
 
 export function CultureExplorePage() {
+  const { i18n } = useTranslation();
+  const isVi = (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('vi');
+
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDestination, setSelectedDestination] = useState('all');
 
-  const categories = cultureService.getCategories();
-  const destinations = cultureService.getDestinations();
-  const articles = cultureService.listArticles({
-    search,
-    category: selectedCategory,
-    destination: selectedDestination,
-  });
-  const featured = cultureService.getFeaturedArticles()[0];
+  const [categories, setCategories] = useState(() => cultureService.getCategoriesSync());
+  const [destinations, setDestinations] = useState(() => cultureService.getDestinationsSync());
+  const [articles, setArticles] = useState([]);
+  const [featured, setFeatured] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [destinationOpen, setDestinationOpen] = useState(false);
+  const destinationDropdownRef = useRef(null);
+
+  // Click outside to close custom destination dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (destinationDropdownRef.current && !destinationDropdownRef.current.contains(event.target)) {
+        setDestinationOpen(false);
+      }
+    };
+    if (destinationOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [destinationOpen]);
+
+  // Fetch categories, destinations, and featured article on mount
+  useEffect(() => {
+    let mounted = true;
+    Promise.all([
+      cultureService.getCategories(),
+      cultureService.getDestinations(),
+      cultureService.getFeaturedArticles(),
+    ])
+      .then(([cats, dests, feats]) => {
+        if (!mounted) return;
+        if (cats?.length) setCategories(cats);
+        if (dests?.length) setDestinations(dests);
+        if (feats?.length) setFeatured(feats[0]);
+      })
+      .catch((err) => {
+        console.warn('Error loading culture meta:', err);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Fetch articles whenever search, category, or destination changes
+  useEffect(() => {
+    let mounted = true;
+    setIsLoading(true);
+    cultureService
+      .listArticles({
+        search,
+        category: selectedCategory,
+        destination: selectedDestination,
+      })
+      .then((res) => {
+        if (!mounted) return;
+        setArticles(res || []);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        if (!mounted) return;
+        console.warn('Error listing articles:', err);
+        setIsLoading(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, [search, selectedCategory, selectedDestination]);
 
   const handleClearFilters = () => {
     setSearch('');
@@ -28,6 +93,11 @@ export function CultureExplorePage() {
   };
 
   const isFiltered = search || selectedCategory !== 'all' || selectedDestination !== 'all';
+
+  const currentDestination = destinations.find((d) => d.id === selectedDestination) || destinations[0] || {
+    labelVi: 'Toàn quốc',
+    labelEn: 'Nationwide',
+  };
 
   return (
     <div className="culture-page w-full max-w-full px-0 py-6 space-y-8">
@@ -116,82 +186,303 @@ export function CultureExplorePage() {
       {/* Filter and Search Bar */}
       <section className="bg-white rounded-2xl border border-[#E8E5DF] p-5 sm:p-6 shadow-xs space-y-5">
         {/* Categories Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label={bilingualLabel("Chủ đề văn hóa", "Culture topics")}>
+        <div
+          className="flex items-center gap-2.5 overflow-x-auto pb-1 scrollbar-none"
+          role="tablist"
+          aria-label={isVi ? "Chủ đề văn hóa" : "Culture topics"}
+        >
           {categories.map((category) => {
             const isActive = selectedCategory === category.id;
+            const categoryIcon = category.icon || (category.id === 'all' ? '✨' : '🏮');
             return (
               <button
                 key={category.id}
                 type="button"
+                className="secondary"
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[#FF8008] to-[#FF6A00] text-white shadow-sm'
-                    : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8] border border-[#E8E5DF]'
-                }`}
+                style={{
+                  minHeight: '38px',
+                  maxHeight: '38px',
+                  height: '38px',
+                  padding: '0 16px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '7px',
+                  borderRadius: '12px',
+                  border: isActive ? '1px solid #EA580C' : '1px solid #E2E8F0',
+                  background: isActive
+                    ? 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)'
+                    : '#FFFFFF',
+                  color: isActive ? '#FFFFFF' : '#475569',
+                  fontSize: '13px',
+                  fontWeight: isActive ? 700 : 600,
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                  boxShadow: isActive
+                    ? '0 4px 14px rgba(234, 88, 12, 0.28)'
+                    : '0 1px 2px rgba(0, 0, 0, 0.03)',
+                  transition: 'all 0.15s ease',
+                  userSelect: 'none',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderColor = '#FDBA74';
+                    e.currentTarget.style.background = '#FFF7ED';
+                    e.currentTarget.style.color = '#C2410C';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderColor = '#E2E8F0';
+                    e.currentTarget.style.background = '#FFFFFF';
+                    e.currentTarget.style.color = '#475569';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
               >
-                <span><BilingualText vi={category.labelVi || category.label} en={category.labelEn || category.label} /></span>
+                <span style={{ fontSize: '14px', lineHeight: 1 }}>{categoryIcon}</span>
+                <span>
+                  <BilingualText
+                    vi={category.labelVi || category.nameVi || category.name || category.label}
+                    en={category.labelEn || category.nameEn || category.name || category.label}
+                  />
+                </span>
               </button>
             );
           })}
         </div>
 
-        {/* Search & Destination Dropdown */}
+        {/* Search & Custom Destination Dropdown */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#E8E5DF]">
           <div className="relative flex-1 max-w-md">
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
             <input
               type="text"
-              aria-label={bilingualLabel("Tìm câu chuyện văn hóa", "Search cultural stories")}
-              placeholder={bilingualLabel("Tìm câu chuyện theo chủ đề hoặc từ khóa…", "Search stories by topic or keyword…")}
+              aria-label={isVi ? "Tìm câu chuyện văn hóa" : "Search cultural stories"}
+              placeholder={isVi ? "Tìm câu chuyện theo chủ đề hoặc từ khóa…" : "Search stories by topic or keyword…"}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-9 py-2.5 bg-white border border-[#E8E5DF] focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 rounded-xl text-xs sm:text-sm text-[#253044] placeholder-[#94A3B8] outline-hidden transition-all"
+              className="w-full pl-10 pr-9 py-2 bg-white border border-[#E2E8F0] focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 rounded-xl text-xs sm:text-sm text-[#1E293B] placeholder-[#94A3B8] outline-hidden transition-all shadow-xs h-[38px]"
             />
             {search && (
               <button
                 type="button"
+                className="secondary"
                 onClick={() => setSearch('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#253044]"
-                aria-label={bilingualLabel("Xóa tìm kiếm", "Clear search")}
+                aria-label={isVi ? "Xóa tìm kiếm" : "Clear search"}
               >
                 <X size={14} />
               </button>
             )}
           </div>
 
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-[#64748B] whitespace-nowrap">
-                <BilingualText vi="Điểm đến:" en="Destination:" />
-              </span>
-              <select
-                value={selectedDestination}
-                onChange={(e) => setSelectedDestination(e.target.value)}
-                className="bg-white border border-[#E8E5DF] rounded-xl px-3 py-2 text-xs text-[#253044] font-medium outline-hidden focus:border-[#F97316] transition-colors cursor-pointer"
-                aria-label={bilingualLabel("Lọc theo điểm đến", "Filter by destination")}
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Custom Destination Dropdown Menu */}
+            <div className="relative" ref={destinationDropdownRef}>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => setDestinationOpen((prev) => !prev)}
+                aria-haspopup="listbox"
+                aria-expanded={destinationOpen}
+                style={{
+                  minHeight: '38px',
+                  maxHeight: '38px',
+                  height: '38px',
+                  padding: '0 14px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  borderRadius: '10px',
+                  border: destinationOpen ? '1px solid #F97316' : '1px solid #E2E8F0',
+                  background: '#FFFFFF',
+                  color: '#1E293B',
+                  cursor: 'pointer',
+                  boxShadow: destinationOpen
+                    ? '0 0 0 3px rgba(249, 115, 22, 0.15)'
+                    : '0 1px 2px rgba(0, 0, 0, 0.04)',
+                  transition: 'all 0.15s ease',
+                  userSelect: 'none',
+                }}
               >
-                {destinations.map((destination) => (
-                  <option key={destination.id} value={destination.id}>
-                    {bilingualLabel(destination.labelVi || destination.label, destination.labelEn || destination.label)}
-                  </option>
-                ))}
-              </select>
+                <MapPin size={15} className="text-[#F97316] flex-shrink-0" />
+                <span className="text-xs text-[#64748B] font-medium whitespace-nowrap">
+                  <BilingualText vi="Điểm đến:" en="Destination:" />
+                </span>
+                <span className="text-xs font-bold text-[#1E293B] whitespace-nowrap">
+                  <BilingualText
+                    vi={currentDestination.labelVi || currentDestination.nameVi || currentDestination.name || currentDestination.label || 'Toàn quốc'}
+                    en={currentDestination.labelEn || currentDestination.nameEn || currentDestination.name || currentDestination.label || 'Nationwide'}
+                  />
+                </span>
+                <ChevronDown
+                  size={14}
+                  className={`text-[#64748B] flex-shrink-0 transition-transform duration-200 ${
+                    destinationOpen ? 'rotate-180 text-[#F97316]' : ''
+                  }`}
+                />
+              </button>
+
+              {/* Dropdown Menu Popup */}
+              {destinationOpen && (
+                <div
+                  role="listbox"
+                  aria-label={isVi ? 'Chọn điểm đến' : 'Select destination'}
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 6px)',
+                    right: 0,
+                    minWidth: '220px',
+                    maxHeight: '320px',
+                    overflowY: 'auto',
+                    background: '#FFFFFF',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '12px',
+                    padding: '6px',
+                    boxShadow: '0 14px 30px -4px rgba(0, 0, 0, 0.12), 0 6px 12px -2px rgba(0, 0, 0, 0.05)',
+                    zIndex: 50,
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: '6px 10px 8px 10px',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      color: '#94A3B8',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      borderBottom: '1px solid #F1F5F9',
+                      marginBottom: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <span><BilingualText vi="Địa phương / Khu vực" en="Region / Destination" /></span>
+                    <span style={{ fontSize: '10px', color: '#CBD5E1', fontWeight: 600 }}>
+                      {destinations.length}
+                    </span>
+                  </div>
+
+                  {destinations.map((destination) => {
+                    const isSelected = selectedDestination === destination.id;
+                    const nameVi = destination.labelVi || destination.nameVi || destination.name || destination.label;
+                    const nameEn = destination.labelEn || destination.nameEn || destination.name || destination.label;
+                    const primaryName = isVi ? nameVi : (nameEn || nameVi);
+                    const secondaryName = isVi ? nameEn : nameVi;
+                    const hasSecondary = secondaryName && secondaryName !== primaryName;
+
+                    return (
+                      <button
+                        key={destination.id}
+                        type="button"
+                        className="secondary"
+                        role="option"
+                        aria-selected={isSelected}
+                        onClick={() => {
+                          setSelectedDestination(destination.id);
+                          setDestinationOpen(false);
+                        }}
+                        style={{
+                          width: '100%',
+                          minHeight: '34px',
+                          maxHeight: '40px',
+                          padding: '6px 10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '8px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: isSelected ? '#FFF7ED' : 'transparent',
+                          color: isSelected ? '#C2410C' : '#334155',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'background 0.12s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = '#F8FAFC';
+                            e.currentTarget.style.color = '#0F172A';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = 'transparent';
+                            e.currentTarget.style.color = '#334155';
+                          }
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                          <MapPin
+                            size={14}
+                            className={isSelected ? 'text-[#EA580C]' : 'text-[#94A3B8]'}
+                            style={{ flexShrink: 0 }}
+                          />
+                          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.25 }}>
+                            <span style={{ fontSize: '13px', fontWeight: isSelected ? 700 : 500 }}>
+                              {primaryName}
+                            </span>
+                            {hasSecondary && (
+                              <span style={{ fontSize: '11px', color: isSelected ? '#EA580C' : '#94A3B8', opacity: 0.85 }}>
+                                {secondaryName}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {isSelected && (
+                          <Check size={15} className="text-[#EA580C]" style={{ flexShrink: 0, strokeWidth: 2.5 }} />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
-            <span className="text-xs font-semibold text-[#64748B] whitespace-nowrap bg-[#F8FAFC] px-3 py-1.5 rounded-lg border border-[#E8E5DF]">
-              {articles.length} <BilingualText vi="bài viết" en="articles" />
+            <span className="text-xs font-bold text-[#475569] whitespace-nowrap bg-[#F8FAFC] px-3.5 py-2 rounded-xl border border-[#E2E8F0] inline-flex items-center gap-1.5 h-[38px]">
+              <span className="w-2 h-2 rounded-full bg-[#10B981]" />
+              <span>{articles.length}</span>
+              <BilingualText vi="bài viết" en="articles" />
             </span>
 
             {isFiltered && (
               <button
                 type="button"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E8E5DF] hover:border-[#F97316] text-xs font-semibold text-[#64748B] hover:text-[#F97316] transition-all cursor-pointer"
+                className="secondary"
+                style={{
+                  minHeight: '38px',
+                  maxHeight: '38px',
+                  height: '38px',
+                  padding: '0 12px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  borderRadius: '10px',
+                  border: '1px solid #E2E8F0',
+                  background: '#FFFFFF',
+                  color: '#64748B',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#F97316';
+                  e.currentTarget.style.color = '#EA580C';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#E2E8F0';
+                  e.currentTarget.style.color = '#64748B';
+                }}
                 onClick={handleClearFilters}
               >
-                <RotateCcw size={12} />
+                <RotateCcw size={13} />
                 <BilingualText vi="Xóa bộ lọc" en="Clear filters" />
               </button>
             )}
@@ -200,7 +491,11 @@ export function CultureExplorePage() {
       </section>
 
       {/* Stories Grid */}
-      {articles.length ? (
+      {isLoading ? (
+        <div className="flex items-center justify-center py-20 text-[#EA580C]">
+          <Loader2 className="animate-spin w-8 h-8" />
+        </div>
+      ) : articles.length ? (
         <div className="culture-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 xl:gap-8">
           {articles.map((article) => (
             <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.25 }} key={article.id}>
@@ -251,8 +546,8 @@ export function CultureExplorePage() {
         </div>
       ) : (
         <EmptyState
-          title={bilingualLabel("Không tìm thấy câu chuyện phù hợp", "No matching stories found")}
-          description={bilingualLabel("Thử một từ khóa, chủ đề hoặc điểm đến khác để khám phá nét đẹp văn hóa Việt Nam.", "Try another keyword, topic, or destination to explore the beauty of Vietnamese culture.")}
+          title={isVi ? "Không tìm thấy câu chuyện phù hợp" : "No matching stories found"}
+          description={isVi ? "Thử một từ khóa, chủ đề hoặc điểm đến khác để khám phá nét đẹp văn hóa Việt Nam." : "Try another keyword, topic, or destination to explore the beauty of Vietnamese culture."}
         />
       )}
     </div>

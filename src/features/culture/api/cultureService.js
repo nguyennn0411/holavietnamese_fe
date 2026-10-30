@@ -1,5 +1,7 @@
 // Culture Exploration Service (Người 4: /culture & /culture/:id)
 
+import axiosClient from '@/shared/api/axiosClient';
+
 export const CULTURE_CATEGORIES = [
   { id: 'all', label: 'Tất cả danh mục', labelVi: 'Tất cả danh mục', labelEn: 'All Categories' },
   { id: 'culinary', label: 'Ẩm thực', labelVi: 'Ẩm thực', labelEn: 'Food & Cuisine' },
@@ -610,15 +612,68 @@ Còn gì thi vị bằng việc neo ghe cạnh một chiếc thuyền bán đồ
 ];
 
 export const cultureService = {
-  getCategories() {
+  async getCategories() {
+    try {
+      const response = await axiosClient.get('/api/culture/categories');
+      const data = response?.result ?? response;
+      if (Array.isArray(data) && data.length > 0) {
+        return [
+          { id: 'all', label: 'Tất cả danh mục', labelVi: 'Tất cả danh mục', labelEn: 'All Categories' },
+          ...data.map(c => ({
+            id: c.slug || c.id,
+            label: c.name,
+            labelVi: c.nameVi || c.name,
+            labelEn: c.nameEn || c.name,
+            icon: c.icon,
+          })),
+        ];
+      }
+    } catch (e) {
+      console.warn('Failed to fetch categories from API, using fallback:', e.message);
+    }
     return CULTURE_CATEGORIES;
   },
 
-  getDestinations() {
+  getCategoriesSync() {
+    return CULTURE_CATEGORIES;
+  },
+
+  async getDestinations() {
+    try {
+      const response = await axiosClient.get('/api/culture/destinations');
+      const data = response?.result ?? response;
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch destinations from API, using fallback:', e.message);
+    }
     return CULTURE_DESTINATIONS;
   },
 
-  listArticles({ search = '', category = 'all', destination = 'all' } = {}) {
+  getDestinationsSync() {
+    return CULTURE_DESTINATIONS;
+  },
+
+  async listArticles({ search = '', category = 'all', destination = 'all' } = {}) {
+    try {
+      const params = {};
+      if (search?.trim()) params.search = search.trim();
+      if (category && category !== 'all') params.category = category;
+      if (destination && destination !== 'all') params.destination = destination;
+
+      const response = await axiosClient.get('/api/culture/articles', { params });
+      const data = response?.result ?? response;
+      if (Array.isArray(data)) {
+        return data;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch articles from API, using fallback:', e.message);
+    }
+    return this.listArticlesSync({ search, category, destination });
+  },
+
+  listArticlesSync({ search = '', category = 'all', destination = 'all' } = {}) {
     let result = [...CULTURE_ARTICLES];
 
     if (search.trim()) {
@@ -642,16 +697,53 @@ export const cultureService = {
     return result;
   },
 
-  getFeaturedArticles() {
+  async getFeaturedArticles() {
+    try {
+      const response = await axiosClient.get('/api/culture/articles/featured');
+      const data = response?.result ?? response;
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch featured articles from API, using fallback:', e.message);
+    }
     return CULTURE_ARTICLES.filter(a => a.isFeatured);
   },
 
-  getArticle(id) {
+  async getArticle(id) {
+    if (!id) return null;
+    try {
+      const response = await axiosClient.get(`/api/culture/articles/${encodeURIComponent(id)}`);
+      const data = response?.result ?? response;
+      if (data && data.id) {
+        return data;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch article from API, using fallback:', e.message);
+    }
+    return this.getArticleSync(id);
+  },
+
+  getArticleSync(id) {
     return CULTURE_ARTICLES.find(a => a.id === id) || null;
   },
 
-  getRelatedArticles(id) {
-    const article = this.getArticle(id);
+  async getRelatedArticles(id) {
+    if (!id) return [];
+    try {
+      const response = await axiosClient.get(`/api/culture/articles/${encodeURIComponent(id)}/related`);
+      const data = response?.result ?? response;
+      if (Array.isArray(data)) {
+        return data;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch related articles from API, using fallback:', e.message);
+    }
+    return this.getRelatedArticlesSync(id);
+  },
+
+  getRelatedArticlesSync(id) {
+    const article = this.getArticleSync(id);
     if (!article) return [];
     return CULTURE_ARTICLES.filter(
       a => a.id !== id && (article.relatedArticles?.includes(a.id) || a.destination === article.destination || a.category === article.category)

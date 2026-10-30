@@ -505,3 +505,56 @@ summary:focus,
   background: #FFFFFF !important;
   border-color: #EA580C !important;
 }
+
+
+/* Animations for Common Animate Components */
+@keyframes shimmerText {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+
+/* Learner Topbar AI Button Height Alignment */
+.learner-topbar__ai-btn,
+button.learner-topbar__ai-btn {
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 0 16px !important;
+  border-radius: 13px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+
+/* Language Switcher Hover Upgrade (matching Hola AI warm peach gradient) */
+.language-switcher button:not(.is-active):hover {
+  background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%) !important;
+  color: #c2410c !important;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.12) !important;
+}
+
+
+/* Active Language Switcher Button (preserves orange gradient on hover/active/focus, never turning dark red) */
+.language-switcher button.is-active,
+.language-switcher button.is-active:hover,
+.language-switcher button.is-active:focus,
+.language-switcher button.is-active:active {
+  background: linear-gradient(135deg, #FF8008, #FF6A00) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(255, 106, 0, 0.28) !important;
+  opacity: 1 !important;
+}

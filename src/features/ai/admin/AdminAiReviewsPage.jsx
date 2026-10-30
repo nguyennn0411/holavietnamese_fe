@@ -2,10 +2,13 @@ import { BilingualText, vietnameseLabel } from '@/shared/components/common/Bilin
 import { useEffect, useState } from 'react';
 import { adminCultureAiService } from '@/features/ai/api/adminCultureAiService';
 import { Lock, FlaskConical } from 'lucide-react';
+import { AdminPagination } from '@/shared/components/common/AdminPagination';
 
 export function AdminAiReviewsPage() {
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const [toast, setToast] = useState('');
 
   // Interactive Test Sandbox State
@@ -57,6 +60,10 @@ Câu trả lời của AI tạo ra:
     }, 600);
   };
 
+  const totalPages = Math.max(1, Math.ceil(reviews.length / pageSize));
+  const safePage = Math.min(currentPage, totalPages);
+  const pagedReviews = reviews.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   return (
     <div className="admin-content">
       {toast && (
@@ -105,7 +112,7 @@ Câu trả lời của AI tạo ra:
                   </td>
                 </tr>
               ) : (
-                reviews.map(r => (
+                pagedReviews.map(r => (
                 <tr
                   key={r.id}
                   onClick={() => setSelectedReview(r)}
@@ -156,6 +163,15 @@ Câu trả lời của AI tạo ra:
               )}
             </tbody>
           </table>
+
+          {reviews.length > 0 && (
+            <AdminPagination
+              currentPage={safePage}
+              pageSize={pageSize}
+              totalItems={reviews.length}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
 
         {/* Right Column: Review Details Action & Test Sandbox */}

@@ -1,15 +1,21 @@
 import { BilingualText } from '@/shared/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { adminCultureAiService } from '@/features/ai/api/adminCultureAiService';
+import { AdminPagination } from '@/shared/components/common/AdminPagination';
 
 export function AdminAiUsagePage() {
   const [usageData, setUsageData] = useState(null);
+  const [logsPage, setLogsPage] = useState(1);
+  const pageSize = 10;
+
   useEffect(() => {
     adminCultureAiService.loadUsageStats()
       .then(setUsageData)
       .catch(() => setUsageData({ summary: {}, modeBreakdown: [], recentLogs: [] }));
   }, []);
+
   if (!usageData) return <div className="admin-content">Đang tải dữ liệu sử dụng AI...</div>;
+
   const summary = {
     totalSessions: 0,
     totalApiCalls: 0,
@@ -22,6 +28,10 @@ export function AdminAiUsagePage() {
   };
   const modeBreakdown = Array.isArray(usageData?.modeBreakdown) ? usageData.modeBreakdown : [];
   const recentLogs = Array.isArray(usageData?.recentLogs) ? usageData.recentLogs : [];
+
+  const totalLogsPages = Math.max(1, Math.ceil(recentLogs.length / pageSize));
+  const safeLogsPage = Math.min(logsPage, totalLogsPages);
+  const pagedLogs = recentLogs.slice((safeLogsPage - 1) * pageSize, safeLogsPage * pageSize);
 
   return (
     <div className="admin-content">
@@ -102,20 +112,17 @@ export function AdminAiUsagePage() {
             <tbody>
               {modeBreakdown.length === 0 ? (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '24px', color: 'var(--color-muted)' }}>
-                    <BilingualText vi="Chưa có dữ liệu phân bổ theo chế độ." en="No mode breakdown recorded yet." />
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '28px', color: 'var(--color-muted)' }}>
+                    <BilingualText vi="Chưa có dữ liệu phân bổ chế độ AI." en="No AI mode breakdown data found." />
                   </td>
                 </tr>
               ) : (
                 modeBreakdown.map(item => (
                 <tr key={item.mode}>
-                  <td>
-                    <strong style={{ color: 'var(--color-ink)' }}>{item.mode}</strong>
-                    <div style={{ fontSize: '11px', color: 'var(--color-forest)' }}>{item.name}</div>
-                  </td>
-                  <td>{(item.calls ?? 0).toLocaleString()}</td>
-                  <td>{Math.round((item.tokens ?? 0) / 1000).toLocaleString()}k</td>
-                  <td><strong style={{ color: 'var(--color-red-hover)' }}>${item.cost ?? 0}</strong></td>
+                  <td><strong>{item.mode}</strong></td>
+                  <td>{item.calls?.toLocaleString()}</td>
+                  <td>{item.tokens?.toLocaleString()}</td>
+                  <td>${item.cost}</td>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '60px', height: '6px', background: 'var(--color-border)', borderRadius: '4px', overflow: 'hidden' }}>
@@ -200,7 +207,7 @@ export function AdminAiUsagePage() {
                 </td>
               </tr>
             ) : (
-              recentLogs.map(log => (
+              pagedLogs.map(log => (
               <tr key={log.id}>
                 <td><code>{log.id}</code></td>
                 <td>{log.timestamp}</td>
@@ -215,6 +222,15 @@ export function AdminAiUsagePage() {
             )}
           </tbody>
         </table>
+
+        {recentLogs.length > 0 && (
+          <AdminPagination
+            currentPage={safeLogsPage}
+            pageSize={pageSize}
+            totalItems={recentLogs.length}
+            onPageChange={setLogsPage}
+          />
+        )}
       </div>
     </div>
   );

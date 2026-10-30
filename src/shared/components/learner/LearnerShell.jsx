@@ -134,13 +134,28 @@ export function LearnerTopbar({ user, stats, onLogout }) {
         {isEligible && (
           <button
             type="button"
-            className="learner-topbar__ai-btn"
+            className="learner-topbar__ai-btn secondary"
             onClick={() => openAiSidebar()}
-            title={isVi ? 'Mở Trợ lý AI Hola' : 'Open Hola AI Coach'}
-            aria-label={isVi ? 'Mở Trợ lý AI Hola' : 'Open Hola AI Coach'}
+            title={isVi ? 'Mở Hola AI' : 'Open Hola AI'}
+            aria-label={isVi ? 'Mở Hola AI' : 'Open Hola AI'}
+            style={{
+              height: '42px',
+              minHeight: '42px',
+              maxHeight: '42px',
+              padding: '0 16px',
+              borderRadius: '13px',
+              boxSizing: 'border-box',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              fontSize: '13px',
+              fontWeight: 700,
+              lineHeight: 1,
+            }}
           >
-            <Sparkles size={14} />
-            <span>{isVi ? 'Trợ lý AI' : 'AI Coach'}</span>
+            <Sparkles size={16} />
+            <span>Hola AI</span>
           </button>
         )}
         <LanguageSwitcher compact />

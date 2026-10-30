@@ -19,6 +19,7 @@ const PUBLIC_API_PREFIXES = [
   '/api/users/register',
   '/api/auth/verify-email',
   '/api/auth/forgot-password',
+  '/api/culture',
 ];
 
 const isPublicApiRequest = (url = '') => PUBLIC_API_PREFIXES.some((prefix) => url.startsWith(prefix));

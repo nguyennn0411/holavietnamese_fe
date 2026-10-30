@@ -13,31 +13,3 @@ export {
   GradientText,
   ShimmeringText,
 } from '@/shared/components/common/animate/AnimatedTexts';
-
-// Re-export Radix UI Animated Primitives for convenience
-export {
-  Accordion,
-  AlertDialog,
-  Checkbox,
-  Collapsible,
-  ContextMenu,
-  Dialog,
-  Drawer,
-  DropdownMenu,
-  HoverCard,
-  Menubar,
-  NavigationMenu,
-  Popover,
-  Progress,
-  RadioGroup,
-  Select,
-  Slider,
-  Switch,
-  Tabs,
-  Toggle,
-  ToggleGroup,
-  Tooltip,
-} from '@animate-ui/react/primitives/radix-ui';
-
-// Re-export Avatar Group
-export { AvatarGroup, AvatarGroupTooltip, AvatarGroupTooltipArrow } from '@animate-ui/react/primitives/avatar-group';

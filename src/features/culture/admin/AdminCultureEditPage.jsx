@@ -10,7 +10,7 @@ export function AdminCultureEditPage() {
   const navigate = useNavigate();
   const isNew = !id || id === 'new';
 
-  const categories = adminCultureAiService.getCategories();
+  const [categories, setCategories] = useState([]);
 
   const [formData, setFormData] = useState({
     id: '',
@@ -22,7 +22,7 @@ export function AdminCultureEditPage() {
     destination: 'Hà Nội',
     author: 'Biên tập viên Hola',
     authorRole: 'Chuyên gia văn hóa ẩm thực',
-    readTime: bilingualLabel('5 phút đọc', '5 min read'),
+    readTime: '5 phút đọc',
     status: 'PUBLISHED',
     coverImage: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80',
     summary: '',
@@ -33,30 +33,42 @@ export function AdminCultureEditPage() {
   });
 
   const [activeTab, setActiveTab] = useState('editor'); // 'editor' | 'preview'
-  const [toast, setToast] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
+
+    adminCultureAiService.getCategories().then((res) => {
+      if (mounted && Array.isArray(res)) setCategories(res);
+    });
+
     if (!isNew) {
-      const existing = adminCultureAiService.getArticle(id);
-      if (existing) {
+      adminCultureAiService.getArticle(id).then((existing) => {
+        if (!mounted || !existing) return;
         setFormData({
           ...existing,
+          category: existing.category || existing.categoryId || 'culinary',
           usefulPhrases: existing.usefulPhrases || [],
         });
-      }
+      });
     }
+
+    return () => {
+      mounted = false;
+    };
   }, [id, isNew]);
 
   const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(''), 3000);
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 3000);
   };
 
   const handleCategoryChange = (catId) => {
-    const selected = categories.find(c => c.id === catId);
+    const selected = categories.find(c => c.id === catId || c.slug === catId || (c.slug || c.id) === catId);
     setFormData(prev => ({
       ...prev,
-      category: catId,
+      category: selected?.id || catId,
       categoryName: selected?.name || 'Khác',
     }));
   };
@@ -84,30 +96,38 @@ export function AdminCultureEditPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.title.trim()) {
+  const handleSubmit = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!formData.title?.trim()) {
       toast.error(bilingualLabel('Vui lòng nhập tiêu đề bài viết.', 'Please enter an article title.'));
       return;
     }
 
     const payload = {
       ...formData,
-      id: formData.id || `culture-${Date.now()}`,
+      id: isNew ? undefined : formData.id,
+      usefulPhrases: formData.usefulPhrases.filter(p => p.word?.trim()),
     };
 
-    adminCultureAiService.saveArticle(payload);
-    showToast(bilingualLabel('Đã lưu bài viết văn hóa thành công!', 'Cultural article saved successfully!'));
-    setTimeout(() => {
-      navigate('/admin/culture');
-    }, 800);
+    setIsSubmitting(true);
+    try {
+      await adminCultureAiService.saveArticle(payload);
+      showToast(bilingualLabel('Đã lưu bài viết văn hóa thành công!', 'Cultural article saved successfully!'));
+      toast.success(bilingualLabel('Lưu bài viết thành công!', 'Article saved successfully!'));
+      setTimeout(() => {
+        navigate('/admin/culture');
+      }, 700);
+    } catch (err) {
+      toast.error(err.message || 'Lỗi khi lưu bài viết.');
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="admin-content">
-      {toast && (
+      {toastMessage && (
         <div style={{ position: 'fixed', top: '24px', right: '24px', background: 'var(--color-ink)', color: 'var(--color-surface)', padding: '12px 20px', borderRadius: '10px', zIndex: 9999, fontWeight: 700 }}>
-          <BilingualText>{toast}</BilingualText>
+          <BilingualText>{toastMessage}</BilingualText>
         </div>
       )}
 
@@ -138,9 +158,12 @@ export function AdminCultureEditPage() {
           <button
             type="button"
             className="button"
+            disabled={isSubmitting}
             onClick={handleSubmit}
-            style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px' }}
-          ><BilingualText>{"Lưu bài viết"}</BilingualText></button>
+            style={{ background: 'var(--color-ink)', borderColor: 'var(--color-ink)', fontSize: '13px', cursor: 'pointer' }}
+          >
+            <BilingualText>{isSubmitting ? 'Đang lưu...' : 'Lưu bài viết'}</BilingualText>
+          </button>
         </div>
       </div>
 
@@ -258,8 +281,8 @@ export function AdminCultureEditPage() {
                     onChange={e => handleCategoryChange(e.target.value)}
                   >
                     {categories.map(c => (
-                      <option key={c.id} value={c.id}>
-                        {c.icon} {c.name}
+                      <option key={c.id} value={c.slug || c.id}>
+                        {c.icon || '🏮'} {c.name}
                       </option>
                     ))}
                   </select>

@@ -1,6 +1,6 @@
 import { BilingualText, bilingualLabel, useBilingualLabel } from '@/shared/components/common/BilingualText';
 import { ContentImage } from '@/shared/components/common/ContentImage';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { cultureService } from '@/features/culture/api/cultureService';
 import { PageHeader, EmptyState, Breadcrumb } from '@/shared/components/common/Ui';
@@ -12,7 +12,18 @@ export function BlogHomePage() {
   const isVi = (i18n?.resolvedLanguage || i18n?.language || 'vi').startsWith('vi');
   const bLabel = useBilingualLabel();
   const [search, setSearch] = useState('');
-  const articles = cultureService.listArticles({ search });
+  const [articles, setArticles] = useState(() => cultureService.listArticlesSync({ search: '' }));
+
+  useEffect(() => {
+    let mounted = true;
+    cultureService.listArticles({ search }).then((res) => {
+      if (mounted && Array.isArray(res)) setArticles(res);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [search]);
+
   const featured = articles[0];
 
   return (
@@ -108,8 +119,26 @@ export function BlogDetailPage() {
   const { i18n } = useTranslation();
   const isVi = (i18n?.resolvedLanguage || i18n?.language || 'vi').startsWith('vi');
   const bLabel = useBilingualLabel();
-  const article = cultureService.getArticle(id);
-  const related = cultureService.getRelatedArticles(id);
+  const [article, setArticle] = useState(() => cultureService.getArticleSync(id));
+  const [related, setRelated] = useState(() => cultureService.getRelatedArticlesSync(id));
+
+  useEffect(() => {
+    let mounted = true;
+    cultureService.getArticle(id).then((art) => {
+      if (!mounted || !art) return;
+      setArticle(art);
+      if (art.relatedArticles && art.relatedArticles.length > 0) {
+        setRelated(art.relatedArticles);
+      } else {
+        cultureService.getRelatedArticles(id).then((rel) => {
+          if (mounted && Array.isArray(rel)) setRelated(rel);
+        });
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [id]);
 
   if (!article) {
     return (

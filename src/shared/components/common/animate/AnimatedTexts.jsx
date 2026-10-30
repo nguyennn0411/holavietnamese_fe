@@ -1,24 +1,57 @@
-import React from 'react';
-import { TypingText as AnimateTypingText } from '@animate-ui/react/primitives/texts/typing';
-import { CountingNumber as AnimateCountingNumber } from '@animate-ui/react/primitives/texts/counting-number';
-import { GradientText as AnimateGradientText } from '@animate-ui/react/primitives/texts/gradient';
-import { ShimmeringText as AnimateShimmeringText } from '@animate-ui/react/primitives/texts/shimmering';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/utils/cn';
 
 /**
  * Typewriter effect for mascot dialogues or learner conversation prompts.
  */
-export function TypingText({ text, className, duration = 50, delay = 0, loop = false, holdDelay = 2000, ...props }) {
+export function TypingText({
+  text = '',
+  className,
+  duration = 45,
+  delay = 0,
+  loop = false,
+  holdDelay = 2000,
+  ...props
+}) {
+  const [displayed, setDisplayed] = useState('');
+
+  useEffect(() => {
+    let timeoutId;
+    let currentIndex = 0;
+    let isDeleting = false;
+
+    const type = () => {
+      if (!isDeleting) {
+        if (currentIndex <= text.length) {
+          setDisplayed(text.slice(0, currentIndex));
+          currentIndex++;
+          timeoutId = setTimeout(type, duration);
+        } else if (loop) {
+          timeoutId = setTimeout(() => {
+            isDeleting = true;
+            type();
+          }, holdDelay);
+        }
+      } else {
+        if (currentIndex > 0) {
+          currentIndex--;
+          setDisplayed(text.slice(0, currentIndex));
+          timeoutId = setTimeout(type, duration / 2);
+        } else {
+          isDeleting = false;
+          timeoutId = setTimeout(type, 400);
+        }
+      }
+    };
+
+    timeoutId = setTimeout(type, delay);
+    return () => clearTimeout(timeoutId);
+  }, [text, duration, delay, loop, holdDelay]);
+
   return (
-    <AnimateTypingText
-      text={text}
-      className={cn('inline-block font-sans', className)}
-      duration={duration}
-      delay={delay}
-      loop={loop}
-      holdDelay={holdDelay}
-      {...props}
-    />
+    <span className={cn('inline-block font-sans', className)} {...props}>
+      {displayed}
+    </span>
   );
 }
 
@@ -31,19 +64,46 @@ export function CountingNumber({
   from = 0,
   className,
   thousandSeparator = ',',
-  transition = { type: 'spring', damping: 20, stiffness: 100 },
+  duration = 1.0,
   ...props
 }) {
   const targetNumber = number !== undefined ? number : (typeof value === 'number' ? value : 0);
+  const [displayVal, setDisplayVal] = useState(from);
+
+  useEffect(() => {
+    let startTimestamp = null;
+    let frameId;
+    const startVal = from;
+    const endVal = targetNumber;
+
+    if (startVal === endVal) {
+      setDisplayVal(endVal);
+      return;
+    }
+
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const elapsed = (timestamp - startTimestamp) / 1000;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutQuart
+      const ease = 1 - Math.pow(1 - progress, 4);
+      const current = Math.round(startVal + (endVal - startVal) * ease);
+      setDisplayVal(current);
+      if (progress < 1) {
+        frameId = requestAnimationFrame(step);
+      }
+    };
+
+    frameId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frameId);
+  }, [targetNumber, from, duration]);
+
+  const formatted = displayVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+
   return (
-    <AnimateCountingNumber
-      number={targetNumber}
-      fromNumber={from}
-      thousandSeparator={thousandSeparator}
-      transition={transition}
-      className={cn('inline-block font-mono font-bold tabular-nums', className)}
-      {...props}
-    />
+    <span className={cn('inline-block font-mono font-bold tabular-nums', className)} {...props}>
+      {formatted}
+    </span>
   );
 }
 
@@ -52,29 +112,47 @@ export function CountingNumber({
  */
 export function GradientText({
   text,
+  children,
   gradient = 'linear-gradient(90deg, #F97316 0%, #F5B942 50%, #DA251D 100%)',
   className,
   ...props
 }) {
+  const content = text !== undefined ? text : children;
   return (
-    <AnimateGradientText
-      text={text}
-      gradient={gradient}
-      className={cn('font-bold', className)}
+    <span
+      className={cn('inline-block font-bold', className)}
+      style={{
+        backgroundImage: gradient,
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+      }}
       {...props}
-    />
+    >
+      {content}
+    </span>
   );
 }
 
 /**
  * Shimmering metallic text shine effect for streak celebrations and milestone awards.
  */
-export function ShimmeringText({ text, className, ...props }) {
+export function ShimmeringText({ text, children, className, ...props }) {
+  const content = text !== undefined ? text : children;
   return (
-    <AnimateShimmeringText
-      text={text}
-      className={cn('font-semibold', className)}
+    <span
+      className={cn(
+        'inline-block font-semibold bg-gradient-to-r from-orange-600 via-amber-300 to-orange-600 bg-clip-text text-transparent',
+        className
+      )}
+      style={{
+        backgroundSize: '200% auto',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        animation: 'shimmerText 2.5s linear infinite',
+      }}
       {...props}
-    />
+    >
+      {content}
+    </span>
   );
 }

@@ -5,6 +5,7 @@ import { adminCultureAiService } from '@/features/ai/api/adminCultureAiService';
 import { toast } from 'sonner';
 import { Check, Pencil, Play, Power, Trash2 } from 'lucide-react';
 import { useConfirmDialog } from '@/shared/components/common/ConfirmDialog';
+import { AdminPagination } from '@/shared/components/common/AdminPagination';
 
 const TOPIC_MAP = {
   dining: { vi: 'Ẩm thực & Quán xá', en: 'Dining & Street Food' },
@@ -30,6 +31,8 @@ export function AdminAiScenariosPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [scenarios, setScenarios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const { confirm, confirmationDialog } = useConfirmDialog();
   const label = useBilingualLabel();
 
@@ -52,6 +55,10 @@ export function AdminAiScenariosPage() {
       window.removeEventListener('focus', refresh);
     };
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, topicFilter, levelFilter, statusFilter]);
 
   const filteredScenarios = scenarios.filter(sc => {
     const q = search.trim().toLowerCase();
@@ -210,6 +217,10 @@ export function AdminAiScenariosPage() {
     boxSizing: 'border-box',
   };
 
+  const totalPages = Math.max(1, Math.ceil(filteredScenarios.length / pageSize));
+  const safePage = Math.min(currentPage, totalPages);
+  const pagedScenarios = filteredScenarios.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   return (
     <div className="admin-content">
       {confirmationDialog}
@@ -294,6 +305,7 @@ export function AdminAiScenariosPage() {
                 setTopicFilter('all');
                 setLevelFilter('all');
                 setStatusFilter('all');
+                setCurrentPage(1);
               }}
             >
               <span>{label('Đặt lại', 'Reset')}</span>
@@ -344,7 +356,7 @@ export function AdminAiScenariosPage() {
                 </td>
               </tr>
             ) : (
-              filteredScenarios.map(sc => {
+              pagedScenarios.map(sc => {
                 const count = sc.completionsCount || 0;
                 const topicObj = TOPIC_MAP[sc.topic];
                 const topicDisplay = topicObj ? label(topicObj.vi, topicObj.en) : (sc.topicName || sc.topic);
@@ -538,6 +550,15 @@ export function AdminAiScenariosPage() {
             )}
           </tbody>
         </table>
+
+        {!loading && filteredScenarios.length > 0 && (
+          <AdminPagination
+            currentPage={safePage}
+            pageSize={pageSize}
+            totalItems={filteredScenarios.length}
+            onPageChange={setCurrentPage}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,35 +1,26 @@
 import React from 'react';
-import { AnimateIcon as BaseAnimateIcon } from '@animate-ui/react/icons';
+import { motion } from 'motion/react';
 import { cn } from '@/utils/cn';
 
 /**
  * Animated icon wrapper for Lucide icons.
- * Triggers interactive animations like 'path' draw, bounce, or pulse on hover or tap.
+ * Triggers interactive animations like bounce or pulse on hover or tap.
  */
 export function AnimatedIcon({
   children,
   className,
-  animateOnHover = 'path', // 'path' | 'path-loop' | boolean
-  animateOnTap,
-  animateOnView,
-  loop = false,
-  speed = 1,
-  delay = 0,
   ...props
 }) {
   return (
-    <BaseAnimateIcon
+    <motion.span
       className={cn('inline-flex items-center justify-center', className)}
-      animateOnHover={animateOnHover}
-      animateOnTap={animateOnTap}
-      animateOnView={animateOnView}
-      loop={loop}
-      speed={speed}
-      delay={delay}
+      whileHover={{ scale: 1.15, rotate: 4 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       {...props}
     >
       {children}
-    </BaseAnimateIcon>
+    </motion.span>
   );
 }
 

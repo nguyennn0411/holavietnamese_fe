@@ -1,6 +1,6 @@
 import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { ContentImage } from '@/shared/components/common/ContentImage';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cultureService } from '@/features/culture/api/cultureService';
@@ -8,26 +8,45 @@ import { vocabularyService } from '@/features/vocabulary/api/vocabularyService';
 import { aiTutorService } from '@/features/ai/api/aiTutorService';
 import { Breadcrumb, SpeakButton, Notice, EmptyState, Artwork } from '@/shared/components/common/Ui';
 import { RichText } from '@/shared/components/common/RichText';
-import { Clock, MapPin, ArrowLeft, Compass } from 'lucide-react';
+import { Clock, MapPin, ArrowLeft, Compass, Loader2 } from 'lucide-react';
 
 export function CultureDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const isVi = (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('vi');
-  const article = cultureService.getArticle(id);
-  const relatedArticles = cultureService.getRelatedArticles(id);
+  const [article, setArticle] = useState(() => cultureService.getArticleSync(id));
+  const [relatedArticles, setRelatedArticles] = useState(() => cultureService.getRelatedArticlesSync(id));
+  const [isLoading, setIsLoading] = useState(!article);
   const [toastMessage, setToastMessage] = useState('');
 
-  if (!article) {
-    return (
-      <EmptyState title={bilingualLabel("Không tìm thấy bài viết văn hóa", "Cultural article not found")}>
-        <Link className="button" to="/culture">
-          <BilingualText vi="Về thư viện văn hóa" en="Back to Culture Library" />
-        </Link>
-      </EmptyState>
-    );
-  }
+  useEffect(() => {
+    let mounted = true;
+    if (!article) setIsLoading(true);
+    cultureService
+      .getArticle(id)
+      .then((art) => {
+        if (!mounted) return;
+        setArticle(art);
+        setIsLoading(false);
+        if (art) {
+          if (art.relatedArticles && art.relatedArticles.length > 0) {
+            setRelatedArticles(art.relatedArticles);
+          } else {
+            cultureService.getRelatedArticles(id).then((rel) => {
+              if (mounted && rel) setRelatedArticles(rel);
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        if (mounted) setIsLoading(false);
+        console.warn('Error fetching culture detail:', err);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, [id]);
 
   const showToast = (message) => {
     setToastMessage(message);
@@ -48,8 +67,26 @@ export function CultureDetailPage() {
   }
 
   function ask() {
-    aiTutorService.createSession('culture_guide', `Tìm hiểu: ${article.title.slice(0, 24)}...`);
+    aiTutorService.createSession('culture_guide', `Tìm hiểu: ${article?.title?.slice(0, 24) || 'Văn hóa'}...`);
     navigate('/ai-tutor');
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-24 text-[#EA580C]">
+        <Loader2 className="animate-spin w-10 h-10" />
+      </div>
+    );
+  }
+
+  if (!article) {
+    return (
+      <EmptyState title={bilingualLabel("Không tìm thấy bài viết văn hóa", "Cultural article not found")}>
+        <Link className="button" to="/culture">
+          <BilingualText vi="Về thư viện văn hóa" en="Back to Culture Library" />
+        </Link>
+      </EmptyState>
+    );
   }
 
   return (
@@ -158,7 +195,7 @@ export function CultureDetailPage() {
                     <div className="actions flex items-center gap-2 shrink-0 self-end sm:self-center">
                       <SpeakButton text={phrase.word} audioUrl={phrase.audioUrl} />
                       <button
-                        className="secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF] text-xs font-semibold shadow-xs transition-all"
+                        className="secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF] text-xs font-semibold shadow-xs transition-all cursor-pointer"
                         onClick={() => save(phrase)}
                       >
                         <BilingualText>{"Lưu từ"}</BilingualText>
@@ -182,7 +219,7 @@ export function CultureDetailPage() {
             </div>
             <button
               onClick={ask}
-              className="px-5 py-3 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-xs sm:text-sm shadow-md transition-all shrink-0"
+              className="px-5 py-3 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-xs sm:text-sm shadow-md transition-all shrink-0 cursor-pointer"
             >
               <BilingualText>{"Hỏi AI Tutor →"}</BilingualText>
             </button>
@@ -203,7 +240,7 @@ export function CultureDetailPage() {
               <BilingualText>{"Từng câu chuyện nhỏ giúp ngôn ngữ trở nên gần gũi và sâu sắc hơn."}</BilingualText>
             </p>
             <button
-              className="secondary w-full py-2.5 px-4 rounded-xl bg-[#FFF7E8] hover:bg-[#FFEEC9] text-[#253044] border border-[#E8E5DF] font-bold text-xs transition-all"
+              className="secondary w-full py-2.5 px-4 rounded-xl bg-[#FFF7E8] hover:bg-[#FFEEC9] text-[#253044] border border-[#E8E5DF] font-bold text-xs transition-all cursor-pointer"
               onClick={ask}
             >
               <BilingualText>{"Hỏi về câu chuyện này"}</BilingualText>
@@ -240,7 +277,7 @@ export function CultureDetailPage() {
                 <BilingualText>{"Câu chuyện liên quan"}</BilingualText>
               </h2>
               <div className="space-y-2.5">
-                {relatedArticles.map(related => (
+                {relatedArticles.map((related) => (
                   <Link
                     className="group block p-3 rounded-xl bg-[#FFF7E8]/70 hover:bg-[#FFF7E8] border border-[#E8E5DF]/40 hover:border-[#E8E5DF] transition-all"
                     key={related.id}
