@@ -46,6 +46,11 @@ export function ProfilePage() {
       })
       .catch((e) => setState((s) => ({ ...s, error: e.message })))
       .finally(() => setState((s) => ({ ...s, loading: false })));
+
+    learnerService
+      .getProgressData()
+      .then((data) => setProgress(data))
+      .catch((err) => console.warn('Could not load progress data in profile:', err));
   }, []);
 
   const save = async (e) => {
@@ -149,6 +154,19 @@ export function ProfilePage() {
         <div className="profile-identity">
           <h2>{profile.fullName || profile.username}</h2>
           <p>{profile.email}</p>
+          <div className="profile-identity-progress my-2">
+            <Link
+              to={ROUTES.PROGRESS}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF7E8] hover:bg-[#FFEECB] text-[#EA580C] text-xs font-bold border border-[#FDBA74]/50 transition-colors shadow-2xs"
+            >
+              <TrendingUp size={13} />
+              <BilingualText
+                vi={`Tiến trình: Cấp ${progress?.currentLevel ?? 1} · ${progress?.totalXp ?? profile?.totalXp ?? 0} XP · Chuỗi ${progress?.streakCount ?? profile?.streakCount ?? 0} ngày`}
+                en={`Progress: Lv. ${progress?.currentLevel ?? 1} · ${progress?.totalXp ?? profile?.totalXp ?? 0} XP · ${progress?.streakCount ?? profile?.streakCount ?? 0}-Day Streak`}
+              />
+              <span className="text-[11px] opacity-75">→</span>
+            </Link>
+          </div>
           <button type="button" className="profile-upload-link" onClick={() => avatarInputRef.current?.click()} disabled={avatarState.uploading}><Upload size={14}/><BilingualText>{avatarState.uploading ? 'Đang tải ảnh lên…' : 'Đổi ảnh đại diện'}</BilingualText></button>
           <small><BilingualText>{"JPEG, PNG hoặc WebP · tối đa 5MB"}</BilingualText></small>
           {avatarState.error && <span className="profile-avatar-error" role="alert"><BilingualText>{avatarState.error}</BilingualText></span>}

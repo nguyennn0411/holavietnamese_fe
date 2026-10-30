@@ -64,6 +64,8 @@
 .user-menu__identity { display:flex; flex-direction:column; gap:4px; padding:18px 20px 16px; border-bottom:1px solid var(--layout-line); background:linear-gradient(135deg,var(--color-cream),var(--color-surface)); }
 .user-menu__identity strong { overflow:hidden; color:var(--layout-ink); font-size:14px; text-overflow:ellipsis; white-space:nowrap; }
 .user-menu__identity span { overflow:hidden; color:var(--layout-muted); font-size:10px; text-overflow:ellipsis; white-space:nowrap; }
+.user-menu__progress-badge { display:flex !important; flex-direction:column !important; padding:12px 18px !important; border-bottom:1px solid var(--layout-line) !important; background:linear-gradient(135deg, #FFFDF8, #FFF5E6) !important; text-decoration:none !important; cursor:pointer !important; transition:all .18s ease !important; }
+.user-menu__progress-badge:hover { background:#FFEED1 !important; }
 .user-menu__panel > a,.user-menu__logout { display:flex;align-items:center;gap:12px; width:100%; min-height:48px; padding:12px 20px; border:0; border-radius:0; color:var(--color-ink); background:transparent; text-align:left; text-decoration:none; font-size:12.5px; font-weight:650; }
 .user-menu__panel > a svg,.user-menu__logout svg { width:18px; height:18px; flex:0 0 18px; color:var(--layout-ink); stroke-width:1.9; }
 .user-menu__panel > a:hover,.user-menu__logout:hover { background:#FFFFFF; color:var(--color-red); }

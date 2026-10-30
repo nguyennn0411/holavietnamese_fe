@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, GraduationCap, TrendingUp } from 'lucide-react';
 import { useConfirmDialog } from '@/shared/components/common/ConfirmDialog';
 import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
+import { learnerService } from '@/features/learning/api/learnerService';
 
 export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
   const contentAdminPath = canReadVocabulary(user) ? ROUTES.ADMIN_VOCABULARY
@@ -15,10 +16,16 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
         : null;
   const label = useBilingualLabel();
   const [open, setOpen] = useState(false);
+  const [progressData, setProgressData] = useState(null);
   const menuRef = useRef(null);
   const displayName = user?.fullName || user?.username || label('Học viên', 'Learner');
   const reduceMotion = useReducedMotion();
   const { confirm, confirmationDialog } = useConfirmDialog();
+
+  useEffect(() => {
+    if (!open) return;
+    learnerService.getProgressData().then((res) => setProgressData(res)).catch(() => {});
+  }, [open]);
 
   const handleLogout = async () => {
     closeMenu();
@@ -96,6 +103,39 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
                 />
               </span>
             </div>
+            <Link
+              to={ROUTES.PROGRESS}
+              onClick={closeMenu}
+              className="user-menu__progress-badge"
+              role="menuitem"
+            >
+              <div className="flex items-center justify-between text-xs font-bold text-[#EA580C] mb-1">
+                <span className="flex items-center gap-1.5">
+                  <TrendingUp size={14} />
+                  <BilingualText
+                    vi={`Cấp ${progressData?.currentLevel ?? 1}: ${progressData?.levelTitle || 'Tập sự'}`}
+                    en={`Lv. ${progressData?.currentLevel ?? 1}: ${progressData?.levelTitleEn || 'Beginner'}`}
+                  />
+                </span>
+                <span className="text-xs text-[#253044] font-black">
+                  {progressData?.totalXp ?? user?.totalXp ?? 0} XP
+                </span>
+              </div>
+              <div className="w-full h-2 bg-[#E8E5DF]/70 rounded-full overflow-hidden my-1">
+                <div
+                  className="h-full bg-gradient-to-r from-amber-500 to-[#EA580C] rounded-full transition-all duration-300"
+                  style={{ width: `${Math.min(100, Math.max(8, progressData?.levelProgressPercent ?? 15))}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-[11px] text-[#64748B]">
+                <span>
+                  <BilingualText vi="Tiến độ lên cấp" en="To next level" />
+                </span>
+                <span className="font-semibold text-[#EA580C]">
+                  {progressData?.levelProgressPercent ?? 0}% ({progressData?.totalXp ?? user?.totalXp ?? 0}/{progressData?.nextLevelRequiredXp ?? 100} XP)
+                </span>
+              </div>
+            </Link>
             <Link to={ROUTES.PROGRESS} onClick={closeMenu} role="menuitem">
               <TrendingUp size={16} />
               <BilingualText vi="Tiến độ học tập" en="Learning Progress" />
