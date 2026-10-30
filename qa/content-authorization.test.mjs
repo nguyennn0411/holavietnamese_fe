@@ -44,11 +44,10 @@ test('an administrator can receive a narrowly scoped content permission', () => 
   assert.equal(canWriteExplore(exploreLinkManager), false);
 });
 
-test('content managers can view Vocabulary import history without requesting Admin-only course imports', () => {
+test('content managers can view Vocabulary import history without website-course imports', () => {
   const page = readFileSync(new URL('../src/features/content-import/pages/AdminImportHistoryPage.jsx', import.meta.url), 'utf8');
   const route = readFileSync(new URL('../src/shared/components/common/AdminRoute.jsx', import.meta.url), 'utf8');
 
   assert.match(route, /importPath \? canImportVocabulary\(user\)/);
-  assert.match(page, /mayViewWebsiteImports \? websiteImportService\.history/);
-  assert.match(page, /mayViewWebsiteImports && <ResourceState resource=\{websiteResource\}>/);
+  assert.doesNotMatch(page, /websiteImportService/);
 });

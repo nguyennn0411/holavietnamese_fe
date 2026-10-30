@@ -30,6 +30,6 @@ test('learner header exposes Manage Courses to content managers', () => {
   assert.match(shell, /const isContentManager = user\?\.roles\?\.includes\('CONTENT_MANAGER'\)/);
   assert.match(shell, /<UserMenu user=\{user\} isAdmin=\{isAdmin\} isContentManager=\{isContentManager\}/);
   assert.match(menu, /isContentManager && !isAdmin/);
-  assert.match(menu, /to=\{ROUTES\.ADMIN_COURSES\}/);
+  assert.match(menu, /to=\{ROUTES\.CONTENT_COURSES\}/);
   assert.match(menu, /en="Manage Courses"/);
 });

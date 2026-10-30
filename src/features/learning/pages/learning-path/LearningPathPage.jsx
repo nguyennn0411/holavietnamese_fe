@@ -197,7 +197,7 @@ function Roadmap({ stages, courseId }) {
           <li key={item.id} className={`is-${state.toLowerCase().replace('_', '-')}`}>
             <span>{icon}</span>
             <div>
-              {state === 'LOCKED' ? content : <Link to={`/learn/${courseId}/lesson/${item.id}`}>{content}</Link>}
+              {state === 'LOCKED' ? content : <Link to={`/courses/${courseId}/lessons/${item.id}`}>{content}</Link>}
             </div>
           </li>
         );
@@ -594,7 +594,7 @@ export function LearningPathPage() {
                       <span style={{ width: `${item.progressPercentage || 0}%` }} />
                     </div>
                     {item.nextLesson ? (
-                      <Link to={`/learn/${item.id}/lesson/${item.nextLesson.id}`}>
+                      <Link to={`/courses/${item.id}/lessons/${item.nextLesson.id}`}>
                         <BilingualText vi="Tiếp tục" en="Continue" />
                         <ChevronRight size={14} />
                       </Link>

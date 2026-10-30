@@ -420,8 +420,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                         <Link
                           to={
                             activeCourse.lastAccessedLessonId
-                              ? `/learn/${activeCourse.id}/lesson/${activeCourse.lastAccessedLessonId}`
-                              : `/learn/${activeCourse.id}`
+                              ? `/courses/${activeCourse.id}/lessons/${activeCourse.lastAccessedLessonId}`
+                              : `/courses/${activeCourse.id}/learn`
                           }
                           className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl !bg-white hover:!bg-[#FFF7E8] !text-[#EA580C] hover:!text-[#C2410C] border-2 border-[#EA580C] font-black text-xs shadow-md transition-all active:!bg-white active:!text-[#EA580C]"
                         >
@@ -498,8 +498,8 @@ export function MyLearningPage({ initialTab = 'courses' }) {
                       {filteredCourses.map((course) => {
                         const isCompleted = course.progressPercentage >= 100 || course.status === 'COMPLETED';
                         const continueUrl = course.lastAccessedLessonId
-                          ? `/learn/${course.id}/lesson/${course.lastAccessedLessonId}`
-                          : `/learn/${course.id}`;
+                          ? `/courses/${course.id}/lessons/${course.lastAccessedLessonId}`
+                          : `/courses/${course.id}/learn`;
                         const realCover = getCourseCover(course);
 
                         return (

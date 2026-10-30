@@ -259,7 +259,6 @@ export function AlphabetPage() {
             <ArrowLeft size={16} aria-hidden="true" />
             <BilingualText vi="Về khóa học" en="Back to courses" />
           </Link>
-          <span><BilingualText vi="Âm mẫu VietSyllables · Dự phòng bằng giọng tiếng Việt trên thiết bị" en="VietSyllables sample audio · Fallback using device Vietnamese TTS" /></span>
         </footer>
       </div>
     </div>

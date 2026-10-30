@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCircle2, Check } from 'lucide-react';
 
 export function LessonNavigation({ lesson, pending, onComplete, showComplete = true }) {
-  const path = (id) => `/learn/${lesson.courseId}/lesson/${id}`;
+  const path = (id) => `/courses/${lesson.courseId}/lessons/${id}`;
 
   return (
     <div className="lesson-navigation flex items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E5DF] shadow-sm">

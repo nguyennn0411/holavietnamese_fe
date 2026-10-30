@@ -23,7 +23,7 @@ export function AdminRoute() {
   const roles = user?.roles || [];
   const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
   const isContentManager = roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER');
-  const contentPath = ['/admin/courses', '/admin/lessons', '/admin/questions', '/admin/quizzes']
+  const contentPath = ['/content/courses', '/content/lessons', '/content/questions', '/content/quizzes', '/admin/courses', '/admin/lessons', '/admin/questions', '/admin/quizzes']
     .some(path => location.pathname === path || location.pathname.startsWith(`${path}/`));
   const vocabularyPath = ['/admin/vocabulary', '/admin/regional-language']
     .some(path => location.pathname === path || location.pathname.startsWith(`${path}/`));

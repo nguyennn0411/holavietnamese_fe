@@ -8,6 +8,7 @@ import { AuthHeader } from '@/features/auth/components/AuthHeader';
 import { AuthRightPanel } from '@/features/auth/components/AuthRightPanel';
 import { clearPostVerificationPath, getUnverifiedLoginEmail, savePendingVerificationEmail, savePostVerificationPath } from '@/features/auth/emailVerificationFlow';
 import { Eye, EyeOff } from 'lucide-react';
+import { ROUTES } from '@/constants/routes';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -72,7 +73,7 @@ export function LoginPage() {
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
           navigate('/admin', { replace: true });
         } else if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
-          navigate('/admin/courses', { replace: true });
+          navigate(ROUTES.CONTENT_COURSES, { replace: true });
         } else {
           continueLearnerFlow(navigate, loggedUser, from);
         }
@@ -153,7 +154,7 @@ export function LoginPage() {
       return <Navigate to="/admin" replace />;
     }
     if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
-      return <Navigate to="/admin/courses" replace />;
+      return <Navigate to={ROUTES.CONTENT_COURSES} replace />;
     }
     return <Navigate to={user?.onboardingCompleted === true ? '/' : '/onboarding/reason'} replace />;
   }
@@ -190,7 +191,7 @@ export function LoginPage() {
         if (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN')) {
           navigate('/admin', { replace: true });
         } else if (roles.includes('CONTENT_MANAGER') || roles.includes('ROLE_CONTENT_MANAGER')) {
-          navigate('/admin/courses', { replace: true });
+          navigate(ROUTES.CONTENT_COURSES, { replace: true });
         } else {
           continueLearnerFlow(navigate, loggedUser, from);
         }

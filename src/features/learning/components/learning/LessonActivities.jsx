@@ -744,7 +744,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
           {activity.quizId ? (
             <Link
               className="button inline-flex items-center gap-2 py-3 px-6 rounded-2xl bg-[#FF7A00] hover:bg-[#EA580C] text-white font-black text-sm shadow-md"
-              to={preview ? `/admin/quizzes/${activity.quizId}/preview` : `/quizzes/${activity.quizId}`}
+              to={preview ? `/content/quizzes/${activity.quizId}/preview` : `/quizzes/${activity.quizId}`}
             >
               <BilingualText>{"Bắt đầu quiz ngay →"}</BilingualText>
             </Link>
