@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { ContentImage } from '@/shared/components/common/ContentImage';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, GraduationCap } from 'lucide-react';
+import { ChevronDown, UserRound, Settings, Trophy, Shield, LogOut, GraduationCap, TrendingUp } from 'lucide-react';
 import { useConfirmDialog } from '@/shared/components/common/ConfirmDialog';
 import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 
@@ -96,6 +96,10 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
                 />
               </span>
             </div>
+            <Link to={ROUTES.PROGRESS} onClick={closeMenu} role="menuitem">
+              <TrendingUp size={16} />
+              <BilingualText vi="Tiến độ học tập" en="Learning Progress" />
+            </Link>
             <Link to={ROUTES.MY_LEARNING} onClick={closeMenu} role="menuitem">
               <GraduationCap size={16} />
               <BilingualText vi="Góc học tập của tôi" en="My Learning" />
