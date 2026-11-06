@@ -1,6 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import { getStoredAudioSpeed } from "@/features/account/services/userSettingsService";
 
-export const AUDIO_BASE = "https://assets.vietsyllables.com/vb_northern_hn_female_nh";
+export const VIETSYLLABLES_ASSET_HOST = "https://assets.vietsyllables.com";
+export const VIETSYLLABLES_VOICE = "vb_northern_hn_female_nh";
+
+// Keep this in one place so the letter tiles and the syllable chart always use
+// the same VietSyllables recording. Their player resolves audio as:
+// asset host / voice / initial / final_tone.mp3.
+export function getVietSyllablesAudioUrl(initial, final, toneId) {
+  const safeInitial = initial || "∅";
+  return `${VIETSYLLABLES_ASSET_HOST}/${VIETSYLLABLES_VOICE}/${encodeURIComponent(safeInitial)}/${encodeURIComponent(final)}_${encodeURIComponent(toneId)}.mp3`;
+}
 
 const toneMarks = { grave: "\u0300", acute: "\u0301", hook: "\u0309", tilde: "\u0303", dot: "\u0323" };
 
@@ -81,7 +91,7 @@ export function entriesForTile(item, group) {
     ...item, group, key: `${group}-${item.id}-${index}`,
     syllable: item.reading, spoken, toneId,
     source: "Giọng Hà Nội",
-    url: `${AUDIO_BASE}/${encodeURIComponent(initial)}/${encodeURIComponent(final)}_${toneId}.mp3`,
+    url: getVietSyllablesAudioUrl(initial, final, toneId),
   }));
 }
 
@@ -126,6 +136,9 @@ export function usePronunciationPlayer() {
     window.speechSynthesis?.cancel();
     const entry = queue[index];
     const audio = entry.url ? new Audio(entry.url) : null;
+    if (audio) {
+      audio.playbackRate = getStoredAudioSpeed();
+    }
     audioRef.current = audio;
     setCurrent({ ...entry, index: index + 1, total: queue.length });
     setStatus("loading");
@@ -150,7 +163,7 @@ export function usePronunciationPlayer() {
       }
       const utterance = new SpeechSynthesisUtterance(entry.spoken || withTone(entry.syllable, entry.toneId));
       utterance.lang = "vi-VN";
-      utterance.rate = 0.8;
+      utterance.rate = getStoredAudioSpeed();
       const voice = window.speechSynthesis.getVoices().find((item) => item.lang.toLowerCase().startsWith("vi"));
       if (voice) utterance.voice = voice;
       utterance.onstart = () => {

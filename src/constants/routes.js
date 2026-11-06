@@ -3,10 +3,20 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
+  SIGNUP: '/signup',
   VERIFY_EMAIL: '/verify-email',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   ONBOARDING: '/onboarding',
+  WELCOME: '/welcome',
+  LOGIN_REQUIRED: '/login-required',
+  AUTH_REQUIRED: '/auth-required',
+
+  // EdTech Next-Gen Experience
+  EDTECH_DASHBOARD: '/edtech/dashboard',
+  LEARNING_PATH: '/learning-path',
+  EDTECH_LESSON: '/edtech/lesson',
+  EDTECH_VOCABULARY: '/edtech/vocabulary',
 
   // Learner
   MY_LEARNING: '/my-learning',
@@ -16,21 +26,24 @@ export const ROUTES = {
   ACHIEVEMENTS: '/achievements',
   NOTIFICATIONS: '/notifications',
 
-  // Courses & Learning (Người 2)
+  // Courses & Learning 
   COURSES: '/courses',
   ALPHABET: '/alphabet',
   COURSE_DETAIL: '/courses/:courseId',
   MY_COURSES: '/my-courses',
-  LEARN_RESUME: '/learn/:courseId',
-  LEARN_LESSON: '/learn/:courseId/lesson/:lessonId',
+  LEARN_RESUME: '/courses/:courseId/learn',
+  LEARN_LESSON: '/courses/:courseId/lessons/:lessonId',
 
-  // Vocabulary (Người 3)
+  // Vocabulary 
   VOCABULARY: '/vocabulary',
   VOCABULARY_CATALOG_DETAIL: '/vocabulary/:id',
-  ADMIN_VOCABULARY_TOPICS: '/admin/vocabulary-topics',
   VOCABULARY_NOTEBOOK: '/vocabulary/notebook',
   VOCABULARY_NOTEBOOK_DETAIL: '/vocabulary/notebook/:id',
   VOCABULARY_REVIEW: '/vocabulary/review',
+  REGIONAL_VIETNAMESE: '/regional-vietnamese',
+  ADMIN_REGIONAL_LANGUAGE: '/admin/vocabulary/regional-language',
+  ADMIN_IMPORT: '/admin/import',
+  ADMIN_IMPORT_HISTORY: '/admin/imports',
 
   EXPLORE: '/explore',
   DESTINATION_DETAIL: '/explore/:id',
@@ -41,19 +54,27 @@ export const ROUTES = {
   QUIZ: '/quizzes/:quizId',
   QUIZ_ATTEMPT: '/quiz-attempts/:attemptId',
   QUIZ_RESULT: '/quiz-attempts/:attemptId/result',
+  COURSE_QUIZ: '/courses/:courseId/quizzes/:quizId',
+  COURSE_QUIZ_ATTEMPT: '/courses/:courseId/quiz-attempts/:attemptId',
+  COURSE_QUIZ_RESULT: '/courses/:courseId/quiz-attempts/:attemptId/result',
+  COURSE_LESSON_QUIZ: '/courses/:courseId/lessons/:lessonId/quizzes/:quizId',
+  COURSE_LESSON_QUIZ_ATTEMPT: '/courses/:courseId/lessons/:lessonId/quiz-attempts/:attemptId',
+  COURSE_LESSON_QUIZ_RESULT: '/courses/:courseId/lessons/:lessonId/quiz-attempts/:attemptId/result',
 
-  // Văn hóa & AI Tutor & Roleplay (Người 4)
+  // Văn hóa & AI Tutor & Roleplay 
   CULTURE: '/culture',
   CULTURE_DETAIL: '/culture/:id',
   AI_TUTOR: '/ai-tutor',
   AI_SCENARIOS: '/ai-scenarios',
   AI_SCENARIO_DETAIL: '/ai-scenarios/:id',
   AI_ROLEPLAY: '/ai-roleplay/:id',
+  AI_ROLEPLAY_SESSION: '/ai/roleplay/sessions/:id',
   AI_SESSION_RESULT: '/ai-sessions/:id/result',
 
-  // Admin (Người 1)
+  // Admin 
   ADMIN: '/admin',
   ADMIN_COURSES: '/admin/courses',
+  ADMIN_COURSE_CREATE: '/admin/courses/new',
   ADMIN_COURSE_BUILDER: '/admin/courses/:courseId',
   ADMIN_COURSE_PREVIEW: '/admin/courses/:courseId/preview',
   ADMIN_LESSONS: '/admin/lessons',
@@ -63,18 +84,45 @@ export const ROUTES = {
   ADMIN_QUIZZES: '/admin/quizzes',
   ADMIN_QUIZ_BUILDER: '/admin/quizzes/:quizId',
   ADMIN_QUIZ_PREVIEW: '/admin/quizzes/:quizId/preview',
+  CONTENT_COURSES: '/content/courses',
+  CONTENT_COURSE_CREATE: '/content/courses/new',
+  CONTENT_COURSE_BUILDER: '/content/courses/:courseId',
+  CONTENT_COURSE_PREVIEW: '/content/courses/:courseId/preview',
+  CONTENT_LESSONS: '/content/lessons',
+  CONTENT_LESSON_BUILDER: '/content/lessons/:lessonId',
+  CONTENT_LESSON_PREVIEW: '/content/lessons/:lessonId/preview',
+  CONTENT_QUESTIONS: '/content/questions',
+  CONTENT_QUIZZES: '/content/quizzes',
+  CONTENT_QUIZ_BUILDER: '/content/quizzes/:quizId',
+  CONTENT_QUIZ_PREVIEW: '/content/quizzes/:quizId/preview',
   ADMIN_VOCABULARY: '/admin/vocabulary',
   ADMIN_DESTINATIONS: '/admin/destinations',
   ADMIN_DESTINATION_DETAIL: '/admin/destinations/:id',
+  ADMIN_JOURNEY: '/admin/journey',
   ADMIN_USERS: '/admin/users',
   ADMIN_USER_DETAIL: '/admin/users/:id',
   ADMIN_ROLES: '/admin/roles',
   ADMIN_SETTINGS: '/admin/settings',
+  ADMIN_SITE_CONTENT: '/admin/site-content',
   ADMIN_ACHIEVEMENTS: '/admin/achievements',
   ADMIN_XP_RULES: '/admin/xp-rules',
   ADMIN_AUDIT_LOGS: '/admin/audit-logs',
 
-  // Admin Văn hóa & AI Tutor & Roleplay (Người 4)
+  // Content Manager data tools
+  CONTENT_REGIONAL_LANGUAGE: '/content/vocabulary/regional-language',
+  CONTENT_IMPORT: '/content/import',
+  CONTENT_IMPORT_HISTORY: '/content/imports',
+  CONTENT_VOCABULARY: '/content/vocabulary',
+  CONTENT_DESTINATIONS: '/content/destinations',
+  CONTENT_DESTINATION_DETAIL: '/content/destinations/:id',
+
+  // Content Manager Văn hóa
+  CONTENT_CULTURE: '/content/culture',
+  CONTENT_CULTURE_EDIT: '/content/culture/:id',
+  CONTENT_CULTURE_NEW: '/content/culture/new',
+  CONTENT_CULTURE_CATEGORIES: '/content/culture-categories',
+
+  // Admin Văn hóa & AI Tutor & Roleplay 
   ADMIN_CULTURE: '/admin/culture',
   ADMIN_CULTURE_EDIT: '/admin/culture/:id',
   ADMIN_CULTURE_NEW: '/admin/culture/new',
@@ -83,6 +131,37 @@ export const ROUTES = {
   ADMIN_AI_SCENARIO_BUILDER: '/admin/ai-scenarios/:id',
   ADMIN_AI_SCENARIO_NEW: '/admin/ai-scenarios/new',
   ADMIN_AI_SETTINGS: '/admin/ai-settings',
-  ADMIN_AI_USAGE: '/admin/ai-usage',
-  ADMIN_AI_REVIEWS: '/admin/ai-reviews',
 };
+
+export function getBackOfficeRoutes(pathname = '') {
+  const adminArea = pathname === ROUTES.ADMIN || pathname.startsWith(`${ROUTES.ADMIN}/`);
+  return adminArea
+    ? {
+        courses: ROUTES.ADMIN_COURSES,
+        courseBuilder: ROUTES.ADMIN_COURSE_BUILDER,
+        coursePreview: ROUTES.ADMIN_COURSE_PREVIEW,
+        lessons: ROUTES.ADMIN_LESSONS,
+        questions: ROUTES.ADMIN_QUESTIONS,
+        quizzes: ROUTES.ADMIN_QUIZZES,
+        vocabulary: ROUTES.ADMIN_VOCABULARY,
+        regionalLanguage: ROUTES.ADMIN_REGIONAL_LANGUAGE,
+        importData: ROUTES.ADMIN_IMPORT,
+        importHistory: ROUTES.ADMIN_IMPORT_HISTORY,
+        destinations: ROUTES.ADMIN_DESTINATIONS,
+        destinationDetail: ROUTES.ADMIN_DESTINATION_DETAIL,
+      }
+    : {
+        courses: ROUTES.CONTENT_COURSES,
+        courseBuilder: ROUTES.CONTENT_COURSE_BUILDER,
+        coursePreview: ROUTES.CONTENT_COURSE_PREVIEW,
+        lessons: ROUTES.CONTENT_LESSONS,
+        questions: ROUTES.CONTENT_QUESTIONS,
+        quizzes: ROUTES.CONTENT_QUIZZES,
+        vocabulary: ROUTES.CONTENT_VOCABULARY,
+        regionalLanguage: ROUTES.CONTENT_REGIONAL_LANGUAGE,
+        importData: ROUTES.CONTENT_IMPORT,
+        importHistory: ROUTES.CONTENT_IMPORT_HISTORY,
+        destinations: ROUTES.CONTENT_DESTINATIONS,
+        destinationDetail: ROUTES.CONTENT_DESTINATION_DETAIL,
+      };
+}
