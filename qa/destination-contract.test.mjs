@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import axios from 'axios';
 import { matchRoutes } from 'react-router-dom';
 import { ROUTES } from '../src/constants/routes.js';
-import { destinationDraft, destinationPayload, DESTINATION_STATUSES } from '../src/models/Destination.js';
+import { destinationDraft, destinationPayload, DESTINATION_STATUSES } from '../src/features/explore/models/Destination.js';
 
 const storage = new Map([['token', 'destination-contract-token']]);
 const redirects = [], calls = [], entries = [];
@@ -12,11 +12,11 @@ globalThis.localStorage = { getItem: key => storage.get(key) ?? null, removeItem
 globalThis.window = { location: { pathname: '/admin/destinations', search: '', assign: path => redirects.push(path) } };
 globalThis.__destinationContract = { axios };
 const load = source => import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
-const { default: client } = await load((await fs.readFile(new URL('../src/infrastructure/api/axiosClient.js', import.meta.url), 'utf8'))
+const { default: client } = await load((await fs.readFile(new URL('../src/shared/api/axiosClient.js', import.meta.url), 'utf8'))
   .replace("import axios from 'axios';", 'const { axios } = globalThis.__destinationContract;')
   .replace('import.meta.env.VITE_API_BASE_URL', '({}).VITE_API_BASE_URL'));
 globalThis.__destinationContract.client = client;
-const { destinationService, adminDestinationService } = await load((await fs.readFile(new URL('../src/services/destinationService.js', import.meta.url), 'utf8'))
+const { destinationService, adminDestinationService } = await load((await fs.readFile(new URL('../src/features/explore/api/destinationService.js', import.meta.url), 'utf8'))
   .replace(/import axiosClient from [^;]+;/, 'const axiosClient = globalThis.__destinationContract.client;'));
 let failureStatus = null, envelopeFailure = false;
 function reject(config, status, message) {
@@ -27,6 +27,9 @@ client.defaults.adapter = async config => {
   calls.push({ method: config.method, url: config.url, params: config.params, body, signal: config.signal, token: config.headers.Authorization });
   if (failureStatus) reject(config, failureStatus, 'Destination request rejected.');
   const admin = config.url.startsWith('/api/admin/');
+  if (config.url.endsWith('/management')) {
+    return { config, status: 200, statusText: 'OK', headers: {}, data: { code: 1000, success: true, result: { destination: { id: 1, ...body.destination }, exploreContent: body.exploreContent } } };
+  }
   const id = config.url.match(/\/(\d+)$/)?.[1];
   let result;
   if (config.method === 'post' || config.method === 'put') {
@@ -67,11 +70,30 @@ test('Admin combines filters, preserves cancellation, and uses the current Beare
   calls.length = 0;
   storage.set('token', 'rotated-destination-token');
   const signal = new AbortController().signal;
-  await adminDestinationService.list({ keyword: 'Hanoi', status: 'DRAFT', region: 'NORTH', page: 5 }, { signal });
-  assert.deepEqual(calls[0], { method: 'get', url: '/api/admin/destinations', params: { keyword: 'Hanoi', status: 'DRAFT', region: 'NORTH' }, body: undefined, signal, token: 'Bearer rotated-destination-token' });
+  await adminDestinationService.list({ keyword: 'Hanoi', status: 'DRAFT', region: 'NORTH', page: 5, size: 10 }, { signal });
+  assert.deepEqual(calls[0], { method: 'get', url: '/api/admin/destinations', params: { keyword: 'Hanoi', status: 'DRAFT', region: 'NORTH', page: 5, size: 10 }, body: undefined, signal, token: 'Bearer rotated-destination-token' });
   await destinationService.list({ keyword: '', region: null, status: 'DRAFT' });
   assert.equal(calls[1].url, '/api/destinations');
   assert.deepEqual(calls[1].params, {});
+});
+
+test('Destination management delegates pagination to the backend', async () => {
+  const page = await fs.readFile(new URL('../src/features/explore/admin/AdminDestinationsPage.jsx', import.meta.url), 'utf8');
+  assert.match(page, /adminDestinationService\.list\(\{ \.\.\.query, page, size: pageSize \}/);
+  assert.match(page, /const items = data\.content \?\? \[\]/);
+  assert.match(page, /totalItems=\{data\.totalElements \?\? items\.length\}/);
+  assert.doesNotMatch(page, /items\.slice\(/);
+});
+
+test('Destination management submits fields and every linked content ID in one request', async () => {
+  calls.length = 0;
+  const destination = destinationPayload(draft);
+  const exploreContent = { vocabularyIds: [3], cultureIds: ['culture-hue'], scenarioIds: ['scenario-hue'] };
+  const response = await adminDestinationService.updateManagement(1, destination, exploreContent);
+  assert.equal(calls[0].method, 'put');
+  assert.equal(calls[0].url, '/api/admin/destinations/1/management');
+  assert.deepEqual(calls[0].body, { destination, exploreContent });
+  assert.deepEqual(response.exploreContent, exploreContent);
 });
 
 test('Create and all four status updates use POST/PUT and keep unpublished entries out of Learner', async () => {
@@ -147,9 +169,9 @@ test('An aborted request never reaches the backend adapter', async () => {
 });
 
 test('Destination routes preserve legacy Explore and the existing Vocabulary flow', () => {
-  const keys = ['ADMIN_DESTINATIONS', 'ADMIN_DESTINATION_DETAIL', 'EXPLORE', 'DESTINATION_DETAIL', 'EXPLORE_VIETNAM', 'LEARNER_DESTINATION_DETAIL', 'VOCABULARY', 'VOCABULARY_NOTEBOOK', 'VOCABULARY_REVIEW'];
+  const keys = ['ADMIN_DESTINATIONS', 'ADMIN_DESTINATION_DETAIL', 'CONTENT_DESTINATIONS', 'CONTENT_DESTINATION_DETAIL', 'EXPLORE', 'DESTINATION_DETAIL', 'EXPLORE_VIETNAM', 'LEARNER_DESTINATION_DETAIL', 'VOCABULARY', 'VOCABULARY_NOTEBOOK', 'VOCABULARY_REVIEW'];
   const routes = keys.map(id => ({ id, path: ROUTES[id] }));
-  for (const [path, id] of [['/admin/destinations', 'ADMIN_DESTINATIONS'], ['/admin/destinations/1', 'ADMIN_DESTINATION_DETAIL'], ['/explore', 'EXPLORE'], ['/explore/1', 'DESTINATION_DETAIL'], ['/explore-vietnam', 'EXPLORE_VIETNAM'], ['/destinations/1', 'LEARNER_DESTINATION_DETAIL'], ['/vocabulary', 'VOCABULARY'], ['/vocabulary/notebook', 'VOCABULARY_NOTEBOOK'], ['/vocabulary/review', 'VOCABULARY_REVIEW']]) {
+  for (const [path, id] of [['/admin/destinations', 'ADMIN_DESTINATIONS'], ['/admin/destinations/1', 'ADMIN_DESTINATION_DETAIL'], ['/content/destinations', 'CONTENT_DESTINATIONS'], ['/content/destinations/1', 'CONTENT_DESTINATION_DETAIL'], ['/explore', 'EXPLORE'], ['/explore/1', 'DESTINATION_DETAIL'], ['/explore-vietnam', 'EXPLORE_VIETNAM'], ['/destinations/1', 'LEARNER_DESTINATION_DETAIL'], ['/vocabulary', 'VOCABULARY'], ['/vocabulary/notebook', 'VOCABULARY_NOTEBOOK'], ['/vocabulary/review', 'VOCABULARY_REVIEW']]) {
     assert.equal(matchRoutes(routes, path).at(-1).route.id, id);
   }
 });

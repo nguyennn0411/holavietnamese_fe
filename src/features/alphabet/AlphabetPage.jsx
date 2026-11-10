@@ -1,15 +1,7 @@
+import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  AudioLines,
-  BookOpen,
-  ChartNoAxesColumnIncreasing,
-  Headphones,
-  Play,
-  RotateCcw,
-  Square,
-  Volume2,
-} from "lucide-react";
+import { useTranslation } from 'react-i18next';
+import { ArrowLeft, AudioLines, Headphones, Play, RotateCcw, Square, Volume2 } from 'lucide-react';
 import data from "./alphabet.json";
 import { SyllableChart } from "./SyllableChart";
 import { entriesForTile, usePronunciationPlayer } from "./pronunciation";
@@ -24,6 +16,8 @@ const consonants = data.letters.filter(
 
 export function AlphabetPage() {
   const { current: selected, status: state, error, playQueue, stop } = usePronunciationPlayer();
+  const { i18n } = useTranslation();
+  const isVi = (i18n?.resolvedLanguage || i18n?.language || 'en').startsWith('vi');
 
   function play(items, group) {
     playQueue(items.flatMap((item) => entriesForTile(item, group)));
@@ -37,9 +31,9 @@ export function AlphabetPage() {
           type="button"
           key={item.id}
           className={`alphabet-tile${active ? " is-selected" : ""}${active && state === "playing" ? " is-playing" : ""}`}
-          aria-label={`Nghe ${item.label ? `thanh ${item.label}` : `chữ ${item.symbol}`}: ${item.reading}`}
+          aria-label={isVi ? `Nghe ${item.label ? `thanh ${item.label}` : `chữ ${item.symbol}`}: ${item.reading}` : `Listen to ${item.label ? `tone ${item.label}` : `letter ${item.symbol}`}: ${item.reading}`}
           aria-pressed={active}
-          title={`Cách đọc: ${item.reading}`}
+          title={isVi ? `Cách đọc: ${item.reading}` : `Pronunciation: ${item.reading}`}
           onClick={() => play([item], group)}
         >
           {item.label && (
@@ -64,29 +58,27 @@ export function AlphabetPage() {
       <div className="alphabet-page">
         <header className="alphabet-header">
           <div>
-            <p className="alphabet-eyebrow">HOLA VIETNAMESE · LUYỆN PHÁT ÂM</p>
-            <h1>Nghe tiếng Việt, <em>từng âm một.</em></h1>
+            <p className="alphabet-eyebrow"><BilingualText vi="HOLA VIETNAMESE · LUYỆN PHÁT ÂM" en="HOLA VIETNAMESE · PRONUNCIATION PRACTICE" /></p>
+            <h1><BilingualText vi={<>Nghe tiếng Việt, <em>từng âm một.</em></>} en={<>Hear Vietnamese, <em>one sound at a time.</em></>} /></h1>
             <p className="alphabet-subtitle">
-              Khám phá 29 chữ cái, ghép phụ âm với vần và nghe sáu thanh điệu.
+              <BilingualText
+                vi="Khám phá 29 chữ cái, ghép phụ âm với vần và nghe sáu thanh điệu."
+                en="Explore the 29 letters, combine consonants with rhymes, and hear the six tones."
+              />
             </p>
           </div>
           <div className="alphabet-meta">
             <span>
-              <BookOpen size={16} aria-hidden="true" />
-              29 chữ cái
+              <BilingualText vi="29 chữ cái" en="29 letters" />
             </span>
             <span>
-              <Headphones size={16} aria-hidden="true" />
-              Bấm vào chữ để nghe
+              <BilingualText vi="Bấm vào chữ để nghe" en="Click a letter to listen" />
             </span>
             <span>
-              <ChartNoAxesColumnIncreasing size={16} aria-hidden="true" />
-              Cơ bản · A0
+              <BilingualText vi="Cơ bản · A0" en="Beginner · A0" />
             </span>
           </div>
         </header>
-
-        <SyllableChart />
 
         <section
           className="alphabet-card alphabet-red"
@@ -97,9 +89,12 @@ export function AlphabetPage() {
               Aa
             </span>
             <div>
-              <h2 id="alphabet-title">Bảng chữ cái</h2>
+              <h2 id="alphabet-title"><BilingualText vi="Bảng chữ cái" en="Alphabet" /></h2>
               <p>
-                29 chữ cái tiếng Việt. Chọn một chữ để nghe cách đọc của chữ đó.
+                <BilingualText
+                  vi="29 chữ cái tiếng Việt. Chọn một chữ để nghe cách đọc của chữ đó."
+                  en="29 Vietnamese letters. Select a letter to hear its pronunciation."
+                />
               </p>
             </div>
             <button
@@ -110,7 +105,7 @@ export function AlphabetPage() {
               }
             >
               <Play size={15} aria-hidden="true" />
-              Nghe lần lượt
+              <BilingualText vi="Nghe lần lượt" en="Play in order" />
             </button>
           </div>
           <div className="alphabet-grid alphabet-letters">
@@ -127,9 +122,12 @@ export function AlphabetPage() {
               ă
             </span>
             <div>
-              <h2 id="vowels-title">Nguyên âm</h2>
+              <h2 id="vowels-title"><BilingualText vi="Nguyên âm" en="Vowels" /></h2>
               <p>
-                12 chữ cái ghi nguyên âm. Nghe và so sánh những chữ dễ nhầm.
+                <BilingualText
+                  vi="12 chữ cái ghi nguyên âm. Nghe và so sánh những chữ dễ nhầm."
+                  en="12 vowel letters. Listen and compare easily confused letters."
+                />
               </p>
             </div>
           </div>
@@ -147,14 +145,14 @@ export function AlphabetPage() {
               <Volume2 size={23} />
             </span>
             <div>
-              <h2 id="consonants-title">Phụ âm</h2>
-              <p>17 chữ cái ghi phụ âm và 11 nhóm chữ thường gặp.</p>
+              <h2 id="consonants-title"><BilingualText vi="Phụ âm" en="Consonants" /></h2>
+              <p><BilingualText vi="17 chữ cái ghi phụ âm và 11 nhóm chữ thường gặp." en="17 consonant letters and 11 common digraphs." /></p>
             </div>
           </div>
           <div className="alphabet-consonants">
             <div className="alphabet-subgroup">
               <h3>
-                Phụ âm đơn <span>(17 chữ)</span>
+                <BilingualText vi="Phụ âm đơn" en="Single consonants" /> <span><BilingualText vi="(17 chữ)" en="(17 letters)" /></span>
               </h3>
               <div className="alphabet-grid alphabet-single">
                 {tiles(consonants, "consonants")}
@@ -162,7 +160,7 @@ export function AlphabetPage() {
             </div>
             <div className="alphabet-subgroup">
               <h3>
-                Phụ âm ghép <span>(11 nhóm chữ)</span>
+                <BilingualText vi="Phụ âm ghép" en="Compound consonants" /> <span><BilingualText vi="(11 nhóm chữ)" en="(11 digraphs)" /></span>
               </h3>
               <div className="alphabet-grid alphabet-compound">
                 {tiles(data.consonantGroups, "groups")}
@@ -180,10 +178,12 @@ export function AlphabetPage() {
               <AudioLines size={23} />
             </span>
             <div>
-              <h2 id="tones-title">Thanh điệu</h2>
+              <h2 id="tones-title"><BilingualText vi="Thanh điệu" en="Tones" /></h2>
               <p>
-                6 thanh điệu, 5 dấu thanh. Chọn từng ô để nghe biến thể tương
-                ứng của âm “a”.
+                <BilingualText
+                  vi="6 thanh điệu, 5 dấu thanh. Chọn từng ô để nghe biến thể tương ứng của âm “a”."
+                  en="6 tones, 5 tone marks. Select each tile to hear the variations of the sound “a”."
+                />
               </p>
             </div>
           </div>
@@ -192,7 +192,9 @@ export function AlphabetPage() {
           </div>
         </section>
 
-        <div className="alphabet-player" aria-label="Điều khiển âm thanh">
+        <SyllableChart />
+
+        <div className="alphabet-player" aria-label={bilingualLabel("Điều khiển âm thanh", "Audio controls")}>
           <span className="alphabet-player-symbol" aria-hidden="true">
             {selected?.symbol || <Headphones size={24} />}
           </span>
@@ -203,34 +205,47 @@ export function AlphabetPage() {
             aria-atomic="true"
           >
             <strong>
-              {selected
-                ? `${state === "loading" ? "Đang tải" : state === "playing" ? "Đang phát" : "Nghe lại"}: ${selected.label || selected.symbol}${selected.total > 1 ? ` · ${selected.index}/${selected.total}` : ""}`
-                : "Chạm vào một chữ, nghe một âm mới"}
+              {selected ? (
+                <>
+                  <BilingualText
+                    vi={state === "loading" ? "Đang tải" : state === "playing" ? "Đang phát" : "Nghe lại"}
+                    en={state === "loading" ? "Loading" : state === "playing" ? "Playing" : "Replay"}
+                  />
+                  : {selected.label || selected.symbol}{selected.total > 1 ? ` · ${selected.index}/${selected.total}` : ""}
+                </>
+              ) : (
+                <BilingualText vi="Chạm vào một chữ, nghe một âm mới" en="Tap a letter to hear a new sound" />
+              )}
             </strong>
             <span>
-              {selected
-                ? `Cách đọc: ${selected.reading} · ${selected.fallback || !selected.url ? "Giọng tổng hợp trên thiết bị" : selected.source}`
-                : "Nghe cách đọc, rồi thử nhắc lại. / Tap a tile to listen."}
+              {selected ? (
+                <>
+                  <BilingualText vi="Cách đọc: " en="Pronunciation: " />
+                  {selected.reading} · {selected.fallback || !selected.url ? <BilingualText vi="Giọng tổng hợp trên thiết bị" en="Device synthesized voice" /> : selected.source}
+                </>
+              ) : (
+                <BilingualText vi="Nghe cách đọc, rồi thử nhắc lại." en="Listen to the pronunciation, then repeat." />
+              )}
             </span>
           </div>
           <div className="alphabet-player-actions">
             <button
               type="button"
-              aria-label="Nghe lại âm đã chọn"
+              aria-label={bilingualLabel("Nghe lại âm đã chọn", "Replay selected sound")}
               disabled={!selected}
               onClick={() => play([selected], selected.group)}
             >
               <RotateCcw size={16} aria-hidden="true" />
-              Nghe lại
+              <BilingualText vi="Nghe lại" en="Replay" />
             </button>
             <button
               type="button"
-              aria-label="Dừng phát âm thanh"
+              aria-label={bilingualLabel("Dừng phát âm thanh", "Stop audio")}
               disabled={!busy}
               onClick={stop}
             >
               <Square size={15} aria-hidden="true" />
-              Dừng
+              <BilingualText vi="Dừng" en="Stop" />
             </button>
           </div>
         </div>
@@ -242,9 +257,8 @@ export function AlphabetPage() {
         <footer className="alphabet-footer">
           <Link to="/courses">
             <ArrowLeft size={16} aria-hidden="true" />
-            Về khóa học
+            <BilingualText vi="Về khóa học" en="Back to courses" />
           </Link>
-          <span>Âm mẫu VietSyllables · Dự phòng bằng giọng tiếng Việt trên thiết bị</span>
         </footer>
       </div>
     </div>

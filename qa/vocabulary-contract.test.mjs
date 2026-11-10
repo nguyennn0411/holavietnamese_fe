@@ -4,11 +4,11 @@ import fs from 'node:fs/promises';
 import axios from 'axios';
 import { matchRoutes } from 'react-router-dom';
 import { ROUTES } from '../src/constants/routes.js';
-import { VocabularyEntry } from '../src/models/VocabularyEntry.js';
-import { Course } from '../src/models/Course.js';
-import { Enrollment } from '../src/models/Enrollment.js';
-import { Lesson } from '../src/models/Lesson.js';
-import { LearningProgress } from '../src/models/LearningProgress.js';
+import { VocabularyEntry } from '../src/features/vocabulary/models/VocabularyEntry.js';
+import { Course } from '../src/features/learning/models/Course.js';
+import { Enrollment } from '../src/features/learning/models/Enrollment.js';
+import { Lesson } from '../src/features/learning/models/Lesson.js';
+import { LearningProgress } from '../src/features/learning/models/LearningProgress.js';
 
 const calls = [];
 const notebook = [];
@@ -22,10 +22,12 @@ const catalogWord = {
 };
 let rejected = false;
 let token = 'vocabulary-contract-test-token';
+const reviewSessionId = 'ef5a91a6-9d2b-4dd0-87bf-a4577a3b2df5';
+const reviewResult = { entryId: 1, word: 'tạm biệt', rating: 'GOOD', reviewedAt: '2026-10-13T18:00:00Z', nextReviewAt: '2026-10-14T18:00:00Z', intervalMinutes: 1440 };
 globalThis.__vocabularyContract = { axios, VocabularyEntry, Course, Enrollment, Lesson, LearningProgress };
 globalThis.localStorage = { getItem: key => key === 'token' ? token : null };
 const load = source => import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
-const clientSource = (await fs.readFile(new URL('../src/infrastructure/api/axiosClient.js', import.meta.url), 'utf8'))
+const clientSource = (await fs.readFile(new URL('../src/shared/api/axiosClient.js', import.meta.url), 'utf8'))
   .replace("import axios from 'axios';", 'const { axios } = globalThis.__vocabularyContract;')
   .replace('import.meta.env.VITE_API_BASE_URL', '({}).VITE_API_BASE_URL');
 const { default: client } = await load(clientSource);
@@ -41,6 +43,8 @@ client.defaults.adapter = async config => {
   else if (config.url === '/api/me/courses/1/progress') data = { progressPercentage: 45, completedLessons: 2, totalLessons: 6 };
   else if (config.url === '/api/vocabulary') data = { code: 1000, result: [catalogWord] };
   else if (config.url === '/api/vocabulary/1009') data = { code: 1000, result: catalogWord };
+  else if (config.url === '/api/me/vocabulary/review') data = { sessionId: reviewSessionId, notebookCount: 1, entries: [{ id: 1, word: 'tạm biệt', meaning: 'goodbye' }], results: [reviewResult] };
+  else if (config.url === '/api/me/vocabulary/1/review') data = reviewResult;
   else if (config.url === '/api/me/vocabulary' && config.method === 'post') {
     data = { ...body, id: notebook.length + 1 };
     notebook.push(data);
@@ -50,12 +54,13 @@ client.defaults.adapter = async config => {
   else data = notebook[0];
   return { config, status: config.method === 'post' ? 201 : config.method === 'delete' ? 204 : 200, statusText: 'OK', headers: {}, data };
 };
-const importService = async name => load((await fs.readFile(new URL(`../src/services/${name}.js`, import.meta.url), 'utf8'))
+const importService = async name => load((await fs.readFile(new URL(['courseService', 'learningService'].includes(name) ? `../src/features/learning/api/${name}.js` : `../src/features/vocabulary/api/${name}.js`, import.meta.url), 'utf8'))
   .replace(/import axiosClient from [^;\n]+;?/, 'const axiosClient = globalThis.__vocabularyContract.client;')
-  .replace(/import \{ (\w+) \} from ['"]@\/models\/[^'"\n]+['"];?/g, (_, name) => `const { ${name} } = globalThis.__vocabularyContract;`)
+  .replace(/import \{ (\w+) \} from ['"]@\/(?:models|features\/(?:vocabulary|learning)\/models)\/[^'"\n]+['"];?/g, (_, name) => `const { ${name} } = globalThis.__vocabularyContract;`)
   .replace(/import \{ httpClient \} from [^;\n]+;?/, 'const httpClient = () => { throw new Error("UNEXPECTED_COOKIE_CLIENT"); };'));
 const { vocabularyService } = await importService('vocabularyService');
 const { vocabularyCatalogService } = await importService('vocabularyCatalogService');
+const { vocabularyReviewService } = await importService('vocabularyReviewService');
 const { courseService } = await importService('courseService');
 const { learningService } = await importService('learningService');
 
@@ -85,8 +90,8 @@ test('Catalog and notebook paths select separate pages without shadowing review'
   for (const [path, expected] of [['/vocabulary', 'VOCABULARY'], ['/vocabulary/1009', 'VOCABULARY_CATALOG_DETAIL'], ['/vocabulary/notebook', 'VOCABULARY_NOTEBOOK'], ['/vocabulary/notebook/1', 'VOCABULARY_NOTEBOOK_DETAIL'], ['/vocabulary/review', 'VOCABULARY_REVIEW']]) {
     assert.equal(matchRoutes(routes, path).at(-1).route.id, expected);
   }
-  const app = await fs.readFile(new URL('../src/App.jsx', import.meta.url), 'utf8');
-  assert.ok(app.includes("import('@/pages/vocabulary/VocabularyDetailPage')"));
+  const app = await fs.readFile(new URL('../src/app/router/AppRouter.jsx', import.meta.url), 'utf8');
+  assert.ok(app.includes("import('@/features/vocabulary/pages/VocabularyDetailPage')"));
   assert.ok(app.includes('path={ROUTES.VOCABULARY_CATALOG_DETAIL} element={<VocabularyDetailPage />}'));
 });
 
@@ -107,7 +112,7 @@ test('Saving a Master word posts only VocabularyRequest fields and notebook/revi
   const before = structuredClone(catalogWord);
   const saved = await vocabularyService.saveWord(catalogWord);
   assert.ok(saved instanceof VocabularyEntry);
-  const payload = { lessonId: null, word: 'tạm biệt', meaning: 'goodbye', pronunciation: '/taːm ɓiət/', exampleSentence: 'Tạm biệt, hẹn gặp lại!', note: 'Dùng khi chia tay.' };
+  const payload = { lessonId: null, masterVocabularyId: 1009, word: 'tạm biệt', meaning: 'goodbye', pronunciation: '/taːm ɓiət/', exampleSentence: 'Tạm biệt, hẹn gặp lại!', note: 'Dùng khi chia tay.' };
   assert.deepEqual(calls[0].body, payload);
   assert.equal(calls[0].method, 'post');
   assert.equal(calls[0].url, '/api/me/vocabulary');
@@ -123,8 +128,31 @@ test('Lesson save uses the same helper, keeps lessonId and sends no Master field
   calls.length = 0;
   await vocabularyService.saveWord({ wordVi: 'cà phê', meaningEn: 'coffee', exampleVi: 'Cho tôi một cà phê.', pronunciation: '/ka fe/' }, 101);
   assert.deepEqual(calls[0].body, { lessonId: 101, word: 'cà phê', meaning: 'coffee', pronunciation: '/ka fe/', exampleSentence: 'Cho tôi một cà phê.', note: '' });
-  const lesson = await fs.readFile(new URL('../src/components/learning/LessonActivities.jsx', import.meta.url), 'utf8');
+  const lesson = await fs.readFile(new URL('../src/features/learning/components/learning/LessonActivities.jsx', import.meta.url), 'utf8');
   assert.ok(lesson.includes('vocabularyService.saveWord(item, lessonId)'));
+});
+
+test('A lesson word preserves its explicit Master link and lesson origin together', async () => {
+  calls.length = 0;
+  await vocabularyService.saveWord({ wordVi: 'tạm biệt', meaningEn: 'goodbye', masterVocabularyId: 1009, exampleVi: 'Tạm biệt!' }, 101);
+  assert.equal(calls[0].body.lessonId, 101);
+  assert.equal(calls[0].body.masterVocabularyId, 1009);
+  assert.equal(calls[0].body.word, 'tạm biệt');
+  assert.equal(calls[0].body.meaning, 'goodbye');
+});
+
+test('Catalog excerpts fit Notebook limits and lesson IDs never become Master IDs', async () => {
+  calls.length = 0;
+  const source = structuredClone(catalogWord);
+  source.meanings[0].usageNote = 'n'.repeat(2500);
+  source.meanings[0].examples[0].exampleVi = 'e'.repeat(2500);
+  await vocabularyService.saveWord(source);
+  assert.equal(calls[0].body.note.length, 2000);
+  assert.equal(calls[0].body.exampleSentence.length, 2000);
+  assert.equal(source.meanings[0].usageNote.length, 2500);
+  await vocabularyService.saveWord({ ...catalogWord, id: 101, wordVi: 'cà phê', meaningEn: 'coffee' }, 101);
+  assert.equal(calls[1].body.lessonId, 101);
+  assert.equal(calls[1].body.masterVocabularyId, undefined);
 });
 
 test('Existing notebook update/delete retain methods, payload and 204 result', async () => {
@@ -149,4 +177,25 @@ test('Invalid and rejected saves never turn into successful notebook data', asyn
   try { await assert.rejects(vocabularyService.saveWord(catalogWord), /NOTEBOOK_SAVE_REJECTED/); }
   finally { rejected = false; }
   assert.equal(notebook.length, size);
+});
+
+test('Review resumes the server session and posts only rating and session ID with the current JWT', async () => {
+  calls.length = 0;
+  const signal = new AbortController().signal;
+  const session = await vocabularyReviewService.session(reviewSessionId, { signal });
+  assert.ok(session.entries[0] instanceof VocabularyEntry);
+  assert.deepEqual(session.results, [reviewResult]);
+  assert.deepEqual(calls[0].params, { sessionId: reviewSessionId });
+  assert.equal(calls[0].signal, signal);
+  assert.deepEqual(await vocabularyReviewService.rate(1, reviewSessionId, 'GOOD'), reviewResult);
+  assert.deepEqual(calls[1].body, { sessionId: reviewSessionId, rating: 'GOOD' });
+  assert.equal(calls[1].url, '/api/me/vocabulary/1/review');
+  assert.equal(calls[1].method, 'post');
+  assert.equal(calls[1].authorization, `Bearer ${token}`);
+  const count = calls.length;
+  await assert.rejects(vocabularyReviewService.rate(1, reviewSessionId, 'INVALID'), /Invalid review rating/);
+  assert.equal(calls.length, count);
+  rejected = true;
+  try { await assert.rejects(vocabularyReviewService.rate(1, reviewSessionId, 'GOOD'), /NOTEBOOK_SAVE_REJECTED/); }
+  finally { rejected = false; }
 });
