@@ -8,6 +8,61 @@ import { useAuth } from '@/features/auth/context/AuthContext';
 import { savePendingVerificationEmail, savePostVerificationPath, startResendCooldown } from '@/features/auth/emailVerificationFlow';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 
+const COMMON_PASSWORDS = new Set([
+  'password', 'password123', 'password1234', '12345678', '123456789', '1234567890',
+  'qwertyuiop', 'qwerty123', 'admin123', 'admin1234', 'holavietnamese',
+  'vietnamese', 'iloveyou', 'welcome123', 'letmein123', 'passphrase',
+  '11111111', '00000000', 'testpassword', 'testing123'
+]);
+
+function getPasswordEvaluation(pwd, uName, uEmail, cPwd) {
+  const trimmed = (pwd || '').trim();
+  const lower = trimmed.toLowerCase();
+  const cleanUser = (uName || '').trim().toLowerCase();
+  const cleanEmailPrefix = (uEmail || '').includes('@') ? (uEmail || '').split('@')[0].trim().toLowerCase() : '';
+
+  const validLength = trimmed.length >= 8 && trimmed.length <= 128;
+  const hasUser = cleanUser.length >= 3 && lower.includes(cleanUser);
+  const hasEmail = cleanEmailPrefix.length >= 3 && lower.includes(cleanEmailPrefix);
+  const notContainsUserInfo = !hasUser && !hasEmail;
+  const notCommon = trimmed.length > 0 && !COMMON_PASSWORDS.has(lower);
+  const confirmMatches = Boolean(cPwd && cPwd === pwd);
+
+  let score = 0;
+  if (trimmed.length > 0) {
+    if (validLength) score += 1;
+    if (trimmed.length >= 12) score += 1;
+    if (/[A-Z]/.test(trimmed) && /[a-z]/.test(trimmed)) score += 1;
+    if (/\d/.test(trimmed) || /[^A-Za-z0-9]/.test(trimmed) || trimmed.includes(' ')) score += 1;
+    if (!notCommon || !notContainsUserInfo) {
+      score = Math.min(score, 1);
+    }
+  }
+
+  return {
+    validLength,
+    notContainsUserInfo,
+    notCommon,
+    confirmMatches,
+    score: Math.min(score, 4),
+  };
+}
+
+function getStrengthLevel(score) {
+  switch (score) {
+    case 1:
+      return { key: 'weak', vi: 'Yếu', en: 'Weak' };
+    case 2:
+      return { key: 'medium', vi: 'Trung bình', en: 'Medium' };
+    case 3:
+      return { key: 'good', vi: 'Khá', en: 'Good' };
+    case 4:
+      return { key: 'strong', vi: 'Rất mạnh', en: 'Strong' };
+    default:
+      return { key: 'empty', vi: 'Chưa nhập', en: 'Empty' };
+  }
+}
+
 export function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,6 +84,9 @@ export function RegisterPage() {
 
   // Field-specific validation and backend error state
   const [fieldErrors, setFieldErrors] = useState({});
+
+  const pwdEval = getPasswordEvaluation(password, username, email, confirmPassword);
+  const strengthLevel = getStrengthLevel(pwdEval.score);
 
   if (isAuthenticated) {
     return <Navigate to={user?.onboardingCompleted === true ? '/' : '/onboarding/reason'} replace />;
@@ -52,10 +110,15 @@ export function RegisterPage() {
       errors.email = bilingualLabel('Email không đúng định dạng (VD: alex@example.com)', 'Invalid email format (e.g. alex@example.com)');
     }
 
-    if (!password) {
+    const trimmedPassword = password.trim();
+    if (!trimmedPassword) {
       errors.password = bilingualLabel('Vui lòng nhập mật khẩu', 'Please enter your password');
-    } else if (password.length < 6) {
-      errors.password = bilingualLabel('Mật khẩu phải có ít nhất 6 ký tự', 'Password must be at least 6 characters');
+    } else if (trimmedPassword.length < 8 || trimmedPassword.length > 128) {
+      errors.password = bilingualLabel('Mật khẩu phải có từ 8 đến 128 ký tự', 'Password must be between 8 and 128 characters');
+    } else if (!pwdEval.notContainsUserInfo) {
+      errors.password = bilingualLabel('Mật khẩu không được chứa tên đăng nhập hoặc email', 'Password must not contain username or email');
+    } else if (!pwdEval.notCommon) {
+      errors.password = bilingualLabel('Mật khẩu quá dễ đoán. Vui lòng chọn mật khẩu an toàn hơn', 'Password is too common. Please choose a more secure password');
     }
 
     if (!confirmPassword) {
@@ -123,6 +186,11 @@ export function RegisterPage() {
           setFieldErrors((prev) => ({
             ...prev,
             email: result.message || bilingualLabel('Email đã được sử dụng', 'Email is already in use'),
+          }));
+        } else if (result.code === 1007 || result.code === 1013 || result.code === 1014) {
+          setFieldErrors((prev) => ({
+            ...prev,
+            password: result.message,
           }));
         } else if (
           result.message &&
@@ -274,7 +342,7 @@ export function RegisterPage() {
                       id="password"
                       className={`auth-input auth-password-input ${fieldErrors.password ? 'auth-input-error' : ''}`}
                       type={showPassword ? 'text' : 'password'}
-                      placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
+                      placeholder={bilingualLabel("Tối thiểu 8 ký tự")}
                       value={password}
                       onChange={(e) => {
                         setPassword(e.target.value);
@@ -330,6 +398,55 @@ export function RegisterPage() {
                     <span className="auth-field-error"><AlertCircle size={13} className="shrink-0 inline mr-1" /><BilingualText>{fieldErrors.confirmPassword}</BilingualText></span>
                   )}
                 </div>
+
+                {/* Password Guidance (Strength Meter + NIST Real-time Checklist) */}
+                {(password.length > 0 || confirmPassword.length > 0) && (
+                  <div className="auth-password-guidance" role="region" aria-label="Password Strength and Requirements">
+                    {/* Strength meter bar */}
+                    <div className="auth-strength-header">
+                      <span className="auth-strength-title">
+                        <BilingualText vi="Độ mạnh mật khẩu:" en="Password strength:" />
+                      </span>
+                      <span className={`auth-strength-label auth-strength-${strengthLevel.key}`}>
+                        <BilingualText vi={strengthLevel.vi} en={strengthLevel.en} />
+                      </span>
+                    </div>
+
+                    <div className="auth-strength-bar-track">
+                      {[1, 2, 3, 4].map((step) => (
+                        <div
+                          key={step}
+                          className={`auth-strength-bar-segment ${
+                            pwdEval.score >= step ? `active-${strengthLevel.key}` : ''
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Real-time Checklist */}
+                    <div className="auth-checklist-grid">
+                      <div className={`auth-checklist-item ${pwdEval.validLength ? 'is-met' : ''}`}>
+                        <span className="auth-checklist-icon">{pwdEval.validLength ? '✓' : '○'}</span>
+                        <BilingualText vi="Từ 8 đến 128 ký tự" en="8 to 128 characters" />
+                      </div>
+
+                      <div className={`auth-checklist-item ${pwdEval.notContainsUserInfo ? 'is-met' : ''}`}>
+                        <span className="auth-checklist-icon">{pwdEval.notContainsUserInfo ? '✓' : '○'}</span>
+                        <BilingualText vi="Không chứa username hoặc email" en="No username or email" />
+                      </div>
+
+                      <div className={`auth-checklist-item ${pwdEval.notCommon ? 'is-met' : ''}`}>
+                        <span className="auth-checklist-icon">{pwdEval.notCommon ? '✓' : '○'}</span>
+                        <BilingualText vi="Tránh mật khẩu quá dễ đoán" en="Not a common password" />
+                      </div>
+
+                      <div className={`auth-checklist-item ${pwdEval.confirmMatches ? 'is-met' : ''}`}>
+                        <span className="auth-checklist-icon">{pwdEval.confirmMatches ? '✓' : '○'}</span>
+                        <BilingualText vi="Mật khẩu xác nhận trùng khớp" en="Passwords match" />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons */}

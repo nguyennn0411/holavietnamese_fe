@@ -278,8 +278,8 @@ label.question-option.selected,
    ========================================================================== */
 
 /* 1. BUTTONS ON CLICK / PRESS / ACTIVE */
-button:not(:disabled):active,
-.button:not([aria-disabled="true"]):active,
+button:not(:disabled):not(.auth-show-btn):active,
+.button:not([aria-disabled="true"]):not(.auth-show-btn):active,
 .btn-primary:not(:disabled):active,
 .auth-btn-primary:not(:disabled):active,
 .site-header__cta:active,
@@ -291,8 +291,8 @@ button:not(:disabled):active,
   box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25) !important;
 }
 
-button:not(:disabled):active svg,
-.button:not([aria-disabled="true"]):active svg {
+button:not(:disabled):not(.auth-show-btn):active svg,
+.button:not([aria-disabled="true"]):not(.auth-show-btn):active svg {
   color: #EA580C !important;
   stroke: #EA580C !important;
 }

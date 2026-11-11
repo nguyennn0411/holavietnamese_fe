@@ -26,8 +26,8 @@ export function ResetPasswordPage() {
       setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu xác nhận không trùng khớp.', 'Confirmation password does not match.') });
       return;
     }
-    if (password.length < 6) {
-      setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu phải từ 6 ký tự trở lên.', 'Password must be at least 6 characters.') });
+    if (password.length < 8) {
+      setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu phải từ 8 ký tự trở lên.', 'Password must be at least 8 characters.') });
       return;
     }
 
@@ -109,7 +109,7 @@ export function ResetPasswordPage() {
                     id="reset-direct-pass"
                     className="auth-input auth-password-input"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
+                    placeholder={bilingualLabel("Tối thiểu 8 ký tự")}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required

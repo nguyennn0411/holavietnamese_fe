@@ -14,7 +14,7 @@ h1 .bilingual-text__en,h2 .bilingual-text__en { font-size:.76em; font-weight:400
 .eyebrow .bilingual-text__en,.account-pill .bilingual-text__en { font-size:.85em; }
 .lead { color:var(--color-muted); font-size:15px; line-height:1.75; }
 .eyebrow { color:var(--color-red); font-size:11px; font-weight:700; letter-spacing:.12em; }
-button,.button { min-height:46px; padding:11px 20px; border-radius:var(--radius-control); background:var(--color-red); border:1px solid var(--color-red); color:var(--color-surface); font-size:13px; box-shadow:none; }
+button:not(.auth-show-btn),.button:not(.auth-show-btn) { min-height:46px; padding:11px 20px; border-radius:var(--radius-control); background:var(--color-red); border:1px solid var(--color-red); color:var(--color-surface); font-size:13px; box-shadow:none; }
 button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):hover,.button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):hover { background:var(--color-red-hover); }
 button .bilingual-text,.button .bilingual-text { text-align:center; }
 button .bilingual-text__en,.button .bilingual-text__en { color:inherit; opacity:.82; }
@@ -272,8 +272,24 @@ label>.bilingual-text { margin-bottom:7px; }
 .auth-hero-title .bilingual-text__en { font-size:.72em; }
 .auth-chip { background:var(--color-sage-soft); color:var(--color-forest); border-color:var(--color-border); }
 .auth-welcome-pill { border-radius:6px; background:var(--color-gold-soft); color:var(--color-ink); }
-.auth-show-btn { min-height:32px; padding:5px 8px; background:transparent; color:var(--color-ink); border:0; }
-.auth-show-btn:has(.bilingual-text) { min-height:42px; }
+.auth-show-btn,
+button.auth-show-btn {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  right: 6px !important;
+  margin: auto 0 !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  width: 36px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: #7F817A !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transform: none !important;
+}
 .auth-password-input { padding-right:74px; }
 .auth-options-row { align-items:center; gap:20px; }
 .auth-checkbox-label { align-items:center; }
@@ -513,8 +529,8 @@ body .vocabulary-ui .vocabulary-review-completion strong { color:var(--color-for
 }
 
 /* Ensure all buttons across the entire app show warm skin tone on click/active, never solid orange */
-button:not(:disabled):active,
-.button:not([aria-disabled="true"]):active {
+button:not(:disabled):not(.auth-show-btn):active,
+.button:not([aria-disabled="true"]):not(.auth-show-btn):active {
   background: #FFF7E8 !important;
   background-color: #FFF7E8 !important;
   color: #EA580C !important;

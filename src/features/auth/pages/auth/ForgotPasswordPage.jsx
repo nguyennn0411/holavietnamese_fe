@@ -51,8 +51,8 @@ export function ForgotPasswordPage() {
   // Step 3: Reset Password
   const handleResetPassword = async (e) => {
     e.preventDefault();
-    if (newPassword.length < 6) {
-      setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu phải từ 6 ký tự trở lên.', 'Password must be at least 6 characters.') });
+    if (newPassword.length < 8) {
+      setStatus({ loading: false, message: '', error: bilingualLabel('Mật khẩu phải từ 8 ký tự trở lên.', 'Password must be at least 8 characters.') });
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -201,7 +201,7 @@ export function ForgotPasswordPage() {
                     id="reset-new-password"
                     className="auth-input auth-password-input"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder={bilingualLabel("Tối thiểu 6 ký tự")}
+                    placeholder={bilingualLabel("Tối thiểu 8 ký tự")}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
