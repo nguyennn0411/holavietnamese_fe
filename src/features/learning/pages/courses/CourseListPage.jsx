@@ -290,9 +290,9 @@ export function CourseListPage() {
                             role="tab"
                             aria-selected={isActive}
                             onClick={() => setStatusFilter(opt.id)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                            className={`course-filter-btn secondary flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer ${
                               isActive
-                                ? 'bg-[#FFF1E6] text-[#EA580C] border border-[#FDBA74] shadow-2xs font-bold'
+                                ? 'is-active bg-[#FFF1E6] text-[#EA580C] border border-[#FDBA74] shadow-2xs font-bold'
                                 : 'bg-white text-[#64748B] hover:text-[#1E293B] hover:bg-[#F8FAFC] border border-[#E2E8F0]'
                             }`}
                           >
@@ -333,9 +333,9 @@ export function CourseListPage() {
                             role="tab"
                             aria-selected={isActive}
                             onClick={() => setLevel(opt.id)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+                            className={`course-filter-btn secondary flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
                               isActive
-                                ? 'bg-[#FFF1E6] text-[#EA580C] border border-[#FDBA74] font-bold shadow-2xs'
+                                ? 'is-active bg-[#FFF1E6] text-[#EA580C] border border-[#FDBA74] font-bold shadow-2xs'
                                 : 'bg-white text-[#64748B] hover:text-[#1E293B] hover:bg-[#F8FAFC] border border-[#E2E8F0]'
                             }`}
                           >

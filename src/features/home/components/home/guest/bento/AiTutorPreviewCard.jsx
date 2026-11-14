@@ -67,7 +67,7 @@ export function AiTutorPreviewCard() {
               speakVietnamese(AI_PROMPTS[aiMessageIndex].ai);
               audioFeedback.playPopSound(1.2);
             }}
-            className="!min-h-0 !min-w-0 px-3 py-1.5 rounded-full bg-[#FFF0DC] hover:bg-[#FDE1B3] text-[#F97316] border border-[#F97316]/30 font-bold text-[11px] flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
+            className="secondary !min-h-0 !min-w-0 px-3 py-1.5 rounded-full bg-[#FFF0DC] hover:bg-[#FDE1B3] text-[#F97316] border border-[#F97316]/30 font-bold text-[11px] flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
           >
             <Volume2 className="w-3.5 h-3.5 shrink-0" strokeWidth={2.2} />
             <span><BilingualText vi="Nghe AI nói" en="Listen to AI" /></span>
@@ -89,7 +89,7 @@ export function AiTutorPreviewCard() {
                   setAiMessageIndex(idx);
                   audioFeedback.playTap();
                 }}
-                className={`!min-h-0 !min-w-0 px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all cursor-pointer border ${
+                className={`secondary !min-h-0 !min-w-0 px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all cursor-pointer border ${
                   isSelected
                     ? 'bg-[#FFF7E8] border-2 border-[#EA580C] text-[#253044] font-bold shadow-xs scale-[1.02]'
                     : 'bg-white text-[#64748B] hover:bg-[#FFF7E8]/70 hover:text-[#253044] border-[#E8E5DF] hover:border-[#EA580C]'

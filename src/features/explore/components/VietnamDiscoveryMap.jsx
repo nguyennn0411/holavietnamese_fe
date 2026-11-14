@@ -25,7 +25,7 @@ export function VietnamDiscoveryMap({ destinations, activeId, onActivate, detail
         <ArrowUpRight size={14} aria-hidden="true" />
       </Link>
     </div>
-    <button type="button" className="discovery-map__close" onClick={() => onActivate(null)}
+    <button type="button" className="discovery-map__close secondary" onClick={() => onActivate(null)}
       aria-label={isVietnamese ? 'Đóng thông tin điểm đến' : 'Close destination preview'}>
       <X size={14} aria-hidden="true" />
     </button>
@@ -46,7 +46,7 @@ export function VietnamDiscoveryMap({ destinations, activeId, onActivate, detail
         const active = destination.id === activeId;
         const name = isVietnamese ? destination.nameVi : destination.nameEn || destination.nameVi;
         return <button key={destination.id} type="button"
-          className={`discovery-map__pin${active ? ' is-active' : ''}`}
+          className={`discovery-map__pin secondary${active ? ' is-active' : ''}`}
           style={{ left: `${x}%`, top: `${y}%` }}
           data-label-side={x > 55 ? 'left' : 'right'}
           aria-label={name} aria-describedby={instructionsId} aria-pressed={active}

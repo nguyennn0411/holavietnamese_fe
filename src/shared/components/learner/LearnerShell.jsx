@@ -40,7 +40,7 @@ export function LearnerSidebar({ collapsed, onToggle }) {
     <aside className="learner-sidebar" aria-label="Learner navigation">
       <button
         type="button"
-        className="sidebar-toggle-btn"
+        className="sidebar-toggle-btn secondary"
         onClick={onToggle}
         aria-label={collapsed ? t('expandSidebar', { defaultValue: 'Mở rộng thanh điều hướng' }) : t('collapseSidebar', { defaultValue: 'Thu gọn thanh điều hướng' })}
         aria-expanded={!collapsed}

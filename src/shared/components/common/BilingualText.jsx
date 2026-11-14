@@ -47,6 +47,8 @@ const patterns = [
   [/^(\d+) lượt xem$/, match => `${match[1]} views`],
   [/^(\d+) từ vựng$/, match => `${match[1]} words`],
   [/^(\d+) từ$/, match => `${match[1]} words`],
+  [/^(\d+) ngày$/, match => `${match[1]} ${match[1] === '1' ? 'day' : 'days'}`],
+  [/^(\d+) bài$/, match => `${match[1]} ${match[1] === '1' ? 'lesson' : 'lessons'}`],
   [/^(\d+) chủ đề$/, match => `${match[1]} topics`],
   [/^(\d+) kịch bản$/, match => `${match[1]} scenarios`],
   [/^(\d+) khóa học$/, match => `${match[1]} courses`],

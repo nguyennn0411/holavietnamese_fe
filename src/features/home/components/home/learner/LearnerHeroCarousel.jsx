@@ -118,11 +118,36 @@ export function LearnerHeroCarousel({ continueTo }) {
 
       {totalSlides > 1 && <div className="learner-carousel__controls">
         <div className="learner-carousel__dots" role="group" aria-label={t('dashboard.carousel.choose')}>
-          {slides.map((item, index) => <button key={item.id ?? item.code ?? index} type="button" className={index === activeIndex ? 'is-active' : ''} onClick={() => navigate(index, index > activeIndex ? 1 : -1)} aria-label={t('dashboard.carousel.goTo', { number: index + 1 })} aria-current={index === activeIndex ? 'true' : undefined}><span /></button>)}
+          {slides.map((item, index) => (
+            <button
+              key={item.id ?? item.code ?? index}
+              type="button"
+              className={`learner-carousel__dot-btn secondary ${index === activeIndex ? 'is-active' : ''}`}
+              onClick={() => navigate(index, index > activeIndex ? 1 : -1)}
+              aria-label={t('dashboard.carousel.goTo', { number: index + 1 })}
+              aria-current={index === activeIndex ? 'true' : undefined}
+            >
+              <span />
+            </button>
+          ))}
         </div>
         <div className="learner-carousel__arrows">
-          <button type="button" onClick={() => navigate(activeIndex - 1, -1)} aria-label={t('dashboard.carousel.previous')}><ArrowLeft size={18} /></button>
-          <button type="button" onClick={() => navigate(activeIndex + 1, 1)} aria-label={t('dashboard.carousel.next')}><ArrowRight size={18} /></button>
+          <button
+            type="button"
+            className="learner-carousel__arrow-btn secondary"
+            onClick={() => navigate(activeIndex - 1, -1)}
+            aria-label={t('dashboard.carousel.previous')}
+          >
+            <ArrowLeft size={18} />
+          </button>
+          <button
+            type="button"
+            className="learner-carousel__arrow-btn secondary"
+            onClick={() => navigate(activeIndex + 1, 1)}
+            aria-label={t('dashboard.carousel.next')}
+          >
+            <ArrowRight size={18} />
+          </button>
         </div>
       </div>}
     </section>

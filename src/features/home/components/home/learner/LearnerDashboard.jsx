@@ -106,14 +106,36 @@ function getActivityTitle(activity, isVi) {
   }
   if (activity.titleEn) return activity.titleEn;
   if (activity.descriptionEn) return activity.descriptionEn;
-  if (activity.description) return activity.description;
-  if (activity.title) return activity.title;
+  const raw = String(activity.description || activity.title || activity.eventName || '').trim();
+  if (/onboarding/i.test(raw)) {
+    if (/khởi đầu|bắt đầu|initial|start/i.test(raw)) {
+      return 'Completed initial onboarding';
+    }
+    return 'Completed onboarding';
+  }
+  if (/điểm danh|checkin|daily/i.test(raw)) {
+    return 'Daily learning check-in';
+  }
+  if (/bài học|lesson/i.test(raw)) {
+    return 'Completed a lesson';
+  }
+  if (/kiểm tra|quiz/i.test(raw)) {
+    return 'Completed a quiz';
+  }
+  if (/từ vựng|vocab/i.test(raw)) {
+    return 'Learned new vocabulary';
+  }
+  if (/vai|tình huống|giao tiếp|roleplay|ai/i.test(raw)) {
+    return 'Completed AI conversation';
+  }
   const type = String(activity.eventType || '').toUpperCase();
   if (type.includes('DAILY_CHECKIN') || type.includes('DAILY_LOGIN')) return 'Daily learning check-in';
   if (type.includes('LESSON')) return 'Completed a lesson';
   if (type.includes('QUIZ')) return 'Completed a quiz';
   if (type.includes('VOCAB')) return 'Learned new vocabulary';
   if (type.includes('AI_ROLEPLAY')) return 'Completed an AI roleplay session';
+  if (activity.description) return activity.description;
+  if (activity.title) return activity.title;
   return 'Completed learning activity';
 }
 
@@ -197,7 +219,7 @@ export function LearnerDashboard({ user }) {
           <h1>{t('dashboard.welcomeName', { name: displayName })}</h1>
           <p>{t('dashboard.welcomeSubtitle')}</p>
         </div>
-        <Link to={continueTo} className="ld-button ld-button--primary"><Play size={16} fill="currentColor" />{currentLesson ? t('dashboard.continueLearning') : <BilingualText vi="Xem lộ trình học" en="View learning roadmap" />}</Link>
+        <Link to={continueTo} className="ld-button ld-button--primary ld-continue-btn"><Play size={16} fill="currentColor" aria-hidden="true" />{currentLesson ? t('dashboard.continueLearning') : <BilingualText vi="Xem lộ trình học" en="View learning roadmap" />}</Link>
         <div className="ld-nghe"><MascotSpeechBubble>{currentLesson ? t('mascot.dashboard.continue') : t('mascot.dashboard.start')}</MascotSpeechBubble><BuffaloMascot variant={currentLesson ? 'encouraging' : 'teaching'} size="medium" animated accessibilityLabel={t('mascot.alt')} /></div>
       </motion.header>
 
@@ -220,7 +242,10 @@ export function LearnerDashboard({ user }) {
                 <div className="ld-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(lessonProgress)}><span style={{ '--progress': `${lessonProgress}%` }} /></div>
                 <div className="ld-continue__footer">
                   <span><Clock3 size={15} />{t('dashboard.resumeHint')}</span>
-                  <Link to={continueTo} className="ld-button ld-button--primary">{t('dashboard.continueLearning')}<ArrowRight size={16} /></Link>
+                  <Link to={continueTo} className="ld-button ld-button--primary ld-continue-btn">
+                    <Play size={16} fill="currentColor" aria-hidden="true" />
+                    {t('dashboard.continueLearning')}
+                  </Link>
                 </div>
               </>
             ) : (
@@ -228,8 +253,9 @@ export function LearnerDashboard({ user }) {
                 <h2><BilingualText vi="Lộ trình học tập cá nhân hóa" en="Personalized Learning Path" /></h2>
                 <p><BilingualText vi="Khám phá bản đồ học tập tiếng Việt theo từng chặng, tích lũy XP và mở khóa các bài học tương tác tiếp theo." en="Explore the Vietnamese learning roadmap station by station, collect XP, and unlock interactive lessons." /></p>
                 <div className="ld-empty__actions">
-                  <Link to="/learning-path" className="ld-button ld-button--primary">
-                    <BilingualText vi="Vào lộ trình học" en="Open learning roadmap" /><ArrowRight size={16} />
+                  <Link to="/learning-path" className="ld-button ld-button--primary ld-continue-btn">
+                    <Play size={16} fill="currentColor" aria-hidden="true" />
+                    <BilingualText vi="Xem lộ trình học" en="View learning roadmap" />
                   </Link>
                   <Link to="/courses" className="ld-button ld-button--secondary">
                     {t('dashboard.exploreCourses')}<ArrowRight size={16} />

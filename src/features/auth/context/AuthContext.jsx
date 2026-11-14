@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import authApi from '@/shared/api/authApi';
 import { markHasAccount } from '@/utils/userState';
 import { getRegistrationVerificationState } from '@/features/auth/emailVerificationFlow';
@@ -45,6 +46,7 @@ const loadPersistedUser = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [accessToken, setAccessToken] = useState(() => localStorage.getItem('token'));
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('token'));
   const [user, setUser] = useState(loadPersistedUser);
@@ -234,6 +236,15 @@ export const AuthProvider = ({ children }) => {
       setAccessToken(null);
       setIsAuthenticated(false);
       setUser(null);
+      try {
+        if (typeof navigate === 'function') {
+          navigate('/', { replace: true });
+        } else {
+          window.location.href = '/';
+        }
+      } catch {
+        window.location.href = '/';
+      }
     }
   };
 

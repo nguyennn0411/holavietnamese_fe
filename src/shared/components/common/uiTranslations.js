@@ -1,5 +1,13 @@
 // Static presentation labels only. API values and user content are not translated.
 export const UI_TRANSLATIONS = {
+  "Hoàn thành Onboarding khởi đầu": [
+    "Hoàn thành Onboarding khởi đầu",
+    "Completed initial onboarding"
+  ],
+  "Onboarding khởi đầu": [
+    "Onboarding khởi đầu",
+    "Initial onboarding"
+  ],
   "Danh từ": [
     "Danh từ",
     "Noun"

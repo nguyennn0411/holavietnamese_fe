@@ -159,9 +159,9 @@ export function SelectionCard({
       >
         {Icon ? <Icon size={24} /> : null}
       </span>
-      <span className="ob-selection-copy">
-        <strong><BilingualText vi={titleVi || title} en={title} /></strong>
-        {detail && <small><BilingualText vi={detailVi || detail} en={detail} /></small>}
+      <span className="ob-selection-copy text-left" style={{ textAlign: 'left', alignItems: 'flex-start' }}>
+        <strong className="text-left" style={{ textAlign: 'left' }}><BilingualText className="text-left" vi={titleVi || title} en={title} /></strong>
+        {detail && <small className="text-left" style={{ textAlign: 'left' }}><BilingualText className="text-left" vi={detailVi || detail} en={detail} /></small>}
       </span>
       {badge && <em><BilingualText vi={badgeVi || badge} en={badge} /></em>}
       <span className="ob-check">

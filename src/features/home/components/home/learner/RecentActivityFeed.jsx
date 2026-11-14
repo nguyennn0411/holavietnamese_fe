@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { Award, BookOpen, Clock, Flame, Sparkles, Trophy, Zap, Check } from 'lucide-react';
 import { EmptyState } from '@/shared/components/common/Ui';
@@ -76,10 +77,44 @@ function getActivityMeta(activity) {
   };
 }
 
+function getActivityTitle(activity, isVi) {
+  if (isVi) {
+    return activity.titleVi || activity.description || activity.title || activity.eventName || 'Hoạt động học tập';
+  }
+  if (activity.titleEn) return activity.titleEn;
+  if (activity.descriptionEn) return activity.descriptionEn;
+  const raw = String(activity.description || activity.title || activity.eventName || '').trim();
+  if (/onboarding/i.test(raw)) {
+    if (/khởi đầu|bắt đầu|initial|start/i.test(raw)) {
+      return 'Completed initial onboarding';
+    }
+    return 'Completed onboarding';
+  }
+  if (/điểm danh|checkin|daily/i.test(raw)) {
+    return 'Daily learning check-in';
+  }
+  if (/bài học|lesson/i.test(raw)) {
+    return 'Completed a lesson';
+  }
+  if (/kiểm tra|quiz/i.test(raw)) {
+    return 'Completed a quiz';
+  }
+  if (/từ vựng|vocab/i.test(raw)) {
+    return 'Learned new vocabulary';
+  }
+  if (/vai|tình huống|giao tiếp|roleplay|ai/i.test(raw)) {
+    return 'Completed AI conversation';
+  }
+  return raw || 'Learning activity';
+}
+
 /**
  * Recent Learning Activity Timeline Feed
  */
 export function RecentActivityFeed({ activities = [] }) {
+  const { i18n } = useTranslation();
+  const isVi = (i18n.resolvedLanguage || i18n.language || 'en').startsWith('vi');
+
   return (
     <section className="bg-white/92 backdrop-blur-xs border border-[#E8E5DF]/70 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(67,25,20,0.04)] space-y-4 text-left">
       <h3 className="text-lg font-black text-[#253044]">
@@ -90,8 +125,8 @@ export function RecentActivityFeed({ activities = [] }) {
           {activities.map((activity, idx) => {
             const meta = getActivityMeta(activity);
             const Icon = meta.icon;
-            const title = activity.titleVi || activity.description || activity.title || activity.eventName || 'Hoạt động học tập';
-            const time = activity.time || (activity.createdAt ? formatRelativeTime(activity.createdAt, 'vi') : 'Gần đây');
+            const title = getActivityTitle(activity, isVi);
+            const time = activity.time || (activity.createdAt ? formatRelativeTime(activity.createdAt, isVi ? 'vi' : 'en') : (isVi ? 'Gần đây' : 'Recently'));
             const xpAmount = activity.xp ?? activity.amount ?? activity.xpReward;
 
             return (
@@ -106,7 +141,7 @@ export function RecentActivityFeed({ activities = [] }) {
                   <div className="space-y-0.5 min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className={`inline-flex items-center rounded-md border px-1.5 py-0.2 text-[10px] font-bold uppercase tracking-wider ${meta.badgeClass}`}>
-                        {meta.labelVi}
+                        {isVi ? meta.labelVi : meta.labelEn}
                       </span>
                       <small className="text-[11px] text-[#94A3B8] flex items-center gap-1">
                         <Clock size={11} />

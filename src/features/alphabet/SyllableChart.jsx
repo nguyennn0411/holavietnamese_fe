@@ -98,14 +98,14 @@ export function SyllableChart() {
       <div className="syllable-toolbar">
         <div className="syllable-filters" aria-label={bilingualLabel("Nhóm vần", "Rhyme groups")}>
           {categories.map(([id, label, labelEn]) => <button type="button" key={id}
-            className={`syllable-filter syllable-${id}${filters.includes(id) ? " active" : ""}`}
+            className={`syllable-filter secondary syllable-${id}${filters.includes(id) ? " active" : ""}`}
             aria-pressed={filters.includes(id)} onClick={() => toggle(id, setFilters)}>
             <span aria-hidden="true">{filters.includes(id) ? "✓" : ""}</span><BilingualText vi={label} en={labelEn} />
           </button>)}
         </div>
         <div className="syllable-tones" aria-label={bilingualLabel("Thanh điệu phát khi chọn ô", "Tone played when tile selected")}>
           {tones.map(([id, label, mark, labelEn]) => <button type="button" key={id}
-            className={`syllable-tone${enabledTones.includes(id) ? " active" : ""}`}
+            className={`syllable-tone secondary${enabledTones.includes(id) ? " active" : ""}`}
             aria-label={`${label} (${mark})`} aria-pressed={enabledTones.includes(id)}
             onClick={() => toggleTone(id)}><strong>{mark}</strong><small><BilingualText vi={label} en={labelEn} /></small></button>)}
         </div>
@@ -117,7 +117,7 @@ export function SyllableChart() {
         </tr></thead><tbody>{initials.map((initial) => <tr key={initial}><th scope="row"><strong>{initial === "∅" ? "—" : initial}</strong><small>{initial === "∅" ? <BilingualText vi="không âm đầu" en="no initial" /> : ""}</small></th>
           {visibleFinals.map(([value, , category]) => <td key={value} className={`syllable-cell-${category}`}>
             {isAvailable(initial, value) && <button type="button"
-              className={`syllable-cell-button${current?.key.startsWith(`${initial}-${value}-`) ? " selected" : ""}`}
+              className={`syllable-cell-button secondary${current?.key.startsWith(`${initial}-${value}-`) ? " selected" : ""}`}
               disabled={!enabledTones.some((id) => category !== "stop" || ["acute", "dot"].includes(id))}
               aria-label={bilingualLabel(`Nghe ${syllableFor(initial, value)} với các thanh đã chọn`, `Listen to ${syllableFor(initial, value)} with selected tones`)}
               onClick={() => playSyllable(initial, value, category)}>{syllableFor(initial, value)}</button>}
@@ -125,7 +125,7 @@ export function SyllableChart() {
         </tr>)}</tbody></table>
       </div> : <div className="syllable-empty"><BilingualText vi="Chọn ít nhất một nhóm vần để xem bảng âm." en="Select at least one rhyme group to view the chart." /></div>}
         <div className="syllable-bottom"><div className="syllable-now"><Volume2 size={20} aria-hidden="true" /><span role="status" aria-live="polite"><strong>{current ? <><BilingualText vi={status === "loading" ? "Đang tải" : status === "playing" ? "Đang phát" : "Đã chọn"} en={status === "loading" ? "Loading" : status === "playing" ? "Playing" : "Selected"} />: {current.syllable}</> : enabledTones.length ? <BilingualText vi="Chọn một ô để bắt đầu nghe" en="Click a cell to start listening" /> : <BilingualText vi="Chọn ít nhất một thanh điệu" en="Select at least one tone" />}</strong><small>{current ? <><BilingualText vi={current.tone} en={current.toneEn} /> · {current.index}/{current.total} · {current.fallback ? <BilingualText vi="Giọng tổng hợp trên thiết bị" en="Device synthesized voice" /> : <BilingualText vi="Giọng Hà Nội" en="Hanoi voice" />}</> : <BilingualText vi="Âm tiết chỉ phát theo các thanh đang được chọn." en="Syllables play only with the selected tones." />}</small></span></div>
-        <div className="syllable-actions"><button type="button" disabled={!queueRef.current.length} onClick={() => playQueue(queueRef.current)}><RotateCcw size={16} aria-hidden="true" /> <BilingualText vi="Nghe lại" en="Replay" /></button><button type="button" disabled={status !== "loading" && status !== "playing"} onClick={stop}><Square size={15} aria-hidden="true" /> <BilingualText vi="Dừng" en="Stop" /></button></div></div>
+        <div className="syllable-actions"><button type="button" className="syllable-action-btn secondary" disabled={!queueRef.current.length} onClick={() => playQueue(queueRef.current)}><RotateCcw size={16} aria-hidden="true" /> <BilingualText vi="Nghe lại" en="Replay" /></button><button type="button" className="syllable-action-btn secondary" disabled={status !== "loading" && status !== "playing"} onClick={stop}><Square size={15} aria-hidden="true" /> <BilingualText vi="Dừng" en="Stop" /></button></div></div>
       {error && <p className="syllable-error" role="alert"><BilingualText>{error}</BilingualText></p>}
     </section>
   );

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   BookOpen,
   Flame,
@@ -99,8 +100,11 @@ export default function HolaNotificationToast({
   onClose,
   onAction,
 }) {
-  const lang = useTextLanguage();
-  const isVi = lang === 'vi';
+  const { i18n } = useTranslation();
+  const contextLang = useTextLanguage();
+  const storedLang = typeof window !== 'undefined' ? localStorage.getItem('hola:ui-language') : null;
+  const activeLang = contextLang || storedLang || i18n?.resolvedLanguage || i18n?.language || 'vi';
+  const isVi = String(activeLang).startsWith('vi');
 
   const type = String(item?.type || 'SYSTEM').toUpperCase();
   const isStreakRelated =

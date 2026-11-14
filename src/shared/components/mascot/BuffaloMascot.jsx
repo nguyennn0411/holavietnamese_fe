@@ -34,6 +34,7 @@ export function BuffaloMascot({
   size = 'medium',
   animated = true,
   className = '',
+  style,
   accessibilityLabel = 'Nghé, the HolaVietnamese learning companion',
 }) {
   const reduceMotion = useReducedMotion();
@@ -46,6 +47,7 @@ export function BuffaloMascot({
       className={`nghe-mascot nghe-mascot--${size} nghe-mascot--${variant} ${
         animated && !reduceMotion ? 'is-animated' : ''
       } ${className}`}
+      style={style}
     >
       <img
         src={imageSrc}

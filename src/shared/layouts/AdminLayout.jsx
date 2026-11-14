@@ -1,6 +1,6 @@
 import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
-import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
@@ -19,8 +19,14 @@ const groups = [
 export function AdminLayout() {
   useTextLanguage();
   const { user, logout, isAdmin, isContentManager } = useAuth();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const sidebar = useRef(null);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/', { replace: true });
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -132,7 +138,7 @@ export function AdminLayout() {
         </nav>
         <div className="admin-sidebar-footer">
           <Link to="/"><ArrowLeft size={16} aria-hidden="true"/><BilingualText>{"Giao diện học viên"}</BilingualText></Link>
-          <button className="admin-logout" onClick={logout}><LogOut size={16} aria-hidden="true"/><BilingualText>{"Đăng xuất"}</BilingualText></button>
+          <button className="admin-logout" onClick={handleLogout}><LogOut size={16} aria-hidden="true"/><BilingualText>{"Đăng xuất"}</BilingualText></button>
         </div>
       </aside>
 

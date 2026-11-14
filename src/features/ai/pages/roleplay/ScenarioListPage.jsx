@@ -103,7 +103,7 @@ export function ScenarioListPage() {
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#FF7A00] p-1"
+                className="secondary absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#FF7A00] p-1 bg-transparent border-0 cursor-pointer"
                 aria-label={bLabel("Xóa tìm kiếm", "Clear search")}
               >
                 <X size={16} />
@@ -124,11 +124,8 @@ export function ScenarioListPage() {
                       key={lvl.id}
                       type="button"
                       onClick={() => setSelectedLevel(lvl.id)}
-                      className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        isSelected
-                          ? 'bg-[#FF7A00] text-white shadow-xs'
-                          : 'bg-[#FFFCF7] hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]/70'
-                      }`}
+                      className={`scenario-filter-btn secondary ${isSelected ? 'is-active' : ''}`}
+                      aria-selected={isSelected}
                     >
                       {isVi ? (lvl.labelVi || lvl.label) : (lvl.labelEn || lvl.label)}
                     </button>
@@ -148,11 +145,8 @@ export function ScenarioListPage() {
                       key={t.id}
                       type="button"
                       onClick={() => setSelectedTopic(t.id)}
-                      className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        isSelected
-                          ? 'bg-[#253044] text-white shadow-xs'
-                          : 'bg-[#FFFCF7] hover:bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]/70'
-                      }`}
+                      className={`scenario-filter-btn secondary ${isSelected ? 'is-active' : ''}`}
+                      aria-selected={isSelected}
                     >
                       {isVi ? (t.labelVi || t.label) : (t.labelEn || t.label)}
                     </button>
@@ -178,7 +172,7 @@ export function ScenarioListPage() {
             <button
               type="button"
               onClick={handleResetFilters}
-              className="text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1 cursor-pointer"
+              className="secondary text-xs font-bold text-[#FF7A00] hover:underline flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
             >
               <RotateCcw size={12} />
               <span><BilingualText vi="Đặt lại bộ lọc" en="Reset filters" /></span>
