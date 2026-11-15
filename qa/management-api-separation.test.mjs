@@ -26,7 +26,10 @@ test('CONTENT and ADMIN use different management API namespaces', async () => {
 });
 
 test('backend security keeps admin and content namespaces exclusive', () => {
-  const security = readFileSync(new URL('../../../BE/src/main/java/com/sep490/backend/modules/auth/config/SecurityConfig.java', import.meta.url), 'utf8');
+  const security = readFileSync(
+    new URL('../../holavietnamese-be/src/main/java/com/sep490/backend/modules/auth/config/SecurityConfig.java', import.meta.url),
+    'utf8',
+  );
   assert.match(security, /requestMatchers\("\/api\/content\/\*\*"\)\.hasRole\("CONTENT"\)/);
   assert.match(security, /requestMatchers\("\/api\/admin\/\*\*"\)\.hasRole\("ADMIN"\)/);
   assert.doesNotMatch(security, /requestMatchers\("\/api\/admin\/\*\*"\)\.hasAnyRole\("ADMIN", "CONTENT"\)/);
