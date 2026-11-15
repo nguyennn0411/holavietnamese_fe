@@ -17,8 +17,8 @@ test('content manager and admin course review UI uses the protected workflow', (
   assert.match(studio, /contentService\.reviewCourse\(course\.id, 'APPROVE'/);
   assert.match(studio, /contentService\.reviewCourse\(course\.id, 'REJECT'/);
   assert.match(studio, /disabled=\{busy \|\| !reviewNote\.trim\(\)\}/);
-  assert.match(service, /\/admin\/courses\/\$\{id\}\/submit/);
-  assert.match(service, /\/admin\/courses\/\$\{id\}\/review/);
+  assert.match(service, /managementResourcePath\(`\/courses\/\$\{id\}\/submit`\)/);
+  assert.match(service, /managementResourcePath\(`\/courses\/\$\{id\}\/review`\)/);
   assert.doesNotMatch(studio, /Xuất Excel gửi Admin/);
   assert.doesNotMatch(service, /\/api\/admin\/courses\/\$\{id\}\/export/);
 });

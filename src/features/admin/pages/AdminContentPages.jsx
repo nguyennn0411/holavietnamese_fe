@@ -2,7 +2,7 @@ import { BilingualText, bilingualLabel } from '@/shared/components/common/Biling
 import { CourseThumbnail } from '@/features/learning/components/course/CourseInfo';
 import { CourseStudio } from '@/features/learning/admin/components/CourseStudio';
 import { ActivityEditor } from '@/features/learning/admin/components/ActivityEditor';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { contentService } from '@/features/learning/api/contentService';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
@@ -458,8 +458,11 @@ function LessonBuilder({ lesson, reload }) {
   const [selected, setSelected] = useState(null),
     [editing, setEditing] = useState(false),
     [creatingQuiz, setCreatingQuiz] = useState(false),
+    [message, setMessage] = useState(''),
     [error, setError] = useState(''),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [uploadingImage, setUploadingImage] = useState(false);
+  const imageInputRef = useRef(null);
   const { isAdmin, isContentManager } = useAuth();
   const navigate = useNavigate();
   const canEdit = isContentManager && !isAdmin && ['DRAFT', 'REJECTED'].includes(lesson.courseStatus);
@@ -473,6 +476,61 @@ function LessonBuilder({ lesson, reload }) {
       setError(err.message);
     } finally {
       setBusy(false);
+    }
+  }
+
+  function chooseLessonImage() {
+    setSelected(null);
+    setMessage('');
+    setError('');
+    if (imageInputRef.current) {
+      imageInputRef.current.value = '';
+      imageInputRef.current.click();
+    }
+  }
+
+  async function addLessonImage(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      setError(bilingualLabel(
+        'Thêm hình ảnh vào bài học thất bại. Chỉ chấp nhận ảnh JPG, PNG hoặc WebP tối đa 5 MB.',
+        'Failed to add the image to the lesson. Choose a JPG, PNG, or WebP image up to 5 MB.'
+      ));
+      return;
+    }
+
+    setUploadingImage(true);
+    setMessage('');
+    setError('');
+    try {
+      const imageUrl = await contentService.uploadLessonMedia(file, 'image');
+      await contentService.addActivity(lesson.id, {
+        activityType: 'IMAGE',
+        title: 'Lesson image',
+        titleVi: 'Hình ảnh bài học',
+        instruction: '',
+        instructionVi: '',
+        contentJson: { imageUrl },
+        isRequired: false,
+        maxScore: 0,
+        status: 'PUBLISHED',
+        quizId: null,
+        grammarTopicIds: [],
+      });
+      setMessage(bilingualLabel(
+        'Đã thêm hình ảnh vào bài học thành công.',
+        'The image was added to the lesson successfully.'
+      ));
+      reload();
+    } catch (err) {
+      setError(bilingualLabel(
+        `Thêm hình ảnh vào bài học thất bại. ${err.message}`,
+        `Failed to add the image to the lesson. ${err.message}`
+      ));
+    } finally {
+      setUploadingImage(false);
     }
   }
 
@@ -505,6 +563,7 @@ function LessonBuilder({ lesson, reload }) {
         }
       />
       {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
+      {message && <Notice kind="success"><BilingualText>{message}</BilingualText></Notice>}
       {!canEdit && <Notice><BilingualText>{"Bài học đang ở chế độ chỉ đọc theo trạng thái khóa học."}</BilingualText></Notice>}
       <div className="lesson-builder-grid">
         <aside className="admin-card">
@@ -547,8 +606,18 @@ function LessonBuilder({ lesson, reload }) {
             <h2><BilingualText>{"Các hoạt động"}</BilingualText></h2>
             {canEdit && (
               <div className="actions">
-                <button onClick={() => setSelected({ activityType: 'IMAGE', status: 'PUBLISHED', contentJson: { imageUrl: '' } })}>
-                  <BilingualText>{"+ Thêm ảnh"}</BilingualText>
+                <input
+                  ref={imageInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  hidden
+                  onChange={addLessonImage}
+                />
+                <button disabled={busy || uploadingImage} onClick={chooseLessonImage}>
+                  <BilingualText
+                    vi={uploadingImage ? 'Đang tải ảnh…' : '+ Thêm ảnh'}
+                    en={uploadingImage ? 'Uploading image…' : '+ Add image'}
+                  />
                 </button>
                 <button onClick={() => setSelected({ activityType: 'VIDEO', status: 'PUBLISHED', contentJson: { videoUrl: '' } })}>
                   <BilingualText>{"+ Thêm video"}</BilingualText>
