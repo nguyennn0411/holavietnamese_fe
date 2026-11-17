@@ -1,19 +1,28 @@
 import { learnerService } from '@/features/learning/api/learnerService';
 import { learningPathService } from '@/features/learning/api/learningPathService';
-import { STORAGE_KEY } from '../context/OnboardingContext';
+import { getStorageKey, LEGACY_STORAGE_KEY } from '../context/OnboardingContext';
 import { buildOnboardingRecommendation } from './recommendationEngine';
 
 export const onboardingService = {
-  readGuestProgress() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { return null; }
+  readGuestProgress(userId) {
+    try {
+      const activeId = userId || localStorage.getItem('userId');
+      const key = getStorageKey(activeId);
+      const raw = localStorage.getItem(key);
+      if (raw) return JSON.parse(raw);
+      const fallback = localStorage.getItem(LEGACY_STORAGE_KEY) || localStorage.getItem('hola:onboarding:guest');
+      return fallback ? JSON.parse(fallback) : null;
+    } catch {
+      return null;
+    }
   },
-  hasCompletedExperience() {
-    const data = this.readGuestProgress();
+  hasCompletedExperience(userId) {
+    const data = this.readGuestProgress(userId);
     return Boolean(data?.guestExperienceCompleted || data?.firstLessonCompleted || data?.placementTestCompleted);
   },
-  async syncProgress() {
-    const data = this.readGuestProgress();
-    if (!this.hasCompletedExperience()) return { skipped: true };
+  async syncProgress(explicitData, userId) {
+    const data = explicitData || this.readGuestProgress(userId);
+    if (!data) return { skipped: true };
     const recommendation = buildOnboardingRecommendation(data);
     await learnerService.saveOnboarding({
       nativeLanguage: 'en',
@@ -42,7 +51,13 @@ export const onboardingService = {
         syncedAt: new Date().toISOString(),
       },
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    const activeId = userId || localStorage.getItem('userId');
+    const key = getStorageKey(activeId);
+    try {
+      localStorage.setItem(key, JSON.stringify(next));
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+      localStorage.removeItem('hola:onboarding:guest');
+    } catch {}
     return { success: true, profileSynced: true, activityResultSynced: true };
   },
 };

@@ -162,6 +162,16 @@ export function RegisterPage() {
       const result = await register(payload);
 
       if (result.success) {
+        // Clear all onboarding storage so this new account never inherits previous onboarding choices
+        try {
+          Object.keys(localStorage).forEach((key) => {
+            if (key.startsWith('hola:onboarding')) {
+              localStorage.removeItem(key);
+            }
+          });
+          window.dispatchEvent(new CustomEvent('hola:onboarding-reset'));
+        } catch {}
+
         const verificationEmail = savePendingVerificationEmail(result.email || email);
         const afterLogin = savePostVerificationPath(location.state?.from || '/onboarding/reason');
         startResendCooldown(60);

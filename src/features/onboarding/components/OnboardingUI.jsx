@@ -3,6 +3,7 @@ import { ArrowLeft, Check, RotateCcw, Volume2, VolumeX, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BuffaloMascot } from '@/shared/components/mascot';
 import { useOnboarding } from '../context/OnboardingContext';
+import { useAuth } from '@/features/auth/context/AuthContext';
 import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
 import { LanguageSwitcher } from '@/shared/components/common/LanguageSwitcher';
 
@@ -56,10 +57,11 @@ export function OnboardingLayout({ children, title, eyebrow, mascotMessage, wide
   const currentStep = progressStep ?? Math.max(stepIndex + 1, 1);
   const previous = backTo || (stepIndex > 0 ? steps[stepIndex - 1] : '/welcome');
 
+  const auth = useAuth();
   const restart = () => {
     if (window.confirm(bilingualLabel('Bắt đầu lại? Tiến trình khảo sát hiện tại của bạn sẽ bị xóa.', 'Start over? Your current onboarding progress will be cleared.'))) {
       reset();
-      navigate('/welcome');
+      navigate(auth?.isAuthenticated ? '/onboarding/reason' : '/welcome');
     }
   };
 

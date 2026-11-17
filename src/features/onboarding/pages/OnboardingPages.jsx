@@ -289,7 +289,15 @@ export function LearningPathPage() {
   }
 
   const choosePlacement = () => {
-    update({ learningPath: 'placement' });
+    const generatedQuestions = getPlacementQuestions(activeLevel);
+    update({
+      learningPath: 'placement',
+      placementQuestionIndex: 0,
+      placementAnswers: [],
+      placementQuestions: generatedQuestions,
+      placementTestCompleted: false,
+      placementResult: null,
+    });
     window.setTimeout(() => navigate('/onboarding/placement-test'), 180);
   };
 
@@ -330,14 +338,25 @@ function ExerciseRunner({ mode }) {
   const navigate = useNavigate();
   const activeLevel = data.selectedLevel || data.currentLevel || 'A1';
 
-  const questions = useMemo(
-    () => (mode === 'lesson' ? firstLessonQuestions : getPlacementQuestions(activeLevel)),
-    [mode, activeLevel]
-  );
+  const questions = useMemo(() => {
+    if (mode === 'lesson') return firstLessonQuestions;
+    if (data.placementQuestions && Array.isArray(data.placementQuestions) && data.placementQuestions.length === 15) {
+      return data.placementQuestions;
+    }
+    const fresh = getPlacementQuestions(activeLevel);
+    update({ placementQuestions: fresh });
+    return fresh;
+  }, [mode, activeLevel, data.placementQuestions, update]);
 
-  const storedIndex = mode === 'lesson' ? data.lessonQuestionIndex : data.placementQuestionIndex;
-  const [index, setIndex] = useState(Math.min(storedIndex || 0, questions.length - 1));
-  const [answers, setAnswers] = useState(mode === 'lesson' ? (data.lessonAnswers || []) : (data.placementAnswers || []));
+  const storedIndex = mode === 'lesson'
+    ? (data.firstLessonCompleted ? 0 : (data.lessonQuestionIndex || 0))
+    : (data.placementTestCompleted ? 0 : (data.placementQuestionIndex || 0));
+  const [index, setIndex] = useState(Math.min(storedIndex, questions.length - 1));
+  const [answers, setAnswers] = useState(
+    mode === 'lesson'
+      ? (data.firstLessonCompleted ? [] : (data.lessonAnswers || []))
+      : (data.placementTestCompleted ? [] : (data.placementAnswers || []))
+  );
   const [selected, setSelected] = useState('');
   const [tokens, setTokens] = useState([]);
   const [checked, setChecked] = useState(false);
@@ -368,6 +387,7 @@ function ExerciseRunner({ mode }) {
         const accuracy = Math.round((score / questions.length) * 100);
         const completion = {
           firstLessonCompleted: true,
+          lessonQuestionIndex: 0,
           firstLessonResult: {
             correct: score,
             total: questions.length,
@@ -395,6 +415,8 @@ function ExerciseRunner({ mode }) {
         placementScore: evaluation.placementScore,
         tierScores: evaluation.tierScores,
         placementTestCompleted: true,
+        placementQuestionIndex: 0,
+        placementQuestions: null,
         placementResult: {
           selectedLevel: evaluation.selectedLevel,
           assessedLevel: evaluation.assessedLevel,
@@ -623,7 +645,7 @@ export function CompletionPage() {
   const handleShowRecommendations = async () => {
     setSaving(true);
     try {
-      await onboardingService.syncProgress();
+      await onboardingService.syncProgress(data);
       await fetchProfile();
       navigate(learningPathPath);
     } catch {
