@@ -16,6 +16,7 @@ import {
   Info,
 } from 'lucide-react';
 import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
+import { HolaSelect } from '@/shared/components/common/HolaSelect';
 import { learnerService } from '@/features/learning/api/learnerService';
 import {
   DEFAULT_USER_SETTINGS,
@@ -242,6 +243,60 @@ export function SettingsPage() {
   const dailyMinutes = form.dailyLearningGoalMinutes || 15;
   const weeklyHours = ((dailyMinutes * 7) / 60).toFixed(1);
 
+  const audioSpeedOptions = [
+    {
+      value: 0.75,
+      label: bilingualLabel("0.75× Chậm rãi (Dễ nghe)", "0.75× Slow (Easy)"),
+      sublabel: bilingualLabel("Dễ nghe cho người mới bắt đầu", "Clear and easy for beginners"),
+      badge: "0.75×",
+    },
+    {
+      value: 0.85,
+      label: bilingualLabel("0.85× Hơi chậm (Rõ thanh)", "0.85× Moderate (Clear)"),
+      sublabel: bilingualLabel("Nghe rõ từng thanh điệu tiếng Việt", "Distinct tones and inflections"),
+      badge: "0.85×",
+    },
+    {
+      value: 1,
+      label: bilingualLabel("1.0× Bình thường (Chuẩn)", "1.0× Normal (Standard)"),
+      sublabel: bilingualLabel("Tốc độ chuẩn trong giao tiếp", "Native natural speaking pace"),
+      badge: "1.0×",
+    },
+    {
+      value: 1.25,
+      label: bilingualLabel("1.25× Nhanh tự nhiên", "1.25× Fast (Conversational)"),
+      sublabel: bilingualLabel("Luyện phản xạ nghe nâng cao", "Advanced listening reflexes"),
+      badge: "1.25×",
+    },
+  ];
+
+  const dailyGoalOptions = [
+    {
+      value: 10,
+      label: bilingualLabel("10 phút / ngày (Thư giãn)", "10 min / day (Casual)"),
+      sublabel: bilingualLabel("~1.2 giờ / tuần · Phù hợp người bận rộn", "~1.2 hrs / week · Busy schedule"),
+      badge: bilingualLabel("Thư giãn", "Casual"),
+    },
+    {
+      value: 15,
+      label: bilingualLabel("15 phút / ngày (Tiêu chuẩn)", "15 min / day (Standard)"),
+      sublabel: bilingualLabel("~1.8 giờ / tuần · Cân bằng & ổn định", "~1.8 hrs / week · Steady & balanced"),
+      badge: bilingualLabel("Tiêu chuẩn", "Standard"),
+    },
+    {
+      value: 30,
+      label: bilingualLabel("30 phút / ngày (Nghiêm túc)", "30 min / day (Dedicated)"),
+      sublabel: bilingualLabel("~3.5 giờ / tuần · Tiến bộ nhanh chóng", "~3.5 hrs / week · Fast progression"),
+      badge: bilingualLabel("Nghiêm túc", "Dedicated"),
+    },
+    {
+      value: 45,
+      label: bilingualLabel("45 phút / ngày (Cấp tốc)", "45 min / day (Intensive)"),
+      sublabel: bilingualLabel("~5.3 giờ / tuần · Lộ trình bứt phá", "~5.3 hrs / week · Intensive mastery"),
+      badge: bilingualLabel("Cấp tốc", "Intensive"),
+    },
+  ];
+
   return (
     <div className="account-page">
       <div className="account-header">
@@ -289,16 +344,14 @@ export function SettingsPage() {
               </small>
             </div>
             <div className="settings-card-action">
-              <select
+              <HolaSelect
                 value={form.audioSpeed || 1}
-                onChange={(e) => updateField('audioSpeed', Number(e.target.value))}
-                aria-label={bilingualLabel("Tốc độ phát âm", "Audio Speed")}
-              >
-                <option value={0.75}>{bilingualLabel("0.75× Chậm rãi (Dễ nghe)", "0.75× Slow")}</option>
-                <option value={0.85}>{bilingualLabel("0.85× Hơi chậm (Rõ thanh)", "0.85× Moderate")}</option>
-                <option value={1}>{bilingualLabel("1.0× Bình thường (Chuẩn)", "1.0× Normal (Standard)")}</option>
-                <option value={1.25}>{bilingualLabel("1.25× Nhanh tự nhiên", "1.25× Natural Fast")}</option>
-              </select>
+                onChange={(val) => updateField('audioSpeed', Number(val))}
+                options={audioSpeedOptions}
+                ariaLabel={bilingualLabel("Tốc độ phát âm", "Audio Speed")}
+                minWidth="260px"
+                align="right"
+              />
             </div>
           </div>
 
@@ -339,16 +392,14 @@ export function SettingsPage() {
               </small>
             </div>
             <div className="settings-card-action">
-              <select
+              <HolaSelect
                 value={form.dailyLearningGoalMinutes || 15}
-                onChange={(e) => updateField('dailyLearningGoalMinutes', Number(e.target.value))}
-                aria-label={bilingualLabel("Mục tiêu thời gian mỗi ngày", "Daily Learning Goal")}
-              >
-                <option value={10}>{bilingualLabel("10 phút / ngày (Thư giãn)", "10 min / day (Casual)")}</option>
-                <option value={15}>{bilingualLabel("15 phút / ngày (Tiêu chuẩn)", "15 min / day (Standard)")}</option>
-                <option value={30}>{bilingualLabel("30 phút / ngày (Nghiêm túc)", "30 min / day (Dedicated)")}</option>
-                <option value={45}>{bilingualLabel("45 phút / ngày (Cấp tốc)", "45 min / day (Intensive)")}</option>
-              </select>
+                onChange={(val) => updateField('dailyLearningGoalMinutes', Number(val))}
+                options={dailyGoalOptions}
+                ariaLabel={bilingualLabel("Mục tiêu thời gian mỗi ngày", "Daily Learning Goal")}
+                minWidth="280px"
+                align="right"
+              />
             </div>
           </div>
 

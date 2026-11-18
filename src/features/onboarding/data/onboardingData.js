@@ -2,6 +2,7 @@ import {
   Award, Baby, BriefcaseBusiness, Compass, Crown, Dumbbell, HeartHandshake, Landmark,
   MessageCircle, Plane, Sparkles, Sprout, Target, Timer, Trophy, Utensils, Volume2,
 } from 'lucide-react';
+import { isAnswerCorrect, getLocalizedOption, areOptionsMatching, PLACEMENT_OPTION_TRANSLATIONS } from './onboardingTranslations.js';
 
 export const learningReasons = [
   { id: 'travel', title: 'Travel and live confidently in Vietnam', titleVi: 'Tự tin du lịch và sinh hoạt tại Việt Nam', detail: 'Directions, transport, food, shopping, and essential conversations.', detailVi: 'Hỏi đường, di chuyển, gọi món, mua sắm và giao tiếp thiết yếu.', icon: Plane },
@@ -374,7 +375,7 @@ export function evaluatePlacementTest(selectedLevel, answers = [], questions = [
 
     for (const q of tierQuestions) {
       const ans = answers.find((a) => a?.questionId === q.id);
-      if (ans?.correct) {
+      if (ans?.correct ?? isAnswerCorrect(ans?.response, q)) {
         tierCorrect++;
         totalCorrect++;
       }
@@ -442,3 +443,16 @@ export function evaluatePlacementTest(selectedLevel, answers = [], questions = [
 
 // Backward compatibility export
 export const placementQuestions = getPlacementQuestions('A1');
+
+export const placementBands = [
+  { min: 0, label: 'New Explorer', labelVi: 'Người mới khám phá', targetLevel: 'A0', recommendation: 'Vietnamese Foundations · Lesson 1' },
+  { min: 3, label: 'Foundation Builder', labelVi: 'Đang xây nền tảng', targetLevel: 'A1', recommendation: 'Everyday Vietnamese · Unit 2' },
+  { min: 6, label: 'Everyday Communicator', labelVi: 'Giao tiếp thường ngày', targetLevel: 'A2', recommendation: 'Real-life Conversations · Unit 4' },
+  { min: 9, label: 'Independent Communicator', labelVi: 'Giao tiếp độc lập', targetLevel: 'B1', recommendation: 'Natural Vietnamese · Unit 6' },
+  { min: 12, label: 'Upper-intermediate Communicator', labelVi: 'Giao tiếp trên trung cấp', targetLevel: 'B2', recommendation: 'Advanced Vietnamese · Chapter 4' },
+  { min: 14, label: 'Advanced Communicator', labelVi: 'Giao tiếp nâng cao', targetLevel: 'C1', recommendation: 'Advanced Vietnamese · Culture and Heritage' },
+];
+
+export { PLACEMENT_OPTION_TRANSLATIONS, getLocalizedOption, areOptionsMatching, isAnswerCorrect };
+
+

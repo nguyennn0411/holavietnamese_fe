@@ -23,24 +23,35 @@ export const onboardingService = {
   async syncProgress(explicitData, userId) {
     const data = explicitData || this.readGuestProgress(userId);
     if (!data) return { skipped: true };
+    if (data.onboardingCompleted && data.syncStatus?.profile === 'synced' && data.syncStatus?.activityResult === 'learning-path-synced') {
+      return { success: true, alreadySynced: true };
+    }
+    const token = localStorage.getItem('token');
     const recommendation = buildOnboardingRecommendation(data);
-    await learnerService.saveOnboarding({
-      nativeLanguage: 'en',
-      learningGoal: recommendation.goalId,
-      targetLevel: recommendation.targetLevel,
-      dailyLearningGoalMinutes: data.dailyGoalMinutes,
-      country: '',
-    });
-    await learningPathService.updatePreferences({
-      level: recommendation.targetLevel,
-      levelSource: data.placementResult?.targetLevel ? 'PLACEMENT' : 'ONBOARDING',
-      learningGoals: [...new Set([
-        recommendation.goalId,
-        ...(recommendation.secondaryGoalIds || []),
-      ].filter(Boolean))],
-      dailyStudyMinutes: data.dailyGoalMinutes || 15,
-      placementTakenAt: data.placementResult?.completedAt || null,
-    });
+
+    if (token) {
+      // Run both API updates in parallel with Promise.all to cut network latency in half
+      await Promise.all([
+        learnerService.saveOnboarding({
+          nativeLanguage: 'en',
+          learningGoal: recommendation.goalId,
+          targetLevel: recommendation.targetLevel,
+          dailyLearningGoalMinutes: data.dailyGoalMinutes,
+          country: '',
+        }),
+        learningPathService.updatePreferences({
+          level: recommendation.targetLevel,
+          levelSource: data.placementResult?.targetLevel ? 'PLACEMENT' : 'ONBOARDING',
+          learningGoals: [...new Set([
+            recommendation.goalId,
+            ...(recommendation.secondaryGoalIds || []),
+          ].filter(Boolean))],
+          dailyStudyMinutes: data.dailyGoalMinutes || 15,
+          placementTakenAt: data.placementResult?.completedAt || null,
+        }),
+      ]);
+    }
+
     const next = {
       ...data,
       onboardingCompleted: true,

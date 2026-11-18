@@ -16,6 +16,7 @@ import {
   Server,
   Lock,
   MessageSquare,
+  Sliders,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -331,6 +332,7 @@ export function AdminSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', text: '' });
+  const [activeTab, setActiveTab] = useState('all');
 
   // Load and normalize system settings from backend
   const fetchSettings = async () => {
@@ -569,9 +571,36 @@ export function AdminSettingsPage() {
         </div>
       )}
 
+      {/* Category Tabs */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, flexWrap: 'wrap', borderBottom: '1px solid #E2E8F0', paddingBottom: 14 }}>
+        {[
+          { id: 'all', labelVi: 'Tất cả cấu hình', labelEn: 'All Settings', icon: Sliders },
+          { id: 'general', labelVi: 'Chung & Thương hiệu', labelEn: 'General & Branding', icon: Globe },
+          { id: 'ai', labelVi: 'Dịch vụ AI & Trợ lý', labelEn: 'AI & Tutor Services', icon: Sparkles },
+          { id: 'security', labelVi: 'Bảo mật & Xác thực', labelEn: 'Security & Auth', icon: ShieldCheck },
+          { id: 'ops', labelVi: 'Vận hành & Bảo trì', labelEn: 'Operations & Maintenance', icon: Server },
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`admin-btn ${isActive ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
+              style={{ height: 36, padding: '0 14px', fontSize: 13 }}
+            >
+              <Icon size={14} />
+              <span><BilingualText vi={tab.labelVi} en={tab.labelEn} /></span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Form with 4 Grouped Cards */}
       <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* CARD 1: Thông tin chung & Nhận diện */}
+        {(activeTab === 'all' || activeTab === 'general') && (
         <div
           className="admin-card"
           style={{
@@ -811,8 +840,10 @@ export function AdminSettingsPage() {
             </div>
           </div>
         </div>
+        )}
 
         {/* CARD 2: Dịch vụ Trí tuệ Nhân tạo (AI Tutor & Speech) */}
+        {(activeTab === 'all' || activeTab === 'ai') && (
         <div
           className="admin-card"
           style={{
@@ -1020,8 +1051,10 @@ export function AdminSettingsPage() {
             />
           </div>
         </div>
+        )}
 
         {/* CARD 3: Bảo mật, Đăng ký & Xác thực */}
+        {(activeTab === 'all' || activeTab === 'security') && (
         <div
           className="admin-card"
           style={{
@@ -1159,8 +1192,10 @@ export function AdminSettingsPage() {
             </div>
           </div>
         </div>
+        )}
 
         {/* CARD 4: Vận hành & Chế độ Bảo trì */}
+        {(activeTab === 'all' || activeTab === 'ops') && (
         <div
           className="admin-card"
           style={{
@@ -1297,6 +1332,7 @@ export function AdminSettingsPage() {
             </div>
           </div>
         </div>
+        )}
 
         {/* Action Controls Bar */}
         <div
@@ -1306,52 +1342,21 @@ export function AdminSettingsPage() {
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: '14px',
-            padding: '18px 24px',
+            padding: '16px 20px',
             backgroundColor: '#FFFFFF',
-            borderRadius: '16px',
+            borderRadius: '14px',
             border: '1px solid #E2E8F0',
             boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+            position: 'sticky',
+            bottom: '16px',
+            zIndex: 30,
           }}
         >
           <button
             type="button"
             onClick={handleResetDefaults}
             disabled={saving}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '10px 18px',
-              borderRadius: '10px',
-              border: '1px solid #CBD5E1',
-              backgroundColor: '#FFFFFF',
-              color: '#475569',
-              fontSize: '13px',
-              fontWeight: 700,
-              cursor: saving ? 'not-allowed' : 'pointer',
-              transition: 'all 0.18s ease',
-            }}
-            onMouseEnter={(e) => {
-              if (!saving) {
-                e.currentTarget.style.backgroundColor = '#F8FAFC';
-                e.currentTarget.style.borderColor = '#94A3B8';
-                e.currentTarget.style.color = '#1E293B';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!saving) {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                e.currentTarget.style.borderColor = '#CBD5E1';
-                e.currentTarget.style.color = '#475569';
-              }
-            }}
-            onMouseDown={(e) => {
-              if (!saving) {
-                e.currentTarget.style.backgroundColor = '#FFF7E8';
-                e.currentTarget.style.borderColor = '#EA580C';
-                e.currentTarget.style.color = '#253044';
-              }
-            }}
+            className="admin-btn admin-btn-secondary"
           >
             <RotateCcw size={15} />
             <BilingualText vi="Khôi phục mặc định" en="Restore Defaults" />
@@ -1360,45 +1365,8 @@ export function AdminSettingsPage() {
           <button
             type="submit"
             disabled={saving}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '11px 28px',
-              borderRadius: '10px',
-              border: '1px solid transparent',
-              background: saving
-                ? '#94A3B8'
-                : 'linear-gradient(135deg, #FF7514 0%, #EA580C 100%)',
-              color: '#FFFFFF',
-              fontSize: '14px',
-              fontWeight: 800,
-              cursor: saving ? 'not-allowed' : 'pointer',
-              boxShadow: saving
-                ? 'none'
-                : '0 4px 14px rgba(234, 88, 12, 0.28)',
-              transition: 'all 0.18s ease',
-            }}
-            onMouseEnter={(e) => {
-              if (!saving) {
-                e.currentTarget.style.background = 'linear-gradient(135deg, #EA580C 0%, #C2410C 100%)';
-                e.currentTarget.style.boxShadow = '0 6px 18px rgba(194, 65, 12, 0.35)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!saving) {
-                e.currentTarget.style.background = 'linear-gradient(135deg, #FF7514 0%, #EA580C 100%)';
-                e.currentTarget.style.boxShadow = '0 4px 14px rgba(234, 88, 12, 0.28)';
-              }
-            }}
-            onMouseDown={(e) => {
-              if (!saving) {
-                e.currentTarget.style.backgroundColor = '#FFF7E8';
-                e.currentTarget.style.background = '#FFF7E8';
-                e.currentTarget.style.borderColor = '#EA580C';
-                e.currentTarget.style.color = '#253044';
-              }
-            }}
+            className="admin-btn admin-btn-primary"
+            style={{ padding: '0 24px' }}
           >
             {saving ? (
               <>

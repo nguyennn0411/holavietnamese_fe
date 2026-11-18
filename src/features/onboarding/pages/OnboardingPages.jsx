@@ -1,18 +1,18 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { BookOpen, Check, ChevronRight, Medal, Play, ShieldCheck, Volume2, X } from 'lucide-react';
 import {
   benefits, dailyGoals, firstLessonQuestions, learningReasons, levelOptions,
   placementBands, placementQuestions, getPlacementQuestions, evaluatePlacementTest,
-  PLACEMENT_DISTRIBUTIONS, TIER_THRESHOLDS,
+  PLACEMENT_DISTRIBUTIONS, TIER_THRESHOLDS, getLocalizedOption, areOptionsMatching, isAnswerCorrect,
 } from '../data/onboardingData';
 import { useOnboarding } from '../context/OnboardingContext';
 import { Brand, Confetti, LessonHeader, Mascot, OnboardingLayout, PrimaryButton, SelectionCard } from '../components/OnboardingUI';
 import { buildLearningPathPath, buildOnboardingRecommendation } from '../services/recommendationEngine';
 import { onboardingService } from '../services/onboardingService';
 import { useAuth } from '@/features/auth/context/AuthContext';
-import { BilingualText, bilingualLabel } from '@/shared/components/common/BilingualText';
+import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
 import { LanguageSwitcher } from '@/shared/components/common/LanguageSwitcher';
 
 const speak = (text) => {
@@ -357,6 +357,7 @@ function ExerciseRunner({ mode }) {
       ? (data.firstLessonCompleted ? [] : (data.lessonAnswers || []))
       : (data.placementTestCompleted ? [] : (data.placementAnswers || []))
   );
+  const textLang = useTextLanguage();
   const [selected, setSelected] = useState('');
   const [tokens, setTokens] = useState([]);
   const [checked, setChecked] = useState(false);
@@ -364,7 +365,7 @@ function ExerciseRunner({ mode }) {
 
   const question = questions[index] || questions[0];
   const response = question.type === 'arrange' ? tokens.join(' ') : selected;
-  const correct = response === question.answer;
+  const correct = isAnswerCorrect(response, question);
 
   const chooseToken = (token) => {
     if (!checked && !tokens.includes(token)) setTokens([...tokens, token]);
@@ -532,9 +533,10 @@ function ExerciseRunner({ mode }) {
               </>
             ) : (
               <div className="ob-answer-grid">
-                {question.options.map((option) => {
-                  const isSelected = selected === option;
-                  const isCorrect = checked && option === question.answer;
+                {question.options.map((option, optIdx) => {
+                  const localizedOption = getLocalizedOption(option, textLang, question, optIdx);
+                  const isSelected = selected === option || selected === localizedOption || areOptionsMatching(selected, option, question);
+                  const isCorrect = checked && isAnswerCorrect(option, question);
                   const isWrong = checked && isSelected && !correct;
 
                   return (
@@ -542,13 +544,13 @@ function ExerciseRunner({ mode }) {
                       type="button"
                       key={option}
                       disabled={checked}
-                      onClick={() => setSelected(option)}
+                      onClick={() => setSelected(localizedOption)}
                       className={`answer-card ${isSelected ? 'is-selected selected' : ''} ${isCorrect ? 'is-correct' : ''} ${isWrong ? 'is-wrong' : ''}`}
                       aria-selected={isSelected}
                       data-state={isSelected ? 'checked' : 'unchecked'}
                       style={!isCorrect && !isWrong ? { backgroundColor: '#ffffff' } : undefined}
                     >
-                      <span>{option}</span>
+                      <span>{localizedOption}</span>
                       {isCorrect && <Check size={18} strokeWidth={2.8} />}
                       {isWrong && <X size={18} strokeWidth={2.8} />}
                     </button>
@@ -571,7 +573,7 @@ function ExerciseRunner({ mode }) {
                 <p>
                   {correct
                     ? (question.noteVi ? <BilingualText vi={question.noteVi} en={question.note} /> : (question.note || <BilingualText vi="Chính xác rồi!" en="That is correct!" />))
-                    : <BilingualText vi={<>Đáp án đúng: <b>{question.answer}</b></>} en={<>Correct answer: <b>{question.answer}</b></>} />}
+                    : <BilingualText vi={<>Đáp án đúng: <b>{getLocalizedOption(question.answer, 'vi', question)}</b></>} en={<>Correct answer: <b>{getLocalizedOption(question.answer, 'en', question)}</b></>} />}
                 </p>
               </div>
             </>
@@ -633,8 +635,9 @@ export function CompletionPage() {
   const { data } = useOnboarding();
   const location = useLocation();
   const navigate = useNavigate();
-  const { fetchProfile } = useAuth();
+  const { isAuthenticated, fetchProfile, updateCurrentUser } = useAuth();
   const [saving, setSaving] = useState(false);
+  const syncTaskRef = useRef(null);
   const mode = location.state?.mode || (data.placementTestCompleted ? 'placement' : 'lesson');
   const result = mode === 'placement' ? data.placementResult : data.firstLessonResult;
   if (!result) return <Navigate to="/onboarding/learning-path" replace />;
@@ -642,14 +645,39 @@ export function CompletionPage() {
   const recommendation = data.recommendation || buildOnboardingRecommendation(data);
   const learningPathPath = buildLearningPathPath(recommendation);
 
+  // Preload next page bundle and pre-sync onboarding results to backend in background
+  useEffect(() => {
+    // 1. Preload LearningPathPage chunk in background so navigation is instant
+    import('@/features/learning/pages/learning-path/LearningPathPage').catch(() => {});
+
+    // 2. Pre-sync progress to database while user is reviewing their results
+    if (isAuthenticated && !data.onboardingCompleted && !syncTaskRef.current) {
+      syncTaskRef.current = onboardingService.syncProgress(data)
+        .then(() => {
+          if (updateCurrentUser) updateCurrentUser({ onboardingCompleted: true });
+          if (fetchProfile) fetchProfile().catch(() => {});
+        })
+        .catch((err) => {
+          console.warn('[Onboarding] Background sync error:', err);
+          syncTaskRef.current = null;
+        });
+    }
+  }, [isAuthenticated, data, updateCurrentUser, fetchProfile]);
+
   const handleShowRecommendations = async () => {
     setSaving(true);
     try {
-      await onboardingService.syncProgress(data);
+      if (syncTaskRef.current) {
+        // Wait for background sync if still in-flight
+        await syncTaskRef.current;
+      }
+      await onboardingService.syncProgress();
       await fetchProfile();
+      if (updateCurrentUser) updateCurrentUser({ onboardingCompleted: true });
       navigate(learningPathPath);
     } catch {
       // Keep the result visible so the learner can retry saving without losing answers.
+      syncTaskRef.current = null;
     } finally {
       setSaving(false);
     }
