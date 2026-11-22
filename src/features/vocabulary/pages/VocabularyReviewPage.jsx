@@ -6,6 +6,7 @@ import { ROUTES } from '@/constants/routes';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
 import { vocabularyReviewService } from '@/features/vocabulary/api/vocabularyReviewService';
+import { vocabularyService } from '@/features/vocabulary/api/vocabularyService';
 import { ResourceState } from '@/shared/components/common/ResourceState';
 import { PageHeader, SpeakButton, EmptyState } from '@/shared/components/common/Ui';
 import { ProgressBar } from '@/shared/components/common/ProgressBar';
@@ -15,13 +16,39 @@ import { CircleCheck, RotateCcw, Gauge, Check, CheckCheck } from 'lucide-react';
 
 export function VocabularyReviewPage() {
   const { user } = useAuth();
+  const [practiceEntries, setPracticeEntries] = useState(null);
+  const [practiceLoading, setPracticeLoading] = useState(false);
+  const [practiceError, setPracticeError] = useState('');
   const storageKey = `vocabulary-review:${user?.userId ?? user?.id ?? user?.username ?? 'current'}`;
   const resource = useAsyncResource(useCallback(async signal => {
     const session = await vocabularyReviewService.session(localStorage.getItem(storageKey) ?? sessionStorage.getItem(storageKey), { signal });
-    if (!signal.aborted) localStorage.setItem(storageKey, session.sessionId);
+    if (!signal.aborted) {
+      if (session.entries.length) {
+        localStorage.setItem(storageKey, session.sessionId);
+      } else {
+        localStorage.removeItem(storageKey);
+        sessionStorage.removeItem(storageKey);
+      }
+    }
     return session;
   }, [storageKey]));
-  const restart = () => { localStorage.removeItem(storageKey); sessionStorage.removeItem(storageKey); resource.reload(); };
+  const completeSession = useCallback(() => {
+    localStorage.removeItem(storageKey);
+    sessionStorage.removeItem(storageKey);
+  }, [storageKey]);
+
+  async function startFreePractice() {
+    if (practiceLoading) return;
+    setPracticeLoading(true);
+    setPracticeError('');
+    try {
+      setPracticeEntries(await vocabularyService.list());
+    } catch (failure) {
+      setPracticeError(failure.message);
+    } finally {
+      setPracticeLoading(false);
+    }
+  }
   return (
     <section className="vocabulary-ui vocabulary-review-page">
       <PageHeader
@@ -40,8 +67,15 @@ export function VocabularyReviewPage() {
         }
       />
       <ResourceState resource={resource}>
-        {session => session.entries.length || session.results.length ? (
-          <ReviewDeck key={session.sessionId} session={session} onRestart={restart} />
+        {session => practiceEntries?.length ? (
+          <ReviewDeck
+            key={`practice-${session.sessionId}`}
+            session={{ ...session, entries: practiceEntries, results: [] }}
+            onComplete={completeSession}
+            practiceOnly
+          />
+        ) : session.entries.length || session.results.length ? (
+          <ReviewDeck key={session.sessionId} session={session} onComplete={completeSession} />
         ) : (
           <EmptyState
             title={session.notebookCount
@@ -51,9 +85,21 @@ export function VocabularyReviewPage() {
               ? <BilingualText vi="Lịch ôn tiếp theo đã được lưu trong sổ tay." en="Your next review schedule has been saved." />
               : <BilingualText vi="Thêm từ hoặc lưu từ trong khi học để bắt đầu ôn tập." en="Add or save a word while learning to begin reviewing." />}
           >
-            <Link className="button" to={ROUTES.VOCABULARY_NOTEBOOK}>
-              <BilingualText>{session.notebookCount ? 'Về sổ tay' : 'Thêm từ vựng'}</BilingualText>
+            {session.notebookCount > 0 && (
+              <button className="button" disabled={practiceLoading} onClick={startFreePractice}>
+                <BilingualText
+                  vi={practiceLoading ? 'Đang mở...' : 'Ôn lại ngay'}
+                  en={practiceLoading ? 'Loading...' : 'Practice now'}
+                />
+              </button>
+            )}
+            <Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}>
+              <BilingualText
+                vi={session.notebookCount ? 'Về sổ tay' : 'Thêm từ vựng'}
+                en={session.notebookCount ? 'Back to notebook' : 'Add vocabulary'}
+              />
             </Link>
+            {practiceError && <p role="alert">{practiceError}</p>}
           </EmptyState>
         )}
       </ResourceState>
@@ -61,28 +107,76 @@ export function VocabularyReviewPage() {
   );
 }
 
-function ReviewDeck({ session, onRestart }) {
+function ReviewDeck({ session, onComplete, practiceOnly = false }) {
   const { i18n } = useTranslation();
   const locale = (i18n.resolvedLanguage || i18n.language).startsWith('vi') ? 'vi-VN' : 'en-US';
   const entries = session.entries;
-  const [index, setIndex] = useState(0);
+  const [queue, setQueue] = useState(() => entries.map(entry => ({ entry, practice: practiceOnly })));
   const [revealed, setRevealed] = useState(false);
   const [results, setResults] = useState(session.results);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
+  const [practiceTotal, setPracticeTotal] = useState(practiceOnly ? entries.length : 0);
+  const [practiceMastered, setPracticeMastered] = useState(() => new Set());
   const submitting = useRef(false);
   const goodCount = results.filter(result => result.rating === 'GOOD' || result.rating === 'EASY').length;
   const moreCount = results.length - goodCount;
+  const difficultIds = new Set(
+    results
+      .filter(result => result.rating === 'AGAIN' || result.rating === 'HARD')
+      .map(result => result.entryId)
+  );
+  const difficultWords = entries.filter(entry => difficultIds.has(entry.id));
+  const nextDueAt = [session.nextDueAt, ...results.map(result => result.nextReviewAt)]
+    .filter(Boolean)
+    .map(value => new Date(value))
+    .filter(value => !Number.isNaN(value.getTime()))
+    .sort((left, right) => left.getTime() - right.getTime())[0];
 
   const labels = {
-    AGAIN: { vi: 'Ôn lại', en: 'Again' },
+    AGAIN: { vi: 'Chưa nhớ', en: 'Again' },
     HARD: { vi: 'Khó', en: 'Hard' },
     GOOD: { vi: 'Nhớ được', en: 'Good' },
-    EASY: { vi: 'Dễ', en: 'Easy' }
+    EASY: { vi: 'Rất dễ', en: 'Easy' }
   };
   const ratingIcons = { AGAIN: RotateCcw, HARD: Gauge, GOOD: Check, EASY: CheckCheck };
 
-  if (index >= entries.length) {
+  function startPractice(words) {
+    setQueue(words.map(entry => ({ entry, practice: true })));
+    setPracticeTotal(words.length);
+    setPracticeMastered(new Set());
+    setRevealed(false);
+    setError('');
+  }
+
+  if (!queue.length && practiceOnly) {
+    return (
+      <div className="review-summary card relative overflow-hidden">
+        <FireworksBackground active={true} />
+        <span className="state-symbol" aria-hidden="true"><CircleCheck size={36} /></span>
+        <p className="eyebrow"><BilingualText vi="Hoàn thành luyện tập" en="Practice complete" /></p>
+        <h2><BilingualText vi="Bạn có thể luyện lại bất cứ lúc nào." en="You can practice again at any time." /></h2>
+        {nextDueAt && (
+          <p className="vocabulary-next-review">
+            <BilingualText
+              vi={`Lần ôn theo lịch tiếp theo: ${formatRelativeDue(nextDueAt, 'vi-VN')}.`}
+              en={`Next scheduled review: ${formatRelativeDue(nextDueAt, 'en-US')}.`}
+            />
+          </p>
+        )}
+        <div className="actions">
+          <RippleButton variant="primary" size="md" onClick={() => startPractice(entries)}>
+            <BilingualText vi="Luyện lại toàn bộ" en="Practice all again" />
+          </RippleButton>
+          <Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}>
+            <BilingualText vi="Về sổ tay" en="Back to notebook" />
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!queue.length) {
     return (
       <div className="review-summary card relative overflow-hidden">
         <FireworksBackground active={true} />
@@ -106,11 +200,11 @@ function ReviewDeck({ session, onRestart }) {
           </div>
           <div>
             <strong><CountingNumber value={goodCount} /></strong>
-            <span><BilingualText vi="Nhớ được / Dễ" en="Good / Easy" /></span>
+            <span><BilingualText vi="Nhớ được / Rất dễ" en="Good / Easy" /></span>
           </div>
           <div>
             <strong><CountingNumber value={moreCount} /></strong>
-            <span><BilingualText vi="Ôn lại" en="Again" /></span>
+            <span><BilingualText vi="Chưa nhớ / Khó" en="Again / Hard" /></span>
           </div>
         </div>
         <p className="muted">
@@ -119,10 +213,25 @@ function ReviewDeck({ session, onRestart }) {
             en={<>{moreCount} words need more practice. Results and review schedules have been saved.</>}
           />
         </p>
+        {nextDueAt && (
+          <p className="vocabulary-next-review">
+            <BilingualText
+              vi={`Lần ôn theo lịch tiếp theo: ${formatRelativeDue(nextDueAt, 'vi-VN')}.`}
+              en={`Next scheduled review: ${formatRelativeDue(nextDueAt, 'en-US')}.`}
+            />
+          </p>
+        )}
         <div className="actions">
-          <RippleButton variant="primary" size="md" onClick={onRestart}>
-            <BilingualText vi="Ôn lại" en="Again" />
-          </RippleButton>
+          {difficultWords.length > 0 && (
+            <RippleButton variant="primary" size="md" onClick={() => startPractice(difficultWords)}>
+              <BilingualText vi="Luyện lại từ chưa nhớ" en="Practice difficult words" />
+            </RippleButton>
+          )}
+          {entries.length > 0 && (
+            <RippleButton variant={difficultWords.length ? 'secondary' : 'primary'} size="md" onClick={() => startPractice(entries)}>
+              <BilingualText vi="Luyện lại toàn bộ" en="Practice all again" />
+            </RippleButton>
+          )}
           <Link className="button secondary" to={ROUTES.VOCABULARY_NOTEBOOK}>
             <BilingualText vi="Về sổ tay" en="Back to notebook" />
           </Link>
@@ -145,17 +254,32 @@ function ReviewDeck({ session, onRestart }) {
     );
   }
 
-  const word = entries[index];
+  const current = queue[0];
+  const word = current.entry;
+  const isPractice = current.practice;
   async function rate(value) {
     if (submitting.current) return;
     submitting.current = true;
     setPending(true);
     setError('');
     try {
-      const result = await vocabularyReviewService.rate(word.id, session.sessionId, value);
-      setResults(previous => [...previous, result]);
+      if (!isPractice) {
+        const result = await vocabularyReviewService.rate(word.id, session.sessionId, value);
+        setResults(previous => [...previous, result]);
+        if (value === 'AGAIN' || value === 'HARD') {
+          setPracticeTotal(previous => previous + 1);
+        }
+        if (queue.slice(1).every(item => item.practice)) onComplete();
+      } else if (value === 'GOOD' || value === 'EASY') {
+        setPracticeMastered(previous => new Set(previous).add(word.id));
+      }
+      setQueue(previous => {
+        const remaining = previous.slice(1);
+        return value === 'AGAIN' || value === 'HARD'
+          ? [...remaining, { entry: word, practice: true }]
+          : remaining;
+      });
       setRevealed(false);
-      setIndex(previous => previous + 1);
     } catch (failure) {
       setError(failure.message);
     } finally {
@@ -169,8 +293,12 @@ function ReviewDeck({ session, onRestart }) {
   return (
     <div className="review-workspace">
       <ProgressBar
-        value={(results.length / total) * 100}
-        label={`${results.length + 1} / ${total} ${locale === 'vi-VN' ? 'từ' : 'words'}`}
+        value={isPractice
+          ? (practiceTotal ? (practiceMastered.size / practiceTotal) * 100 : 0)
+          : (results.length / total) * 100}
+        label={isPractice
+          ? `${practiceMastered.size} / ${practiceTotal} ${locale === 'vi-VN' ? 'từ đã nhớ' : 'words mastered'}`
+          : `${Math.min(results.length + 1, total)} / ${total} ${locale === 'vi-VN' ? 'từ' : 'words'}`}
       />
 
       {/* 3D FlipCard for interactive Flashcard experience */}
@@ -178,7 +306,7 @@ function ReviewDeck({ session, onRestart }) {
         trigger="click"
         flipped={revealed}
         onFlip={(state) => setRevealed(state)}
-        className="w-full max-w-lg mx-auto"
+        className="vocabulary-review-flipcard w-full max-w-lg mx-auto"
         innerClassName="min-h-[260px]"
         front={
           <article className="review-flashcard card w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 cursor-pointer select-none">
@@ -227,8 +355,27 @@ function ReviewDeck({ session, onRestart }) {
           );
         })}
       </div>
+      {isPractice && (
+        <button className="secondary vocabulary-practice-finish" onClick={() => setQueue([])}>
+          <BilingualText vi="Kết thúc luyện tập" en="Finish practice" />
+        </button>
+      )}
     </div>
   );
+}
+
+function formatRelativeDue(value, locale) {
+  const milliseconds = value.getTime() - Date.now();
+  if (milliseconds <= 0) return locale === 'vi-VN' ? 'ngay bây giờ' : 'now';
+
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: 'always' });
+  const minutes = Math.ceil(milliseconds / 60_000);
+  if (minutes < 60) return formatter.format(minutes, 'minute');
+
+  const hours = Math.ceil(milliseconds / 3_600_000);
+  if (hours < 24) return formatter.format(hours, 'hour');
+
+  return formatter.format(Math.ceil(milliseconds / 86_400_000), 'day');
 }
 
 export default VocabularyReviewPage;
