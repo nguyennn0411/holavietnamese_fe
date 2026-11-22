@@ -7,6 +7,7 @@ import { useAuth } from '@/features/auth/context/AuthContext';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
 import { vocabularyReviewService } from '@/features/vocabulary/api/vocabularyReviewService';
 import { vocabularyService } from '@/features/vocabulary/api/vocabularyService';
+import { difficultReviewEntries, reviewSessionEntries } from '@/features/vocabulary/models/ReviewSession';
 import { ResourceState } from '@/shared/components/common/ResourceState';
 import { PageHeader, SpeakButton, EmptyState } from '@/shared/components/common/Ui';
 import { ProgressBar } from '@/shared/components/common/ProgressBar';
@@ -70,7 +71,7 @@ export function VocabularyReviewPage() {
         {session => practiceEntries?.length ? (
           <ReviewDeck
             key={`practice-${session.sessionId}`}
-            session={{ ...session, entries: practiceEntries, results: [] }}
+            session={{ ...session, entries: practiceEntries, reviewedEntries: [], results: [] }}
             onComplete={completeSession}
             practiceOnly
           />
@@ -111,6 +112,7 @@ function ReviewDeck({ session, onComplete, practiceOnly = false }) {
   const { i18n } = useTranslation();
   const locale = (i18n.resolvedLanguage || i18n.language).startsWith('vi') ? 'vi-VN' : 'en-US';
   const entries = session.entries;
+  const sessionEntries = reviewSessionEntries(session);
   const [queue, setQueue] = useState(() => entries.map(entry => ({ entry, practice: practiceOnly })));
   const [revealed, setRevealed] = useState(false);
   const [results, setResults] = useState(session.results);
@@ -121,12 +123,7 @@ function ReviewDeck({ session, onComplete, practiceOnly = false }) {
   const submitting = useRef(false);
   const goodCount = results.filter(result => result.rating === 'GOOD' || result.rating === 'EASY').length;
   const moreCount = results.length - goodCount;
-  const difficultIds = new Set(
-    results
-      .filter(result => result.rating === 'AGAIN' || result.rating === 'HARD')
-      .map(result => result.entryId)
-  );
-  const difficultWords = entries.filter(entry => difficultIds.has(entry.id));
+  const difficultWords = difficultReviewEntries(sessionEntries, results);
   const nextDueAt = [session.nextDueAt, ...results.map(result => result.nextReviewAt)]
     .filter(Boolean)
     .map(value => new Date(value))
@@ -227,8 +224,8 @@ function ReviewDeck({ session, onComplete, practiceOnly = false }) {
               <BilingualText vi="Luyện lại từ chưa nhớ" en="Practice difficult words" />
             </RippleButton>
           )}
-          {entries.length > 0 && (
-            <RippleButton variant={difficultWords.length ? 'secondary' : 'primary'} size="md" onClick={() => startPractice(entries)}>
+          {sessionEntries.length > 0 && (
+            <RippleButton variant={difficultWords.length ? 'secondary' : 'primary'} size="md" onClick={() => startPractice(sessionEntries)}>
               <BilingualText vi="Luyện lại toàn bộ" en="Practice all again" />
             </RippleButton>
           )}
