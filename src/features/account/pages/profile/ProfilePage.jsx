@@ -1,4 +1,5 @@
 import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
+import { HolaSelect } from '@/shared/components/common/HolaSelect';
 import { useEffect, useRef, useState } from 'react';
 import { learnerService } from '@/features/learning/api/learnerService';
 import { useAuth } from '@/features/auth/context/AuthContext';
@@ -16,6 +17,11 @@ import {
   Clock,
   BookOpen,
   Languages,
+  Target,
+  GraduationCap,
+  Globe,
+  MapPin,
+  Phone,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -126,6 +132,29 @@ export function ProfilePage() {
     zh: '🇨🇳 中文',
     fr: '🇫🇷 Français',
   };
+
+  const nativeLanguageOptions = [
+    { value: 'en', label: '🇬🇧 English' },
+    { value: 'ko', label: '🇰🇷 한국어 (Korean)' },
+    { value: 'ja', label: '🇯🇵 日本語 (Japanese)' },
+    { value: 'zh', label: '🇨🇳 中文 (Chinese)' },
+    { value: 'fr', label: '🇫🇷 Français (French)' },
+  ];
+
+  const learningGoalOptions = [
+    { value: 'travel', label: bilingualLabel('✈️ Du lịch & Khám phá', '✈️ Travel & Exploration') },
+    { value: 'work', label: bilingualLabel('💼 Công việc & Định cư', '💼 Work & Relocation') },
+    { value: 'exam_vsl', label: bilingualLabel('🎓 Thi chứng chỉ VSL', '🎓 VSL Certification') },
+    { value: 'culture', label: bilingualLabel('🏮 Văn hóa & Đời sống', '🏮 Culture & Life') },
+    { value: 'daily_communication', label: bilingualLabel('🗣️ Giao tiếp hằng ngày', '🗣️ Daily Communication') },
+  ];
+
+  const targetLevelOptions = [
+    { value: 'A1', label: bilingualLabel('A1 – Mới bắt đầu', 'A1 – Beginner') },
+    { value: 'A2', label: bilingualLabel('A2 – Sơ cấp', 'A2 – Elementary') },
+    { value: 'B1', label: bilingualLabel('B1 – Trung cấp', 'B1 – Intermediate') },
+    { value: 'B2', label: bilingualLabel('B2 – Trung cấp nâng cao', 'B2 – Upper Intermediate') },
+  ];
 
   return (
     <div className="account-page space-y-6">
@@ -291,45 +320,41 @@ export function ProfilePage() {
             />
           </label>
 
-          <label>
-            <span><BilingualText>{"Ngôn ngữ mẹ đẻ"}</BilingualText></span>
-            <select
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-bold text-[#1E293B]"><BilingualText vi="Ngôn ngữ mẹ đẻ" en="Native Language" /></span>
+            <HolaSelect
               value={form.nativeLanguage || 'en'}
-              onChange={(e) => setForm({ ...form, nativeLanguage: e.target.value })}
-            >
-              <option value="en">{bilingualLabel("English")}</option>
-              <option value="ko">{bilingualLabel("한국어 (Korean)")}</option>
-              <option value="ja">{bilingualLabel("日本語 (Japanese)")}</option>
-              <option value="zh">{bilingualLabel("中文 (Chinese)")}</option>
-              <option value="fr">{bilingualLabel("Français (French)")}</option>
-            </select>
-          </label>
+              onChange={(val) => setForm({ ...form, nativeLanguage: val })}
+              options={nativeLanguageOptions}
+              fullWidth
+              align="left"
+              ariaLabel={bilingualLabel("Ngôn ngữ mẹ đẻ", "Native Language")}
+            />
+          </div>
 
-          <label>
-            <span><BilingualText>{"Mục tiêu học tập"}</BilingualText></span>
-            <select
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-bold text-[#1E293B]"><BilingualText vi="Mục tiêu học tập" en="Learning Goal" /></span>
+            <HolaSelect
               value={form.learningGoal || 'travel'}
-              onChange={(e) => setForm({ ...form, learningGoal: e.target.value })}
-            >
-              <option value="travel">{bilingualLabel("Du lịch & Khám phá")}</option>
-              <option value="work">{bilingualLabel("Công việc & Định cư")}</option>
-              <option value="exam_vsl">{bilingualLabel("Thi chứng chỉ VSL")}</option>
-              <option value="culture">{bilingualLabel("Văn hóa & Đời sống")}</option>
-            </select>
-          </label>
+              onChange={(val) => setForm({ ...form, learningGoal: val })}
+              options={learningGoalOptions}
+              fullWidth
+              align="left"
+              ariaLabel={bilingualLabel("Mục tiêu học tập", "Learning Goal")}
+            />
+          </div>
 
-          <label>
-            <span><BilingualText>{"Cấp độ mong muốn"}</BilingualText></span>
-            <select
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-bold text-[#1E293B]"><BilingualText vi="Cấp độ mong muốn" en="Target Level" /></span>
+            <HolaSelect
               value={form.targetLevel || 'A1'}
-              onChange={(e) => setForm({ ...form, targetLevel: e.target.value })}
-            >
-              <option value="A1">{bilingualLabel("A1 – Mới bắt đầu")}</option>
-              <option value="A2">{bilingualLabel("A2 – Sơ cấp")}</option>
-              <option value="B1">{bilingualLabel("B1 – Trung cấp")}</option>
-              <option value="B2">{bilingualLabel("B2 – Trung cấp nâng cao")}</option>
-            </select>
-          </label>
+              onChange={(val) => setForm({ ...form, targetLevel: val })}
+              options={targetLevelOptions}
+              fullWidth
+              align="left"
+              ariaLabel={bilingualLabel("Cấp độ mong muốn", "Target Level")}
+            />
+          </div>
 
           <button
             type="submit"
@@ -340,36 +365,155 @@ export function ProfilePage() {
           </button>
         </form>
       ) : (
-        <div className="profile-rows">
-          <div>
-            <b><BilingualText>{"Mục tiêu học tiếng Việt"}</BilingualText></b>
-            <span>
-              <BilingualText
-                vi={goalLabels[profile.learningGoal]?.vi || profile.learningGoal || 'Du lịch & Khám phá'}
-                en={goalLabels[profile.learningGoal]?.en || profile.learningGoal || 'Travel & Exploration'}
-              />
-            </span>
-            <i>✓</i>
+        <div className="profile-info-card">
+          <div className="profile-info-header">
+            <div>
+              <h2 className="profile-info-title">
+                <BilingualText vi="Thông tin học tập & tài khoản" en="Learning & Account Details" />
+              </h2>
+              <p className="profile-info-subtitle">
+                <BilingualText
+                  vi="Mục tiêu, cấp độ hiện tại và thông tin liên hệ của học viên"
+                  en="Learning goals, current CEFR level, and contact details"
+                />
+              </p>
+            </div>
+            <button
+              type="button"
+              className="account-btn account-btn-outline"
+              onClick={() => setEditing(true)}
+            >
+              <BilingualText vi="✏️ Chỉnh sửa" en="✏️ Edit Info" />
+            </button>
           </div>
-          <div>
-            <b><BilingualText>{"Trình độ hiện tại"}</BilingualText></b>
-            <span><BilingualText>{profile.targetLevel ? `Cấp độ ${profile.targetLevel}` : 'A1 - Mới bắt đầu'}</BilingualText></span>
-            <i>✓</i>
-          </div>
-          <div>
-            <b><BilingualText>{"Ngôn ngữ mẹ đẻ"}</BilingualText></b>
-            <span><BilingualText>{languageLabels[profile.nativeLanguage] || profile.nativeLanguage || 'English'}</BilingualText></span>
-            <i>✓</i>
-          </div>
-          <div>
-            <b><BilingualText>{"Quốc gia"}</BilingualText></b>
-            <span><BilingualText>{profile.country || 'Chưa cập nhật'}</BilingualText></span>
-            <i>✓</i>
-          </div>
-          <div>
-            <b><BilingualText>{"Số điện thoại"}</BilingualText></b>
-            <span><BilingualText>{profile.phoneNumber || 'Chưa cập nhật'}</BilingualText></span>
-            <i>✓</i>
+
+          <div className="profile-info-list">
+            {/* Mục tiêu học tập */}
+            <div className="profile-info-row">
+              <div className="profile-info-label-group">
+                <div className="profile-info-icon-box profile-info-icon--orange">
+                  <Target size={18} />
+                </div>
+                <div className="profile-info-label-texts">
+                  <span className="profile-info-label">
+                    <BilingualText vi="Mục tiêu học tiếng Việt" en="Learning Goal" />
+                  </span>
+                  <small className="profile-info-hint">
+                    <BilingualText vi="Định hướng bài học và lộ trình cá nhân" en="Curriculum orientation" />
+                  </small>
+                </div>
+              </div>
+              <div className="profile-info-value">
+                <span className="profile-pill-badge profile-pill-badge--orange">
+                  <BilingualText
+                    vi={goalLabels[profile.learningGoal]?.vi || profile.learningGoal || 'Du lịch & Khám phá'}
+                    en={goalLabels[profile.learningGoal]?.en || profile.learningGoal || 'Travel & Exploration'}
+                  />
+                </span>
+              </div>
+            </div>
+
+            {/* Trình độ hiện tại */}
+            <div className="profile-info-row">
+              <div className="profile-info-label-group">
+                <div className="profile-info-icon-box profile-info-icon--blue">
+                  <GraduationCap size={18} />
+                </div>
+                <div className="profile-info-label-texts">
+                  <span className="profile-info-label">
+                    <BilingualText vi="Trình độ hiện tại" en="Current Level" />
+                  </span>
+                  <small className="profile-info-hint">
+                    <BilingualText vi="Khung tham chiếu CEFR quốc tế" en="CEFR proficiency scale" />
+                  </small>
+                </div>
+              </div>
+              <div className="profile-info-value">
+                <span className="profile-pill-badge profile-pill-badge--blue">
+                  <BilingualText
+                    vi={profile.targetLevel ? `Cấp độ ${profile.targetLevel}` : 'A1 - Mới bắt đầu'}
+                    en={profile.targetLevel ? `Level ${profile.targetLevel}` : 'A1 - Beginner'}
+                  />
+                </span>
+              </div>
+            </div>
+
+            {/* Ngôn ngữ mẹ đẻ */}
+            <div className="profile-info-row">
+              <div className="profile-info-label-group">
+                <div className="profile-info-icon-box profile-info-icon--emerald">
+                  <Globe size={18} />
+                </div>
+                <div className="profile-info-label-texts">
+                  <span className="profile-info-label">
+                    <BilingualText vi="Ngôn ngữ mẹ đẻ" en="Native Language" />
+                  </span>
+                  <small className="profile-info-hint">
+                    <BilingualText vi="Ngôn ngữ giải nghĩa song ngữ" en="Default translation language" />
+                  </small>
+                </div>
+              </div>
+              <div className="profile-info-value">
+                <span className="profile-pill-badge profile-pill-badge--neutral">
+                  <BilingualText
+                    vi={languageLabels[profile.nativeLanguage] || profile.nativeLanguage || 'English'}
+                    en={languageLabels[profile.nativeLanguage] || profile.nativeLanguage || 'English'}
+                  />
+                </span>
+              </div>
+            </div>
+
+            {/* Quốc gia */}
+            <div className="profile-info-row">
+              <div className="profile-info-label-group">
+                <div className="profile-info-icon-box profile-info-icon--purple">
+                  <MapPin size={18} />
+                </div>
+                <div className="profile-info-label-texts">
+                  <span className="profile-info-label">
+                    <BilingualText vi="Quốc gia" en="Country" />
+                  </span>
+                  <small className="profile-info-hint">
+                    <BilingualText vi="Khu vực sinh sống" en="Residence region" />
+                  </small>
+                </div>
+              </div>
+              <div className="profile-info-value">
+                {profile.country ? (
+                  <span className="profile-info-text-bold">{profile.country}</span>
+                ) : (
+                  <span className="profile-info-text-muted">
+                    <BilingualText vi="Chưa cập nhật" en="Not provided" />
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Số điện thoại */}
+            <div className="profile-info-row">
+              <div className="profile-info-label-group">
+                <div className="profile-info-icon-box profile-info-icon--amber">
+                  <Phone size={18} />
+                </div>
+                <div className="profile-info-label-texts">
+                  <span className="profile-info-label">
+                    <BilingualText vi="Số điện thoại" en="Phone Number" />
+                  </span>
+                  <small className="profile-info-hint">
+                    <BilingualText vi="Bảo mật tài khoản & xác minh OTP" en="Account security & OTP" />
+                  </small>
+                </div>
+              </div>
+              <div className="profile-info-value">
+                {profile.phoneNumber ? (
+                  <span className="profile-info-text-bold font-mono">{profile.phoneNumber}</span>
+                ) : (
+                  <span className="profile-info-text-muted">
+                    <BilingualText vi="Chưa cập nhật" en="Not provided" />
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

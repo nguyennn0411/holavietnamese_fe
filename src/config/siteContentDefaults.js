@@ -24,7 +24,7 @@ export const DEFAULT_MENU_ITEMS = Object.freeze([
   },
   {
     code: 'GUEST_LEARNING_PATH', placement: MENU_PLACEMENTS.GUEST, labelVi: 'Lộ trình học', labelEn: 'Learning Path',
-    path: '/edtech/dashboard', iconKey: 'compass', displayOrder: 20, enabled: true, authRequired: true, mobilePrimary: false, featureKey: 'LEARNING_PATH',
+    path: '/learning-path', iconKey: 'compass', displayOrder: 20, enabled: true, authRequired: true, mobilePrimary: false, featureKey: 'LEARNING_PATH',
   },
   {
     code: 'GUEST_COURSES', placement: MENU_PLACEMENTS.GUEST, labelVi: 'Khóa học', labelEn: 'Courses',
@@ -60,7 +60,7 @@ export const DEFAULT_MENU_ITEMS = Object.freeze([
   },
   {
     code: 'LEARNER_LEARNING_PATH', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Lộ trình học', labelEn: 'Learning Path',
-    path: '/edtech/dashboard', iconKey: 'compass', displayOrder: 20, enabled: true, authRequired: true, mobilePrimary: true, featureKey: 'LEARNING_PATH',
+    path: '/learning-path', iconKey: 'compass', displayOrder: 20, enabled: true, authRequired: true, mobilePrimary: true, featureKey: 'LEARNING_PATH',
   },
   {
     code: 'LEARNER_COURSES', placement: MENU_PLACEMENTS.LEARNER, labelVi: 'Khóa học', labelEn: 'Courses',

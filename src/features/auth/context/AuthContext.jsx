@@ -126,6 +126,14 @@ export const AuthProvider = ({ children }) => {
         window.dispatchEvent(new CustomEvent('hola:auth-token-changed', { detail: { token } }));
         markHasAccount();
 
+        // Clear guest/legacy onboarding cache so it never contaminates the logged-in user
+        try {
+          localStorage.removeItem('hola:onboarding:v1');
+          localStorage.removeItem('hola:onboarding:guest');
+        } catch {
+          // Storage can be unavailable in restricted browser contexts.
+        }
+
         const userInfo = {
           userId,
           username: uname,
@@ -197,6 +205,14 @@ export const AuthProvider = ({ children }) => {
         window.dispatchEvent(new CustomEvent('hola:auth-token-changed', { detail: { token } }));
         markHasAccount();
 
+        // Clear guest/legacy onboarding cache so it never contaminates the logged-in user
+        try {
+          localStorage.removeItem('hola:onboarding:v1');
+          localStorage.removeItem('hola:onboarding:guest');
+        } catch {
+          // Storage can be unavailable in restricted browser contexts.
+        }
+
         const userInfo = {
           userId,
           username: uname,
@@ -233,6 +249,16 @@ export const AuthProvider = ({ children }) => {
       window.dispatchEvent(new CustomEvent('hola:auth-token-changed', { detail: { token: null } }));
       localStorage.removeItem('user');
       ['userId', 'username', 'fullName', 'role', 'roles', 'permissions'].forEach((key) => localStorage.removeItem(key));
+      try {
+        Object.keys(localStorage).forEach((key) => {
+          if (key.startsWith('hola:onboarding')) {
+            localStorage.removeItem(key);
+          }
+        });
+        window.dispatchEvent(new CustomEvent('hola:onboarding-reset'));
+      } catch (err) {
+        console.warn('Failed to clear onboarding state on logout:', err);
+      }
       setAccessToken(null);
       setIsAuthenticated(false);
       setUser(null);

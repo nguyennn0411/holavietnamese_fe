@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
 import { adminService } from '@/features/admin/api/adminService';
 import { useConfirmDialog } from '@/shared/components/common/ConfirmDialog';
-import { Zap, Power, Sparkles, BookOpen, Flame, Award, CheckCircle2 } from 'lucide-react';
+import { Zap, Power, Sparkles, BookOpen, Flame, Award, CheckCircle2, RefreshCw, AlertTriangle } from 'lucide-react';
 import { AdminActionButton, AdminActionGroup } from '@/shared/components/common/AdminTableActions';
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
+import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
 
 const PAGE_SIZE = 10;
 
@@ -79,10 +80,10 @@ export function AdminXpRulesPage() {
     try {
       if (editingId) {
         await adminService.updateXpRule(editingId, payload);
-        setMsg('Đã cập nhật quy tắc XP thành công!');
+        setMsg(bilingualLabel('Đã cập nhật quy tắc XP thành công!', 'XP rule updated successfully!'));
       } else {
         await adminService.createXpRule(payload);
-        setMsg('Đã khởi tạo quy tắc XP mới!');
+        setMsg(bilingualLabel('Đã khởi tạo quy tắc XP mới!', 'New XP rule created successfully!'));
       }
       setEditingId(null);
       setDraft(emptyDraft);
@@ -168,108 +169,170 @@ export function AdminXpRulesPage() {
   }, [items, currentPage]);
 
   return (
-    <div className="space-y-6">
+    <div className="admin-xp-rules-page" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {confirmationDialog}
 
       {/* Header */}
-      <div className="flex flex-col gap-2">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 border border-orange-200 text-[#EA580C] text-xs font-bold w-fit">
-          <Zap size={13} /> QUY TẮC TÍNH ĐIỂM
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 20, flexWrap: 'wrap' }}>
+        <div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: '999px', background: '#FFF7ED', border: '1px solid #FFEDD5', color: '#EA580C', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Zap size={13} />
+            <BilingualText vi="HỆ THỐNG · QUY TẮC TÍNH ĐIỂM" en="SYSTEM · SCORING RULES" />
+          </div>
+          <h1 style={{ margin: '0 0 6px', fontSize: '1.75rem', fontWeight: 800, color: '#0F172A' }}>
+            <BilingualText vi="Quy tắc cộng điểm XP" en="XP Reward Rules" />
+          </h1>
+          <p style={{ margin: 0, color: '#64748B', fontSize: '0.92rem' }}>
+            <BilingualText
+              vi="Quản lý cơ chế thưởng XP cho từng hoạt động học tập và cấu hình giới hạn chống cày điểm lạm phát."
+              en="Manage XP reward amounts for learner activities and configure daily anti-farming caps."
+            />
+          </p>
         </div>
-        <h1 className="text-2xl font-black text-[#253044] m-0"><BilingualText>Quy tắc cộng điểm XP</BilingualText></h1>
-        <p className="text-sm text-[#64748B] m-0">
-          <BilingualText>Quản lý cơ chế thưởng XP cho từng hoạt động học tập và cấu hình giới hạn chống cày điểm lạm phát.</BilingualText>
-        </p>
+
+        <button
+          type="button"
+          onClick={load}
+          className="admin-btn admin-btn-secondary"
+        >
+          <RefreshCw size={15} className={loading ? 'spin-animation' : ''} />
+          <BilingualText vi="Tải lại dữ liệu" en="Reload Data" />
+        </button>
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF] shadow-2xs">
-          <div className="text-xs font-bold text-[#64748B] uppercase tracking-wide"><BilingualText>Tổng số quy tắc</BilingualText></div>
-          <div className="text-2xl font-black text-[#253044] mt-1">{stats.total}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+        <div className="admin-card" style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: '#FFF7ED', color: '#EA580C', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Zap size={22} />
+          </div>
+          <div>
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <BilingualText vi="Tổng số quy tắc" en="Total Rules" />
+            </span>
+            <div style={{ fontSize: '1.65rem', fontWeight: 850, color: '#0F172A', lineHeight: 1.2, marginTop: 2 }}>
+              {stats.total}
+            </div>
+          </div>
         </div>
-        <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF] shadow-2xs">
-          <div className="text-xs font-bold text-emerald-700 uppercase tracking-wide"><BilingualText>Đang áp dụng (Bật)</BilingualText></div>
-          <div className="text-2xl font-black text-emerald-600 mt-1">{stats.active}</div>
+
+        <div className="admin-card" style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: '#ECFDF5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CheckCircle2 size={22} />
+          </div>
+          <div>
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <BilingualText vi="Đang áp dụng (Bật)" en="Active Rules" />
+            </span>
+            <div style={{ fontSize: '1.65rem', fontWeight: 850, color: '#15803D', lineHeight: 1.2, marginTop: 2 }}>
+              {stats.active}
+            </div>
+          </div>
         </div>
-        <div className="p-4 rounded-2xl bg-white border border-[#E8E5DF] shadow-2xs">
-          <div className="text-xs font-bold text-[#EA580C] uppercase tracking-wide"><BilingualText>Giới hạn tối đa/ngày</BilingualText></div>
-          <div className="text-2xl font-black text-[#EA580C] mt-1">~{stats.maxDailyPotential} XP</div>
+
+        <div className="admin-card" style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Flame size={22} />
+          </div>
+          <div>
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#B45309', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <BilingualText vi="Giới hạn tối đa/ngày" en="Max Daily Potential" />
+            </span>
+            <div style={{ fontSize: '1.65rem', fontWeight: 850, color: '#B45309', lineHeight: 1.2, marginTop: 2 }}>
+              ~{stats.maxDailyPotential} XP
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Alert Notices */}
       {error && (
-        <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-medium flex items-center justify-between" role="alert">
-          <span>{error}</span>
-          <button type="button" onClick={() => setError('')} className="text-red-500 hover:text-red-700 font-bold ml-2">×</button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderRadius: 10, background: '#FEF2F2', border: '1px solid #FCA5A5', color: '#991B1B', fontSize: 13, fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <AlertTriangle size={16} />
+            <span>{error}</span>
+          </div>
+          <button type="button" onClick={() => setError('')} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#991B1B', fontWeight: 700 }}>×</button>
         </div>
       )}
       {msg && (
-        <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium flex items-center justify-between">
-          <span>{msg}</span>
-          <button type="button" onClick={() => setMsg('')} className="text-emerald-500 hover:text-emerald-700 font-bold ml-2">×</button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderRadius: 10, background: '#ECFDF5', border: '1px solid #A7F3D0', color: '#065F46', fontSize: 13, fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <CheckCircle2 size={16} />
+            <span>{msg}</span>
+          </div>
+          <button type="button" onClick={() => setMsg('')} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#065F46', fontWeight: 700 }}>×</button>
         </div>
       )}
 
       {/* Form Add / Edit */}
-      <div className="rounded-2xl border border-[#E8E5DF] bg-white p-5 shadow-2xs text-left">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-          <h2 className="text-base font-bold text-[#253044] m-0">
-            <BilingualText>{editingId ? 'Chỉnh sửa quy tắc XP' : 'Thêm quy tắc XP mới'}</BilingualText>
-          </h2>
+      <div className="admin-card" style={{ padding: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, marginBottom: 18, flexWrap: 'wrap' }}>
+          <div>
+            <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 2px', color: '#0F172A' }}>
+              <BilingualText vi={editingId ? 'Chỉnh sửa quy tắc XP' : 'Thêm quy tắc XP mới'} en={editingId ? 'Edit XP Rule' : 'Add New XP Rule'} />
+            </h2>
+            <span style={{ fontSize: 12, color: '#64748B' }}>
+              <BilingualText vi="Thiết lập sự kiện kích hoạt và điểm XP thưởng tương ứng." en="Configure event triggers and corresponding XP rewards." />
+            </span>
+          </div>
 
           {!editingId && (
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-xs text-[#64748B] font-medium mr-1">Mẫu nhanh:</span>
-              {PRESETS.map((p) => (
-                <button
-                  key={p.eventType}
-                  type="button"
-                  onClick={() => applyPreset(p)}
-                  className="px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 text-[#EA580C] border border-orange-200 text-xs font-semibold transition-colors cursor-pointer !min-h-0"
-                  title={`Điền mẫu: ${p.eventName}`}
-                >
-                  {p.eventName}
-                </button>
-              ))}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 11.5, fontWeight: 700, color: '#64748B', marginRight: 4 }}>Mẫu nhanh:</span>
+              {PRESETS.map((p) => {
+                const Icon = p.icon;
+                return (
+                  <button
+                    key={p.eventType}
+                    type="button"
+                    onClick={() => applyPreset(p)}
+                    className="admin-btn admin-btn-secondary admin-btn-sm"
+                    style={{ height: 28, padding: '0 8px', fontSize: 11.5, gap: 5 }}
+                    title={`Điền mẫu: ${p.eventName}`}
+                  >
+                    <Icon size={12} style={{ color: '#EA580C' }} />
+                    <span>{p.eventName}</span>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
 
-        <form onSubmit={submit} className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
             <div>
-              <label className="block text-xs font-bold text-[#253044] mb-1">
-                Mã sự kiện (Event Type) *
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#1E293B', marginBottom: 5 }}>
+                <BilingualText vi="Mã sự kiện (Event Type) *" en="Event Type Code *" />
               </label>
               <input
                 type="text"
                 placeholder="VD: LESSON_COMPLETE"
                 value={draft.eventType}
                 onChange={(e) => setDraft({ ...draft, eventType: e.target.value.toUpperCase().replace(/\s+/g, '_') })}
-                className="w-full px-3 py-2 rounded-xl border border-[#E8E5DF] text-sm focus:outline-none focus:border-[#EA580C] font-mono"
+                style={{ width: '100%', height: 38, padding: '0 12px', borderRadius: 8, border: '1px solid #E2E8F0', fontSize: 13, fontFamily: 'monospace' }}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#253044] mb-1">
-                Tên sự kiện hiển thị *
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#1E293B', marginBottom: 5 }}>
+                <BilingualText vi="Tên sự kiện hiển thị *" en="Event Name Display *" />
               </label>
               <input
                 type="text"
                 placeholder="VD: Hoàn thành 1 bài học"
                 value={draft.eventName}
                 onChange={(e) => setDraft({ ...draft, eventName: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border border-[#E8E5DF] text-sm focus:outline-none focus:border-[#EA580C]"
+                style={{ width: '100%', height: 38, padding: '0 12px', borderRadius: 8, border: '1px solid #E2E8F0', fontSize: 13 }}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#253044] mb-1">
-                Điểm thưởng (XP) *
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#1E293B', marginBottom: 5 }}>
+                <BilingualText vi="Điểm thưởng (XP) *" en="XP Reward Points *" />
               </label>
               <input
                 type="number"
@@ -278,14 +341,14 @@ export function AdminXpRulesPage() {
                 placeholder="20"
                 value={draft.xpReward}
                 onChange={(e) => setDraft({ ...draft, xpReward: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-                className="w-full px-3 py-2 rounded-xl border border-[#E8E5DF] text-sm focus:outline-none focus:border-[#EA580C]"
+                style={{ width: '100%', height: 38, padding: '0 12px', borderRadius: 8, border: '1px solid #E2E8F0', fontSize: 13 }}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#253044] mb-1">
-                Giới hạn ngày (Daily Cap)
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#1E293B', marginBottom: 5 }}>
+                <BilingualText vi="Giới hạn ngày (Daily Cap)" en="Daily Cap Limit" />
               </label>
               <input
                 type="number"
@@ -294,37 +357,37 @@ export function AdminXpRulesPage() {
                 placeholder="200 (để trống = vô hạn)"
                 value={draft.dailyCap ?? ''}
                 onChange={(e) => setDraft({ ...draft, dailyCap: e.target.value === '' ? null : Math.max(0, parseInt(e.target.value, 10) || 0) })}
-                className="w-full px-3 py-2 rounded-xl border border-[#E8E5DF] text-sm focus:outline-none focus:border-[#EA580C]"
+                style={{ width: '100%', height: 38, padding: '0 12px', borderRadius: 8, border: '1px solid #E2E8F0', fontSize: 13 }}
               />
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2 border-t border-[#E8E5DF]">
-            <label className="inline-flex items-center gap-2 cursor-pointer text-xs font-bold text-[#253044]">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, paddingTop: 14, borderTop: '1px solid #E2E8F0', flexWrap: 'wrap' }}>
+            <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600, color: '#1E293B' }}>
               <input
                 type="checkbox"
                 checked={draft.active}
                 onChange={(e) => setDraft({ ...draft, active: e.target.checked })}
-                className="h-4 w-4 rounded text-[#EA580C] focus:ring-[#EA580C]"
+                style={{ width: 17, height: 17, accentColor: '#EA580C' }}
               />
-              Kích hoạt áp dụng quy tắc này ngay
+              <BilingualText vi="Kích hoạt áp dụng quy tắc này ngay" en="Activate this rule immediately" />
             </label>
 
-            <div className="flex items-center gap-2">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {editingId && (
                 <button
                   type="button"
                   onClick={cancelEdit}
-                  className="px-4 py-2 rounded-xl border border-[#E8E5DF] text-xs font-bold text-[#64748B] hover:bg-stone-50 transition-colors cursor-pointer !min-h-0"
+                  className="admin-btn admin-btn-secondary"
                 >
-                  Hủy chỉnh sửa
+                  <BilingualText vi="Hủy chỉnh sửa" en="Cancel" />
                 </button>
               )}
               <button
                 type="submit"
-                className="px-5 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer !min-h-0 !border-0"
+                className="admin-btn admin-btn-primary"
               >
-                {editingId ? 'Lưu thay đổi quy tắc' : '+ Thêm quy tắc XP'}
+                <BilingualText vi={editingId ? 'Lưu thay đổi quy tắc' : '+ Thêm quy tắc XP'} en={editingId ? 'Save Changes' : '+ Add XP Rule'} />
               </button>
             </div>
           </div>
@@ -332,107 +395,105 @@ export function AdminXpRulesPage() {
       </div>
 
       {/* Rules Table */}
-      <div className="overflow-hidden rounded-2xl border border-[#E8E5DF] bg-white shadow-2xs">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-[#E8E5DF] bg-[#FFFBF5] text-xs font-bold uppercase tracking-wider text-[#64748B]">
-                <th className="py-3 px-4"><BilingualText>Mã sự kiện (Event Type)</BilingualText></th>
-                <th className="py-3 px-4"><BilingualText>Tên hoạt động</BilingualText></th>
-                <th className="py-3 px-4"><BilingualText>Điểm XP thưởng</BilingualText></th>
-                <th className="py-3 px-4"><BilingualText>Giới hạn / ngày (Chống spam)</BilingualText></th>
-                <th className="py-3 px-4 text-center"><BilingualText>Trạng thái</BilingualText></th>
-                <th className="py-3 px-4 text-right"><BilingualText>Thao tác</BilingualText></th>
+      <div className="admin-table-container">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th><BilingualText vi="Mã sự kiện (Event Type)" en="Event Type Code" /></th>
+              <th><BilingualText vi="Tên hoạt động" en="Activity Name" /></th>
+              <th><BilingualText vi="Điểm XP thưởng" en="XP Reward" /></th>
+              <th><BilingualText vi="Giới hạn / ngày (Chống spam)" en="Daily Cap (Anti-farming)" /></th>
+              <th style={{ textAlign: 'center' }}><BilingualText vi="Trạng thái" en="Status" /></th>
+              <th style={{ textAlign: 'right', paddingRight: 20 }}><BilingualText vi="Thao tác" en="Actions" /></th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={6} style={{ textAlign: 'center', padding: '60px 0', color: '#64748B' }}>
+                  <RefreshCw size={24} className="spin-animation" style={{ color: '#EA580C', margin: '0 auto 8px' }} />
+                  <BilingualText vi="Đang tải danh sách quy tắc XP…" en="Loading XP rules…" />
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-[#E8E5DF]">
-              {loading ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-[#64748B]">
-                    <span className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-[#EA580C] border-t-transparent mr-2" />
-                    <BilingualText>Đang tải danh sách quy tắc XP…</BilingualText>
-                  </td>
-                </tr>
-              ) : items.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-[#64748B]">
-                    Chưa có quy tắc XP nào. Hãy chọn mẫu nhanh phía trên để tạo.
-                  </td>
-                </tr>
-              ) : (
-                paginatedItems.map((item) => {
-                  const isActive = item.active !== false;
+            ) : items.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={{ textAlign: 'center', padding: '50px 0', color: '#64748B' }}>
+                  <BilingualText vi="Chưa có quy tắc XP nào. Hãy chọn mẫu nhanh phía trên để tạo." en="No XP rules configured yet." />
+                </td>
+              </tr>
+            ) : (
+              paginatedItems.map((item) => {
+                const isActive = item.active !== false;
 
-                  return (
-                    <tr key={item.id} className="hover:bg-stone-50/70 transition-colors">
-                      {/* Event Type */}
-                      <td className="py-3 px-4 font-mono text-xs font-bold text-[#EA580C]">
+                return (
+                  <tr key={item.id}>
+                    <td>
+                      <code style={{ fontSize: 12, fontWeight: 700, color: '#EA580C' }}>
                         {item.eventType}
-                      </td>
+                      </code>
+                    </td>
 
-                      {/* Event Name */}
-                      <td className="py-3 px-4 font-semibold text-[#253044]">
-                        {item.eventName}
-                      </td>
+                    <td>
+                      <strong style={{ color: '#0F172A' }}>{item.eventName}</strong>
+                    </td>
 
-                      {/* XP Reward */}
-                      <td className="py-3 px-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
-                          +{item.xpReward} XP
+                    <td>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', padding: '3px 8px', borderRadius: 999, background: '#ECFDF5', border: '1px solid #A7F3D0', color: '#065F46', fontSize: 11.5, fontWeight: 750 }}>
+                        +{item.xpReward} XP
+                      </span>
+                    </td>
+
+                    <td>
+                      {item.dailyCap && item.dailyCap > 0 ? (
+                        <span style={{ fontSize: 12.5, fontWeight: 650, color: '#1E293B' }}>
+                          Tối đa {item.dailyCap} XP/ngày
                         </span>
-                      </td>
+                      ) : (
+                        <span style={{ fontSize: 12, color: '#94A3B8', fontStyle: 'italic' }}>Không giới hạn</span>
+                      )}
+                    </td>
 
-                      {/* Daily Cap */}
-                      <td className="py-3 px-4 text-xs text-[#64748B]">
-                        {item.dailyCap && item.dailyCap > 0 ? (
-                          <span className="font-semibold text-[#253044]">
-                            Tối đa {item.dailyCap} XP/ngày
-                          </span>
-                        ) : (
-                          <span className="text-stone-400 italic">Không giới hạn</span>
-                        )}
-                      </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <button
+                        type="button"
+                        onClick={() => toggleActive(item)}
+                        title={isActive ? 'Nhấn để tạm dừng' : 'Nhấn để kích hoạt'}
+                        style={{ border: 'none', background: 'transparent', padding: 0, cursor: 'pointer' }}
+                      >
+                        <AdminStatusBadge status={isActive ? 'ACTIVE' : 'INACTIVE'} />
+                      </button>
+                    </td>
 
-                      {/* Status Toggle */}
-                      <td className="py-3 px-4 text-center">
-                        <button
-                          type="button"
-                          onClick={() => toggleActive(item)}
-                          title={isActive ? 'Nhấn để tạm dừng' : 'Nhấn để kích hoạt'}
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer !min-h-0 !border ${
-                            isActive
-                              ? 'bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100'
-                              : 'bg-stone-100 border-stone-300 text-stone-500 hover:bg-stone-200'
-                          }`}
-                        >
-                          <Power size={12} />
-                          <BilingualText>{isActive ? 'Hoạt động' : 'Tạm dừng'}</BilingualText>
-                        </button>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-3 px-4 text-right">
-                        <AdminActionGroup>
-                          <AdminActionButton tone="neutral" onClick={() => startEdit(item)}><BilingualText>Sửa</BilingualText></AdminActionButton>
-                          <AdminActionButton tone="delete" iconOnly onClick={() => remove(item.id, item.eventName)} title="Xóa quy tắc" aria-label="Xóa quy tắc" />
-                        </AdminActionGroup>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-        {items.length > 0 && (
-          <AdminPagination
-            currentPage={currentPage + 1}
-            pageSize={PAGE_SIZE}
-            totalItems={items.length}
-            onPageChange={(nextPage) => setPage(nextPage - 1)}
-          />
-        )}
+                    <td style={{ textAlign: 'right', paddingRight: 20 }}>
+                      <AdminActionGroup>
+                        <AdminActionButton tone="neutral" onClick={() => startEdit(item)}>
+                          <BilingualText vi="Sửa" en="Edit" />
+                        </AdminActionButton>
+                        <AdminActionButton
+                          tone="delete"
+                          iconOnly
+                          onClick={() => remove(item.id, item.eventName)}
+                          title="Xóa quy tắc"
+                          aria-label="Xóa quy tắc"
+                        />
+                      </AdminActionGroup>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
       </div>
+
+      {items.length > 0 && (
+        <AdminPagination
+          currentPage={currentPage + 1}
+          pageSize={PAGE_SIZE}
+          totalItems={items.length}
+          onPageChange={(nextPage) => setPage(nextPage - 1)}
+        />
+      )}
     </div>
   );
 }

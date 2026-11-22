@@ -47,3 +47,20 @@ test('user settings defaults and local persistence', async () => {
   assert.equal(notifResult.success, false);
   assert.equal(notifResult.status, 'unsupported');
 });
+
+test('settings and profile pages replace native select with modern HolaSelect', async () => {
+  const { readFileSync } = await import('node:fs');
+  const settingsSource = readFileSync(new URL('../src/features/account/pages/settings/SettingsPage.jsx', import.meta.url), 'utf8');
+  const profileSource = readFileSync(new URL('../src/features/account/pages/profile/ProfilePage.jsx', import.meta.url), 'utf8');
+
+  assert.match(settingsSource, /import\s*\{\s*HolaSelect\s*\}\s*from\s*['"]@\/shared\/components\/common\/HolaSelect['"]/);
+  assert.doesNotMatch(settingsSource, /<select/);
+  assert.match(settingsSource, /options=\{audioSpeedOptions\}/);
+  assert.match(settingsSource, /options=\{dailyGoalOptions\}/);
+
+  assert.match(profileSource, /import\s*\{\s*HolaSelect\s*\}\s*from\s*['"]@\/shared\/components\/common\/HolaSelect['"]/);
+  assert.doesNotMatch(profileSource, /<select/);
+  assert.match(profileSource, /options=\{nativeLanguageOptions\}/);
+  assert.match(profileSource, /options=\{learningGoalOptions\}/);
+  assert.match(profileSource, /options=\{targetLevelOptions\}/);
+});

@@ -16,7 +16,8 @@ import { useAuth } from '@/features/auth/context/AuthContext';
 import { AdminActionGroup, AdminActionLink } from '@/shared/components/common/AdminTableActions';
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
-import { Search, X, Eye, Pencil, Check, Info, Clock, BookOpen } from 'lucide-react';
+import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
+import { Search, X, Eye, Pencil, Check, Info, Clock } from 'lucide-react';
 
 const CONTENT_STATUS_DOTS = {
   DRAFT: '#F59E0B',
@@ -83,22 +84,23 @@ export function AdminContentListPage({ kind }) {
 
   const action =
     kind === 'lessons' ? (
-      <Link className="button secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
-        <BilingualText>{"← Quay lại khóa học"}</BilingualText>
+      <Link className="admin-btn admin-btn-secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
+        <BilingualText vi="← Quay lại khóa học" en="← Back to courses" />
       </Link>
     ) : canCreate && kind === 'courses' ? (
-      <Link className="button" to="/content/courses/new">
+      <Link className="admin-btn admin-btn-primary" to="/content/courses/new">
         + Import khóa học
       </Link>
     ) : canCreate ? (
-      <button onClick={() => setCreating(true)}>
-        <BilingualText>
-          {kind === 'quizzes' ? '+ Tạo quiz' : kind === 'lessons' ? '+ Tạo bài học' : '+ Tạo khóa học'}
-        </BilingualText>
+      <button className="admin-btn admin-btn-primary" onClick={() => setCreating(true)}>
+        <BilingualText
+          vi={kind === 'quizzes' ? '+ Tạo quiz' : kind === 'lessons' ? '+ Tạo bài học' : '+ Tạo khóa học'}
+          en={kind === 'quizzes' ? '+ Create quiz' : kind === 'lessons' ? '+ Create lesson' : '+ Create course'}
+        />
       </button>
     ) : isContentManager && !isAdmin && kind !== 'courses' ? (
-      <Link className="button secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
-        <BilingualText>{"← Quay lại khóa học"}</BilingualText>
+      <Link className="admin-btn admin-btn-secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
+        <BilingualText vi="← Quay lại khóa học" en="← Back to courses" />
       </Link>
     ) : null;
 
@@ -135,26 +137,12 @@ export function AdminContentListPage({ kind }) {
               aria-selected={status === 'REVIEW'}
               className={`review-tab-btn ${status === 'REVIEW' ? 'is-active' : ''}`}
               onClick={() => {
-                setStatus('REVIEW');
+                setStatus(current => current === 'REVIEW' ? '' : 'REVIEW');
                 setPage(0);
               }}
             >
               <Clock size={16} />
               <span><BilingualText vi="Chờ Admin duyệt" en="Pending review" /></span>
-            </button>
-
-            <button
-              type="button"
-              role="tab"
-              aria-selected={status === ''}
-              className={`review-tab-btn ${status === '' ? 'is-active' : ''}`}
-              onClick={() => {
-                setStatus('');
-                setPage(0);
-              }}
-            >
-              <BookOpen size={16} />
-              <span><BilingualText vi="Tất cả khóa học" en="All courses" /></span>
             </button>
           </div>
 
@@ -290,27 +278,10 @@ export function AdminContentListPage({ kind }) {
 
           <button
             type="submit"
-            style={{
-              height: '40px',
-              minHeight: '40px',
-              maxHeight: '40px',
-              padding: '0 18px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)',
-              border: 'none',
-              color: '#FFFFFF',
-              fontSize: '13px',
-              fontWeight: 700,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '7px',
-              cursor: 'pointer',
-              boxShadow: '0 2px 6px rgba(234, 88, 12, 0.25)',
-              whiteSpace: 'nowrap',
-            }}
+            className="admin-btn admin-btn-primary"
           >
             <Search size={15} strokeWidth={2.3} />
-            <span><BilingualText>{"Tìm kiếm"}</BilingualText></span>
+            <span><BilingualText vi="Tìm kiếm" en="Search" /></span>
           </button>
         </div>
       </form>
@@ -321,15 +292,15 @@ export function AdminContentListPage({ kind }) {
           return (
             <>
               {items.length ? (
-                <div className="admin-card table-scroll" style={{ padding: 0 }}>
+                <div className="admin-table-container">
                   <table className="admin-table">
                     <thead>
                       <tr>
-                        <th><BilingualText>{"Nội dung"}</BilingualText></th>
-                        <th><BilingualText>{"Loại / Trình độ"}</BilingualText></th>
-                        <th><BilingualText>{"Trạng thái"}</BilingualText></th>
-                        <th><BilingualText>{reviewQueue && status === 'REVIEW' ? "Ngày gửi duyệt" : "Cập nhật"}</BilingualText></th>
-                        <th style={{ textAlign: 'right' }}><BilingualText>{"Thao tác"}</BilingualText></th>
+                        <th><BilingualText vi="Nội dung" en="Content" /></th>
+                        <th><BilingualText vi="Loại / Trình độ" en="Type / Level" /></th>
+                        <th><BilingualText vi="Trạng thái" en="Status" /></th>
+                        <th><BilingualText vi={reviewQueue && status === 'REVIEW' ? "Ngày gửi duyệt" : "Cập nhật"} en={reviewQueue && status === 'REVIEW' ? "Submitted" : "Updated"} /></th>
+                        <th style={{ textAlign: 'right' }}><BilingualText vi="Thao tác" en="Actions" /></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -343,19 +314,7 @@ export function AdminContentListPage({ kind }) {
                             </td>
                             <td>{item.level || item.lessonType || item.quizType}</td>
                             <td>
-                              <span
-                                className={`admin-badge ${
-                                  item.status === 'PUBLISHED'
-                                    ? 'admin-badge-success'
-                                    : item.status === 'REJECTED'
-                                    ? 'admin-badge-danger'
-                                    : item.status === 'REVIEW'
-                                    ? 'admin-badge-info'
-                                    : 'admin-badge-warning'
-                                }`}
-                              >
-                                <BilingualText>{item.status || item.publicationStatus}</BilingualText>
-                              </span>
+                              <AdminStatusBadge status={item.status || item.publicationStatus} />
                             </td>
                             <td>
                               {(pendingReview ? item.submittedAt : item.updatedAt)

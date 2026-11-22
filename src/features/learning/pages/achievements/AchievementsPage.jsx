@@ -325,14 +325,14 @@ export function AchievementsPage() {
               </div>
 
               {/* Status Filter */}
-              <div className="flex shrink-0 items-center gap-1">
+              <div className="flex shrink-0 items-center gap-1.5 p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0]">
                 <button
                   type="button"
                   onClick={() => setStatusFilter('all')}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-bold !min-h-0 ${
+                  className={`achieve-status-btn rounded-lg px-3 py-1.5 text-xs font-bold transition-all !min-h-0 ${
                     statusFilter === 'all'
-                      ? '!bg-white text-[#EA580C] border border-[#EA580C]'
-                      : '!bg-white text-[#64748B] border border-[#E8E5DF]'
+                      ? '!bg-white !text-[#EA580C] shadow-xs'
+                      : '!bg-transparent !text-[#64748B] hover:!text-[#0F172A]'
                   }`}
                 >
                   <BilingualText vi="Toàn bộ" en="All" />
@@ -340,10 +340,10 @@ export function AchievementsPage() {
                 <button
                   type="button"
                   onClick={() => setStatusFilter('unlocked')}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-bold !min-h-0 ${
+                  className={`achieve-status-btn rounded-lg px-3 py-1.5 text-xs font-bold transition-all !min-h-0 ${
                     statusFilter === 'unlocked'
-                      ? '!bg-white text-[#EA580C] border border-[#EA580C]'
-                      : '!bg-white text-[#64748B] border border-[#E8E5DF]'
+                      ? '!bg-white !text-[#EA580C] shadow-xs'
+                      : '!bg-transparent !text-[#64748B] hover:!text-[#0F172A]'
                   }`}
                 >
                   <BilingualText vi="Đã đạt" en="Unlocked" />
@@ -351,10 +351,10 @@ export function AchievementsPage() {
                 <button
                   type="button"
                   onClick={() => setStatusFilter('locked')}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-bold !min-h-0 ${
+                  className={`achieve-status-btn rounded-lg px-3 py-1.5 text-xs font-bold transition-all !min-h-0 ${
                     statusFilter === 'locked'
-                      ? '!bg-white text-[#EA580C] border border-[#EA580C]'
-                      : '!bg-white text-[#64748B] border border-[#E8E5DF]'
+                      ? '!bg-white !text-[#EA580C] shadow-xs'
+                      : '!bg-transparent !text-[#64748B] hover:!text-[#0F172A]'
                   }`}
                 >
                   <BilingualText vi="Chưa đạt" en="In progress" />
