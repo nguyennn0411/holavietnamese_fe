@@ -39,12 +39,15 @@ test('Regional reads preserve filters, cancellation and publication decisions fr
   calls.length = 0; result = [{ vocabularyId: 12, word: 'Từ chuẩn', variants: [{ region: 'NORTH' }, { region: 'SOUTH' }] }];
   const controller = new AbortController();
   assert.deepEqual(await regionalVocabularyService.list({ keyword: 'Thơm', region: 'SOUTH', empty: '' }, { signal: controller.signal }), result);
+  result = { content: result, number: 0, totalPages: 1 };
+  await regionalVocabularyService.page({ keyword: 'Thơm', region: 'SOUTH', page: 0, size: 20 });
+  assert.equal(calls[1].url, '/api/regional-vietnamese/search');
   assert.deepEqual(calls[0].params, { keyword: 'Thơm', region: 'SOUTH' }); assert.equal(calls[0].signal, controller.signal);
-  await regionalVocabularyService.get(12); assert.equal(calls[1].url, '/api/regional-vietnamese/12');
+  await regionalVocabularyService.get(12); assert.equal(calls[2].url, '/api/regional-vietnamese/12');
   await adminRegionalVocabularyService.list({ vocabularyId: 12, status: 'DRAFT', page: 2, size: 20 });
-  assert.equal(calls[2].url, '/api/admin/regional-language');
-  assert.deepEqual(calls[2].params, { vocabularyId: 12, status: 'DRAFT', page: 2, size: 20 });
-  await adminRegionalVocabularyService.get(9); assert.equal(calls[3].url, '/api/admin/regional-language/9');
+  assert.equal(calls[3].url, '/api/admin/regional-language');
+  assert.deepEqual(calls[3].params, { vocabularyId: 12, status: 'DRAFT', page: 2, size: 20 });
+  await adminRegionalVocabularyService.get(9); assert.equal(calls[4].url, '/api/admin/regional-language/9');
 });
 test('Regional administration uses existing POST and PUT semantics and never deletes records', async () => {
   calls.length = 0; const payload = regionalPayload({ ...regionalDraft(), vocabularyId: 12, region: 'NORTH', word: 'Dứa', meaning: 'Pineapple' });

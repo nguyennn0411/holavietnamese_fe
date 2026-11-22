@@ -5,6 +5,23 @@ export const vocabularyService = {
     const params = Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== '' && value != null))
     return (await axiosClient.get('/api/me/vocabulary', { ...options, params })).map(v => new VocabularyEntry(v))
   },
+  async page(filters = {}, options = {}) {
+    const params = Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== '' && value != null))
+    const result = await axiosClient.get('/api/me/vocabulary/page', { ...options, params })
+    return { ...result, content: (result.content ?? []).map(value => new VocabularyEntry(value)) }
+  },
+  async practice(limit = 20, options = {}) {
+    return (await axiosClient.get('/api/me/vocabulary/practice', { ...options, params: { limit } }))
+      .map(value => new VocabularyEntry(value))
+  },
+  async findByMaster(masterVocabularyId, options = {}) {
+    try {
+      return new VocabularyEntry(await axiosClient.get(`/api/me/vocabulary/by-master/${encodeURIComponent(String(masterVocabularyId))}`, options))
+    } catch (error) {
+      if (error.status === 404) return null
+      throw error
+    }
+  },
   async get(id, options = {}) { return new VocabularyEntry(await axiosClient.get(`/api/me/vocabulary/${id}`, options)) },
   async add(entry) { return new VocabularyEntry(await axiosClient.post('/api/me/vocabulary', validate(entry))) },
   async update(id, entry) { return new VocabularyEntry(await axiosClient.put(`/api/me/vocabulary/${id}`, validate(entry))) },

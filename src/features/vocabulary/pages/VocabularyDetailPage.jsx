@@ -9,7 +9,7 @@ import { ResourceState } from '@/shared/components/common/ResourceState';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
 import { vocabularyCatalogService } from '@/features/vocabulary/api/vocabularyCatalogService';
 import { regionalVocabularyService } from '@/features/explore/regional/api/regionalVocabularyService';
-import { useVocabulary } from '@/features/vocabulary/hooks/useVocabulary';
+import { vocabularyService } from '@/features/vocabulary/api/vocabularyService';
 import { SaveVocabularyButton } from '@/features/vocabulary/components/SaveVocabularyButton';
 import { DictionaryAttribution, DictionaryAudio, DictionaryExample, DictionaryWordLink } from '@/features/vocabulary/components/DictionaryElements';
 import { RegionalComparison } from '@/features/explore/regional/components/RegionalComparison';
@@ -40,11 +40,14 @@ export function VocabularyDetailPage() {
 export function DictionaryEntry({ entry, links, regional, onNotebookChanged = () => {} }) {
   const { i18n } = useTranslation();
   const language = (i18n.resolvedLanguage || i18n.language || 'en').startsWith('vi') ? 'vi' : 'en';
-  const notebook = useVocabulary({ search: '', courseId: '', lessonId: '' });
+  const notebook = useAsyncResource(useCallback(
+    signal => vocabularyService.findByMaster(entry.id, { signal }),
+    [entry.id]
+  ));
   const [meaningIndex, setMeaningIndex] = useState(0);
   const meaning = entry.meanings?.[meaningIndex];
   const selected = { ...entry, meanings: meaning ? [meaning] : [] };
-  const saved = notebook.data?.find(item => item.masterVocabularyId === entry.id) || null;
+  const saved = notebook.data || null;
   function changed() { notebook.reload(); onNotebookChanged(); }
   return <article className="dictionary-entry-detail">
     <header className="dictionary-word-header"><p className="eyebrow"><BookOpen size={15} /> <BilingualText vi="MỤC TỪ TIẾNG VIỆT" en="VIETNAMESE DICTIONARY ENTRY" /></p>

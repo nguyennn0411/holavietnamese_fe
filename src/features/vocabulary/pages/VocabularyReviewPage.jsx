@@ -43,7 +43,7 @@ export function VocabularyReviewPage() {
     setPracticeLoading(true);
     setPracticeError('');
     try {
-      setPracticeEntries(await vocabularyService.list());
+      setPracticeEntries(await vocabularyService.practice(20));
     } catch (failure) {
       setPracticeError(failure.message);
     } finally {

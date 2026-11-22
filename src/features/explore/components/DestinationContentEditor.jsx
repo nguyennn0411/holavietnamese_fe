@@ -5,13 +5,12 @@ import { Notice } from '@/shared/components/common/Ui';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
 import { destinationExploreService } from '@/features/explore/api/destinationExploreService';
 import { exploreCultures, openableExploreScenarios } from '@/features/explore/models/DestinationExplore';
+import { cultureService } from '@/features/culture/api/cultureService';
 
 export function DestinationContentEditor({ destinationId, editable = false, embedded = false, onChange }) {
   const resource = useAsyncResource(useCallback(async signal => {
-    const [content, cultureItems] = await Promise.all([
-      destinationExploreService.management(destinationId, { signal }),
-      exploreCultures({ signal }),
-    ]);
+    const content = await destinationExploreService.management(destinationId, { signal });
+    const cultureItems = await cultureService.getArticlesByIds(content.cultureIds || [], { signal });
     const byId = new Map(cultureItems.map(item => [item.id, item]));
     return {
       ...content,

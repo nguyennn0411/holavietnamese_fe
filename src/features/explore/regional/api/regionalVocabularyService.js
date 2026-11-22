@@ -13,6 +13,7 @@ const pathId = id => {
 const managementPath = (suffix = '') => managementApiPath(`/regional-language${suffix}`);
 export const regionalVocabularyService = {
   async list(filters = {}, options = {}) { return resultOf(await axiosClient.get('/api/regional-vietnamese', { ...options, params: paramsOf(filters) })); },
+  async page(filters = {}, options = {}) { return resultOf(await axiosClient.get('/api/regional-vietnamese/search', { ...options, params: paramsOf(filters) })); },
   async get(id, options = {}) { return resultOf(await axiosClient.get(`/api/regional-vietnamese/${pathId(id)}`, options)); },
 };
 export const adminRegionalVocabularyService = {

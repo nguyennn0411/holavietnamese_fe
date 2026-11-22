@@ -667,6 +667,16 @@ export const cultureService = {
     return data;
   },
 
+  async getArticlesByIds(ids, { signal } = {}) {
+    if (!ids?.length) return [];
+    const response = await axiosClient.get('/api/culture/articles/batch', {
+      params: { ids: ids.join(',') }, signal,
+    });
+    const data = response?.result ?? response;
+    if (!Array.isArray(data)) throw new Error('Invalid culture article batch response.');
+    return data;
+  },
+
   async listArticles(filters = {}) {
     try {
       return await this.listArticlesFromApi(filters);
