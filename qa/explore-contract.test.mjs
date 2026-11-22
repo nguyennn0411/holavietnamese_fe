@@ -40,6 +40,7 @@ test('Explore content uses a read-only endpoint with JWT and cancellation; no st
   assert.deepEqual(result.cultureIds,[]);
   assert.equal(calls.at(-1).method,'get'); assert.equal(calls.at(-1).url,'/api/destinations/42/content');
   assert.equal(calls.at(-1).headers.Authorization,'Bearer explore-token'); assert.equal(calls.at(-1).signal,signal);
+  assert.equal(calls.at(-1).params.page,0); assert.equal(calls.at(-1).params.size,undefined);
   assert.equal(calls.at(-1).data,undefined);
 });
 test('Saving Explore links sends source IDs without lesson, progress, reward or user fields',async () => {
@@ -72,5 +73,9 @@ test('Explore opens vocabulary details in-place instead of navigating to the dic
   assert.ok(source.includes('VocabularyEntryModal'));
   assert.ok(source.includes('setSelectedVocabularyId'));
   assert.ok(source.includes('destination-vocabulary-link'));
+  assert.ok(source.includes('regionalTotalPages'));
+  assert.ok(source.includes('alwaysVisible'));
+  assert.ok(!source.includes('Từ vựng hữu ích'));
+  assert.ok(!source.includes('Useful vocabulary'));
   assert.ok(!source.includes('ROUTES.VOCABULARY_CATALOG_DETAIL'));
 });

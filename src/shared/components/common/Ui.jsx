@@ -31,10 +31,11 @@ export function Notice({ children, kind = 'info' }) {
   return <div className={`ui-notice ui-notice--${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div>;
 }
 
-export function Pagination({ page, totalPages, onChange }) {
+export function Pagination({ page, totalPages, onChange, alwaysVisible = false }) {
   useTextLanguage();
-  if (totalPages < 2) return null;
-  return <nav className="pagination" aria-label={bilingualLabel("Phân trang", "Pagination")}><button className="secondary" disabled={page <= 0} onClick={() => onChange(page - 1)}><ArrowLeft size={16}/><BilingualText>{"Trước"}</BilingualText></button><span>{page + 1} / {totalPages}</span><button className="secondary" disabled={page + 1 >= totalPages} onClick={() => onChange(page + 1)}><BilingualText>{"Sau"}</BilingualText><ArrowRight size={16}/></button></nav>;
+  if (totalPages < 2 && !alwaysVisible) return null;
+  const availablePages = Math.max(totalPages, 1);
+  return <nav className="pagination" aria-label={bilingualLabel("Phân trang", "Pagination")}><button type="button" className="secondary" disabled={page <= 0} onClick={() => onChange(page - 1)}><ArrowLeft size={16}/><BilingualText>{"Trước"}</BilingualText></button><span>{page + 1} / {availablePages}</span><button type="button" className="secondary" disabled={page + 1 >= availablePages} onClick={() => onChange(page + 1)}><BilingualText>{"Sau"}</BilingualText><ArrowRight size={16}/></button></nav>;
 }
 
 export function Artwork({ kind = 'food', className = '', alt = '' }) {
