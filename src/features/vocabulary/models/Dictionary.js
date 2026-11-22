@@ -7,6 +7,22 @@ export const definitionOf = (meaning, language = 'vi') => {
     : meaning?.definitionEn || meaning?.translationEn || meaning?.definitionVi || '';
 };
 
+const normalizedSearchText = value => String(value || '').normalize('NFC').trim().toLocaleLowerCase('en');
+
+export function matchingMeaning(entry, keyword) {
+  const meanings = entry?.meanings || [];
+  const needle = normalizedSearchText(keyword);
+  if (!needle || meanings.length === 0) return meanings[0];
+
+  return meanings
+    .map((meaning, index) => {
+      const translation = normalizedSearchText(meaning?.translationEn);
+      const score = translation === needle ? 0 : translation.startsWith(needle) ? 1 : translation.includes(needle) ? 2 : 3;
+      return { meaning, index, score };
+    })
+    .sort((left, right) => left.score - right.score || left.index - right.index)[0]?.meaning;
+}
+
 const PARTS_OF_SPEECH = {
   noun: { vi: 'Danh từ', en: 'Noun' }, verb: { vi: 'Động từ', en: 'Verb' }, adj: { vi: 'Tính từ', en: 'Adjective' },
   adv: { vi: 'Phó từ', en: 'Adverb' }, pron: { vi: 'Đại từ', en: 'Pronoun' }, num: { vi: 'Số từ', en: 'Numeral' },

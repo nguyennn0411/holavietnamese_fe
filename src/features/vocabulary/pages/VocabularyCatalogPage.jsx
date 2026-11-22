@@ -1,7 +1,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { generatePath, Link, useSearchParams } from 'react-router-dom';
-import { Search, ArrowUpRight, MapPin } from 'lucide-react';
+import { Search, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { BilingualText } from '@/shared/components/common/BilingualText';
 import { ROUTES } from '@/constants/routes';
@@ -10,7 +10,7 @@ import { DictionaryAudio, DictionaryAttribution } from '@/features/vocabulary/co
 import { ResourceState } from '@/shared/components/common/ResourceState';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
 import { vocabularyCatalogService } from '@/features/vocabulary/api/vocabularyCatalogService';
-import { dictionaryQuery, definitionOf, partOfSpeechLabel } from '@/features/vocabulary/models/Dictionary';
+import { dictionaryQuery, definitionOf, matchingMeaning, partOfSpeechLabel } from '@/features/vocabulary/models/Dictionary';
 import '@/features/vocabulary/components/vocabulary.css';
 import '@/features/vocabulary/components/dictionary.css';
 
@@ -135,7 +135,7 @@ export function VocabularyCatalogPage() {
               {/* 7. Danh sách từ vựng */}
               <div className="dictionary-entry-grid">
                 {data.content.map(item => {
-                  const meaning = item.meanings?.[0];
+                  const meaning = matchingMeaning(item, query.keyword);
                   const href = generatePath(ROUTES.VOCABULARY_CATALOG_DETAIL, { id: String(item.id) });
 
                   return (

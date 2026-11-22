@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import { dictionaryMeaning, definitionOf, dictionaryQuery, highlightedParts, partOfSpeechLabel } from '../src/features/vocabulary/models/Dictionary.js';
+import { dictionaryMeaning, definitionOf, dictionaryQuery, highlightedParts, matchingMeaning, partOfSpeechLabel } from '../src/features/vocabulary/models/Dictionary.js';
 import { vocabularyDraft, vocabularyPayload } from '../src/features/vocabulary/models/AdminVocabulary.js';
 
 test('Dictionary search URL keeps only bilingual keyword and pagination', () => {
@@ -24,6 +24,17 @@ test('Vietnamese-only meanings fit Notebook and highlights remain plain text wit
   assert.deepEqual(parts.filter(part => part.match).map(part => part.text), ['Bàn', 'bàn']);
   assert.equal(parts.map(part => part.text).join(''), 'Bàn và cái bàn. <script>alert(1)</script>');
   assert.deepEqual(highlightedParts('a.b', 'a.b'), [{ text: 'a.b', match: true }]);
+});
+
+test('Dictionary preview displays the English meaning that matched the search keyword', () => {
+  const entry = { meanings: [
+    { translationEn: 'table', definitionVi: 'Một đồ vật.' },
+    { translationEn: 'student', definitionVi: 'Người đi học.' },
+    { translationEn: 'student association', definitionVi: 'Hội sinh viên.' },
+  ] };
+  assert.equal(matchingMeaning(entry, ' STUDENT '), entry.meanings[1]);
+  assert.equal(matchingMeaning(entry, 'student ass'), entry.meanings[2]);
+  assert.equal(matchingMeaning(entry, 'unmatched'), entry.meanings[0]);
 });
 
 test('Admin can edit Vietnamese definitions without inventing translations or CEFR and preserves labels', () => {
