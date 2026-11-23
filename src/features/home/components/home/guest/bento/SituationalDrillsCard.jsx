@@ -48,15 +48,15 @@ export function SituationalDrillsCard() {
                 speakVietnamese(item.phraseVi);
                 audioFeedback.playTap();
               }}
-              className={`p-3 rounded-2xl border text-left transition-all space-y-1 cursor-pointer ${
+              aria-pressed={isSelected}
+              className={`situation-drill-btn secondary p-3 rounded-2xl border text-left transition-all space-y-1 cursor-pointer ${
                 isSelected
-                  ? 'bg-[#FFF7E8] border-2 border-[#EA580C] shadow-xs'
-                  : 'bg-[#FFFCF7] border-[#E8E5DF]/70 hover:border-[#EA580C] hover:bg-[#FFF7E8]/60'
-              } active:bg-[#FFF0DC] active:border-[#EA580C]`}
+                  ? 'is-active bg-[#FFF7E8] border-2 border-[#EA580C] shadow-xs'
+                  : 'bg-[#FFFCF7] border-[#E8E5DF] hover:border-[#EA580C] hover:bg-[#FFF7E8]/60'
+              }`}
             >
-              
-              <h4 className="text-xs font-bold text-[#253044] truncate">{item.title}</h4>
-              <p className="text-[10px] text-[#64748B] truncate">{item.situation}</p>
+              <h4 className={`situation-drill-btn__title text-xs font-bold truncate transition-colors ${isSelected ? 'text-[#EA580C]' : 'text-[#253044]'}`}>{item.title}</h4>
+              <p className="situation-drill-btn__subtitle text-[10px] text-[#64748B] truncate">{item.situation}</p>
             </button>
           );
         })}
@@ -76,11 +76,11 @@ export function SituationalDrillsCard() {
           <button
             type="button"
             onClick={() => speakVietnamese(currentSituation.phraseVi)}
-            className="!min-h-0 !min-w-0 !p-0 w-9 h-9 rounded-xl bg-[#FFF0DC] hover:bg-[#FDE1B3] active:bg-[#FCD8A2] text-[#EA580C] border border-[#EA580C]/30 flex items-center justify-center shadow-xs transition-colors shrink-0 ml-2 cursor-pointer"
+            className="situation-drill-audio-btn secondary !min-h-0 !min-w-0 !p-0 w-9 h-9 rounded-xl bg-[#FFF0DC] hover:bg-[#FDE1B3] active:bg-[#FCD8A2] text-[#EA580C] border border-[#EA580C]/30 flex items-center justify-center shadow-xs transition-colors shrink-0 ml-2 cursor-pointer"
             title={bilingualLabel("Nghe câu mẫu", "Listen to sample sentence")}
             aria-label={bilingualLabel("Nghe câu mẫu", "Listen to sample sentence")}
           >
-            <Volume2 className="w-4 h-4 shrink-0" strokeWidth={2.2} />
+            <Volume2 className="w-4 h-4 shrink-0 text-[#EA580C]" strokeWidth={2.2} />
           </button>
         </div>
         <div className="flex flex-wrap items-center justify-between text-xs text-[#64748B] border-t border-[#E8E5DF]/50 pt-2">

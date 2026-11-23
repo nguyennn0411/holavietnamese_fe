@@ -14,11 +14,15 @@ h1 .bilingual-text__en,h2 .bilingual-text__en { font-size:.76em; font-weight:400
 .eyebrow .bilingual-text__en,.account-pill .bilingual-text__en { font-size:.85em; }
 .lead { color:var(--color-muted); font-size:15px; line-height:1.75; }
 .eyebrow { color:var(--color-red); font-size:11px; font-weight:700; letter-spacing:.12em; }
-button,.button { min-height:46px; padding:11px 20px; border-radius:var(--radius-control); background:var(--color-red); border:1px solid var(--color-red); color:var(--color-surface); font-size:13px; box-shadow:none; }
-button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):hover,.button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):hover { background:var(--color-red-hover); }
-button .bilingual-text,.button .bilingual-text { text-align:center; }
+button:not(.auth-show-btn):not(.sidebar-toggle-btn):not(.user-menu__trigger):not(.user-menu__logout):not(.notification-menu__trigger):not(.learner-topbar__ai-btn):not(.confirm-dialog__close):not(.guest-cultural-banner__arrow-btn):not(.guest-cultural-banner__dot-btn):not(.tone-pitch-btn):not(.situation-drill-btn):not(.situation-drill-audio-btn):not(.diacritic-keycap-btn):not(.course-filter-btn):not(.scenario-filter-btn):not(.discovery-map__pin):not(.discovery-map__close):not(.tutor-mode-select-trigger):not(.tutor-mode-option):not(.tutor-speed-btn):not(.tutor-quick-prompt):not(.tutor-mic-btn):not(.tutor-send-btn):not(.tutor-action-btn):not(.alphabet-tile):not(.alphabet-play-all):not(.alphabet-player-btn):not(.syllable-filter):not(.syllable-tone):not(.syllable-cell-button):not(.syllable-action-btn):not(.coursera-ai-header__btn):not(.ai-coach-coursera__icon-btn):not(.coursera-ai-banner__btn-ok):not(.coursera-ai-banner__btn-dismiss):not(.coursera-ai-chip):not(.coursera-ai-msg__action):not(.coursera-ai-quick-pill):not(.coursera-ai-mic-btn):not(.coursera-ai-send-btn):not(.notif-btn):not(.notif-action-btn):not(.notif-mark-all-btn):not(.notif-filter-tab):not(.notif-page-btn):not(.wb-btn):not([class*="wb-"]):not([class*="admin-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]):not([role="tab"]):not(.secondary),
+.button:not(.auth-show-btn):not(.sidebar-toggle-btn):not(.user-menu__trigger):not(.user-menu__logout):not(.notification-menu__trigger):not(.learner-topbar__ai-btn):not(.confirm-dialog__close):not(.guest-cultural-banner__arrow-btn):not(.guest-cultural-banner__dot-btn):not(.tone-pitch-btn):not(.situation-drill-btn):not(.situation-drill-audio-btn):not(.diacritic-keycap-btn):not(.course-filter-btn):not(.scenario-filter-btn):not(.discovery-map__pin):not(.discovery-map__close):not(.tutor-mode-select-trigger):not(.tutor-mode-option):not(.tutor-speed-btn):not(.tutor-quick-prompt):not(.tutor-mic-btn):not(.tutor-send-btn):not(.tutor-action-btn):not(.alphabet-tile):not(.alphabet-play-all):not(.alphabet-player-btn):not(.syllable-filter):not(.syllable-tone):not(.syllable-cell-button):not(.syllable-action-btn):not(.coursera-ai-header__btn):not(.ai-coach-coursera__icon-btn):not(.coursera-ai-banner__btn-ok):not(.coursera-ai-banner__btn-dismiss):not(.coursera-ai-chip):not(.coursera-ai-msg__action):not(.coursera-ai-quick-pill):not(.coursera-ai-mic-btn):not(.coursera-ai-send-btn):not(.notif-btn):not(.notif-action-btn):not(.notif-mark-all-btn):not(.notif-filter-tab):not(.notif-page-btn):not(.wb-btn):not([class*="wb-"]):not([class*="admin-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]):not([role="tab"]):not(.secondary) { min-height:46px; padding:11px 20px; border-radius:var(--radius-control); background:var(--color-red); border:1px solid var(--color-red); color:var(--color-surface); font-size:13px; box-shadow:none; }
+button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):not([role="tab"]):not(.sidebar-toggle-btn):not(.user-menu__trigger):not(.user-menu__logout):not(.notification-menu__trigger):not(.learner-topbar__ai-btn):not(.confirm-dialog__close):not(.guest-cultural-banner__arrow-btn):not(.guest-cultural-banner__dot-btn):not(.tone-pitch-btn):not(.situation-drill-btn):not(.situation-drill-audio-btn):not(.diacritic-keycap-btn):not(.course-filter-btn):not(.scenario-filter-btn):not(.discovery-map__pin):not(.discovery-map__close):not(.tutor-mode-select-trigger):not(.tutor-mode-option):not(.tutor-speed-btn):not(.tutor-quick-prompt):not(.tutor-mic-btn):not(.tutor-send-btn):not(.tutor-action-btn):not(.alphabet-tile):not(.alphabet-play-all):not(.alphabet-player-btn):not(.syllable-filter):not(.syllable-tone):not(.syllable-cell-button):not(.syllable-action-btn):not(.coursera-ai-header__btn):not(.ai-coach-coursera__icon-btn):not(.coursera-ai-banner__btn-ok):not(.coursera-ai-banner__btn-dismiss):not(.coursera-ai-chip):not(.coursera-ai-msg__action):not(.coursera-ai-quick-pill):not(.coursera-ai-mic-btn):not(.coursera-ai-send-btn):not(.notif-btn):not(.notif-action-btn):not(.notif-mark-all-btn):not(.notif-filter-tab):not(.notif-page-btn):not(.wb-btn):not([class*="wb-"]):not([class*="admin-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]):hover,
+.button:not(.ob-selection):not(.ob-path-card):not(.ob-outline):not(.question-option):not(.answer-card):not(.secondary):not([role="radio"]):not([role="checkbox"]):not([role="tab"]):not(.sidebar-toggle-btn):not(.user-menu__trigger):not(.user-menu__logout):not(.notification-menu__trigger):not(.learner-topbar__ai-btn):not(.confirm-dialog__close):not(.guest-cultural-banner__arrow-btn):not(.guest-cultural-banner__dot-btn):not(.tone-pitch-btn):not(.situation-drill-btn):not(.situation-drill-audio-btn):not(.diacritic-keycap-btn):not(.course-filter-btn):not(.scenario-filter-btn):not(.discovery-map__pin):not(.discovery-map__close):not(.tutor-mode-select-trigger):not(.tutor-mode-option):not(.tutor-speed-btn):not(.tutor-quick-prompt):not(.tutor-mic-btn):not(.tutor-send-btn):not(.tutor-action-btn):not(.alphabet-tile):not(.alphabet-play-all):not(.alphabet-player-btn):not(.syllable-filter):not(.syllable-tone):not(.syllable-cell-button):not(.syllable-action-btn):not(.coursera-ai-header__btn):not(.ai-coach-coursera__icon-btn):not(.coursera-ai-banner__btn-ok):not(.coursera-ai-banner__btn-dismiss):not(.coursera-ai-chip):not(.coursera-ai-msg__action):not(.coursera-ai-quick-pill):not(.coursera-ai-mic-btn):not(.coursera-ai-send-btn):not(.notif-btn):not(.notif-action-btn):not(.notif-mark-all-btn):not(.notif-filter-tab):not(.notif-page-btn):not(.wb-btn):not([class*="wb-"]):not([class*="admin-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]):hover { background:var(--color-red-hover); }
+button:not(.ob-selection):not(.answer-card):not(.course-filter-btn):not(.scenario-filter-btn):not(.alphabet-tile):not(.syllable-filter):not(.syllable-tone):not(.syllable-cell-button):not([class*="admin-"]):not([class*="wb-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]) .bilingual-text,
+.button:not(.ob-selection):not(.answer-card):not(.course-filter-btn):not(.scenario-filter-btn):not(.alphabet-tile):not(.syllable-filter):not(.syllable-tone):not(.syllable-cell-button):not([class*="admin-"]):not([class*="wb-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]) .bilingual-text { text-align:center; }
 button .bilingual-text__en,.button .bilingual-text__en { color:inherit; opacity:.82; }
-button:has(.bilingual-text),.button:has(.bilingual-text) { min-height:54px; }
+button:not(.sidebar-toggle-btn):not(.user-menu__trigger):not(.user-menu__logout):not(.notification-menu__trigger):not(.learner-topbar__ai-btn):not(.confirm-dialog__close):not(.guest-cultural-banner__arrow-btn):not(.guest-cultural-banner__dot-btn):not(.tone-pitch-btn):not(.situation-drill-btn):not(.situation-drill-audio-btn):not(.diacritic-keycap-btn):not(.course-filter-btn):not(.scenario-filter-btn):not(.discovery-map__pin):not(.discovery-map__close):not(.tutor-mode-select-trigger):not(.tutor-mode-option):not(.tutor-speed-btn):not(.tutor-quick-prompt):not(.tutor-mic-btn):not(.tutor-send-btn):not(.tutor-action-btn):not(.alphabet-tile):not(.alphabet-play-all):not(.alphabet-player-btn):not(.syllable-filter):not(.syllable-tone):not(.syllable-cell-button):not(.syllable-action-btn):not(.coursera-ai-header__btn):not(.ai-coach-coursera__icon-btn):not(.coursera-ai-banner__btn-ok):not(.coursera-ai-banner__btn-dismiss):not(.coursera-ai-chip):not(.coursera-ai-msg__action):not(.coursera-ai-quick-pill):not(.coursera-ai-mic-btn):not(.coursera-ai-send-btn):not(.notif-btn):not(.notif-action-btn):not(.notif-mark-all-btn):not(.notif-filter-tab):not(.notif-page-btn):not(.wb-btn):not([class*="wb-"]):not([class*="admin-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]):not([role="tab"]):has(.bilingual-text),
+.button:not(.sidebar-toggle-btn):not(.user-menu__trigger):not(.user-menu__logout):not(.notification-menu__trigger):not(.learner-topbar__ai-btn):not(.confirm-dialog__close):not(.guest-cultural-banner__arrow-btn):not(.guest-cultural-banner__dot-btn):not(.tone-pitch-btn):not(.situation-drill-btn):not(.situation-drill-audio-btn):not(.diacritic-keycap-btn):not(.course-filter-btn):not(.scenario-filter-btn):not(.discovery-map__pin):not(.discovery-map__close):not(.tutor-mode-select-trigger):not(.tutor-mode-option):not(.tutor-speed-btn):not(.tutor-quick-prompt):not(.tutor-mic-btn):not(.tutor-send-btn):not(.tutor-action-btn):not(.alphabet-tile):not(.alphabet-play-all):not(.alphabet-player-btn):not(.syllable-filter):not(.syllable-tone):not(.syllable-cell-button):not(.syllable-action-btn):not(.coursera-ai-header__btn):not(.ai-coach-coursera__icon-btn):not(.coursera-ai-banner__btn-ok):not(.coursera-ai-banner__btn-dismiss):not(.coursera-ai-chip):not(.coursera-ai-msg__action):not(.coursera-ai-quick-pill):not(.coursera-ai-mic-btn):not(.coursera-ai-send-btn):not(.notif-btn):not(.notif-action-btn):not(.notif-mark-all-btn):not(.notif-filter-tab):not(.notif-page-btn):not(.wb-btn):not([class*="wb-"]):not([class*="admin-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]):not([role="tab"]):has(.bilingual-text) { min-height:54px; }
 button.secondary,.button.secondary,.account-outline-btn,.auth-btn-secondary { color:var(--color-ink); background:var(--color-surface); border-color:var(--color-border); }
 button.secondary:hover,.button.secondary:hover { background:var(--color-sand); }
 button.secondary .bilingual-text__en,.button.secondary .bilingual-text__en { color:var(--color-muted); opacity:1; }
@@ -272,8 +276,24 @@ label>.bilingual-text { margin-bottom:7px; }
 .auth-hero-title .bilingual-text__en { font-size:.72em; }
 .auth-chip { background:var(--color-sage-soft); color:var(--color-forest); border-color:var(--color-border); }
 .auth-welcome-pill { border-radius:6px; background:var(--color-gold-soft); color:var(--color-ink); }
-.auth-show-btn { min-height:32px; padding:5px 8px; background:transparent; color:var(--color-ink); border:0; }
-.auth-show-btn:has(.bilingual-text) { min-height:42px; }
+.auth-show-btn,
+button.auth-show-btn {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  right: 6px !important;
+  margin: auto 0 !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  width: 36px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: #7F817A !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transform: none !important;
+}
 .auth-password-input { padding-right:74px; }
 .auth-options-row { align-items:center; gap:20px; }
 .auth-checkbox-label { align-items:center; }
@@ -479,6 +499,184 @@ body .vocabulary-ui .vocabulary-review-completion strong { color:var(--color-for
   background-image: none;
 }
 
+/* ==========================================================================
+   Notifications Action & Controls UI (Scoped Overrides)
+   ========================================================================== */
+.notif-action-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  max-width: 34px !important;
+  max-height: 34px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  border: 1px solid #E2E8F0 !important;
+  background: #FFFFFF !important;
+  color: #64748B !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  outline: none !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  flex-shrink: 0 !important;
+}
+
+.notif-action-btn:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+/* Mark as Read button */
+.notif-action-btn--read {
+  background: #F0FDF4 !important;
+  border-color: #BBF7D0 !important;
+  color: #16A34A !important;
+}
+
+.notif-action-btn--read:hover:not(:disabled) {
+  background: #DCFCE7 !important;
+  border-color: #86EFAC !important;
+  color: #15803D !important;
+  transform: translateY(-1px) scale(1.05) !important;
+  box-shadow: 0 3px 8px -1px rgba(22, 163, 74, 0.22) !important;
+}
+
+.notif-action-btn--read:active:not(:disabled) {
+  background: #BBF7D0 !important;
+  color: #14532D !important;
+  transform: translateY(0) scale(0.96) !important;
+}
+
+/* Delete notification button */
+.notif-action-btn--delete {
+  background: #FFF1F2 !important;
+  border-color: #FECDD3 !important;
+  color: #E11D48 !important;
+}
+
+.notif-action-btn--delete:hover:not(:disabled) {
+  background: #FFE4E6 !important;
+  border-color: #FDA4AF !important;
+  color: #BE123C !important;
+  transform: translateY(-1px) scale(1.05) !important;
+  box-shadow: 0 3px 8px -1px rgba(225, 29, 72, 0.22) !important;
+}
+
+.notif-action-btn--delete:active:not(:disabled) {
+  background: #FECDD3 !important;
+  color: #9F1239 !important;
+  transform: translateY(0) scale(0.96) !important;
+}
+
+/* Mark All As Read button */
+.notif-mark-all-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 38px !important;
+  height: 38px !important;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  border: 1px solid #FED7AA !important;
+  background: #FFF7ED !important;
+  color: #EA580C !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease-in-out !important;
+  box-shadow: 0 1px 2px rgba(234, 88, 12, 0.05) !important;
+}
+
+.notif-mark-all-btn:hover:not(:disabled) {
+  background: #FFEDD5 !important;
+  border-color: #FDBA74 !important;
+  color: #C2410C !important;
+  transform: translateY(-1px) !important;
+}
+
+.notif-mark-all-btn:active:not(:disabled) {
+  background: #FED7AA !important;
+  color: #9A3412 !important;
+  transform: translateY(0) !important;
+}
+
+.notif-mark-all-btn:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+}
+
+/* Filter Tab buttons */
+.notif-filter-tab {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 0 14px !important;
+  border-radius: 8px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: #64748B !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.notif-filter-tab.is-active {
+  background: #FFFFFF !important;
+  border-color: #E8E5DF !important;
+  color: #253044 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.notif-filter-tab--unread.is-active {
+  color: #EA580C !important;
+  border-color: rgba(254, 215, 170, 0.8) !important;
+}
+
+.notif-filter-tab:hover:not(.is-active) {
+  color: #253044 !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Pagination buttons */
+.notif-page-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 0 14px !important;
+  border-radius: 10px !important;
+  border: 1px solid #E8E5DF !important;
+  background: #FFFFFF !important;
+  color: #253044 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.notif-page-btn:hover:not(:disabled) {
+  border-color: rgba(234, 88, 12, 0.5) !important;
+  background: #FFFBF5 !important;
+  color: #EA580C !important;
+}
+
+.notif-page-btn:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
 /* Custom Thin Elegant Scrollbar for Notification Dropdown */
 .notification-scroll::-webkit-scrollbar {
   width: 5px;
@@ -513,8 +711,8 @@ body .vocabulary-ui .vocabulary-review-completion strong { color:var(--color-for
 }
 
 /* Ensure all buttons across the entire app show warm skin tone on click/active, never solid orange */
-button:not(:disabled):active,
-.button:not([aria-disabled="true"]):active {
+button:not(:disabled):not(.auth-show-btn):not([class*="admin-"]):not([class*="wb-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]):active,
+.button:not([aria-disabled="true"]):not(.auth-show-btn):not([class*="admin-"]):not([class*="wb-"]):not([class*="studio-"]):not([class*="settings-"]):not([class*="account-"]):not([class*="achieve-"]):not([class*="hola-select-"]):active {
   background: #FFF7E8 !important;
   background-color: #FFF7E8 !important;
   color: #EA580C !important;

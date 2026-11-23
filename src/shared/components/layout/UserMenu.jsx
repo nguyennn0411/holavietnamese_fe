@@ -1,6 +1,6 @@
 import { BilingualText, useBilingualLabel } from '@/shared/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { ContentImage } from '@/shared/components/common/ContentImage';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
@@ -15,6 +15,7 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
       : canImportVocabulary(user) ? ROUTES.CONTENT_IMPORT
         : null;
   const label = useBilingualLabel();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [progressData, setProgressData] = useState(null);
   const menuRef = useRef(null);
@@ -37,7 +38,8 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
       tone: 'danger',
     });
     if (confirmed) {
-      onLogout();
+      await onLogout();
+      navigate('/', { replace: true });
     }
   };
 
@@ -62,7 +64,7 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
     <div className="user-menu" ref={menuRef}>
       <button
         type="button"
-        className="user-menu__trigger"
+        className="user-menu__trigger secondary"
         onClick={() => setOpen((value) => !value)}
         aria-label={label(`Menu tài khoản của ${displayName}`, `Account menu for ${displayName}`)}
         aria-expanded={open}
@@ -73,8 +75,8 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
             src={user?.avatarUrl}
             alt={label(`Ảnh đại diện của ${displayName}`, `Avatar of ${displayName}`)}
             className="user-menu__avatar-image"
-            width={30}
-            height={30}
+            width={32}
+            height={32}
             loading="eager"
             referrerPolicy="no-referrer"
             fallback={<span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>}
@@ -174,7 +176,7 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
                 <BilingualText vi="Quản lý nội dung" en="Content Management" />
               </Link>
             )}
-            <button type="button" className="user-menu__logout" onClick={handleLogout} role="menuitem">
+            <button type="button" className="user-menu__logout secondary" onClick={handleLogout} role="menuitem">
               <LogOut size={16} />
               <BilingualText vi="Đăng xuất" en="Log Out" />
             </button>

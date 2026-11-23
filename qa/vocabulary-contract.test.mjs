@@ -5,6 +5,7 @@ import axios from 'axios';
 import { matchRoutes } from 'react-router-dom';
 import { ROUTES } from '../src/constants/routes.js';
 import { VocabularyEntry } from '../src/features/vocabulary/models/VocabularyEntry.js';
+import { difficultReviewEntries, reviewSessionEntries } from '../src/features/vocabulary/models/ReviewSession.js';
 import { Course } from '../src/features/learning/models/Course.js';
 import { Enrollment } from '../src/features/learning/models/Enrollment.js';
 import { Lesson } from '../src/features/learning/models/Lesson.js';
@@ -43,12 +44,15 @@ client.defaults.adapter = async config => {
   else if (config.url === '/api/me/courses/1/progress') data = { progressPercentage: 45, completedLessons: 2, totalLessons: 6 };
   else if (config.url === '/api/vocabulary') data = { code: 1000, result: [catalogWord] };
   else if (config.url === '/api/vocabulary/1009') data = { code: 1000, result: catalogWord };
-  else if (config.url === '/api/me/vocabulary/review') data = { sessionId: reviewSessionId, notebookCount: 1, entries: [{ id: 1, word: 'tạm biệt', meaning: 'goodbye' }], results: [reviewResult] };
+  else if (config.url === '/api/me/vocabulary/review') data = { sessionId: reviewSessionId, notebookCount: 2, entries: [{ id: 2, word: 'xin chào', meaning: 'hello' }], reviewedEntries: [{ id: 1, word: 'tạm biệt', meaning: 'goodbye' }], results: [reviewResult] };
   else if (config.url === '/api/me/vocabulary/1/review') data = reviewResult;
   else if (config.url === '/api/me/vocabulary' && config.method === 'post') {
     data = { ...body, id: notebook.length + 1 };
     notebook.push(data);
   } else if (config.url === '/api/me/vocabulary') data = [...notebook];
+  else if (config.url === '/api/me/vocabulary/page') data = { content: [...notebook], number: 0, totalPages: 1, totalElements: notebook.length, first: true, last: true };
+  else if (config.url === '/api/me/vocabulary/practice') data = [...notebook].slice(0, config.params?.limit ?? 20);
+  else if (config.url === '/api/me/vocabulary/by-master/1009') data = { id: 99, masterVocabularyId: 1009, word: 'tạm biệt', meaning: 'goodbye' };
   else if (config.method === 'put') { data = { ...body, id: 1 }; notebook[0] = data; }
   else if (config.method === 'delete') { notebook.length = 0; data = ''; }
   else data = notebook[0];
@@ -168,6 +172,20 @@ test('Existing notebook update/delete retain methods, payload and 204 result', a
   assert.equal(calls[1].url, '/api/me/vocabulary/1');
 });
 
+test('Notebook pages and free practice use bounded dedicated endpoints', async () => {
+  calls.length = 0;
+  const page = await vocabularyService.page({ search: 'xin', page: 2, size: 20 });
+  assert.ok(Array.isArray(page.content));
+  assert.deepEqual(calls[0].params, { search: 'xin', page: 2, size: 20 });
+  assert.equal(calls[0].url, '/api/me/vocabulary/page');
+  await vocabularyService.practice(20);
+  assert.equal(calls[1].url, '/api/me/vocabulary/practice');
+  assert.deepEqual(calls[1].params, { limit: 20 });
+  const saved = await vocabularyService.findByMaster(1009);
+  assert.ok(saved instanceof VocabularyEntry);
+  assert.equal(calls[2].url, '/api/me/vocabulary/by-master/1009');
+});
+
 test('Invalid and rejected saves never turn into successful notebook data', async () => {
   calls.length = 0;
   const size = notebook.length;
@@ -184,6 +202,8 @@ test('Review resumes the server session and posts only rating and session ID wit
   const signal = new AbortController().signal;
   const session = await vocabularyReviewService.session(reviewSessionId, { signal });
   assert.ok(session.entries[0] instanceof VocabularyEntry);
+  assert.ok(session.reviewedEntries[0] instanceof VocabularyEntry);
+  assert.equal(session.reviewedEntries[0].id, reviewResult.entryId);
   assert.deepEqual(session.results, [reviewResult]);
   assert.deepEqual(calls[0].params, { sessionId: reviewSessionId });
   assert.equal(calls[0].signal, signal);
@@ -198,4 +218,25 @@ test('Review resumes the server session and posts only rating and session ID wit
   rejected = true;
   try { await assert.rejects(vocabularyReviewService.rate(1, reviewSessionId, 'GOOD'), /NOTEBOOK_SAVE_REJECTED/); }
   finally { rejected = false; }
+});
+
+test('Resumed review rebuilds the complete deck and keeps AGAIN/HARD cards available', () => {
+  const reviewedEntries = [
+    { id: 1, word: 'một' },
+    { id: 2, word: 'hai' },
+    { id: 3, word: 'ba' },
+  ];
+  const entries = [{ id: 3, word: 'ba' }, { id: 4, word: 'bốn' }, { id: 5, word: 'năm' }];
+  const results = [
+    { entryId: 1, rating: 'AGAIN' },
+    { entryId: 2, rating: 'HARD' },
+    { entryId: 3, rating: 'GOOD' },
+  ];
+
+  const completeDeck = reviewSessionEntries({ reviewedEntries, entries });
+  assert.deepEqual(completeDeck.map(entry => entry.id), [1, 2, 3, 4, 5]);
+  assert.deepEqual(
+    difficultReviewEntries(completeDeck, results).map(entry => entry.id),
+    [1, 2]
+  );
 });

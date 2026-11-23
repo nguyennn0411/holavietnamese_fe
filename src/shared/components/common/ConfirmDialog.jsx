@@ -35,12 +35,12 @@ function ConfirmDialog({ options, onResolve }) {
       {options && <motion.div className="confirm-overlay" role="presentation" initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduceMotion ? 0 : .18 }} onMouseDown={(event) => { if (event.target === event.currentTarget) onResolve(false); }}>
         <motion.section ref={panelRef} className="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId}
           initial={reduceMotion ? false : { opacity: 0, y: 14, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8, scale: .98 }} transition={{ duration: reduceMotion ? 0 : .2, ease: [0.22, 1, 0.36, 1] }}>
-          <button className="confirm-dialog__close" type="button" aria-label={bilingualLabel("Đóng", "Close")} onClick={() => onResolve(false)}><X size={18}/></button>
+          <button className="confirm-dialog__close secondary" type="button" aria-label={bilingualLabel("Đóng", "Close")} onClick={() => onResolve(false)}><X size={16} strokeWidth={2.2} /></button>
           <span className={`confirm-dialog__icon confirm-dialog__icon--${options.tone || 'danger'}`} aria-hidden="true"><AlertTriangle size={22}/></span>
           <div className="confirm-dialog__copy"><h2 id={titleId}><BilingualText>{options.title || 'Xác nhận thao tác'}</BilingualText></h2><p id={descriptionId}><BilingualText>{options.description}</BilingualText></p>{options.details&&<div className="confirm-dialog__details">{options.details}</div>}</div>
           <div className="confirm-dialog__actions">
-            <button className="secondary" type="button" onClick={() => onResolve(false)}><BilingualText>{options.cancelLabel || 'Hủy'}</BilingualText></button>
-            <button data-confirm className={options.tone === 'warning' ? '' : 'danger'} type="button" onClick={() => onResolve(true)}><BilingualText>{options.confirmLabel || 'Xác nhận'}</BilingualText></button>
+            <button className="confirm-dialog__cancel secondary" type="button" onClick={() => onResolve(false)}><BilingualText>{options.cancelLabel || 'Hủy'}</BilingualText></button>
+            <button data-confirm className={`confirm-dialog__confirm ${options.tone === 'warning' ? 'is-warning' : 'danger is-danger'}`} type="button" onClick={() => onResolve(true)}><BilingualText>{options.confirmLabel || 'Xác nhận'}</BilingualText></button>
           </div>
         </motion.section>
       </motion.div>}

@@ -1,6 +1,9 @@
 // Admin Service for Culture, AI Scenarios, AI Settings, Usage & Reviews (Người 4 Admin)
 
 import axiosClient from '@/shared/api/axiosClient';
+import { managementApiPath } from '@/shared/api/managementApiPath';
+
+const cultureManagementPath = (suffix = '') => managementApiPath(`/culture${suffix}`);
 
 const STORAGE_ADMIN_CULTURE = 'hola_admin_culture_articles_v1';
 const STORAGE_ADMIN_CATEGORIES = 'hola_admin_culture_categories_v1';
@@ -409,7 +412,7 @@ export const adminCultureAiService = {
       if (filters.category && filters.category !== 'all') params.category = filters.category;
       if (filters.status && filters.status !== 'all') params.status = filters.status;
 
-      const response = await axiosClient.get('/api/admin/culture/articles', { params });
+      const response = await axiosClient.get(cultureManagementPath('/articles'), { params });
       const data = response?.result ?? response;
       if (Array.isArray(data)) return data;
     } catch (e) {
@@ -440,7 +443,7 @@ export const adminCultureAiService = {
   async getArticle(id) {
     if (!id) return null;
     try {
-      const response = await axiosClient.get(`/api/admin/culture/articles/${encodeURIComponent(id)}`);
+      const response = await axiosClient.get(cultureManagementPath(`/articles/${encodeURIComponent(id)}`));
       const data = response?.result ?? response;
       if (data && data.id) return data;
     } catch (e) {
@@ -454,8 +457,8 @@ export const adminCultureAiService = {
     try {
       const isExisting = articleData.id && articleData.id !== 'new';
       const endpoint = isExisting
-        ? `/api/admin/culture/articles/${encodeURIComponent(articleData.id)}`
-        : '/api/admin/culture/articles';
+        ? cultureManagementPath(`/articles/${encodeURIComponent(articleData.id)}`)
+        : cultureManagementPath('/articles');
       const method = isExisting ? axiosClient.put : axiosClient.post;
       const response = await method(endpoint, articleData);
       const saved = response?.result ?? response;
@@ -485,7 +488,7 @@ export const adminCultureAiService = {
 
   async deleteArticle(id) {
     try {
-      await axiosClient.delete(`/api/admin/culture/articles/${encodeURIComponent(id)}`);
+      await axiosClient.delete(cultureManagementPath(`/articles/${encodeURIComponent(id)}`));
     } catch (e) {
       console.warn('Backend deleteArticle failed, falling back:', e.message);
       const list = (await this.getArticles()).filter(a => a.id !== id);
@@ -497,7 +500,7 @@ export const adminCultureAiService = {
 
   async updateArticleStatus(id, newStatus) {
     try {
-      const response = await axiosClient.patch(`/api/admin/culture/articles/${encodeURIComponent(id)}/status`, { status: newStatus });
+      const response = await axiosClient.patch(cultureManagementPath(`/articles/${encodeURIComponent(id)}/status`), { status: newStatus });
       return response?.result ?? response;
     } catch (e) {
       console.warn('Backend updateArticleStatus failed, falling back:', e.message);
@@ -510,7 +513,7 @@ export const adminCultureAiService = {
   // --- CULTURE CATEGORIES (REST API + Persistent Database) ---
   async getCategories() {
     try {
-      const response = await axiosClient.get('/api/admin/culture/categories');
+      const response = await axiosClient.get(cultureManagementPath('/categories'));
       const data = response?.result ?? response;
       if (Array.isArray(data) && data.length > 0) {
         return data.map(item => ({
@@ -539,8 +542,8 @@ export const adminCultureAiService = {
     try {
       const isExisting = catData.id && !catData.id.startsWith('cat-new');
       const endpoint = isExisting
-        ? `/api/admin/culture/categories/${encodeURIComponent(catData.id)}`
-        : '/api/admin/culture/categories';
+        ? cultureManagementPath(`/categories/${encodeURIComponent(catData.id)}`)
+        : cultureManagementPath('/categories');
       const method = isExisting ? axiosClient.put : axiosClient.post;
       const response = await method(endpoint, catData);
       return response?.result ?? response;
@@ -568,7 +571,7 @@ export const adminCultureAiService = {
     try {
       await Promise.all(
         orderedList.map((cat, idx) =>
-          axiosClient.put(`/api/admin/culture/categories/${encodeURIComponent(cat.id)}`, {
+          axiosClient.put(cultureManagementPath(`/categories/${encodeURIComponent(cat.id)}`), {
             ...cat,
             displayOrder: idx + 1,
           })
@@ -583,7 +586,7 @@ export const adminCultureAiService = {
 
   async deleteCategory(id) {
     try {
-      await axiosClient.delete(`/api/admin/culture/categories/${encodeURIComponent(id)}`);
+      await axiosClient.delete(cultureManagementPath(`/categories/${encodeURIComponent(id)}`));
     } catch (e) {
       console.warn('Backend deleteCategory failed, falling back:', e.message);
       const list = (await this.getCategories()).filter(c => c.id !== id);

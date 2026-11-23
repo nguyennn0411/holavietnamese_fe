@@ -30,7 +30,7 @@ export function AlphabetPage() {
         <button
           type="button"
           key={item.id}
-          className={`alphabet-tile${active ? " is-selected" : ""}${active && state === "playing" ? " is-playing" : ""}`}
+          className={`alphabet-tile secondary${active ? " is-selected" : ""}${active && state === "playing" ? " is-playing" : ""}`}
           aria-label={isVi ? `Nghe ${item.label ? `thanh ${item.label}` : `chữ ${item.symbol}`}: ${item.reading}` : `Listen to ${item.label ? `tone ${item.label}` : `letter ${item.symbol}`}: ${item.reading}`}
           aria-pressed={active}
           title={isVi ? `Cách đọc: ${item.reading}` : `Pronunciation: ${item.reading}`}
@@ -98,7 +98,7 @@ export function AlphabetPage() {
               </p>
             </div>
             <button
-              className="alphabet-play-all"
+              className="alphabet-play-all secondary"
               type="button"
               onClick={() =>
                 play(data.letters, "letters")
@@ -231,6 +231,7 @@ export function AlphabetPage() {
           <div className="alphabet-player-actions">
             <button
               type="button"
+              className="alphabet-player-btn secondary"
               aria-label={bilingualLabel("Nghe lại âm đã chọn", "Replay selected sound")}
               disabled={!selected}
               onClick={() => play([selected], selected.group)}
@@ -240,6 +241,7 @@ export function AlphabetPage() {
             </button>
             <button
               type="button"
+              className="alphabet-player-btn secondary"
               aria-label={bilingualLabel("Dừng phát âm thanh", "Stop audio")}
               disabled={!busy}
               onClick={stop}

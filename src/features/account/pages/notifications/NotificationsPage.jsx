@@ -135,7 +135,7 @@ export function NotificationsPage() {
             type="button"
             disabled={busy || unreadCount === 0}
             onClick={markAllAsRead}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-2.5 text-xs font-bold text-[#EA580C] shadow-xs transition-all hover:bg-[#FFEDD5] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+            className="notif-mark-all-btn"
           >
             <CheckCheck size={16} strokeWidth={2.2} />
             <BilingualText vi="Đánh dấu tất cả đã đọc" en="Mark all as read" />
@@ -155,11 +155,7 @@ export function NotificationsPage() {
                 role="tab"
                 aria-selected={filter === 'all'}
                 onClick={() => selectFilter('all')}
-                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all ${
-                  filter === 'all'
-                    ? 'border border-[#E8E5DF]/70 bg-white text-[#253044] shadow-xs'
-                    : 'text-[#64748B] hover:text-[#253044]'
-                }`}
+                className={`notif-filter-tab ${filter === 'all' ? 'is-active' : ''}`}
               >
                 <BilingualText vi="Tất cả" en="All" />
                 <span
@@ -176,11 +172,7 @@ export function NotificationsPage() {
                 role="tab"
                 aria-selected={filter === 'unread'}
                 onClick={() => selectFilter('unread')}
-                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all ${
-                  filter === 'unread'
-                    ? 'border border-[#FED7AA]/80 bg-white text-[#EA580C] shadow-xs'
-                    : 'text-[#64748B] hover:text-[#EA580C]'
-                }`}
+                className={`notif-filter-tab notif-filter-tab--unread ${filter === 'unread' ? 'is-active' : ''}`}
               >
                 <BilingualText vi="Chưa đọc" en="Unread" />
                 {unreadCount > 0 && (
@@ -277,7 +269,7 @@ export function NotificationsPage() {
                         </div>
 
                         {/* Actions */}
-                        <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                           {!item.isRead && (
                             <button
                               type="button"
@@ -285,9 +277,9 @@ export function NotificationsPage() {
                               onClick={() => markAsRead(item.id)}
                               title={isVi ? 'Đánh dấu đã đọc' : 'Mark as read'}
                               aria-label={isVi ? 'Đánh dấu đã đọc' : 'Mark as read'}
-                              className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-[#E8E5DF] bg-white text-[#64748B] transition-colors hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 focus:outline-none"
+                              className="notif-action-btn notif-action-btn--read"
                             >
-                              <Check size={15} strokeWidth={2.2} />
+                              <Check size={16} strokeWidth={2.5} />
                             </button>
                           )}
                           <button
@@ -296,9 +288,9 @@ export function NotificationsPage() {
                             onClick={() => deleteNotification(item.id)}
                             title={isVi ? 'Xóa thông báo' : 'Delete notification'}
                             aria-label={isVi ? 'Xóa thông báo' : 'Delete notification'}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-[#E8E5DF] bg-white text-[#64748B] transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 focus:outline-none"
+                            className="notif-action-btn notif-action-btn--delete"
                           >
-                            <Trash2 size={15} strokeWidth={2} />
+                            <Trash2 size={16} strokeWidth={2.2} />
                           </button>
                         </div>
                       </div>
@@ -357,7 +349,7 @@ export function NotificationsPage() {
               type="button"
               disabled={page <= 1 || loading}
               onClick={() => setPage((value) => value - 1)}
-              className="inline-flex items-center gap-1 rounded-xl border border-[#E8E5DF] bg-white px-3.5 py-2 text-xs font-semibold text-[#253044] transition-colors hover:border-[#EA580C]/50 hover:bg-[#FFFBF5] hover:text-[#EA580C] focus:outline-none disabled:opacity-40"
+              className="notif-page-btn disabled:opacity-40"
             >
               <ChevronLeft size={15} />
               <BilingualText vi="Trước" en="Previous" />
@@ -372,7 +364,7 @@ export function NotificationsPage() {
               type="button"
               disabled={page >= pageData.totalPages || loading}
               onClick={() => setPage((value) => value + 1)}
-              className="inline-flex items-center gap-1 rounded-xl border border-[#E8E5DF] bg-white px-3.5 py-2 text-xs font-semibold text-[#253044] transition-colors hover:border-[#EA580C]/50 hover:bg-[#FFFBF5] hover:text-[#EA580C] focus:outline-none disabled:opacity-40"
+              className="notif-page-btn disabled:opacity-40"
             >
               <BilingualText vi="Sau" en="Next" />
               <ChevronRight size={15} />

@@ -94,7 +94,7 @@ export function HeroInteractiveWidget() {
           <button
             type="button"
             onClick={() => speakVietnamese(exercise.phrase, 0.9)}
-            className="!min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFF0DC] hover:bg-[#FDE1B3] active:bg-[#FCD8A2] text-[#EA580C] border border-[#EA580C]/30 transition-all text-[11px] font-bold shadow-2xs cursor-pointer"
+            className="secondary !min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFF0DC] hover:bg-[#FDE1B3] active:bg-[#FCD8A2] text-[#EA580C] border border-[#EA580C]/30 transition-all text-[11px] font-bold shadow-2xs cursor-pointer"
             title={t('widget.normalAudio')}
             aria-label={t('widget.normalAudio')}
           >
@@ -104,7 +104,7 @@ export function HeroInteractiveWidget() {
           <button
             type="button"
             onClick={() => speakVietnamese(exercise.phrase, 0.6)}
-            className="!min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFFCF7] hover:bg-[#E8E5DF] text-[#64748B] hover:text-[#253044] transition-all text-[11px] font-bold border border-[#E8E5DF]/60 cursor-pointer"
+            className="secondary !min-h-0 !min-w-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFFCF7] hover:bg-[#E8E5DF] text-[#64748B] hover:text-[#253044] transition-all text-[11px] font-bold border border-[#E8E5DF]/60 cursor-pointer"
             title={t('widget.slowAudio')}
             aria-label={t('widget.slowAudio')}
           >
@@ -138,7 +138,7 @@ export function HeroInteractiveWidget() {
               key={`${token}-${idx}`}
               type="button"
               onClick={() => handleRemoveToken(token)}
-              className="px-3.5 py-1.5 rounded-xl bg-white border-2 border-[#EA580C] text-[#EA580C] font-black text-xs shadow-[0_2px_0_#EA580C] hover:bg-[#FFF0DC] active:translate-y-0.5 transition-all"
+              className="secondary px-3.5 py-1.5 rounded-xl bg-white border-2 border-[#EA580C] text-[#EA580C] font-black text-xs shadow-[0_2px_0_#EA580C] hover:bg-[#FFF0DC] active:translate-y-0.5 transition-all cursor-pointer"
             >
               {token}
             </motion.button>
@@ -154,7 +154,7 @@ export function HeroInteractiveWidget() {
             key={`${token}-${idx}`}
             type="button"
             onClick={() => handleSelectToken(token)}
-            className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] hover:border-[#EA580C] text-[#253044] font-bold text-xs shadow-[0_2px_0_#E8E5DF] hover:shadow-[0_2px_0_#EA580C] active:translate-y-0.5 transition-all"
+            className="secondary px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF7E8] border border-[#E8E5DF] hover:border-[#EA580C] text-[#253044] font-bold text-xs shadow-[0_2px_0_#E8E5DF] hover:shadow-[0_2px_0_#EA580C] active:translate-y-0.5 transition-all cursor-pointer"
           >
             {token}
           </motion.button>
@@ -176,9 +176,6 @@ export function HeroInteractiveWidget() {
               <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
               <span className="font-bold">{t('widget.correct')}</span>
             </div>
-            <span className="font-black text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-lg shrink-0">
-              +15 XP
-            </span>
           </motion.div>
         )}
 
@@ -194,7 +191,7 @@ export function HeroInteractiveWidget() {
             <button
               type="button"
               onClick={handleReset}
-              className="text-xs font-bold underline text-red-700 ml-2"
+              className="secondary text-xs font-bold underline text-red-700 ml-2"
             >
               {t('widget.retry')}
             </button>
@@ -207,7 +204,7 @@ export function HeroInteractiveWidget() {
         <button
           type="button"
           onClick={handleReset}
-          className="!min-h-0 !min-w-0 p-2.5 rounded-xl text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8] transition-colors shrink-0 cursor-pointer"
+          className="secondary !min-h-0 !min-w-0 p-2.5 rounded-xl text-[#64748B] hover:text-[#253044] hover:bg-[#FFF7E8] transition-colors shrink-0 cursor-pointer"
           title={t('widget.reset')}
           aria-label={t('widget.reset')}
         >

@@ -19,15 +19,21 @@ function useLearnerItems() {
   const language = i18n.resolvedLanguage || i18n.language || 'en';
   return useMemo(() => getMenuItems(MENU_PLACEMENTS.LEARNER)
     .filter((item) => item.code !== 'LEARNER_MY_LEARNING')
-    .map((item) => ({
-      ...item,
-      to: safeInternalPath(item.path),
-      label: localizedSiteField(item, 'label', language),
-      icon: siteContentIcon(item.iconKey),
-      status: localizedSiteField(item, 'status', language),
-      end: item.path === '/',
-      mobile: item.mobilePrimary === true,
-    })), [getMenuItems, language]);
+    .map((item) => {
+      let targetPath = safeInternalPath(item.path);
+      if (targetPath === '/edtech/dashboard') {
+        targetPath = '/learning-path';
+      }
+      return {
+        ...item,
+        to: targetPath,
+        label: localizedSiteField(item, 'label', language),
+        icon: siteContentIcon(item.iconKey),
+        status: localizedSiteField(item, 'status', language),
+        end: targetPath === '/',
+        mobile: item.mobilePrimary === true,
+      };
+    }), [getMenuItems, language]);
 }
 
 export function LearnerSidebar({ collapsed, onToggle }) {
@@ -35,12 +41,13 @@ export function LearnerSidebar({ collapsed, onToggle }) {
   const { pathname } = useLocation();
   const learnerItems = useLearnerItems();
   const notebookRoute = pathname === '/vocabulary/review' || pathname === '/vocabulary/notebook' || pathname.startsWith('/vocabulary/notebook/');
+  const learningPathRoute = pathname === '/learning-path' || pathname === '/edtech/dashboard' || pathname.startsWith('/learning-path');
 
   return (
     <aside className="learner-sidebar" aria-label="Learner navigation">
       <button
         type="button"
-        className="sidebar-toggle-btn"
+        className="sidebar-toggle-btn secondary"
         onClick={onToggle}
         aria-label={collapsed ? t('expandSidebar', { defaultValue: 'Mở rộng thanh điều hướng' }) : t('collapseSidebar', { defaultValue: 'Thu gọn thanh điều hướng' })}
         aria-expanded={!collapsed}
@@ -50,25 +57,44 @@ export function LearnerSidebar({ collapsed, onToggle }) {
       </button>
       <div className="learner-sidebar__brand"><Brand compact collapsed={collapsed} /></div>
       <nav className="learner-sidebar__nav">
-        {learnerItems.map(({ id, code, to, label, icon: Icon, status, end, mobile, available }) => to && available !== false ? (
-          <NavLink
-            key={id ?? code}
-            to={to}
-            end={end}
-            aria-current={notebookRoute ? (to === '/my-learning' ? 'page' : false) : undefined}
-            className={({ isActive }) => `learner-sidebar__link ${mobile ? 'is-mobile-primary' : ''} ${(notebookRoute ? to === '/my-learning' : isActive) ? 'active' : ''}`}
-            title={collapsed ? label : undefined}
-          >
-            <span className="sidebar-link__icon"><Icon /></span>
-            <b className="sidebar-link__label">{label}</b>
-          </NavLink>
-        ) : (
-          <div key={id ?? code} className="learner-sidebar__link is-disabled" title={status ? `${label} — ${status}` : label} aria-disabled="true">
-            <span className="sidebar-link__icon"><Icon /></span>
-            <b className="sidebar-link__label">{label}</b>
-            {status && <small className="learner-sidebar__status">{status}</small>}
-          </div>
-        ))}
+        {learnerItems.map(({ id, code, to, label, icon: Icon, status, end, mobile, available }) => {
+          if (!to || available === false) {
+            return (
+              <div key={id ?? code} className="learner-sidebar__link is-disabled" title={status ? `${label} — ${status}` : label} aria-disabled="true">
+                <span className="sidebar-link__icon"><Icon /></span>
+                <b className="sidebar-link__label">{label}</b>
+                {status && <small className="learner-sidebar__status">{status}</small>}
+              </div>
+            );
+          }
+
+          const isLearningPathItem = to === '/learning-path' || to === '/edtech/dashboard' || code === 'LEARNER_LEARNING_PATH';
+          const isMyLearningItem = to === '/my-learning';
+
+          const isItemActive = (isActive) => {
+            if (notebookRoute) return isMyLearningItem;
+            if (learningPathRoute) return isLearningPathItem;
+            return isActive;
+          };
+
+          const isAriaPage = notebookRoute
+            ? (isMyLearningItem ? 'page' : false)
+            : (learningPathRoute ? (isLearningPathItem ? 'page' : false) : undefined);
+
+          return (
+            <NavLink
+              key={id ?? code}
+              to={to}
+              end={end}
+              aria-current={isAriaPage}
+              className={({ isActive }) => `learner-sidebar__link ${mobile ? 'is-mobile-primary' : ''} ${isItemActive(isActive) ? 'active is-active' : ''}`}
+              title={collapsed ? label : undefined}
+            >
+              <span className="sidebar-link__icon"><Icon /></span>
+              <b className="sidebar-link__label">{label}</b>
+            </NavLink>
+          );
+        })}
       </nav>
       <div className="learner-sidebar__tip">
         <span>VI</span>
@@ -95,6 +121,9 @@ export function LearnerTopbar({ user, stats, onLogout }) {
     }
     if (location.pathname === '/my-learning') {
       return isVi ? 'Góc học tập' : 'My Learning';
+    }
+    if (location.pathname === '/learning-path' || location.pathname === '/edtech/dashboard' || location.pathname.startsWith('/learning-path')) {
+      return isVi ? 'Lộ trình học' : 'Learning Path';
     }
     return learnerItems.find((item) => item.to && (item.end ? location.pathname === item.to : location.pathname.startsWith(item.to)))?.label || t('learn');
   }, [learnerItems, location.pathname, t, isVi]);

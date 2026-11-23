@@ -23,6 +23,13 @@ const adapter=async config => {
       id:'culture-from-api',title:'Culture from API',summary:'API content',status:'PUBLISHED'
     }]}};
   }
+  if (config.url === '/api/culture/articles/batch') {
+    const ids=String(config.params?.ids || '').split(',');
+    const rows=ids.includes('culture-from-api') ? [{
+      id:'culture-from-api',title:'Culture from API',summary:'API content',status:'PUBLISHED'
+    }] : [];
+    return {config,status:200,statusText:'OK',headers:{},data:{code:1000,result:rows}};
+  }
   return {config,status:200,statusText:'OK',headers:{},data:failed?{code:9999,message:'Rejected',success:false}:{code:1000,result:{vocabulary:[],regionalVariants:[],cultureIds:[],scenarios:[]}}};
 };
 client.defaults.adapter=adapter;
@@ -33,6 +40,7 @@ test('Explore content uses a read-only endpoint with JWT and cancellation; no st
   assert.deepEqual(result.cultureIds,[]);
   assert.equal(calls.at(-1).method,'get'); assert.equal(calls.at(-1).url,'/api/destinations/42/content');
   assert.equal(calls.at(-1).headers.Authorization,'Bearer explore-token'); assert.equal(calls.at(-1).signal,signal);
+  assert.equal(calls.at(-1).params.page,0); assert.equal(calls.at(-1).params.size,undefined);
   assert.equal(calls.at(-1).data,undefined);
 });
 test('Saving Explore links sends source IDs without lesson, progress, reward or user fields',async () => {
@@ -51,6 +59,8 @@ test('Rejected content and saves remain errors',async () => {
 test('Culture references resolve from the Culture API and never substitute another article',async () => {
   const articles=await exploreCultures(); assert(articles.length>0);
   assert.deepEqual(await resolveExploreCultures(['missing',articles[0].id]),[articles[0]]);
+  assert.equal(calls.at(-1).url,'/api/culture/articles/batch');
+  assert.equal(calls.at(-1).params.ids,'missing,culture-from-api');
 });
 test('Scenario links trust ACTIVE records returned by the Backend',() => {
   const first={id:'dynamic-scenario',title:'Dynamic',status:'ACTIVE'};
@@ -63,5 +73,9 @@ test('Explore opens vocabulary details in-place instead of navigating to the dic
   assert.ok(source.includes('VocabularyEntryModal'));
   assert.ok(source.includes('setSelectedVocabularyId'));
   assert.ok(source.includes('destination-vocabulary-link'));
+  assert.ok(source.includes('regionalTotalPages'));
+  assert.ok(source.includes('alwaysVisible'));
+  assert.ok(!source.includes('Từ vựng hữu ích'));
+  assert.ok(!source.includes('Useful vocabulary'));
   assert.ok(!source.includes('ROUTES.VOCABULARY_CATALOG_DETAIL'));
 });

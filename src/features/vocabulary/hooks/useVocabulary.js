@@ -8,6 +8,14 @@ export function useVocabulary({ search, courseId, lessonId }) {
   useEffect(() => { const timer = setTimeout(() => setDebounced(search), 250); return () => clearTimeout(timer) }, [search])
   return useAsyncResource(useCallback(signal => vocabularyService.list({ search: debounced, courseId, lessonId }, { signal }), [debounced, courseId, lessonId]))
 }
+export function useVocabularyPage({ search, courseId, lessonId, page, size = 20 }) {
+  const [debounced, setDebounced] = useState(search)
+  useEffect(() => { const timer = setTimeout(() => setDebounced(search), 250); return () => clearTimeout(timer) }, [search])
+  return useAsyncResource(useCallback(
+    signal => vocabularyService.page({ search: debounced, courseId, lessonId, page, size }, { signal }),
+    [debounced, courseId, lessonId, page, size]
+  ))
+}
 export function useVocabularyEntry(id) {
   return useAsyncResource(useCallback(signal => vocabularyService.get(id, { signal }), [id]))
 }

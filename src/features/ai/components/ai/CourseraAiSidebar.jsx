@@ -841,14 +841,14 @@ Pick a suggested question below or ask me anything!`,
               <div className="coursera-ai-banner__actions">
                 <button
                   type="button"
-                  className="coursera-ai-banner__btn-ok"
+                  className="coursera-ai-banner__btn-ok secondary"
                   onClick={dismissBanner}
                 >
                   {isVi ? 'Đã hiểu' : 'Sounds great'}
                 </button>
                 <button
                   type="button"
-                  className="coursera-ai-banner__btn-dismiss"
+                  className="coursera-ai-banner__btn-dismiss secondary"
                   onClick={dismissBanner}
                 >
                   {isVi ? 'Đóng' : 'Dismiss'}
@@ -890,7 +890,7 @@ Pick a suggested question below or ask me anything!`,
                 <button
                   key={idx}
                   type="button"
-                  className="coursera-ai-chip"
+                  className="coursera-ai-chip secondary"
                   onClick={() => handleSendMessage(item.text)}
                 >
                   <span>
@@ -941,7 +941,7 @@ Pick a suggested question below or ask me anything!`,
                       <div className="coursera-ai-msg__footer">
                         <button
                           type="button"
-                          className="coursera-ai-msg__action"
+                          className="coursera-ai-msg__action secondary"
                           onClick={() => handleCopy(msg.id, msg.text)}
                           title={isVi ? 'Sao chép câu trả lời' : 'Copy answer'}
                         >
@@ -951,7 +951,7 @@ Pick a suggested question below or ask me anything!`,
 
                         <button
                           type="button"
-                          className="coursera-ai-msg__action"
+                          className="coursera-ai-msg__action secondary"
                           onClick={() => handleSpeak(msg.id, msg.text)}
                           title={isVi ? 'Nghe phát âm tiếng Việt' : 'Listen pronunciation'}
                         >
@@ -1007,7 +1007,7 @@ Pick a suggested question below or ask me anything!`,
                 <button
                   key={idx}
                   type="button"
-                  className="coursera-ai-quick-pill"
+                  className="coursera-ai-quick-pill secondary"
                   onClick={() => handlePillClick(item.text)}
                   disabled={isSending}
                   title={item.text}
@@ -1025,7 +1025,7 @@ Pick a suggested question below or ask me anything!`,
             {/* Speak / Mic Button */}
             <button
               type="button"
-              className={`coursera-ai-mic-btn ${isListening ? 'is-listening' : ''}`}
+              className={`coursera-ai-mic-btn secondary ${isListening ? 'is-listening' : ''}`}
               onClick={toggleSpeechRecognition}
               disabled={isSending}
               title={
@@ -1059,7 +1059,7 @@ Pick a suggested question below or ask me anything!`,
             {/* Send Button */}
             <button
               type="submit"
-              className="coursera-ai-send-btn"
+              className="coursera-ai-send-btn secondary"
               disabled={!input.trim() || isSending}
               title={isVi ? 'Gửi câu hỏi (Enter)' : 'Send message (Enter)'}
               aria-label={isVi ? 'Gửi' : 'Send'}

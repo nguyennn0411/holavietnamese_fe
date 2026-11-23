@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import authApi from '@/shared/api/authApi';
 import { markHasAccount } from '@/utils/userState';
 import { getRegistrationVerificationState } from '@/features/auth/emailVerificationFlow';
@@ -45,6 +46,7 @@ const loadPersistedUser = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [accessToken, setAccessToken] = useState(() => localStorage.getItem('token'));
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('token'));
   const [user, setUser] = useState(loadPersistedUser);
@@ -124,6 +126,14 @@ export const AuthProvider = ({ children }) => {
         window.dispatchEvent(new CustomEvent('hola:auth-token-changed', { detail: { token } }));
         markHasAccount();
 
+        // Clear guest/legacy onboarding cache so it never contaminates the logged-in user
+        try {
+          localStorage.removeItem('hola:onboarding:v1');
+          localStorage.removeItem('hola:onboarding:guest');
+        } catch {
+          // Storage can be unavailable in restricted browser contexts.
+        }
+
         const userInfo = {
           userId,
           username: uname,
@@ -195,6 +205,14 @@ export const AuthProvider = ({ children }) => {
         window.dispatchEvent(new CustomEvent('hola:auth-token-changed', { detail: { token } }));
         markHasAccount();
 
+        // Clear guest/legacy onboarding cache so it never contaminates the logged-in user
+        try {
+          localStorage.removeItem('hola:onboarding:v1');
+          localStorage.removeItem('hola:onboarding:guest');
+        } catch {
+          // Storage can be unavailable in restricted browser contexts.
+        }
+
         const userInfo = {
           userId,
           username: uname,
@@ -231,9 +249,28 @@ export const AuthProvider = ({ children }) => {
       window.dispatchEvent(new CustomEvent('hola:auth-token-changed', { detail: { token: null } }));
       localStorage.removeItem('user');
       ['userId', 'username', 'fullName', 'role', 'roles', 'permissions'].forEach((key) => localStorage.removeItem(key));
+      try {
+        Object.keys(localStorage).forEach((key) => {
+          if (key.startsWith('hola:onboarding')) {
+            localStorage.removeItem(key);
+          }
+        });
+        window.dispatchEvent(new CustomEvent('hola:onboarding-reset'));
+      } catch (err) {
+        console.warn('Failed to clear onboarding state on logout:', err);
+      }
       setAccessToken(null);
       setIsAuthenticated(false);
       setUser(null);
+      try {
+        if (typeof navigate === 'function') {
+          navigate('/', { replace: true });
+        } else {
+          window.location.href = '/';
+        }
+      } catch {
+        window.location.href = '/';
+      }
     }
   };
 

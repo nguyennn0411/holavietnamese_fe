@@ -1,5 +1,6 @@
 import { httpClient } from '@/shared/api/httpClient';
 import axiosClient from '@/shared/api/axiosClient';
+import { managementApiPath, managementResourcePath } from '@/shared/api/managementApiPath';
 
 // Reuse the project's existing JWT client and legacy session client as appropriate.
 const request = (path, method = 'GET', body, signal) => localStorage.getItem('token')
@@ -30,9 +31,9 @@ async function uploadSignedMedia(file, endpoint, expectedType) {
 }
 
 export const contentService = {
-  async courseWorkbookTemplate() { return axiosClient.get('/api/admin/courses/workbook/template', { responseType: 'blob' }); },
-  async courseWorkbookValidate(file) { const form = new FormData(); form.append('file', file); return axiosClient.post('/api/admin/courses/workbook/validate', form); },
-  async courseWorkbookImport(file) { const form = new FormData(); form.append('file', file); return axiosClient.post('/api/admin/courses/workbook/import', form); },
+  async courseWorkbookTemplate() { return axiosClient.get(managementApiPath('/courses/workbook/template'), { responseType: 'blob' }); },
+  async courseWorkbookValidate(file) { const form = new FormData(); form.append('file', file); return axiosClient.post(managementApiPath('/courses/workbook/validate'), form); },
+  async courseWorkbookImport(file) { const form = new FormData(); form.append('file', file); return axiosClient.post(managementApiPath('/courses/workbook/import'), form); },
   uploadCourseCover(file) { return uploadSignedMedia(file, '/api/media/courses/cover/signature', 'image'); },
   uploadLessonMedia(file, type) {
     if (!['image', 'video', 'audio'].includes(type)) throw new Error('Loại tệp bài học không hợp lệ.');
@@ -42,28 +43,28 @@ export const contentService = {
     if (!['image', 'audio'].includes(type)) throw new Error('Loại tệp câu hỏi không hợp lệ.');
     return uploadSignedMedia(file, `/api/media/questions/signature?type=${type}`, type === 'audio' ? 'video' : 'image');
   },
-  list(kind, filters = {}, signal) { const query = new URLSearchParams(Object.entries(filters).filter(([, value]) => value !== '' && value != null)); return request(`/admin/${kind}?${query}`, 'GET', undefined, signal); },
-  get(kind, id, signal) { return request(`/admin/${kind}/${id}`, 'GET', undefined, signal); },
-  create(kind, body) { return request(`/admin/${kind}`, 'POST', body); },
-  update(kind, id, body) { return request(`/admin/${kind}/${id}`, 'PUT', body); },
-  status(kind, id, status) { return request(`/admin/${kind}/${id}/status`, 'PATCH', { status }); },
-  submitCourse(id) { return request(`/admin/courses/${id}/submit`, 'POST'); },
-  requestCourseEdit(id, reason) { return request(`/admin/courses/${id}/edit-request`, 'POST', { reason }); },
-  reviewCourseEditRequest(id, decision, note) { return request(`/admin/courses/${id}/edit-request/review`, 'POST', { decision, note }); },
-  courseReadiness(id, signal) { return request(`/admin/courses/${id}/readiness`, 'GET', undefined, signal); },
-  setFinalAssessment(id, quizId) { return request(`/admin/courses/${id}/final-assessment`, 'PATCH', { quizId }); },
-  reviewCourse(id, decision, note) { return request(`/admin/courses/${id}/review`, 'POST', { decision, note }); },
-  deleteCourse(id) { return request(`/admin/courses/${id}`, 'DELETE'); },
-  deleteQuiz(id) { return request(`/admin/quizzes/${id}`, 'DELETE'); },
-  addModule(courseId, body) { return request(`/admin/courses/${courseId}/modules`, 'POST', body); },
-  updateModule(id, body) { return request(`/admin/modules/${id}`, 'PUT', body); },
-  addLesson(moduleId, body) { return request(`/admin/modules/${moduleId}/lessons`, 'POST', body); },
-  addActivity(lessonId, body) { return request(`/admin/lessons/${lessonId}/activities`, 'POST', body); },
-  updateActivity(id, body) { return request(`/admin/activities/${id}`, 'PUT', body); },
-  reorder(path, ids) { return request(`/admin/${path}/reorder`, 'PUT', { ids }); },
-  addQuestion(quizId, questionId, points) { return request(`/admin/quizzes/${quizId}/questions`, 'POST', { questionId, points }); },
-  removeQuestion(quizId, questionId) { return request(`/admin/quizzes/${quizId}/questions/${questionId}`, 'DELETE'); },
-  preview(kind, id, signal) { return request(`/admin/${kind}/${id}/preview`, 'GET', undefined, signal); },
+  list(kind, filters = {}, signal) { const query = new URLSearchParams(Object.entries(filters).filter(([, value]) => value !== '' && value != null)); return request(`${managementResourcePath(`/${kind}`)}?${query}`, 'GET', undefined, signal); },
+  get(kind, id, signal) { return request(managementResourcePath(`/${kind}/${id}`), 'GET', undefined, signal); },
+  create(kind, body) { return request(managementResourcePath(`/${kind}`), 'POST', body); },
+  update(kind, id, body) { return request(managementResourcePath(`/${kind}/${id}`), 'PUT', body); },
+  status(kind, id, status) { return request(managementResourcePath(`/${kind}/${id}/status`), 'PATCH', { status }); },
+  submitCourse(id) { return request(managementResourcePath(`/courses/${id}/submit`), 'POST'); },
+  requestCourseEdit(id, reason) { return request(managementResourcePath(`/courses/${id}/edit-request`), 'POST', { reason }); },
+  reviewCourseEditRequest(id, decision, note) { return request(managementResourcePath(`/courses/${id}/edit-request/review`), 'POST', { decision, note }); },
+  courseReadiness(id, signal) { return request(managementResourcePath(`/courses/${id}/readiness`), 'GET', undefined, signal); },
+  setFinalAssessment(id, quizId) { return request(managementResourcePath(`/courses/${id}/final-assessment`), 'PATCH', { quizId }); },
+  reviewCourse(id, decision, note) { return request(managementResourcePath(`/courses/${id}/review`), 'POST', { decision, note }); },
+  deleteCourse(id) { return request(managementResourcePath(`/courses/${id}`), 'DELETE'); },
+  deleteQuiz(id) { return request(managementResourcePath(`/quizzes/${id}`), 'DELETE'); },
+  addModule(courseId, body) { return request(managementResourcePath(`/courses/${courseId}/modules`), 'POST', body); },
+  updateModule(id, body) { return request(managementResourcePath(`/modules/${id}`), 'PUT', body); },
+  addLesson(moduleId, body) { return request(managementResourcePath(`/modules/${moduleId}/lessons`), 'POST', body); },
+  addActivity(lessonId, body) { return request(managementResourcePath(`/lessons/${lessonId}/activities`), 'POST', body); },
+  updateActivity(id, body) { return request(managementResourcePath(`/activities/${id}`), 'PUT', body); },
+  reorder(path, ids) { return request(managementResourcePath(`/${path}/reorder`), 'PUT', { ids }); },
+  addQuestion(quizId, questionId, points) { return request(managementResourcePath(`/quizzes/${quizId}/questions`), 'POST', { questionId, points }); },
+  removeQuestion(quizId, questionId) { return request(managementResourcePath(`/quizzes/${quizId}/questions/${questionId}`), 'DELETE'); },
+  preview(kind, id, signal) { return request(managementResourcePath(`/${kind}/${id}/preview`), 'GET', undefined, signal); },
   lesson(id, signal) { return request(`/lessons/${id}`, 'GET', undefined, signal); },
   completeActivity(id, answer) { return request(`/activities/${id}/complete`, 'POST', answer === undefined ? {} : { answer }); },
   quiz(id, signal) { return request(`/quizzes/${id}`, 'GET', undefined, signal); },

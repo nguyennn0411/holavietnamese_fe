@@ -6,7 +6,12 @@ export const vocabularyReviewService = {
     const data = await axiosClient.get('/api/me/vocabulary/review', {
       ...options, params: sessionId ? { sessionId } : {},
     });
-    return { ...data, entries: data.entries.map(entry => new VocabularyEntry(entry)) };
+    return {
+      ...data,
+      entries: (data.entries ?? []).map(entry => new VocabularyEntry(entry)),
+      reviewedEntries: (data.reviewedEntries ?? []).map(entry => new VocabularyEntry(entry)),
+      results: data.results ?? [],
+    };
   },
   async rate(entryId, sessionId, rating) {
     if (!['AGAIN', 'HARD', 'GOOD', 'EASY'].includes(rating)) throw new Error('Invalid review rating.');

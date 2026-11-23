@@ -1,8 +1,32 @@
 import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
 import { useEffect, useRef, useState } from 'react';
-import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { Menu, X, ArrowLeft, LogOut } from 'lucide-react';
+import {
+  Menu,
+  X,
+  ArrowLeft,
+  LogOut,
+  Home,
+  LayoutDashboard,
+  Users,
+  BookOpen,
+  Layers,
+  Languages,
+  HelpCircle,
+  CheckSquare,
+  Compass,
+  Landmark,
+  FolderTree,
+  Sparkles,
+  Sliders,
+  Trophy,
+  Zap,
+  ShieldCheck,
+  History,
+  LayoutGrid,
+  Settings,
+} from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { ROUTES } from '@/constants/routes';
 import { PageTransition } from '@/shared/components/common/PageTransition';
@@ -10,17 +34,61 @@ import { LanguageSwitcher } from '@/shared/components/common/LanguageSwitcher';
 import { canReadExplore, canReadVocabulary, canReadCulture } from '@/utils/permissions/contentAccess';
 
 const groups = [
-  { title: 'Tổng quan', links: [[ROUTES.ADMIN, 'Dashboard'], [ROUTES.ADMIN_USERS, 'Người dùng']] },
-  { title: 'Nội dung học tập', links: [[ROUTES.CONTENT_COURSES, 'Khóa học'], [ROUTES.CONTENT_LESSONS, 'Bài học'], [ROUTES.ADMIN_VOCABULARY, 'Từ vựng'], [ROUTES.CONTENT_QUESTIONS, 'Ngân hàng câu hỏi'], [ROUTES.CONTENT_QUIZZES, 'Quiz']] },
-  { title: 'Văn hóa & AI', links: [[ROUTES.ADMIN_DESTINATIONS, 'Điểm đến'], [ROUTES.ADMIN_CULTURE, 'Văn hóa'], [ROUTES.ADMIN_CULTURE_CATEGORIES, 'Danh mục văn hóa'], [ROUTES.ADMIN_AI_SCENARIOS, 'Kịch bản AI'], [ROUTES.ADMIN_AI_SETTINGS, 'Cấu hình AI']] },
-  { title: 'Hệ thống', links: [[ROUTES.ADMIN_ACHIEVEMENTS, 'Thành tích'], [ROUTES.ADMIN_XP_RULES, 'Quy tắc XP'], [ROUTES.ADMIN_ROLES, 'Vai trò & phân quyền'], [ROUTES.ADMIN_AUDIT_LOGS, 'Nhật ký hệ thống'], [ROUTES.ADMIN_SITE_CONTENT, 'Menu & banner'], [ROUTES.ADMIN_SETTINGS, 'Cài đặt']] },
+  {
+    title: 'Tổng quan',
+    titleEn: 'Overview',
+    links: [
+      [ROUTES.ADMIN, 'Dashboard', 'Dashboard', LayoutDashboard],
+      [ROUTES.ADMIN_USERS, 'Người dùng', 'Users', Users],
+    ],
+  },
+  {
+    title: 'Nội dung học tập',
+    titleEn: 'Learning Content',
+    links: [
+      [ROUTES.CONTENT_COURSES, 'Khóa học', 'Courses', BookOpen],
+      [ROUTES.CONTENT_LESSONS, 'Bài học', 'Lessons', Layers],
+      [ROUTES.ADMIN_VOCABULARY, 'Từ vựng', 'Vocabulary', Languages],
+      [ROUTES.CONTENT_QUESTIONS, 'Ngân hàng câu hỏi', 'Question Bank', HelpCircle],
+      [ROUTES.CONTENT_QUIZZES, 'Quiz', 'Quizzes', CheckSquare],
+    ],
+  },
+  {
+    title: 'Văn hóa & AI',
+    titleEn: 'Culture & AI',
+    links: [
+      [ROUTES.ADMIN_DESTINATIONS, 'Điểm đến', 'Destinations', Compass],
+      [ROUTES.ADMIN_CULTURE, 'Văn hóa', 'Culture', Landmark],
+      [ROUTES.ADMIN_CULTURE_CATEGORIES, 'Danh mục văn hóa', 'Culture Categories', FolderTree],
+      [ROUTES.ADMIN_AI_SCENARIOS, 'Kịch bản AI', 'AI Scenarios', Sparkles],
+      [ROUTES.ADMIN_AI_SETTINGS, 'Cấu hình AI', 'AI Configuration', Sliders],
+    ],
+  },
+  {
+    title: 'Hệ thống',
+    titleEn: 'System',
+    links: [
+      [ROUTES.ADMIN_ACHIEVEMENTS, 'Thành tích', 'Achievements', Trophy],
+      [ROUTES.ADMIN_XP_RULES, 'Quy tắc XP', 'XP Rules', Zap],
+      [ROUTES.ADMIN_ROLES, 'Vai trò & phân quyền', 'Roles & Permissions', ShieldCheck],
+      [ROUTES.ADMIN_AUDIT_LOGS, 'Nhật ký hệ thống', 'Audit Logs', History],
+      [ROUTES.ADMIN_SITE_CONTENT, 'Menu & banner', 'Menus & Banners', LayoutGrid],
+      [ROUTES.ADMIN_SETTINGS, 'Cài đặt', 'Settings', Settings],
+    ],
+  },
 ];
 
 export function AdminLayout() {
   useTextLanguage();
   const { user, logout, isAdmin, isContentManager } = useAuth();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const sidebar = useRef(null);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/', { replace: true });
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -46,12 +114,15 @@ export function AdminLayout() {
 
   const visibleGroups = groups.map(group => {
     let groupTitle = group.title;
+    let groupTitleEn = group.titleEn;
     if (isContentManager && !isAdmin && group.title === 'Văn hóa & AI') {
       groupTitle = 'Văn hóa';
+      groupTitleEn = 'Culture';
     }
     return {
       ...group,
       title: groupTitle,
+      titleEn: groupTitleEn,
       links: group.links.filter(([to]) => {
         if (to === ROUTES.ADMIN_VOCABULARY) return vocabularyAllowed;
         if (to === ROUTES.ADMIN_DESTINATIONS) return exploreAllowed;
@@ -60,7 +131,7 @@ export function AdminLayout() {
           return to === ROUTES.CONTENT_COURSES ? (isAdmin || isContentManager) : (isContentManager && !isAdmin);
         }
         return isAdmin;
-      }).map(([to, label]) => {
+      }).map(([to, labelVi, labelEn, Icon]) => {
         let finalTo = to;
         if (isAdmin) {
           if (to === ROUTES.CONTENT_COURSES) finalTo = ROUTES.ADMIN_COURSES;
@@ -70,69 +141,78 @@ export function AdminLayout() {
           if (to === ROUTES.ADMIN_VOCABULARY) finalTo = ROUTES.CONTENT_VOCABULARY;
           if (to === ROUTES.ADMIN_DESTINATIONS) finalTo = ROUTES.CONTENT_DESTINATIONS;
         }
-        let resolvedLabel = label;
+        let resolvedLabel = labelVi;
+        let resolvedLabelEn = labelEn;
         if (to === ROUTES.CONTENT_COURSES) {
           resolvedLabel = isContentManager && !isAdmin ? 'Biên soạn khóa học' : (isAdmin ? 'Khóa học' : 'Khóa học');
+          resolvedLabelEn = isContentManager && !isAdmin ? 'Course Authoring' : 'Courses';
         } else if (to === ROUTES.ADMIN_VOCABULARY && isAdmin) {
           resolvedLabel = 'Từ vựng';
+          resolvedLabelEn = 'Vocabulary';
         } else if (isAdmin && (to === ROUTES.ADMIN_CULTURE || to === ROUTES.CONTENT_CULTURE)) {
           resolvedLabel = 'Quản lý bài viết';
+          resolvedLabelEn = 'Manage Articles';
         }
-        return [finalTo, resolvedLabel];
+        return [finalTo, resolvedLabel, resolvedLabelEn, Icon];
       }),
     };
   }).filter(group => group.links.length > 0);
 
   const location = useLocation();
-  const contentFlowPrefixes = [
-    ROUTES.CONTENT_COURSES, ROUTES.CONTENT_LESSONS, ROUTES.CONTENT_QUESTIONS, ROUTES.CONTENT_QUIZZES,
-    ROUTES.ADMIN_COURSES, ROUTES.ADMIN_LESSONS, ROUTES.ADMIN_QUESTIONS, ROUTES.ADMIN_QUIZZES,
-  ];
-  const inContentFlow = contentFlowPrefixes.some(prefix => location.pathname === prefix || location.pathname.startsWith(prefix + '/'));
-  const current = isContentManager && !isAdmin && inContentFlow
-    ? 'Biên soạn khóa học'
-    : isAdmin && (location.pathname === ROUTES.ADMIN_COURSES || location.pathname.startsWith(`${ROUTES.ADMIN_COURSES}/`))
-    ? 'Duyệt khóa học'
-    : visibleGroups.flatMap(group => group.links).find(([to]) => location.pathname === to || (to !== '/admin' && location.pathname.startsWith(to + '/')))?.[1] || (isAdmin ? 'Quản trị hệ thống' : 'Quản lý nội dung');
+  const currentItem = visibleGroups
+    .flatMap(group => group.links)
+    .find(([to]) => location.pathname === to || (to !== '/admin' && location.pathname.startsWith(to + '/')));
+  const currentVi = currentItem?.[1] || (isAdmin ? 'Quản trị hệ thống' : 'Quản lý nội dung');
+  const currentEn = currentItem?.[2] || (isAdmin ? 'System Administration' : 'Content Management');
+
+  const userInitial = (user?.fullName || user?.username || (isAdmin ? 'A' : 'C')).charAt(0).toUpperCase();
 
   return (
     <div className={`admin-wrapper ${open ? 'admin-menu-open' : ''}`}>
-      <a className="skip-link" href="#admin-content"><BilingualText>{"Chuyển đến nội dung chính"}</BilingualText></a>
+      <a className="skip-link" href="#admin-content"><BilingualText vi="Chuyển đến nội dung chính" en="Skip to main content" /></a>
       <aside ref={sidebar} id="admin-navigation" className="admin-sidebar">
         <Link to={isAdmin ? '/admin' : (visibleGroups[0]?.links[0]?.[0] || '/')} className="admin-sidebar-header">
-          {isAdmin ? 'hola admin' : 'hola content'}
-          <span><BilingualText>{isAdmin ? "SYSTEM & GOVERNANCE" : "CONTENT & LEARNING"}</BilingualText></span>
+          <div className="admin-sidebar-brand">
+            <span className="admin-sidebar-brand__name">{isAdmin ? 'hola admin' : 'hola content'}</span>
+            <span className="admin-sidebar-brand__tag">
+              <BilingualText vi={isAdmin ? "HỆ THỐNG & QUẢN TRỊ" : "NỘI DUNG & HỌC TẬP"} en={isAdmin ? "SYSTEM & GOVERNANCE" : "CONTENT & LEARNING"} />
+            </span>
+          </div>
         </Link>
         <nav className="admin-nav" aria-label={bilingualLabel("Điều hướng quản lý", "Management navigation")}>
           {visibleGroups.map(group => (
             <div className="admin-nav-group" key={group.title}>
-              <p><BilingualText>{group.title}</BilingualText></p>
-              {group.links.map(([to, label]) => (
+              <p><BilingualText vi={group.title} en={group.titleEn} /></p>
+              {group.links.map(([to, labelVi, labelEn, Icon]) => (
                 <NavLink
                   key={to}
                   to={to}
                   end={to === '/admin'}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) => `admin-nav-item ${
-                    isActive ||
-                    (isContentManager && !isAdmin && to === ROUTES.CONTENT_COURSES && inContentFlow) ||
-                    (isAdmin && to === ROUTES.ADMIN_COURSES && (location.pathname === ROUTES.ADMIN_COURSES || location.pathname.startsWith(`${ROUTES.ADMIN_COURSES}/`)))
+                    isActive || (to !== '/admin' && (location.pathname === to || location.pathname.startsWith(`${to}/`)))
                       ? 'active'
                       : ''
                   }`}
                 >
-                  <BilingualText
-                    vi={label}
-                    en={label === 'Biên soạn khóa học' ? 'Course authoring' : label === 'Duyệt khóa học' ? 'Course review' : label === 'Quản lý bài viết' ? 'Manage articles' : undefined}
-                  />
+                  {Icon && <Icon size={16} className="admin-nav-icon" aria-hidden="true" />}
+                  <span className="admin-nav-text">
+                    <BilingualText vi={labelVi} en={labelEn} />
+                  </span>
                 </NavLink>
               ))}
             </div>
           ))}
         </nav>
         <div className="admin-sidebar-footer">
-          <Link to="/"><ArrowLeft size={16} aria-hidden="true"/><BilingualText>{"Giao diện học viên"}</BilingualText></Link>
-          <button className="admin-logout" onClick={logout}><LogOut size={16} aria-hidden="true"/><BilingualText>{"Đăng xuất"}</BilingualText></button>
+          <Link to="/" className="admin-learner-link">
+            <ArrowLeft size={15} aria-hidden="true" />
+            <BilingualText vi="Giao diện học viên" en="Learner view" />
+          </Link>
+          <button className="admin-logout" onClick={handleLogout}>
+            <LogOut size={15} aria-hidden="true" />
+            <BilingualText vi="Đăng xuất" en="Sign out" />
+          </button>
         </div>
       </aside>
 
@@ -151,26 +231,35 @@ export function AdminLayout() {
               {open ? <X size={20}/> : <Menu size={20}/>}
             </button>
             <div className="admin-breadcrumb">
+              <Link to={isAdmin ? '/admin' : (visibleGroups[0]?.links[0]?.[0] || '/')} className="admin-breadcrumb-home" aria-label="Home">
+                <Home size={15} />
+              </Link>
+              <span className="admin-breadcrumb-separator">/</span>
               <span className="admin-breadcrumb-prefix">
-                <BilingualText>{isAdmin ? "Quản trị" : "Nội dung"}</BilingualText>
-                <span className="admin-breadcrumb-separator">/</span>
+                <BilingualText vi={isAdmin ? "Quản trị" : "Nội dung"} en={isAdmin ? "Admin" : "Content"} />
               </span>
+              <span className="admin-breadcrumb-separator">/</span>
               <strong className="admin-breadcrumb-current">
-                <BilingualText vi={current} en={current === 'Biên soạn khóa học' ? 'Course authoring' : current === 'Duyệt khóa học' ? 'Course review' : undefined} />
+                <BilingualText vi={currentVi} en={currentEn} />
               </strong>
             </div>
           </div>
 
           <div className="admin-topbar-right">
             <LanguageSwitcher compact />
-            <span className="admin-identity">
-              <span className="admin-identity-name">
-                <BilingualText>{user?.fullName || user?.username || (isAdmin ? 'Quản trị viên' : 'Người quản lý nội dung')}</BilingualText>
-              </span>
-              <span className="badge">
-                <BilingualText>{isAdmin ? 'ADMIN' : 'CONTENT MANAGER'}</BilingualText>
-              </span>
-            </span>
+            <div className="admin-user-pill">
+              <div className="admin-user-avatar">
+                {userInitial}
+              </div>
+              <div className="admin-user-meta">
+                <span className="admin-user-name">
+                  {user?.fullName || user?.username || (isAdmin ? 'Quản trị viên' : 'Quản lý nội dung')}
+                </span>
+                <span className={`admin-user-role-badge ${isAdmin ? 'admin-user-role-badge--admin' : 'admin-user-role-badge--content'}`}>
+                  {isAdmin ? 'ADMIN' : 'CONTENT'}
+                </span>
+              </div>
+            </div>
           </div>
         </header>
 
@@ -183,3 +272,5 @@ export function AdminLayout() {
     </div>
   );
 }
+
+export default AdminLayout;

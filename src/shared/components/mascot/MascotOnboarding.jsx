@@ -206,40 +206,28 @@ export function MascotOnboarding() {
               {/* Top Accent Gradient Bar */}
               <div className="h-1.5 w-full bg-gradient-to-r from-[#EA580C] via-[#F97316] to-[#F59E0B]" />
 
-              {/* Close Button (X) */}
-              <button
-                type="button"
-                onClick={close}
-                aria-label={t('mascot.guide.skip', 'Bỏ qua')}
-                className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[#E8E5DF] bg-[#FAF8F5] text-[#64748B] hover:border-[#FED7AA] hover:bg-[#FFF7ED] hover:text-[#EA580C] transition-colors focus:outline-none"
-                style={{
-                  backgroundColor: '#FAF8F5',
-                  borderColor: '#E8E5DF',
-                  minHeight: 'unset',
-                  width: '32px',
-                  height: '32px',
-                  padding: 0,
-                }}
-              >
-                <X size={16} strokeWidth={2.2} />
-              </button>
-
               {/* Card Body */}
-              <div className="grid grid-cols-1 sm:grid-cols-[190px_1fr] gap-6 p-6 sm:p-7 items-center">
+              <div className="grid grid-cols-1 sm:grid-cols-[185px_1fr] gap-6 p-6 sm:p-7 items-center">
                 {/* Left: Mascot Hero Box */}
                 <div
-                  className="flex flex-col items-center justify-center rounded-2xl border border-[#FED7AA]/60 bg-gradient-to-b from-[#FFF7ED] via-[#FFFBF5] to-white p-4 text-center shadow-inner"
+                  className="flex flex-col items-center justify-center rounded-2xl border border-[#FED7AA]/80 bg-gradient-to-b from-[#FFF7ED] via-[#FFFBF5] to-white p-3.5 sm:p-4 text-center shadow-inner overflow-hidden self-stretch"
                   style={{ backgroundColor: '#FFFBF5', borderColor: '#FED7AA' }}
                 >
-                  <div className="h-[135px] flex items-center justify-center">
+                  <div className="w-full h-[145px] flex items-center justify-center overflow-hidden">
                     <BuffaloMascot
                       variant={steps[step].variant || 'teaching'}
-                      size="large"
+                      size="medium"
                       animated
+                      style={{
+                        '--nghe-width': '96px',
+                        width: '96px',
+                        height: '136px',
+                        maxHeight: '136px',
+                      }}
                     />
                   </div>
                   <span
-                    className="mt-3 inline-flex items-center gap-1 rounded-full border border-[#FED7AA] bg-white px-2.5 py-0.5 text-[11px] font-bold text-[#EA580C] shadow-xs"
+                    className="mt-2.5 inline-flex items-center gap-1 rounded-full border border-[#FED7AA] bg-white px-2.5 py-0.5 text-[11px] font-bold text-[#EA580C] shadow-xs"
                     style={{ backgroundColor: '#ffffff', borderColor: '#FED7AA', color: '#EA580C' }}
                   >
                     <Sparkles size={11} />

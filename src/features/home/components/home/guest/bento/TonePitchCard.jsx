@@ -53,16 +53,17 @@ export function TonePitchCard() {
               key={t.id}
               type="button"
               onClick={() => handlePlayTone(t.id)}
-              className={`!min-h-0 !min-w-0 p-3 rounded-2xl border transition-all text-center flex flex-col items-center gap-1 cursor-pointer ${
+              aria-pressed={isSelected}
+              className={`tone-pitch-btn secondary !min-h-0 !min-w-0 p-3 rounded-2xl border transition-all text-center flex flex-col items-center gap-1 cursor-pointer ${
                 isSelected
-                  ? 'bg-[#FFF7E8] border-2 border-[#EA580C] shadow-md scale-105'
-                  : 'bg-white hover:bg-[#FFF7E8]/60 border-[#E8E5DF]/70 hover:border-[#EA580C]'
-              } active:bg-[#FFF0DC] active:border-[#EA580C]`}
+                  ? 'is-active bg-[#FFF7E8] border-2 border-[#EA580C] shadow-md scale-105'
+                  : 'bg-white hover:bg-[#FFF7E8]/60 border-[#E8E5DF] hover:border-[#EA580C]'
+              }`}
             >
-              <span className="text-[10px] font-bold text-[#64748B] uppercase">{t.name}</span>
-              <span className="text-lg font-black text-[#253044]">{t.word}</span>
-              <span className="text-[10px] text-[#EA580C] font-bold">{t.symbol}</span>
-              <Volume2 className="w-3.5 h-3.5 text-[#EA580C] mt-0.5 shrink-0" strokeWidth={2.2} />
+              <span className={`tone-pitch-btn__name text-[10px] font-bold uppercase transition-colors ${isSelected ? 'text-[#EA580C]' : 'text-[#64748B]'}`}>{t.name}</span>
+              <span className="tone-pitch-btn__word text-lg font-black text-[#253044]">{t.word}</span>
+              <span className="tone-pitch-btn__symbol text-[10px] text-[#EA580C] font-bold">{t.symbol}</span>
+              <Volume2 className="tone-pitch-btn__icon w-3.5 h-3.5 text-[#EA580C] mt-0.5 shrink-0" strokeWidth={2.2} />
             </button>
           );
         })}

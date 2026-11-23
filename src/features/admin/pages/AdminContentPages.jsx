@@ -2,7 +2,7 @@ import { BilingualText, bilingualLabel } from '@/shared/components/common/Biling
 import { CourseThumbnail } from '@/features/learning/components/course/CourseInfo';
 import { CourseStudio } from '@/features/learning/admin/components/CourseStudio';
 import { ActivityEditor } from '@/features/learning/admin/components/ActivityEditor';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { contentService } from '@/features/learning/api/contentService';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
@@ -16,7 +16,8 @@ import { useAuth } from '@/features/auth/context/AuthContext';
 import { AdminActionGroup, AdminActionLink } from '@/shared/components/common/AdminTableActions';
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
-import { Search, X, Eye, Pencil, Check, Info, Clock, BookOpen } from 'lucide-react';
+import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
+import { Search, X, Eye, Pencil, Check, Info, Clock } from 'lucide-react';
 
 const CONTENT_STATUS_DOTS = {
   DRAFT: '#F59E0B',
@@ -83,22 +84,23 @@ export function AdminContentListPage({ kind }) {
 
   const action =
     kind === 'lessons' ? (
-      <Link className="button secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
-        <BilingualText>{"← Quay lại khóa học"}</BilingualText>
+      <Link className="admin-btn admin-btn-secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
+        <BilingualText vi="← Quay lại khóa học" en="← Back to courses" />
       </Link>
     ) : canCreate && kind === 'courses' ? (
-      <Link className="button" to="/content/courses/new">
+      <Link className="admin-btn admin-btn-primary" to="/content/courses/new">
         + Import khóa học
       </Link>
     ) : canCreate ? (
-      <button onClick={() => setCreating(true)}>
-        <BilingualText>
-          {kind === 'quizzes' ? '+ Tạo quiz' : kind === 'lessons' ? '+ Tạo bài học' : '+ Tạo khóa học'}
-        </BilingualText>
+      <button className="admin-btn admin-btn-primary" onClick={() => setCreating(true)}>
+        <BilingualText
+          vi={kind === 'quizzes' ? '+ Tạo quiz' : kind === 'lessons' ? '+ Tạo bài học' : '+ Tạo khóa học'}
+          en={kind === 'quizzes' ? '+ Create quiz' : kind === 'lessons' ? '+ Create lesson' : '+ Create course'}
+        />
       </button>
     ) : isContentManager && !isAdmin && kind !== 'courses' ? (
-      <Link className="button secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
-        <BilingualText>{"← Quay lại khóa học"}</BilingualText>
+      <Link className="admin-btn admin-btn-secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
+        <BilingualText vi="← Quay lại khóa học" en="← Back to courses" />
       </Link>
     ) : null;
 
@@ -135,26 +137,12 @@ export function AdminContentListPage({ kind }) {
               aria-selected={status === 'REVIEW'}
               className={`review-tab-btn ${status === 'REVIEW' ? 'is-active' : ''}`}
               onClick={() => {
-                setStatus('REVIEW');
+                setStatus(current => current === 'REVIEW' ? '' : 'REVIEW');
                 setPage(0);
               }}
             >
               <Clock size={16} />
               <span><BilingualText vi="Chờ Admin duyệt" en="Pending review" /></span>
-            </button>
-
-            <button
-              type="button"
-              role="tab"
-              aria-selected={status === ''}
-              className={`review-tab-btn ${status === '' ? 'is-active' : ''}`}
-              onClick={() => {
-                setStatus('');
-                setPage(0);
-              }}
-            >
-              <BookOpen size={16} />
-              <span><BilingualText vi="Tất cả khóa học" en="All courses" /></span>
             </button>
           </div>
 
@@ -290,27 +278,10 @@ export function AdminContentListPage({ kind }) {
 
           <button
             type="submit"
-            style={{
-              height: '40px',
-              minHeight: '40px',
-              maxHeight: '40px',
-              padding: '0 18px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #FF7A00 0%, #EA580C 100%)',
-              border: 'none',
-              color: '#FFFFFF',
-              fontSize: '13px',
-              fontWeight: 700,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '7px',
-              cursor: 'pointer',
-              boxShadow: '0 2px 6px rgba(234, 88, 12, 0.25)',
-              whiteSpace: 'nowrap',
-            }}
+            className="admin-btn admin-btn-primary"
           >
             <Search size={15} strokeWidth={2.3} />
-            <span><BilingualText>{"Tìm kiếm"}</BilingualText></span>
+            <span><BilingualText vi="Tìm kiếm" en="Search" /></span>
           </button>
         </div>
       </form>
@@ -321,15 +292,15 @@ export function AdminContentListPage({ kind }) {
           return (
             <>
               {items.length ? (
-                <div className="admin-card table-scroll" style={{ padding: 0 }}>
+                <div className="admin-table-container">
                   <table className="admin-table">
                     <thead>
                       <tr>
-                        <th><BilingualText>{"Nội dung"}</BilingualText></th>
-                        <th><BilingualText>{"Loại / Trình độ"}</BilingualText></th>
-                        <th><BilingualText>{"Trạng thái"}</BilingualText></th>
-                        <th><BilingualText>{reviewQueue && status === 'REVIEW' ? "Ngày gửi duyệt" : "Cập nhật"}</BilingualText></th>
-                        <th style={{ textAlign: 'right' }}><BilingualText>{"Thao tác"}</BilingualText></th>
+                        <th><BilingualText vi="Nội dung" en="Content" /></th>
+                        <th><BilingualText vi="Loại / Trình độ" en="Type / Level" /></th>
+                        <th><BilingualText vi="Trạng thái" en="Status" /></th>
+                        <th><BilingualText vi={reviewQueue && status === 'REVIEW' ? "Ngày gửi duyệt" : "Cập nhật"} en={reviewQueue && status === 'REVIEW' ? "Submitted" : "Updated"} /></th>
+                        <th style={{ textAlign: 'right' }}><BilingualText vi="Thao tác" en="Actions" /></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -343,19 +314,7 @@ export function AdminContentListPage({ kind }) {
                             </td>
                             <td>{item.level || item.lessonType || item.quizType}</td>
                             <td>
-                              <span
-                                className={`admin-badge ${
-                                  item.status === 'PUBLISHED'
-                                    ? 'admin-badge-success'
-                                    : item.status === 'REJECTED'
-                                    ? 'admin-badge-danger'
-                                    : item.status === 'REVIEW'
-                                    ? 'admin-badge-info'
-                                    : 'admin-badge-warning'
-                                }`}
-                              >
-                                <BilingualText>{item.status || item.publicationStatus}</BilingualText>
-                              </span>
+                              <AdminStatusBadge status={item.status || item.publicationStatus} />
                             </td>
                             <td>
                               {(pendingReview ? item.submittedAt : item.updatedAt)
@@ -458,8 +417,11 @@ function LessonBuilder({ lesson, reload }) {
   const [selected, setSelected] = useState(null),
     [editing, setEditing] = useState(false),
     [creatingQuiz, setCreatingQuiz] = useState(false),
+    [message, setMessage] = useState(''),
     [error, setError] = useState(''),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [uploadingImage, setUploadingImage] = useState(false);
+  const imageInputRef = useRef(null);
   const { isAdmin, isContentManager } = useAuth();
   const navigate = useNavigate();
   const canEdit = isContentManager && !isAdmin && ['DRAFT', 'REJECTED'].includes(lesson.courseStatus);
@@ -473,6 +435,61 @@ function LessonBuilder({ lesson, reload }) {
       setError(err.message);
     } finally {
       setBusy(false);
+    }
+  }
+
+  function chooseLessonImage() {
+    setSelected(null);
+    setMessage('');
+    setError('');
+    if (imageInputRef.current) {
+      imageInputRef.current.value = '';
+      imageInputRef.current.click();
+    }
+  }
+
+  async function addLessonImage(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      setError(bilingualLabel(
+        'Thêm hình ảnh vào bài học thất bại. Chỉ chấp nhận ảnh JPG, PNG hoặc WebP tối đa 5 MB.',
+        'Failed to add the image to the lesson. Choose a JPG, PNG, or WebP image up to 5 MB.'
+      ));
+      return;
+    }
+
+    setUploadingImage(true);
+    setMessage('');
+    setError('');
+    try {
+      const imageUrl = await contentService.uploadLessonMedia(file, 'image');
+      await contentService.addActivity(lesson.id, {
+        activityType: 'IMAGE',
+        title: 'Lesson image',
+        titleVi: 'Hình ảnh bài học',
+        instruction: '',
+        instructionVi: '',
+        contentJson: { imageUrl },
+        isRequired: false,
+        maxScore: 0,
+        status: 'PUBLISHED',
+        quizId: null,
+        grammarTopicIds: [],
+      });
+      setMessage(bilingualLabel(
+        'Đã thêm hình ảnh vào bài học thành công.',
+        'The image was added to the lesson successfully.'
+      ));
+      reload();
+    } catch (err) {
+      setError(bilingualLabel(
+        `Thêm hình ảnh vào bài học thất bại. ${err.message}`,
+        `Failed to add the image to the lesson. ${err.message}`
+      ));
+    } finally {
+      setUploadingImage(false);
     }
   }
 
@@ -505,6 +522,7 @@ function LessonBuilder({ lesson, reload }) {
         }
       />
       {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
+      {message && <Notice kind="success"><BilingualText>{message}</BilingualText></Notice>}
       {!canEdit && <Notice><BilingualText>{"Bài học đang ở chế độ chỉ đọc theo trạng thái khóa học."}</BilingualText></Notice>}
       <div className="lesson-builder-grid">
         <aside className="admin-card">
@@ -547,8 +565,18 @@ function LessonBuilder({ lesson, reload }) {
             <h2><BilingualText>{"Các hoạt động"}</BilingualText></h2>
             {canEdit && (
               <div className="actions">
-                <button onClick={() => setSelected({ activityType: 'IMAGE', status: 'PUBLISHED', contentJson: { imageUrl: '' } })}>
-                  <BilingualText>{"+ Thêm ảnh"}</BilingualText>
+                <input
+                  ref={imageInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  hidden
+                  onChange={addLessonImage}
+                />
+                <button disabled={busy || uploadingImage} onClick={chooseLessonImage}>
+                  <BilingualText
+                    vi={uploadingImage ? 'Đang tải ảnh…' : '+ Thêm ảnh'}
+                    en={uploadingImage ? 'Uploading image…' : '+ Add image'}
+                  />
                 </button>
                 <button onClick={() => setSelected({ activityType: 'VIDEO', status: 'PUBLISHED', contentJson: { videoUrl: '' } })}>
                   <BilingualText>{"+ Thêm video"}</BilingualText>

@@ -13,18 +13,26 @@ function useGuestItems() {
   const { i18n } = useTranslation();
   const { getMenuItems } = useSiteContent();
   const language = i18n.resolvedLanguage || i18n.language || 'en';
-  return useMemo(() => getMenuItems(MENU_PLACEMENTS.GUEST).map((item) => ({
-    ...item,
-    to: safeInternalPath(item.path),
-    label: localizedSiteField(item, 'label', language),
-    icon: siteContentIcon(item.iconKey),
-    end: item.path === '/',
-  })), [getMenuItems, language]);
+  return useMemo(() => getMenuItems(MENU_PLACEMENTS.GUEST).map((item) => {
+    let targetPath = safeInternalPath(item.path);
+    if (targetPath === '/edtech/dashboard') {
+      targetPath = '/learning-path';
+    }
+    return {
+      ...item,
+      to: targetPath,
+      label: localizedSiteField(item, 'label', language),
+      icon: siteContentIcon(item.iconKey),
+      end: targetPath === '/',
+    };
+  }), [getMenuItems, language]);
 }
 
 function GuestNavigation({ collapsed = false, onNavigate }) {
   const location = useLocation();
   const guestItems = useGuestItems();
+  const isLearningPathRoute = location.pathname === '/learning-path' || location.pathname === '/edtech/dashboard' || location.pathname.startsWith('/learning-path');
+
   return <nav className="guest-sidebar__nav" aria-label="Guest navigation">
     {guestItems.map(({ id, code, to, label, icon: Icon, end }) => {
       if (!to) return <div key={id ?? code} className="guest-sidebar__link is-disabled" aria-disabled="true" title={label}>
@@ -32,11 +40,14 @@ function GuestNavigation({ collapsed = false, onNavigate }) {
         <b className="sidebar-link__label">{label}</b>
       </div>;
       const [path, hash = ''] = to.split('#');
-      const active = end
-        ? location.pathname === path && !location.hash
-        : hash
-          ? location.pathname === path && location.hash === `#${hash}`
-          : location.pathname === path || location.pathname.startsWith(`${path}/`);
+      const isLearningPathItem = path === '/learning-path' || path === '/edtech/dashboard' || code === 'GUEST_LEARNING_PATH';
+      const active = isLearningPathRoute && isLearningPathItem
+        ? true
+        : end
+          ? location.pathname === path && !location.hash
+          : hash
+            ? location.pathname === path && location.hash === `#${hash}`
+            : location.pathname === path || location.pathname.startsWith(`${path}/`);
       return <Link key={id ?? code} to={to} onClick={onNavigate} className={`guest-sidebar__link ${active ? 'is-active' : ''}`} aria-current={active ? 'page' : undefined} title={collapsed ? label : undefined}>
         <span className="sidebar-link__icon"><Icon /></span>
         <b className="sidebar-link__label">{label}</b>
@@ -50,7 +61,7 @@ export function GuestSidebar({ collapsed, onToggle }) {
   return <aside className="guest-sidebar" aria-label="Public site navigation">
     <button
       type="button"
-      className="sidebar-toggle-btn"
+      className="sidebar-toggle-btn secondary"
       onClick={onToggle}
       aria-label={collapsed ? t('expandSidebar', { defaultValue: 'Mở rộng thanh điều hướng' }) : t('collapseSidebar', { defaultValue: 'Thu gọn thanh điều hướng' })}
       aria-expanded={!collapsed}

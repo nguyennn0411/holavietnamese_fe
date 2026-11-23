@@ -226,49 +226,57 @@
 .learner-sidebar__tip small { color: #887568; font-size: 8px; }
 
 /* Unified toggle button anchored exactly to boundary rail */
-.sidebar-toggle-btn {
-  position: absolute;
-  top: 24px;
-  right: -13px;
-  width: 26px;
-  height: 26px;
-  min-height: 26px;
-  min-width: 26px;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  border: 1.5px solid #dcc8b6;
-  border-radius: 50%;
-  background: #fff;
-  color: #7C2D12;
-  box-shadow: 0 2px 8px rgba(88, 28, 23, .14), 0 1px 3px rgba(0, 0, 0, .08);
-  cursor: pointer;
-  z-index: 750;
-  outline: none;
-  transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s cubic-bezier(0.22, 1, 0.36, 1);
+.sidebar-toggle-btn,
+button.sidebar-toggle-btn {
+  position: absolute !important;
+  top: 22px !important;
+  right: -14px !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1.5px solid #E2E8F0 !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  color: #475569 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  cursor: pointer !important;
+  z-index: 750 !important;
+  outline: none !important;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
-.sidebar-toggle-btn:hover {
-  background: #FF6A00;
-  color: #fff;
-  border-color: #FF6A00;
-  box-shadow: 0 4px 14px rgba(255, 106, 0, .35);
-  transform: scale(1.08);
+.sidebar-toggle-btn:hover,
+button.sidebar-toggle-btn:hover {
+  background: #FFF7ED !important;
+  color: #EA580C !important;
+  border-color: #FED7AA !important;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.22) !important;
+  transform: scale(1.08) !important;
 }
-.sidebar-toggle-btn:focus-visible {
-  outline: 2px solid #FF8008;
-  outline-offset: 2px;
+.sidebar-toggle-btn:focus-visible,
+button.sidebar-toggle-btn:focus-visible {
+  outline: 2px solid #EA580C !important;
+  outline-offset: 2px !important;
 }
-.sidebar-toggle-btn:active {
-  transform: scale(.92);
+.sidebar-toggle-btn:active,
+button.sidebar-toggle-btn:active {
+  transform: scale(.92) !important;
+  background: #FFEDD5 !important;
 }
 .sidebar-toggle-btn__icon {
-  width: 14px;
-  height: 14px;
-  stroke-width: 2.6;
-  transition: transform var(--sidebar-duration) var(--sidebar-easing);
+  width: 15px !important;
+  height: 15px !important;
+  stroke-width: 2.4 !important;
+  transition: transform var(--sidebar-duration) var(--sidebar-easing) !important;
 }
 .is-sidebar-collapsed .sidebar-toggle-btn__icon {
-  transform: rotate(180deg);
+  transform: rotate(180deg) !important;
 }
 
 /* Smooth label & brand collapsing (flicker-free, line-wrap free) */
@@ -374,11 +382,179 @@
 .learner-topbar__stats span{display:grid}
 .learner-topbar__stats small{color:#887568;font-size:6px;font-weight:800;letter-spacing:.08em}
 .learner-topbar__stats b{font-size:11px}
-.learner-topbar__actions{display:flex;align-items:center;gap:7px}
-.learner-language{width:38px;height:38px;min-height:38px;padding:0;border:1px solid #E8E5DF;border-radius:11px;background:#fffcf7;color:#EA580C;font-size:9px;font-weight:900}
-.learner-topbar .notification-menu__trigger{width:38px!important;height:38px!important;min-height:38px!important;padding:0!important;border:1px solid #E8E5DF!important;border-radius:11px!important;background:#ffffff!important;color:#253044!important;outline:none!important;box-shadow:none!important}
-.learner-topbar .notification-menu__trigger:hover{background:#f8fafc!important;border-color:#cbd5e1!important}
+.learner-topbar__actions{display:flex;align-items:center;gap:8px}
+
+/* Language switcher aligned with Hola AI button (height: 42px) */
+.learner-topbar .language-switcher,
+.guest-topbar .language-switcher,
+.language-switcher.is-compact {
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 3px !important;
+  border-radius: 13px !important;
+  border: 1px solid #E8E5DF !important;
+  background: rgba(255, 252, 247, 0.88) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  box-sizing: border-box !important;
+}
+.learner-topbar .language-switcher button,
+.guest-topbar .language-switcher button,
+.language-switcher.is-compact button {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  min-width: 44px !important;
+  padding: 0 8px !important;
+  border-radius: 9px !important;
+  border: 0 !important;
+  font-size: 11px !important;
+  font-weight: 750 !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  box-sizing: border-box !important;
+}
+
+/* Notification trigger aligned to 42px */
+.learner-topbar .notification-menu__trigger{width:42px!important;height:42px!important;min-height:42px!important;max-height:42px!important;padding:0!important;border:1px solid #E8E5DF!important;border-radius:13px!important;background:rgba(255, 252, 247, 0.88)!important;color:#253044!important;outline:none!important;box-shadow:0 1px 3px rgba(0, 0, 0, 0.02)!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important}
+.learner-topbar .notification-menu__trigger:hover{background:#ffffff!important;border-color:#cbd5e1!important}
 .learner-topbar .notification-menu__trigger:focus,.learner-topbar .notification-menu__trigger:focus-visible,.learner-topbar .notification-menu__trigger:active{outline:none!important;box-shadow:none!important;border-color:#E8E5DF!important}
+
+/* User Menu Profile trigger aligned to 42px, reset orange background */
+.learner-topbar .user-menu__trigger,
+.site-header .user-menu__trigger,
+.user-menu__trigger {
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 4px 10px 4px 5px !important;
+  border: 1px solid #E8E5DF !important;
+  border-radius: 13px !important;
+  background: rgba(255, 252, 247, 0.88) !important;
+  color: #253044 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  outline: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s ease !important;
+}
+.learner-topbar .user-menu__trigger:hover,
+.site-header .user-menu__trigger:hover,
+.user-menu__trigger:hover {
+  background: #ffffff !important;
+  border-color: #FED7AA !important;
+  color: #EA580C !important;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.1) !important;
+}
+.learner-topbar .user-menu__trigger[aria-expanded="true"],
+.user-menu__trigger[aria-expanded="true"] {
+  background: #ffffff !important;
+  border-color: #EA580C !important;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.15) !important;
+}
+.user-menu__avatar {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  background: #FFF7ED !important;
+  color: #EA580C !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+  border: 1.5px solid rgba(234, 88, 12, 0.2) !important;
+  padding: 0 !important;
+}
+.user-menu__avatar-image {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+.user-menu__name {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #253044 !important;
+  max-width: 120px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.user-menu__chevron {
+  color: #64748B !important;
+  width: 15px !important;
+  height: 15px !important;
+  stroke-width: 2.2 !important;
+  transition: transform 0.2s ease, color 0.2s ease !important;
+}
+.user-menu__trigger:hover .user-menu__chevron,
+.user-menu__trigger[aria-expanded="true"] .user-menu__chevron {
+  color: #EA580C !important;
+}
+.user-menu__trigger[aria-expanded="true"] .user-menu__chevron {
+  transform: rotate(180deg) !important;
+}
+
+/* Elegant and clean User Menu Logout Button (never loud orange) */
+.user-menu__logout,
+button.user-menu__logout {
+  width: calc(100% - 20px) !important;
+  margin: 8px 10px 10px 10px !important;
+  min-height: 42px !important;
+  height: 42px !important;
+  padding: 0 14px !important;
+  border-radius: 11px !important;
+  border: 1px solid #FEE2E2 !important;
+  background: #FFF5F5 !important;
+  color: #DC2626 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: all 0.18s ease !important;
+}
+.user-menu__logout svg,
+button.user-menu__logout svg {
+  width: 16px !important;
+  height: 16px !important;
+  color: #DC2626 !important;
+  flex-shrink: 0 !important;
+  stroke-width: 2 !important;
+  transition: transform 0.18s ease !important;
+}
+.user-menu__logout:hover,
+button.user-menu__logout:hover {
+  background: #FEE2E2 !important;
+  border-color: #FECACA !important;
+  color: #B91C1C !important;
+  transform: none !important;
+}
+.user-menu__logout:hover svg,
+button.user-menu__logout:hover svg {
+  color: #B91C1C !important;
+  transform: translateX(2px) !important;
+}
+.user-menu__logout:active,
+button.user-menu__logout:active {
+  background: #FECACA !important;
+  transform: scale(0.98) !important;
+}
 
 /* Main content and footer reflow */
 .learner-app__main{flex:1;width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;padding:16px clamp(20px,2.2vw,36px) 60px!important;box-sizing:border-box!important}

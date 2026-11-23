@@ -1,16 +1,18 @@
 import axiosClient from '@/shared/api/axiosClient';
+import { managementApiPath } from '@/shared/api/managementApiPath';
 
 const resultOf = (response) => response?.result ?? response;
 const paramsOf = filters => Object.fromEntries(['keyword', 'status', 'partOfSpeech', 'page', 'size']
   .filter(key => filters[key] !== '' && filters[key] != null).map(key => [key, filters[key]]));
+const vocabularyPath = (suffix = '') => managementApiPath(`/vocabulary${suffix}`);
 
 export const adminVocabularyService = {
   async search(filters = {}, options = {}) {
-    return resultOf(await axiosClient.get('/api/admin/vocabulary/search', { ...options, params: paramsOf(filters) }));
+    return resultOf(await axiosClient.get(vocabularyPath('/search'), { ...options, params: paramsOf(filters) }));
   },
   async list(filters = {}, options = {}) {
     return resultOf(
-      await axiosClient.get('/api/admin/vocabulary', {
+      await axiosClient.get(vocabularyPath(), {
         ...options,
         params: paramsOf(filters),
       })
@@ -19,7 +21,7 @@ export const adminVocabularyService = {
 
   async get(id, options = {}) {
     return resultOf(
-      await axiosClient.get(`/api/admin/vocabulary/${id}`, {
+      await axiosClient.get(vocabularyPath(`/${id}`), {
         ...options,
       })
     );
@@ -27,7 +29,7 @@ export const adminVocabularyService = {
 
   async create(data, options = {}) {
     return resultOf(
-      await axiosClient.post('/api/admin/vocabulary', data, {
+      await axiosClient.post(vocabularyPath(), data, {
         ...options,
       })
     );
@@ -35,30 +37,30 @@ export const adminVocabularyService = {
 
   async update(id, data, options = {}) {
     return resultOf(
-      await axiosClient.put(`/api/admin/vocabulary/${id}`, data, {
+      await axiosClient.put(vocabularyPath(`/${id}`), data, {
         ...options,
       })
     );
   },
 
   async submitReview(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/submit-review`, null, options));
+    return resultOf(await axiosClient.post(vocabularyPath(`/${id}/submit-review`), null, options));
   },
 
   async review(id, decision, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/review`, { decision }, options));
+    return resultOf(await axiosClient.post(vocabularyPath(`/${id}/review`), { decision }, options));
   },
   async approveAllPending(options = {}) {
-    return resultOf(await axiosClient.post('/api/admin/vocabulary/review/approve-all', null, options));
+    return resultOf(await axiosClient.post(vocabularyPath('/review/approve-all'), null, options));
   },
   async archive(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/archive`, null, options));
+    return resultOf(await axiosClient.post(vocabularyPath(`/${id}/archive`), null, options));
   },
   async restore(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/restore`, null, options));
+    return resultOf(await axiosClient.post(vocabularyPath(`/${id}/restore`), null, options));
   },
   async revise(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/vocabulary/${id}/revise`, null, options));
+    return resultOf(await axiosClient.post(vocabularyPath(`/${id}/revise`), null, options));
   },
 
 };

@@ -778,14 +778,14 @@ export function AiTutorPage() {
               if (!event.currentTarget.contains(event.relatedTarget)) setIsHistoryMenuOpen(false);
             }}
           >
-            <button type="button" className="tutor-mode-select-trigger" aria-expanded={isHistoryMenuOpen} aria-controls="conversation-history-options" onClick={() => setIsHistoryMenuOpen(open => !open)}>
+            <button type="button" className="tutor-mode-select-trigger secondary" aria-expanded={isHistoryMenuOpen} aria-controls="conversation-history-options" onClick={() => setIsHistoryMenuOpen(open => !open)}>
               <span className="tutor-mode-select-current">{selectedHistoryOption.label} · {selectedHistoryOption.count}</span>
               <ChevronDown className="tutor-mode-select-chevron" size={16} aria-hidden="true" />
             </button>
             {isHistoryMenuOpen && (
               <div className="tutor-mode-menu" id="conversation-history-options" role="group" aria-label={isEn ? 'Conversation type' : 'Loại hội thoại'}>
                 {historyOptions.map(option => (
-                  <button key={option.id} type="button" className={`tutor-mode-option ${historyKind === option.id ? 'is-active' : ''}`} aria-pressed={historyKind === option.id} onClick={() => {
+                  <button key={option.id} type="button" className={`tutor-mode-option secondary ${historyKind === option.id ? 'is-active' : ''}`} aria-pressed={historyKind === option.id} onClick={() => {
                     setHistoryKind(option.id);
                     setIsHistoryMenuOpen(false);
                     historyMenuRef.current?.querySelector('button')?.focus();
@@ -984,7 +984,7 @@ export function AiTutorPage() {
                     audioFeedback.playTap();
                     showToast(isEn ? `Speech speed: ${newRate}x` : `Tốc độ phát âm: ${newRate}x`);
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-white border border-[#DECBB4] text-[#78685B] hover:text-[#202124] text-xs font-bold hover:bg-[#FFF9EE] transition-colors shadow-2xs cursor-pointer"
+                  className="tutor-speed-btn secondary px-3 py-1.5 rounded-xl bg-white border border-[#DECBB4] text-[#78685B] hover:text-[#202124] text-xs font-bold hover:bg-[#FFF9EE] transition-colors shadow-2xs cursor-pointer"
                   title={isEn ? "Toggle speech speed (1.0x Normal / 0.65x Slow)" : "Chuyển đổi tốc độ phát âm (1.0x Chuẩn / 0.65x Chậm)"}
                 >
                   <BilingualText
@@ -1005,7 +1005,7 @@ export function AiTutorPage() {
                   type="button"
                   id="tutor-mode-select"
                   disabled={isSending}
-                  className="tutor-mode-select-trigger"
+                  className="tutor-mode-select-trigger secondary"
                   aria-haspopup="listbox"
                   aria-expanded={isModeMenuOpen}
                   aria-labelledby="tutor-mode-select-label tutor-mode-select"
@@ -1033,7 +1033,7 @@ export function AiTutorPage() {
                             type="button"
                             role="option"
                             aria-selected={isActive}
-                            className={`tutor-mode-option ${isActive ? 'is-active' : ''}`}
+                            className={`tutor-mode-option secondary ${isActive ? 'is-active' : ''}`}
                             onClick={() => {
                               handleSwitchMode(mode.id);
                               setIsModeMenuOpen(false);
@@ -1197,7 +1197,7 @@ export function AiTutorPage() {
                               onClick={() =>
                                 handleSaveWordToVocabulary(item.word, item.meaning)
                               }
-                              className="px-2.5 py-1 rounded-xl bg-[#FFF9EE] hover:bg-[#F5E1D8] border border-[#DECBB4] text-[#431914] text-[11px] font-bold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer group/vocab"
+                              className="secondary px-2.5 py-1 rounded-xl bg-[#FFF9EE] hover:bg-[#F5E1D8] border border-[#DECBB4] text-[#431914] text-[11px] font-bold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer group/vocab"
                               title={isEn ? `Save "${item.word}" to vocabulary notebook` : `Lưu từ "${item.word}" vào sổ từ vựng`}
                             >
                               <BookmarkPlus
@@ -1221,7 +1221,7 @@ export function AiTutorPage() {
                         <button
                           type="button"
                           onClick={() => handleCopy(msg.id, getDisplayMessageText(msg.text))}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-stone-500 hover:text-orange-600 transition-colors bg-transparent hover:!bg-transparent focus:!bg-transparent border-0 cursor-pointer p-0 shadow-none hover:!shadow-none"
+                          className="secondary inline-flex items-center gap-1 text-[11px] font-semibold text-stone-500 hover:text-orange-600 transition-colors bg-transparent hover:!bg-transparent focus:!bg-transparent border-0 cursor-pointer p-0 shadow-none hover:!shadow-none"
                           title={isEn ? "Copy message" : "Sao chép nội dung"}
                         >
                           {isCopied ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
@@ -1230,7 +1230,7 @@ export function AiTutorPage() {
                         <button
                           type="button"
                           onClick={() => handleSpeak(msg.id, getDisplayMessageText(msg.text))}
-                          className={`inline-flex items-center gap-1 text-[11px] font-semibold transition-colors bg-transparent hover:!bg-transparent focus:!bg-transparent border-0 cursor-pointer p-0 shadow-none hover:!shadow-none ${isSpeaking ? 'text-orange-600 font-bold' : 'text-stone-500 hover:text-orange-600'}`}
+                          className={`secondary inline-flex items-center gap-1 text-[11px] font-semibold transition-colors bg-transparent hover:!bg-transparent focus:!bg-transparent border-0 cursor-pointer p-0 shadow-none hover:!shadow-none ${isSpeaking ? 'text-orange-600 font-bold' : 'text-stone-500 hover:text-orange-600'}`}
                           title={isSpeaking ? bilingualLabel('Dừng phát âm', 'Stop speech') : bilingualLabel('Nghe phát âm', 'Listen')}
                         >
                           {isSpeaking ? <VolumeX size={12} className="text-orange-600 animate-pulse" /> : <Volume2 size={12} />}
@@ -1354,7 +1354,7 @@ export function AiTutorPage() {
                 type="button"
                 onClick={() => handleSendMessage(prompt)}
                 disabled={isSending}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#FFF9EE] border border-[#DECBB4]/70 hover:border-[#DA251D] text-xs font-semibold text-[#202124] shrink-0 transition-all shadow-2xs disabled:opacity-50 cursor-pointer"
+                className="tutor-quick-prompt secondary px-3 py-1.5 rounded-xl bg-white hover:bg-[#FFF9EE] border border-[#DECBB4]/70 hover:border-[#DA251D] text-xs font-semibold text-[#202124] shrink-0 transition-all shadow-2xs disabled:opacity-50 cursor-pointer"
               >
                 {prompt}
               </button>
@@ -1368,9 +1368,9 @@ export function AiTutorPage() {
               type="button"
               onClick={handleToggleVoiceInput}
               disabled={isSending}
-              className={`h-10 w-10 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+              className={`tutor-mic-btn secondary h-10 w-10 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
                 isListening
-                  ? 'bg-red-600 text-white animate-pulse ring-4 ring-red-200'
+                  ? 'is-listening bg-red-600 text-white animate-pulse ring-4 ring-red-200'
                   : 'bg-[#FAF8F5] hover:bg-[#F5E1D8] text-[#DA251D] border border-[#DECBB4]'
               }`}
               title={
@@ -1402,7 +1402,7 @@ export function AiTutorPage() {
             <button
               type="submit"
               disabled={!inputText.trim() || isSending || !currentSession}
-              className={`h-10 w-10 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all shrink-0 cursor-pointer ${
+              className={`tutor-send-btn secondary h-10 w-10 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all shrink-0 cursor-pointer ${
                 inputText.trim() && !isSending && currentSession
                   ? 'bg-[#DA251D] hover:bg-[#89221E] text-white shadow-[0_3px_0_#89221E] active:translate-y-0.5 active:shadow-none'
                   : 'bg-stone-200 text-stone-400 cursor-not-allowed'

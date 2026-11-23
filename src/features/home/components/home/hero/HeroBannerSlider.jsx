@@ -88,13 +88,21 @@ export function HeroBannerSlider() {
       </div>
 
       {totalSlides > 1 && <div className="guest-cultural-banner__arrows">
-        <button type="button" onClick={() => goTo(currentSlide - 1)} aria-label={t('previousSlide')}><ChevronLeft size={22} /></button>
-        <button type="button" onClick={() => goTo(currentSlide + 1)} aria-label={t('nextSlide')}><ChevronRight size={22} /></button>
+        <button type="button" className="guest-cultural-banner__arrow-btn secondary" onClick={() => goTo(currentSlide - 1)} aria-label={t('previousSlide')}><ChevronLeft size={20} strokeWidth={2.2} /></button>
+        <button type="button" className="guest-cultural-banner__arrow-btn secondary" onClick={() => goTo(currentSlide + 1)} aria-label={t('nextSlide')}><ChevronRight size={20} strokeWidth={2.2} /></button>
       </div>}
 
       {totalSlides > 1 && <div className="guest-cultural-banner__pagination" role="group" aria-label={t('carouselLabel')}>
         {banners.map((banner, index) => (
-          <button key={banner.id ?? banner.code ?? index} type="button" className={index === currentSlide ? 'is-active' : ''} onClick={() => goTo(index)} title={slideTitles[index]} aria-label={t('goToSlide', { number: index + 1, title: slideTitles[index] })} aria-current={index === currentSlide ? 'true' : undefined}>
+          <button
+            key={banner.id ?? banner.code ?? index}
+            type="button"
+            className={`guest-cultural-banner__dot-btn secondary ${index === currentSlide ? 'is-active' : ''}`}
+            onClick={() => goTo(index)}
+            title={slideTitles[index]}
+            aria-label={t('goToSlide', { number: index + 1, title: slideTitles[index] })}
+            aria-current={index === currentSlide ? 'true' : undefined}
+          >
             <span>{index === currentSlide && <i key={`${currentSlide}-${timerKey}`} className={paused ? 'is-paused' : ''} />}</span>
           </button>
         ))}

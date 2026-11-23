@@ -68,7 +68,7 @@ export function LanguageSwitcher({ compact = false, className = '' }) {
     >
       <button
         type="button"
-        className={`secondary ${language === 'en' ? 'is-active' : ''}`}
+        className={`language-switcher-btn secondary ${language === 'en' ? 'is-active' : ''}`}
         aria-pressed={language === 'en'}
         onClick={() => changeLanguage('en')}
         title="English"
@@ -76,7 +76,7 @@ export function LanguageSwitcher({ compact = false, className = '' }) {
           background: 'linear-gradient(135deg, #ff7a00 0%, #ea580c 100%)',
           color: '#ffffff',
           borderColor: 'transparent',
-          boxShadow: '0 4px 10px rgba(234, 88, 12, 0.28)',
+          boxShadow: '0 3px 8px rgba(234, 88, 12, 0.28)',
           cursor: 'default',
         } : undefined}
       >
@@ -85,7 +85,7 @@ export function LanguageSwitcher({ compact = false, className = '' }) {
       </button>
       <button
         type="button"
-        className={`secondary ${language === 'vi' ? 'is-active' : ''}`}
+        className={`language-switcher-btn secondary ${language === 'vi' ? 'is-active' : ''}`}
         aria-pressed={language === 'vi'}
         onClick={() => changeLanguage('vi')}
         title="Tiếng Việt"
@@ -93,7 +93,7 @@ export function LanguageSwitcher({ compact = false, className = '' }) {
           background: 'linear-gradient(135deg, #ff7a00 0%, #ea580c 100%)',
           color: '#ffffff',
           borderColor: 'transparent',
-          boxShadow: '0 4px 10px rgba(234, 88, 12, 0.28)',
+          boxShadow: '0 3px 8px rgba(234, 88, 12, 0.28)',
           cursor: 'default',
         } : undefined}
       >

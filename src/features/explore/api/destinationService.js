@@ -1,4 +1,5 @@
 import axiosClient from '@/shared/api/axiosClient';
+import { managementApiPath } from '@/shared/api/managementApiPath';
 
 const resultOf = response => {
   if (response?.success === false || (typeof response?.code === 'number' && response.code !== 1000)) {
@@ -11,6 +12,7 @@ const resultOf = response => {
 const paramsOf = (filters, keys) => Object.fromEntries(keys
   .filter(key => filters[key] !== '' && filters[key] != null)
   .map(key => [key, filters[key]]));
+const destinationManagementPath = (suffix = '') => managementApiPath(`/destinations${suffix}`);
 
 export const destinationService = {
   async list(filters = {}, options = {}) {
@@ -39,35 +41,35 @@ export const destinationService = {
 
 export const adminDestinationService = {
   async list(filters = {}, options = {}) {
-    return resultOf(await axiosClient.get('/api/admin/destinations', {
+    return resultOf(await axiosClient.get(destinationManagementPath(), {
       ...options, params: paramsOf(filters, ['keyword', 'status', 'region', 'page', 'size']),
     }));
   },
   async get(id, options = {}) {
-    return resultOf(await axiosClient.get(`/api/admin/destinations/${encodeURIComponent(id)}`, options));
+    return resultOf(await axiosClient.get(destinationManagementPath(`/${encodeURIComponent(id)}`), options));
   },
   async create(payload, options = {}) {
-    return resultOf(await axiosClient.post('/api/admin/destinations', payload, options));
+    return resultOf(await axiosClient.post(destinationManagementPath(), payload, options));
   },
   async update(id, payload, options = {}) {
-    return resultOf(await axiosClient.put(`/api/admin/destinations/${encodeURIComponent(id)}`, payload, options));
+    return resultOf(await axiosClient.put(destinationManagementPath(`/${encodeURIComponent(id)}`), payload, options));
   },
   async updateManagement(id, destination, exploreContent, options = {}) {
-    return resultOf(await axiosClient.put(`/api/admin/destinations/${encodeURIComponent(id)}/management`, { destination, exploreContent }, options));
+    return resultOf(await axiosClient.put(destinationManagementPath(`/${encodeURIComponent(id)}/management`), { destination, exploreContent }, options));
   },
   async submitReview(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/submit-review`, null, options));
+    return resultOf(await axiosClient.post(destinationManagementPath(`/${encodeURIComponent(id)}/submit-review`), null, options));
   },
   async review(id, decision, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/review`, { decision }, options));
+    return resultOf(await axiosClient.post(destinationManagementPath(`/${encodeURIComponent(id)}/review`), { decision }, options));
   },
   async archive(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/archive`, null, options));
+    return resultOf(await axiosClient.post(destinationManagementPath(`/${encodeURIComponent(id)}/archive`), null, options));
   },
   async restore(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/restore`, null, options));
+    return resultOf(await axiosClient.post(destinationManagementPath(`/${encodeURIComponent(id)}/restore`), null, options));
   },
   async revise(id, options = {}) {
-    return resultOf(await axiosClient.post(`/api/admin/destinations/${encodeURIComponent(id)}/revise`, null, options));
+    return resultOf(await axiosClient.post(destinationManagementPath(`/${encodeURIComponent(id)}/revise`), null, options));
   },
 };

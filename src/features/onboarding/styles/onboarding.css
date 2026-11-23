@@ -2422,24 +2422,45 @@ label.question-option.selected:active,
 }
 
 .ob-grid.six .ob-selection-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  gap: 6px !important;
+  width: 100% !important;
 }
 
 .ob-grid.six .ob-selection-copy strong {
-  font-size: 16px;
-  font-weight: 700;
-  color: #111827;
-  letter-spacing: -0.2px;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  letter-spacing: -0.2px !important;
+  text-align: left !important;
+  width: 100% !important;
 }
 
 .ob-grid.six .ob-selection-copy small {
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #4B5563;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: #4B5563 !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.ob-grid.six .ob-selection-copy .bilingual-text,
+.ob-grid.six .ob-selection-copy .bilingual-text__current,
+.ob-grid.six .ob-selection-copy .bilingual-text__vi,
+.ob-grid.six .ob-selection-copy .bilingual-text__en,
+.ob-selection .ob-selection-copy .bilingual-text,
+.ob-selection .ob-selection-copy .bilingual-text__current,
+.ob-selection .ob-selection-copy .bilingual-text__vi,
+.ob-selection .ob-selection-copy .bilingual-text__en {
+  text-align: left !important;
+  justify-items: start !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  display: block !important;
 }
 
 /* Tier Pill in Quiz Runner */
