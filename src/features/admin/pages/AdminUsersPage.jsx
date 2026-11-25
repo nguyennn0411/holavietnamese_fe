@@ -21,10 +21,10 @@ import {
 } from 'lucide-react';
 
 const PAGE_SIZE = 10;
-const EDITABLE_ROLES = ['LEARNER', 'CONTENT'];
+const EDITABLE_ROLES = ['LEARNER', 'CONTENT_CREATOR'];
 const ROLE_LABELS = {
   LEARNER: { vi: 'Học viên', en: 'Learner' },
-  CONTENT: { vi: 'Quản lý nội dung', en: 'Content' },
+  CONTENT_CREATOR: { vi: 'Người sáng tạo nội dung', en: 'Content Creator' },
   ADMIN: { vi: 'Quản trị viên', en: 'Administrator' },
 };
 
@@ -39,7 +39,7 @@ const STATUS_OPTIONS = [
 const ROLE_OPTIONS = [
   { value: '', label: bilingualLabel('Tất cả vai trò', 'All roles'), icon: Users, iconColor: '#64748B' },
   { value: 'LEARNER', label: bilingualLabel('Học viên', 'Learner'), icon: GraduationCap, iconColor: '#2563EB' },
-  { value: 'CONTENT', label: bilingualLabel('Quản lý nội dung', 'Content Manager'), icon: PenTool, iconColor: '#EA580C' },
+  { value: 'CONTENT_CREATOR', label: bilingualLabel('Người sáng tạo nội dung', 'Content Creator'), icon: PenTool, iconColor: '#EA580C' },
   { value: 'ADMIN', label: bilingualLabel('Quản trị viên', 'Administrator'), icon: Shield, iconColor: '#DC2626' },
 ];
 
@@ -57,10 +57,10 @@ const EDITABLE_ROLE_DETAILS = [
     descEn: 'Learner account participating in courses, pronunciation practice, quizzes, and AI conversations.',
   },
   {
-    key: 'CONTENT',
-    nameVi: 'Quản lý nội dung',
-    nameEn: 'Content Manager',
-    code: 'CONTENT',
+    key: 'CONTENT_CREATOR',
+    nameVi: 'Người sáng tạo nội dung',
+    nameEn: 'Content Creator',
+    code: 'CONTENT_CREATOR',
     icon: PenTool,
     iconColor: '#EA580C',
     iconBg: '#FFF7ED',
@@ -460,7 +460,7 @@ export function AdminUsersPage() {
                   const isActive = user.status === 'ACTIVE';
                   const roleBadgeClass = userRole === 'ADMIN'
                     ? 'admin-badge admin-badge-danger'
-                    : userRole === 'CONTENT'
+                    : userRole === 'CONTENT_CREATOR'
                     ? 'admin-badge admin-badge-warning'
                     : 'admin-badge admin-badge-info';
 
@@ -581,7 +581,7 @@ export function AdminUsersPage() {
                 </strong>
                 <span
                   className={
-                    String(roleUser.role || '').replace(/^ROLE_/, '') === 'CONTENT'
+                    String(roleUser.role || '').replace(/^ROLE_/, '') === 'CONTENT_CREATOR'
                       ? 'admin-badge admin-badge-warning'
                       : 'admin-badge admin-badge-info'
                   }

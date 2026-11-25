@@ -11,7 +11,7 @@ import { AdminPagination } from '@/shared/components/common/AdminPagination';
 
 export function AdminCultureListPage() {
   const { confirm, confirmationDialog } = useConfirmDialog();
-  const { isAdmin, isContentManager } = useAuth();
+  const { isAdmin, isContentCreator } = useAuth();
   const cultureBasePath = isAdmin ? '/admin/culture' : '/content/culture';
   const categoriesBasePath = isAdmin ? '/admin/culture-categories' : '/content/culture-categories';
   const label = useBilingualLabel();
@@ -247,10 +247,10 @@ export function AdminCultureListPage() {
           <p style={{ margin: 0, color: 'var(--color-forest)', fontSize: '14px' }}>
             <BilingualText
               vi={isAdmin
-                ? "Kiểm duyệt các bài viết văn hóa từ Content Manager, phê duyệt xuất bản hoặc yêu cầu chỉnh sửa."
+                ? "Kiểm duyệt các bài viết văn hóa từ Content Creator, phê duyệt xuất bản hoặc yêu cầu chỉnh sửa."
                 : "Soạn thảo bài viết, biên tập nội dung văn hóa và gửi Admin kiểm duyệt để xuất bản cho học viên."}
               en={isAdmin
-                ? "Review culture articles from Content Managers, approve publication, or request revisions."
+                ? "Review culture articles from Content Creators, approve publication, or request revisions."
                 : "Author articles, edit culture content, and submit for Admin approval to publish."}
             />
           </p>
@@ -490,7 +490,7 @@ export function AdminCultureListPage() {
                             </button>
                           )
                         ) : (
-                          // Content Manager actions
+                          // Content Creator actions
                           article.status === 'DRAFT' ? (
                             <button
                               type="button"

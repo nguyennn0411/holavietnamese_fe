@@ -27,7 +27,7 @@ export function AdminImportHistoryPage() {
   return <section className="content-import-page content-import-detail">
     <Breadcrumb items={[{ label: label('Từ vựng', 'Vocabulary'), to: managementRoutes.vocabulary }, { label: label('Nhập dữ liệu', 'Import Data'), to: managementRoutes.importData }, { label: label('Lịch sử', 'History') }]} />
     <PageHeader
-      eyebrow={<BilingualText vi="Quản lý nội dung" en="Content Management" />}
+      eyebrow={<BilingualText vi="Người sáng tạo nội dung" en="Content Management" />}
       title={<BilingualText vi="Lịch sử import" en="Import History" />}
       description={<BilingualText vi="Xem bản xem trước, kết quả và lỗi của những lần nhập dữ liệu." en="View previews, results, and logs of data import operations." />}
       actions={<Link className="button" to={managementRoutes.importData}><BilingualText vi="Nhập dữ liệu" en="Import Data" /></Link>}

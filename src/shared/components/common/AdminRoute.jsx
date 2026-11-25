@@ -22,7 +22,7 @@ export function AdminRoute() {
 
   const role = String(user?.role || '').replace(/^ROLE_/, '');
   const isAdmin = role === 'ADMIN';
-  const isContentManager = role === 'CONTENT';
+  const isContentCreator = role === 'CONTENT_CREATOR';
   const vocabularyPath = ['/content/vocabulary', '/content/regional-language', '/admin/vocabulary', '/admin/regional-language']
     .some(path => location.pathname === path || location.pathname.startsWith(`${path}/`));
   const importPath = ['/content/import', '/content/imports', '/admin/import', '/admin/imports']
@@ -37,7 +37,7 @@ export function AdminRoute() {
         : culturePath ? canReadCulture(user)
           : null;
 
-  if (!isAdmin && !isContentManager && moduleAllowed !== true) {
+  if (!isAdmin && !isContentCreator && moduleAllowed !== true) {
     return (
       <Navigate
         to="/forbidden"
@@ -47,7 +47,7 @@ export function AdminRoute() {
   }
 
   // Phân rõ đường dẫn theo vai trò:
-  // Admin luôn dùng /admin/*, Content Manager luôn dùng /content/*
+  // Admin luôn dùng /admin/*, Content Creator luôn dùng /content/*
   const contentManagerPrefixes = [
     '/content/culture',
     '/content/culture-categories',
@@ -83,7 +83,7 @@ export function AdminRoute() {
     }
   }
 
-  if (isContentManager && !isAdmin) {
+  if (isContentCreator && !isAdmin) {
     for (const prefix of adminPrefixes) {
       if (location.pathname === prefix || location.pathname.startsWith(`${prefix}/`)) {
         return <Navigate to={location.pathname.replace(/^\/admin\//, '/content/') + location.search} replace />;

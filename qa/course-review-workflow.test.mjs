@@ -4,7 +4,7 @@ import test from 'node:test';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
-test('content manager and admin course review UI uses the protected workflow', () => {
+test('content creator and admin course review UI uses the protected workflow', () => {
   const page = read('src/features/admin/pages/AdminContentPages.jsx');
   const studio = read('src/features/learning/admin/components/CourseStudio.jsx');
   const service = read('src/features/learning/api/contentService.js');
@@ -23,13 +23,13 @@ test('content manager and admin course review UI uses the protected workflow', (
   assert.doesNotMatch(service, /\/api\/admin\/courses\/\$\{id\}\/export/);
 });
 
-test('learner header exposes Manage Courses to content managers', () => {
+test('learner header exposes Manage Courses to content creators', () => {
   const shell = read('src/shared/components/learner/LearnerShell.jsx');
   const menu = read('src/shared/components/layout/UserMenu.jsx');
 
-  assert.match(shell, /const isContentManager = role === 'CONTENT'/);
-  assert.match(shell, /<UserMenu user=\{user\} isAdmin=\{isAdmin\} isContentManager=\{isContentManager\}/);
-  assert.match(menu, /isContentManager && !isAdmin/);
+  assert.match(shell, /const isContentCreator = role === 'CONTENT_CREATOR'/);
+  assert.match(shell, /<UserMenu user=\{user\} isAdmin=\{isAdmin\} isContentCreator=\{isContentCreator\}/);
+  assert.match(menu, /isContentCreator && !isAdmin/);
   assert.match(menu, /to=\{ROUTES\.CONTENT_COURSES\}/);
   assert.match(menu, /en="Manage Courses"/);
 });

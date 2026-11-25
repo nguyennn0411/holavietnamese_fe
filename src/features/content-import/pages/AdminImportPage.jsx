@@ -16,9 +16,9 @@ export function AdminImportPage() {
   const label = useBilingualLabel();
   const types = useAsyncResource(useCallback(signal => contentImportService.types({ signal }), []));
   return <section className="content-import-page">
-    <Breadcrumb items={[{ label: label('Quản lý nội dung', 'Content Management') }, { label: label('Nhập từ vựng', 'Vocabulary Import') }]} />
+    <Breadcrumb items={[{ label: label('Người sáng tạo nội dung', 'Content Management') }, { label: label('Nhập từ vựng', 'Vocabulary Import') }]} />
     <PageHeader
-      eyebrow={<BilingualText vi="Quản lý nội dung" en="Content Management" />}
+      eyebrow={<BilingualText vi="Người sáng tạo nội dung" en="Content Management" />}
       title={<BilingualText vi="Nhập từ vựng từ Excel" en="Import Vocabulary from Excel" />}
       description={<BilingualText vi="Kiểm tra dữ liệu Excel trước khi nhập vào kho từ vựng." en="Validate Excel data before importing it into the vocabulary library." />}
       actions={<Link className="button secondary" to={managementRoutes.importHistory}><BilingualText vi="Lịch sử import" en="Import History" /></Link>}

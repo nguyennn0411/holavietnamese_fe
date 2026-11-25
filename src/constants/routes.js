@@ -108,7 +108,7 @@ export const ROUTES = {
   ADMIN_XP_RULES: '/admin/xp-rules',
   ADMIN_AUDIT_LOGS: '/admin/audit-logs',
 
-  // Content Manager data tools
+  // Content Creator data tools
   CONTENT_REGIONAL_LANGUAGE: '/content/vocabulary/regional-language',
   CONTENT_IMPORT: '/content/import',
   CONTENT_IMPORT_HISTORY: '/content/imports',
@@ -116,7 +116,7 @@ export const ROUTES = {
   CONTENT_DESTINATIONS: '/content/destinations',
   CONTENT_DESTINATION_DETAIL: '/content/destinations/:id',
 
-  // Content Manager Văn hóa
+  // Content Creator Văn hóa
   CONTENT_CULTURE: '/content/culture',
   CONTENT_CULTURE_EDIT: '/content/culture/:id',
   CONTENT_CULTURE_NEW: '/content/culture/new',

@@ -13,8 +13,8 @@ const localStorageStub = initial => {
   };
 };
 
-test('CONTENT and ADMIN use different management API namespaces', async () => {
-  globalThis.localStorage = localStorageStub({ role: 'CONTENT' });
+test('CONTENT_CREATOR and ADMIN use different management API namespaces', async () => {
+  globalThis.localStorage = localStorageStub({ role: 'CONTENT_CREATOR' });
   const paths = await import(`${moduleUrl.href}?separation=${Date.now()}`);
   assert.equal(paths.managementApiPath('/courses'), '/api/content/courses');
   assert.equal(paths.managementResourcePath('/lessons/1'), '/content/lessons/1');
@@ -30,7 +30,7 @@ test('backend security keeps admin and content namespaces exclusive', () => {
     new URL('../../holavietnamese-be/src/main/java/com/sep490/backend/modules/auth/config/SecurityConfig.java', import.meta.url),
     'utf8',
   );
-  assert.match(security, /requestMatchers\("\/api\/content\/\*\*"\)\.hasRole\("CONTENT"\)/);
+  assert.match(security, /requestMatchers\("\/api\/content\/\*\*"\)\.hasRole\("CONTENT_CREATOR"\)/);
   assert.match(security, /requestMatchers\("\/api\/admin\/\*\*"\)\.hasRole\("ADMIN"\)/);
-  assert.doesNotMatch(security, /requestMatchers\("\/api\/admin\/\*\*"\)\.hasAnyRole\("ADMIN", "CONTENT"\)/);
+  assert.doesNotMatch(security, /requestMatchers\("\/api\/admin\/\*\*"\)\.hasAnyRole\("ADMIN", "CONTENT_CREATOR"\)/);
 });
