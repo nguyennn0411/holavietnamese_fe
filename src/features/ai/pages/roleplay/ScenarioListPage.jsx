@@ -40,19 +40,6 @@ export function ScenarioListPage() {
 
   return (
     <div className="relative w-full min-h-[calc(100vh-80px)] overflow-hidden">
-      {/* Subtle Heritage Dong Son Bronze Drum Background Watermark */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center overflow-hidden select-none"
-        aria-hidden="true"
-      >
-        <div
-          className="w-[min(96vw,1000px)] h-[min(96vw,1000px)] sm:w-[920px] sm:h-[920px] lg:w-[1100px] lg:h-[1100px] aspect-square opacity-[0.05] bg-contain bg-center bg-no-repeat transform-gpu"
-          style={{
-            backgroundImage: `url('/design/dong-son-drum.webp')`,
-          }}
-        />
-      </div>
-
       <div className="relative z-10 w-full max-w-full px-0 py-6 space-y-8 text-left">
         {/* Header Hero Banner */}
         <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] border border-[#E8E5DF] p-8 sm:p-12 shadow-sm">

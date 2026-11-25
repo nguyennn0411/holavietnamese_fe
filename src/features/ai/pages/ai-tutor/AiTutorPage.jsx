@@ -586,19 +586,6 @@ export function AiTutorPage() {
 
   return (
     <div className="ai-tutor-screen-root relative w-full min-h-[calc(100vh-80px)] overflow-hidden">
-      {/* Subtle Heritage Dong Son Bronze Drum Background Watermark (4-6% opacity) */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center overflow-hidden select-none"
-        aria-hidden="true"
-      >
-        <div
-          className="w-[min(96vw,1000px)] h-[min(96vw,1000px)] sm:w-[920px] sm:h-[920px] lg:w-[1100px] lg:h-[1100px] aspect-square opacity-[0.05] bg-contain bg-center bg-no-repeat transform-gpu"
-          style={{
-            backgroundImage: `url('/design/dong-son-drum.webp')`,
-          }}
-        />
-      </div>
-
       <div className="relative z-10 w-full max-w-full px-0 py-6 space-y-6">
         {confirmationDialog}
 
