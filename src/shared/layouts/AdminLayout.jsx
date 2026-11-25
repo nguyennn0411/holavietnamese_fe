@@ -19,7 +19,6 @@ import {
   Landmark,
   FolderTree,
   Sparkles,
-  Sliders,
   Trophy,
   Zap,
   ShieldCheck,
@@ -61,7 +60,6 @@ const groups = [
       [ROUTES.ADMIN_CULTURE, 'Văn hóa', 'Culture', Landmark],
       [ROUTES.ADMIN_CULTURE_CATEGORIES, 'Danh mục văn hóa', 'Culture Categories', FolderTree],
       [ROUTES.ADMIN_AI_SCENARIOS, 'Kịch bản AI', 'AI Scenarios', Sparkles],
-      [ROUTES.ADMIN_AI_SETTINGS, 'Cấu hình AI', 'AI Configuration', Sliders],
     ],
   },
   {

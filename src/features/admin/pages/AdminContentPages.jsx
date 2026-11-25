@@ -17,7 +17,7 @@ import { AdminActionGroup, AdminActionLink } from '@/shared/components/common/Ad
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
 import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
-import { Search, X, Eye, Pencil, Check, Info, Clock } from 'lucide-react';
+import { Search, X, Eye, Pencil, Check, Info, Clock, Layers, AlertCircle, Archive } from 'lucide-react';
 
 const CONTENT_STATUS_DOTS = {
   DRAFT: '#F59E0B',
@@ -27,13 +27,83 @@ const CONTENT_STATUS_DOTS = {
   ARCHIVED: '#64748B',
 };
 
+const STATUS_BANNER_CONFIG = {
+  '': {
+    labelVi: 'Tất cả khóa học',
+    labelEn: 'All Courses',
+    icon: Layers,
+    hintVi: 'Hiển thị danh sách toàn bộ khóa học trên hệ thống ở mọi trạng thái.',
+    hintEn: 'Displaying all courses across all statuses.',
+    emptyTitleVi: 'Chưa có khóa học nào',
+    emptyTitleEn: 'No courses found',
+    emptyDescVi: 'Hệ thống chưa có khóa học nào hoặc hãy thử từ khóa tìm kiếm khác.',
+    emptyDescEn: 'No courses available or try another search keyword.',
+  },
+  REVIEW: {
+    labelVi: 'Chờ Admin duyệt',
+    labelEn: 'Pending Review',
+    icon: Clock,
+    hintVi: 'Các bản nháp Content Manager đã gửi sẽ xuất hiện ở mục Chờ Admin duyệt.',
+    hintEn: 'Drafts submitted by Content Managers appear in Pending review.',
+    emptyTitleVi: 'Không có khóa học chờ duyệt',
+    emptyTitleEn: 'No courses pending review',
+    emptyDescVi: 'Các khóa học Content Manager gửi duyệt sẽ hiển thị tại đây.',
+    emptyDescEn: 'Courses submitted by Content Managers will appear here.',
+  },
+  DRAFT: {
+    labelVi: 'Bản nháp',
+    labelEn: 'Draft Courses',
+    icon: Pencil,
+    hintVi: 'Các khóa học đang trong quá trình biên soạn, chưa gửi yêu cầu kiểm duyệt.',
+    hintEn: 'Courses currently being authored, not yet submitted for review.',
+    emptyTitleVi: 'Không có khóa học bản nháp',
+    emptyTitleEn: 'No draft courses',
+    emptyDescVi: 'Không có khóa học nào đang ở trạng thái bản nháp.',
+    emptyDescEn: 'There are no courses currently in draft status.',
+  },
+  REJECTED: {
+    labelVi: 'Cần chỉnh sửa',
+    labelEn: 'Needs Revision / Rejected',
+    icon: AlertCircle,
+    hintVi: 'Các khóa học cần Content Manager cập nhật và chỉnh sửa lại theo yêu cầu.',
+    hintEn: 'Courses requiring updates and revisions from Content Managers.',
+    emptyTitleVi: 'Không có khóa học cần chỉnh sửa',
+    emptyTitleEn: 'No rejected courses',
+    emptyDescVi: 'Hiện không có khóa học nào bị từ chối hoặc cần chỉnh sửa lại.',
+    emptyDescEn: 'There are currently no courses requiring revisions.',
+  },
+  PUBLISHED: {
+    labelVi: 'Đã xuất bản',
+    labelEn: 'Published Courses',
+    icon: Check,
+    hintVi: 'Các khóa học đã duyệt thành công và đang hiển thị công khai cho học viên.',
+    hintEn: 'Courses successfully approved and live for learners.',
+    emptyTitleVi: 'Không có khóa học đã xuất bản',
+    emptyTitleEn: 'No published courses',
+    emptyDescVi: 'Chưa có khóa học nào được xuất bản công khai.',
+    emptyDescEn: 'There are no published courses yet.',
+  },
+  ARCHIVED: {
+    labelVi: 'Lưu trữ',
+    labelEn: 'Archived Courses',
+    icon: Archive,
+    hintVi: 'Các khóa học đã tạm ngưng hoặc được đưa vào kho lưu trữ.',
+    hintEn: 'Courses paused or retired to the archive.',
+    emptyTitleVi: 'Không có khóa học lưu trữ',
+    emptyTitleEn: 'No archived courses',
+    emptyDescVi: 'Không có khóa học nào trong kho lưu trữ.',
+    emptyDescEn: 'There are no courses in the archive.',
+  },
+};
+
 const labels = { courses: 'Khóa học', lessons: 'Bài học', quizzes: 'Quiz' };
 
 export function AdminContentListPage({ kind }) {
   const { isAdmin, isContentManager } = useAuth();
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState(() => (isAdmin && kind === 'courses' ? 'REVIEW' : ''));
+  // Default to all statuses as requested by user (previously: isAdmin && kind === 'courses' ? 'REVIEW' : '')
+  const [status, setStatus] = useState('');
   const [page, setPage] = useState(0);
   const [creating, setCreating] = useState(false);
   const navigate = useNavigate();
@@ -128,35 +198,44 @@ export function AdminContentListPage({ kind }) {
         actions={action}
       />
 
-      {reviewQueue && (
-        <div className="review-tabs-bar">
-          <div className="review-tabs-group" role="tablist" aria-label={bilingualLabel('Bộ lọc kiểm duyệt khóa học', 'Course review filters')}>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={status === 'REVIEW'}
-              className={`review-tab-btn ${status === 'REVIEW' ? 'is-active' : ''}`}
-              onClick={() => {
-                setStatus(current => current === 'REVIEW' ? '' : 'REVIEW');
-                setPage(0);
-              }}
-            >
-              <Clock size={16} />
-              <span><BilingualText vi="Chờ Admin duyệt" en="Pending review" /></span>
-            </button>
-          </div>
+      {reviewQueue && (() => {
+        const currentBanner = STATUS_BANNER_CONFIG[status] || STATUS_BANNER_CONFIG[''];
+        const TabIcon = currentBanner.icon;
+        return (
+          <div className="review-tabs-bar">
+            <div className="review-tabs-group" role="tablist" aria-label={bilingualLabel('Bộ lọc kiểm duyệt khóa học', 'Course review filters')}>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={true}
+                className="review-tab-btn is-active"
+                onClick={() => {
+                  setStatus((current) => (current === 'REVIEW' ? '' : current === '' ? 'REVIEW' : ''));
+                  setPage(0);
+                }}
+                title={
+                  status === 'REVIEW'
+                    ? bilingualLabel("Bấm để xem tất cả khóa học", "Click to view all courses")
+                    : bilingualLabel("Bấm để chuyển sang Chờ duyệt", "Click to switch to pending review")
+                }
+              >
+                <TabIcon size={16} />
+                <span><BilingualText vi={currentBanner.labelVi} en={currentBanner.labelEn} /></span>
+              </button>
+            </div>
 
-          <div className="review-tabs-hint">
-            <Info size={14} />
-            <span>
-              <BilingualText
-                vi="Các bản nháp Content Manager đã gửi sẽ xuất hiện ở mục Chờ Admin duyệt."
-                en="Drafts submitted by Content Managers appear in Pending review."
-              />
-            </span>
+            <div className="review-tabs-hint">
+              <Info size={14} />
+              <span>
+                <BilingualText
+                  vi={currentBanner.hintVi}
+                  en={currentBanner.hintEn}
+                />
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Filter Toolbar matching the exact ratio & style of AdminUsersPage */}
       <form
@@ -355,13 +434,13 @@ export function AdminContentListPage({ kind }) {
               ) : (
                 <EmptyState
                   title={
-                    reviewQueue && status === 'REVIEW'
-                      ? bilingualLabel("Không có khóa học chờ duyệt", "No courses pending review")
+                    kind === 'courses' && STATUS_BANNER_CONFIG[status]
+                      ? bilingualLabel(STATUS_BANNER_CONFIG[status].emptyTitleVi, STATUS_BANNER_CONFIG[status].emptyTitleEn)
                       : bilingualLabel("Chưa có nội dung phù hợp", "No matching content")
                   }
                   description={
-                    reviewQueue && status === 'REVIEW'
-                      ? bilingualLabel("Các khóa học Content Manager gửi duyệt sẽ hiển thị tại đây.", "Courses submitted by Content Managers will appear here.")
+                    kind === 'courses' && STATUS_BANNER_CONFIG[status]
+                      ? bilingualLabel(STATUS_BANNER_CONFIG[status].emptyDescVi, STATUS_BANNER_CONFIG[status].emptyDescEn)
                       : bilingualLabel("Tạo nội dung mới hoặc thay đổi bộ lọc.", "Create new content or change filters.")
                   }
                 />

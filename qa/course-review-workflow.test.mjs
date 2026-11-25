@@ -23,6 +23,25 @@ test('content manager and admin course review UI uses the protected workflow', (
   assert.doesNotMatch(service, /\/api\/admin\/courses\/\$\{id\}\/export/);
 });
 
+test('admin courses defaults to all statuses and dynamically updates status banner according to filter menu', () => {
+  const page = read('src/features/admin/pages/AdminContentPages.jsx');
+
+  // Verify status state defaults to '' (all statuses)
+  assert.match(page, /const\s*\[status,\s*setStatus\]\s*=\s*useState\(['"]{2}\)/);
+
+  // Verify status banner mapping has all statuses
+  assert.match(page, /STATUS_BANNER_CONFIG/);
+  assert.match(page, /Tất cả khóa học/);
+  assert.match(page, /Chờ Admin duyệt/);
+  assert.match(page, /Bản nháp/);
+  assert.match(page, /Cần chỉnh sửa/);
+  assert.match(page, /Đã xuất bản/);
+  assert.match(page, /Lưu trữ/);
+
+  // Dynamic banner binding
+  assert.match(page, /STATUS_BANNER_CONFIG\[status\]/);
+});
+
 test('learner header exposes Manage Courses to content managers', () => {
   const shell = read('src/shared/components/learner/LearnerShell.jsx');
   const menu = read('src/shared/components/layout/UserMenu.jsx');

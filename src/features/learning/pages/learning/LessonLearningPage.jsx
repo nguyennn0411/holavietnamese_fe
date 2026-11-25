@@ -264,12 +264,12 @@ function LessonScreen({ courseId, lessonId }) {
                 <button
                   type="button"
                   onClick={() => setSidebarOpen((v) => !v)}
-                  className="lg:hidden ml-auto inline-flex h-9 w-9 min-h-0 items-center justify-center rounded-full border border-[#E8E5DF] !bg-white !p-0 text-[#24382B] shadow-xs transition-all hover:!border-[#24382B] hover:!bg-[#24382B] hover:!text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24382B] cursor-pointer"
+                  className="lg:hidden ml-auto inline-flex h-9 w-9 lesson-roadmap-toggle-btn"
                   title={sidebarOpen ? bilingualLabel('Ẩn danh sách bài', 'Hide lesson list') : bilingualLabel('Hiện danh sách bài', 'Show lesson list')}
                   aria-label={sidebarOpen ? bilingualLabel('Ẩn danh sách bài', 'Hide lesson list') : bilingualLabel('Hiện danh sách bài', 'Show lesson list')}
                   aria-expanded={sidebarOpen}
                 >
-                  {sidebarOpen ? <ChevronLeft size={18} aria-hidden="true" /> : <ChevronRight size={18} aria-hidden="true" />}
+                  {sidebarOpen ? <ChevronLeft size={16} strokeWidth={2.2} aria-hidden="true" /> : <ChevronRight size={16} strokeWidth={2.2} aria-hidden="true" />}
                 </button>
               </div>
             </header>
@@ -316,16 +316,16 @@ function LessonScreen({ courseId, lessonId }) {
                 )}
 
                 {!sidebarOpen && (
-                  <aside className="hidden lg:flex w-10 shrink-0 sticky top-20 self-start justify-center pt-4">
+                  <aside className="hidden lg:flex w-10 shrink-0 sticky top-20 self-start justify-center pt-2">
                     <button
                       type="button"
                       onClick={() => setSidebarOpen(true)}
-                      className="inline-flex h-9 w-9 min-h-0 items-center justify-center rounded-full border border-[#E8E5DF] !bg-white !p-0 text-[#24382B] shadow-sm transition-all hover:!border-[#24382B] hover:!bg-[#24382B] hover:!text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24382B] cursor-pointer"
+                      className="lesson-roadmap-toggle-btn lesson-roadmap-toggle-btn--expand"
                       title={bilingualLabel('Mở lộ trình khóa học', 'Show course roadmap')}
                       aria-label={bilingualLabel('Mở lộ trình khóa học', 'Show course roadmap')}
                       aria-expanded="false"
                     >
-                      <ChevronRight size={18} aria-hidden="true" />
+                      <ChevronRight size={17} strokeWidth={2.2} aria-hidden="true" />
                     </button>
                   </aside>
                 )}
