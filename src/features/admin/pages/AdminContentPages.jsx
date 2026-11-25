@@ -2,7 +2,8 @@ import { BilingualText, bilingualLabel } from '@/shared/components/common/Biling
 import { CourseThumbnail } from '@/features/learning/components/course/CourseInfo';
 import { CourseStudio } from '@/features/learning/admin/components/CourseStudio';
 import { ActivityEditor } from '@/features/learning/admin/components/ActivityEditor';
-import { useCallback, useRef, useState } from 'react';
+import { canIllustrateActivity } from '@/features/learning/admin/activityIllustrations';
+import { useCallback, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { contentService } from '@/features/learning/api/contentService';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
@@ -420,11 +421,13 @@ function LessonBuilder({ lesson, reload }) {
     [message, setMessage] = useState(''),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false),
-    [uploadingImage, setUploadingImage] = useState(false);
-  const imageInputRef = useRef(null);
+    [imageTargetId, setImageTargetId] = useState(null),
+    [focusIllustration, setFocusIllustration] = useState(0);
   const { isAdmin, isContentCreator } = useAuth();
   const navigate = useNavigate();
   const canEdit = isContentCreator && !isAdmin && ['DRAFT', 'REJECTED'].includes(lesson.courseStatus);
+  const illustrationTargets = (lesson.activities || []).filter(canIllustrateActivity);
+  const imageTarget = illustrationTargets.find(activity => String(activity.id) === imageTargetId);
 
   async function reorder(index, direction) {
     setBusy(true);
@@ -438,59 +441,24 @@ function LessonBuilder({ lesson, reload }) {
     }
   }
 
-  function chooseLessonImage() {
-    setSelected(null);
+  function openIllustrationEditor(activity) {
+    setSelected(activity);
+    setFocusIllustration(request => request + 1);
+    setImageTargetId(null);
     setMessage('');
     setError('');
-    if (imageInputRef.current) {
-      imageInputRef.current.value = '';
-      imageInputRef.current.click();
-    }
   }
 
-  async function addLessonImage(event) {
-    const file = event.target.files?.[0];
-    event.target.value = '';
-    if (!file) return;
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
-      setError(bilingualLabel(
-        'Thêm hình ảnh vào bài học thất bại. Chỉ chấp nhận ảnh JPG, PNG hoặc WebP tối đa 5 MB.',
-        'Failed to add the image to the lesson. Choose a JPG, PNG, or WebP image up to 5 MB.'
-      ));
-      return;
-    }
+  function chooseLessonImage() {
+    const current = illustrationTargets.find(activity => activity.id === selected?.id);
+    if (current) openIllustrationEditor(current);
+    else if (illustrationTargets.length === 1) openIllustrationEditor(illustrationTargets[0]);
+    else setImageTargetId('');
+  }
 
-    setUploadingImage(true);
-    setMessage('');
-    setError('');
-    try {
-      const imageUrl = await contentService.uploadLessonMedia(file, 'image');
-      await contentService.addActivity(lesson.id, {
-        activityType: 'IMAGE',
-        title: 'Lesson image',
-        titleVi: 'Hình ảnh bài học',
-        instruction: '',
-        instructionVi: '',
-        contentJson: { imageUrl },
-        isRequired: false,
-        maxScore: 0,
-        status: 'PUBLISHED',
-        quizId: null,
-        grammarTopicIds: [],
-      });
-      setMessage(bilingualLabel(
-        'Đã thêm hình ảnh vào bài học thành công.',
-        'The image was added to the lesson successfully.'
-      ));
-      reload();
-    } catch (err) {
-      setError(bilingualLabel(
-        `Thêm hình ảnh vào bài học thất bại. ${err.message}`,
-        `Failed to add the image to the lesson. ${err.message}`
-      ));
-    } finally {
-      setUploadingImage(false);
-    }
+  function selectActivity(activity) {
+    setFocusIllustration(0);
+    setSelected(activity);
   }
 
   return (
@@ -565,31 +533,24 @@ function LessonBuilder({ lesson, reload }) {
             <h2><BilingualText>{"Các hoạt động"}</BilingualText></h2>
             {canEdit && (
               <div className="actions">
-                <input
-                  ref={imageInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  hidden
-                  onChange={addLessonImage}
-                />
-                <button disabled={busy || uploadingImage} onClick={chooseLessonImage}>
-                  <BilingualText
-                    vi={uploadingImage ? 'Đang tải ảnh…' : '+ Thêm ảnh'}
-                    en={uploadingImage ? 'Uploading image…' : '+ Add image'}
-                  />
+                <button type="button" disabled={busy || !illustrationTargets.length} onClick={chooseLessonImage}>
+                  <BilingualText vi="+ Thêm ảnh" en="+ Add image" />
                 </button>
-                <button onClick={() => setSelected({ activityType: 'VIDEO', status: 'PUBLISHED', contentJson: { videoUrl: '' } })}>
+                <button disabled={busy} onClick={() => selectActivity({ activityType: 'VIDEO', status: 'PUBLISHED', contentJson: { videoUrl: '' } })}>
                   <BilingualText>{"+ Thêm video"}</BilingualText>
                 </button>
-                <button className="secondary" onClick={() => setSelected({})}>
+                <button className="secondary" disabled={busy} onClick={() => selectActivity({})}>
                   <BilingualText>{"+ Hoạt động khác"}</BilingualText>
                 </button>
               </div>
             )}
           </div>
+          {canEdit && !illustrationTargets.length && <p className="muted">
+            <BilingualText vi="Thêm một mục nội dung trước khi gắn ảnh minh họa." en="Create a content activity before attaching an illustration." />
+          </p>}
           {lesson.activities?.map((activity, index) => (
             <div className={`list-row activity-builder-row ${selected?.id === activity.id ? 'selected' : ''}`} key={activity.id}>
-              <button className="activity-select" onClick={() => canEdit && setSelected(activity)}>
+              <button className="activity-select" disabled={busy} onClick={() => canEdit && selectActivity(activity)}>
                 <span className="badge">{index + 1}</span>
                 <BilingualText vi={activity.titleVi || activity.title} en={activity.title} />
               </button>
@@ -605,12 +566,37 @@ function LessonBuilder({ lesson, reload }) {
         </section>
         <aside className="admin-card">
           {canEdit && selected ? (
-            <ActivityEditor key={selected.id || selected.activityType || 'new'} initial={selected} lessonId={lesson.id} onSaved={() => { setSelected(null); reload(); }} />
+            <ActivityEditor key={selected.id || selected.activityType || 'new'} initial={selected}
+              lessonId={lesson.id} focusIllustration={focusIllustration} onBusyChange={setBusy}
+              onSaved={({ addedIllustration }) => {
+                if (addedIllustration) setMessage(bilingualLabel('Đã gắn ảnh vào mục nội dung.', 'Illustration attached to the activity.'));
+                selectActivity(null);
+                reload();
+              }} />
           ) : (
             <p className="muted"><BilingualText>{canEdit ? 'Chọn hoạt động để chỉnh sửa nội dung.' : 'Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.'}</BilingualText></p>
           )}
         </aside>
       </div>
+      {canEdit && imageTargetId !== null && <Modal title={bilingualLabel('Thêm ảnh minh họa', 'Add an illustration')} onClose={() => setImageTargetId(null)}>
+        <form onSubmit={event => {
+          event.preventDefault();
+          if (imageTarget) openIllustrationEditor(imageTarget);
+        }}>
+          <label>
+            <BilingualText vi="Mục nội dung" en="Content activity" />
+            <select required value={imageTargetId} onChange={event => setImageTargetId(event.target.value)}>
+              <option value="">{bilingualLabel('Chọn mục để gắn ảnh', 'Choose an activity for this image')}</option>
+              {illustrationTargets.map(activity => <option key={activity.id} value={activity.id}>
+                {bilingualLabel(activity.titleVi || activity.title, activity.title || activity.titleVi)}
+              </option>)}
+            </select>
+          </label>
+          <button className="button" type="submit" disabled={!imageTarget}>
+            <BilingualText vi="Tiếp tục" en="Continue" />
+          </button>
+        </form>
+      </Modal>}
       {canEdit && editing && (
         <Modal title={bilingualLabel("Chỉnh sửa bài học")} onClose={() => setEditing(false)}>
           <ContentForm kind="lessons" initial={lesson} onCancel={() => setEditing(false)} onSave={async (body) => { await contentService.update('lessons', lesson.id, body); setEditing(false); reload(); }} />

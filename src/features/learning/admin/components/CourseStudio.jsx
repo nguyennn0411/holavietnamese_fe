@@ -8,6 +8,7 @@ import { ResourceState } from '@/shared/components/common/ResourceState';
 import { Notice } from '@/shared/components/common/Ui';
 import { Modal } from '@/shared/components/common/Modal';
 import { ContentForm } from '@/features/learning/admin/components/ContentForm';
+import { LessonImageImportPanel } from '@/features/learning/admin/components/LessonImageImportPanel';
 import { CourseThumbnail } from '@/features/learning/components/course/CourseInfo';
 import { LessonActivities } from '@/features/learning/components/learning/LessonActivities';
 import { moveItem } from '@/features/learning/components/learning/answerUtils';
@@ -65,7 +66,7 @@ export function CourseStudio({ course, reload = () => {} }) {
   const [hasUnsaved, setHasUnsaved] = useState(false);
   const [importedCourseId, setImportedCourseId] = useState(null);
   const [importedCourses, setImportedCourses] = useState([]);
-  const [infoEditorOpen, setInfoEditorOpen] = useState(true);
+  const [infoEditorOpen, setInfoEditorOpen] = useState(false);
   const dirty = useRef(false);
   const modules = course?.modules || [];
   const lessons = modules.flatMap(m => m.lessons || []);
@@ -90,7 +91,7 @@ export function CourseStudio({ course, reload = () => {} }) {
     if (dirty.current && !window.confirm(label('Thông tin chưa được lưu. Rời bước này và bỏ thay đổi?'))) return;
     dirty.current = false;
     setHasUnsaved(false);
-    if (next === 'info' && canEdit) setInfoEditorOpen(true);
+    setInfoEditorOpen(false);
     setParams({ step: next });
     setError('');
   }
@@ -239,13 +240,22 @@ export function CourseStudio({ course, reload = () => {} }) {
           });
         }} />}
         {course && step === 'info' && <>
+          {canEdit && ownsCourse && <LessonImageImportPanel
+            key={course.id}
+            courseId={course.id}
+            lessons={lessons}
+            busy={busy}
+            onBusyChange={setBusy}
+            onImported={readiness.reload}
+            onDownload={downloadWorkbook}
+          />}
           {canEdit ? <section className="studio-panel studio-editor-launch">
             <div>
               <p className="studio-eyebrow"><BilingualText>{"CHỈNH SỬA THEO TỪNG BƯỚC"}</BilingualText></p>
               <h2><BilingualText>{"Thông tin khóa học"}</BilingualText></h2>
               <p><BilingualText vi="Mở cửa sổ chỉnh sửa để lần lượt hoàn thiện phần giới thiệu, ảnh bìa và thiết lập. Sau khi lưu, hệ thống tự chuyển sang cấu trúc bài học." en="Open the editor wizard to complete introduction, cover image, and settings. Once saved, you will proceed to course curriculum." /></p>
             </div>
-            <button onClick={() => setInfoEditorOpen(true)}><FileText size={17} /> <BilingualText>{"Mở cửa sổ chỉnh sửa"}</BilingualText></button>
+            <button type="button" disabled={busy} onClick={() => setInfoEditorOpen(true)}><FileText size={17} /> <BilingualText>{"Mở cửa sổ chỉnh sửa"}</BilingualText></button>
           </section> : <CourseDetailsForm key={`${course.id}-${course.updatedAt}`} course={course} canEdit={false} onBusyChange={setBusy} onDirty={() => {}} onSave={() => {}} />}
           {canEdit && infoEditorOpen && <Modal title={label("Chỉnh sửa thông tin khóa học")} className="studio-wizard-modal" busy={busy} onClose={closeInfoEditor}>
             <CourseDetailsForm key={`${course.id}-${course.updatedAt}`} wizard course={course} canEdit onCancel={closeInfoEditor} onBusyChange={setBusy} onDirty={value => { dirty.current = value; setHasUnsaved(value); }} onSave={async body => {
