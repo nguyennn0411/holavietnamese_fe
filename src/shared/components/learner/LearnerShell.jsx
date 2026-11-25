@@ -132,7 +132,7 @@ export function LearnerTopbar({ user, stats, onLogout }) {
   const hasEnergy = stats?.hearts != null || stats?.energy != null;
   const role = String(user?.role || '').replace(/^ROLE_/, '');
   const isAdmin = role === 'ADMIN';
-  const isContentManager = role === 'CONTENT';
+  const isContentCreator = role === 'CONTENT_CREATOR';
 
   return (
     <header className="learner-topbar">
@@ -190,7 +190,7 @@ export function LearnerTopbar({ user, stats, onLogout }) {
         )}
         <LanguageSwitcher compact />
         <NotificationDropdown fallbackIcon={<Bell />} />
-        <UserMenu user={user} isAdmin={isAdmin} isContentManager={isContentManager} onLogout={onLogout} />
+        <UserMenu user={user} isAdmin={isAdmin} isContentCreator={isContentCreator} onLogout={onLogout} />
       </div>
     </header>
   );

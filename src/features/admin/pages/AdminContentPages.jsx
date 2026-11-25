@@ -30,7 +30,7 @@ const CONTENT_STATUS_DOTS = {
 const labels = { courses: 'Khóa học', lessons: 'Bài học', quizzes: 'Quiz' };
 
 export function AdminContentListPage({ kind }) {
-  const { isAdmin, isContentManager } = useAuth();
+  const { isAdmin, isContentCreator } = useAuth();
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState(() => (isAdmin && kind === 'courses' ? 'REVIEW' : ''));
@@ -45,7 +45,7 @@ export function AdminContentListPage({ kind }) {
     )
   );
 
-  const canCreate = isContentManager && !isAdmin && kind === 'courses';
+  const canCreate = isContentCreator && !isAdmin && kind === 'courses';
   const statuses =
     kind === 'courses'
       ? ['DRAFT', 'REVIEW', 'REJECTED', 'PUBLISHED', 'ARCHIVED']
@@ -76,7 +76,7 @@ export function AdminContentListPage({ kind }) {
   const description =
     kind === 'courses'
       ? isAdmin
-        ? 'Xem và kiểm duyệt khóa học do Content Manager gửi lên.'
+        ? 'Xem và kiểm duyệt khóa học do Content Creator gửi lên.'
         : 'Tạo, chỉnh sửa và gửi khóa học cho Admin kiểm duyệt.'
       : kind === 'lessons'
       ? 'Xem các bài học thuộc khóa học được phân quyền.'
@@ -98,7 +98,7 @@ export function AdminContentListPage({ kind }) {
           en={kind === 'quizzes' ? '+ Create quiz' : kind === 'lessons' ? '+ Create lesson' : '+ Create course'}
         />
       </button>
-    ) : isContentManager && !isAdmin && kind !== 'courses' ? (
+    ) : isContentCreator && !isAdmin && kind !== 'courses' ? (
       <Link className="admin-btn admin-btn-secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
         <BilingualText vi="← Quay lại khóa học" en="← Back to courses" />
       </Link>
@@ -109,7 +109,7 @@ export function AdminContentListPage({ kind }) {
   return (
     <section>
       <PageHeader
-        eyebrow={<BilingualText vi={isAdmin ? 'Kiểm duyệt nội dung' : 'Quản lý nội dung học tập'} en={isAdmin ? 'Content Moderation' : 'Learning Content Management'} />}
+        eyebrow={<BilingualText vi={isAdmin ? 'Kiểm duyệt nội dung' : 'Người sáng tạo nội dung học tập'} en={isAdmin ? 'Content Moderation' : 'Learning Content Management'} />}
         title={<BilingualText vi={labels[kind]} en={kind === 'courses' ? 'Courses' : kind === 'lessons' ? 'Lessons' : 'Quizzes'} />}
         description={
           <BilingualText
@@ -117,7 +117,7 @@ export function AdminContentListPage({ kind }) {
             en={
               kind === 'courses'
                 ? isAdmin
-                  ? 'Review and moderate courses submitted by Content Managers.'
+                  ? 'Review and moderate courses submitted by Content Creators.'
                   : 'Create, edit and submit courses for Admin review.'
                 : kind === 'lessons'
                 ? 'View lessons belonging to assigned courses.'
@@ -150,8 +150,8 @@ export function AdminContentListPage({ kind }) {
             <Info size={14} />
             <span>
               <BilingualText
-                vi="Các bản nháp Content Manager đã gửi sẽ xuất hiện ở mục Chờ Admin duyệt."
-                en="Drafts submitted by Content Managers appear in Pending review."
+                vi="Các bản nháp Content Creator đã gửi sẽ xuất hiện ở mục Chờ Admin duyệt."
+                en="Drafts submitted by Content Creators appear in Pending review."
               />
             </span>
           </div>
@@ -361,7 +361,7 @@ export function AdminContentListPage({ kind }) {
                   }
                   description={
                     reviewQueue && status === 'REVIEW'
-                      ? bilingualLabel("Các khóa học Content Manager gửi duyệt sẽ hiển thị tại đây.", "Courses submitted by Content Managers will appear here.")
+                      ? bilingualLabel("Các khóa học Content Creator gửi duyệt sẽ hiển thị tại đây.", "Courses submitted by Content Creators will appear here.")
                       : bilingualLabel("Tạo nội dung mới hoặc thay đổi bộ lọc.", "Create new content or change filters.")
                   }
                 />
@@ -422,9 +422,9 @@ function LessonBuilder({ lesson, reload }) {
     [busy, setBusy] = useState(false),
     [uploadingImage, setUploadingImage] = useState(false);
   const imageInputRef = useRef(null);
-  const { isAdmin, isContentManager } = useAuth();
+  const { isAdmin, isContentCreator } = useAuth();
   const navigate = useNavigate();
-  const canEdit = isContentManager && !isAdmin && ['DRAFT', 'REJECTED'].includes(lesson.courseStatus);
+  const canEdit = isContentCreator && !isAdmin && ['DRAFT', 'REJECTED'].includes(lesson.courseStatus);
 
   async function reorder(index, direction) {
     setBusy(true);

@@ -1728,8 +1728,8 @@ export const UI_TRANSLATIONS = {
     "Quản trị nội dung học tập",
     "Learning content administration"
   ],
-  "Quản lý nội dung, phiên bản và trạng thái xuất bản.": [
-    "Quản lý nội dung, phiên bản và trạng thái xuất bản.",
+  "Người sáng tạo nội dung, phiên bản và trạng thái xuất bản.": [
+    "Người sáng tạo nội dung, phiên bản và trạng thái xuất bản.",
     "Manage content, versions and publication status."
   ],
   "Chưa có nội dung phù hợp": [
@@ -8496,8 +8496,8 @@ export const UI_TRANSLATIONS = {
     "Kiểm duyệt nội dung",
     "Content moderation"
   ],
-  "Quản lý nội dung học tập": [
-    "Quản lý nội dung học tập",
+  "Người sáng tạo nội dung học tập": [
+    "Người sáng tạo nội dung học tập",
     "Learning content management"
   ],
   "+ Import khóa học": [
@@ -8534,11 +8534,11 @@ export const UI_TRANSLATIONS = {
   ],
   "Người quản lý nội dung": [
     "Người quản lý nội dung",
-    "Content Manager"
+    "Content Creator"
   ],
-  "CONTENT MANAGER": [
-    "CONTENT MANAGER",
-    "CONTENT MANAGER"
+  "CONTENT CREATOR": [
+    "CONTENT CREATOR",
+    "CONTENT CREATOR"
   ],
   "Tự tạo từ tên; bạn có thể sửa nếu muốn.": [
     "Tự tạo từ tên; bạn có thể sửa nếu muốn.",
@@ -8823,7 +8823,7 @@ export const UI_TRANSLATIONS = {
   "Tìm email, họ tên": ["Tìm email, họ tên", "Search email, full name"],
   "Tất cả vai trò": ["Tất cả vai trò", "All roles"],
   "Người học": ["Người học", "Learner"],
-  "Quản lý nội dung": ["Quản lý nội dung", "Content Manager"],
+  "Người sáng tạo nội dung": ["Người sáng tạo nội dung", "Content Creator"],
   "Quản trị viên": ["Quản trị viên", "Administrator"],
   "Tất cả trạng thái": ["Tất cả trạng thái", "All statuses"],
   "Hoạt động": ["Hoạt động", "Active"],
@@ -9194,7 +9194,7 @@ export const UI_TRANSLATIONS = {
   "← Quay lại bài học": ["← Quay lại bài học", "← Back to lesson"],
   "← Quay lại khóa học": ["← Quay lại khóa học", "← Back to course"],
   "Chuỗi ngày liên tiếp": ["Chuỗi ngày liên tiếp", "Consecutive days streak"],
-  "Xem và kiểm duyệt khóa học do Content Manager gửi lên.": ["Xem và kiểm duyệt khóa học do Content Manager gửi lên.", "Review and approve courses submitted by Content Managers."],
+  "Xem và kiểm duyệt khóa học do Content Creator gửi lên.": ["Xem và kiểm duyệt khóa học do Content Creator gửi lên.", "Review and approve courses submitted by Content Creators."],
   "Tạo, chỉnh sửa và gửi khóa học cho Admin kiểm duyệt.": ["Tạo, chỉnh sửa và gửi khóa học cho Admin kiểm duyệt.", "Create, edit, and submit courses to Admin for review."],
   "Xem các bài học thuộc khóa học được phân quyền.": ["Xem các bài học thuộc khóa học được phân quyền.", "View lessons belonging to assigned courses."],
   "Quản lý quiz và trạng thái xuất bản.": ["Quản lý quiz và trạng thái xuất bản.", "Manage quizzes and publication status."],

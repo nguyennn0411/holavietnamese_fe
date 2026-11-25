@@ -11,7 +11,7 @@ export function AppHeader({ isAuthenticated, user, loading, stats, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const role = String(user?.role || '').replace(/^ROLE_/, '');
   const isAdmin = role === 'ADMIN';
-  const isContentManager = role === 'CONTENT';
+  const isContentCreator = role === 'CONTENT_CREATOR';
   return (
     <header className="site-header">
       <div className="site-header__inner">
@@ -26,7 +26,7 @@ export function AppHeader({ isAuthenticated, user, loading, stats, onLogout }) {
                 <span title={bilingualLabel("Tổng điểm kinh nghiệm", "Total XP")}><Zap size={15} aria-hidden="true"/> <strong>{stats.xp}</strong> XP</span>
               </div>
               <NotificationDropdown />
-              <UserMenu user={user} isAdmin={isAdmin} isContentManager={isContentManager} onLogout={onLogout} />
+              <UserMenu user={user} isAdmin={isAdmin} isContentCreator={isContentCreator} onLogout={onLogout} />
             </>
           ) : (
             <div className="site-header__guest-actions">

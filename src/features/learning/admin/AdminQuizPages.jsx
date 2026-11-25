@@ -26,7 +26,7 @@ const QUESTION_STATUS_OPTIONS = [
 ];
 
 export function AdminQuestionBankPage() {
-  const { isAdmin, isContentManager } = useAuth();
+  const { isAdmin, isContentCreator } = useAuth();
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(0);
@@ -36,7 +36,7 @@ export function AdminQuestionBankPage() {
   const resource = useAsyncResource(
     useCallback((signal) => contentService.list('questions', { q: query, status, page, size: 12 }, signal), [query, status, page])
   );
-  const canEdit = isContentManager && !isAdmin;
+  const canEdit = isContentCreator && !isAdmin;
 
   return (
     <section>
@@ -47,12 +47,12 @@ export function AdminQuestionBankPage() {
             vi={
               canEdit
                 ? 'Tạo và quản lý câu hỏi dùng trong các bài học và quiz của bạn.'
-                : 'Xem câu hỏi do Content Manager biên soạn; nội dung được duyệt cùng khóa học.'
+                : 'Xem câu hỏi do Content Creator biên soạn; nội dung được duyệt cùng khóa học.'
             }
             en={
               canEdit
                 ? 'Create and manage questions for your lessons and quizzes.'
-                : 'Review Content Manager questions as part of the course approval flow.'
+                : 'Review Content Creator questions as part of the course approval flow.'
             }
           />
         }
@@ -337,7 +337,7 @@ export function AdminQuizBuilderPage() {
 }
 
 function QuizBuilder({ quiz, reload }) {
-  const { isAdmin, isContentManager } = useAuth();
+  const { isAdmin, isContentCreator } = useAuth();
   const [edit, setEdit] = useState(false),
     [adding, setAdding] = useState(false),
     [creatingQuestion, setCreatingQuestion] = useState(() => new URLSearchParams(window.location.search).has('newQuestion')),
@@ -346,14 +346,14 @@ function QuizBuilder({ quiz, reload }) {
     [message, setMessage] = useState('');
   const navigate = useNavigate();
   const questions = quiz.questions || [];
-  const canEdit = isContentManager && !isAdmin && ['DRAFT', 'REJECTED'].includes(quiz.courseStatus);
+  const canEdit = isContentCreator && !isAdmin && ['DRAFT', 'REJECTED'].includes(quiz.courseStatus);
   const lessonResource = useAsyncResource(
     useCallback((signal) => (quiz.lessonId ? contentService.get('lessons', quiz.lessonId, signal) : Promise.resolve(null)), [quiz.lessonId])
   );
   const hasLinkedQuiz = lessonResource.data?.activities?.some((activity) => activity.activityType === 'QUIZ' && Number(activity.quizId) === Number(quiz.id));
   const basePath = isAdmin ? '/admin' : '/content';
   const breadcrumbItems =
-    isContentManager && !isAdmin
+    isContentCreator && !isAdmin
       ? [
           { to: '/content/courses', label: bilingualLabel('Khóa học', 'Courses') },
           ...(quiz.courseId ? [{ to: `/content/courses/${quiz.courseId}?step=curriculum`, label: bilingualLabel('Cấu trúc khóa học', 'Course curriculum') }] : []),

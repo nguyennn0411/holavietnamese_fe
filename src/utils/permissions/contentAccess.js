@@ -22,20 +22,20 @@ export const userRole = (user) => {
 };
 export const hasRole = (user, role) => userRole(user) === role.replace(/^ROLE_/, '');
 export const hasPermission = (user, permission) => userPermissions(user).includes(permission);
-export const isContentManager = (user) => hasRole(user, 'CONTENT');
+export const isContentCreator = (user) => hasRole(user, 'CONTENT_CREATOR');
 export const isAdministrator = (user) => hasRole(user, 'ADMIN');
 
 const hasAny = (user, permissions) => permissions.some((permission) => hasPermission(user, permission));
 
-export const canReadVocabulary = (user) => isContentManager(user) || isAdministrator(user) || hasAny(user, [
+export const canReadVocabulary = (user) => isContentCreator(user) || isAdministrator(user) || hasAny(user, [
   CONTENT_PERMISSIONS.VOCABULARY_READ,
   CONTENT_PERMISSIONS.VOCABULARY_WRITE,
   CONTENT_PERMISSIONS.VOCABULARY_REVIEW,
   CONTENT_PERMISSIONS.VOCABULARY_PUBLISH,
 ]);
-export const canWriteVocabulary = (user) => isContentManager(user)
+export const canWriteVocabulary = (user) => isContentCreator(user)
   || hasPermission(user, CONTENT_PERMISSIONS.VOCABULARY_WRITE);
-export const canImportVocabulary = (user) => isContentManager(user)
+export const canImportVocabulary = (user) => isContentCreator(user)
   || hasPermission(user, CONTENT_PERMISSIONS.VOCABULARY_IMPORT);
 export const canReviewVocabulary = (user) => isAdministrator(user) || hasAny(user, [
   CONTENT_PERMISSIONS.VOCABULARY_REVIEW,
@@ -43,16 +43,16 @@ export const canReviewVocabulary = (user) => isAdministrator(user) || hasAny(use
 ]);
 export const canPublishVocabulary = canReviewVocabulary;
 
-export const canReadExplore = (user) => isContentManager(user) || isAdministrator(user) || hasAny(user, [
+export const canReadExplore = (user) => isContentCreator(user) || isAdministrator(user) || hasAny(user, [
   CONTENT_PERMISSIONS.EXPLORE_READ,
   CONTENT_PERMISSIONS.EXPLORE_WRITE,
   CONTENT_PERMISSIONS.EXPLORE_LINK_WRITE,
   CONTENT_PERMISSIONS.EXPLORE_REVIEW,
   CONTENT_PERMISSIONS.EXPLORE_PUBLISH,
 ]);
-export const canWriteExplore = (user) => isContentManager(user)
+export const canWriteExplore = (user) => isContentCreator(user)
   || hasPermission(user, CONTENT_PERMISSIONS.EXPLORE_WRITE);
-export const canManageExploreLinks = (user) => isContentManager(user)
+export const canManageExploreLinks = (user) => isContentCreator(user)
   || hasPermission(user, CONTENT_PERMISSIONS.EXPLORE_LINK_WRITE);
 export const canReviewExplore = (user) => isAdministrator(user) || hasAny(user, [
   CONTENT_PERMISSIONS.EXPLORE_REVIEW,
@@ -60,7 +60,7 @@ export const canReviewExplore = (user) => isAdministrator(user) || hasAny(user, 
 ]);
 export const canPublishExplore = canReviewExplore;
 
-export const canReadCulture = (user) => isContentManager(user) || isAdministrator(user);
-export const canWriteCulture = (user) => isContentManager(user) || isAdministrator(user);
+export const canReadCulture = (user) => isContentCreator(user) || isAdministrator(user);
+export const canWriteCulture = (user) => isContentCreator(user) || isAdministrator(user);
 export const canReviewCulture = (user) => isAdministrator(user);
 export const canPublishCulture = (user) => isAdministrator(user);

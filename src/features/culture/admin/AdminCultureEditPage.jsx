@@ -11,7 +11,7 @@ export function AdminCultureEditPage() {
   useTextLanguage();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAdmin, isContentManager } = useAuth();
+  const { isAdmin, isContentCreator } = useAuth();
   const cultureBasePath = isAdmin ? '/admin/culture' : '/content/culture';
   const isNew = !id || id === 'new';
 
@@ -203,7 +203,7 @@ export function AdminCultureEditPage() {
               )}
             </>
           ) : (
-            // Content Manager actions
+            // Content Creator actions
             <>
               <button
                 type="button"

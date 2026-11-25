@@ -9,7 +9,7 @@ import { useConfirmDialog } from '@/shared/components/common/ConfirmDialog';
 import { canImportVocabulary, canReadExplore, canReadVocabulary } from '@/utils/permissions/contentAccess';
 import { learnerService } from '@/features/learning/api/learnerService';
 
-export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
+export function UserMenu({ user, isAdmin, isContentCreator, onLogout }) {
   const contentAdminPath = canReadVocabulary(user) ? ROUTES.CONTENT_VOCABULARY
     : canReadExplore(user) ? ROUTES.CONTENT_DESTINATIONS
       : canImportVocabulary(user) ? ROUTES.CONTENT_IMPORT
@@ -100,8 +100,8 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
               <span>
                 {user?.email || `@${user?.username || 'learner'}`} ·{' '}
                 <BilingualText
-                  vi={isAdmin ? 'Quản trị viên' : isContentManager ? 'Quản lý nội dung' : 'Học viên'}
-                  en={isAdmin ? 'Administrator' : isContentManager ? 'Content Manager' : 'Learner'}
+                  vi={isAdmin ? 'Quản trị viên' : isContentCreator ? 'Người sáng tạo nội dung' : 'Học viên'}
+                  en={isAdmin ? 'Administrator' : isContentCreator ? 'Content Creator' : 'Learner'}
                 />
               </span>
             </div>
@@ -164,16 +164,16 @@ export function UserMenu({ user, isAdmin, isContentManager, onLogout }) {
                 <BilingualText vi="Trang quản trị" en="Admin Panel" />
               </Link>
             )}
-            {isContentManager && !isAdmin && (
+            {isContentCreator && !isAdmin && (
               <Link to={ROUTES.CONTENT_COURSES} onClick={closeMenu} role="menuitem" className="user-menu__admin">
                 <Shield size={16} />
                 <BilingualText vi="Quản lý khóa học" en="Manage Courses" />
               </Link>
             )}
-            {!isContentManager && contentAdminPath && !isAdmin && (
+            {!isContentCreator && contentAdminPath && !isAdmin && (
               <Link to={contentAdminPath} onClick={closeMenu} role="menuitem" className="user-menu__admin">
                 <Shield size={16} />
-                <BilingualText vi="Quản lý nội dung" en="Content Management" />
+                <BilingualText vi="Người sáng tạo nội dung" en="Content Management" />
               </Link>
             )}
             <button type="button" className="user-menu__logout secondary" onClick={handleLogout} role="menuitem">
