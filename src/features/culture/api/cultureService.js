@@ -611,6 +611,8 @@ Còn gì thi vị bằng việc neo ghe cạnh một chiếc thuyền bán đồ
   },
 ];
 
+const pendingArticleRequests = new Map();
+
 export const cultureService = {
   async getCategories() {
     try {
@@ -725,16 +727,23 @@ export const cultureService = {
 
   async getArticle(id) {
     if (!id) return null;
-    try {
-      const response = await axiosClient.get(`/api/culture/articles/${encodeURIComponent(id)}`);
-      const data = response?.result ?? response;
-      if (data && data.id) {
-        return data;
+    // Share one in-flight request per article so double effects (React StrictMode)
+    // do not send duplicate detail reads that each count as a view.
+    if (pendingArticleRequests.has(id)) return pendingArticleRequests.get(id);
+    const request = (async () => {
+      try {
+        const response = await axiosClient.get(`/api/culture/articles/${encodeURIComponent(id)}`);
+        const data = response?.result ?? response;
+        if (data && data.id) {
+          return data;
+        }
+      } catch (e) {
+        console.warn('Failed to fetch article from API, using fallback:', e.message);
       }
-    } catch (e) {
-      console.warn('Failed to fetch article from API, using fallback:', e.message);
-    }
-    return this.getArticleSync(id);
+      return this.getArticleSync(id);
+    })().finally(() => pendingArticleRequests.delete(id));
+    pendingArticleRequests.set(id, request);
+    return request;
   },
 
   getArticleSync(id) {
