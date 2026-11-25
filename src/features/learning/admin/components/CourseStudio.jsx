@@ -8,6 +8,7 @@ import { ResourceState } from '@/shared/components/common/ResourceState';
 import { Notice } from '@/shared/components/common/Ui';
 import { Modal } from '@/shared/components/common/Modal';
 import { ContentForm } from '@/features/learning/admin/components/ContentForm';
+import { LessonImageImportPanel } from '@/features/learning/admin/components/LessonImageImportPanel';
 import { CourseThumbnail } from '@/features/learning/components/course/CourseInfo';
 import { LessonActivities } from '@/features/learning/components/learning/LessonActivities';
 import { moveItem } from '@/features/learning/components/learning/answerUtils';
@@ -41,22 +42,22 @@ const issueNames = {
 const slugify = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 190).replace(/-$/g, '');
 
 export function AdminCourseCreatePage() {
-  const { isContentManager, isAdmin } = useAuth();
-  if (!isContentManager || isAdmin) return <Notice><BilingualText vi="Bạn cần tài khoản Content Manager để tạo khóa học." en="You need a Content Manager account to create courses." /> <Link to={isAdmin ? "/admin/courses" : "/content/courses"}><BilingualText vi="Về danh sách" en="Back to list" /></Link></Notice>;
+  const { isContentCreator, isAdmin } = useAuth();
+  if (!isContentCreator || isAdmin) return <Notice><BilingualText vi="Bạn cần tài khoản Content Creator để tạo khóa học." en="You need a Content Creator account to create courses." /> <Link to={isAdmin ? "/admin/courses" : "/content/courses"}><BilingualText vi="Về danh sách" en="Back to list" /></Link></Notice>;
   return <CourseStudio />;
 }
 
 export function CourseStudio({ course, reload = () => {} }) {
   const label = useBilingualLabel();
-  const { isAdmin, isContentManager, user } = useAuth();
+  const { isAdmin, isContentCreator, user } = useAuth();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const selectedStep = params.get('step');
   const step = steps.some(s => s.id === selectedStep) && course ? selectedStep : 'info';
-  const canEdit = isContentManager && !isAdmin && (!course || ['DRAFT', 'REJECTED'].includes(course.status));
+  const canEdit = isContentCreator && !isAdmin && (!course || ['DRAFT', 'REJECTED'].includes(course.status));
   const canReview = isAdmin && course?.status === 'REVIEW';
   const ownsCourse = Boolean(course && String(course.createdBy) === String(user?.userId ?? user?.id));
-  const canRequestEdit = isContentManager && !isAdmin && ownsCourse && course?.status === 'PUBLISHED' && course?.editRequestStatus !== 'PENDING';
+  const canRequestEdit = isContentCreator && !isAdmin && ownsCourse && course?.status === 'PUBLISHED' && course?.editRequestStatus !== 'PENDING';
   const canReviewEditRequest = isAdmin && course?.status === 'PUBLISHED' && course?.editRequestStatus === 'PENDING';
   const [modal, setModal] = useState(null), [busy, setBusy] = useState(false);
   const [error, setError] = useState(''), [message, setMessage] = useState('');
@@ -65,7 +66,7 @@ export function CourseStudio({ course, reload = () => {} }) {
   const [hasUnsaved, setHasUnsaved] = useState(false);
   const [importedCourseId, setImportedCourseId] = useState(null);
   const [importedCourses, setImportedCourses] = useState([]);
-  const [infoEditorOpen, setInfoEditorOpen] = useState(true);
+  const [infoEditorOpen, setInfoEditorOpen] = useState(false);
   const dirty = useRef(false);
   const modules = course?.modules || [];
   const lessons = modules.flatMap(m => m.lessons || []);
@@ -90,7 +91,7 @@ export function CourseStudio({ course, reload = () => {} }) {
     if (dirty.current && !window.confirm(label('Thông tin chưa được lưu. Rời bước này và bỏ thay đổi?'))) return;
     dirty.current = false;
     setHasUnsaved(false);
-    if (next === 'info' && canEdit) setInfoEditorOpen(true);
+    setInfoEditorOpen(false);
     setParams({ step: next });
     setError('');
   }
@@ -239,13 +240,22 @@ export function CourseStudio({ course, reload = () => {} }) {
           });
         }} />}
         {course && step === 'info' && <>
+          {canEdit && ownsCourse && <LessonImageImportPanel
+            key={course.id}
+            courseId={course.id}
+            lessons={lessons}
+            busy={busy}
+            onBusyChange={setBusy}
+            onImported={readiness.reload}
+            onDownload={downloadWorkbook}
+          />}
           {canEdit ? <section className="studio-panel studio-editor-launch">
             <div>
               <p className="studio-eyebrow"><BilingualText>{"CHỈNH SỬA THEO TỪNG BƯỚC"}</BilingualText></p>
               <h2><BilingualText>{"Thông tin khóa học"}</BilingualText></h2>
               <p><BilingualText vi="Mở cửa sổ chỉnh sửa để lần lượt hoàn thiện phần giới thiệu, ảnh bìa và thiết lập. Sau khi lưu, hệ thống tự chuyển sang cấu trúc bài học." en="Open the editor wizard to complete introduction, cover image, and settings. Once saved, you will proceed to course curriculum." /></p>
             </div>
-            <button onClick={() => setInfoEditorOpen(true)}><FileText size={17} /> <BilingualText>{"Mở cửa sổ chỉnh sửa"}</BilingualText></button>
+            <button type="button" disabled={busy} onClick={() => setInfoEditorOpen(true)}><FileText size={17} /> <BilingualText>{"Mở cửa sổ chỉnh sửa"}</BilingualText></button>
           </section> : <CourseDetailsForm key={`${course.id}-${course.updatedAt}`} course={course} canEdit={false} onBusyChange={setBusy} onDirty={() => {}} onSave={() => {}} />}
           {canEdit && infoEditorOpen && <Modal title={label("Chỉnh sửa thông tin khóa học")} className="studio-wizard-modal" busy={busy} onClose={closeInfoEditor}>
             <CourseDetailsForm key={`${course.id}-${course.updatedAt}`} wizard course={course} canEdit onCancel={closeInfoEditor} onBusyChange={setBusy} onDirty={value => { dirty.current = value; setHasUnsaved(value); }} onSave={async body => {
@@ -358,8 +368,8 @@ export function CourseStudio({ course, reload = () => {} }) {
           </div>}
           {canReviewEditRequest && <div className="studio-review">
             <h3><BilingualText vi="Duyệt yêu cầu chỉnh sửa khóa học" en="Review course edit request" /></h3>
-            <p><strong><BilingualText vi="Lý do của Content Manager: " en="Content Manager's reason: " /></strong>{course.editRequestReason}</p>
-            <label><BilingualText vi="Phản hồi của Admin" en="Admin response" /><textarea rows={4} value={reviewNote} onChange={event => setReviewNote(event.target.value)} placeholder={label('Ghi chú cho Content Manager…')} disabled={busy} /></label>
+            <p><strong><BilingualText vi="Lý do của Content Creator: " en="Content Creator's reason: " /></strong>{course.editRequestReason}</p>
+            <label><BilingualText vi="Phản hồi của Admin" en="Admin response" /><textarea rows={4} value={reviewNote} onChange={event => setReviewNote(event.target.value)} placeholder={label('Ghi chú cho Content Creator…')} disabled={busy} /></label>
             <div className="studio-actions">
               <button disabled={busy} onClick={() => mutate(() => contentService.reviewCourseEditRequest(course.id, 'APPROVE', reviewNote), 'Đã duyệt. Khóa học được chuyển về bản nháp để chỉnh sửa.')}><CheckCircle2 size={17} /> <BilingualText vi="Duyệt & mở quyền chỉnh sửa" en="Approve & unlock editing" /></button>
               <button className="secondary" disabled={busy || !reviewNote.trim()} onClick={() => mutate(() => contentService.reviewCourseEditRequest(course.id, 'REJECT', reviewNote), 'Đã từ chối yêu cầu chỉnh sửa.')}><BilingualText vi="Từ chối yêu cầu" en="Reject request" /></button>

@@ -18,7 +18,7 @@ export function RequireLearningPathOnboarding() {
   }
 
   const role = String(user.role || '').replace(/^ROLE_/, '');
-  const isBackOfficeAccount = role === 'ADMIN' || role === 'CONTENT';
+  const isBackOfficeAccount = role === 'ADMIN' || role === 'CONTENT_CREATOR';
 
   if (!isBackOfficeAccount && user.onboardingCompleted !== true) {
     return (

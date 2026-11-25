@@ -33,21 +33,21 @@ const PERMISSION_METADATA = [
   { code: 'SITE_CONTENT_MANAGE', domain: 'CMS', domainEn: 'CMS', descVi: 'Quản lý banner trang chủ và menu điều hướng', descEn: 'Manage home banners and navigation menus', roles: ['ADMIN'] },
 
   // Content Authoring
-  { code: 'COURSE_CREATE', domain: 'Khóa học', domainEn: 'Courses', descVi: 'Tạo mới khóa học và chương trình đào tạo', descEn: 'Create courses and curriculum modules', roles: ['ADMIN', 'CONTENT'] },
-  { code: 'COURSE_EDIT', domain: 'Khóa học', domainEn: 'Courses', descVi: 'Biên soạn cấu trúc bài học, từ vựng và câu hỏi', descEn: 'Edit lessons, vocabulary, and questions', roles: ['ADMIN', 'CONTENT'] },
+  { code: 'COURSE_CREATE', domain: 'Khóa học', domainEn: 'Courses', descVi: 'Tạo mới khóa học và chương trình đào tạo', descEn: 'Create courses and curriculum modules', roles: ['ADMIN', 'CONTENT_CREATOR'] },
+  { code: 'COURSE_EDIT', domain: 'Khóa học', domainEn: 'Courses', descVi: 'Biên soạn cấu trúc bài học, từ vựng và câu hỏi', descEn: 'Edit lessons, vocabulary, and questions', roles: ['ADMIN', 'CONTENT_CREATOR'] },
   { code: 'COURSE_REVIEW', domain: 'Khóa học', domainEn: 'Courses', descVi: 'Duyệt và xuất bản khóa học công khai', descEn: 'Review and publish courses for learners', roles: ['ADMIN'] },
-  { code: 'QUESTION_BANK_MANAGE', domain: 'Khóa học', domainEn: 'Courses', descVi: 'Quản lý kho câu hỏi trắc nghiệm và bài tập', descEn: 'Manage question bank and quizzes', roles: ['ADMIN', 'CONTENT'] },
-  { code: 'CONTENT_IMPORT', domain: 'Dữ liệu', domainEn: 'Data', descVi: 'Nhập hàng loạt khóa học và từ vựng từ tệp Excel', descEn: 'Bulk import courses and vocabulary via Excel', roles: ['ADMIN', 'CONTENT'] },
+  { code: 'QUESTION_BANK_MANAGE', domain: 'Khóa học', domainEn: 'Courses', descVi: 'Quản lý kho câu hỏi trắc nghiệm và bài tập', descEn: 'Manage question bank and quizzes', roles: ['ADMIN', 'CONTENT_CREATOR'] },
+  { code: 'CONTENT_IMPORT', domain: 'Dữ liệu', domainEn: 'Data', descVi: 'Nhập hàng loạt khóa học và từ vựng từ tệp Excel', descEn: 'Bulk import courses and vocabulary via Excel', roles: ['ADMIN', 'CONTENT_CREATOR'] },
 
   // Culture & Explore
-  { code: 'CULTURE_ARTICLE_MANAGE', domain: 'Văn hóa', domainEn: 'Culture', descVi: 'Viết bài giới thiệu văn hóa và phong tục Việt', descEn: 'Publish culture articles and traditions', roles: ['ADMIN', 'CONTENT'] },
-  { code: 'DESTINATION_MANAGE', domain: 'Điểm đến', domainEn: 'Destinations', descVi: 'Quản lý địa điểm danh lam thắng cảnh du lịch', descEn: 'Manage tourism destinations and regional guides', roles: ['ADMIN', 'CONTENT'] },
+  { code: 'CULTURE_ARTICLE_MANAGE', domain: 'Văn hóa', domainEn: 'Culture', descVi: 'Viết bài giới thiệu văn hóa và phong tục Việt', descEn: 'Publish culture articles and traditions', roles: ['ADMIN', 'CONTENT_CREATOR'] },
+  { code: 'DESTINATION_MANAGE', domain: 'Điểm đến', domainEn: 'Destinations', descVi: 'Quản lý địa điểm danh lam thắng cảnh du lịch', descEn: 'Manage tourism destinations and regional guides', roles: ['ADMIN', 'CONTENT_CREATOR'] },
   { code: 'AI_SCENARIO_MANAGE', domain: 'AI & Luyện nói', domainEn: 'AI & Speech', descVi: 'Thiết lập kịch bản hội thoại và gia sư ảo', descEn: 'Design roleplay scenarios and AI tutor settings', roles: ['ADMIN'] },
 
   // Learner Capabilities
-  { code: 'LEARNER_STUDY', domain: 'Học tập', domainEn: 'Learning', descVi: 'Học bài, làm bài tập và làm bài kiểm tra', descEn: 'Access lessons, exercises, and quizzes', roles: ['ADMIN', 'CONTENT', 'LEARNER'] },
-  { code: 'AI_CHAT_ACCESS', domain: 'AI & Luyện nói', domainEn: 'AI & Speech', descVi: 'Trò chuyện và luyện phát âm cùng gia sư AI', descEn: 'Converse with AI tutor for pronunciation practice', roles: ['ADMIN', 'CONTENT', 'LEARNER'] },
-  { code: 'PROFILE_CUSTOMIZE', domain: 'Cá nhân', domainEn: 'Personal', descVi: 'Tùy chỉnh mục tiêu hàng ngày và hồ sơ cá nhân', descEn: 'Customize daily study goals and user profile', roles: ['ADMIN', 'CONTENT', 'LEARNER'] },
+  { code: 'LEARNER_STUDY', domain: 'Học tập', domainEn: 'Learning', descVi: 'Học bài, làm bài tập và làm bài kiểm tra', descEn: 'Access lessons, exercises, and quizzes', roles: ['ADMIN', 'CONTENT_CREATOR', 'LEARNER'] },
+  { code: 'AI_CHAT_ACCESS', domain: 'AI & Luyện nói', domainEn: 'AI & Speech', descVi: 'Trò chuyện và luyện phát âm cùng gia sư AI', descEn: 'Converse with AI tutor for pronunciation practice', roles: ['ADMIN', 'CONTENT_CREATOR', 'LEARNER'] },
+  { code: 'PROFILE_CUSTOMIZE', domain: 'Cá nhân', domainEn: 'Personal', descVi: 'Tùy chỉnh mục tiêu hàng ngày và hồ sơ cá nhân', descEn: 'Customize daily study goals and user profile', roles: ['ADMIN', 'CONTENT_CREATOR', 'LEARNER'] },
 ];
 
 const ROLE_CARDS = [
@@ -66,9 +66,9 @@ const ROLE_CARDS = [
     scopesEn: ['User Management', 'System Settings', 'Course Review', 'Audit Logs'],
   },
   {
-    role: 'CONTENT',
-    nameVi: 'Quản lý nội dung',
-    nameEn: 'Content Manager',
+    role: 'CONTENT_CREATOR',
+    nameVi: 'Người sáng tạo nội dung',
+    nameEn: 'Content Creator',
     badgeTone: 'warning',
     accentColor: '#D97706',
     bgColor: '#FFFBEB',
@@ -236,8 +236,8 @@ export function AdminRolesPage() {
             <BilingualText vi="Chính sách bảo mật hệ thống:" en="System Security Policy:" />
           </strong>
           <BilingualText
-            vi="Các vai trò cốt lõi (ADMIN, CONTENT, LEARNER) được định nghĩa cố định trong kiến trúc bảo mật để ngăn ngừa leo thang đặc quyền. Quản trị viên gán vai trò trực tiếp cho tài khoản tại trang Người dùng."
-            en="Core roles (ADMIN, CONTENT, LEARNER) are permanently structured in the security layer to prevent privilege escalation. Administrators assign roles to individual accounts in the Users page."
+            vi="Các vai trò cốt lõi (ADMIN, CONTENT_CREATOR, LEARNER) được định nghĩa cố định trong kiến trúc bảo mật để ngăn ngừa leo thang đặc quyền. Quản trị viên gán vai trò trực tiếp cho tài khoản tại trang Người dùng."
+            en="Core roles (ADMIN, CONTENT_CREATOR, LEARNER) are permanently structured in the security layer to prevent privilege escalation. Administrators assign roles to individual accounts in the Users page."
           />
         </div>
       </div>
@@ -423,7 +423,7 @@ export function AdminRolesPage() {
               {[
                 { id: 'ALL', labelVi: 'Tất cả', labelEn: 'All' },
                 { id: 'ADMIN', labelVi: 'Admin', labelEn: 'Admin' },
-                { id: 'CONTENT', labelVi: 'Content', labelEn: 'Content' },
+                { id: 'CONTENT_CREATOR', labelVi: 'Người sáng tạo', labelEn: 'Content Creator' },
                 { id: 'LEARNER', labelVi: 'Learner', labelEn: 'Learner' },
               ].map((pill) => (
                 <button
@@ -500,7 +500,7 @@ export function AdminRolesPage() {
                     <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                       {perm.roles.map((r) => {
                         const isAdm = r === 'ADMIN';
-                        const isCnt = r === 'CONTENT';
+                        const isCnt = r === 'CONTENT_CREATOR';
                         const isLrn = r === 'LEARNER';
                         const bg = isAdm ? '#FEF2F2' : isCnt ? '#FFFBEB' : '#ECFDF5';
                         const color = isAdm ? '#DC2626' : isCnt ? '#D97706' : '#059669';

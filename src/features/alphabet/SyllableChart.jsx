@@ -59,8 +59,8 @@ function syllableFor(initial, final) {
 export function SyllableChart() {
   useTextLanguage();
   const { current, status, error, playQueue, stop, queueRef } = usePronunciationPlayer();
-  const [filters, setFilters] = useState(["simple", "complex"]);
-  const [enabledTones, setEnabledTones] = useState([]);
+  const [filters, setFilters] = useState(["simple"]);
+  const [enabledTones, setEnabledTones] = useState(["none"]);
 
   function playSyllable(initial, final, category) {
     const selected = tones.filter(([id]) => enabledTones.includes(id) &&

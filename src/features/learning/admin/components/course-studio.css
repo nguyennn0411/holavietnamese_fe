@@ -996,6 +996,140 @@
   color: #0F172A;
   margin: 0 0 10px;
 }
+.lesson-image-import .studio-section-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lesson-image-import .studio-section-heading h2 svg {
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.lesson-image-dropzone {
+  padding: 26px 18px;
+}
+
+.lesson-image-dropzone > :not(input) {
+  pointer-events: none;
+}
+
+.lesson-image-dropzone > strong {
+  color: #253044;
+  font-size: 15px;
+}
+
+.lesson-image-dropzone > small {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.lesson-image-dropzone:focus-within,
+.lesson-image-import .wb-btn:focus-visible {
+  outline: 2px solid #ea580c !important;
+  outline-offset: 3px;
+}
+
+.lesson-image-dropzone.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.lesson-image-import .wb-queue-title h3 {
+  margin: 0;
+}
+
+.lesson-image-import .wb-file-meta {
+  flex: 0 1 auto;
+  max-width: 100%;
+}
+
+.lesson-image-import .wb-queue > p,
+.lesson-image-progress,
+.lesson-image-groups {
+  margin-top: 12px;
+}
+
+.lesson-image-groups {
+  display: grid;
+  gap: 10px;
+  max-height: 420px;
+  overflow: auto;
+}
+
+.lesson-image-groups details {
+  border: 1px solid #e8ddd0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #faf8f5;
+}
+
+.lesson-image-groups summary {
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.lesson-image-groups ul {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+
+.lesson-image-groups li {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid #ede4d8;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.lesson-image-thumb {
+  width: 80px;
+  aspect-ratio: 8 / 5;
+  border-radius: 6px;
+  background: #f6f1e9;
+  overflow: hidden;
+}
+
+.lesson-image-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lesson-image-groups li > div:last-child {
+  display: grid;
+  justify-items: start;
+  gap: 3px;
+  overflow-wrap: anywhere;
+}
+
+.lesson-image-groups .wb-status-pill {
+  white-space: normal;
+}
+
+.lesson-image-target {
+  display: grid;
+  gap: 3px;
+  max-width: 100%;
+  font-size: 12px;
+}
+
+.lesson-image-target select {
+  max-width: 100%;
+}
+
+.lesson-image-row-error {
+  color: #a63225;
+}
+
 .studio-panel h3 {
   font-size: 15px;
   font-weight: 700;

@@ -29,7 +29,7 @@ test('back-office accounts can access learner onboarding and all pages without b
   ]);
   assert.match(app, /<Route element=\{<RequireLearnerOnboarding \/>\}>[\s\S]*path="\/onboarding\/placement-test"/);
   assert.match(guard, /role === 'ADMIN'/);
-  assert.match(guard, /role === 'CONTENT'/);
+  assert.match(guard, /role === 'CONTENT_CREATOR'/);
   assert.match(guard, /role === 'LEARNER'/);
   assert.match(guard, /\/forbidden/);
 });

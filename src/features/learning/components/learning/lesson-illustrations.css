@@ -1,0 +1,95 @@
+.illustrated-activity {
+  container: lesson-illustration / inline-size;
+}
+
+.illustrated-activity-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 22px;
+}
+
+@container lesson-illustration (min-width: 680px) {
+  .illustrated-activity-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  }
+}
+
+.illustrated-activity-content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.illustrated-activity-content .activity-intro {
+  display: block;
+  min-height: 0;
+}
+
+.illustrated-activity-content .editorial-phrase {
+  font-size: clamp(1.05rem, 2.6cqi, 1.45rem);
+  line-height: 1.55;
+}
+
+.illustrated-activity-images {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.illustrated-activity-images figure {
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #e8e5df;
+  border-radius: 14px;
+  background: #fffdf9;
+}
+
+.illustrated-activity-zoom {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.illustrated-activity-zoom img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+
+.illustrated-activity-zoom-icon {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #253044;
+}
+
+.illustrated-activity-images figcaption {
+  padding-top: 7px;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.illustrated-activity-modal {
+  width: min(1080px, calc(100vw - 32px));
+}
+
+.illustrated-activity-modal > img {
+  display: block;
+  max-height: 75vh;
+  max-width: 100%;
+  margin: 0 auto;
+  object-fit: contain;
+}

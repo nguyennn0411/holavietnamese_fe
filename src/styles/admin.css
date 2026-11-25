@@ -909,7 +909,7 @@ button.review-tab-btn.is-active {
 }
 
 
-/* Shared table actions for every Admin / Content Manager data table. */
+/* Shared table actions for every Admin / Content Creator data table. */
 .admin-content .admin-row-actions {
   display: inline-flex;
   align-items: center;

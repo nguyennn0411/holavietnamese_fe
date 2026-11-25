@@ -35,7 +35,7 @@ test('course roadmap owns the desktop collapse arrow and leaves a compact reopen
   ]);
 
   assert.match(page, /aria-expanded=\{sidebarOpen\}/);
-  assert.match(page, /lg:hidden ml-auto inline-flex h-9 w-9/);
+  assert.match(page, /lesson-roadmap-toggle lg:hidden ml-auto inline-flex !h-9 !w-9/);
   assert.match(page, /onClose=\{\(\) => setSidebarOpen\(false\)\}/);
   assert.match(page, /!sidebarOpen &&/);
   assert.match(page, /Mở lộ trình khóa học/);

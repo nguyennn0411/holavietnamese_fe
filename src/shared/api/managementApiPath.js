@@ -10,8 +10,8 @@ const normalizedRole = () => {
   }
 };
 
-export const managementApiRoot = () => normalizedRole() === 'CONTENT' ? '/api/content' : '/api/admin';
-export const managementResourceRoot = () => normalizedRole() === 'CONTENT' ? '/content' : '/admin';
+export const managementApiRoot = () => normalizedRole() === 'CONTENT_CREATOR' ? '/api/content' : '/api/admin';
+export const managementResourceRoot = () => normalizedRole() === 'CONTENT_CREATOR' ? '/content' : '/admin';
 
 export const managementApiPath = (path = '') => `${managementApiRoot()}${path.startsWith('/') ? path : `/${path}`}`;
 export const managementResourcePath = (path = '') => `${managementResourceRoot()}${path.startsWith('/') ? path : `/${path}`}`;
