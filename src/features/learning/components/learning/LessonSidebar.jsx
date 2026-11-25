@@ -97,7 +97,7 @@ export function LessonSidebar({
               title={isDrawer
                 ? bilingualLabel("Đóng danh sách bài", "Close lesson list")
                 : bilingualLabel("Thu gọn lộ trình khóa học", "Collapse course roadmap")}
-              className="inline-flex h-7 w-7 min-h-0 shrink-0 items-center justify-center rounded-full border border-[#E8E5DF] !bg-white !p-0 text-[#24382B] shadow-xs transition-all hover:!border-[#24382B] hover:!bg-[#24382B] hover:!text-white cursor-pointer"
+              className="lesson-roadmap-toggle inline-flex !h-7 !w-7 !min-h-0 shrink-0 items-center justify-center !rounded-full !border !border-[#E8E5DF] !bg-white !p-0 !text-[#24382B] shadow-xs transition-all hover:!border-[#24382B] hover:!bg-[#24382B] hover:!text-white cursor-pointer"
             >
               {isDrawer
                 ? <X size={16} aria-hidden="true" />
