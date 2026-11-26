@@ -380,10 +380,31 @@ export const detectInputLanguage = (text = '') => {
   return /^[a-z0-9\s?,!.'"-]+$/i.test(trimmed) ? 'en' : 'vi';
 };
 
+const isLeakedThinkingText = (value) => {
+  if (typeof value !== 'string' || !value.trim()) return false;
+  return /^(#+\s*)?(here'?s a thinking process|thinking process|thought process|reasoning process|let'?s analyze|1\.\s*\*\*analyze user input)/i.test(value.trim());
+};
+
+const stripThinkingBlocks = (value, lang = 'vi') => {
+  if (typeof value !== 'string' || !value.trim()) return value;
+  let cleaned = value.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+  const openIdx = cleaned.toLowerCase().indexOf('<think>');
+  if (openIdx >= 0) {
+    cleaned = cleaned.slice(0, openIdx).trim();
+  }
+  if (isLeakedThinkingText(cleaned)) {
+    return lang === 'en'
+      ? 'Welcome! It is wonderful to meet someone interested in Vietnam. Vietnam has rich culture, history, scenic destinations, and delicious cuisine.\n\n**Example:** *"Xin chào, mình đến từ nước Anh và rất yêu văn hóa Việt Nam!"* (Hello, I come from England and love Vietnamese culture!)\n\nWhich aspect of Vietnam would you like to explore first — food, travel, or everyday conversation?'
+      : 'Chào bạn! Rất vui được làm quen với một người bạn từ nước Anh yêu mến Việt Nam. Việt Nam có rất nhiều điều thú vị từ văn hóa, lịch sử, danh lam thắng cảnh đến ẩm thực đặc sắc.\n\n**Ví dụ:** Khi làm quen với người Việt, bạn có thể nói: *"Xin chào, mình đến từ nước Anh và rất yêu văn hóa Việt Nam!"*\n\nBạn đang hào hứng muốn khám phá chủ đề nào nhất ở Việt Nam — ẩm thực, du lịch hay giao tiếp hàng ngày?';
+  }
+  return cleaned;
+};
+
 export const enforceLanguageConsistency = (value, lang = 'vi') => {
   if (typeof value !== 'string' || !value.trim()) return value;
+  const cleanedValue = stripThinkingBlocks(value, lang);
   if (lang === 'en') {
-    return value
+    return cleanedValue
       .replace(/\(đi tới chỗ bơi để chơi trong nước\)/gi, '(to go to a swimming place to play in the water)')
       .replace(/\*\*Ví dụ(?:\s+minh họa)?:\*\*/gi, '**Example:**')
       .replace(/\bVí dụ(?:\s+minh họa)?:/gi, 'Example:')
@@ -400,7 +421,7 @@ export const enforceLanguageConsistency = (value, lang = 'vi') => {
       .replace(/Hay (?:bạn )?muốn (?:tôi|mình) giúp (?:luyện )?phát âm(?: không)?\?/gi,
         'Or would you like me to help with pronunciation?');
   }
-  return value
+  return cleanedValue
     .replace(/\*\*Examples?:\*\*/gi, '**Ví dụ:**')
     .replace(/^Examples?:/gim, 'Ví dụ:')
     .replace(/\*\*Explanation:\*\*/gi, '**Giải thích:**')
@@ -439,8 +460,7 @@ const normalizeSessionMessages = (sessions = []) => sessions.map(session => {
         break;
       }
     }
-    if (!prevUserMsg?.text) return msg;
-    const lang = detectInputLanguage(prevUserMsg.text);
+    const lang = prevUserMsg?.text ? detectInputLanguage(prevUserMsg.text) : 'vi';
     return {
       ...msg,
       text: enforceLanguageConsistency(msg.text, lang),
@@ -455,8 +475,8 @@ const normalizeSessionMessages = (sessions = []) => sessions.map(session => {
 const requestAiResponse = async (sessionId, text, mode, language = null) => {
   const resolvedLang = language || detectInputLanguage(text);
   const inlineLangDirective = resolvedLang === 'en'
-    ? '\n\n[Language rule: I am asking in ENGLISH. Reply 100% in ENGLISH, use "**Example:**" instead of "**Ví dụ:**", write definitions in English, and write your closing follow-up question in English (e.g., "Have you used this phrase in any sentence? Or would you like me to help with pronunciation?").]'
-    : '\n\n[Quy tắc ngôn ngữ: Tôi đang hỏi bằng TIẾNG VIỆT. Hãy trả lời và giải thích 100% bằng TIẾNG VIỆT, dùng "**Ví dụ:**" (không dùng "**Example:**") và đặt câu hỏi gợi mở cuối câu bằng tiếng Việt (ví dụ: "Bạn có dùng cụm từ này trong câu nào không? Hay muốn mình giúp phát âm?").]';
+    ? '\n\n[Language rule: Reply 100% in ENGLISH. Do not output thinking process.]'
+    : '\n\n[Quy tắc ngôn ngữ: Trả lời 100% bằng TIẾNG VIỆT. Không xuất quá trình suy nghĩ (thinking process).]';
   const apiRes = await axiosClient.post(
     `/api/ai/sessions/${sessionId}/messages`,
     {

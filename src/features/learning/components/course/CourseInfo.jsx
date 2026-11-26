@@ -3,12 +3,12 @@ import { ContentImage } from '@/shared/components/common/ContentImage';
 import { BookOpen, Clock } from 'lucide-react';
 
 const LEVEL_BADGES = {
-  A0: 'bg-sky-700 text-sky-100',
   A1: 'bg-emerald-700 text-emerald-100',
   A2: 'bg-teal-700 text-teal-100',
   B1: 'bg-amber-700 text-amber-100',
   B2: 'bg-purple-700 text-purple-100',
   C1: 'bg-[#EA580C] text-white',
+  C2: 'bg-rose-700 text-rose-100',
 };
 
 const DEFAULT_COVERS = [
@@ -34,13 +34,13 @@ export function getCourseCover(course) {
   if (/sinh hoạt|di chuyển|daily|life|travel/i.test(title)) {
     return `${import.meta.env.BASE_URL}design/hero/vietnam-hoi-an-banner.jpg`;
   }
-  if (/làm quen|giao tiếp 1|sơ cấp 1|phát âm|alphabet|a0/i.test(title) || level === 'A0') {
+  if (/làm quen|giao tiếp 1|sơ cấp 1|phát âm|alphabet|a1/i.test(title) || level === 'A1') {
     return `${import.meta.env.BASE_URL}design/hero/vietnam-pho-banner.jpg`;
   }
   if (/hành trình|khám phá|trung cấp|b1/i.test(title) || level === 'B1') {
     return `${import.meta.env.BASE_URL}design/hero/vietnam-tet-banner.jpg`;
   }
-  if (/nâng cao|b2|c1|luyện nói/i.test(title) || level === 'B2' || level === 'C1') {
+  if (/nâng cao|b2|c1|c2|luyện nói/i.test(title) || level === 'B2' || level === 'C1' || level === 'C2') {
     return `${import.meta.env.BASE_URL}design/hero/ho-chi-minh-mausoleum.webp`;
   }
 

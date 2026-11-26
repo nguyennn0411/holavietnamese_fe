@@ -85,11 +85,11 @@ export const CULTURAL_SITUATIONS = [
  * Gamified Learning Roadmap Adventure Nodes
  */
 export const ROADMAP_NODES = [
-  { id: '1', level: 'A0', title: 'Làm quen 6 Thanh điệu & Bảng chữ cái', status: 'completed', stars: 3, xp: 50 },
+  { id: '1', level: 'A1', title: 'Làm quen 6 Thanh điệu & Bảng chữ cái', status: 'completed', stars: 3, xp: 50 },
   { id: '2', level: 'A1', title: 'Chào hỏi & Gọi món đường phố', status: 'completed', stars: 3, xp: 75 },
-  { id: '3', level: 'A1+', title: 'Đi chợ & Hỏi giá tiền Việt', status: 'current', stars: 1, xp: 100 },
-  { id: '4', level: 'A2', title: 'Giao lưu bạn bè & Đồng nghiệp', status: 'locked', stars: 0, xp: 120 },
-  { id: '5', level: 'B1', title: 'Khám phá văn hóa & Đời sống Việt', status: 'locked', stars: 0, xp: 150 },
+  { id: '3', level: 'A2', title: 'Đi chợ & Hỏi giá tiền Việt', status: 'current', stars: 1, xp: 100 },
+  { id: '4', level: 'B1', title: 'Giao lưu bạn bè & Đồng nghiệp', status: 'locked', stars: 0, xp: 120 },
+  { id: '5', level: 'B2', title: 'Khám phá văn hóa & Đời sống Việt', status: 'locked', stars: 0, xp: 150 },
 ];
 
 /**

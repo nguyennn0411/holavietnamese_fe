@@ -17,21 +17,21 @@ test('builds a practical beginner travel plan from onboarding answers', () => {
     dailyGoalMinutes: 10,
   });
 
-  assert.equal(recommendation.targetLevel, 'A0');
+  assert.equal(recommendation.targetLevel, 'A1');
   assert.equal(recommendation.goalId, 'travel');
   assert.equal(recommendation.paceId, 'steady');
   assert.equal(recommendation.sessionsPerWeek, 5);
   assert.equal(recommendation.weeklyMinutes, 50);
 
   const path = buildRecommendationPath(recommendation);
-  assert.match(path, /level=A0/);
+  assert.match(path, /level=A1/);
   assert.match(path, /recommended=1/);
   assert.match(path, /goal=travel/);
   assert.match(path, /pace=steady/);
 
   const learningPath = buildLearningPathPath(recommendation);
   assert.match(learningPath, /^\/learning-path\?/);
-  assert.match(learningPath, /level=A0/);
+  assert.match(learningPath, /level=A1/);
   assert.match(learningPath, /goal=travel/);
 });
 

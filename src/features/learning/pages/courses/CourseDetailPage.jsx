@@ -129,16 +129,10 @@ function formatDuration(minutes) {
  * Chuẩn đầu ra mặc định theo trình độ nếu backend chưa cấu hình learningOutcomes
  */
 const DEFAULT_OUTCOMES_BY_LEVEL = {
-  A0: [
-    'Nắm vững 29 chữ cái tiếng Việt và các quy tắc ghép vần chuẩn xác',
-    'Phát âm chuẩn xác 6 thanh điệu đặc trưng cùng trợ lý AI Tutor',
-    'Tự tin đọc và nhận biết các từ vựng căn bản trong đời sống hàng ngày',
-    'Giao tiếp những câu chào hỏi, cảm ơn và xin lỗi sơ đẳng',
-  ],
   A1: [
+    'Nắm vững 29 chữ cái tiếng Việt, 6 thanh điệu và các quy tắc ghép vần chuẩn xác',
     'Tự tin giao tiếp các chủ đề thông dụng: Chào hỏi, giới thiệu bản thân, mua sắm',
     'Làm chủ hơn 300 từ vựng cốt lõi và các cấu trúc câu giao tiếp căn bản',
-    'Luyện phát âm chuẩn giọng Bắc - Nam với sự trợ giúp của AI Tutor',
     'Hiểu nét văn hóa xưng hô lễ phép đặc trưng của người Việt Nam',
   ],
   A2: [
@@ -152,6 +146,24 @@ const DEFAULT_OUTCOMES_BY_LEVEL = {
     'Làm chủ ngữ điệu biểu cảm và phản xạ giao tiếp tự nhiên như người bản xứ',
     'Đọc hiểu tài liệu ngắn, tin tức và các đoạn hội thoại nâng cao',
     'Kỹ năng viết đoạn văn và phản hồi tương tác linh hoạt trong đời sống',
+  ],
+  B2: [
+    'Giao tiếp lưu loát và tranh luận rõ ràng trong môi trường học tập, công sở',
+    'Nắm vững cấu trúc ngữ pháp phức tạp và cách diễn đạt giàu sắc thái',
+    'Đọc hiểu báo chí, bài viết chuyên đề và nội dung văn hóa sâu sắc',
+    'Trình bày quan điểm mạch lạc bằng cả văn nói và văn viết',
+  ],
+  C1: [
+    'Sử dụng tiếng Việt linh hoạt, chuẩn xác trong bối cảnh học thuật và chuyên môn',
+    'Hiểu sâu hàm ý, thành ngữ, tục ngữ và sắc thái văn hóa vùng miền',
+    'Phân tích và tổng hợp thông tin từ các văn bản dài, độ khó cao',
+    'Thuyết trình và đàm phán tự nhiên với phong thái chuyên nghiệp',
+  ],
+  C2: [
+    'Làm chủ tiếng Việt ở mức độ tinh thông tương đương người bản ngữ',
+    'Cảm thụ trọn vẹn chiều sâu văn học, nghệ thuật và sắc thái biểu cảm tinh tế',
+    'Diễn đạt tức thì, uyển chuyển và chính xác trong mọi tình huống phức tạp',
+    'Biên soạn, phản biện và sáng tạo nội dung chuyên sâu bằng tiếng Việt',
   ],
 };
 

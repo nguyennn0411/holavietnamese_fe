@@ -98,7 +98,7 @@ test('Scenario: B1 test where user passes B1 threshold (e.g. 6/8 B1, 3/3 A1, 3/4
   assert.equal(evalResult.tierScores.B1.passed, true);
 });
 
-test('Scenario: Prerequisite foundation lost (misses A1 foundation) defaults to A0', () => {
+test('Scenario: Prerequisite foundation lost (misses A1 foundation) defaults to A1', () => {
   const questions = getPlacementQuestions('B1');
   const a1Questions = questions.filter((q) => q.level === 'A1');
   const a2Questions = questions.filter((q) => q.level === 'A2');
@@ -116,7 +116,7 @@ test('Scenario: Prerequisite foundation lost (misses A1 foundation) defaults to 
   ];
 
   const evalResult = evaluatePlacementTest('B1', answers, questions);
-  assert.equal(evalResult.assessedLevel, 'A0', 'Losing A1 foundation must stop progression at A0');
+  assert.equal(evalResult.assessedLevel, 'A1', 'Losing A1 foundation must stop progression at A1');
   assert.equal(evalResult.tierScores.A1.passed, false);
 });
 

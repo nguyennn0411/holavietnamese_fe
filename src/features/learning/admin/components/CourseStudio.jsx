@@ -185,7 +185,15 @@ export function CourseStudio({ course, reload = () => {} }) {
     {course && <nav className="studio-steps" aria-label={label("Các bước chỉnh sửa khóa học")}>
       {steps.map((item, index) => {
         const isActive = step === item.id;
-        const isComplete = Boolean(stepComplete[item.id]);
+        const isSubmittedOrPublished = ['REVIEW', 'PUBLISHED'].includes(course?.status);
+        const stepDataReady = item.id === 'info'
+          ? infoComplete
+          : item.id === 'curriculum' || item.id === 'preview'
+          ? structureComplete
+          : ready && isSubmittedOrPublished;
+        const isComplete = Boolean(
+          stepDataReady && (isSubmittedOrPublished || index < currentStepIndex)
+        );
         return (
           <button
             key={item.id}
@@ -290,7 +298,7 @@ export function CourseStudio({ course, reload = () => {} }) {
                 <Link to={canEdit ? `${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}` : `${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}/preview`}>
                   <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
                 </Link>
-                <small><Clock size={12} /> {lesson.estimatedMinutes || 0} <BilingualText vi="phút" en="min" /> <span className={`studio-status studio-status--${lesson.status}`}><BilingualText>{statusNames[lesson.status] || lesson.status}</BilingualText></span></small>
+                <small><Clock size={12} /> {lesson.estimatedMinutes || 0} <BilingualText vi="phút" en="min" /> <AdminStatusBadge status={lesson.status} size="sm" /></small>
               </div>
               <div className="studio-lesson-actions">
                 <Link className="studio-icon-link" aria-label={label(`Xem trước ${lesson.titleVi || lesson.title}`)} to={`${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}/preview`}><Eye size={17} /></Link>
@@ -1205,7 +1213,7 @@ function CourseDetailsForm({ course, canEdit, onSave, onDirty, onBusyChange, wiz
             <HolaSelect
               value={form.level}
               onChange={(val) => update('level', val)}
-              options={['A0', 'A1', 'A2', 'B1', 'B2', 'C1'].map((level) => ({ value: level, label: level }))}
+              options={['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map((level) => ({ value: level, label: level }))}
               fullWidth
               align="left"
               disabled={busy || !canEdit}

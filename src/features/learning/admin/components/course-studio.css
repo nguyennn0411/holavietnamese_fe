@@ -109,11 +109,12 @@
   font-weight: 700;
   white-space: nowrap;
 }
-.studio-status > span {
+.studio-status > span:not(.bilingual-text) {
   width: 6px;
   height: 6px;
   background: currentColor;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 .studio-status--PUBLISHED {
   background: #ECFDF5;
@@ -1313,25 +1314,66 @@
 }
 .studio-module-tools {
   display: flex;
+  align-items: center;
   gap: 8px;
-  padding: 0 20px 15px;
+  padding: 0 20px 14px;
   justify-content: flex-end;
 }
-.course-studio .studio-icon-button {
-  padding: 8px;
-  min-width: 32px;
+.studio-module-tools button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 14px !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border-radius: 8px !important;
+  background: #FFFFFF !important;
+  color: #334155 !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+  transition: all 0.16s ease !important;
+}
+.studio-module-tools button:hover:not(:disabled) {
+  background: #F8FAFC !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+.course-studio .studio-icon-button,
+.studio-module-tools .studio-icon-button,
+.studio-lesson-actions .studio-icon-button {
+  width: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
 }
 .studio-lesson {
   display: flex;
   align-items: center;
   gap: 13px;
-  padding: 15px 20px;
+  padding: 14px 20px;
   border-top: 1px solid #F1F5F9;
+  transition: background 0.15s ease;
+}
+.studio-lesson:hover {
+  background: #FAFBFD;
 }
 .studio-lesson-number {
   font-size: 12px;
   color: #94A3B8;
   font-weight: 700;
+  min-width: 20px;
 }
 .studio-lesson-title {
   flex: 1;
@@ -1351,14 +1393,17 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
+  margin-top: 5px;
   color: var(--studio-muted);
-  font-size: 11px;
+  font-size: 11.5px;
+}
+.studio-lesson-title .admin-status-badge {
+  margin-left: 4px;
 }
 .studio-lesson-title .studio-status {
-  font-size: 9.5px;
-  padding: 2px 7px;
-  margin-left: 5px;
+  font-size: 10.5px;
+  padding: 2px 8px;
+  margin-left: 4px;
 }
 .studio-lesson-actions {
   display: flex;
@@ -1367,22 +1412,94 @@
   flex-wrap: wrap;
   justify-content: flex-end;
 }
-.studio-lesson-actions .button, .studio-lesson-actions button {
-  font-size: 11px;
-  padding: 6px 10px;
+.studio-lesson-actions .button,
+.studio-lesson-actions button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border-radius: 8px !important;
+  background: #FFFFFF !important;
+  color: #334155 !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+  text-decoration: none !important;
+  transition: all 0.16s ease !important;
+}
+.studio-lesson-actions .button:hover:not(:disabled),
+.studio-lesson-actions button:hover:not(:disabled) {
+  background: #F8FAFC !important;
+  color: #EA580C !important;
+  border-color: #FDBA74 !important;
+}
+.studio-lesson-actions .studio-icon-button {
+  width: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  padding: 0 !important;
 }
 .studio-icon-link {
-  display: flex;
-  padding: 7px;
-  color: #94A3B8;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  border: 1px solid #E2E8F0 !important;
+  background: #FFFFFF !important;
+  color: #64748B !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+  transition: all 0.16s ease !important;
 }
 .studio-icon-link:hover {
-  color: #0F172A;
+  color: #0D9488 !important;
+  background: #F0FDFA !important;
+  border-color: #99F6E4 !important;
 }
-.admin-content .studio-add-lesson {
-  margin: 14px 20px 20px;
-  border-style: dashed;
-  color: #EA580C;
+.admin-content .studio-add-lesson,
+.course-studio .studio-add-lesson {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 14px !important;
+  margin: 12px 20px 18px !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border-radius: 9px !important;
+  border: 1px dashed #FDBA74 !important;
+  background: #FFFDF9 !important;
+  color: #EA580C !important;
+  transition: all 0.16s ease !important;
+}
+.admin-content .studio-add-lesson:hover:not(:disabled),
+.course-studio .studio-add-lesson:hover:not(:disabled) {
+  background: #FFF7ED !important;
+  border-color: #EA580C !important;
+  color: #C2410C !important;
+}
+.course-studio button .bilingual-text,
+.course-studio button .bilingual-text__current,
+.course-studio .button .bilingual-text,
+.course-studio .button .bilingual-text__current {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
 }
 .studio-empty {
   padding: 48px 25px;

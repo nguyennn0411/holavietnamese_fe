@@ -16,6 +16,7 @@ import { useAuth } from '@/features/auth/context/AuthContext';
 import { AdminActionButton, AdminActionGroup } from '@/shared/components/common/AdminTableActions';
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
+import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
 import { Search, X, Pencil } from 'lucide-react';
 
 const QUESTION_STATUS_OPTIONS = [
@@ -58,8 +59,13 @@ export function AdminQuestionBankPage() {
         }
         actions={
           canEdit ? (
-            <button onClick={() => setModal({})}>
-              <BilingualText>{"+ Tạo câu hỏi"}</BilingualText>
+            <button
+              type="button"
+              className="button"
+              onClick={() => setModal({})}
+              style={{ fontSize: '13px', minHeight: '40px', height: '40px', padding: '0 16px', cursor: 'pointer' }}
+            >
+              <BilingualText vi="+ Tạo câu hỏi" en="+ Create question" />
             </button>
           ) : null
         }
@@ -235,17 +241,7 @@ export function AdminQuestionBankPage() {
                         <td>{question.topic}</td>
                         <td>v{question.currentVersion}</td>
                         <td>
-                          <span
-                            className={`admin-badge ${
-                              question.status === 'PUBLISHED'
-                                ? 'admin-badge-success'
-                                : question.status === 'ARCHIVED'
-                                ? 'admin-badge-danger'
-                                : 'admin-badge-warning'
-                            }`}
-                          >
-                            <BilingualText>{question.status}</BilingualText>
-                          </span>
+                          <AdminStatusBadge status={question.status} />
                         </td>
                         {canEdit && (
                           <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>

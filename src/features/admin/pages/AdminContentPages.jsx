@@ -409,15 +409,26 @@ export function AdminContentListPage({ kind }) {
                                   icon={pendingReview ? Check : isAdmin ? Eye : Pencil}
                                   to={`${isAdmin ? '/admin' : '/content'}/${kind}/${item.id}${pendingReview ? '?step=publish' : ''}`}
                                 >
-                                  <BilingualText>
-                                    {pendingReview
-                                      ? 'Mở kiểm duyệt'
-                                      : isAdmin
-                                      ? 'Chi tiết'
-                                      : kind === 'courses'
-                                      ? 'Chỉnh sửa'
-                                      : 'Mở builder'}
-                                  </BilingualText>
+                                  <BilingualText
+                                    vi={
+                                      pendingReview
+                                        ? 'Mở kiểm duyệt'
+                                        : isAdmin
+                                        ? 'Chi tiết'
+                                        : kind === 'courses'
+                                        ? 'Chỉnh sửa'
+                                        : 'Mở builder'
+                                    }
+                                    en={
+                                      pendingReview
+                                        ? 'Review'
+                                        : isAdmin
+                                        ? 'Details'
+                                        : kind === 'courses'
+                                        ? 'Edit'
+                                        : 'Open builder'
+                                    }
+                                  />
                                 </AdminActionLink>
                               </AdminActionGroup>
                             </td>
