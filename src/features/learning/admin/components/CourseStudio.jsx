@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { AlertCircle, ArrowLeft, ArrowRight, BookOpen, Check, CheckCheck, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Clock, Download, ExternalLink, Eye, FileCheck, Files, FileSpreadsheet, FileText, Globe, ImagePlus, Layers, Plus, RefreshCw, Save, Send, ShieldCheck, Trash2, Upload, UploadCloud, X } from 'lucide-react';
+import { AlertCircle, ArrowLeft, ArrowRight, BookOpen, Check, CheckCheck, CheckCircle2, ChevronDown, ChevronUp, Clock, Download, ExternalLink, Eye, FileCheck, Files, FileSpreadsheet, FileText, Globe, ImagePlus, Layers, Plus, RefreshCw, Save, Send, ShieldCheck, Trash2, Upload, UploadCloud, X } from 'lucide-react';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { contentService } from '@/features/learning/api/contentService';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
@@ -8,7 +8,6 @@ import { ResourceState } from '@/shared/components/common/ResourceState';
 import { Notice } from '@/shared/components/common/Ui';
 import { Modal } from '@/shared/components/common/Modal';
 import { ContentForm } from '@/features/learning/admin/components/ContentForm';
-import { LessonImageImportPanel } from '@/features/learning/admin/components/LessonImageImportPanel';
 import { CourseThumbnail } from '@/features/learning/components/course/CourseInfo';
 import { LessonActivities } from '@/features/learning/components/learning/LessonActivities';
 import { moveItem } from '@/features/learning/components/learning/answerUtils';
@@ -34,7 +33,9 @@ const issueNames = {
   'Add at least one module.': 'Thêm ít nhất một học phần.',
   'Add at least one lesson.': 'Thêm ít nhất một bài học.',
   'Every module needs a lesson.': 'Mỗi học phần cần có bài học.',
-  'Publish every lesson before submitting.': 'Xuất bản tất cả bài học.',
+  'Restore archived lessons to draft before submitting.': 'Chuyển các bài học đã lưu trữ về bản nháp trước khi gửi duyệt.',
+  'Publish every lesson before approving.': 'Tất cả bài học phải ở trạng thái xuất bản trước khi phê duyệt.',
+  'Publish all quizzes linked to published activities.': 'Xuất bản tất cả quiz gắn với hoạt động đã xuất bản.',
   'Every lesson needs a published required learning activity.': 'Mỗi bài cần một hoạt động học bắt buộc đã xuất bản.',
   'Every lesson needs a published quiz activity.': 'Mỗi bài cần một quiz đã xuất bản và gắn vào bài.',
   'Set a published final course quiz and attach it to a lesson.': 'Thêm quiz cuối khóa, xuất bản và gắn vào bài học.',
@@ -79,8 +80,6 @@ export function CourseStudio({ course, reload = () => {} }) {
   const structureComplete = Boolean(structureStarted && readiness.data && !(readiness.data.issues || []).length);
   const stepComplete = { info: infoComplete, curriculum: structureComplete, preview: false, publish: ready };
   const currentStepIndex = steps.findIndex(item => item.id === step);
-  const completionCount = Number(infoComplete) + Number(structureComplete) + Number(ready);
-  const completionPercent = Math.round((completionCount / 3) * 100);
   const currentSummary = step === 'info'
     ? infoComplete ? label('Thông tin bắt buộc đã đầy đủ.') : `${metadataIssues.length || 1} ${label('mục thông tin cần bổ sung.')}`
     : step === 'curriculum' ? `${modules.length} ${label('học phần')} · ${lessons.length} ${label('bài học')} · ${readiness.data?.issues?.length || 0} ${label('mục cần hoàn thiện.')}`
@@ -240,15 +239,6 @@ export function CourseStudio({ course, reload = () => {} }) {
           });
         }} />}
         {course && step === 'info' && <>
-          {canEdit && ownsCourse && <LessonImageImportPanel
-            key={course.id}
-            courseId={course.id}
-            lessons={lessons}
-            busy={busy}
-            onBusyChange={setBusy}
-            onImported={readiness.reload}
-            onDownload={downloadWorkbook}
-          />}
           {canEdit ? <section className="studio-panel studio-editor-launch">
             <div>
               <p className="studio-eyebrow"><BilingualText>{"CHỈNH SỬA THEO TỪNG BƯỚC"}</BilingualText></p>
@@ -269,12 +259,6 @@ export function CourseStudio({ course, reload = () => {} }) {
           </Modal>}
         </>}
         {step === 'curriculum' && <>
-          <div className="studio-content-flow" aria-label={label("Luồng biên soạn nội dung")}>
-            <div className="is-current"><span>1</span><strong><BilingualText vi="Khóa học" en="Course" /></strong><small><BilingualText vi="Thông tin và cấu trúc" en="Info & structure" /></small></div><ArrowRight size={16} />
-            <div><span>2</span><strong><BilingualText vi="Bài học" en="Lessons" /></strong><small><BilingualText vi="Nội dung và media" en="Content & media" /></small></div><ArrowRight size={16} />
-            <div><span>3</span><strong><BilingualText vi="Quiz" en="Quiz" /></strong><small><BilingualText vi="Đánh giá trong bài" en="Lesson quizzes" /></small></div><ArrowRight size={16} />
-            <div><span>4</span><strong><BilingualText vi="Câu hỏi" en="Questions" /></strong><small><BilingualText vi="Câu hỏi và đáp án" en="Questions & keys" /></small></div>
-          </div>
           <div className="studio-section-heading">
             <div>
               <p className="studio-eyebrow"><BilingualText>{"XÂY DỰNG LỘ TRÌNH"}</BilingualText></p>
@@ -354,7 +338,7 @@ export function CourseStudio({ course, reload = () => {} }) {
             <ShieldCheck size={25} />
             <div>
               <h3><BilingualText>{ready ? 'Khóa học đã sẵn sàng gửi duyệt' : 'Hoàn thiện các mục còn thiếu'}</BilingualText></h3>
-              <p><BilingualText>{"Sau khi gửi, khóa học chuyển sang chỉ đọc. Admin phê duyệt sẽ xuất bản cho học viên."}</BilingualText></p>
+              <p><BilingualText vi="Khi gửi duyệt, bài học nháp sẽ chuyển sang Đã xuất bản. Học viên có thể truy cập sau khi Admin duyệt khóa học." en="Submitting for review marks draft lessons as Published. Learners can access them after an Admin approves the course." /></p>
             </div>
             <button disabled={busy || !ready} onClick={() => mutate(() => contentService.submitCourse(course.id), 'Đã gửi Admin kiểm duyệt.')}><Send size={16} />{busy ? label('Đang gửi…') : label('Gửi kiểm duyệt')}</button>
           </div>}
@@ -394,95 +378,6 @@ export function CourseStudio({ course, reload = () => {} }) {
             <div><BookOpen size={17} /><strong>{lessons.length}</strong><span><BilingualText>{"bài học"}</BilingualText></span></div>
             <div><Clock size={17} /><strong>{lessons.reduce((sum, l) => sum + Number(l.estimatedMinutes || 0), 0)}</strong><span><BilingualText>{"phút nội dung"}</BilingualText></span></div>
           </div>
-        </div>
-        <section className="studio-progress-card">
-          <div className="studio-progress-heading">
-            <span className="studio-eyebrow">
-              <BilingualText vi="TIẾN ĐỘ HOÀN THIỆN" en="COMPLETION PROGRESS" />
-            </span>
-            <div className="studio-progress-metric">
-              <strong className="studio-progress-percent">{completionPercent}%</strong>
-              <span className="studio-progress-ratio">
-                {completionCount}/3 <BilingualText vi="nhóm yêu cầu" en="requirements" />
-              </span>
-            </div>
-          </div>
-          <div className="studio-progress-track">
-            <span style={{ width: `${completionPercent}%` }} />
-          </div>
-          <div className="studio-progress-list">
-            <button
-              type="button"
-              className={`studio-progress-item ${infoComplete ? 'is-complete' : ''}`}
-              onClick={() => changeStep('info')}
-            >
-              <span className="studio-progress-badge">
-                {infoComplete ? <Check size={14} strokeWidth={2.5} /> : '1'}
-              </span>
-              <div className="studio-progress-body">
-                <strong className="studio-progress-name">
-                  <BilingualText vi="Thông tin khóa học" en="Course Information" />
-                </strong>
-                <small className="studio-progress-status">
-                  <BilingualText
-                    vi={infoComplete ? 'Đã đầy đủ' : 'Cần bổ sung'}
-                    en={infoComplete ? 'Complete' : 'Needs attention'}
-                  />
-                </small>
-              </div>
-              <ChevronRight size={15} className="studio-progress-arrow" />
-            </button>
-
-            <button
-              type="button"
-              className={`studio-progress-item ${structureComplete ? 'is-complete' : ''}`}
-              onClick={() => changeStep('curriculum')}
-            >
-              <span className="studio-progress-badge">
-                {structureComplete ? <Check size={14} strokeWidth={2.5} /> : '2'}
-              </span>
-              <div className="studio-progress-body">
-                <strong className="studio-progress-name">
-                  <BilingualText vi="Bài học & hoạt động" en="Lessons & Activities" />
-                </strong>
-                <small className="studio-progress-status">
-                  <BilingualText
-                    vi={structureComplete ? 'Đã đầy đủ' : structureStarted ? 'Đang hoàn thiện' : 'Chưa có nội dung'}
-                    en={structureComplete ? 'Complete' : structureStarted ? 'In progress' : 'Empty'}
-                  />
-                </small>
-              </div>
-              <ChevronRight size={15} className="studio-progress-arrow" />
-            </button>
-
-            <button
-              type="button"
-              className={`studio-progress-item ${ready ? 'is-complete' : ''}`}
-              onClick={() => changeStep('publish')}
-            >
-              <span className="studio-progress-badge">
-                {ready ? <Check size={14} strokeWidth={2.5} /> : '3'}
-              </span>
-              <div className="studio-progress-body">
-                <strong className="studio-progress-name">
-                  <BilingualText vi="Gửi kiểm duyệt" en="Submit for Review" />
-                </strong>
-                <small className="studio-progress-status">
-                  <BilingualText
-                    vi={ready ? 'Đã sẵn sàng' : `${issues.length} mục còn thiếu`}
-                    en={ready ? 'Ready to submit' : `${issues.length} item(s) pending`}
-                  />
-                </small>
-              </div>
-              <ChevronRight size={15} className="studio-progress-arrow" />
-            </button>
-          </div>
-        </section>
-        <div className="studio-side-tip">
-          <ShieldCheck size={21} />
-          <h3><BilingualText>{"Mẹo biên soạn"}</BilingualText></h3>
-          <p><BilingualText>{"Lưu thông tin trước khi chuyển bước. Mở Xem trước để kiểm tra nội dung theo góc nhìn học viên."}</BilingualText></p>
-          <button className="secondary studio-tip-btn" disabled={busy || hasUnsaved} onClick={() => changeStep('preview')}><BilingualText>{"Mở xem trước"}</BilingualText> <ArrowRight size={14} /></button>
         </div>
       </aside>}
     </div>

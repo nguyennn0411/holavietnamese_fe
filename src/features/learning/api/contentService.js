@@ -34,8 +34,6 @@ export const contentService = {
   async courseWorkbookTemplate() { return axiosClient.get(managementApiPath('/courses/workbook/template'), { responseType: 'blob' }); },
   async courseWorkbookValidate(file) { const form = new FormData(); form.append('file', file); return axiosClient.post(managementApiPath('/courses/workbook/validate'), form); },
   async courseWorkbookImport(file) { const form = new FormData(); form.append('file', file); return axiosClient.post(managementApiPath('/courses/workbook/import'), form); },
-  previewLessonImages(courseId, items) { return axiosClient.post(managementApiPath(`/courses/${courseId}/lesson-images/preview`), { items }); },
-  attachLessonImage(courseId, image) { return axiosClient.put(managementApiPath(`/courses/${courseId}/lesson-images`), image); },
   uploadCourseCover(file) { return uploadSignedMedia(file, '/api/media/courses/cover/signature', 'image'); },
   uploadLessonMedia(file, type) {
     if (!['image', 'video', 'audio'].includes(type)) throw new Error('Loại tệp bài học không hợp lệ.');

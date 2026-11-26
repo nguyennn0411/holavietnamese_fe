@@ -3,7 +3,7 @@ import { CourseThumbnail } from '@/features/learning/components/course/CourseInf
 import { CourseStudio } from '@/features/learning/admin/components/CourseStudio';
 import { ActivityEditor } from '@/features/learning/admin/components/ActivityEditor';
 import { canIllustrateActivity } from '@/features/learning/admin/activityIllustrations';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { contentService } from '@/features/learning/api/contentService';
 import { useAsyncResource } from '@/shared/hooks/useAsyncResource';
@@ -18,7 +18,8 @@ import { AdminActionGroup, AdminActionLink } from '@/shared/components/common/Ad
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
 import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
-import { Search, X, Eye, Pencil, Check, Info, Clock, Layers, AlertCircle, Archive } from 'lucide-react';
+import { AlertCircle, Archive, ArrowDown, ArrowLeft, ArrowUp, Check, ChevronDown, Clock, Eye, Info, Layers, Pencil, Plus, Search, X } from 'lucide-react';
+import './lesson-builder.css';
 
 const CONTENT_STATUS_DOTS = {
   DRAFT: '#F59E0B',
@@ -494,7 +495,8 @@ export function AdminLessonBuilderPage() {
 }
 
 function LessonBuilder({ lesson, reload }) {
-  const [selected, setSelected] = useState(null),
+  const [selection, setSelection] = useState(undefined),
+    [showEditor, setShowEditor] = useState(false),
     [editing, setEditing] = useState(false),
     [creatingQuiz, setCreatingQuiz] = useState(false),
     [message, setMessage] = useState(''),
@@ -505,7 +507,16 @@ function LessonBuilder({ lesson, reload }) {
   const { isAdmin, isContentCreator } = useAuth();
   const navigate = useNavigate();
   const canEdit = isContentCreator && !isAdmin && ['DRAFT', 'REJECTED'].includes(lesson.courseStatus);
-  const illustrationTargets = (lesson.activities || []).filter(canIllustrateActivity);
+  const addActivityMenu = useRef(null);
+  const activitiesHeading = useRef(null);
+  const editorBackButton = useRef(null);
+  const activities = lesson.activities || [];
+  const selected = selection === undefined
+    ? activities[0]
+    : selection?.id == null
+      ? selection
+      : activities.find(activity => activity.id === selection.id);
+  const illustrationTargets = activities.filter(canIllustrateActivity);
   const imageTarget = illustrationTargets.find(activity => String(activity.id) === imageTargetId);
 
   async function reorder(index, direction) {
@@ -520,24 +531,52 @@ function LessonBuilder({ lesson, reload }) {
     }
   }
 
+  async function changeStatus(event) {
+    setBusy(true);
+    try {
+      await contentService.status('lessons', lesson.id, event.target.value);
+      reload();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function closeAddActivityMenu() {
+    addActivityMenu.current?.removeAttribute('open');
+  }
+
   function openIllustrationEditor(activity) {
-    setSelected(activity);
-    setFocusIllustration(request => request + 1);
+    selectActivity(activity, true);
     setImageTargetId(null);
     setMessage('');
     setError('');
   }
 
   function chooseLessonImage() {
+    closeAddActivityMenu();
     const current = illustrationTargets.find(activity => activity.id === selected?.id);
     if (current) openIllustrationEditor(current);
     else if (illustrationTargets.length === 1) openIllustrationEditor(illustrationTargets[0]);
     else setImageTargetId('');
   }
 
-  function selectActivity(activity) {
-    setFocusIllustration(0);
-    setSelected(activity);
+  function selectActivity(activity, focusImage = false) {
+    setFocusIllustration(request => focusImage ? request + 1 : 0);
+    closeAddActivityMenu();
+    setSelection(activity);
+    setShowEditor(true);
+    if (!focusImage && window.matchMedia('(max-width: 900px)').matches) {
+      requestAnimationFrame(() => editorBackButton.current?.focus());
+    }
+  }
+
+  function showActivities() {
+    setShowEditor(false);
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      requestAnimationFrame(() => activitiesHeading.current?.focus());
+    }
   }
 
   return (
@@ -550,112 +589,106 @@ function LessonBuilder({ lesson, reload }) {
         ]}
       />
       <PageHeader
-        title={<BilingualText vi={canEdit ? 'Lesson Builder' : 'Xem nội dung bài học'} en={canEdit ? 'Lesson Builder' : 'View lesson content'} />}
-        description={`${lesson.title} · ${lesson.moduleTitle || ''}`}
-        actions={
-          <>
-            <Link className="button secondary" to={`${isAdmin ? '/admin' : '/content'}/courses/${lesson.courseId}?step=curriculum`}>
-              <BilingualText>{"← Quay lại khóa học"}</BilingualText>
-            </Link>
-            <Link className="button secondary" to={`${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}/preview`}>
-              <BilingualText>{"Xem trước bài học"}</BilingualText>
-            </Link>
-            {canEdit && (
-              <button onClick={() => setCreatingQuiz(true)}>
-                <BilingualText>{"+ Tạo quiz bài học"}</BilingualText>
-              </button>
-            )}
-          </>
-        }
+        title={<span className="lesson-builder-title">
+          <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
+          <AdminStatusBadge status={lesson.publicationStatus || 'DRAFT'} />
+        </span>}
+        description={lesson.moduleTitle}
+        actions={<Link className="button secondary" to={`${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}/preview`}>
+          <Eye size={16} />
+          <BilingualText>{"Xem trước bài học"}</BilingualText>
+        </Link>}
       />
       {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
       {message && <Notice kind="success"><BilingualText>{message}</BilingualText></Notice>}
       {!canEdit && <Notice><BilingualText>{"Bài học đang ở chế độ chỉ đọc theo trạng thái khóa học."}</BilingualText></Notice>}
-      <div className="lesson-builder-grid">
-        <aside className="admin-card">
-          <h2><BilingualText>{"Thông tin bài học"}</BilingualText></h2>
-          <strong><BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} /></strong>
-          <p className="muted">{lesson.lessonType} · <BilingualText>{lesson.publicationStatus}</BilingualText></p>
-          <p><BilingualText vi={lesson.descriptionVi || lesson.description} en={lesson.description} /></p>
-          {canEdit && (
-            <>
-              <button className="secondary" onClick={() => setEditing(true)}>
-                <BilingualText>{"Chỉnh sửa"}</BilingualText>
-              </button>
-              <label className="builder-status">
-                <BilingualText>{"Trạng thái"}</BilingualText>
-                <select
-                  value={lesson.publicationStatus || 'DRAFT'}
-                  disabled={busy}
-                  onChange={async (event) => {
-                    setBusy(true);
-                    try {
-                      await contentService.status('lessons', lesson.id, event.target.value);
-                      reload();
-                    } catch (err) {
-                      setError(err.message);
-                    } finally {
-                      setBusy(false);
-                    }
-                  }}
-                >
-                  {['DRAFT', 'PUBLISHED', 'ARCHIVED'].map((st) => (
-                    <option key={st} value={st}>{bilingualLabel(st)}</option>
-                  ))}
-                </select>
-              </label>
-            </>
-          )}
-        </aside>
-        <section>
-          <div className="builder-heading">
-            <h2><BilingualText>{"Các hoạt động"}</BilingualText></h2>
-            {canEdit && (
-              <div className="actions">
-                <button type="button" disabled={busy || !illustrationTargets.length} onClick={chooseLessonImage}>
-                  <BilingualText vi="+ Thêm ảnh" en="+ Add image" />
+      <details className="admin-card lesson-builder-info">
+        <summary><BilingualText>{"Thông tin bài học"}</BilingualText><ChevronDown size={16} /></summary>
+        <div className="lesson-builder-info-content">
+          {lesson.lessonType && <p className="muted"><BilingualText>{lesson.lessonType}</BilingualText></p>}
+          {(lesson.descriptionVi || lesson.description) && <p>
+            <BilingualText vi={lesson.descriptionVi || lesson.description} en={lesson.description || lesson.descriptionVi} />
+          </p>}
+          {canEdit && <div className="lesson-builder-info-actions">
+            <label>
+              <BilingualText>{"Trạng thái"}</BilingualText>
+              <select value={lesson.publicationStatus || 'DRAFT'} disabled={busy} onChange={changeStatus}>
+                <option value="DRAFT">{bilingualLabel('DRAFT')}</option>
+                {lesson.publicationStatus === 'PUBLISHED' && <option value="PUBLISHED" disabled>{bilingualLabel('PUBLISHED')}</option>}
+                <option value="ARCHIVED">{bilingualLabel('ARCHIVED')}</option>
+              </select>
+            </label>
+            <button type="button" className="secondary" disabled={busy} onClick={() => setEditing(true)}>
+              <Pencil size={15} /> <BilingualText>{"Chỉnh sửa"}</BilingualText>
+            </button>
+          </div>}
+        </div>
+      </details>
+      <div className={`lesson-builder-grid${canEdit && selected && showEditor ? ' is-editor-open' : ''}`}>
+        <section className="admin-card lesson-builder-list" aria-labelledby="lesson-builder-activities">
+          <div className="lesson-builder-list-heading">
+            <h2 id="lesson-builder-activities" tabIndex={-1} ref={activitiesHeading}><BilingualText>{"Các hoạt động"}</BilingualText></h2>
+            {canEdit && <details className="lesson-builder-add" ref={addActivityMenu}>
+              <summary className="button"><Plus size={16} /><BilingualText vi="Thêm hoạt động" en="Add activity" /><ChevronDown size={14} /></summary>
+              <div className="lesson-builder-add-options">
+                <button type="button" className="secondary" disabled={busy || !illustrationTargets.length} onClick={chooseLessonImage}>
+                  <BilingualText vi="Thêm ảnh" en="Add image" />
                 </button>
-                <button disabled={busy} onClick={() => selectActivity({ activityType: 'VIDEO', status: 'PUBLISHED', contentJson: { videoUrl: '' } })}>
-                  <BilingualText>{"+ Thêm video"}</BilingualText>
+                {!illustrationTargets.length && <small className="muted">
+                  <BilingualText vi="Thêm một mục nội dung trước khi gắn ảnh minh họa." en="Create a content activity before attaching an illustration." />
+                </small>}
+                <button type="button" className="secondary" disabled={busy} onClick={() => selectActivity({ activityType: 'VIDEO', status: 'PUBLISHED', contentJson: { videoUrl: '' } })}>
+                  <BilingualText vi="Thêm video" en="Add video" />
                 </button>
-                <button className="secondary" disabled={busy} onClick={() => selectActivity({})}>
-                  <BilingualText>{"+ Hoạt động khác"}</BilingualText>
+                <button type="button" className="secondary" disabled={busy} onClick={() => selectActivity({})}>
+                  <BilingualText vi="Hoạt động khác" en="Other activities" />
                 </button>
               </div>
-            )}
+            </details>}
           </div>
-          {canEdit && !illustrationTargets.length && <p className="muted">
-            <BilingualText vi="Thêm một mục nội dung trước khi gắn ảnh minh họa." en="Create a content activity before attaching an illustration." />
-          </p>}
-          {lesson.activities?.map((activity, index) => (
-            <div className={`list-row activity-builder-row ${selected?.id === activity.id ? 'selected' : ''}`} key={activity.id}>
-              <button className="activity-select" disabled={busy} onClick={() => canEdit && selectActivity(activity)}>
-                <span className="badge">{index + 1}</span>
-                <BilingualText vi={activity.titleVi || activity.title} en={activity.title} />
-              </button>
-              {canEdit && (
-                <div className="actions">
-                  <button className="secondary" disabled={busy || index === 0} onClick={() => reorder(index, -1)}>↑</button>
-                  <button className="secondary" disabled={busy || index === lesson.activities.length - 1} onClick={() => reorder(index, 1)}>↓</button>
-                </div>
-              )}
-            </div>
-          ))}
-          {!lesson.activities?.length && <EmptyState title={bilingualLabel("Chưa có hoạt động", "No activities yet")} />}
+          <ol className="lesson-builder-activities">
+            {activities.map((activity, index) => {
+              const active = canEdit && selected?.id === activity.id;
+              const title = <BilingualText vi={activity.titleVi || activity.title} en={activity.title} />;
+              const summary = <><span className="lesson-builder-number" aria-hidden="true">{index + 1}</span>{title}</>;
+              return <li className={`lesson-builder-row${active ? ' is-selected' : ''}`} key={activity.id}>
+                {canEdit ? <button type="button" className="lesson-builder-select" aria-pressed={active} disabled={busy} onClick={() => selectActivity(activity)}>
+                  {summary}
+                </button> : <span className="lesson-builder-select">{summary}</span>}
+                {canEdit && <div className="lesson-builder-order">
+                  <button type="button" className="secondary" aria-label={bilingualLabel('Di chuyển lên', 'Move up')} disabled={busy || index === 0} onClick={() => reorder(index, -1)}><ArrowUp size={15} /></button>
+                  <button type="button" className="secondary" aria-label={bilingualLabel('Di chuyển xuống', 'Move down')} disabled={busy || index === activities.length - 1} onClick={() => reorder(index, 1)}><ArrowDown size={15} /></button>
+                </div>}
+              </li>;
+            })}
+          </ol>
+          {!activities.length && <EmptyState title={bilingualLabel("Chưa có hoạt động", "No activities yet")} />}
+          {canEdit && <button type="button" className="secondary lesson-builder-quiz" disabled={busy} onClick={() => setCreatingQuiz(true)}>
+            <Plus size={16} /> <BilingualText vi="Tạo quiz bài học" en="Create lesson quiz" />
+          </button>}
         </section>
-        <aside className="admin-card">
+        <section className="admin-card lesson-builder-editor">
           {canEdit && selected ? (
-            <ActivityEditor key={selected.id || selected.activityType || 'new'} initial={selected}
-              lessonId={lesson.id} focusIllustration={focusIllustration} onBusyChange={setBusy}
-              onSaved={({ addedIllustration }) => {
-                if (addedIllustration) setMessage(bilingualLabel('Đã gắn ảnh vào mục nội dung.', 'Illustration attached to the activity.'));
-                selectActivity(null);
-                reload();
-              }} />
+            <>
+              <button type="button" className="secondary lesson-builder-back" ref={editorBackButton} disabled={busy} onClick={showActivities}>
+                <ArrowLeft size={16} /> <BilingualText vi="Quay lại hoạt động" en="Back to activities" />
+              </button>
+              <ActivityEditor key={selected.id || selected.activityType || 'new'} initial={selected}
+                lessonId={lesson.id} focusIllustration={focusIllustration} onBusyChange={setBusy}
+                onSaved={({ addedIllustration }) => {
+                  if (addedIllustration) setMessage(bilingualLabel('Đã gắn ảnh vào mục nội dung.', 'Illustration attached to the activity.'));
+                  setFocusIllustration(0);
+                  setSelection(null);
+                  showActivities();
+                  reload();
+                }} />
+            </>
           ) : (
-            <p className="muted"><BilingualText>{canEdit ? 'Chọn hoạt động để chỉnh sửa nội dung.' : 'Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.'}</BilingualText></p>
+            <p className="muted"><BilingualText>
+              {canEdit ? 'Chọn hoạt động để chỉnh sửa nội dung.' : 'Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.'}
+            </BilingualText></p>
           )}
-        </aside>
+        </section>
       </div>
       {canEdit && imageTargetId !== null && <Modal title={bilingualLabel('Thêm ảnh minh họa', 'Add an illustration')} onClose={() => setImageTargetId(null)}>
         <form onSubmit={event => {
