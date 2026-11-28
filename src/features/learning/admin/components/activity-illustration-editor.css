@@ -1,47 +1,86 @@
 .activity-illustration-editor {
   min-width: 0;
-  margin: 18px 0;
-  padding: 14px;
-  border: 1px solid var(--color-border, #e8e5df);
+  margin: 4px 0;
+  padding: 16px 18px;
+  border: 1px solid #E2E8F0;
   border-radius: 12px;
+  background: #F8FAFC;
 }
 
 .activity-illustration-editor legend {
-  padding: 0 6px;
-  font-size: 14px;
-  font-weight: 700;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 750;
+  color: #0F172A;
+}
+
+.activity-illustration-file-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .activity-illustration-editor input[type='file'] {
   max-width: 100%;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  color: #334155;
+  background: #FFFFFF;
+  border: 1px dashed #CBD5E1;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.activity-illustration-editor input[type='file']::file-selector-button {
+  margin-right: 12px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #1E293B;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.activity-illustration-editor input[type='file']::file-selector-button:hover {
+  background: #FFF7ED;
+  color: #EA580C;
+  border-color: #FDBA74;
 }
 
 .activity-illustration-editor-gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .activity-illustration-editor-gallery img {
-  width: 90px;
-  height: 60px;
+  width: 96px;
+  height: 64px;
   object-fit: contain;
-  border: 1px solid var(--color-border, #e8e5df);
-  border-radius: 6px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
 }
 
 .activity-illustration-editor-selection {
   display: flex;
   flex-wrap: wrap;
-  align-items: start;
-  gap: 10px;
-  margin-top: 10px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #E2E8F0;
 }
 
 .activity-illustration-editor-selection img {
   width: min(160px, 100%);
   max-height: 110px;
   object-fit: contain;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
   border-radius: 8px;
 }

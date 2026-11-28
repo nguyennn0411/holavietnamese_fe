@@ -8,7 +8,7 @@ import { ResourceState } from '@/shared/components/common/ResourceState';
 import { Notice } from '@/shared/components/common/Ui';
 import { Modal } from '@/shared/components/common/Modal';
 import { ContentForm } from '@/features/learning/admin/components/ContentForm';
-import { CourseThumbnail } from '@/features/learning/components/course/CourseInfo';
+import { CourseThumbnail, getCourseCover } from '@/features/learning/components/course/CourseInfo';
 import { LessonActivities } from '@/features/learning/components/learning/LessonActivities';
 import { moveItem } from '@/features/learning/components/learning/answerUtils';
 import { BilingualText, useBilingualLabel, bilingualLabel } from '@/shared/components/common/BilingualText';
@@ -72,10 +72,10 @@ export function CourseStudio({ course, reload = () => {} }) {
   const modules = course?.modules || [];
   const lessons = modules.flatMap(m => m.lessons || []);
   const readiness = useAsyncResource(useCallback(signal => course ? contentService.courseReadiness(course.id, signal) : Promise.resolve(null), [course?.id, course?.updatedAt, course?.status]));
-  const metadataIssues = course ? [!course.thumbnailUrl && 'Thêm ảnh bìa khóa học.', !course.learningOutcomes?.trim() && 'Bổ sung mục tiêu học tập.'].filter(Boolean) : [];
+  const metadataIssues = course ? [!course.title?.trim() && 'Thêm tên khóa học.', !course.description?.trim() && 'Thêm mô tả khóa học.', !course.learningOutcomes?.trim() && 'Bổ sung mục tiêu học tập.'].filter(Boolean) : [];
   const issues = [...metadataIssues, ...(readiness.data?.issues || [])];
   const ready = Boolean(course && readiness.data?.ready && !readiness.isValidating && !readiness.error && !metadataIssues.length);
-  const infoComplete = Boolean(course?.title && course?.description && course?.thumbnailUrl && course?.learningOutcomes?.trim());
+  const infoComplete = Boolean(course?.title?.trim() && course?.description?.trim() && course?.code?.trim() && course?.slug?.trim() && course?.level);
   const structureStarted = Boolean(modules.length && lessons.length);
   const structureComplete = Boolean(structureStarted && readiness.data && !(readiness.data.issues || []).length);
   const stepComplete = { info: infoComplete, curriculum: structureComplete, preview: false, publish: ready };
@@ -192,7 +192,7 @@ export function CourseStudio({ course, reload = () => {} }) {
           ? structureComplete
           : ready && isSubmittedOrPublished;
         const isComplete = Boolean(
-          stepDataReady && (isSubmittedOrPublished || index < currentStepIndex)
+          stepDataReady && (item.id === 'info' || isSubmittedOrPublished || index < currentStepIndex)
         );
         return (
           <button
@@ -207,7 +207,7 @@ export function CourseStudio({ course, reload = () => {} }) {
             <span className="studio-step-body">
               <strong className="studio-step-title"><BilingualText>{item.title}</BilingualText></strong>
               <small className="studio-step-desc"><BilingualText>{item.description}</BilingualText></small>
-              <span className="studio-step-state"><BilingualText>{isComplete ? 'Hoàn tất' : isActive ? 'Đang thực hiện' : item.id === 'preview' ? 'Bước kiểm tra' : 'Chưa bắt đầu'}</BilingualText></span>
+              <span className="studio-step-state"><BilingualText>{isActive ? 'Đang thực hiện' : isComplete ? 'Hoàn tất' : item.id === 'preview' ? 'Bước kiểm tra' : 'Chưa bắt đầu'}</BilingualText></span>
             </span>
           </button>
         );
@@ -256,13 +256,12 @@ export function CourseStudio({ course, reload = () => {} }) {
             <button type="button" disabled={busy} onClick={() => setInfoEditorOpen(true)}><FileText size={17} /> <BilingualText>{"Mở cửa sổ chỉnh sửa"}</BilingualText></button>
           </section> : <CourseDetailsForm key={`${course.id}-${course.updatedAt}`} course={course} canEdit={false} onBusyChange={setBusy} onDirty={() => {}} onSave={() => {}} />}
           {canEdit && infoEditorOpen && <Modal title={label("Chỉnh sửa thông tin khóa học")} className="studio-wizard-modal" busy={busy} onClose={closeInfoEditor}>
-            <CourseDetailsForm key={`${course.id}-${course.updatedAt}`} wizard course={course} canEdit onCancel={closeInfoEditor} onBusyChange={setBusy} onDirty={value => { dirty.current = value; setHasUnsaved(value); }} onSave={async body => {
+            <CourseDetailsForm key={course.id} wizard course={course} canEdit onCancel={closeInfoEditor} onBusyChange={setBusy} onDirty={value => { dirty.current = value; setHasUnsaved(value); }} onSave={async body => {
               await contentService.update('courses', course.id, body);
               dirty.current = false;
               setHasUnsaved(false);
               setInfoEditorOpen(false);
-              reload(); readiness.reload(); setMessage(label('Đã lưu thông tin. Tiếp tục hoàn thiện cấu trúc khóa học.'));
-              setParams({ step: 'curriculum' });
+              reload(); readiness.reload(); setMessage(label('Đã lưu thông tin khóa học.'));
             }} />
           </Modal>}
         </>}
@@ -1090,15 +1089,15 @@ function CourseDetailsForm({ course, canEdit, onSave, onDirty, onBusyChange, wiz
   const label = useBilingualLabel();
   const [form, setForm] = useState(() => ({ title: course?.title || '', titleVi: course?.titleVi || '', description: course?.description || '', descriptionVi: course?.descriptionVi || '', code: course?.code || '', slug: course?.slug || '', level: course?.level || 'A1', estimatedMinutes: course?.estimatedMinutes ?? course?.estimatedDuration ?? 0, learningOutcomes: course?.learningOutcomes || '', isFree: course?.isFree ?? true, thumbnailUrl: course?.thumbnailUrl || '' }));
   const [manualSlug, setManualSlug] = useState(Boolean(course)), [manualCode, setManualCode] = useState(Boolean(course));
-  const [file, setFile] = useState(null), [preview, setPreview] = useState(course?.thumbnailUrl || '');
+  const [file, setFile] = useState(null), [preview, setPreview] = useState(() => course?.thumbnailUrl || (course ? getCourseCover(course) : ''));
   const [busy, setBusy] = useState(false), [error, setError] = useState(''), [dirty, setDirty] = useState(false);
   const [phase, setPhase] = useState(0);
   const fileInput = useRef(null);
 
   useEffect(() => {
-    if (!file) { setPreview(form.thumbnailUrl); return; }
+    if (!file) { setPreview(form.thumbnailUrl || (course ? getCourseCover({ ...course, ...form }) : '')); return; }
     const url = URL.createObjectURL(file); setPreview(url); return () => URL.revokeObjectURL(url);
-  }, [file, form.thumbnailUrl]);
+  }, [file, form.thumbnailUrl, form.title, form.titleVi, form.level, course]);
 
   useEffect(() => {
     if (!dirty) return;
@@ -1159,10 +1158,40 @@ function CourseDetailsForm({ course, canEdit, onSave, onDirty, onBusyChange, wiz
 
   const phaseLabels = ['Giới thiệu', 'Ảnh bìa', 'Thiết lập'];
 
-  return <form className={`studio-details-form${wizard ? ' studio-details-form--wizard' : ''}`} onSubmit={submit}>
-    {wizard && <div className="studio-wizard-steps" aria-label={label("Các phần thông tin khóa học")}>{phaseLabels.map((pLabel, index) => <button key={pLabel} type="button" className={`${index === phase ? 'is-active ' : ''}${index < phase ? 'is-complete' : ''}`.trim()} aria-current={index === phase ? 'step' : undefined} onClick={() => index <= phase && setPhase(index)}><span>{index < phase ? <Check size={14} /> : index + 1}</span><strong><BilingualText>{pLabel}</BilingualText></strong></button>)}</div>}
-    <fieldset disabled={busy || !canEdit}>
-      {(!wizard || phase === 0) && <section className="studio-panel">
+  return <form className={`studio-details-form${wizard ? ' studio-details-form--wizard' : ''}`} onSubmit={submit} onKeyDown={e => {
+    if (wizard && e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+    }
+  }}>
+    {wizard && (
+      <div className="studio-wizard-steps" aria-label={label("Các phần thông tin khóa học")}>
+        {phaseLabels.map((pLabel, index) => (
+          <button
+            key={pLabel}
+            type="button"
+            className={`studio-wizard-step-btn ${index === phase ? 'is-active ' : ''}${index < phase ? 'is-complete' : ''}`.trim()}
+            aria-current={index === phase ? 'step' : undefined}
+            onClick={() => {
+              if (index <= phase) {
+                setError('');
+                setPhase(index);
+              } else if (form.title.trim() && form.description.trim()) {
+                setError('');
+                setPhase(index);
+              } else {
+                setError(label('Điền tên và phần giới thiệu tiếng Anh trước khi tiếp tục.'));
+              }
+            }}
+          >
+            <span className="studio-wizard-step-num">{index < phase ? <Check size={14} strokeWidth={2.5} /> : index + 1}</span>
+            <strong><BilingualText>{pLabel}</BilingualText></strong>
+          </button>
+        ))}
+      </div>
+    )}
+    <div className="studio-wizard-body">
+      <fieldset disabled={busy || !canEdit}>
+        {(!wizard || phase === 0) && <section className="studio-panel">
         <div className="studio-section-heading">
           <div>
             <p className="studio-eyebrow"><BilingualText vi="ĐẶT NỀN TẢNG" en="FOUNDATION" /></p>
@@ -1232,15 +1261,16 @@ function CourseDetailsForm({ course, canEdit, onSave, onDirty, onBusyChange, wiz
           </div>
         </details>
       </section>}
-    </fieldset>
+      </fieldset>
+    </div>
     {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
     {wizard ? <div className="studio-wizard-actions">
-      <button type="button" className="secondary" disabled={busy} onClick={phase === 0 ? onCancel : () => { setError(''); setPhase(current => current - 1); }}><ArrowLeft size={16} /> <BilingualText>{phase === 0 ? 'Đóng' : 'Quay lại'}</BilingualText></button>
+      <button type="button" className="admin-btn admin-btn-secondary" disabled={busy} onClick={phase === 0 ? onCancel : () => { setError(''); setPhase(current => current - 1); }}><ArrowLeft size={16} /> <BilingualText>{phase === 0 ? 'Đóng' : 'Quay lại'}</BilingualText></button>
       <span><BilingualText vi="Bước" en="Step" /> {phase + 1} / {phaseLabels.length}</span>
-      {phase < 2 ? <button type="button" disabled={busy} onClick={nextPhase}><BilingualText vi="Tiếp tục" en="Continue" />: <BilingualText>{phaseLabels[phase + 1]}</BilingualText> <ArrowRight size={16} /></button> : <button disabled={busy}><Save size={17} /> {busy ? label('Đang lưu…') : label('Lưu và sang Cấu trúc')}</button>}
+      {phase < 2 ? <button type="button" className="admin-btn admin-btn-primary" disabled={busy} onClick={nextPhase}><BilingualText vi="Tiếp tục" en="Continue" />: <BilingualText>{phaseLabels[phase + 1]}</BilingualText> <ArrowRight size={16} /></button> : <button type="button" className="admin-btn admin-btn-primary" disabled={busy} onClick={submit}><Save size={16} /> {busy ? label('Đang lưu…') : label('Lưu thông tin')}</button>}
     </div> : canEdit && <div className={`studio-form-save ${dirty ? 'has-changes' : ''}`}>
       <span role="status"><BilingualText>{dirty ? 'Bạn có thay đổi chưa lưu.' : 'Thông tin khóa học đã được lưu.'}</BilingualText></span>
-      <button disabled={busy || !dirty}><Save size={17} /> {busy ? label('Đang lưu…') : dirty ? label('Lưu thay đổi') : label('Đã lưu')}</button>
+      <button type="submit" className="admin-btn admin-btn-primary" disabled={busy || !dirty}><Save size={16} /> {busy ? label('Đang lưu…') : dirty ? label('Lưu thay đổi') : label('Đã lưu')}</button>
     </div>}
   </form>;
 }

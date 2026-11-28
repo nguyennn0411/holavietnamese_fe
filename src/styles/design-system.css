@@ -839,9 +839,9 @@ input[type="radio"]:checked {
 }
 
 /* 7. ACCORDIONS & COLLAPSIBLES */
-summary:hover,
-summary:active,
-summary:focus,
+summary:not(.admin-btn):not(.button):hover,
+summary:not(.admin-btn):not(.button):active,
+summary:not(.admin-btn):not(.button):focus,
 .accordion-trigger:hover,
 .accordion-trigger:active,
 .accordion-trigger:focus,

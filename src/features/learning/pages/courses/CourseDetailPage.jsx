@@ -658,7 +658,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                 <button
                   type="button"
                   onClick={toggleAllModules}
-                  className="self-start sm:self-center text-xs font-bold !text-[#EA580C] hover:!text-white transition-colors py-1.5 px-3 rounded-xl !bg-[#FFF2D6]/70 hover:!bg-[#C2410C] border border-[#FFCD00]/50 hover:border-[#C2410C] cursor-pointer shadow-2xs"
+                  className="course-action-expand-btn self-start sm:self-center text-xs font-bold !text-[#EA580C] hover:!text-[#C2410C] transition-colors py-2 px-3.5 rounded-xl !bg-[#FFF7E8] hover:!bg-[#FFEDD5] border border-[#FED7AA] hover:border-[#FDBA74] cursor-pointer shadow-2xs"
                 >
                   <BilingualText vi={isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'} en={isAllExpanded ? 'Collapse all' : 'Expand all'} />
                 </button>
@@ -691,23 +691,31 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                   return (
                     <div
                       key={moduleKey}
-                      className="rounded-2xl border border-[#E8E5DF] overflow-hidden bg-[#FFFDF9] transition-all shadow-xs"
+                      className={`rounded-2xl border overflow-hidden transition-all shadow-xs ${
+                        isExpanded
+                          ? 'border-[#FED7AA] bg-white'
+                          : 'border-[#E8E5DF] bg-[#FFFDF9] hover:border-[#FDBA74]'
+                      }`}
                     >
                       {/* Nút Accordion Header của Module */}
                       <button
                         type="button"
                         onClick={() => toggleModule(moduleKey)}
-                        className="group w-full flex items-center justify-between p-4 sm:p-5 text-left cursor-pointer !bg-transparent hover:!bg-[#C2410C] transition-colors select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A00]"
+                        className={`course-module-accordion-btn group w-full flex items-center justify-between p-4 sm:p-5 text-left cursor-pointer transition-colors select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FF7A00] ${
+                          isExpanded
+                            ? '!bg-[#FFF9F2] hover:!bg-[#FFF3E4]'
+                            : '!bg-[#FFFDF9] hover:!bg-[#FFF7E8]'
+                        }`}
                         aria-expanded={isExpanded}
                       >
                         <div className="flex items-center gap-3.5 pr-2">
-                          <span className="w-8 h-8 rounded-xl bg-[#FFF2D6] text-[#EA580C] font-black text-xs flex items-center justify-center shrink-0 border border-[#FFCD00]/40 shadow-2xs">
+                          <span className="w-9 h-9 rounded-xl bg-[#FFF0DC] text-[#EA580C] font-black text-xs flex items-center justify-center shrink-0 border border-[#FED7AA] shadow-2xs">
                             {mIdx + 1}
                           </span>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-[#EA580C] group-hover:text-white uppercase tracking-wide transition-colors">
-                                Module {mIdx + 1}
+                              <span className="text-[11px] font-extrabold text-[#EA580C] uppercase tracking-wider">
+                                <BilingualText vi={`Học phần ${mIdx + 1}`} en={`Module ${mIdx + 1}`} />
                               </span>
                               {isModuleFinished && (
                                 <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
@@ -716,11 +724,11 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                                 </span>
                               )}
                             </div>
-                            <h3 className="text-sm sm:text-base font-bold text-[#253044] group-hover:text-white leading-snug transition-colors">
+                            <h3 className="text-sm sm:text-base font-extrabold !text-[#253044] group-hover:!text-[#EA580C] leading-snug transition-colors mt-0.5">
                               <BilingualText vi={module.titleVi || module.title} en={module.title} />
                             </h3>
                             {(module.descriptionVi || module.description || module.metadata?.descriptionVi) && (
-                              <p className="text-xs text-[#64748B] group-hover:text-white/90 line-clamp-2 mt-1 font-normal transition-colors">
+                              <p className="text-xs !text-[#64748B] line-clamp-2 mt-1 font-normal">
                                 <BilingualText
                                   vi={module.descriptionVi || module.metadata?.descriptionVi || module.description}
                                   en={module.description || module.metadata?.descriptionEn}
@@ -730,16 +738,16 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 text-xs text-[#64748B] group-hover:text-white shrink-0 transition-colors">
-                          <span className="hidden sm:inline-block">
+                        <div className="flex items-center gap-3 text-xs !text-[#64748B] shrink-0">
+                          <span className="hidden sm:inline-block font-semibold !text-[#475569]">
                             <BilingualText vi={`${moduleLessons.length} bài học`} en={`${moduleLessons.length} lessons`} />
                           </span>
-                          <span className="hidden md:inline-block text-[#EA580C] group-hover:text-white font-medium transition-colors">
+                          <span className="hidden md:inline-block !text-[#EA580C] font-bold">
                             • {formatDuration(moduleMinutes)}
                           </span>
                           <ChevronDown
                             size={18}
-                            className={`text-[#EA580C] group-hover:text-white transition-all duration-200 ${
+                            className={`!text-[#EA580C] transition-transform duration-200 ${
                               isExpanded ? 'rotate-180' : ''
                             }`}
                           />
@@ -748,7 +756,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
 
                       {/* Danh sách Lesson khi Accordion mở */}
                       {isExpanded && (
-                        <div className="p-4 sm:p-5 pt-0 space-y-2.5 border-t border-[#E8E5DF]/40 bg-white">
+                        <div className="p-4 sm:p-5 space-y-2.5 border-t border-[#F3E8D8] bg-white">
                           {moduleLessons.length === 0 ? (
                             <p className="text-xs text-[#64748B] italic py-2">
                               <BilingualText>{"Module này chưa có bài học."}</BilingualText>

@@ -28,33 +28,374 @@
 .admin-vocabulary-pagination { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 42px; }
 .admin-vocabulary-pagination > p { margin: 0; }
 .admin-vocabulary-pagination .pagination { margin: 0; }
-.admin-vocabulary-page .modal { width: min(820px,calc(100vw - 32px)); }
-.admin-vocabulary-page .modal > .row { padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--color-border); }
-.admin-vocabulary-page .modal > .row h2 { font-size: 21px; }
-.admin-vocabulary-form > fieldset { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
-.admin-vocabulary-form > fieldset > label { margin: 0; }
-.admin-vocabulary-form > fieldset > :is(fieldset,section,button) { grid-column: 1 / -1; }
-.admin-vocabulary-form > fieldset > fieldset { padding: 18px; border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-paper); }
-.admin-vocabulary-form legend { padding-inline: 6px; color: var(--color-muted); font-weight: 700; }
-.admin-vocabulary-form section.admin-card { padding: 20px; box-shadow: none; }
-.admin-vocabulary-form section.admin-card > .row { align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-.admin-vocabulary-form section.admin-card > .row h3 { margin: 0; }
-.admin-vocabulary-form .actions { flex-wrap: wrap; gap: 12px; }
-.admin-vocabulary-form > .actions, .admin-vocabulary-topic-form > .actions:last-child { justify-content: flex-end; padding-top: 18px; border-top: 1px solid var(--color-border); }
-.admin-vocabulary-topic-form { display: grid; gap: 18px; }
-.admin-vocabulary-topic-form label { margin: 0; }
-.admin-vocabulary-detail dl { display: grid; grid-template-columns: minmax(100px,150px) minmax(0,1fr); gap: 12px 20px; padding: 20px; margin-bottom: 24px; border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-paper); }
-.admin-vocabulary-detail dt { font-size: 12px; color: var(--color-muted); }
-.admin-vocabulary-detail dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+
+/* ==========================================================================
+   Modernized Admin Vocabulary Modal (Create / Edit / View)
+   ========================================================================== */
+.modal.admin-vocabulary-modal,
+.admin-vocabulary-page .modal {
+  width: min(860px, calc(100vw - 32px)) !important;
+  max-width: min(860px, calc(100vw - 32px)) !important;
+  max-height: min(88dvh, 800px) !important;
+  padding: 22px 26px !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  border: 1px solid #E2E8F0 !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16) !important;
+}
+
+.modal.admin-vocabulary-modal[open],
+.admin-vocabulary-page .modal[open] {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.modal.admin-vocabulary-modal > .row,
+.admin-vocabulary-page .modal > .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 16px;
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid #E2E8F0;
+  flex-shrink: 0;
+}
+
+.modal.admin-vocabulary-modal > .row h2,
+.admin-vocabulary-page .modal > .row h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+}
+
+.admin-vocabulary-form,
+.admin-vocabulary-detail {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.admin-vocabulary-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 18px 10px 20px 2px;
+  margin-right: -4px;
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E1 #F8FAFC;
+}
+
+.admin-vocabulary-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-vocabulary-modal-body::-webkit-scrollbar-track {
+  background: #F8FAFC;
+  border-radius: 999px;
+}
+
+.admin-vocabulary-modal-body::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+  border: 2px solid #F8FAFC;
+}
+
+.admin-vocabulary-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+.admin-vocabulary-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-vocab-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-vocabulary-fieldset label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: #334155;
+  min-width: 0;
+}
+
+.admin-vocabulary-fieldset input,
+.admin-vocabulary-fieldset textarea {
+  width: 100%;
+  padding: 10px 13px;
+  font-size: 13.5px;
+  color: #0F172A;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 9px;
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.admin-vocabulary-fieldset input {
+  height: 40px;
+  min-height: 40px;
+}
+
+.admin-vocabulary-fieldset textarea {
+  resize: vertical;
+  min-height: 76px;
+  line-height: 1.55;
+}
+
+.admin-vocabulary-fieldset input:focus,
+.admin-vocabulary-fieldset textarea:focus {
+  outline: none !important;
+  border-color: #EA580C !important;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12) !important;
+}
+
+.admin-vocab-status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  font-size: 13px;
+  font-weight: 650;
+  color: #334155;
+}
+
+.admin-vocab-meaning-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.admin-vocab-meaning-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.admin-vocab-meaning-header h3 {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 750;
+  color: #0F172A;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.admin-vocab-meaning-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: #FFF7ED;
+  border: 1px solid #FED7AA;
+  color: #EA580C;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.admin-vocab-hint {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  color: #92400E;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.admin-vocab-order-field {
+  max-width: 180px;
+}
+
+.admin-vocab-order-tag {
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.admin-vocab-example-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+.admin-vocab-example-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-vocab-example-header h4 {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 750;
+  color: #334155;
+}
+
+.admin-vocab-example-vi {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  color: #0F172A;
+}
+
+.admin-vocab-example-en {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.admin-vocab-example-audio {
+  margin: 0;
+  font-size: 12px;
+  color: #64748B;
+}
+
+.admin-vocab-dashed-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 14px !important;
+  font-size: 12.5px !important;
+  font-weight: 650 !important;
+  border-radius: 9px !important;
+  border: 1px dashed #FDBA74 !important;
+  background: #FFFDF9 !important;
+  color: #EA580C !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  width: fit-content;
+  transition: all 0.16s ease !important;
+}
+
+.admin-vocab-dashed-btn.is-full {
+  width: 100%;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+}
+
+.admin-vocab-dashed-btn:hover:not(:disabled) {
+  background: #FFF7ED !important;
+  border-color: #EA580C !important;
+  color: #C2410C !important;
+}
+
+.admin-vocab-error {
+  margin: 8px 0 0;
+  padding: 10px 14px;
+  border-radius: 9px;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.admin-vocabulary-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 2px 2px;
+  border-top: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.admin-vocabulary-detail-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  padding: 16px 18px;
+  margin: 0 0 16px;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  background: #F8FAFC;
+}
+
+.admin-vocabulary-detail-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-vocabulary-detail-meta > div.is-wide {
+  grid-column: 1 / -1;
+}
+
+.admin-vocabulary-detail-meta dt {
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.admin-vocabulary-detail-meta dd {
+  margin: 0;
+  font-size: 13.5px;
+  color: #0F172A;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .admin-vocabulary-page .success.state { padding: 16px 20px; text-align: left; color: var(--color-forest); background: var(--color-sage-soft); }
+
 @media(max-width:767px) {
   .admin-vocabulary-page .page-header > .actions { width: 100%; }
   .admin-vocabulary-page .admin-vocabulary-filters { padding: 20px; }
   .admin-vocabulary-page .admin-vocabulary-filters > .actions > label { flex-basis: 100% !important; }
-  .admin-vocabulary-form > fieldset { grid-template-columns: minmax(0,1fr); }
-  .admin-vocabulary-detail dl { grid-template-columns: minmax(0,1fr); gap: 6px; }
-  .admin-vocabulary-detail dd { margin-bottom: 12px; }
-  .admin-vocabulary-page .modal { padding: 20px; }
+  .admin-vocab-grid-2,
+  .admin-vocabulary-detail-meta { grid-template-columns: minmax(0, 1fr); }
+  .modal.admin-vocabulary-modal,
+  .admin-vocabulary-page .modal { padding: 18px 16px !important; }
   .admin-vocabulary-page .admin-vocabulary-pagination { align-items: flex-start; flex-direction: column; }
 }
 @media(max-width:1050px) {
