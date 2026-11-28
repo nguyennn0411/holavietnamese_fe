@@ -1728,8 +1728,8 @@ export const UI_TRANSLATIONS = {
     "Quản trị nội dung học tập",
     "Learning content administration"
   ],
-  "Quản lý nội dung, phiên bản và trạng thái xuất bản.": [
-    "Quản lý nội dung, phiên bản và trạng thái xuất bản.",
+  "Người sáng tạo nội dung, phiên bản và trạng thái xuất bản.": [
+    "Người sáng tạo nội dung, phiên bản và trạng thái xuất bản.",
     "Manage content, versions and publication status."
   ],
   "Chưa có nội dung phù hợp": [
@@ -7328,9 +7328,17 @@ export const UI_TRANSLATIONS = {
     "Mỗi học phần cần có bài học.",
     "Every module needs a lesson."
   ],
-  "Xuất bản tất cả bài học.": [
-    "Xuất bản tất cả bài học.",
-    "Publish every lesson."
+  "Chuyển các bài học đã lưu trữ về bản nháp trước khi gửi duyệt.": [
+    "Chuyển các bài học đã lưu trữ về bản nháp trước khi gửi duyệt.",
+    "Restore archived lessons to draft before submitting."
+  ],
+  "Tất cả bài học phải ở trạng thái xuất bản trước khi phê duyệt.": [
+    "Tất cả bài học phải ở trạng thái xuất bản trước khi phê duyệt.",
+    "All lessons must be published before approval."
+  ],
+  "Xuất bản tất cả quiz gắn với hoạt động đã xuất bản.": [
+    "Xuất bản tất cả quiz gắn với hoạt động đã xuất bản.",
+    "Publish all quizzes linked to published activities."
   ],
   "Mỗi bài cần một hoạt động học bắt buộc đã xuất bản.": [
     "Mỗi bài cần một hoạt động học bắt buộc đã xuất bản.",
@@ -7559,46 +7567,6 @@ export const UI_TRANSLATIONS = {
   "phút nội dung": [
     "phút nội dung",
     "minutes of content"
-  ],
-  "TIẾN ĐỘ HOÀN THIỆN": [
-    "TIẾN ĐỘ HOÀN THIỆN",
-    "COMPLETION PROGRESS"
-  ],
-  "nhóm yêu cầu": [
-    "nhóm yêu cầu",
-    "requirement groups"
-  ],
-  "Đã đầy đủ": [
-    "Đã đầy đủ",
-    "Complete"
-  ],
-  "Cần bổ sung": [
-    "Cần bổ sung",
-    "Needs additions"
-  ],
-  "Bài học & hoạt động": [
-    "Bài học & hoạt động",
-    "Lessons & activities"
-  ],
-  "Đang hoàn thiện": [
-    "Đang hoàn thiện",
-    "In progress"
-  ],
-  "Đã sẵn sàng": [
-    "Đã sẵn sàng",
-    "Ready"
-  ],
-  "Mẹo biên soạn": [
-    "Mẹo biên soạn",
-    "Authoring tip"
-  ],
-  "Lưu thông tin trước khi chuyển bước. Mở Xem trước để kiểm tra nội dung theo góc nhìn học viên.": [
-    "Lưu thông tin trước khi chuyển bước. Mở Xem trước để kiểm tra nội dung theo góc nhìn học viên.",
-    "Save info before moving to the next step. Open Preview to test content from a learner's perspective."
-  ],
-  "Mở xem trước": [
-    "Mở xem trước",
-    "Open preview"
   ],
   "Quản lý biến thể vùng miền": [
     "Quản lý biến thể vùng miền",
@@ -8468,21 +8436,9 @@ export const UI_TRANSLATIONS = {
     "Trạng thái câu hỏi",
     "Question status"
   ],
-  "+ Tạo quiz bài học": [
-    "+ Tạo quiz bài học",
-    "+ Create lesson quiz"
-  ],
   "+ Thêm ảnh": [
     "+ Thêm ảnh",
     "+ Add image"
-  ],
-  "+ Thêm video": [
-    "+ Thêm video",
-    "+ Add video"
-  ],
-  "+ Hoạt động khác": [
-    "+ Hoạt động khác",
-    "+ Other activities"
   ],
   "Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.": [
     "Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.",
@@ -8496,8 +8452,8 @@ export const UI_TRANSLATIONS = {
     "Kiểm duyệt nội dung",
     "Content moderation"
   ],
-  "Quản lý nội dung học tập": [
-    "Quản lý nội dung học tập",
+  "Người sáng tạo nội dung học tập": [
+    "Người sáng tạo nội dung học tập",
     "Learning content management"
   ],
   "+ Import khóa học": [
@@ -8534,11 +8490,11 @@ export const UI_TRANSLATIONS = {
   ],
   "Người quản lý nội dung": [
     "Người quản lý nội dung",
-    "Content Manager"
+    "Content Creator"
   ],
-  "CONTENT MANAGER": [
-    "CONTENT MANAGER",
-    "CONTENT MANAGER"
+  "CONTENT CREATOR": [
+    "CONTENT CREATOR",
+    "CONTENT CREATOR"
   ],
   "Tự tạo từ tên; bạn có thể sửa nếu muốn.": [
     "Tự tạo từ tên; bạn có thể sửa nếu muốn.",
@@ -8823,7 +8779,7 @@ export const UI_TRANSLATIONS = {
   "Tìm email, họ tên": ["Tìm email, họ tên", "Search email, full name"],
   "Tất cả vai trò": ["Tất cả vai trò", "All roles"],
   "Người học": ["Người học", "Learner"],
-  "Quản lý nội dung": ["Quản lý nội dung", "Content Manager"],
+  "Người sáng tạo nội dung": ["Người sáng tạo nội dung", "Content Creator"],
   "Quản trị viên": ["Quản trị viên", "Administrator"],
   "Tất cả trạng thái": ["Tất cả trạng thái", "All statuses"],
   "Hoạt động": ["Hoạt động", "Active"],
@@ -9143,7 +9099,6 @@ export const UI_TRANSLATIONS = {
   "Bỏ những thay đổi chưa lưu?": ["Bỏ những thay đổi chưa lưu?", "Discard unsaved changes?"],
   "Vui lòng kiểm tra lại nội dung.": ["Vui lòng kiểm tra lại nội dung.", "Please check the content again."],
   "Đã lưu thông tin. Tiếp tục hoàn thiện cấu trúc khóa học.": ["Đã lưu thông tin. Tiếp tục hoàn thiện cấu trúc khóa học.", "Information saved. Continue building the course structure."],
-  "Luồng biên soạn nội dung": ["Luồng biên soạn nội dung", "Content authoring workflow"],
   "Đã gửi Admin kiểm duyệt.": ["Đã gửi Admin kiểm duyệt.", "Submitted to Admin for review."],
   "Khóa học đã được phê duyệt và xuất bản.": ["Khóa học đã được phê duyệt và xuất bản.", "Course has been approved and published."],
   "Đã gửi yêu cầu chỉnh sửa.": ["Đã gửi yêu cầu chỉnh sửa.", "Revision request sent."],
@@ -9194,7 +9149,7 @@ export const UI_TRANSLATIONS = {
   "← Quay lại bài học": ["← Quay lại bài học", "← Back to lesson"],
   "← Quay lại khóa học": ["← Quay lại khóa học", "← Back to course"],
   "Chuỗi ngày liên tiếp": ["Chuỗi ngày liên tiếp", "Consecutive days streak"],
-  "Xem và kiểm duyệt khóa học do Content Manager gửi lên.": ["Xem và kiểm duyệt khóa học do Content Manager gửi lên.", "Review and approve courses submitted by Content Managers."],
+  "Xem và kiểm duyệt khóa học do Content Creator gửi lên.": ["Xem và kiểm duyệt khóa học do Content Creator gửi lên.", "Review and approve courses submitted by Content Creators."],
   "Tạo, chỉnh sửa và gửi khóa học cho Admin kiểm duyệt.": ["Tạo, chỉnh sửa và gửi khóa học cho Admin kiểm duyệt.", "Create, edit, and submit courses to Admin for review."],
   "Xem các bài học thuộc khóa học được phân quyền.": ["Xem các bài học thuộc khóa học được phân quyền.", "View lessons belonging to assigned courses."],
   "Quản lý quiz và trạng thái xuất bản.": ["Quản lý quiz và trạng thái xuất bản.", "Manage quizzes and publication status."],

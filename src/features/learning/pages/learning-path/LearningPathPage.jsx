@@ -20,7 +20,7 @@ import { BuffaloMascot } from '@/shared/components/mascot/BuffaloMascot';
 import { useLearningPath } from '@/features/learning/hooks/useLearningPath';
 import '@/styles/learning-path-simple.css';
 
-const LEVELS = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1'];
+const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
 const GOAL_OPTIONS = [
   { id: 'connection', labelVi: 'Giao tiếp gia đình & bạn bè', labelEn: 'Family & Friends', icon: '💬' },

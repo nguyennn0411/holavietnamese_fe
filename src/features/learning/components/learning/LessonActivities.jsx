@@ -13,11 +13,13 @@ import { QuestionInput } from '@/features/learning/components/learning/QuestionI
 import { answerPresent } from '@/features/learning/components/learning/answerUtils';
 import { vocabularyService } from '@/features/vocabulary/api/vocabularyService';
 import { ContentImage } from '@/shared/components/common/ContentImage';
+import { Modal } from '@/shared/components/common/Modal';
 import { mediaSource } from '@/shared/components/common/mediaSource';
 import { MediaPlayer } from '@/features/learning/components/learning/MediaPlayer';
 import alphabetData from '@/features/alphabet/alphabet.json';
 import { MessageCircle, BookOpen, FileText, CheckSquare, Award, Layers, LayoutGrid, Languages, Bookmark, CheckCircle2, ArrowLeft, ArrowRight, RotateCcw, Headphones, Check, Pause, Play, Lightbulb, AlertCircle, ZoomIn, X } from 'lucide-react';
 import { getStoredAudioSpeed, isAutoTranslateEnabled, isPronunciationHintsEnabled } from '@/features/account/services/userSettingsService';
+import './lesson-illustrations.css';
 
 const alphabetAudioBySymbol = new Map(
   alphabetData.letters.map(({ symbol, id }) => [symbol, `/media/alphabet/${id}.wav`])
@@ -89,6 +91,11 @@ function activityHasImage(activity) {
   );
 }
 
+function lessonActivities(lesson) {
+  return (lesson.activities || []).filter(activity =>
+    activity.status !== 'ARCHIVED' || !activityContent(activity).inlineTargetActivityId);
+}
+
 export function LessonActivities({
   lessonId,
   fallback,
@@ -147,7 +154,7 @@ function LessonAllActivitiesPreview({ lesson }) {
       <Notice>
         <BilingualText vi="Bản xem trước hiển thị toàn bộ hoạt động theo đúng thứ tự của bài học." en="This preview shows every activity in lesson order." />
       </Notice>
-      {lesson.activities.map((activity, index) => (
+      {lessonActivities(lesson).map((activity, index) => (
         <PreviewActivityCard
           key={activity.id}
           activity={activity}
@@ -206,7 +213,7 @@ function ActivityWorkspace({
   const [params, setParams] = useSearchParams();
   useTextLanguage();
   const workspaceRef = useRef(null);
-  const activities = lesson.activities || [];
+  const activities = lessonActivities(lesson);
   const requested = activities.findIndex(
     (activity) => String(activity.id) === params.get('activity')
   );
@@ -573,9 +580,53 @@ function ActivityWorkspace({
 /**
  * Thân hoạt động xử lý Dialogue, Vocabulary, Grammar và các bài tập
  */
-function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, lesson }) {
+function ActivityBody(props) {
+  const content = activityContent(props.activity);
+  const illustrations = Array.isArray(content.illustrations)
+    ? content.illustrations.filter(image => image?.placement === 'inline' && image.imageUrl)
+    : [];
+  if (!illustrations.length) return <ActivityContent {...props} />;
+
+  return <ActivityIllustrationLayout illustrations={illustrations}>
+    <ActivityContent {...props} />
+  </ActivityIllustrationLayout>;
+}
+
+function ActivityIllustrationLayout({ illustrations, children }) {
+  useTextLanguage();
+  const [selected, setSelected] = useState(null);
+  const title = image => bilingualLabel(
+    image.captionVi || image.captionEn || 'Ảnh minh họa',
+    image.captionEn || image.captionVi || 'Lesson illustration',
+  );
+
+  return <div className="illustrated-activity">
+    <div className="illustrated-activity-grid">
+      <div className="illustrated-activity-content">{children}</div>
+      <aside className="illustrated-activity-images" aria-label={bilingualLabel('Ảnh minh họa', 'Lesson illustrations')}>
+        {illustrations.map((image, index) => <figure key={`${image.imageUrl}-${index}`}>
+          <button type="button" className="illustrated-activity-zoom"
+            aria-label={bilingualLabel(`Phóng to: ${title(image)}`, `Enlarge: ${title(image)}`)}
+            onClick={() => setSelected(image)}>
+            <ContentImage src={image.imageUrl} alt={title(image)} />
+            <span className="illustrated-activity-zoom-icon"><ZoomIn size={16} aria-hidden="true" /></span>
+          </button>
+          {(image.captionVi || image.captionEn) && <figcaption>{title(image)}</figcaption>}
+        </figure>)}
+      </aside>
+    </div>
+    {selected && <Modal title={title(selected)} className="illustrated-activity-modal" onClose={() => setSelected(null)}>
+      <ContentImage src={selected.imageUrl} alt={title(selected)} loading="eager" />
+    </Modal>}
+  </div>;
+}
+
+function ActivityContent({ activity, lessonId, answer, setAnswer, busy, preview, lesson }) {
   useTextLanguage();
   const content = activityContent(activity);
+  const textbookIllustrations = Array.isArray(content.illustrations)
+    ? content.illustrations.filter(image => image && image.placement !== 'inline')
+    : [];
 
   const type = activity.activityType;
 
@@ -790,7 +841,7 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
           )}
 
           {/* Hình minh họa giáo trình */}
-          {content.illustrations?.length > 0 && (
+          {textbookIllustrations.length > 0 && (
             <section className="textbook-illustrations space-y-4 pt-5 border-t border-[#E8E5DF]/50" aria-label={bilingualLabel("Hình minh họa trong giáo trình", "Textbook illustrations")}>
               <div className="flex items-center justify-between gap-3 flex-wrap">
                 <div className="flex items-center gap-2.5">
@@ -807,12 +858,12 @@ function ActivityBody({ activity, lessonId, answer, setAnswer, busy, preview, le
                   </div>
                 </div>
                 <span className="px-2.5 py-1 rounded-full bg-stone-100 text-stone-600 text-[11px] font-bold">
-                  <BilingualText vi={`${content.illustrations.length} hình`} en={`${content.illustrations.length} images`} />
+                  <BilingualText vi={`${textbookIllustrations.length} hình`} en={`${textbookIllustrations.length} images`} />
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {content.illustrations.map((illustration, index) => (
+                {textbookIllustrations.map((illustration, index) => (
                   <figure
                     key={`${illustration.imageUrl}-${index}`}
                     onClick={() => setZoomedImage(illustration.imageUrl)}

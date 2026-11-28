@@ -248,7 +248,7 @@ export function RoleplaySessionPage() {
                 en={<>Roleplay session: {scenario.titleEn || scenario.title}</>}
               />
             </h1>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#DA251D]/10 text-[#DA251D] text-[11px] font-bold">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FFF2D6] text-[#EA580C] border border-[#FDE68A] text-xs font-bold">
               {scenario.level || 'A1 - A2'}
             </span>
           </div>
@@ -257,45 +257,39 @@ export function RoleplaySessionPage() {
         {/* Speed & Global Actions */}
         <div className="flex flex-wrap items-center gap-2.5 self-start md:self-auto">
           {/* Audio speed pill */}
-          <div className="flex items-center bg-white border border-[#E8E5DF] rounded-xl p-1 shadow-xs text-xs font-semibold">
-            <span className="px-2 text-[#64748B] text-[11px]"><BilingualText vi="Tốc độ đọc:" en="Audio speed:" /></span>
+          <div className="rp-speed-group shadow-xs">
+            <span className="px-2 text-[#64748B] text-[11px] font-semibold"><BilingualText vi="Tốc độ đọc:" en="Audio speed:" /></span>
             <button
               type="button"
               onClick={() => setSpeechRate(0.7)}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
-                speechRate === 0.7
-                  ? 'bg-[#DA251D] text-white font-bold shadow-xs'
-                  : 'text-[#431914] hover:bg-[#FFF9ED]'
-              }`}
+              className={`rp-speed-btn ${speechRate === 0.7 ? 'is-active' : ''}`}
             >
               <BilingualText vi="0.7x Chậm" en="0.7x Slow" />
             </button>
             <button
               type="button"
               onClick={() => setSpeechRate(0.95)}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
-                speechRate >= 0.9
-                  ? 'bg-[#DA251D] text-white font-bold shadow-xs'
-                  : 'text-[#431914] hover:bg-[#FFF9ED]'
-              }`}
+              className={`rp-speed-btn ${speechRate >= 0.9 ? 'is-active' : ''}`}
             >
               <BilingualText vi="1.0x Chuẩn" en="1.0x Normal" />
             </button>
           </div>
 
           <button
+            type="button"
             onClick={handleResetSession}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFF4E0] text-[#715A4F] hover:text-[#202124] border border-[#DECBB4] font-semibold text-xs shadow-xs transition-all"
+            className="rp-header-btn"
           >
-            <RotateCcw size={13} />
+            <RotateCcw size={14} />
             <BilingualText vi="Bắt đầu lại" en="Restart" />
           </button>
 
           <button
+            type="button"
             onClick={handleFinishSession}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#202124] hover:bg-[#333] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all"
+            className="rp-primary-btn"
           >
-            <Award size={14} className="text-[#FFCD00]" />
+            <Award size={15} />
             <BilingualText vi="Kết thúc & Xem kết quả" en="Finish & View Results" />
           </button>
         </div>
@@ -306,36 +300,33 @@ export function RoleplaySessionPage() {
         {/* Main Dialogue Chat Window (Col 8) */}
         <main className="lg:col-span-8 flex flex-col bg-white rounded-3xl border border-[#DECBB4] shadow-md overflow-hidden min-h-[720px]">
           {/* Partner Status Header */}
-          <div className="px-5 py-4 bg-gradient-to-r from-[#FFF9EE] to-white border-b border-[#EADCC7] flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="relative w-11 h-11 rounded-2xl bg-[#FFF2D6] border-2 border-[#FFCD00] flex items-center justify-center text-2xl shadow-xs">
+          <div className="px-6 py-4 bg-white border-b border-[#E8E5DF] flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="relative w-12 h-12 rounded-2xl bg-[#FFF7ED] border border-[#FED7AA] flex items-center justify-center text-2xl shadow-xs shrink-0">
                 {scenario.aiRole.avatar}
-                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white ring-1 ring-emerald-300" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-black text-[#202124] leading-tight">
+                  <h3 className="text-base font-black text-[#1E293B] leading-tight">
                     {scenario.aiRole.name}
                   </h3>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#DA251D]/10 text-[#DA251D]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                     AI Partner
                   </span>
                 </div>
-                <p className="text-xs text-[#715A4F] leading-tight mt-0.5">
+                <p className="text-xs text-[#64748B] leading-tight mt-1">
                   {scenario.aiRole.role}
                 </p>
               </div>
             </div>
 
             <button
+              type="button"
               onClick={() => setShowHints(!showHints)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
-                showHints
-                  ? 'bg-[#FFF2D6] text-[#A62A24] border-[#FFCD00]'
-                  : 'bg-white text-[#715A4F] border-[#DECBB4] hover:bg-[#FFF9EE]'
-              }`}
+              className={`rp-hints-btn ${showHints ? 'is-active' : ''}`}
             >
-              <Lightbulb size={14} className={showHints ? 'text-[#DA251D]' : 'text-[#715A4F]'} />
+              <Lightbulb size={14} className={showHints ? 'text-[#EA580C]' : 'text-[#64748B]'} />
               <BilingualText vi={showHints ? 'Ẩn gợi ý' : 'Hiện gợi ý trả lời'} en={showHints ? 'Hide hints' : 'Show response hints'} />
             </button>
           </div>
@@ -365,14 +356,14 @@ export function RoleplaySessionPage() {
                   <div
                     className={`max-w-[88%] sm:max-w-[82%] xl:max-w-[78%] rounded-3xl p-5 sm:p-6 shadow-xs text-sm sm:text-base leading-relaxed transition-all ${
                       isAi
-                        ? 'bg-white border border-[#E8DCCF] text-[#202124]'
-                        : 'bg-gradient-to-br from-[#DA251D] to-[#B71C1C] text-white shadow-sm'
+                        ? 'bg-white border border-[#E2E8F0] text-[#1E293B]'
+                        : 'bg-gradient-to-r from-[#FF7A00] to-[#EA580C] text-white shadow-sm'
                     }`}
                   >
                     {/* Header sender label */}
                     <div
                       className={`text-[11px] font-bold mb-1.5 flex items-center justify-between gap-2 ${
-                        isAi ? 'text-[#DA251D]' : 'text-white/80'
+                        isAi ? 'text-[#EA580C]' : 'text-white/80'
                       }`}
                     >
                       <span>
@@ -398,9 +389,9 @@ export function RoleplaySessionPage() {
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
-                        className={`mt-2.5 p-2.5 rounded-xl text-xs sm:text-sm border ${
+                        className={`mt-2.5 p-3 rounded-xl text-xs sm:text-sm border ${
                           isAi
-                            ? 'bg-[#FFF9EE] border-[#FFCD00]/50 text-[#5B3E31]'
+                            ? 'bg-[#FFFDF5] border-[#FDE68A] text-[#78350F]'
                             : 'bg-white/15 border-white/20 text-white'
                         }`}
                       >
@@ -417,9 +408,9 @@ export function RoleplaySessionPage() {
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
-                        className={`mt-2.5 p-2.5 rounded-xl text-xs border ${
+                        className={`mt-2.5 p-3 rounded-xl text-xs border ${
                           isAi
-                            ? 'bg-[#F2F7F2] border-[#C3DEC3] text-[#24382B]'
+                            ? 'bg-[#F0FDF4] border-[#BBF7D0] text-[#14532D]'
                             : 'bg-white/15 border-white/20 text-white'
                         }`}
                       >
@@ -434,20 +425,16 @@ export function RoleplaySessionPage() {
                     {/* Message Actions */}
                     <div
                       className={`mt-3 pt-2.5 flex flex-wrap items-center gap-1.5 border-t ${
-                        isAi ? 'border-[#F0E6D8]' : 'border-white/20'
+                        isAi ? 'border-slate-100' : 'border-white/20'
                       }`}
                     >
                       <button
                         type="button"
                         onClick={() => handleSpeak(msg.text, msg.id)}
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                          isAi
-                            ? 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] hover:text-[#DA251D] border border-[#E8DCCF]'
-                            : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
-                        }`}
+                        className={isAi ? `rp-msg-action-btn ${isPlayingThis ? 'is-speaking' : ''}` : 'inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/20 hover:bg-white/30 text-white border border-white/30'}
                         title={bilingualLabel("Nghe phát âm chuẩn", "Listen to standard pronunciation")}
                       >
-                        <Volume2 size={13} className={isPlayingThis ? 'text-[#DA251D] animate-spin' : ''} />
+                        <Volume2 size={13} className={isPlayingThis ? 'text-[#EA580C] animate-spin' : ''} />
                         <BilingualText vi="Nghe" en="Listen" />
                       </button>
 
@@ -455,15 +442,7 @@ export function RoleplaySessionPage() {
                         <button
                           type="button"
                           onClick={() => toggleTranslation(msg.id)}
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                            isAi
-                              ? isTranslating
-                                ? 'bg-[#DA251D] text-white'
-                                : 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] border border-[#E8DCCF]'
-                              : isTranslating
-                              ? 'bg-white text-[#DA251D]'
-                              : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
-                          }`}
+                          className={isAi ? `rp-msg-action-btn ${isTranslating ? 'is-translating' : ''}` : `inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold ${isTranslating ? 'bg-white text-[#EA580C]' : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'}`}
                           title={bilingualLabel("Dịch câu nói sang tiếng Anh", "Translate sentence to English")}
                         >
                           <Languages size={13} />
@@ -475,15 +454,7 @@ export function RoleplaySessionPage() {
                         <button
                           type="button"
                           onClick={() => toggleExplanation(msg.id)}
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                            isAi
-                              ? isExplaining
-                                ? 'bg-[#24382B] text-white'
-                                : 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] border border-[#E8DCCF]'
-                              : isExplaining
-                              ? 'bg-white text-[#24382B]'
-                              : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
-                          }`}
+                          className={isAi ? `rp-msg-action-btn ${isExplaining ? 'is-explaining' : ''}` : `inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold ${isExplaining ? 'bg-white text-[#166534]' : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'}`}
                           title={bilingualLabel("Giải thích từ vựng & sắc thái văn hóa", "Explain vocabulary & cultural nuances")}
                         >
                           <HelpCircle size={13} />
@@ -494,7 +465,7 @@ export function RoleplaySessionPage() {
                   </div>
 
                   {!isAi && (
-                    <div className="w-9 h-9 rounded-xl bg-[#DA251D] text-white flex items-center justify-center text-sm font-bold shrink-0 shadow-xs">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FF7A00] to-[#EA580C] text-white flex items-center justify-center text-sm font-bold shrink-0 shadow-xs">
                       👤
                     </div>
                   )}
@@ -530,28 +501,29 @@ export function RoleplaySessionPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="px-5 py-3.5 bg-[#FFF9EE] border-t border-[#EADCC7] space-y-2"
+                className="px-6 py-4 bg-[#FFFDF9] border-t border-[#E8E5DF] space-y-2.5"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#A62A24] uppercase tracking-wider">
-                    <Lightbulb size={13} className="text-[#DA251D]" />
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#EA580C] uppercase tracking-wider">
+                    <Lightbulb size={13} className="text-[#EA580C]" />
                     <BilingualText vi="Gợi ý câu trả lời tự nhiên (Bấm để gửi ngay):" en="Natural response hints (Click to send):" />
                   </div>
                   <span className="text-[10px] text-[#64748B]"><BilingualText vi="Chạm 1 lần để nói" en="Tap once to speak" /></span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {suggestions.map((sug, idx) => (
                     <button
                       key={idx}
+                      type="button"
                       onClick={() => handleSendMessage(sug.text)}
                       disabled={isSending}
-                      className="group flex flex-col text-left p-2.5 rounded-xl bg-white hover:bg-[#FFF2D6] border border-[#DECBB4] hover:border-[#FFCD00] shadow-xs hover:shadow-sm transition-all"
+                      className="rp-suggestion-btn group"
                     >
-                      <span className="text-xs font-bold text-[#202124] group-hover:text-[#DA251D] transition-colors leading-tight">
+                      <span className="text-xs font-bold text-[#1E293B] group-hover:text-[#EA580C] transition-colors leading-tight">
                         "{sug.text}"
                       </span>
-                      <span className="text-[11px] text-[#715A4F] italic mt-0.5 line-clamp-1">
+                      <span className="text-[11px] text-[#64748B] italic mt-0.5 line-clamp-1">
                         ({sug.meaning})
                       </span>
                     </button>
@@ -562,18 +534,14 @@ export function RoleplaySessionPage() {
           </AnimatePresence>
 
           {/* User Input Console */}
-          <div className="roleplay-input-console p-3 sm:p-4 bg-white border-t border-[#EADCC7]">
-            <div className="flex items-center gap-2.5">
+          <div className="roleplay-input-console p-4 sm:p-5 bg-white border-t border-[#E8E5DF]">
+            <div className="flex items-center gap-3">
               {/* Mic Speech Button */}
               <button
                 type="button"
                 onClick={handleToggleVoiceInput}
                 disabled={isSending}
-                className={`relative h-11 w-11 min-h-0 p-0 rounded-xl flex items-center justify-center transition-all shrink-0 ${
-                  isListening
-                    ? 'bg-[#DA251D] text-white shadow-lg ring-4 ring-[#DA251D]/25 animate-pulse'
-                    : 'bg-[#FFF9EE] hover:bg-[#FFEEC9] text-[#715A4F] hover:text-[#DA251D] border border-[#DECBB4]'
-                }`}
+                className={`rp-mic-btn relative ${isListening ? 'is-active' : ''}`}
                 title={isListening ? bilingualLabel('Đang nghe giọng nói... Bấm để dừng', 'Listening... Click to stop') : bilingualLabel('Bấm để nói tiếng Việt (Microphone)', 'Click to speak Vietnamese (Microphone)')}
               >
                 <Mic size={18} className={isListening ? 'animate-bounce' : ''} />
@@ -596,7 +564,7 @@ export function RoleplaySessionPage() {
                   rows={1}
                   disabled={isSending}
                   placeholder={bLabel(`Nhập câu thoại tiếng Việt của bạn với ${scenario.aiRole.name}...`, `Type your Vietnamese response to ${scenario.aiRole.name}...`)}
-                  className="w-full resize-none px-4 py-2.5 bg-[#FFF7E8] border border-[#E8E5DF] focus:border-[#FF7A00] focus:ring-2 focus:ring-[#FF7A00]/10 rounded-2xl text-xs sm:text-sm text-[#253044] placeholder-[#64748B]/60 transition-all outline-hidden leading-relaxed"
+                  className="w-full resize-none px-4 py-2.5 bg-[#F8FAFC] focus:bg-white border border-[#E2E8F0] focus:border-[#EA580C] focus:ring-2 focus:ring-[#EA580C]/10 rounded-2xl text-xs sm:text-sm text-[#1E293B] placeholder-[#64748B]/60 transition-all outline-hidden leading-relaxed"
                 />
                 <span className="absolute right-3 bottom-2 text-[10px] text-[#64748B]/70 hidden sm:inline">
                   <BilingualText vi="Enter ↵ để gửi" en="Enter ↵ to send" />
@@ -608,11 +576,7 @@ export function RoleplaySessionPage() {
                 type="button"
                 onClick={() => handleSendMessage()}
                 disabled={!inputText.trim() || isSending}
-                className={`inline-flex items-center justify-center gap-1.5 h-11 min-h-0 px-4 sm:px-5 rounded-xl font-bold text-xs sm:text-sm shrink-0 transition-all ${
-                  inputText.trim() && !isSending
-                    ? 'bg-[#DA251D] hover:bg-[#B71C1C] text-white shadow-md hover:shadow-lg'
-                    : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
-                }`}
+                className="rp-send-btn"
               >
                 <span><BilingualText vi="Gửi" en="Send" /></span>
                 <Send size={15} />
@@ -624,32 +588,32 @@ export function RoleplaySessionPage() {
         {/* Right Mission Sidebar (Col 4) */}
         <aside className="lg:col-span-4 space-y-4">
           {/* Mission Progress Card */}
-          <div className="bg-white rounded-3xl border border-[#DECBB4] p-5 sm:p-6 shadow-sm space-y-4">
+          <div className="bg-white rounded-3xl border border-[#E8E5DF] p-5 sm:p-6 shadow-xs space-y-4">
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] font-bold text-[#DA251D] uppercase tracking-wider">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[11px] font-bold text-[#EA580C] uppercase tracking-wider">
                   <BilingualText vi="Tiến độ kịch bản" en="Scenario progress" />
                 </span>
-                <span className="text-xs font-bold text-[#253044]">
+                <span className="text-xs font-bold text-[#1E293B]">
                   <BilingualText
                     vi={`${completedCount}/${totalTasks} mục tiêu (${progressPercent}%)`}
                     en={`${completedCount}/${totalTasks} goals (${progressPercent}%)`}
                   />
                 </span>
               </div>
-              <h3 className="text-base font-black text-[#202124] tracking-tight">
+              <h3 className="text-base font-black text-[#1E293B] tracking-tight">
                 <BilingualText vi="Mục tiêu đối thoại" en="Dialogue objectives" />
               </h3>
 
               {/* Progress bar */}
-              <div className="w-full h-2 rounded-full bg-[#EADCC7] overflow-hidden mt-2.5">
+              <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden mt-2.5 border border-slate-200/50">
                 <div
-                  className="h-full bg-gradient-to-r from-[#DA251D] to-[#FFCD00] rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-[#FF7A00] to-[#10B981] rounded-full transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
               {session?.completionReported && (
-                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold">
+                <div className="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold border border-emerald-200/60">
                   <CheckCircle2 size={12} />
                   <BilingualText>{"Đã ghi nhận hoàn thành kịch bản"}</BilingualText>
                 </div>
@@ -663,24 +627,24 @@ export function RoleplaySessionPage() {
                 return (
                   <div
                     key={task.id}
-                    className={`flex items-start gap-3 p-3 rounded-2xl border transition-all ${
+                    className={`flex items-start gap-3 p-3.5 rounded-2xl border transition-all ${
                       isDone
-                        ? 'bg-[#F2F7F2] border-[#C3DEC3] text-[#24382B]'
-                        : 'bg-[#FFF9EE] border-[#DECBB4] text-[#4A3B32]'
+                        ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950 shadow-2xs'
+                        : 'bg-[#F8FAFC] border-[#E2E8F0] text-slate-700'
                     }`}
                   >
                     <span
-                      className={`w-6 h-6 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${
+                      className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${
                         isDone
                           ? 'bg-emerald-600 text-white shadow-xs'
-                          : 'bg-white border border-[#DECBB4] text-[#715A4F]'
+                          : 'bg-white border border-slate-300 text-slate-500'
                       }`}
                     >
                       {isDone ? '✓' : idx + 1}
                     </span>
 
                     <div className="flex-1 text-xs leading-snug">
-                      <div className={`font-semibold ${isDone ? 'line-through opacity-80' : ''}`}>
+                      <div className={`font-semibold ${isDone ? 'line-through opacity-75' : 'text-slate-800'}`}>
                         {isVi ? (task.labelVi || task.label) : (task.labelEn || task.label)}
                       </div>
                       {isDone && (
@@ -696,21 +660,21 @@ export function RoleplaySessionPage() {
           </div>
 
           {/* Roleplay Persona Card */}
-          <div className="bg-gradient-to-br from-[#FFF9EE] to-[#FFF2D6] rounded-3xl border border-[#FFCD00]/50 p-5 shadow-xs space-y-2.5">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#A62A24]">
+          <div className="bg-gradient-to-br from-[#FFFDF9] to-[#FFF7ED] rounded-3xl border border-[#FED7AA] p-5 shadow-xs space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#C2410C]">
               <span>🎭</span>
               <BilingualText vi="Nhắc nhở vai diễn của bạn:" en="Your role reminder:" />
             </div>
 
-            <div className="text-xs text-[#5B3E31] leading-relaxed">
+            <div className="text-xs text-[#78350F] leading-relaxed">
               <BilingualText vi="Bạn đang đóng vai:" en="You are playing:" />{' '}
-              <strong className="text-[#FF7A00] font-bold">
+              <strong className="text-[#EA580C] font-black">
                 <BilingualText
                   vi={scenario.learnerRole?.roleVi || scenario.learnerRole?.role || 'Du khách'}
                   en={scenario.learnerRole?.roleEn || scenario.learnerRole?.role || 'Traveler'}
                 />
               </strong>.
-              <p className="mt-1">
+              <p className="mt-1.5 text-slate-600 font-normal">
                 <BilingualText
                   vi={'Hãy xưng hô tự nhiên và dùng kính ngữ lịch sự như "Dạ", "ạ", "cho em hỏi" để ghi điểm tối đa nhé!'}
                   en={'Use natural address terms and polite honorifics like "Dạ", "ạ", "cho em hỏi" to maximize your score!'}
@@ -723,9 +687,9 @@ export function RoleplaySessionPage() {
           <button
             type="button"
             onClick={handleFinishSession}
-            className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#DA251D] to-[#B71C1C] hover:from-[#B71C1C] hover:to-[#8B1414] text-white font-black text-sm shadow-md hover:shadow-xl transition-all"
+            className="rp-cta-btn"
           >
-            <Award size={16} className="text-[#FFCD00]" />
+            <Award size={16} />
             <BilingualText vi="Hoàn tất & Nhận đánh giá ➔" en="Complete & View Evaluation ➔" />
           </button>
         </aside>

@@ -72,7 +72,7 @@ export function LoginPage() {
         const role = String(loggedUser?.role || '').replace(/^ROLE_/, '');
         if (role === 'ADMIN') {
           navigate('/admin', { replace: true });
-        } else if (role === 'CONTENT') {
+        } else if (role === 'CONTENT_CREATOR') {
           navigate(ROUTES.CONTENT_COURSES, { replace: true });
         } else {
           continueLearnerFlow(navigate, loggedUser, from);
@@ -153,7 +153,7 @@ export function LoginPage() {
     if (role === 'ADMIN') {
       return <Navigate to="/admin" replace />;
     }
-    if (role === 'CONTENT') {
+    if (role === 'CONTENT_CREATOR') {
       return <Navigate to={ROUTES.CONTENT_COURSES} replace />;
     }
     return <Navigate to={user?.onboardingCompleted === true ? '/' : '/onboarding/reason'} replace />;
@@ -190,7 +190,7 @@ export function LoginPage() {
         const role = String(loggedUser?.role || '').replace(/^ROLE_/, '');
         if (role === 'ADMIN') {
           navigate('/admin', { replace: true });
-        } else if (role === 'CONTENT') {
+        } else if (role === 'CONTENT_CREATOR') {
           navigate(ROUTES.CONTENT_COURSES, { replace: true });
         } else {
           continueLearnerFlow(navigate, loggedUser, from);

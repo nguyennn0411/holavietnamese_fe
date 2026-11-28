@@ -19,7 +19,6 @@ import {
   Landmark,
   FolderTree,
   Sparkles,
-  Sliders,
   Trophy,
   Zap,
   ShieldCheck,
@@ -61,7 +60,6 @@ const groups = [
       [ROUTES.ADMIN_CULTURE, 'Văn hóa', 'Culture', Landmark],
       [ROUTES.ADMIN_CULTURE_CATEGORIES, 'Danh mục văn hóa', 'Culture Categories', FolderTree],
       [ROUTES.ADMIN_AI_SCENARIOS, 'Kịch bản AI', 'AI Scenarios', Sparkles],
-      [ROUTES.ADMIN_AI_SETTINGS, 'Cấu hình AI', 'AI Configuration', Sliders],
     ],
   },
   {
@@ -80,7 +78,7 @@ const groups = [
 
 export function AdminLayout() {
   useTextLanguage();
-  const { user, logout, isAdmin, isContentManager } = useAuth();
+  const { user, logout, isAdmin, isContentCreator } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const sidebar = useRef(null);
@@ -115,7 +113,7 @@ export function AdminLayout() {
   const visibleGroups = groups.map(group => {
     let groupTitle = group.title;
     let groupTitleEn = group.titleEn;
-    if (isContentManager && !isAdmin && group.title === 'Văn hóa & AI') {
+    if (isContentCreator && !isAdmin && group.title === 'Văn hóa & AI') {
       groupTitle = 'Văn hóa';
       groupTitleEn = 'Culture';
     }
@@ -128,14 +126,14 @@ export function AdminLayout() {
         if (to === ROUTES.ADMIN_DESTINATIONS) return exploreAllowed;
         if (to === ROUTES.CONTENT_CULTURE || to === ROUTES.CONTENT_CULTURE_CATEGORIES || to === ROUTES.ADMIN_CULTURE || to === ROUTES.ADMIN_CULTURE_CATEGORIES) return cultureAllowed;
         if (managerAuthoringPaths.includes(to)) {
-          return to === ROUTES.CONTENT_COURSES ? (isAdmin || isContentManager) : (isContentManager && !isAdmin);
+          return to === ROUTES.CONTENT_COURSES ? (isAdmin || isContentCreator) : (isContentCreator && !isAdmin);
         }
         return isAdmin;
       }).map(([to, labelVi, labelEn, Icon]) => {
         let finalTo = to;
         if (isAdmin) {
           if (to === ROUTES.CONTENT_COURSES) finalTo = ROUTES.ADMIN_COURSES;
-        } else if (isContentManager && !isAdmin) {
+        } else if (isContentCreator && !isAdmin) {
           if (to === ROUTES.ADMIN_CULTURE) finalTo = ROUTES.CONTENT_CULTURE;
           if (to === ROUTES.ADMIN_CULTURE_CATEGORIES) finalTo = ROUTES.CONTENT_CULTURE_CATEGORIES;
           if (to === ROUTES.ADMIN_VOCABULARY) finalTo = ROUTES.CONTENT_VOCABULARY;
@@ -144,8 +142,8 @@ export function AdminLayout() {
         let resolvedLabel = labelVi;
         let resolvedLabelEn = labelEn;
         if (to === ROUTES.CONTENT_COURSES) {
-          resolvedLabel = isContentManager && !isAdmin ? 'Biên soạn khóa học' : (isAdmin ? 'Khóa học' : 'Khóa học');
-          resolvedLabelEn = isContentManager && !isAdmin ? 'Course Authoring' : 'Courses';
+          resolvedLabel = isContentCreator && !isAdmin ? 'Biên soạn khóa học' : (isAdmin ? 'Khóa học' : 'Khóa học');
+          resolvedLabelEn = isContentCreator && !isAdmin ? 'Course Authoring' : 'Courses';
         } else if (to === ROUTES.ADMIN_VOCABULARY && isAdmin) {
           resolvedLabel = 'Từ vựng';
           resolvedLabelEn = 'Vocabulary';
@@ -162,7 +160,7 @@ export function AdminLayout() {
   const currentItem = visibleGroups
     .flatMap(group => group.links)
     .find(([to]) => location.pathname === to || (to !== '/admin' && location.pathname.startsWith(to + '/')));
-  const currentVi = currentItem?.[1] || (isAdmin ? 'Quản trị hệ thống' : 'Quản lý nội dung');
+  const currentVi = currentItem?.[1] || (isAdmin ? 'Quản trị hệ thống' : 'Người sáng tạo nội dung');
   const currentEn = currentItem?.[2] || (isAdmin ? 'System Administration' : 'Content Management');
 
   const userInitial = (user?.fullName || user?.username || (isAdmin ? 'A' : 'C')).charAt(0).toUpperCase();
@@ -236,7 +234,7 @@ export function AdminLayout() {
               </Link>
               <span className="admin-breadcrumb-separator">/</span>
               <span className="admin-breadcrumb-prefix">
-                <BilingualText vi={isAdmin ? "Quản trị" : "Nội dung"} en={isAdmin ? "Admin" : "Content"} />
+                <BilingualText vi={isAdmin ? "Quản trị" : "Sáng tạo nội dung"} en={isAdmin ? "Admin" : "Content Creator"} />
               </span>
               <span className="admin-breadcrumb-separator">/</span>
               <strong className="admin-breadcrumb-current">
@@ -253,10 +251,10 @@ export function AdminLayout() {
               </div>
               <div className="admin-user-meta">
                 <span className="admin-user-name">
-                  {user?.fullName || user?.username || (isAdmin ? 'Quản trị viên' : 'Quản lý nội dung')}
+                  {user?.fullName || user?.username || (isAdmin ? 'Quản trị viên' : 'Người sáng tạo nội dung')}
                 </span>
                 <span className={`admin-user-role-badge ${isAdmin ? 'admin-user-role-badge--admin' : 'admin-user-role-badge--content'}`}>
-                  {isAdmin ? 'ADMIN' : 'CONTENT'}
+                  {isAdmin ? 'ADMIN' : 'CONTENT_CREATOR'}
                 </span>
               </div>
             </div>

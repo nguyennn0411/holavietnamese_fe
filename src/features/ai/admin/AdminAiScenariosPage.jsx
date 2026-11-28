@@ -252,13 +252,6 @@ export function AdminAiScenariosPage() {
 
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <Link
-            to="/admin/ai-settings"
-            className="button secondary"
-            style={{ fontSize: '13px', minHeight: '40px', height: '40px', padding: '0 16px' }}
-          >
-            <span>{label('Cấu hình mô hình AI', 'AI model configuration')}</span>
-          </Link>
-          <Link
             to="/admin/ai-scenarios/new"
             className="button"
             style={{ fontSize: '13px', minHeight: '40px', height: '40px', padding: '0 16px' }}

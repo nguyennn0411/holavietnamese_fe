@@ -2,6 +2,7 @@ import { BilingualText, bilingualLabel } from '@/shared/components/common/Biling
 import { CourseThumbnail } from '@/features/learning/components/course/CourseInfo';
 import { CourseStudio } from '@/features/learning/admin/components/CourseStudio';
 import { ActivityEditor } from '@/features/learning/admin/components/ActivityEditor';
+import { canIllustrateActivity } from '@/features/learning/admin/activityIllustrations';
 import { useCallback, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { contentService } from '@/features/learning/api/contentService';
@@ -17,7 +18,8 @@ import { AdminActionGroup, AdminActionLink } from '@/shared/components/common/Ad
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
 import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
-import { Search, X, Eye, Pencil, Check, Info, Clock } from 'lucide-react';
+import { AlertCircle, Archive, ArrowDown, ArrowLeft, ArrowUp, Check, ChevronDown, Clock, Eye, Info, Layers, Pencil, Plus, Search, X } from 'lucide-react';
+import './lesson-builder.css';
 
 const CONTENT_STATUS_DOTS = {
   DRAFT: '#F59E0B',
@@ -27,13 +29,83 @@ const CONTENT_STATUS_DOTS = {
   ARCHIVED: '#64748B',
 };
 
+const STATUS_BANNER_CONFIG = {
+  '': {
+    labelVi: 'Tất cả khóa học',
+    labelEn: 'All Courses',
+    icon: Layers,
+    hintVi: 'Hiển thị danh sách toàn bộ khóa học trên hệ thống ở mọi trạng thái.',
+    hintEn: 'Displaying all courses across all statuses.',
+    emptyTitleVi: 'Chưa có khóa học nào',
+    emptyTitleEn: 'No courses found',
+    emptyDescVi: 'Hệ thống chưa có khóa học nào hoặc hãy thử từ khóa tìm kiếm khác.',
+    emptyDescEn: 'No courses available or try another search keyword.',
+  },
+  REVIEW: {
+    labelVi: 'Chờ Admin duyệt',
+    labelEn: 'Pending Review',
+    icon: Clock,
+    hintVi: 'Các bản nháp Content Manager đã gửi sẽ xuất hiện ở mục Chờ Admin duyệt.',
+    hintEn: 'Drafts submitted by Content Managers appear in Pending review.',
+    emptyTitleVi: 'Không có khóa học chờ duyệt',
+    emptyTitleEn: 'No courses pending review',
+    emptyDescVi: 'Các khóa học Content Manager gửi duyệt sẽ hiển thị tại đây.',
+    emptyDescEn: 'Courses submitted by Content Managers will appear here.',
+  },
+  DRAFT: {
+    labelVi: 'Bản nháp',
+    labelEn: 'Draft Courses',
+    icon: Pencil,
+    hintVi: 'Các khóa học đang trong quá trình biên soạn, chưa gửi yêu cầu kiểm duyệt.',
+    hintEn: 'Courses currently being authored, not yet submitted for review.',
+    emptyTitleVi: 'Không có khóa học bản nháp',
+    emptyTitleEn: 'No draft courses',
+    emptyDescVi: 'Không có khóa học nào đang ở trạng thái bản nháp.',
+    emptyDescEn: 'There are no courses currently in draft status.',
+  },
+  REJECTED: {
+    labelVi: 'Cần chỉnh sửa',
+    labelEn: 'Needs Revision / Rejected',
+    icon: AlertCircle,
+    hintVi: 'Các khóa học cần Content Manager cập nhật và chỉnh sửa lại theo yêu cầu.',
+    hintEn: 'Courses requiring updates and revisions from Content Managers.',
+    emptyTitleVi: 'Không có khóa học cần chỉnh sửa',
+    emptyTitleEn: 'No rejected courses',
+    emptyDescVi: 'Hiện không có khóa học nào bị từ chối hoặc cần chỉnh sửa lại.',
+    emptyDescEn: 'There are currently no courses requiring revisions.',
+  },
+  PUBLISHED: {
+    labelVi: 'Đã xuất bản',
+    labelEn: 'Published Courses',
+    icon: Check,
+    hintVi: 'Các khóa học đã duyệt thành công và đang hiển thị công khai cho học viên.',
+    hintEn: 'Courses successfully approved and live for learners.',
+    emptyTitleVi: 'Không có khóa học đã xuất bản',
+    emptyTitleEn: 'No published courses',
+    emptyDescVi: 'Chưa có khóa học nào được xuất bản công khai.',
+    emptyDescEn: 'There are no published courses yet.',
+  },
+  ARCHIVED: {
+    labelVi: 'Lưu trữ',
+    labelEn: 'Archived Courses',
+    icon: Archive,
+    hintVi: 'Các khóa học đã tạm ngưng hoặc được đưa vào kho lưu trữ.',
+    hintEn: 'Courses paused or retired to the archive.',
+    emptyTitleVi: 'Không có khóa học lưu trữ',
+    emptyTitleEn: 'No archived courses',
+    emptyDescVi: 'Không có khóa học nào trong kho lưu trữ.',
+    emptyDescEn: 'There are no courses in the archive.',
+  },
+};
+
 const labels = { courses: 'Khóa học', lessons: 'Bài học', quizzes: 'Quiz' };
 
 export function AdminContentListPage({ kind }) {
-  const { isAdmin, isContentManager } = useAuth();
+  const { isAdmin, isContentCreator } = useAuth();
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState(() => (isAdmin && kind === 'courses' ? 'REVIEW' : ''));
+  // Default to all statuses as requested by user (previously: isAdmin && kind === 'courses' ? 'REVIEW' : '')
+  const [status, setStatus] = useState('');
   const [page, setPage] = useState(0);
   const [creating, setCreating] = useState(false);
   const navigate = useNavigate();
@@ -45,7 +117,7 @@ export function AdminContentListPage({ kind }) {
     )
   );
 
-  const canCreate = isContentManager && !isAdmin && kind === 'courses';
+  const canCreate = isContentCreator && !isAdmin && kind === 'courses';
   const statuses =
     kind === 'courses'
       ? ['DRAFT', 'REVIEW', 'REJECTED', 'PUBLISHED', 'ARCHIVED']
@@ -76,7 +148,7 @@ export function AdminContentListPage({ kind }) {
   const description =
     kind === 'courses'
       ? isAdmin
-        ? 'Xem và kiểm duyệt khóa học do Content Manager gửi lên.'
+        ? 'Xem và kiểm duyệt khóa học do Content Creator gửi lên.'
         : 'Tạo, chỉnh sửa và gửi khóa học cho Admin kiểm duyệt.'
       : kind === 'lessons'
       ? 'Xem các bài học thuộc khóa học được phân quyền.'
@@ -98,7 +170,7 @@ export function AdminContentListPage({ kind }) {
           en={kind === 'quizzes' ? '+ Create quiz' : kind === 'lessons' ? '+ Create lesson' : '+ Create course'}
         />
       </button>
-    ) : isContentManager && !isAdmin && kind !== 'courses' ? (
+    ) : isContentCreator && !isAdmin && kind !== 'courses' ? (
       <Link className="admin-btn admin-btn-secondary" to={isAdmin ? "/admin/courses" : "/content/courses"}>
         <BilingualText vi="← Quay lại khóa học" en="← Back to courses" />
       </Link>
@@ -109,7 +181,7 @@ export function AdminContentListPage({ kind }) {
   return (
     <section>
       <PageHeader
-        eyebrow={<BilingualText vi={isAdmin ? 'Kiểm duyệt nội dung' : 'Quản lý nội dung học tập'} en={isAdmin ? 'Content Moderation' : 'Learning Content Management'} />}
+        eyebrow={<BilingualText vi={isAdmin ? 'Kiểm duyệt nội dung' : 'Người sáng tạo nội dung học tập'} en={isAdmin ? 'Content Moderation' : 'Learning Content Management'} />}
         title={<BilingualText vi={labels[kind]} en={kind === 'courses' ? 'Courses' : kind === 'lessons' ? 'Lessons' : 'Quizzes'} />}
         description={
           <BilingualText
@@ -117,7 +189,7 @@ export function AdminContentListPage({ kind }) {
             en={
               kind === 'courses'
                 ? isAdmin
-                  ? 'Review and moderate courses submitted by Content Managers.'
+                  ? 'Review and moderate courses submitted by Content Creators.'
                   : 'Create, edit and submit courses for Admin review.'
                 : kind === 'lessons'
                 ? 'View lessons belonging to assigned courses.'
@@ -128,35 +200,44 @@ export function AdminContentListPage({ kind }) {
         actions={action}
       />
 
-      {reviewQueue && (
-        <div className="review-tabs-bar">
-          <div className="review-tabs-group" role="tablist" aria-label={bilingualLabel('Bộ lọc kiểm duyệt khóa học', 'Course review filters')}>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={status === 'REVIEW'}
-              className={`review-tab-btn ${status === 'REVIEW' ? 'is-active' : ''}`}
-              onClick={() => {
-                setStatus(current => current === 'REVIEW' ? '' : 'REVIEW');
-                setPage(0);
-              }}
-            >
-              <Clock size={16} />
-              <span><BilingualText vi="Chờ Admin duyệt" en="Pending review" /></span>
-            </button>
-          </div>
+      {reviewQueue && (() => {
+        const currentBanner = STATUS_BANNER_CONFIG[status] || STATUS_BANNER_CONFIG[''];
+        const TabIcon = currentBanner.icon;
+        return (
+          <div className="review-tabs-bar">
+            <div className="review-tabs-group" role="tablist" aria-label={bilingualLabel('Bộ lọc kiểm duyệt khóa học', 'Course review filters')}>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={true}
+                className="review-tab-btn is-active"
+                onClick={() => {
+                  setStatus((current) => (current === 'REVIEW' ? '' : current === '' ? 'REVIEW' : ''));
+                  setPage(0);
+                }}
+                title={
+                  status === 'REVIEW'
+                    ? bilingualLabel("Bấm để xem tất cả khóa học", "Click to view all courses")
+                    : bilingualLabel("Bấm để chuyển sang Chờ duyệt", "Click to switch to pending review")
+                }
+              >
+                <TabIcon size={16} />
+                <span><BilingualText vi={currentBanner.labelVi} en={currentBanner.labelEn} /></span>
+              </button>
+            </div>
 
-          <div className="review-tabs-hint">
-            <Info size={14} />
-            <span>
-              <BilingualText
-                vi="Các bản nháp Content Manager đã gửi sẽ xuất hiện ở mục Chờ Admin duyệt."
-                en="Drafts submitted by Content Managers appear in Pending review."
-              />
-            </span>
+            <div className="review-tabs-hint">
+              <Info size={14} />
+              <span>
+                <BilingualText
+                  vi={currentBanner.hintVi}
+                  en={currentBanner.hintEn}
+                />
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Filter Toolbar matching the exact ratio & style of AdminUsersPage */}
       <form
@@ -328,15 +409,26 @@ export function AdminContentListPage({ kind }) {
                                   icon={pendingReview ? Check : isAdmin ? Eye : Pencil}
                                   to={`${isAdmin ? '/admin' : '/content'}/${kind}/${item.id}${pendingReview ? '?step=publish' : ''}`}
                                 >
-                                  <BilingualText>
-                                    {pendingReview
-                                      ? 'Mở kiểm duyệt'
-                                      : isAdmin
-                                      ? 'Chi tiết'
-                                      : kind === 'courses'
-                                      ? 'Chỉnh sửa'
-                                      : 'Mở builder'}
-                                  </BilingualText>
+                                  <BilingualText
+                                    vi={
+                                      pendingReview
+                                        ? 'Mở kiểm duyệt'
+                                        : isAdmin
+                                        ? 'Chi tiết'
+                                        : kind === 'courses'
+                                        ? 'Chỉnh sửa'
+                                        : 'Mở builder'
+                                    }
+                                    en={
+                                      pendingReview
+                                        ? 'Review'
+                                        : isAdmin
+                                        ? 'Details'
+                                        : kind === 'courses'
+                                        ? 'Edit'
+                                        : 'Open builder'
+                                    }
+                                  />
                                 </AdminActionLink>
                               </AdminActionGroup>
                             </td>
@@ -355,13 +447,13 @@ export function AdminContentListPage({ kind }) {
               ) : (
                 <EmptyState
                   title={
-                    reviewQueue && status === 'REVIEW'
-                      ? bilingualLabel("Không có khóa học chờ duyệt", "No courses pending review")
+                    kind === 'courses' && STATUS_BANNER_CONFIG[status]
+                      ? bilingualLabel(STATUS_BANNER_CONFIG[status].emptyTitleVi, STATUS_BANNER_CONFIG[status].emptyTitleEn)
                       : bilingualLabel("Chưa có nội dung phù hợp", "No matching content")
                   }
                   description={
-                    reviewQueue && status === 'REVIEW'
-                      ? bilingualLabel("Các khóa học Content Manager gửi duyệt sẽ hiển thị tại đây.", "Courses submitted by Content Managers will appear here.")
+                    kind === 'courses' && STATUS_BANNER_CONFIG[status]
+                      ? bilingualLabel(STATUS_BANNER_CONFIG[status].emptyDescVi, STATUS_BANNER_CONFIG[status].emptyDescEn)
                       : bilingualLabel("Tạo nội dung mới hoặc thay đổi bộ lọc.", "Create new content or change filters.")
                   }
                 />
@@ -414,17 +506,29 @@ export function AdminLessonBuilderPage() {
 }
 
 function LessonBuilder({ lesson, reload }) {
-  const [selected, setSelected] = useState(null),
+  const [selection, setSelection] = useState(undefined),
+    [showEditor, setShowEditor] = useState(false),
     [editing, setEditing] = useState(false),
     [creatingQuiz, setCreatingQuiz] = useState(false),
     [message, setMessage] = useState(''),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false),
-    [uploadingImage, setUploadingImage] = useState(false);
-  const imageInputRef = useRef(null);
-  const { isAdmin, isContentManager } = useAuth();
+    [imageTargetId, setImageTargetId] = useState(null),
+    [focusIllustration, setFocusIllustration] = useState(0);
+  const { isAdmin, isContentCreator } = useAuth();
   const navigate = useNavigate();
-  const canEdit = isContentManager && !isAdmin && ['DRAFT', 'REJECTED'].includes(lesson.courseStatus);
+  const canEdit = isContentCreator && !isAdmin && ['DRAFT', 'REJECTED'].includes(lesson.courseStatus);
+  const addActivityMenu = useRef(null);
+  const activitiesHeading = useRef(null);
+  const editorBackButton = useRef(null);
+  const activities = lesson.activities || [];
+  const selected = selection === undefined
+    ? activities[0]
+    : selection?.id == null
+      ? selection
+      : activities.find(activity => activity.id === selection.id);
+  const illustrationTargets = activities.filter(canIllustrateActivity);
+  const imageTarget = illustrationTargets.find(activity => String(activity.id) === imageTargetId);
 
   async function reorder(index, direction) {
     setBusy(true);
@@ -438,58 +542,51 @@ function LessonBuilder({ lesson, reload }) {
     }
   }
 
-  function chooseLessonImage() {
-    setSelected(null);
-    setMessage('');
-    setError('');
-    if (imageInputRef.current) {
-      imageInputRef.current.value = '';
-      imageInputRef.current.click();
+  async function changeStatus(event) {
+    setBusy(true);
+    try {
+      await contentService.status('lessons', lesson.id, event.target.value);
+      reload();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
     }
   }
 
-  async function addLessonImage(event) {
-    const file = event.target.files?.[0];
-    event.target.value = '';
-    if (!file) return;
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
-      setError(bilingualLabel(
-        'Thêm hình ảnh vào bài học thất bại. Chỉ chấp nhận ảnh JPG, PNG hoặc WebP tối đa 5 MB.',
-        'Failed to add the image to the lesson. Choose a JPG, PNG, or WebP image up to 5 MB.'
-      ));
-      return;
-    }
+  function closeAddActivityMenu() {
+    addActivityMenu.current?.removeAttribute('open');
+  }
 
-    setUploadingImage(true);
+  function openIllustrationEditor(activity) {
+    selectActivity(activity, true);
+    setImageTargetId(null);
     setMessage('');
     setError('');
-    try {
-      const imageUrl = await contentService.uploadLessonMedia(file, 'image');
-      await contentService.addActivity(lesson.id, {
-        activityType: 'IMAGE',
-        title: 'Lesson image',
-        titleVi: 'Hình ảnh bài học',
-        instruction: '',
-        instructionVi: '',
-        contentJson: { imageUrl },
-        isRequired: false,
-        maxScore: 0,
-        status: 'PUBLISHED',
-        quizId: null,
-        grammarTopicIds: [],
-      });
-      setMessage(bilingualLabel(
-        'Đã thêm hình ảnh vào bài học thành công.',
-        'The image was added to the lesson successfully.'
-      ));
-      reload();
-    } catch (err) {
-      setError(bilingualLabel(
-        `Thêm hình ảnh vào bài học thất bại. ${err.message}`,
-        `Failed to add the image to the lesson. ${err.message}`
-      ));
-    } finally {
-      setUploadingImage(false);
+  }
+
+  function chooseLessonImage() {
+    closeAddActivityMenu();
+    const current = illustrationTargets.find(activity => activity.id === selected?.id);
+    if (current) openIllustrationEditor(current);
+    else if (illustrationTargets.length === 1) openIllustrationEditor(illustrationTargets[0]);
+    else setImageTargetId('');
+  }
+
+  function selectActivity(activity, focusImage = false) {
+    setFocusIllustration(request => focusImage ? request + 1 : 0);
+    closeAddActivityMenu();
+    setSelection(activity);
+    setShowEditor(true);
+    if (!focusImage && window.matchMedia('(max-width: 900px)').matches) {
+      requestAnimationFrame(() => editorBackButton.current?.focus());
+    }
+  }
+
+  function showActivities() {
+    setShowEditor(false);
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      requestAnimationFrame(() => activitiesHeading.current?.focus());
     }
   }
 
@@ -503,114 +600,126 @@ function LessonBuilder({ lesson, reload }) {
         ]}
       />
       <PageHeader
-        title={<BilingualText vi={canEdit ? 'Lesson Builder' : 'Xem nội dung bài học'} en={canEdit ? 'Lesson Builder' : 'View lesson content'} />}
-        description={`${lesson.title} · ${lesson.moduleTitle || ''}`}
-        actions={
-          <>
-            <Link className="button secondary" to={`${isAdmin ? '/admin' : '/content'}/courses/${lesson.courseId}?step=curriculum`}>
-              <BilingualText>{"← Quay lại khóa học"}</BilingualText>
-            </Link>
-            <Link className="button secondary" to={`${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}/preview`}>
-              <BilingualText>{"Xem trước bài học"}</BilingualText>
-            </Link>
-            {canEdit && (
-              <button onClick={() => setCreatingQuiz(true)}>
-                <BilingualText>{"+ Tạo quiz bài học"}</BilingualText>
-              </button>
-            )}
-          </>
-        }
+        title={<span className="lesson-builder-title">
+          <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
+          <AdminStatusBadge status={lesson.publicationStatus || 'DRAFT'} />
+        </span>}
+        description={lesson.moduleTitle}
+        actions={<Link className="button secondary" to={`${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}/preview`}>
+          <Eye size={16} />
+          <BilingualText>{"Xem trước bài học"}</BilingualText>
+        </Link>}
       />
       {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
       {message && <Notice kind="success"><BilingualText>{message}</BilingualText></Notice>}
       {!canEdit && <Notice><BilingualText>{"Bài học đang ở chế độ chỉ đọc theo trạng thái khóa học."}</BilingualText></Notice>}
-      <div className="lesson-builder-grid">
-        <aside className="admin-card">
-          <h2><BilingualText>{"Thông tin bài học"}</BilingualText></h2>
-          <strong><BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} /></strong>
-          <p className="muted">{lesson.lessonType} · <BilingualText>{lesson.publicationStatus}</BilingualText></p>
-          <p><BilingualText vi={lesson.descriptionVi || lesson.description} en={lesson.description} /></p>
-          {canEdit && (
-            <>
-              <button className="secondary" onClick={() => setEditing(true)}>
-                <BilingualText>{"Chỉnh sửa"}</BilingualText>
-              </button>
-              <label className="builder-status">
-                <BilingualText>{"Trạng thái"}</BilingualText>
-                <select
-                  value={lesson.publicationStatus || 'DRAFT'}
-                  disabled={busy}
-                  onChange={async (event) => {
-                    setBusy(true);
-                    try {
-                      await contentService.status('lessons', lesson.id, event.target.value);
-                      reload();
-                    } catch (err) {
-                      setError(err.message);
-                    } finally {
-                      setBusy(false);
-                    }
-                  }}
-                >
-                  {['DRAFT', 'PUBLISHED', 'ARCHIVED'].map((st) => (
-                    <option key={st} value={st}>{bilingualLabel(st)}</option>
-                  ))}
-                </select>
-              </label>
-            </>
-          )}
-        </aside>
-        <section>
-          <div className="builder-heading">
-            <h2><BilingualText>{"Các hoạt động"}</BilingualText></h2>
-            {canEdit && (
-              <div className="actions">
-                <input
-                  ref={imageInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  hidden
-                  onChange={addLessonImage}
-                />
-                <button disabled={busy || uploadingImage} onClick={chooseLessonImage}>
-                  <BilingualText
-                    vi={uploadingImage ? 'Đang tải ảnh…' : '+ Thêm ảnh'}
-                    en={uploadingImage ? 'Uploading image…' : '+ Add image'}
-                  />
+      <details className="admin-card lesson-builder-info">
+        <summary><BilingualText>{"Thông tin bài học"}</BilingualText><ChevronDown size={16} /></summary>
+        <div className="lesson-builder-info-content">
+          {lesson.lessonType && <p className="muted"><BilingualText>{lesson.lessonType}</BilingualText></p>}
+          {(lesson.descriptionVi || lesson.description) && <p>
+            <BilingualText vi={lesson.descriptionVi || lesson.description} en={lesson.description || lesson.descriptionVi} />
+          </p>}
+          {canEdit && <div className="lesson-builder-info-actions">
+            <label>
+              <BilingualText>{"Trạng thái"}</BilingualText>
+              <select value={lesson.publicationStatus || 'DRAFT'} disabled={busy} onChange={changeStatus}>
+                <option value="DRAFT">{bilingualLabel('DRAFT')}</option>
+                {lesson.publicationStatus === 'PUBLISHED' && <option value="PUBLISHED" disabled>{bilingualLabel('PUBLISHED')}</option>}
+                <option value="ARCHIVED">{bilingualLabel('ARCHIVED')}</option>
+              </select>
+            </label>
+            <button type="button" className="secondary" disabled={busy} onClick={() => setEditing(true)}>
+              <Pencil size={15} /> <BilingualText>{"Chỉnh sửa"}</BilingualText>
+            </button>
+          </div>}
+        </div>
+      </details>
+      <div className={`lesson-builder-grid${canEdit && selected && showEditor ? ' is-editor-open' : ''}`}>
+        <section className="admin-card lesson-builder-list" aria-labelledby="lesson-builder-activities">
+          <div className="lesson-builder-list-heading">
+            <h2 id="lesson-builder-activities" tabIndex={-1} ref={activitiesHeading}><BilingualText>{"Các hoạt động"}</BilingualText></h2>
+            {canEdit && <details className="lesson-builder-add" ref={addActivityMenu}>
+              <summary className="button"><Plus size={16} /><BilingualText vi="Thêm hoạt động" en="Add activity" /><ChevronDown size={14} /></summary>
+              <div className="lesson-builder-add-options">
+                <button type="button" className="secondary" disabled={busy || !illustrationTargets.length} onClick={chooseLessonImage}>
+                  <BilingualText vi="Thêm ảnh" en="Add image" />
                 </button>
-                <button onClick={() => setSelected({ activityType: 'VIDEO', status: 'PUBLISHED', contentJson: { videoUrl: '' } })}>
-                  <BilingualText>{"+ Thêm video"}</BilingualText>
+                {!illustrationTargets.length && <small className="muted">
+                  <BilingualText vi="Thêm một mục nội dung trước khi gắn ảnh minh họa." en="Create a content activity before attaching an illustration." />
+                </small>}
+                <button type="button" className="secondary" disabled={busy} onClick={() => selectActivity({ activityType: 'VIDEO', status: 'PUBLISHED', contentJson: { videoUrl: '' } })}>
+                  <BilingualText vi="Thêm video" en="Add video" />
                 </button>
-                <button className="secondary" onClick={() => setSelected({})}>
-                  <BilingualText>{"+ Hoạt động khác"}</BilingualText>
+                <button type="button" className="secondary" disabled={busy} onClick={() => selectActivity({})}>
+                  <BilingualText vi="Hoạt động khác" en="Other activities" />
                 </button>
               </div>
-            )}
+            </details>}
           </div>
-          {lesson.activities?.map((activity, index) => (
-            <div className={`list-row activity-builder-row ${selected?.id === activity.id ? 'selected' : ''}`} key={activity.id}>
-              <button className="activity-select" onClick={() => canEdit && setSelected(activity)}>
-                <span className="badge">{index + 1}</span>
-                <BilingualText vi={activity.titleVi || activity.title} en={activity.title} />
-              </button>
-              {canEdit && (
-                <div className="actions">
-                  <button className="secondary" disabled={busy || index === 0} onClick={() => reorder(index, -1)}>↑</button>
-                  <button className="secondary" disabled={busy || index === lesson.activities.length - 1} onClick={() => reorder(index, 1)}>↓</button>
-                </div>
-              )}
-            </div>
-          ))}
-          {!lesson.activities?.length && <EmptyState title={bilingualLabel("Chưa có hoạt động", "No activities yet")} />}
+          <ol className="lesson-builder-activities">
+            {activities.map((activity, index) => {
+              const active = canEdit && selected?.id === activity.id;
+              const title = <BilingualText vi={activity.titleVi || activity.title} en={activity.title} />;
+              const summary = <><span className="lesson-builder-number" aria-hidden="true">{index + 1}</span>{title}</>;
+              return <li className={`lesson-builder-row${active ? ' is-selected' : ''}`} key={activity.id}>
+                {canEdit ? <button type="button" className="lesson-builder-select" aria-pressed={active} disabled={busy} onClick={() => selectActivity(activity)}>
+                  {summary}
+                </button> : <span className="lesson-builder-select">{summary}</span>}
+                {canEdit && <div className="lesson-builder-order">
+                  <button type="button" className="secondary" aria-label={bilingualLabel('Di chuyển lên', 'Move up')} disabled={busy || index === 0} onClick={() => reorder(index, -1)}><ArrowUp size={15} /></button>
+                  <button type="button" className="secondary" aria-label={bilingualLabel('Di chuyển xuống', 'Move down')} disabled={busy || index === activities.length - 1} onClick={() => reorder(index, 1)}><ArrowDown size={15} /></button>
+                </div>}
+              </li>;
+            })}
+          </ol>
+          {!activities.length && <EmptyState title={bilingualLabel("Chưa có hoạt động", "No activities yet")} />}
+          {canEdit && <button type="button" className="secondary lesson-builder-quiz" disabled={busy} onClick={() => setCreatingQuiz(true)}>
+            <Plus size={16} /> <BilingualText vi="Tạo quiz bài học" en="Create lesson quiz" />
+          </button>}
         </section>
-        <aside className="admin-card">
+        <section className="admin-card lesson-builder-editor">
           {canEdit && selected ? (
-            <ActivityEditor key={selected.id || selected.activityType || 'new'} initial={selected} lessonId={lesson.id} onSaved={() => { setSelected(null); reload(); }} />
+            <>
+              <button type="button" className="secondary lesson-builder-back" ref={editorBackButton} disabled={busy} onClick={showActivities}>
+                <ArrowLeft size={16} /> <BilingualText vi="Quay lại hoạt động" en="Back to activities" />
+              </button>
+              <ActivityEditor key={selected.id || selected.activityType || 'new'} initial={selected}
+                lessonId={lesson.id} focusIllustration={focusIllustration} onBusyChange={setBusy}
+                onSaved={({ addedIllustration }) => {
+                  if (addedIllustration) setMessage(bilingualLabel('Đã gắn ảnh vào mục nội dung.', 'Illustration attached to the activity.'));
+                  setFocusIllustration(0);
+                  setSelection(null);
+                  showActivities();
+                  reload();
+                }} />
+            </>
           ) : (
-            <p className="muted"><BilingualText>{canEdit ? 'Chọn hoạt động để chỉnh sửa nội dung.' : 'Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.'}</BilingualText></p>
+            <p className="muted"><BilingualText>
+              {canEdit ? 'Chọn hoạt động để chỉnh sửa nội dung.' : 'Admin có thể xem toàn bộ nội dung bằng chức năng xem trước.'}
+            </BilingualText></p>
           )}
-        </aside>
+        </section>
       </div>
+      {canEdit && imageTargetId !== null && <Modal title={bilingualLabel('Thêm ảnh minh họa', 'Add an illustration')} onClose={() => setImageTargetId(null)}>
+        <form onSubmit={event => {
+          event.preventDefault();
+          if (imageTarget) openIllustrationEditor(imageTarget);
+        }}>
+          <label>
+            <BilingualText vi="Mục nội dung" en="Content activity" />
+            <select required value={imageTargetId} onChange={event => setImageTargetId(event.target.value)}>
+              <option value="">{bilingualLabel('Chọn mục để gắn ảnh', 'Choose an activity for this image')}</option>
+              {illustrationTargets.map(activity => <option key={activity.id} value={activity.id}>
+                {bilingualLabel(activity.titleVi || activity.title, activity.title || activity.titleVi)}
+              </option>)}
+            </select>
+          </label>
+          <button className="button" type="submit" disabled={!imageTarget}>
+            <BilingualText vi="Tiếp tục" en="Continue" />
+          </button>
+        </form>
+      </Modal>}
       {canEdit && editing && (
         <Modal title={bilingualLabel("Chỉnh sửa bài học")} onClose={() => setEditing(false)}>
           <ContentForm kind="lessons" initial={lesson} onCancel={() => setEditing(false)} onSave={async (body) => { await contentService.update('lessons', lesson.id, body); setEditing(false); reload(); }} />

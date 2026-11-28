@@ -17,7 +17,7 @@ export function RequireLearnerOnboarding() {
   }
 
   const role = String(user.role || '').replace(/^ROLE_/, '');
-  const allowed = role === 'LEARNER' || role === 'ADMIN' || role === 'CONTENT';
+  const allowed = role === 'LEARNER' || role === 'ADMIN' || role === 'CONTENT_CREATOR';
   if (!allowed) return <Navigate to="/forbidden" replace />;
 
   return <Outlet />;

@@ -468,12 +468,28 @@ form.admin-card {
 }
 
 .admin-badge {
-  display: inline-block;
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1.2;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.admin-badge .bilingual-text,
+.admin-badge .bilingual-text__current {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
 }
 
 .admin-badge-success {
@@ -909,7 +925,7 @@ button.review-tab-btn.is-active {
 }
 
 
-/* Shared table actions for every Admin / Content Manager data table. */
+/* Shared table actions for every Admin / Content Creator data table. */
 .admin-content .admin-row-actions {
   display: inline-flex;
   align-items: center;
@@ -1352,6 +1368,7 @@ button.admin-modal-btn-save:hover:not(:disabled) {
 .admin-status-badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   height: 26px;
   padding: 0 10px;
@@ -1362,6 +1379,49 @@ button.admin-modal-btn-save:hover:not(:disabled) {
   white-space: nowrap;
   letter-spacing: 0.01em;
   border: 1px solid transparent;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.admin-status-badge__text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.admin-status-badge .bilingual-text,
+.admin-status-badge .bilingual-text__current,
+.admin-btn .bilingual-text,
+.admin-btn .bilingual-text__current,
+.admin-user-role-badge .bilingual-text,
+.admin-user-role-badge .bilingual-text__current,
+.admin-identity .badge .bilingual-text,
+.admin-identity .badge .bilingual-text__current,
+.admin-content .page-header .actions .bilingual-text,
+.admin-content .page-header .actions .bilingual-text__current {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+
+.admin-content .page-header .actions > button,
+.admin-content .page-header .actions > .button,
+.admin-content .page-header .actions > a.button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  max-height: 40px !important;
+  padding: 0 16px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
 }
 
 .admin-status-badge--sm {

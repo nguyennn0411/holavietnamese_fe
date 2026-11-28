@@ -5,14 +5,14 @@ const SELF_ASSESSMENT_LEVELS = Object.freeze({
   B2: 'B2',
   C1: 'C1',
   C2: 'C2',
-  new: 'A0',
+  new: 'A1',
   words: 'A1',
   simple: 'A2',
   everyday: 'B1',
   fluent: 'B2',
 });
 
-const LEVEL_ORDER = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const LEVEL_ORDER = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
 export const GOAL_PROFILES = Object.freeze({
   travel: {
@@ -133,7 +133,7 @@ export function resolveTargetLevel(data = {}) {
   if (data.placementResult?.assessedLevel) return data.placementResult.assessedLevel;
   if (data.placementResult?.targetLevel) return data.placementResult.targetLevel;
   if (data.assessedLevel) return data.assessedLevel;
-  if (data.learningPath === 'beginner') return 'A0';
+  if (data.learningPath === 'beginner') return 'A1';
   return SELF_ASSESSMENT_LEVELS[data.selectedLevel] || SELF_ASSESSMENT_LEVELS[data.currentLevel] || 'A1';
 }
 
@@ -209,7 +209,7 @@ export function rankCoursesForRecommendation(items = [], recommendation = {}) {
       const keywordMatches = goal.keywords.filter((keyword) => text.includes(keyword.toLocaleLowerCase('vi'))).length;
       const levelScore = courseLevel === targetLevel
         ? 70
-        : targetLevel === 'A1' && courseLevel === 'A0'
+        : targetLevel === 'A1' && courseLevel === 'A1'
           ? 42
           : courseIndex >= 0 && targetIndex >= 0 && Math.abs(courseIndex - targetIndex) === 1
             ? 18

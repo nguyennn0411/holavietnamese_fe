@@ -84,7 +84,7 @@ const AdminCultureEditPage = lazy(() => import('@/features/culture/admin/AdminCu
 const AdminCultureCategoriesPage = lazy(() => import('@/features/culture/admin/AdminCultureCategoriesPage').then(module => ({ default: module.AdminCultureCategoriesPage })));
 const AdminAiScenariosPage = lazy(() => import('@/features/ai/admin/AdminAiScenariosPage').then(module => ({ default: module.AdminAiScenariosPage })));
 const AdminScenarioBuilderPage = lazy(() => import('@/features/ai/admin/AdminScenarioBuilderPage').then(module => ({ default: module.AdminScenarioBuilderPage })));
-const AdminAiSettingsPage = lazy(() => import('@/features/ai/admin/AdminAiSettingsPage').then(module => ({ default: module.AdminAiSettingsPage })));
+
 const AdminAiUsagePage = lazy(() => import('@/features/ai/admin/AdminAiUsagePage').then(module => ({ default: module.AdminAiUsagePage })));
 const AdminAiReviewsPage = lazy(() => import('@/features/ai/admin/AdminAiReviewsPage').then(module => ({ default: module.AdminAiReviewsPage })));
 const VocabularyReviewPage = lazy(() => import('@/features/vocabulary/pages/VocabularyReviewPage').then(module => ({ default: module.VocabularyReviewPage })));
@@ -286,7 +286,8 @@ export function AppRouter() {
                 <Route path={ROUTES.ADMIN_AI_SCENARIOS} element={<AdminAiScenariosPage />} />
                 <Route path={ROUTES.ADMIN_AI_SCENARIO_NEW} element={<AdminScenarioBuilderPage />} />
                 <Route path={ROUTES.ADMIN_AI_SCENARIO_BUILDER} element={<AdminScenarioBuilderPage />} />
-                <Route path={ROUTES.ADMIN_AI_SETTINGS} element={<AdminAiSettingsPage />} />
+                <Route path={ROUTES.ADMIN_AI_SETTINGS} element={<Navigate to={ROUTES.ADMIN_AI_SCENARIOS} replace />} />
+
                 <Route path={ROUTES.ADMIN_AI_USAGE} element={<AdminAiUsagePage />} />
                 <Route path={ROUTES.ADMIN_AI_REVIEWS} element={<AdminAiReviewsPage />} />
               </Route>

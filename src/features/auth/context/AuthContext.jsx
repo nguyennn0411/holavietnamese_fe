@@ -282,7 +282,7 @@ export const AuthProvider = ({ children }) => {
   const hasPermission = (permission) => Boolean(user?.permissions?.includes(permission));
 
   const isAdmin = hasRole('ADMIN');
-  const isContentManager = hasRole('CONTENT');
+  const isContentCreator = hasRole('CONTENT_CREATOR');
   const isLearner = hasRole('LEARNER');
 
   const contextValue = {
@@ -297,7 +297,7 @@ export const AuthProvider = ({ children }) => {
     hasRole,
     hasPermission,
     isAdmin,
-    isContentManager,
+    isContentCreator,
     isLearner,
     fetchProfile,
     updateCurrentUser,

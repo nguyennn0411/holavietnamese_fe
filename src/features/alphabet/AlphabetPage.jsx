@@ -75,7 +75,7 @@ export function AlphabetPage() {
               <BilingualText vi="Bấm vào chữ để nghe" en="Click a letter to listen" />
             </span>
             <span>
-              <BilingualText vi="Cơ bản · A0" en="Beginner · A0" />
+              <BilingualText vi="Sơ cấp · A1" en="Beginner · A1" />
             </span>
           </div>
         </header>

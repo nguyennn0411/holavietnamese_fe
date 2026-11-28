@@ -1,28 +1,74 @@
 import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { contentService } from '@/features/learning/api/contentService';
 import { Notice } from '@/shared/components/common/Ui';
+import { ContentImage } from '@/shared/components/common/ContentImage';
+import { appendInlineIllustration, canAppendIllustration, canIllustrateActivity, illustrationFileTypes, isIllustrationFile } from '../activityIllustrations';
+import './activity-illustration-editor.css';
 
 const types = ['TEXT','IMAGE','AUDIO','VIDEO','VOCABULARY','FLASHCARD','DIALOGUE','GRAMMAR','SOUND_PATTERN','MULTIPLE_CHOICE','FILL_BLANK','MATCHING','REORDER_SENTENCE','LISTEN_AND_CHOOSE','LISTEN_AND_TYPE','LISTENING','TRANSLATION','PRACTICE','QUIZ','PRONUNCIATION','AI_CONVERSATION','AI_ROLEPLAY'];
 const exercises = ['MULTIPLE_CHOICE','FILL_BLANK','MATCHING','REORDER_SENTENCE','LISTEN_AND_CHOOSE','LISTEN_AND_TYPE','LISTENING','TRANSLATION','PRACTICE'];
 
-export function ActivityEditor({ initial, lessonId, onSaved }) {
+export function ActivityEditor({ initial, lessonId, focusIllustration, onSaved, onBusyChange }) {
   useTextLanguage();
   const [form,setForm] = useState({activityType:'TEXT',title:'',instruction:'',isRequired:true,maxScore:0,status:'DRAFT',quizId:null,...initial,grammarTopicIds:initial.grammarTopicIds || initial.grammarTopics?.map(topic=>topic.id) || []});
   const [raw,setRaw] = useState(typeof initial.contentJson==='string' ? initial.contentJson : JSON.stringify(initial.contentJson || {body:''},null,2));
   const [busy,setBusy] = useState(false), [error,setError] = useState('');
   const [mediaFile,setMediaFile] = useState(null);
   const [mediaPreview,setMediaPreview] = useState('');
+  const [illustrationFile, setIllustrationFile] = useState(null);
+  const [illustrationPreview, setIllustrationPreview] = useState('');
+  const illustrationInput = useRef(null);
+  const illustrationUpload = useRef(null);
   let content; try {content=JSON.parse(raw);} catch {content=null;}
   const update = values => setRaw(JSON.stringify({...content,...values},null,2));
   const mediaType = form.activityType === 'IMAGE' ? 'image' : form.activityType === 'VIDEO' ? 'video' : form.activityType === 'AUDIO' ? 'audio' : null;
   const mediaKey = mediaType === 'image' ? 'imageUrl' : mediaType === 'audio' ? 'audioUrl' : 'videoUrl';
+  const canAddIllustration = canIllustrateActivity(form);
+  const currentIllustrations = Array.isArray(content?.illustrations)
+    ? content.illustrations.filter(figure => figure?.placement === 'inline' && figure.imageUrl)
+    : [];
   useEffect(() => {
     if (!mediaFile) { setMediaPreview(''); return undefined; }
     const url = URL.createObjectURL(mediaFile);
     setMediaPreview(url);
     return () => URL.revokeObjectURL(url);
   }, [mediaFile]);
+  useEffect(() => {
+    if (!illustrationFile) { setIllustrationPreview(''); return undefined; }
+    const url = URL.createObjectURL(illustrationFile);
+    setIllustrationPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [illustrationFile]);
+  useEffect(() => {
+    if (!focusIllustration || !illustrationInput.current) return undefined;
+    const frame = requestAnimationFrame(() => {
+      illustrationInput.current?.focus({ preventScroll: true });
+      illustrationInput.current?.scrollIntoView({ block: 'nearest' });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [focusIllustration]);
+
+  function chooseIllustration(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setIllustrationFile(null);
+    illustrationUpload.current = null;
+    if (!isIllustrationFile(file)) {
+      setError(bilingualLabel('Chọn ảnh JPG, PNG hoặc WebP tối đa 5 MB.', 'Choose a JPG, PNG, or WebP image up to 5 MB.'));
+      event.target.value = '';
+      return;
+    }
+    setError('');
+    setIllustrationFile(file);
+  }
+
+  function clearIllustrationSelection() {
+    setIllustrationFile(null);
+    illustrationUpload.current = null;
+    if (illustrationInput.current) illustrationInput.current.value = '';
+  }
+
   function chooseMedia(event) {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -43,10 +89,26 @@ export function ActivityEditor({ initial, lessonId, onSaved }) {
   const field = (key,label,multiline=false) => <label key={key}><BilingualText>{label}</BilingualText>{multiline ? <textarea rows={4} value={content?.[key]||''} onChange={event=>update({[key]:event.target.value})}/> : <input value={content?.[key]||''} onChange={event=>update({[key]:event.target.value})}/>}</label>;
   const rows = (key,fields,defaults) => <div className="activity-editor-rows">{(content?.[key]||[]).map((row,index)=><div className="activity-editor-row" key={index}><div className="builder-heading"><strong>{index+1}</strong><button type="button" className="secondary" aria-label={bilingualLabel(`Xóa dòng ${index+1}`, `Delete line ${index+1}`)} onClick={()=>update({[key]:content[key].filter((_,i)=>i!==index)})}>×</button></div>{fields.map(([name,label])=><label key={name}><BilingualText>{label}</BilingualText><input value={row[name]||''} onChange={event=>update({[key]:content[key].map((item,i)=>i===index?{...item,[name]:event.target.value}:item)})}/></label>)}</div>)}<button type="button" className="secondary" onClick={()=>update({[key]:[...(content?.[key]||[]),{...defaults}]})}><BilingualText>{"+ Thêm dòng"}</BilingualText></button></div>;
   async function save(event) {
-    event.preventDefault();setBusy(true);setError('');
+    event.preventDefault();
+    if (busy) return;
+    setBusy(true);
+    onBusyChange?.(true);
+    setError('');
     try {
       const payload = Object.fromEntries(['activityType','title','titleVi','instruction','instructionVi','isRequired','status'].map(key=>[key,form[key]]));
-      const contentJson = JSON.parse(raw);
+      let contentJson = JSON.parse(raw);
+      if (illustrationFile) {
+        if (!canAddIllustration || !canAppendIllustration(contentJson)) throw new Error(bilingualLabel(
+          'Kiểm tra cấu hình của mục nội dung trước khi gắn ảnh.',
+          'Check the activity content configuration before attaching the illustration.',
+        ));
+        let imageUrl = illustrationUpload.current?.url;
+        if (!imageUrl) {
+          imageUrl = await contentService.uploadLessonMedia(illustrationFile, 'image');
+          illustrationUpload.current = { url: imageUrl };
+        }
+        contentJson = appendInlineIllustration(contentJson, imageUrl);
+      }
       if (mediaType) {
         if (form.status === 'PUBLISHED' && !mediaFile && !contentJson[mediaKey]) throw new Error(bilingualLabel(
           `Chọn tệp hoặc nhập URL ${mediaType === 'image' ? 'ảnh' : mediaType === 'audio' ? 'âm thanh' : 'video'}.`,
@@ -56,17 +118,40 @@ export function ActivityEditor({ initial, lessonId, onSaved }) {
       }
       Object.assign(payload,{maxScore:Number(form.maxScore),quizId:form.quizId?Number(form.quizId):null,grammarTopicIds:form.grammarTopicIds,contentJson});
       if(initial.id) await contentService.updateActivity(initial.id,payload);else await contentService.addActivity(lessonId,payload);
-      onSaved();
-    } catch(err){setError(err.message);}finally{setBusy(false);}
+      onSaved({ addedIllustration: Boolean(illustrationFile) });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+      onBusyChange?.(false);
+    }
   }
   return <form onSubmit={save}><h2><BilingualText>{initial.id?'Chỉnh sửa hoạt động':'Hoạt động mới'}</BilingualText></h2>
-    <label><BilingualText>{"Loại hoạt động"}</BilingualText><select disabled={busy} value={form.activityType} onChange={event=>{setForm({...form,activityType:event.target.value});setMediaFile(null);setMediaPreview('');}}>{types.map(type=><option key={type} value={type}>{bilingualLabel(type)}</option>)}</select></label>
+    <label><BilingualText>{"Loại hoạt động"}</BilingualText><select disabled={busy} value={form.activityType} onChange={event=>{setForm({...form,activityType:event.target.value});setMediaFile(null);setMediaPreview('');clearIllustrationSelection();}}>{types.map(type=><option key={type} value={type}>{bilingualLabel(type)}</option>)}</select></label>
     <label><BilingualText>{"Tiêu đề"}</BilingualText><input required value={form.title} onChange={event=>setForm({...form,title:event.target.value})}/></label>
     <label><BilingualText>{"Tiêu đề tiếng Việt"}</BilingualText><input value={form.titleVi||''} onChange={event=>setForm({...form,titleVi:event.target.value})}/></label>
     <label><BilingualText>{"Hướng dẫn"}</BilingualText><textarea value={form.instruction||''} onChange={event=>setForm({...form,instruction:event.target.value})}/></label>
     <label><BilingualText>{"Hướng dẫn tiếng Việt"}</BilingualText><textarea value={form.instructionVi||''} onChange={event=>setForm({...form,instructionVi:event.target.value})}/></label>
     {content ? <>
       {form.activityType==='TEXT' && field('body', bilingualLabel('Nội dung bài học', 'Lesson content'), true)}
+      {canAddIllustration && <fieldset className="activity-illustration-editor" disabled={busy}>
+        <legend><BilingualText vi="Ảnh minh họa trong mục này" en="Illustrations in this activity" /></legend>
+        {currentIllustrations.length > 0 && <div className="activity-illustration-editor-gallery">
+          {currentIllustrations.map((image, index) => <ContentImage key={`${image.imageUrl}-${index}`} src={image.imageUrl}
+            alt={bilingualLabel(image.captionVi || form.titleVi || 'Ảnh minh họa đã gắn', image.captionEn || form.title || 'Attached illustration')} />)}
+        </div>}
+        <label>
+          <BilingualText vi="Chọn ảnh minh họa" en="Choose an illustration" />
+          <input ref={illustrationInput} type="file" accept={illustrationFileTypes.join(',')} onChange={chooseIllustration} />
+          <small><BilingualText vi="JPG, PNG hoặc WebP tối đa 5 MB. Ảnh sẽ hiện cùng nội dung sau khi lưu." en="JPG, PNG, or WebP up to 5 MB. The image appears alongside the content after you save." /></small>
+        </label>
+        {illustrationPreview && <div className="activity-illustration-editor-selection">
+          <img src={illustrationPreview} alt={bilingualLabel('Xem trước ảnh vừa chọn', 'Selected illustration preview')} />
+          <button className="secondary" type="button" onClick={clearIllustrationSelection}>
+            <BilingualText vi="Bỏ ảnh đã chọn" en="Clear selected image" />
+          </button>
+        </div>}
+      </fieldset>}
       {mediaType && <>
         <label><BilingualText vi={mediaType === 'image' ? 'Tải ảnh lên' : mediaType === 'audio' ? 'Tải âm thanh lên' : 'Tải video lên'} en={mediaType === 'image' ? 'Upload image' : mediaType === 'audio' ? 'Upload audio' : 'Upload video'} />
           <input type="file" accept={mediaType === 'image' ? 'image/jpeg,image/png,image/webp' : mediaType === 'audio' ? 'audio/mpeg,audio/mp3,audio/wav,audio/x-wav,audio/ogg,audio/mp4' : 'video/mp4,video/webm'} disabled={busy} onChange={chooseMedia}/>

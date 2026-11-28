@@ -13,6 +13,7 @@ import { canImportVocabulary, canReviewVocabulary, canWriteVocabulary } from '@/
 import { AdminActionButton, AdminActionGroup } from '@/shared/components/common/AdminTableActions';
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
+import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
 import { useConfirmDialog } from '@/shared/components/common/ConfirmDialog';
 import '@/features/vocabulary/components/admin/admin-vocabulary.css';
 
@@ -189,7 +190,7 @@ export function AdminVocabularyPage() {
                 type="button"
                 disabled={bulkApproving}
                 onClick={approveAllPending}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', minHeight: '40px', height: '40px', padding: '0 16px', cursor: 'pointer' }}
               >
                 <CheckCheck size={16} aria-hidden="true" />
                 <BilingualText
@@ -201,7 +202,7 @@ export function AdminVocabularyPage() {
             <Link
               className="button secondary"
               to={managementRoutes.regionalLanguage}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', minHeight: '40px', height: '40px', padding: '0 16px' }}
             >
               <MapPin size={16} aria-hidden="true" />
               <BilingualText vi="Từ vựng vùng miền" en="Regional vocabulary" />
@@ -210,7 +211,7 @@ export function AdminVocabularyPage() {
               <Link
                 className="button secondary"
                 to={managementRoutes.importData}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', minHeight: '40px', height: '40px', padding: '0 16px' }}
               >
                 <Upload size={16} aria-hidden="true" />
                 <BilingualText vi="Nhập dữ liệu" en="Import data" />
@@ -220,7 +221,7 @@ export function AdminVocabularyPage() {
               <button
                 type="button"
                 onClick={() => setModal({ mode: 'create' })}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', minHeight: '40px', height: '40px', padding: '0 16px', cursor: 'pointer' }}
               >
                 <Plus size={16} aria-hidden="true" />
                 <BilingualText vi="Thêm từ vựng" en="Add vocabulary" />
@@ -465,17 +466,7 @@ export function AdminVocabularyPage() {
                       </td>
                       <td>{item.partOfSpeech}</td>
                       <td>
-                        <span
-                          className={`admin-badge ${
-                            item.status === 'PUBLISHED'
-                              ? 'admin-badge-success'
-                              : item.status === 'ARCHIVED'
-                              ? 'admin-badge-danger'
-                              : 'admin-badge-warning'
-                          }`}
-                        >
-                          <BilingualText>{item.status}</BilingualText>
-                        </span>
+                        <AdminStatusBadge status={item.status} />
                       </td>
                       <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                         <AdminActionGroup>

@@ -109,11 +109,12 @@
   font-weight: 700;
   white-space: nowrap;
 }
-.studio-status > span {
+.studio-status > span:not(.bilingual-text) {
   width: 6px;
   height: 6px;
   background: currentColor;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 .studio-status--PUBLISHED {
   background: #ECFDF5;
@@ -973,15 +974,6 @@
   .wb-file-row { flex-direction: column; align-items: flex-start; }
   .wb-file-actions { width: 100%; justify-content: flex-end; }
 }
-.studio-content-flow { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; padding: 15px; margin-bottom: 22px; border: 1px solid var(--studio-line); border-radius: 14px; background: #fffdf9; }
-.studio-content-flow > div { display: grid; grid-template-columns: 29px minmax(0, 1fr); column-gap: 9px; align-items: center; min-width: 0; }
-.studio-content-flow > div > span { grid-row: 1 / 3; display: grid; place-items: center; width: 29px; height: 29px; border: 1px solid #d9c9b9; border-radius: 50%; color: #806e5f; font-size: 10px; font-weight: 800; }
-.studio-content-flow strong, .studio-content-flow small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.studio-content-flow strong { font-size: 11px; }
-.studio-content-flow small { color: var(--studio-muted); font-size: 9px; }
-.studio-content-flow > svg { color: #c2ad98; }
-.studio-content-flow > div.is-current > span { border-color: #a62a24; background: #a62a24; color: white; }
-.studio-content-flow > div.is-current strong { color: #a62a24; }
 .studio-panel, .studio-module, .studio-side-card {
   background: #FFFFFF;
   border: 1px solid var(--studio-line);
@@ -1266,225 +1258,6 @@
   color: #0F172A;
   font-weight: 700;
 }
-.studio-side-tip {
-  padding: 20px;
-  border: 1px solid #FDE68A;
-  border-radius: 14px;
-  background: #FFFBEB;
-}
-.studio-side-tip > svg {
-  color: #D97706;
-}
-.studio-side-tip h3 {
-  font-size: 14px;
-  font-weight: 700;
-  color: #92400E;
-  margin: 10px 0 6px;
-}
-.studio-side-tip p {
-  font-size: 12px;
-  color: #B45309;
-  line-height: 1.7;
-  margin: 6px 0 14px;
-}
-.studio-side-tip button {
-  width: 100%;
-}
-.studio-progress-card {
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 1px solid var(--studio-line);
-  border-radius: 16px;
-  background: #FFFFFF;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  text-align: left !important;
-}
-.studio-progress-heading {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-  text-align: left !important;
-  gap: 4px;
-}
-.studio-progress-heading .studio-eyebrow {
-  margin: 0;
-  text-align: left !important;
-  color: #EA580C;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-.studio-progress-metric {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  text-align: left !important;
-  width: 100%;
-}
-.studio-progress-percent {
-  font-size: 26px !important;
-  font-weight: 800 !important;
-  color: #0F172A !important;
-  line-height: 1;
-  text-align: left !important;
-}
-.studio-progress-ratio {
-  color: #64748B !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  text-align: left !important;
-}
-.studio-progress-track {
-  height: 7px;
-  margin: 12px 0 14px;
-  overflow: hidden;
-  border-radius: 99px;
-  background: #F1F5F9;
-}
-.studio-progress-track > span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #FF7A00, #EA580C);
-  transition: width 0.3s ease;
-}
-.studio-progress-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-}
-
-/* Studio Progress Item Button - Clean Light SaaS and Left Aligned */
-.course-studio .studio-progress-item,
-.admin-content .studio-progress-card button.studio-progress-item {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  text-align: left !important;
-  width: 100% !important;
-  min-height: unset !important;
-  padding: 11px 13px !important;
-  background: #FFFFFF !important;
-  color: #0F172A !important;
-  border: 1.5px solid #E2E8F0 !important;
-  border-radius: 12px !important;
-  gap: 12px !important;
-  cursor: pointer;
-  transition: all 0.18s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-}
-.course-studio .studio-progress-item:hover,
-.admin-content .studio-progress-card button.studio-progress-item:hover {
-  background: #F8FAFC !important;
-  border-color: #CBD5E1 !important;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
-}
-.course-studio .studio-progress-item.is-complete,
-.admin-content .studio-progress-card button.studio-progress-item.is-complete {
-  border-color: #E2E8F0 !important;
-  background: #FFFFFF !important;
-}
-.studio-progress-badge {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 28px !important;
-  height: 28px !important;
-  flex: 0 0 28px !important;
-  border: 1.5px solid #CBD5E1 !important;
-  border-radius: 50% !important;
-  font-size: 11.5px !important;
-  font-weight: 800 !important;
-  color: #64748B !important;
-  background: #F1F5F9 !important;
-  transition: all 0.18s ease;
-}
-.studio-progress-item:not(.is-complete) .studio-progress-badge {
-  background: #FFF7ED !important;
-  border-color: #FED7AA !important;
-  color: #EA580C !important;
-}
-.studio-progress-item.is-complete .studio-progress-badge {
-  border-color: #10B981 !important;
-  background: #10B981 !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
-}
-.studio-progress-body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start !important;
-  text-align: left !important;
-}
-.studio-progress-name {
-  display: block;
-  font-size: 13px !important;
-  font-weight: 750 !important;
-  color: #0F172A !important;
-  line-height: 1.35;
-  text-align: left !important;
-}
-.studio-progress-name .bilingual-text,
-.studio-progress-name .bilingual-text__vi,
-.studio-progress-name .bilingual-text__en {
-  text-align: left !important;
-}
-.studio-progress-status {
-  display: block;
-  font-size: 11px !important;
-  line-height: 1.3;
-  margin-top: 2px;
-  text-align: left !important;
-}
-.studio-progress-status .bilingual-text,
-.studio-progress-status .bilingual-text__vi,
-.studio-progress-status .bilingual-text__en {
-  text-align: left !important;
-}
-.studio-progress-item:not(.is-complete) .studio-progress-status {
-  color: #EA580C !important;
-  font-weight: 600;
-}
-.studio-progress-item.is-complete .studio-progress-status {
-  color: #059669 !important;
-  font-weight: 600;
-}
-.studio-progress-arrow {
-  color: #94A3B8;
-  margin-left: auto;
-  flex-shrink: 0;
-  transition: transform 0.15s ease, color 0.15s ease;
-}
-.studio-progress-item:hover .studio-progress-arrow {
-  color: #0F172A;
-  transform: translateX(3px);
-}
-.course-studio .studio-tip-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  min-height: 38px !important;
-  padding: 8px 14px !important;
-  background: #FFFFFF !important;
-  color: #78350F !important;
-  border: 1px solid #FCD34D !important;
-  border-radius: 9px !important;
-  font-weight: 650 !important;
-  font-size: 12.5px !important;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-.course-studio .studio-tip-btn:hover:not(:disabled) {
-  background: #FEF3C7 !important;
-  border-color: #F59E0B !important;
-  color: #92400E !important;
-}
 .studio-module {
   padding: 0;
   overflow: hidden;
@@ -1541,25 +1314,66 @@
 }
 .studio-module-tools {
   display: flex;
+  align-items: center;
   gap: 8px;
-  padding: 0 20px 15px;
+  padding: 0 20px 14px;
   justify-content: flex-end;
 }
-.course-studio .studio-icon-button {
-  padding: 8px;
-  min-width: 32px;
+.studio-module-tools button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 14px !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border-radius: 8px !important;
+  background: #FFFFFF !important;
+  color: #334155 !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+  transition: all 0.16s ease !important;
+}
+.studio-module-tools button:hover:not(:disabled) {
+  background: #F8FAFC !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+.course-studio .studio-icon-button,
+.studio-module-tools .studio-icon-button,
+.studio-lesson-actions .studio-icon-button {
+  width: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
 }
 .studio-lesson {
   display: flex;
   align-items: center;
   gap: 13px;
-  padding: 15px 20px;
+  padding: 14px 20px;
   border-top: 1px solid #F1F5F9;
+  transition: background 0.15s ease;
+}
+.studio-lesson:hover {
+  background: #FAFBFD;
 }
 .studio-lesson-number {
   font-size: 12px;
   color: #94A3B8;
   font-weight: 700;
+  min-width: 20px;
 }
 .studio-lesson-title {
   flex: 1;
@@ -1579,14 +1393,17 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
+  margin-top: 5px;
   color: var(--studio-muted);
-  font-size: 11px;
+  font-size: 11.5px;
+}
+.studio-lesson-title .admin-status-badge {
+  margin-left: 4px;
 }
 .studio-lesson-title .studio-status {
-  font-size: 9.5px;
-  padding: 2px 7px;
-  margin-left: 5px;
+  font-size: 10.5px;
+  padding: 2px 8px;
+  margin-left: 4px;
 }
 .studio-lesson-actions {
   display: flex;
@@ -1595,22 +1412,94 @@
   flex-wrap: wrap;
   justify-content: flex-end;
 }
-.studio-lesson-actions .button, .studio-lesson-actions button {
-  font-size: 11px;
-  padding: 6px 10px;
+.studio-lesson-actions .button,
+.studio-lesson-actions button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border-radius: 8px !important;
+  background: #FFFFFF !important;
+  color: #334155 !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+  text-decoration: none !important;
+  transition: all 0.16s ease !important;
+}
+.studio-lesson-actions .button:hover:not(:disabled),
+.studio-lesson-actions button:hover:not(:disabled) {
+  background: #F8FAFC !important;
+  color: #EA580C !important;
+  border-color: #FDBA74 !important;
+}
+.studio-lesson-actions .studio-icon-button {
+  width: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  padding: 0 !important;
 }
 .studio-icon-link {
-  display: flex;
-  padding: 7px;
-  color: #94A3B8;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  border: 1px solid #E2E8F0 !important;
+  background: #FFFFFF !important;
+  color: #64748B !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+  transition: all 0.16s ease !important;
 }
 .studio-icon-link:hover {
-  color: #0F172A;
+  color: #0D9488 !important;
+  background: #F0FDFA !important;
+  border-color: #99F6E4 !important;
 }
-.admin-content .studio-add-lesson {
-  margin: 14px 20px 20px;
-  border-style: dashed;
-  color: #EA580C;
+.admin-content .studio-add-lesson,
+.course-studio .studio-add-lesson {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  padding: 0 14px !important;
+  margin: 12px 20px 18px !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border-radius: 9px !important;
+  border: 1px dashed #FDBA74 !important;
+  background: #FFFDF9 !important;
+  color: #EA580C !important;
+  transition: all 0.16s ease !important;
+}
+.admin-content .studio-add-lesson:hover:not(:disabled),
+.course-studio .studio-add-lesson:hover:not(:disabled) {
+  background: #FFF7ED !important;
+  border-color: #EA580C !important;
+  color: #C2410C !important;
+}
+.course-studio button .bilingual-text,
+.course-studio button .bilingual-text__current,
+.course-studio .button .bilingual-text,
+.course-studio .button .bilingual-text__current {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
 }
 .studio-empty {
   padding: 48px 25px;
@@ -1871,4 +1760,4 @@
 }
 @media (max-width: 1150px) { .studio-layout { grid-template-columns: minmax(0, 1fr) 225px; gap: 18px; } .studio-steps small { display: none; } .studio-lesson { flex-wrap: wrap; } .studio-lesson-actions { margin-left: auto; } }
 @media (max-width: 850px) { .studio-layout { grid-template-columns: minmax(0, 1fr); } .studio-sidebar { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } .studio-side-card { margin: 0; } .studio-side-card .course-cover, .studio-side-card img, .studio-cover-placeholder { max-height: 150px; } .studio-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .studio-steps small { display: block; } .studio-step-intro { align-items: flex-start; } }
-@media (max-width: 540px) { .studio-header { align-items: flex-start; flex-direction: column; gap: 16px; } .studio-save-state { align-items: flex-start; } .studio-steps { padding: 5px; } .admin-content .studio-steps button { padding: 10px 6px; gap: 7px; } .studio-steps strong { font-size: 11px; } .studio-steps small { font-size: 9px; } .studio-step-state { display: none; } .studio-step-number { width: 25px; height: 25px; } .studio-step-intro { align-items: stretch; flex-direction: column; gap: 14px; } .studio-step-summary { max-width: none; } .studio-editor-launch { align-items: flex-start; flex-direction: column; } .studio-wizard-modal { width: calc(100vw - 20px); padding: 16px; } .studio-details-form--wizard { min-height: calc(100dvh - 105px); max-height: calc(100dvh - 105px); } .studio-wizard-steps { gap: 4px; } .admin-content .studio-wizard-steps button { justify-content: center; padding: 8px 4px; } .admin-content .studio-wizard-steps button strong { display: none; } .studio-wizard-actions { grid-template-columns: 1fr 1fr; } .studio-wizard-actions > span { display: none; } .studio-wizard-actions > button { width: 100%; } .studio-panel { padding: 20px 16px; } .studio-details-form--wizard .studio-panel { padding: 20px 2px 10px; } .studio-content-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; padding: 10px; } .studio-content-flow > svg { display: none; } .studio-content-flow > div { display: flex; flex-direction: column; gap: 5px; text-align: center; } .studio-content-flow small { display: none; } .studio-content-flow > div > span { width: 25px; height: 25px; flex: 0 0 25px; } .studio-content-flow strong { font-size: 9px; } .studio-form-grid, .studio-cover-editor, .studio-sidebar, .studio-workbook-flow { grid-template-columns: minmax(0, 1fr); } .studio-section-heading { flex-wrap: wrap; } .studio-footer { flex-wrap: wrap; } .studio-footer > span { width: 100%; order: -1; text-align: center; } .studio-form-save { bottom: 6px; align-items: stretch; flex-direction: column; } .studio-lesson { padding: 15px 12px; } .studio-lesson-actions { justify-content: flex-start; width: 100%; padding-left: 26px; } .studio-module-tools { justify-content: flex-start; } .studio-preview-hero h2 { font-size: 22px; } .studio-preview-hero .course-cover { height: 180px; } .studio-preview-lesson { flex-wrap: wrap; } .studio-preview-lesson > small { width: 100%; padding-left: 27px; } .studio-issue-list li { flex-wrap: wrap; } .studio-issue-list li > span:nth-child(2) { min-width: 190px; } .studio-issue-list li > button { margin-left: 21px; } .studio-publish-action { padding: 18px; } }
+@media (max-width: 540px) { .studio-header { align-items: flex-start; flex-direction: column; gap: 16px; } .studio-save-state { align-items: flex-start; } .studio-steps { padding: 5px; } .admin-content .studio-steps button { padding: 10px 6px; gap: 7px; } .studio-steps strong { font-size: 11px; } .studio-steps small { font-size: 9px; } .studio-step-state { display: none; } .studio-step-number { width: 25px; height: 25px; } .studio-step-intro { align-items: stretch; flex-direction: column; gap: 14px; } .studio-step-summary { max-width: none; } .studio-editor-launch { align-items: flex-start; flex-direction: column; } .studio-wizard-modal { width: calc(100vw - 20px); padding: 16px; } .studio-details-form--wizard { min-height: calc(100dvh - 105px); max-height: calc(100dvh - 105px); } .studio-wizard-steps { gap: 4px; } .admin-content .studio-wizard-steps button { justify-content: center; padding: 8px 4px; } .admin-content .studio-wizard-steps button strong { display: none; } .studio-wizard-actions { grid-template-columns: 1fr 1fr; } .studio-wizard-actions > span { display: none; } .studio-wizard-actions > button { width: 100%; } .studio-panel { padding: 20px 16px; } .studio-details-form--wizard .studio-panel { padding: 20px 2px 10px; } .studio-form-grid, .studio-cover-editor, .studio-sidebar, .studio-workbook-flow { grid-template-columns: minmax(0, 1fr); } .studio-section-heading { flex-wrap: wrap; } .studio-footer { flex-wrap: wrap; } .studio-footer > span { width: 100%; order: -1; text-align: center; } .studio-form-save { bottom: 6px; align-items: stretch; flex-direction: column; } .studio-lesson { padding: 15px 12px; } .studio-lesson-actions { justify-content: flex-start; width: 100%; padding-left: 26px; } .studio-module-tools { justify-content: flex-start; } .studio-preview-hero h2 { font-size: 22px; } .studio-preview-hero .course-cover { height: 180px; } .studio-preview-lesson { flex-wrap: wrap; } .studio-preview-lesson > small { width: 100%; padding-left: 27px; } .studio-issue-list li { flex-wrap: wrap; } .studio-issue-list li > span:nth-child(2) { min-width: 190px; } .studio-issue-list li > button { margin-left: 21px; } .studio-publish-action { padding: 18px; } }

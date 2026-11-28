@@ -9,13 +9,13 @@ test('auth state and login routing use one role string', () => {
   const login = read('src/features/auth/pages/auth/LoginPage.jsx');
   const types = read('src/shared/api/authApi.types.ts');
 
-  assert.match(types, /role: 'LEARNER' \| 'CONTENT' \| 'ADMIN'/);
+  assert.match(types, /role: 'LEARNER' \| 'CONTENT_CREATOR' \| 'ADMIN'/);
   assert.doesNotMatch(types, /roles\?: string\[\]/);
   assert.match(auth, /role: normalizeRole\(role\)/);
-  assert.match(auth, /const isContentManager = hasRole\('CONTENT'\)/);
+  assert.match(auth, /const isContentCreator = hasRole\('CONTENT_CREATOR'\)/);
   assert.doesNotMatch(auth, /user\.roles/);
   assert.match(login, /role === 'ADMIN'/);
-  assert.match(login, /role === 'CONTENT'/);
+  assert.match(login, /role === 'CONTENT_CREATOR'/);
   assert.doesNotMatch(login, /loggedUser\?\.roles/);
 });
 
@@ -25,7 +25,7 @@ test('admin role update sends the backend single-role contract', () => {
   const detail = read('src/features/admin/pages/AdminUserDetailPage.jsx');
 
   assert.match(service, /put\(`\/api\/admin\/users\/\$\{id\}\/role`, \{ role \}\)/);
-  assert.match(list, /const EDITABLE_ROLES = \['LEARNER', 'CONTENT'\]/);
+  assert.match(list, /const EDITABLE_ROLES = \['LEARNER', 'CONTENT_CREATOR'\]/);
   assert.match(list, /userRole !== 'ADMIN'/);
   assert.match(detail, /const canEditRole = isAdmin && userRole !== 'ADMIN'/);
   assert.doesNotMatch(list, /type="checkbox"/);

@@ -204,7 +204,7 @@ export function AdminAuditLogsPage() {
           <p style={{ color: '#64748B', margin: 0, fontSize: '0.92rem' }}>
             <BilingualText
               vi="Ghi nhận thao tác thay đổi dữ liệu của quản trị viên, người quản lý nội dung và hệ thống."
-              en="Tracks data changes made by administrators, content managers, and the system."
+              en="Tracks data changes made by administrators, content creators, and the system."
             />
           </p>
         </div>

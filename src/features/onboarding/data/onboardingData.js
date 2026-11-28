@@ -396,9 +396,10 @@ export function evaluatePlacementTest(selectedLevel, answers = [], questions = [
   }
 
   // Tiered Waterfall Evaluation:
-  // Starts at 'A0'. Advances step-by-step through tiersInTest in sequential order.
+  // Starts at 'A1' (Bậc 1 according to MOET 6-level Vietnamese framework).
+  // Advances step-by-step through tiersInTest in sequential order.
   // Breaks on the first failed tier to preserve foundational integrity.
-  let assessedLevel = 'A0';
+  let assessedLevel = 'A1';
   for (const tier of tiersInTest) {
     if (tierScores[tier]?.passed) {
       assessedLevel = tier;
@@ -414,13 +415,13 @@ export function evaluatePlacementTest(selectedLevel, answers = [], questions = [
   let explanationVi;
   let explanationEn;
 
-  if (assessedLevel === normLevel) {
+  if (assessedLevel === normLevel && tierScores[normLevel]?.passed) {
     explanationVi = `Chúc mừng bạn! Bạn đã hoàn thành xuất sắc các tầng kiến thức và được xác nhận đạt trình độ ${normLevel}.`;
     explanationEn = `Congratulations! You mastered all foundation tiers and confirmed your ${normLevel} proficiency.`;
-  } else if (assessedLevel === 'A0') {
+  } else if (!tierScores.A1?.passed) {
     const a1Percent = tierScores.A1?.percent ?? 0;
-    explanationVi = `Bạn đạt ${a1Percent}% ở phần nền tảng A1 (yêu cầu ≥ 80%). Hệ thống đề xuất bắt đầu từ A0 để xây dựng nền móng tiếng Việt vững chắc nhất.`;
-    explanationEn = `You scored ${a1Percent}% in the A1 foundation (requires ≥ 80%). We recommend starting at A0 to build a solid base.`;
+    explanationVi = `Bạn đạt ${a1Percent}% ở phần nền tảng A1 (yêu cầu ≥ 80%). Hệ thống đề xuất bắt đầu từ A1 để xây dựng nền móng tiếng Việt vững chắc nhất.`;
+    explanationEn = `You scored ${a1Percent}% in the A1 foundation (requires ≥ 80%). We recommend starting at A1 to build a solid base.`;
   } else {
     const nextFailedTier = tiersInTest.find((t) => !tierScores[t]?.passed);
     const failedInfo = nextFailedTier ? tierScores[nextFailedTier] : null;
@@ -445,12 +446,12 @@ export function evaluatePlacementTest(selectedLevel, answers = [], questions = [
 export const placementQuestions = getPlacementQuestions('A1');
 
 export const placementBands = [
-  { min: 0, label: 'New Explorer', labelVi: 'Người mới khám phá', targetLevel: 'A0', recommendation: 'Vietnamese Foundations · Lesson 1' },
-  { min: 3, label: 'Foundation Builder', labelVi: 'Đang xây nền tảng', targetLevel: 'A1', recommendation: 'Everyday Vietnamese · Unit 2' },
-  { min: 6, label: 'Everyday Communicator', labelVi: 'Giao tiếp thường ngày', targetLevel: 'A2', recommendation: 'Real-life Conversations · Unit 4' },
-  { min: 9, label: 'Independent Communicator', labelVi: 'Giao tiếp độc lập', targetLevel: 'B1', recommendation: 'Natural Vietnamese · Unit 6' },
-  { min: 12, label: 'Upper-intermediate Communicator', labelVi: 'Giao tiếp trên trung cấp', targetLevel: 'B2', recommendation: 'Advanced Vietnamese · Chapter 4' },
-  { min: 14, label: 'Advanced Communicator', labelVi: 'Giao tiếp nâng cao', targetLevel: 'C1', recommendation: 'Advanced Vietnamese · Culture and Heritage' },
+  { min: 0, label: 'Foundation Builder', labelVi: 'Đang xây nền tảng', targetLevel: 'A1', recommendation: 'Everyday Vietnamese · Unit 1' },
+  { min: 5, label: 'Everyday Communicator', labelVi: 'Giao tiếp thường ngày', targetLevel: 'A2', recommendation: 'Real-life Conversations · Unit 4' },
+  { min: 8, label: 'Independent Communicator', labelVi: 'Giao tiếp độc lập', targetLevel: 'B1', recommendation: 'Natural Vietnamese · Unit 6' },
+  { min: 11, label: 'Upper-intermediate Communicator', labelVi: 'Giao tiếp trên trung cấp', targetLevel: 'B2', recommendation: 'Advanced Vietnamese · Chapter 4' },
+  { min: 13, label: 'Advanced Communicator', labelVi: 'Giao tiếp nâng cao', targetLevel: 'C1', recommendation: 'Advanced Vietnamese · Culture and Heritage' },
+  { min: 15, label: 'Mastery Communicator', labelVi: 'Tinh thông bản ngữ', targetLevel: 'C2', recommendation: 'Mastery Vietnamese · Literature and Nuance' },
 ];
 
 export { PLACEMENT_OPTION_TRANSLATIONS, getLocalizedOption, areOptionsMatching, isAnswerCorrect };

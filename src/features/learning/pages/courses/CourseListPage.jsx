@@ -22,12 +22,12 @@ import {
 
 const LEVEL_COLORS = {
   all: 'bg-stone-400',
-  A0: 'bg-sky-500',
   A1: 'bg-emerald-500',
   A2: 'bg-teal-500',
   B1: 'bg-amber-500',
   B2: 'bg-purple-500',
   C1: 'bg-[#F97316]',
+  C2: 'bg-rose-500',
 };
 
 export function CourseListPage() {
@@ -47,12 +47,12 @@ export function CourseListPage() {
 
   const levelOptions = [
     { id: 'all', label: 'Tất cả trình độ', labelEn: 'All levels', desc: 'Toàn bộ khóa học', descEn: 'All courses' },
-    { id: 'A0', label: 'A0 - Nhập môn', labelEn: 'A0 - Absolute Beginner', desc: 'Chữ cái & Thanh điệu', descEn: 'Alphabet & 6 Tones' },
-    { id: 'A1', label: 'A1 - Cơ bản', labelEn: 'A1 - Elementary', desc: 'Chào hỏi & Giao tiếp nền tảng', descEn: 'Greetings & Basic Communication' },
-    { id: 'A2', label: 'A2 - Sơ cấp', labelEn: 'A2 - Pre-Intermediate', desc: 'Đời sống & Mua sắm hàng ngày', descEn: 'Daily Life & Shopping' },
-    { id: 'B1', label: 'B1 - Trung cấp', labelEn: 'B1 - Intermediate', desc: 'Hội thoại mở rộng & Tự tin diễn đạt', descEn: 'Conversations & Self-Expression' },
-    { id: 'B2', label: 'B2 - Cao cấp', labelEn: 'B2 - Upper Intermediate', desc: 'Làm việc & Thảo luận chủ đề', descEn: 'Work & Thematic Discussions' },
-    { id: 'C1', label: 'C1 - Thành thạo', labelEn: 'C1 - Advanced', desc: 'Ngôn ngữ học thuật & Chuyên sâu', descEn: 'Academic & In-depth Fluency' },
+    { id: 'A1', label: 'A1 - Sơ cấp 1', labelEn: 'A1 - Beginner', desc: 'Phát âm, chào hỏi & giao tiếp nền tảng', descEn: 'Pronunciation, Greetings & Basics' },
+    { id: 'A2', label: 'A2 - Sơ cấp 2', labelEn: 'A2 - Elementary', desc: 'Đời sống & Mua sắm hàng ngày', descEn: 'Daily Life & Shopping' },
+    { id: 'B1', label: 'B1 - Trung cấp 1', labelEn: 'B1 - Intermediate', desc: 'Hội thoại mở rộng & Tự tin diễn đạt', descEn: 'Conversations & Self-Expression' },
+    { id: 'B2', label: 'B2 - Trung cấp 2', labelEn: 'B2 - Upper-Intermediate', desc: 'Làm việc & Thảo luận chủ đề', descEn: 'Work & Thematic Discussions' },
+    { id: 'C1', label: 'C1 - Cao cấp 1', labelEn: 'C1 - Advanced', desc: 'Ngôn ngữ học thuật & Chuyên sâu', descEn: 'Academic & In-depth Fluency' },
+    { id: 'C2', label: 'C2 - Cao cấp 2', labelEn: 'C2 - Mastery', desc: 'Tinh thông ngôn ngữ & Văn hóa Việt', descEn: 'Native-like Mastery & Cultural Depth' },
   ];
 
   return (

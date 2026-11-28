@@ -15,6 +15,7 @@ import { canReviewVocabulary, canWriteVocabulary } from '@/utils/permissions/con
 import { AdminActionButton, AdminActionGroup } from '@/shared/components/common/AdminTableActions';
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
+import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
 import { useConfirmDialog } from '@/shared/components/common/ConfirmDialog';
 import { useLocation, Link } from 'react-router-dom';
 import {
@@ -457,17 +458,7 @@ export function AdminRegionalLanguagePage() {
                       <td><strong>{item.word}</strong></td>
                       <td>{item.meaning}</td>
                       <td>
-                        <span
-                          className={`admin-badge ${
-                            item.status === 'PUBLISHED'
-                              ? 'admin-badge-success'
-                              : item.status === 'ARCHIVED'
-                              ? 'admin-badge-danger'
-                              : 'admin-badge-warning'
-                          }`}
-                        >
-                          <BilingualText>{item.status}</BilingualText>
-                        </span>
+                        <AdminStatusBadge status={item.status} />
                       </td>
                       <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                         <AdminActionGroup>

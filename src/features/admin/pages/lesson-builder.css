@@ -1,0 +1,209 @@
+.lesson-builder-title,
+.lesson-builder-list-heading,
+.lesson-builder-info summary,
+.lesson-builder-info-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lesson-builder-title,
+.lesson-builder-list-heading,
+.lesson-builder-info-actions {
+  flex-wrap: wrap;
+}
+
+.lesson-builder-info.admin-card {
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.lesson-builder-info summary {
+  justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+}
+
+.lesson-builder-info summary::-webkit-details-marker,
+.lesson-builder-add summary::-webkit-details-marker {
+  display: none;
+}
+
+.lesson-builder-info[open] > summary svg {
+  transform: rotate(180deg);
+}
+
+.lesson-builder-info-content {
+  border-top: 1px solid var(--border-color);
+  padding: 12px 18px 16px;
+}
+
+.lesson-builder-info-content p {
+  margin: 0 0 8px;
+}
+
+.lesson-builder-info-actions {
+  align-items: flex-end;
+  margin-top: 12px;
+}
+
+.lesson-builder-info-actions label {
+  margin: 0;
+}
+
+.lesson-builder-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.lesson-builder-list.admin-card,
+.lesson-builder-editor.admin-card {
+  padding: 16px;
+}
+
+.lesson-builder-list-heading {
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.lesson-builder-list-heading h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.lesson-builder-add {
+  position: relative;
+}
+
+.lesson-builder-add summary.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  list-style: none;
+  cursor: pointer;
+  padding: 8px 10px;
+}
+
+.lesson-builder-add-options {
+  position: absolute;
+  z-index: 2;
+  inset-inline-end: 0;
+  top: calc(100% + 6px);
+  width: 215px;
+  max-width: calc(100vw - 48px);
+  display: grid;
+  gap: 4px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgb(15 23 42 / 12%);
+}
+
+.lesson-builder-add-options small {
+  padding: 0 8px 4px;
+}
+
+.lesson-builder-activities {
+  display: grid;
+  gap: 7px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.lesson-builder-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+}
+
+.lesson-builder-row.is-selected {
+  background: #fff3e8;
+  border-color: #f9b784;
+}
+
+.lesson-builder-row .lesson-builder-select {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 9px;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.admin-content .lesson-builder-row button.lesson-builder-select {
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+.admin-content .lesson-builder-row button.lesson-builder-select:hover:not(:disabled) {
+  background: #fff3e8;
+}
+
+.lesson-builder-number {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 12px;
+}
+
+.is-selected .lesson-builder-number {
+  background: #ffdfc4;
+  color: #9a3412;
+}
+
+.lesson-builder-order {
+  display: flex;
+  gap: 4px;
+  padding-inline-end: 7px;
+}
+
+.admin-content .lesson-builder-order button.secondary {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 4px;
+  box-shadow: none;
+}
+
+.lesson-builder-quiz {
+  margin-top: 14px;
+  width: 100%;
+}
+
+.admin-content .lesson-builder-editor .lesson-builder-back {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .lesson-builder-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lesson-builder-grid:not(.is-editor-open) .lesson-builder-editor,
+  .lesson-builder-grid.is-editor-open .lesson-builder-list {
+    display: none;
+  }
+
+  .admin-content .lesson-builder-editor .lesson-builder-back {
+    display: inline-flex;
+    margin-bottom: 14px;
+  }
+}

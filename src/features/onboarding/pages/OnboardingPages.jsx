@@ -393,7 +393,7 @@ function ExerciseRunner({ mode }) {
             correct: score,
             total: questions.length,
             accuracy,
-            targetLevel: 'A0',
+            targetLevel: 'A1',
             xp: 20,
           },
           lessonAnswers: nextAnswers,

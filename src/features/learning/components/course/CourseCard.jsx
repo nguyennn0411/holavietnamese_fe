@@ -6,12 +6,12 @@ import { BilingualText } from '@/shared/components/common/BilingualText';
 
 // Màu sắc nhận diện theo khung trình độ CEFR với độ tương phản hài hòa
 const LEVEL_BADGES = {
-  A0: 'bg-sky-600/90 text-white border-sky-400/40',
   A1: 'bg-emerald-600/90 text-white border-emerald-400/40',
   A2: 'bg-teal-600/90 text-white border-teal-400/40',
   B1: 'bg-amber-600/90 text-white border-amber-400/40',
   B2: 'bg-purple-600/90 text-white border-purple-400/40',
   C1: 'bg-[#F97316]/90 text-white border-orange-300/40',
+  C2: 'bg-rose-600/90 text-white border-rose-400/40',
 };
 
 export function CourseCard({ course, enrollment, recommendationRank }) {

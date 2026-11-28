@@ -4,10 +4,10 @@ import { useParams, Link } from 'react-router-dom';
 import { adminService } from '@/features/admin/api/adminService';
 import { useAuth } from '@/features/auth/context/AuthContext';
 
-const EDITABLE_ROLES = ['LEARNER', 'CONTENT'];
+const EDITABLE_ROLES = ['LEARNER', 'CONTENT_CREATOR'];
 const ROLE_LABELS = {
   LEARNER: { vi: 'Học viên', en: 'Learner' },
-  CONTENT: { vi: 'Quản lý nội dung', en: 'Content' },
+  CONTENT_CREATOR: { vi: 'Người sáng tạo nội dung', en: 'Content Creator' },
   ADMIN: { vi: 'Quản trị viên', en: 'Administrator' },
 };
 

@@ -13,7 +13,7 @@ test('Learning Path requires completed onboarding only for learner accounts', as
   assert.match(app, /<RequireAuth fallbackFeature="learning" \/>/);
   assert.match(app, /<RequireLearningPathOnboarding \/>/);
   assert.match(app, /path=\{ROUTES\.LEARNING_PATH\} element=\{<LearningPathPage \/>\}/);
-  assert.match(gate, /role === 'ADMIN' \|\| role === 'CONTENT'/);
+  assert.match(gate, /role === 'ADMIN' \|\| role === 'CONTENT_CREATOR'/);
   assert.match(gate, /!isBackOfficeAccount && user\.onboardingCompleted !== true/);
   assert.match(gate, /to="\/onboarding\/reason"/);
   assert.match(gate, /onboardingGate: true/);
