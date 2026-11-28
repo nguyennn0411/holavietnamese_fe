@@ -14,6 +14,7 @@ import {
   ChevronUp,
   Flame,
   Info,
+  Settings2,
 } from 'lucide-react';
 import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
 import { HolaSelect } from '@/shared/components/common/HolaSelect';
@@ -298,21 +299,27 @@ export function SettingsPage() {
   ];
 
   return (
-    <div className="account-page">
-      <div className="account-header">
-        <span className="account-pill">
-          <BilingualText vi="Tùy biến trải nghiệm" en="Customize Experience" />
-        </span>
-        <h1 className="account-title">
-          <BilingualText vi="Cài đặt ứng dụng" en="App Settings" />
-        </h1>
-        <p className="account-desc">
-          <BilingualText
-            vi="Tùy chỉnh tốc độ bài học, tính năng trợ giảng và thông báo nhắc nhở hàng ngày."
-            en="Customize lesson pace, interactive hints, and daily reminder notifications."
-          />
-        </p>
-      </div>
+    <div className="account-page settings-page !w-full !max-w-none !px-0 !py-2 space-y-8">
+      <header className="settings-hero">
+        <div className="settings-hero__copy">
+          <span className="settings-hero__eyebrow">
+            <Settings2 size={13} />
+            <BilingualText vi="Tùy biến trải nghiệm" en="Customize Experience" />
+          </span>
+          <h1>
+            <BilingualText vi="Cài đặt ứng dụng" en="App Settings" />
+          </h1>
+          <p>
+            <BilingualText
+              vi="Điều chỉnh trải nghiệm học tập theo nhịp độ, mục tiêu và thói quen riêng của bạn."
+              en="Shape your learning experience around your own pace, goals, and daily habits."
+            />
+          </p>
+        </div>
+        <div className="settings-hero__visual" aria-hidden="true">
+          <div><Settings2 size={40} strokeWidth={1.8} /></div>
+        </div>
+      </header>
 
       {state.error && (
         <div className="auth-message auth-message-error">

@@ -164,8 +164,8 @@ export function AchievementsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#FFFCF7] px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl flex min-h-80 items-center justify-center">
+      <main className="min-h-screen bg-[#FFFCF7] px-4 py-8 sm:px-6 lg:px-8 xl:px-10">
+        <div className="mx-auto flex min-h-80 max-w-[1560px] items-center justify-center 2xl:max-w-[1680px]">
           <div className="text-center">
             <span className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-[#EA580C] border-t-transparent" />
             <p className="mt-3 text-sm font-semibold text-[#64748B]">
@@ -178,24 +178,29 @@ export function AchievementsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FFFCF7] px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl">
+    <main className="min-h-screen bg-[#FFFCF7] px-4 py-8 sm:px-6 lg:px-8 xl:px-10">
+      <div className="mx-auto w-full max-w-[1560px] space-y-8 2xl:max-w-[1680px]">
         {/* Header */}
-        <header className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <span className="mb-2 inline-flex items-center gap-2 rounded-full bg-[#FFF0DC] px-3 py-1 text-xs font-bold text-[#C2410C]">
+        <header className="flex flex-col justify-between gap-6 rounded-3xl border border-[#E8E5DF] bg-gradient-to-br from-[#FFF7E8] via-[#F7F0E3] to-[#EEE3D1] p-6 shadow-sm sm:p-8 lg:flex-row lg:items-center lg:p-10">
+          <div className="max-w-3xl space-y-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#E7B59D] bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#EA580C] shadow-xs">
               <Trophy size={13} />
               <BilingualText vi="HỆ THỐNG PHẦN THƯỞNG" en="REWARDS SYSTEM" />
             </span>
-            <h1 className="text-3xl font-black tracking-tight text-[#253044]">
+            <h1 className="text-3xl font-black tracking-tight text-[#253044] sm:text-4xl">
               <BilingualText vi="Huy chương & Huy hiệu" en="Medals & Badges" />
             </h1>
-            <p className="mt-1 text-sm text-[#64748B]">
+            <p className="max-w-2xl text-sm leading-relaxed text-[#64748B] sm:text-base">
               <BilingualText
                 vi="Tôn vinh hành trình kiên trì, từng cột mốc và chiến tích học tập tiếng Việt của bạn."
                 en="Honoring your persistence, milestones, and Vietnamese learning achievements."
               />
             </p>
+          </div>
+          <div className="hidden h-36 w-56 shrink-0 items-center justify-center rounded-2xl border-2 border-white/90 bg-white/65 text-[#EA580C] shadow-md lg:flex xl:w-72">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-[#E7B59D] bg-[#FFF7E8] shadow-xs">
+              <Trophy size={42} strokeWidth={1.8} />
+            </div>
           </div>
         </header>
 
@@ -206,14 +211,14 @@ export function AchievementsPage() {
         )}
 
         {/* Overview Hero Banner */}
-        <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-r from-[#EA580C] via-[#F97316] to-[#FB923C] p-6 text-white shadow-[0_12px_40px_rgba(234,88,12,0.18)] sm:p-8 relative">
-          <StarsBackground className="opacity-30" starCount={40} />
+        <section className="relative overflow-hidden rounded-3xl border border-[#24382B] bg-gradient-to-r from-[#24382B] via-[#2F4A39] to-[#3B5B47] p-6 text-[#FFF7E8] shadow-md sm:p-8">
+          <StarsBackground className="opacity-10" starCount={40} />
           <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-2">
-              <span className="inline-block text-[11px] font-black uppercase tracking-widest text-orange-100">
+              <span className="inline-block text-[11px] font-black uppercase tracking-widest text-[#F6D9B8]">
                 <BilingualText vi="TIẾN TRÌNH TỔNG THỂ" en="OVERALL PROGRESS" />
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black">
+              <h2 className="text-2xl font-black !text-white sm:text-3xl">
                 {activeTab === 'badges' ? (
                   <BilingualText
                     vi={<>Đã mở khóa <CountingNumber value={unlockedBadgesCount} /> / {badges.length} huy hiệu</>}
@@ -226,7 +231,7 @@ export function AchievementsPage() {
                   />
                 )}
               </h2>
-              <p className="text-sm text-orange-100/90 max-w-xl">
+              <p className="max-w-3xl text-sm text-[#F7F0E3]/90">
                 {progress?.levelTitle ? (
                   <span>
                     <BilingualText
@@ -244,7 +249,7 @@ export function AchievementsPage() {
             </div>
 
             <div className="flex shrink-0 items-center gap-3">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-inner">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/25 bg-white/10 text-[#FFF7E8] shadow-inner backdrop-blur-md">
                 {activeTab === 'badges' ? <Award size={36} /> : <Medal size={36} />}
               </div>
             </div>
@@ -252,14 +257,14 @@ export function AchievementsPage() {
         </section>
 
         {/* Tab Switcher (Huy hiệu vs Huy chương) */}
-        <div className="mb-6 flex gap-3 border-b border-[#E8E5DF] pb-4">
+        <div className="flex flex-wrap gap-2 border-b border-[#E8E5DF] pb-1">
           <button
             type="button"
             onClick={() => setActiveTab('badges')}
-            className={`inline-flex items-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-bold transition-all !min-h-0 ${
+            className={`inline-flex !min-h-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === 'badges'
                 ? '!bg-white !text-[#EA580C] border-2 border-[#EA580C] shadow-sm'
-                : '!bg-white !text-[#64748B] border border-[#E8E5DF] hover:!text-[#253044]'
+                : '!bg-white/80 !text-[#64748B] border border-[#E8E5DF] hover:!bg-white hover:!text-[#EA580C]'
             }`}
           >
             <Award size={18} />
@@ -272,10 +277,10 @@ export function AchievementsPage() {
           <button
             type="button"
             onClick={() => setActiveTab('medals')}
-            className={`inline-flex items-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-bold transition-all !min-h-0 ${
+            className={`inline-flex !min-h-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all ${
               activeTab === 'medals'
                 ? '!bg-white !text-[#EA580C] border-2 border-[#EA580C] shadow-sm'
-                : '!bg-white !text-[#64748B] border border-[#E8E5DF] hover:!text-[#253044]'
+                : '!bg-white/80 !text-[#64748B] border border-[#E8E5DF] hover:!bg-white hover:!text-[#EA580C]'
             }`}
           >
             <Medal size={18} />
@@ -290,7 +295,7 @@ export function AchievementsPage() {
         {activeTab === 'badges' && (
           <section>
             {/* Filter Pills */}
-            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               {/* Category Filters */}
               <div className="flex flex-wrap gap-2">
                 <button
@@ -325,7 +330,7 @@ export function AchievementsPage() {
               </div>
 
               {/* Status Filter */}
-              <div className="flex shrink-0 items-center gap-1.5 p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0]">
+              <div className="flex w-fit shrink-0 items-center gap-1.5 rounded-xl border border-[#DDD6CB] bg-[#EEEAE4] p-1">
                 <button
                   type="button"
                   onClick={() => setStatusFilter('all')}
@@ -374,7 +379,7 @@ export function AchievementsPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredBadges.map((badge) => {
                   const isUnlocked = badge.isUnlocked === true || badge.unlocked === true;
                   const catMeta = CATEGORY_META[badge.category] || CATEGORY_META.LESSON;
@@ -389,8 +394,8 @@ export function AchievementsPage() {
                       onClick={() => setSelectedReward({ type: 'badge', data: badge })}
                       className={`relative flex flex-col justify-between rounded-2xl border p-5 transition-all cursor-pointer ${
                         isUnlocked
-                          ? 'border-orange-200 bg-white shadow-sm hover:border-[#EA580C] hover:shadow-md'
-                          : 'border-[#E8E5DF] bg-stone-50/70 opacity-80 hover:opacity-100 hover:border-stone-300'
+                          ? 'border-[#E8E5DF] bg-[#FFF7E8] shadow-sm hover:border-[#EA580C] hover:shadow-md'
+                          : 'border-[#E8E5DF] bg-[#FFF7E8]/70 opacity-80 hover:opacity-100 hover:border-[#EA580C]'
                       }`}
                     >
                       <div>
@@ -503,8 +508,8 @@ export function AchievementsPage() {
                     onClick={() => setSelectedReward({ type: 'medal', data: tier })}
                     className={`relative flex flex-col justify-between rounded-2xl border p-5 transition-all cursor-pointer ${
                       isEarned
-                        ? 'border-orange-200 bg-white shadow-sm hover:border-[#EA580C] hover:shadow-md'
-                        : 'border-[#E8E5DF] bg-stone-50/70 opacity-70 hover:opacity-100'
+                        ? 'border-[#E8E5DF] bg-[#FFF7E8] shadow-sm hover:border-[#EA580C] hover:shadow-md'
+                        : 'border-[#E8E5DF] bg-[#FFF7E8]/70 opacity-70 hover:opacity-100'
                     }`}
                   >
                     <div>
