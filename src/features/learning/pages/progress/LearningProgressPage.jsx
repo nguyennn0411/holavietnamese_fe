@@ -60,12 +60,15 @@ export function LearningProgressPage() {
   const resource = useAsyncResource(useCallback(() => learnerService.getProgressData(), []));
 
   return (
-    <section>
-      <PageHeader
-        eyebrow={<BilingualText vi="Từng bước nhỏ đều có ý nghĩa" en="Every small step counts" />}
-        title={<BilingualText vi="Tiến độ học tập" en="Learning Progress" />}
-        description={<BilingualText vi="Nhìn lại những điều bạn đã học và tìm nhịp học của riêng mình." en="Look back at what you've learned and discover your own study rhythm." />}
-      />
+    <section className="learning-progress-page w-full max-w-[1560px] 2xl:max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8">
+      <div className="learning-progress-hero">
+        <PageHeader
+          eyebrow={<BilingualText vi="Từng bước nhỏ đều có ý nghĩa" en="Every small step counts" />}
+          title={<BilingualText vi="Tiến độ học tập" en="Learning Progress" />}
+          description={<BilingualText vi="Nhìn lại những điều bạn đã học và tìm nhịp học của riêng mình." en="Look back at what you've learned and discover your own study rhythm." />}
+        />
+        <div className="learning-progress-hero__mark" aria-hidden="true">↗</div>
+      </div>
       <ResourceState resource={resource}>
         {data => {
           const streak = data?.streakCount ?? data?.currentStreak ?? 0;
