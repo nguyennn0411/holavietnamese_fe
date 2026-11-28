@@ -776,13 +776,12 @@ button.review-tab-btn.is-active {
 
 .admin-content button,
 .admin-content .button {
-  background: #FFFFFF;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
-  border: 1px solid var(--primary-orange, #F97316);
+  background: var(--primary-orange, #EA580C);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(234, 88, 12, 0.2);
+  border: 1px solid var(--primary-orange, #EA580C);
   color: #FFFFFF;
   border-radius: 8px;
-  font-weight: 600;
   transition: all .18s ease;
 }
 

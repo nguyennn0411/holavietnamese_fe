@@ -17,7 +17,8 @@ import { AdminActionButton, AdminActionGroup } from '@/shared/components/common/
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
 import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
-import { Search, X, Pencil } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowUp, CheckCircle2, Circle, Eye, Link2, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
+import './quiz-builder.css';
 
 const QUESTION_STATUS_OPTIONS = [
   { value: '', label: bilingualLabel('Tất cả trạng thái', 'All statuses'), dotColor: '#94A3B8' },
@@ -281,6 +282,7 @@ export function AdminQuestionBankPage() {
       {canEdit && modal && (
         <Modal
           title={modal.id ? bilingualLabel("Chỉnh sửa câu hỏi") : bilingualLabel("Tạo câu hỏi")}
+          className="admin-question-modal"
           onClose={() => setModal(null)}
         >
           {modal.id ? (
@@ -391,17 +393,25 @@ function QuizBuilder({ quiz, reload }) {
     }
   }
   return (
-    <section>
+    <section className="quiz-builder-page">
       <Breadcrumb items={breadcrumbItems} />
       <PageHeader
-        title={<BilingualText vi="Trình tạo Quiz" en="Quiz Builder" />}
+        eyebrow={bilingualLabel('BIÊN SOẠN ĐÁNH GIÁ', 'QUIZ AUTHORING')}
+        title={
+          <span className="quiz-builder-title">
+            <BilingualText vi="Trình tạo Quiz" en="Quiz Builder" />
+            <AdminStatusBadge status={quiz.status || 'DRAFT'} />
+          </span>
+        }
         description={<BilingualText vi={quiz.titleVi || quiz.title} en={quiz.title} />}
         actions={
           <>
-            <Link className="button secondary" to={parentUrl}>
-              <BilingualText>{quiz.lessonId ? "← Quay lại bài học" : "← Quay lại khóa học"}</BilingualText>
+            <Link className="admin-btn admin-btn-secondary" to={parentUrl}>
+              <ArrowLeft size={16} />
+              <BilingualText>{quiz.lessonId ? 'Quay lại bài học' : 'Quay lại khóa học'}</BilingualText>
             </Link>
-            <Link className="button secondary" to={`${basePath}/quizzes/${quiz.id}/preview`}>
+            <Link className="admin-btn admin-btn-secondary" to={`${basePath}/quizzes/${quiz.id}/preview`}>
+              <Eye size={16} />
               <BilingualText>{"Xem trước quiz"}</BilingualText>
             </Link>
           </>
@@ -409,110 +419,236 @@ function QuizBuilder({ quiz, reload }) {
       />
       {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
       {message && <Notice kind="success"><BilingualText>{message}</BilingualText></Notice>}
-      <section className="admin-card">
-        <div className="builder-heading">
-          <h2><BilingualText>{"Cấu hình chung"}</BilingualText></h2>
-          <button className="secondary" disabled={!canEdit} onClick={() => setEdit(true)}>
+
+      <section className="admin-card quiz-builder-config-card">
+        <div className="quiz-builder-card-header">
+          <div>
+            <h2><BilingualText>{"Cấu hình chung"}</BilingualText></h2>
+            <p><BilingualText vi="Thiết lập điểm đạt, thời gian và số lần làm bài tối đa." en="Configure passing score, time limit, and maximum attempts." /></p>
+          </div>
+          <button type="button" className="admin-btn admin-btn-secondary" disabled={!canEdit} onClick={() => setEdit(true)}>
+            <Pencil size={15} />
             <BilingualText>{"Chỉnh sửa"}</BilingualText>
           </button>
         </div>
+
         <div className="quiz-config-grid">
-          <div>
+          <div className="quiz-config-item">
             <small><BilingualText>{"Điểm đạt"}</BilingualText></small>
             <strong>{quiz.passingScore}%</strong>
           </div>
-          <div>
+          <div className="quiz-config-item">
             <small><BilingualText>{"Số lần tối đa"}</BilingualText></small>
             <strong><BilingualText>{quiz.maxAttempts || 'Không giới hạn'}</BilingualText></strong>
           </div>
-          <div>
+          <div className="quiz-config-item">
             <small><BilingualText>{"Giới hạn thời gian"}</BilingualText></small>
             <strong><BilingualText>{quiz.timeLimitMinutes ? `${quiz.timeLimitMinutes} phút` : 'Không giới hạn'}</BilingualText></strong>
           </div>
-          <div>
+          <div className="quiz-config-item">
             <small><BilingualText>{"Xáo trộn câu hỏi"}</BilingualText></small>
             <strong><BilingualText>{quiz.randomizeQuestions ? 'Bật' : 'Tắt'}</BilingualText></strong>
           </div>
         </div>
-      </section>
-      <section className="admin-card">
-        <p><Link className="text-link" to={parentUrl}>← Quay lại {quiz.lessonId ? "bài học" : "khóa học"}</Link></p>
+
         {quiz.lessonId && (
-          <div className="actions">
-            <span>{hasLinkedQuiz ? "Quiz đã gắn vào bài học." : "Sau khi xuất bản quiz, gắn nó vào bài học."}</span>
-            {canEdit && quiz.status === "PUBLISHED" && !hasLinkedQuiz && <button disabled={busy} onClick={() => mutate(attachQuiz)}>Gắn quiz vào bài học</button>}
+          <div className={`quiz-lesson-link-banner ${hasLinkedQuiz ? 'is-linked' : ''}`}>
+            <div className="quiz-lesson-link-info">
+              <Link2 size={16} />
+              <span>
+                <BilingualText
+                  vi={hasLinkedQuiz ? 'Quiz đã được gắn vào hoạt động của bài học.' : 'Sau khi xuất bản quiz, hãy gắn quiz vào bài học.'}
+                  en={hasLinkedQuiz ? 'Quiz is attached to the lesson activities.' : 'After publishing the quiz, attach it to the lesson.'}
+                />
+              </span>
+            </div>
+            <div className="quiz-lesson-link-actions">
+              {canEdit && quiz.status === 'PUBLISHED' && !hasLinkedQuiz && (
+                <button type="button" className="admin-btn admin-btn-primary admin-btn-sm" disabled={busy} onClick={() => mutate(attachQuiz)}>
+                  <BilingualText vi="Gắn quiz vào bài học" en="Attach quiz to lesson" />
+                </button>
+              )}
+              <Link className="admin-row-action admin-row-action--neutral" to={parentUrl}>
+                <ArrowLeft size={13} />
+                <BilingualText>{quiz.lessonId ? 'Về bài học' : 'Về khóa học'}</BilingualText>
+              </Link>
+            </div>
           </div>
         )}
       </section>
-      <div className="builder-heading">
-        <h2><BilingualText>{"Câu hỏi và đáp án"}</BilingualText></h2>
-        <div className="actions">
-          <button className="secondary" disabled={!canEdit} onClick={() => setCreatingQuestion(true)}>
-            <BilingualText>{"+ Tạo câu hỏi và đáp án"}</BilingualText>
-          </button>
-          <button disabled={!canEdit} onClick={() => setAdding(true)}>
-            <BilingualText>{"+ Thêm từ ngân hàng"}</BilingualText>
-          </button>
+
+      <section className="admin-card quiz-builder-questions-card">
+        <div className="quiz-builder-card-header">
+          <div>
+            <h2>
+              <BilingualText>{"Câu hỏi và đáp án"}</BilingualText>
+              <span className="quiz-builder-count-pill">{questions.length}</span>
+            </h2>
+            <p><BilingualText vi="Sắp xếp thứ tự câu hỏi và phân bổ điểm số cho từng câu." en="Order questions and assign points for each question." /></p>
+          </div>
+          <div className="quiz-builder-header-actions">
+            <button type="button" className="admin-btn admin-btn-secondary" disabled={!canEdit} onClick={() => setCreatingQuestion(true)}>
+              <Plus size={16} />
+              <BilingualText vi="Tạo câu hỏi mới" en="Create question" />
+            </button>
+            <button type="button" className="admin-btn admin-btn-primary" disabled={!canEdit} onClick={() => setAdding(true)}>
+              <Plus size={16} />
+              <BilingualText vi="Thêm từ ngân hàng" en="Add from bank" />
+            </button>
+          </div>
         </div>
-      </div>
-      {questions.length ? (
-        questions.map((question, index) => (
-          <div className="list-row" key={question.questionId}>
-            <strong>
-              <span className="badge">{index + 1}</span> <BilingualText vi={question.promptVi || question.prompt} en={question.prompt} />
-            </strong>
-            <div className="actions">
-              <label className="quiz-points">
-                <BilingualText>{"Điểm"}</BilingualText>
-                <input
-                  aria-label={`Điểm câu ${index + 1}`}
-                  disabled={!canEdit}
-                  type="number"
-                  min="0.01"
-                  max="10000"
-                  step="0.01"
-                  defaultValue={question.points}
-                  key={`${question.questionId}-${question.points}`}
-                  onBlur={(event) => {
-                    const points = Number(event.target.value);
-                    if (points !== Number(question.points) && points > 0) mutate(() => contentService.addQuestion(quiz.id, question.questionId, points));
-                  }}
-                />
-              </label>
-              <button className="secondary" disabled={!canEdit || busy || index === 0} aria-label={`Đưa câu ${index + 1} lên`} onClick={() => mutate(() => contentService.reorder(`quizzes/${quiz.id}/questions`, moveItem(questions.map((item) => item.questionId), index, -1)))}>↑</button>
-              <button className="secondary" disabled={!canEdit || busy || index === questions.length - 1} aria-label={`Đưa câu ${index + 1} xuống`} onClick={() => mutate(() => contentService.reorder(`quizzes/${quiz.id}/questions`, moveItem(questions.map((item) => item.questionId), index, 1)))}>↓</button>
-              <button className="secondary" disabled={!canEdit || busy} aria-label={`Gỡ câu ${index + 1}`} onClick={() => mutate(() => contentService.removeQuestion(quiz.id, question.questionId))}>×</button>
+
+        {questions.length ? (
+          <div className="quiz-questions-list">
+            {questions.map((question, index) => (
+              <div className="quiz-question-row" key={question.questionId}>
+                <div className="quiz-question-main">
+                  <span className="quiz-question-number">{index + 1}</span>
+                  <div className="quiz-question-text">
+                    <strong>
+                      <BilingualText vi={question.promptVi || question.prompt} en={question.prompt} />
+                    </strong>
+                    <div className="quiz-question-meta">
+                      {question.questionType && <span className="quiz-meta-tag">{question.questionType}</span>}
+                      {question.status && <AdminStatusBadge status={question.status} size="sm" />}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="quiz-question-controls">
+                  <label className="quiz-points-box">
+                    <span><BilingualText>{"Điểm"}</BilingualText></span>
+                    <input
+                      aria-label={`Điểm câu ${index + 1}`}
+                      disabled={!canEdit}
+                      type="number"
+                      min="0.01"
+                      max="10000"
+                      step="0.01"
+                      defaultValue={question.points}
+                      key={`${question.questionId}-${question.points}`}
+                      onBlur={(event) => {
+                        const points = Number(event.target.value);
+                        if (points !== Number(question.points) && points > 0)
+                          mutate(() => contentService.addQuestion(quiz.id, question.questionId, points));
+                      }}
+                    />
+                  </label>
+                  <div className="quiz-question-order-btns">
+                    <button
+                      type="button"
+                      className="admin-row-action admin-row-action--neutral admin-row-action--icon"
+                      disabled={!canEdit || busy || index === 0}
+                      aria-label={`Đưa câu ${index + 1} lên`}
+                      onClick={() =>
+                        mutate(() =>
+                          contentService.reorder(
+                            `quizzes/${quiz.id}/questions`,
+                            moveItem(
+                              questions.map((item) => item.questionId),
+                              index,
+                              -1
+                            )
+                          )
+                        )
+                      }
+                    >
+                      <ArrowUp size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-row-action admin-row-action--neutral admin-row-action--icon"
+                      disabled={!canEdit || busy || index === questions.length - 1}
+                      aria-label={`Đưa câu ${index + 1} xuống`}
+                      onClick={() =>
+                        mutate(() =>
+                          contentService.reorder(
+                            `quizzes/${quiz.id}/questions`,
+                            moveItem(
+                              questions.map((item) => item.questionId),
+                              index,
+                              1
+                            )
+                          )
+                        )
+                      }
+                    >
+                      <ArrowDown size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-row-action admin-row-action--delete admin-row-action--icon"
+                      disabled={!canEdit || busy}
+                      aria-label={`Gỡ câu ${index + 1}`}
+                      onClick={() => mutate(() => contentService.removeQuestion(quiz.id, question.questionId))}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState title={<BilingualText vi="Thêm câu hỏi đầu tiên" en="Add your first question" />} />
+        )}
+      </section>
+
+      <section className="admin-card quiz-publication-card">
+        <div className="quiz-publication-info">
+          <h2><BilingualText>{"Kiểm tra xuất bản"}</BilingualText></h2>
+          <div className="quiz-checklist">
+            <div className={`quiz-check-item ${questions.length ? 'is-done' : ''}`}>
+              {questions.length ? <CheckCircle2 size={16} /> : <Circle size={16} />}
+              <span><BilingualText>{"Có ít nhất một câu hỏi"}</BilingualText></span>
+            </div>
+            <div className={`quiz-check-item ${questions.every((item) => item.status === 'PUBLISHED') && questions.length ? 'is-done' : ''}`}>
+              {questions.every((item) => item.status === 'PUBLISHED') && questions.length ? <CheckCircle2 size={16} /> : <Circle size={16} />}
+              <span><BilingualText>{"Các câu hỏi đã xuất bản"}</BilingualText></span>
+            </div>
+            <div className="quiz-check-item is-done">
+              <CheckCircle2 size={16} />
+              <span><BilingualText>{"Điểm đạt:"}</BilingualText> <strong>{quiz.passingScore}%</strong></span>
             </div>
           </div>
-        ))
-      ) : (
-        <EmptyState title={<BilingualText vi="Thêm câu hỏi đầu tiên" en="Add your first question" />} />
-      )}
-      <section className="admin-card publication-checks">
-        <div>
-          <h2><BilingualText>{"Kiểm tra xuất bản"}</BilingualText></h2>
-          <p>{questions.length ? '✓' : '○'}<BilingualText>{"Có ít nhất một câu hỏi"}</BilingualText></p>
-          <p>{questions.every((item) => item.status === 'PUBLISHED') && questions.length ? '✓' : '○'}<BilingualText>{"Các câu hỏi đã xuất bản"}</BilingualText></p>
-          <p><BilingualText>{"✓ Điểm đạt:"}</BilingualText>{quiz.passingScore}%</p>
-          <small className="muted"><BilingualText>{"Trạng thái hiện tại:"}</BilingualText><BilingualText>{quiz.status}</BilingualText></small>
+          <div className="quiz-status-inline">
+            <span><BilingualText>{"Trạng thái hiện tại:"}</BilingualText></span>
+            <AdminStatusBadge status={quiz.status || 'DRAFT'} size="sm" />
+          </div>
         </div>
-        <div className="actions">
-          <button disabled={!canEdit || busy || quiz.status === 'PUBLISHED' || questions.length === 0} onClick={() => mutate(() => contentService.status('quizzes', quiz.id, 'PUBLISHED'))}><BilingualText>{"Xuất bản quiz"}</BilingualText></button>
-          {quiz.status === 'PUBLISHED' && <button className="secondary" disabled={!canEdit || busy} onClick={() => mutate(() => contentService.status('quizzes', quiz.id, 'DRAFT'))}><BilingualText>{"Chuyển về bản nháp"}</BilingualText></button>}
+        <div className="quiz-publication-actions">
+          <button
+            type="button"
+            className="admin-btn admin-btn-primary"
+            disabled={!canEdit || busy || quiz.status === 'PUBLISHED' || questions.length === 0}
+            onClick={() => mutate(() => contentService.status('quizzes', quiz.id, 'PUBLISHED'))}
+          >
+            <BilingualText>{"Xuất bản quiz"}</BilingualText>
+          </button>
+          {quiz.status === 'PUBLISHED' && (
+            <button
+              type="button"
+              className="admin-btn admin-btn-secondary"
+              disabled={!canEdit || busy}
+              onClick={() => mutate(() => contentService.status('quizzes', quiz.id, 'DRAFT'))}
+            >
+              <BilingualText>{"Chuyển về bản nháp"}</BilingualText>
+            </button>
+          )}
         </div>
       </section>
       {edit && (
-        <Modal title={bilingualLabel("Cấu hình quiz")} onClose={() => setEdit(false)}>
+        <Modal title={bilingualLabel("Cấu hình quiz")} className="admin-content-form-modal" onClose={() => setEdit(false)}>
           <ContentForm kind="quizzes" initial={quiz} onCancel={() => setEdit(false)} onSave={async (body) => { await contentService.update('quizzes', quiz.id, body); setEdit(false); reload(); }} />
         </Modal>
       )}
       {adding && (
-        <Modal title={bilingualLabel("Chọn từ ngân hàng câu hỏi")} onClose={() => setAdding(false)}>
+        <Modal title={bilingualLabel("Chọn từ ngân hàng câu hỏi")} className="admin-question-picker-modal" onClose={() => setAdding(false)}>
           <QuestionPicker selected={questions.map((item) => item.questionId)} onAdd={async (id) => { await contentService.addQuestion(quiz.id, id, 1); setAdding(false); reload(); }} />
         </Modal>
       )}
       {canEdit && creatingQuestion && (
-        <Modal title={bilingualLabel("Tạo câu hỏi cho quiz")} onClose={closeQuestionDialog}>
+        <Modal title={bilingualLabel("Tạo câu hỏi cho quiz")} className="admin-question-modal" onClose={closeQuestionDialog}>
           <QuestionForm initial={{ status: "PUBLISHED" }} onCancel={closeQuestionDialog} onSave={async (body) => { const question = await contentService.create("questions", body); await contentService.addQuestion(quiz.id, question.id, 1); closeQuestionDialog(); reload(); }} />
         </Modal>
       )}
@@ -524,33 +660,82 @@ function QuestionPicker({ selected, onAdd }) {
   const [search, setSearch] = useState(''), [page, setPage] = useState(0), [busy, setBusy] = useState(false), [error, setError] = useState('');
   const resource = useAsyncResource(useCallback((signal) => contentService.list('questions', { q: search, page, size: 10, status: 'PUBLISHED' }, signal), [search, page]));
   return (
-    <>
-      <input aria-label={bilingualLabel("Tìm câu hỏi trong ngân hàng", "Search question bank")} placeholder={bilingualLabel("Tìm câu hỏi…")} value={search} onChange={(event) => { setSearch(event.target.value); setPage(0); }} />
-      {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
-      <ResourceState resource={resource}>
-        {(data) => (
-          <>
-            {data.content?.map((question) => (
-              <div className="list-row" key={question.id}>
-                <div>
-                  <strong><BilingualText vi={question.promptVi || question.prompt} en={question.prompt} /></strong>
-                  <small>{question.questionType} · v{question.currentVersion}</small>
-                </div>
-                <button disabled={busy || selected.includes(question.id)} onClick={async () => { setBusy(true); try { await onAdd(question.id); } catch (err) { setError(err.message); } finally { setBusy(false); } }}>
-                  <BilingualText>{selected.includes(question.id) ? 'Đã thêm' : 'Thêm'}</BilingualText>
-                </button>
-              </div>
-            ))}
-            {!data.content?.length && (
-              <EmptyState title={<BilingualText vi="Chưa có câu hỏi đã xuất bản" en="No published questions yet" />}>
-                <Link className="text-link" to={`${basePath}/questions`}><BilingualText>{"Mở ngân hàng câu hỏi →"}</BilingualText></Link>
-              </EmptyState>
-            )}
-            <AdminPagination currentPage={page + 1} pageSize={10} totalItems={data.totalElements ?? data.content?.length ?? 0} onPageChange={(nextPage) => setPage(nextPage - 1)} />
-          </>
+    <div className="question-picker-container">
+      <div className="admin-search-bar" style={{ marginBottom: '14px' }}>
+        <Search size={16} className="admin-search-bar__icon" />
+        <input
+          className="admin-search-bar__input"
+          aria-label={bilingualLabel("Tìm câu hỏi trong ngân hàng", "Search question bank")}
+          placeholder={bilingualLabel("Tìm câu hỏi…")}
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setPage(0);
+          }}
+        />
+        {search && (
+          <button
+            type="button"
+            className="admin-search-bar__clear"
+            aria-label={bilingualLabel("Xóa tìm kiếm", "Clear search")}
+            onClick={() => {
+              setSearch('');
+              setPage(0);
+            }}
+          >
+            <X size={12} />
+          </button>
         )}
-      </ResourceState>
-    </>
+      </div>
+      {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
+      <div className="question-picker-body">
+        <ResourceState resource={resource}>
+          {(data) => (
+            <>
+              <div className="question-picker-list">
+                {data.content?.map((question) => {
+                  const isAdded = selected.includes(question.id);
+                  return (
+                    <div className={`question-picker-row ${isAdded ? 'is-added' : ''}`} key={question.id}>
+                      <div className="question-picker-info">
+                        <strong><BilingualText vi={question.promptVi || question.prompt} en={question.prompt} /></strong>
+                        <small>
+                          <span className="quiz-meta-tag">{question.questionType}</span>
+                          <span>v{question.currentVersion}</span>
+                        </small>
+                      </div>
+                      <button
+                        type="button"
+                        className={`admin-btn admin-btn-sm ${isAdded ? 'admin-btn-secondary' : 'admin-btn-primary'}`}
+                        disabled={busy || isAdded}
+                        onClick={async () => {
+                          setBusy(true);
+                          try {
+                            await onAdd(question.id);
+                          } catch (err) {
+                            setError(err.message);
+                          } finally {
+                            setBusy(false);
+                          }
+                        }}
+                      >
+                        <BilingualText>{isAdded ? 'Đã thêm' : 'Thêm'}</BilingualText>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+              {!data.content?.length && (
+                <EmptyState title={<BilingualText vi="Chưa có câu hỏi đã xuất bản" en="No published questions yet" />}>
+                  <Link className="text-link" to="/content/questions"><BilingualText>{"Mở ngân hàng câu hỏi →"}</BilingualText></Link>
+                </EmptyState>
+              )}
+              <AdminPagination currentPage={page + 1} pageSize={10} totalItems={data.totalElements ?? data.content?.length ?? 0} onPageChange={(nextPage) => setPage(nextPage - 1)} />
+            </>
+          )}
+        </ResourceState>
+      </div>
+    </div>
   );
 }
 

@@ -45,12 +45,17 @@ test('course roadmap owns the desktop collapse arrow and leaves a compact reopen
   assert.match(sidebar, /<ChevronLeft/);
 });
 
-test('course module hover keeps every text line readable on the dark background', async () => {
-  const page = await read('../src/features/learning/pages/courses/CourseDetailPage.jsx');
+test('course module accordion uses warm cream surfaces without global orange button override', async () => {
+  const [detailPage, resumePage, heritageCss] = await Promise.all([
+    read('../src/features/learning/pages/courses/CourseDetailPage.jsx'),
+    read('../src/features/learning/pages/learning/ResumeCoursePage.jsx'),
+    read('../src/styles/heritage.css'),
+  ]);
 
-  assert.match(page, /hover:!bg-\[#C2410C\]/);
-  assert.match(page, /group-hover:text-white leading-snug/);
-  assert.match(page, /group-hover:text-white\/90 line-clamp-2/);
-  assert.match(page, /group-hover:text-white shrink-0/);
-  assert.match(page, /hover:!text-white/);
+  assert.match(detailPage, /course-module-accordion-btn/);
+  assert.match(detailPage, /course-action-expand-btn/);
+  assert.doesNotMatch(detailPage, /hover:!bg-\[#C2410C\]/);
+  assert.match(resumePage, /course-module-accordion-btn/);
+  assert.match(resumePage, /course-action-expand-btn/);
+  assert.match(heritageCss, /:not\(\[class\*="course-module-"\]\):not\(\[class\*="course-action-"\]\)/);
 });

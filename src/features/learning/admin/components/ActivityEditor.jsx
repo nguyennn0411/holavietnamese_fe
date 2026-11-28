@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { contentService } from '@/features/learning/api/contentService';
 import { Notice } from '@/shared/components/common/Ui';
 import { ContentImage } from '@/shared/components/common/ContentImage';
+import { HolaSelect } from '@/shared/components/common/HolaSelect';
 import { appendInlineIllustration, canAppendIllustration, canIllustrateActivity, illustrationFileTypes, isIllustrationFile } from '../activityIllustrations';
 import './activity-illustration-editor.css';
 
@@ -87,7 +88,7 @@ export function ActivityEditor({ initial, lessonId, focusIllustration, onSaved, 
     setMediaFile(file);
   }
   const field = (key,label,multiline=false) => <label key={key}><BilingualText>{label}</BilingualText>{multiline ? <textarea rows={4} value={content?.[key]||''} onChange={event=>update({[key]:event.target.value})}/> : <input value={content?.[key]||''} onChange={event=>update({[key]:event.target.value})}/>}</label>;
-  const rows = (key,fields,defaults) => <div className="activity-editor-rows">{(content?.[key]||[]).map((row,index)=><div className="activity-editor-row" key={index}><div className="builder-heading"><strong>{index+1}</strong><button type="button" className="secondary" aria-label={bilingualLabel(`Xóa dòng ${index+1}`, `Delete line ${index+1}`)} onClick={()=>update({[key]:content[key].filter((_,i)=>i!==index)})}>×</button></div>{fields.map(([name,label])=><label key={name}><BilingualText>{label}</BilingualText><input value={row[name]||''} onChange={event=>update({[key]:content[key].map((item,i)=>i===index?{...item,[name]:event.target.value}:item)})}/></label>)}</div>)}<button type="button" className="secondary" onClick={()=>update({[key]:[...(content?.[key]||[]),{...defaults}]})}><BilingualText>{"+ Thêm dòng"}</BilingualText></button></div>;
+  const rows = (key,fields,defaults) => <div className="activity-editor-rows">{(content?.[key]||[]).map((row,index)=><div className="activity-editor-row" key={index}><div className="builder-heading"><strong>{index+1}</strong><button type="button" className="admin-btn admin-btn-secondary admin-btn-sm admin-btn-icon" aria-label={bilingualLabel(`Xóa dòng ${index+1}`, `Delete line ${index+1}`)} onClick={()=>update({[key]:content[key].filter((_,i)=>i!==index)})}>×</button></div>{fields.map(([name,label])=><label key={name}><BilingualText>{label}</BilingualText><input value={row[name]||''} onChange={event=>update({[key]:content[key].map((item,i)=>i===index?{...item,[name]:event.target.value}:item)})}/></label>)}</div>)}<button type="button" className="admin-btn admin-btn-secondary admin-btn-sm" onClick={()=>update({[key]:[...(content?.[key]||[]),{...defaults}]})}><BilingualText>{"+ Thêm dòng"}</BilingualText></button></div>;
   async function save(event) {
     event.preventDefault();
     if (busy) return;
@@ -126,12 +127,35 @@ export function ActivityEditor({ initial, lessonId, focusIllustration, onSaved, 
       onBusyChange?.(false);
     }
   }
-  return <form onSubmit={save}><h2><BilingualText>{initial.id?'Chỉnh sửa hoạt động':'Hoạt động mới'}</BilingualText></h2>
-    <label><BilingualText>{"Loại hoạt động"}</BilingualText><select disabled={busy} value={form.activityType} onChange={event=>{setForm({...form,activityType:event.target.value});setMediaFile(null);setMediaPreview('');clearIllustrationSelection();}}>{types.map(type=><option key={type} value={type}>{bilingualLabel(type)}</option>)}</select></label>
-    <label><BilingualText>{"Tiêu đề"}</BilingualText><input required value={form.title} onChange={event=>setForm({...form,title:event.target.value})}/></label>
-    <label><BilingualText>{"Tiêu đề tiếng Việt"}</BilingualText><input value={form.titleVi||''} onChange={event=>setForm({...form,titleVi:event.target.value})}/></label>
-    <label><BilingualText>{"Hướng dẫn"}</BilingualText><textarea value={form.instruction||''} onChange={event=>setForm({...form,instruction:event.target.value})}/></label>
-    <label><BilingualText>{"Hướng dẫn tiếng Việt"}</BilingualText><textarea value={form.instructionVi||''} onChange={event=>setForm({...form,instructionVi:event.target.value})}/></label>
+  return <form className="activity-editor-form" onSubmit={save}>
+    <div className="activity-editor-header">
+      <h2><BilingualText>{initial.id?'Chỉnh sửa hoạt động':'Hoạt động mới'}</BilingualText></h2>
+    </div>
+    <div className="activity-editor-field">
+      <span className="activity-editor-field-label"><BilingualText>{"Loại hoạt động"}</BilingualText></span>
+      <HolaSelect
+        disabled={busy}
+        value={form.activityType}
+        onChange={(val) => {
+          setForm({ ...form, activityType: val });
+          setMediaFile(null);
+          setMediaPreview('');
+          clearIllustrationSelection();
+        }}
+        options={types.map((type) => ({ value: type, label: bilingualLabel(type) }))}
+        fullWidth
+        align="left"
+        ariaLabel={bilingualLabel('Loại hoạt động', 'Activity type')}
+      />
+    </div>
+    <div className="activity-editor-grid-2">
+      <label><BilingualText>{"Tiêu đề"}</BilingualText><input required value={form.title} onChange={event=>setForm({...form,title:event.target.value})}/></label>
+      <label><BilingualText>{"Tiêu đề tiếng Việt"}</BilingualText><input value={form.titleVi||''} onChange={event=>setForm({...form,titleVi:event.target.value})}/></label>
+    </div>
+    <div className="activity-editor-grid-2">
+      <label><BilingualText>{"Hướng dẫn"}</BilingualText><textarea rows={3} value={form.instruction||''} onChange={event=>setForm({...form,instruction:event.target.value})}/></label>
+      <label><BilingualText>{"Hướng dẫn tiếng Việt"}</BilingualText><textarea rows={3} value={form.instructionVi||''} onChange={event=>setForm({...form,instructionVi:event.target.value})}/></label>
+    </div>
     {content ? <>
       {form.activityType==='TEXT' && field('body', bilingualLabel('Nội dung bài học', 'Lesson content'), true)}
       {canAddIllustration && <fieldset className="activity-illustration-editor" disabled={busy}>
@@ -140,14 +164,14 @@ export function ActivityEditor({ initial, lessonId, focusIllustration, onSaved, 
           {currentIllustrations.map((image, index) => <ContentImage key={`${image.imageUrl}-${index}`} src={image.imageUrl}
             alt={bilingualLabel(image.captionVi || form.titleVi || 'Ảnh minh họa đã gắn', image.captionEn || form.title || 'Attached illustration')} />)}
         </div>}
-        <label>
+        <label className="activity-illustration-file-label">
           <BilingualText vi="Chọn ảnh minh họa" en="Choose an illustration" />
           <input ref={illustrationInput} type="file" accept={illustrationFileTypes.join(',')} onChange={chooseIllustration} />
           <small><BilingualText vi="JPG, PNG hoặc WebP tối đa 5 MB. Ảnh sẽ hiện cùng nội dung sau khi lưu." en="JPG, PNG, or WebP up to 5 MB. The image appears alongside the content after you save." /></small>
         </label>
         {illustrationPreview && <div className="activity-illustration-editor-selection">
           <img src={illustrationPreview} alt={bilingualLabel('Xem trước ảnh vừa chọn', 'Selected illustration preview')} />
-          <button className="secondary" type="button" onClick={clearIllustrationSelection}>
+          <button className="admin-btn admin-btn-secondary admin-btn-sm" type="button" onClick={clearIllustrationSelection}>
             <BilingualText vi="Bỏ ảnh đã chọn" en="Clear selected image" />
           </button>
         </div>}
@@ -173,9 +197,27 @@ export function ActivityEditor({ initial, lessonId, focusIllustration, onSaved, 
     <details className="activity-editor-advanced"><summary><BilingualText>{"Cấu hình nội dung nâng cao"}</BilingualText></summary><label><BilingualText>{"Nội dung theo cấu trúc hoạt động"}</BilingualText><textarea className="json-editor" rows={12} value={raw} onChange={event=>setRaw(event.target.value)} spellCheck={false}/></label></details>
     {form.activityType==='QUIZ' && <label><BilingualText>{"Quiz liên kết"}</BilingualText><input type="number" min="1" required value={form.quizId||''} onChange={event=>setForm({...form,quizId:event.target.value})}/><a className="text-link" href="/content/quizzes"><BilingualText>{"Mở danh sách quiz →"}</BilingualText></a></label>}
     {form.activityType==='GRAMMAR' && <label><BilingualText>{"ID chủ đề ngữ pháp (cách nhau bằng dấu phẩy)"}</BilingualText><input value={form.grammarTopicIds.join(',')} onChange={event=>setForm({...form,grammarTopicIds:event.target.value.split(',').map(value=>Number(value.trim())).filter(value=>value>0)})}/></label>}
-    <label><BilingualText>{"Điểm tối đa"}</BilingualText><input type="number" min="0" required value={form.maxScore} onChange={event=>setForm({...form,maxScore:event.target.value})}/></label>
-    <label><BilingualText>{"Trạng thái"}</BilingualText><select value={form.status} onChange={event=>setForm({...form,status:event.target.value})}>{['DRAFT','PUBLISHED','ARCHIVED'].map(status=><option key={status} value={status}>{bilingualLabel(status)}</option>)}</select></label>
+    <div className="activity-editor-grid-2">
+      <label><BilingualText>{"Điểm tối đa"}</BilingualText><input type="number" min="0" required value={form.maxScore} onChange={event=>setForm({...form,maxScore:event.target.value})}/></label>
+      <div className="activity-editor-field">
+        <span className="activity-editor-field-label"><BilingualText>{"Trạng thái"}</BilingualText></span>
+        <HolaSelect
+          disabled={busy}
+          value={form.status}
+          onChange={(val) => setForm({ ...form, status: val })}
+          options={['DRAFT', 'PUBLISHED', 'ARCHIVED'].map((status) => ({ value: status, label: bilingualLabel(status) }))}
+          fullWidth
+          align="left"
+          ariaLabel={bilingualLabel('Trạng thái', 'Status')}
+        />
+      </div>
+    </div>
     <label className="checkbox-row"><input type="checkbox" checked={!!form.isRequired} onChange={event=>setForm({...form,isRequired:event.target.checked})}/><BilingualText>{"Bắt buộc"}</BilingualText></label>
-    {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}<button disabled={busy}><BilingualText>{busy?'Đang lưu…':'Lưu hoạt động'}</BilingualText></button>
+    {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
+    <div className="activity-editor-actions">
+      <button type="submit" className="admin-btn admin-btn-primary" disabled={busy}>
+        <BilingualText>{busy?'Đang lưu…':'Lưu hoạt động'}</BilingualText>
+      </button>
+    </div>
   </form>;
 }

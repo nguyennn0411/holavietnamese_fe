@@ -1,6 +1,7 @@
 import { BilingualText, bilingualLabel, useTextLanguage } from '@/shared/components/common/BilingualText';
 import { useEffect, useState } from 'react';
 import { Notice } from '@/shared/components/common/Ui';
+import { HolaSelect } from '@/shared/components/common/HolaSelect';
 import { contentService } from '@/features/learning/api/contentService';
 
 const definitions = {
@@ -95,27 +96,44 @@ export function ContentForm({ kind, initial = {}, fixedFields = [], onSave, onCa
     }
   }
 
-  return <form onSubmit={submit}>
-    <div className="form-grid">{definitions[kind].filter(([key]) => !fixedFields.includes(key)).map(([key,label,type,required=true]) => {
-      const optional = type === false || required === false;
-      return <label key={key} className={type === 'textarea' ? 'full-width' : ''}>
-        <BilingualText>{label}</BilingualText>
-        {Array.isArray(type) ? <select disabled={busy} value={form[key] || type[0]} onChange={event => updateField(key, event.target.value)}>{type.map(option => <option key={option} value={option}>{bilingualLabel(option)}</option>)}</select>
-          : type === 'textarea' ? <textarea disabled={busy} required={!optional} rows={3} value={form[key] || ''} onChange={event => updateField(key, event.target.value)}/>
-            : <input disabled={busy} required={!optional} type={typeof type === 'string' ? type : 'text'} min={key === 'maxAttempts' || key === 'timeLimitMinutes' ? 1 : 0} max={key === 'passingScore' ? 100 : undefined} pattern={key === 'slug' ? '[a-z0-9]+(?:-[a-z0-9]+)*' : undefined} value={form[key] ?? ''} onChange={event => updateField(key, event.target.value)}/>}
-        {key === 'slug' && !initial.slug && <small><BilingualText vi="Tự tạo từ tên; bạn có thể sửa nếu muốn." en="Auto-generated from title; edit if needed." /></small>}
-      </label>;
-    })}</div>
-    {kind === 'courses' && <>
-      <label className="course-cover-upload"><BilingualText>Ảnh bìa khóa học</BilingualText>
-        <input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} required={!form.thumbnailUrl && !coverFile} onChange={chooseCover}/>
-        <small><BilingualText vi="JPG, PNG hoặc WebP, tối đa 5 MB. Ảnh được tải lên Cloudinary khi lưu khóa học." en="JPG, PNG or WebP, max 5 MB. Uploaded to Cloudinary on save." /></small>
-      </label>
-      {coverPreview && <img className="course-cover-upload-preview" src={coverPreview} alt={bilingualLabel("Xem trước ảnh bìa khóa học", "Course cover preview")}/>}
-      <label className="checkbox-row"><input type="checkbox" disabled={busy} checked={!!form.isFree} onChange={event => setForm({...form,isFree:event.target.checked})}/><BilingualText>Khóa học miễn phí</BilingualText></label>
-    </>}
-    {kind === 'quizzes' && <label className="checkbox-row"><input type="checkbox" disabled={busy} checked={!!form.randomizeQuestions} onChange={event => setForm({...form,randomizeQuestions:event.target.checked})}/><BilingualText>Xáo trộn câu hỏi</BilingualText></label>}
+  return <form className="admin-content-form" onSubmit={submit}>
+    <div className="admin-content-form-body">
+      <div className="form-grid">{definitions[kind].filter(([key]) => !fixedFields.includes(key)).map(([key,label,type,required=true]) => {
+        const optional = type === false || required === false;
+        if (Array.isArray(type)) {
+          return (
+            <div key={key} className="activity-editor-field">
+              <span className="activity-editor-field-label"><BilingualText>{label}</BilingualText></span>
+              <HolaSelect
+                disabled={busy}
+                value={form[key] || type[0]}
+                onChange={(val) => updateField(key, val)}
+                options={type.map((option) => ({ value: option, label: bilingualLabel(option) }))}
+                fullWidth
+                align="left"
+                ariaLabel={bilingualLabel(label)}
+              />
+            </div>
+          );
+        }
+        return <label key={key} className={type === 'textarea' ? 'full-width' : ''}>
+          <span><BilingualText>{label}</BilingualText>{!optional && <span className="studio-required"> *</span>}</span>
+          {type === 'textarea' ? <textarea disabled={busy} required={!optional} rows={3} value={form[key] || ''} onChange={event => updateField(key, event.target.value)}/>
+              : <input disabled={busy} required={!optional} type={typeof type === 'string' ? type : 'text'} min={key === 'maxAttempts' || key === 'timeLimitMinutes' ? 1 : 0} max={key === 'passingScore' ? 100 : undefined} pattern={key === 'slug' ? '[a-z0-9]+(?:-[a-z0-9]+)*' : undefined} value={form[key] ?? ''} onChange={event => updateField(key, event.target.value)}/>}
+          {key === 'slug' && !initial.slug && <small><BilingualText vi="Tự tạo từ tên; bạn có thể sửa nếu muốn." en="Auto-generated from title; edit if needed." /></small>}
+        </label>;
+      })}</div>
+      {kind === 'courses' && <>
+        <label className="course-cover-upload"><BilingualText>Ảnh bìa khóa học</BilingualText>
+          <input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} required={!form.thumbnailUrl && !coverFile} onChange={chooseCover}/>
+          <small><BilingualText vi="JPG, PNG hoặc WebP, tối đa 5 MB. Ảnh được tải lên Cloudinary khi lưu khóa học." en="JPG, PNG or WebP, max 5 MB. Uploaded to Cloudinary on save." /></small>
+        </label>
+        {coverPreview && <img className="course-cover-upload-preview" src={coverPreview} alt={bilingualLabel("Xem trước ảnh bìa khóa học", "Course cover preview")}/>}
+        <label className="checkbox-row"><input type="checkbox" disabled={busy} checked={!!form.isFree} onChange={event => setForm({...form,isFree:event.target.checked})}/><BilingualText>Khóa học miễn phí</BilingualText></label>
+      </>}
+      {kind === 'quizzes' && <label className="checkbox-row"><input type="checkbox" disabled={busy} checked={!!form.randomizeQuestions} onChange={event => setForm({...form,randomizeQuestions:event.target.checked})}/><BilingualText>Xáo trộn câu hỏi</BilingualText></label>}
+    </div>
     {error && <Notice kind="error"><BilingualText>{error}</BilingualText></Notice>}
-    <div className="form-actions actions"><button type="button" className="secondary" disabled={busy} onClick={onCancel}><BilingualText>Hủy</BilingualText></button><button disabled={busy}><BilingualText>{busy ? 'Đang lưu…' : 'Lưu thay đổi'}</BilingualText></button></div>
+    <div className="admin-content-form-footer"><button type="button" className="admin-btn admin-btn-secondary" disabled={busy} onClick={onCancel}><BilingualText>Hủy</BilingualText></button><button type="submit" className="admin-btn admin-btn-primary" disabled={busy}><BilingualText>{busy ? 'Đang lưu…' : 'Lưu thay đổi'}</BilingualText></button></div>
   </form>;
 }

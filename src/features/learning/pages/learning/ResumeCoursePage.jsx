@@ -426,7 +426,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
           <button
             type="button"
             onClick={toggleAll}
-            className="text-xs font-bold text-[#EA580C] hover:underline px-3 py-1.5 rounded-lg bg-[#FFF7E8] border border-[#E8E5DF] cursor-pointer"
+            className="course-action-expand-btn text-xs font-bold !text-[#EA580C] hover:!text-[#C2410C] px-3.5 py-2 rounded-xl !bg-[#FFF7E8] hover:!bg-[#FFEDD5] border border-[#FED7AA] hover:border-[#FDBA74] cursor-pointer transition-colors shadow-2xs"
           >
             {isAllExpanded ? <BilingualText vi="Thu gọn tất cả" en="Collapse all" /> : <BilingualText vi="Mở rộng tất cả" en="Expand all" />}
           </button>
@@ -448,43 +448,58 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                 key={mId}
                 className={`module-card rounded-2xl border transition-all duration-200 overflow-hidden ${
                   isExpanded
-                    ? 'border-[#E8E5DF] bg-white shadow-xs'
-                    : 'border-[#E8E5DF]/70 bg-white/70 hover:bg-white'
+                    ? 'border-[#FED7AA] bg-white shadow-xs'
+                    : 'border-[#E8E5DF] bg-[#FFFDF9] hover:border-[#FDBA74] hover:bg-white'
                 }`}
               >
                 {/* Module Header Bar */}
                 <button
                   type="button"
                   onClick={() => toggleModule(mId)}
-                  className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer"
+                  className={`course-module-accordion-btn group w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer transition-colors ${
+                    isExpanded
+                      ? '!bg-[#FFF9F2] hover:!bg-[#FFF3E4]'
+                      : '!bg-[#FFFDF9] hover:!bg-[#FFF7E8]'
+                  }`}
                 >
                   <div className="flex items-center gap-3.5">
                     <span
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 ${
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-2xs ${
                         isModuleDone
                           ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                          : 'bg-[#FFF7E8] text-[#253044] border border-[#E8E5DF]'
+                          : 'bg-[#FFF0DC] text-[#EA580C] border border-[#FED7AA]'
                       }`}
                     >
                       {isModuleDone ? <CheckCircle2 size={16} /> : mIdx + 1}
                     </span>
 
                     <div>
-                      <h3 className="text-sm sm:text-base font-black text-[#253044]">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-extrabold text-[#EA580C] uppercase tracking-wider">
+                          <BilingualText vi={`Học phần ${mIdx + 1}`} en={`Module ${mIdx + 1}`} />
+                        </span>
+                        {isModuleDone && (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                            <CheckCircle2 size={11} />
+                            <BilingualText vi="Hoàn thành" en="Completed" />
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-sm sm:text-base font-extrabold !text-[#253044] group-hover:!text-[#EA580C] transition-colors mt-0.5">
                         <BilingualText vi={module.titleVi || module.title} en={module.title} />
                       </h3>
                       {(module.descriptionVi || module.description || module.metadata?.descriptionVi) && (
-                        <p className="text-xs text-[#64748B] line-clamp-2 mt-0.5 font-normal">
+                        <p className="text-xs !text-[#64748B] line-clamp-2 mt-0.5 font-normal">
                           <BilingualText
                             vi={module.descriptionVi || module.metadata?.descriptionVi || module.description}
                             en={module.description || module.metadata?.descriptionEn}
                           />
                         </p>
                       )}
-                      <p className="text-[11px] text-[#64748B] flex items-center gap-2 mt-1">
-                        <span><BilingualText vi={`${moduleLessons.length} bài học`} en={`${moduleLessons.length} lessons`} /></span>
+                      <p className="text-[11px] !text-[#64748B] flex items-center gap-2 mt-1">
+                        <span className="font-semibold !text-[#475569]"><BilingualText vi={`${moduleLessons.length} bài học`} en={`${moduleLessons.length} lessons`} /></span>
                         <span>•</span>
-                        <span className={isModuleDone ? 'text-emerald-700 font-bold' : ''}>
+                        <span className={isModuleDone ? 'text-emerald-700 font-bold' : 'font-medium !text-[#EA580C]'}>
                           <BilingualText
                             vi={`${moduleCompletedCount}/${moduleLessons.length} đã hoàn thành`}
                             en={`${moduleCompletedCount}/${moduleLessons.length} completed`}
@@ -494,14 +509,14 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 text-[#64748B]">
+                  <div className="flex items-center gap-2 !text-[#EA580C] shrink-0">
                     {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                   </div>
                 </button>
 
                 {/* Module Lessons List */}
                 {isExpanded && (
-                  <div className="border-t border-[#E8E5DF]/40 bg-[#FFF7E8]/20 p-3 sm:p-4 space-y-2">
+                  <div className="border-t border-[#F3E8D8] bg-white p-3.5 sm:p-4 space-y-2.5">
                     {moduleLessons.map((lesson, lIdx) => {
                       const uKey = lesson.id ?? `les-${mIdx}-${lIdx}`;
                       const status = lessonStateMap[uKey] || 'LOCKED';
@@ -585,17 +600,13 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                             </span>
 
                             {isLocked ? (
-                              <button
-                                type="button"
-                                onClick={() => handleLockedClick(lessonTitle)}
-                                aria-label={bilingualLabel(`Bài học ${lessonTitle} đang bị khóa`, `Lesson ${lessonTitle} is locked`)}
-                                className="p-2 text-stone-400 hover:text-stone-600 cursor-pointer"
-                              >
-                                <Lock size={15} />
-                              </button>
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-stone-100 text-stone-500 border border-stone-200 font-bold text-[10px]">
+                                <Lock size={11} />
+                                <BilingualText vi="Đã khóa" en="Locked" />
+                              </span>
                             ) : (
-                              <span className="w-7 h-7 rounded-lg bg-[#FFF0DC] text-[#EA580C] flex items-center justify-center text-xs font-bold group-hover:bg-[#FDE1B3] group-hover:text-[#EA580C] border border-[#EA580C]/20 transition-all">
-                                <Play size={12} fill="currentColor" />
+                              <span className="w-8 h-8 rounded-xl bg-[#FFF0DC] text-[#EA580C] flex items-center justify-center text-xs font-bold group-hover:bg-[#EA580C] group-hover:text-white border border-[#FED7AA] transition-all">
+                                <Play size={13} fill="currentColor" />
                               </span>
                             )}
                           </div>

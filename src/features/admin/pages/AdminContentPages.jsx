@@ -18,6 +18,7 @@ import { AdminActionGroup, AdminActionLink } from '@/shared/components/common/Ad
 import { AdminPagination } from '@/shared/components/common/AdminPagination';
 import { AdminFilterSelect } from '@/shared/components/common/AdminFilterSelect';
 import { AdminStatusBadge } from '@/shared/components/common/AdminStatusBadge';
+import { HolaSelect } from '@/shared/components/common/HolaSelect';
 import { AlertCircle, Archive, ArrowDown, ArrowLeft, ArrowUp, Check, ChevronDown, Clock, Eye, Info, Layers, Pencil, Plus, Search, X } from 'lucide-react';
 import './lesson-builder.css';
 
@@ -542,10 +543,12 @@ function LessonBuilder({ lesson, reload }) {
     }
   }
 
-  async function changeStatus(event) {
+  async function changeStatus(nextStatus) {
+    const targetStatus = typeof nextStatus === 'string' ? nextStatus : nextStatus?.target?.value;
+    if (!targetStatus || targetStatus === (lesson.publicationStatus || 'DRAFT')) return;
     setBusy(true);
     try {
-      await contentService.status('lessons', lesson.id, event.target.value);
+      await contentService.status('lessons', lesson.id, targetStatus);
       reload();
     } catch (err) {
       setError(err.message);
@@ -600,12 +603,13 @@ function LessonBuilder({ lesson, reload }) {
         ]}
       />
       <PageHeader
+        eyebrow={bilingualLabel('BIÊN SOẠN BÀI HỌC', 'LESSON AUTHORING')}
         title={<span className="lesson-builder-title">
           <BilingualText vi={lesson.titleVi || lesson.title} en={lesson.title} />
           <AdminStatusBadge status={lesson.publicationStatus || 'DRAFT'} />
         </span>}
         description={lesson.moduleTitle}
-        actions={<Link className="button secondary" to={`${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}/preview`}>
+        actions={<Link className="admin-btn admin-btn-secondary" to={`${isAdmin ? '/admin' : '/content'}/lessons/${lesson.id}/preview`}>
           <Eye size={16} />
           <BilingualText>{"Xem trước bài học"}</BilingualText>
         </Link>}
@@ -621,15 +625,25 @@ function LessonBuilder({ lesson, reload }) {
             <BilingualText vi={lesson.descriptionVi || lesson.description} en={lesson.description || lesson.descriptionVi} />
           </p>}
           {canEdit && <div className="lesson-builder-info-actions">
-            <label>
-              <BilingualText>{"Trạng thái"}</BilingualText>
-              <select value={lesson.publicationStatus || 'DRAFT'} disabled={busy} onChange={changeStatus}>
-                <option value="DRAFT">{bilingualLabel('DRAFT')}</option>
-                {lesson.publicationStatus === 'PUBLISHED' && <option value="PUBLISHED" disabled>{bilingualLabel('PUBLISHED')}</option>}
-                <option value="ARCHIVED">{bilingualLabel('ARCHIVED')}</option>
-              </select>
-            </label>
-            <button type="button" className="secondary" disabled={busy} onClick={() => setEditing(true)}>
+            <div className="lesson-builder-status-field">
+              <span className="lesson-builder-status-label"><BilingualText>{"Trạng thái"}</BilingualText></span>
+              <HolaSelect
+                value={lesson.publicationStatus || 'DRAFT'}
+                disabled={busy}
+                onChange={changeStatus}
+                options={[
+                  { value: 'DRAFT', label: bilingualLabel('DRAFT') },
+                  ...(lesson.publicationStatus === 'PUBLISHED'
+                    ? [{ value: 'PUBLISHED', label: bilingualLabel('PUBLISHED') }]
+                    : []),
+                  { value: 'ARCHIVED', label: bilingualLabel('ARCHIVED') },
+                ]}
+                minWidth="190px"
+                align="left"
+                ariaLabel={bilingualLabel('Trạng thái', 'Status')}
+              />
+            </div>
+            <button type="button" className="admin-btn admin-btn-secondary" disabled={busy} onClick={() => setEditing(true)}>
               <Pencil size={15} /> <BilingualText>{"Chỉnh sửa"}</BilingualText>
             </button>
           </div>}
@@ -640,7 +654,7 @@ function LessonBuilder({ lesson, reload }) {
           <div className="lesson-builder-list-heading">
             <h2 id="lesson-builder-activities" tabIndex={-1} ref={activitiesHeading}><BilingualText>{"Các hoạt động"}</BilingualText></h2>
             {canEdit && <details className="lesson-builder-add" ref={addActivityMenu}>
-              <summary className="button"><Plus size={16} /><BilingualText vi="Thêm hoạt động" en="Add activity" /><ChevronDown size={14} /></summary>
+              <summary className="admin-btn admin-btn-primary admin-btn-sm"><Plus size={15} /><BilingualText vi="Thêm hoạt động" en="Add activity" /><ChevronDown size={14} /></summary>
               <div className="lesson-builder-add-options">
                 <button type="button" className="secondary" disabled={busy || !illustrationTargets.length} onClick={chooseLessonImage}>
                   <BilingualText vi="Thêm ảnh" en="Add image" />
@@ -661,14 +675,14 @@ function LessonBuilder({ lesson, reload }) {
             {activities.map((activity, index) => {
               const active = canEdit && selected?.id === activity.id;
               const title = <BilingualText vi={activity.titleVi || activity.title} en={activity.title} />;
-              const summary = <><span className="lesson-builder-number" aria-hidden="true">{index + 1}</span>{title}</>;
+              const summary = <><span className="lesson-builder-number" aria-hidden="true">{index + 1}</span><span className="lesson-builder-item-title">{title}</span></>;
               return <li className={`lesson-builder-row${active ? ' is-selected' : ''}`} key={activity.id}>
                 {canEdit ? <button type="button" className="lesson-builder-select" aria-pressed={active} disabled={busy} onClick={() => selectActivity(activity)}>
                   {summary}
                 </button> : <span className="lesson-builder-select">{summary}</span>}
                 {canEdit && <div className="lesson-builder-order">
-                  <button type="button" className="secondary" aria-label={bilingualLabel('Di chuyển lên', 'Move up')} disabled={busy || index === 0} onClick={() => reorder(index, -1)}><ArrowUp size={15} /></button>
-                  <button type="button" className="secondary" aria-label={bilingualLabel('Di chuyển xuống', 'Move down')} disabled={busy || index === activities.length - 1} onClick={() => reorder(index, 1)}><ArrowDown size={15} /></button>
+                  <button type="button" className="secondary" aria-label={bilingualLabel('Di chuyển lên', 'Move up')} disabled={busy || index === 0} onClick={() => reorder(index, -1)}><ArrowUp size={14} /></button>
+                  <button type="button" className="secondary" aria-label={bilingualLabel('Di chuyển xuống', 'Move down')} disabled={busy || index === activities.length - 1} onClick={() => reorder(index, 1)}><ArrowDown size={14} /></button>
                 </div>}
               </li>;
             })}
@@ -681,8 +695,8 @@ function LessonBuilder({ lesson, reload }) {
         <section className="admin-card lesson-builder-editor">
           {canEdit && selected ? (
             <>
-              <button type="button" className="secondary lesson-builder-back" ref={editorBackButton} disabled={busy} onClick={showActivities}>
-                <ArrowLeft size={16} /> <BilingualText vi="Quay lại hoạt động" en="Back to activities" />
+              <button type="button" className="admin-btn admin-btn-secondary admin-btn-sm lesson-builder-back" ref={editorBackButton} disabled={busy} onClick={showActivities}>
+                <ArrowLeft size={15} /> <BilingualText vi="Quay lại hoạt động" en="Back to activities" />
               </button>
               <ActivityEditor key={selected.id || selected.activityType || 'new'} initial={selected}
                 lessonId={lesson.id} focusIllustration={focusIllustration} onBusyChange={setBusy}
@@ -702,22 +716,30 @@ function LessonBuilder({ lesson, reload }) {
         </section>
       </div>
       {canEdit && imageTargetId !== null && <Modal title={bilingualLabel('Thêm ảnh minh họa', 'Add an illustration')} onClose={() => setImageTargetId(null)}>
-        <form onSubmit={event => {
+        <form className="activity-editor-form" onSubmit={event => {
           event.preventDefault();
           if (imageTarget) openIllustrationEditor(imageTarget);
         }}>
-          <label>
-            <BilingualText vi="Mục nội dung" en="Content activity" />
-            <select required value={imageTargetId} onChange={event => setImageTargetId(event.target.value)}>
-              <option value="">{bilingualLabel('Chọn mục để gắn ảnh', 'Choose an activity for this image')}</option>
-              {illustrationTargets.map(activity => <option key={activity.id} value={activity.id}>
-                {bilingualLabel(activity.titleVi || activity.title, activity.title || activity.titleVi)}
-              </option>)}
-            </select>
-          </label>
-          <button className="button" type="submit" disabled={!imageTarget}>
-            <BilingualText vi="Tiếp tục" en="Continue" />
-          </button>
+          <div className="activity-editor-field">
+            <span className="activity-editor-field-label"><BilingualText vi="Mục nội dung" en="Content activity" /></span>
+            <HolaSelect
+              value={imageTargetId}
+              onChange={(val) => setImageTargetId(String(val))}
+              placeholder={bilingualLabel('Chọn mục để gắn ảnh', 'Choose an activity for this image')}
+              options={illustrationTargets.map((activity) => ({
+                value: String(activity.id),
+                label: bilingualLabel(activity.titleVi || activity.title, activity.title || activity.titleVi),
+              }))}
+              fullWidth
+              align="left"
+              ariaLabel={bilingualLabel('Mục nội dung', 'Content activity')}
+            />
+          </div>
+          <div className="activity-editor-actions">
+            <button className="admin-btn admin-btn-primary" type="submit" disabled={!imageTarget}>
+              <BilingualText vi="Tiếp tục" en="Continue" />
+            </button>
+          </div>
         </form>
       </Modal>}
       {canEdit && editing && (
