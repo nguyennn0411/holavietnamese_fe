@@ -456,11 +456,12 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                 <button
                   type="button"
                   onClick={() => toggleModule(mId)}
-                  className={`course-module-accordion-btn group w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer transition-colors ${
+                  className={`course-module-toggle course-module-accordion-btn group w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer transition-colors ${
                     isExpanded
                       ? '!bg-[#FFF9F2] hover:!bg-[#FFF3E4]'
                       : '!bg-[#FFFDF9] hover:!bg-[#FFF7E8]'
                   }`}
+                  aria-expanded={isExpanded}
                 >
                   <div className="flex items-center gap-3.5">
                     <span
@@ -531,7 +532,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                         <div
                           className={`flex items-center justify-between gap-4 p-3.5 rounded-xl border transition-all ${
                             isCurrent
-                              ? 'bg-amber-50/80 border-[#FFCD00] shadow-sm ring-1 ring-[#FFCD00]/50'
+                              ? 'bg-white border-[#E8E5DF] shadow-xs'
                               : isCompleted
                               ? 'bg-white border-emerald-200/80 hover:border-emerald-300'
                               : isLocked

@@ -450,6 +450,117 @@
 /* ==========================================================================
    PROGRESS PAGE (.progress-kpis & detail grid)
    ========================================================================== */
+.learning-progress-hero,
+.profile-page-header {
+  position: relative;
+  overflow: hidden;
+  padding: 32px 36px;
+  border: 1px solid #e8e5df;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #fff7e8 0%, #f7f0e3 55%, #eee3d1 100%);
+  box-shadow: 0 4px 14px rgba(43,23,15,.05);
+}
+.learning-progress-hero .page-header { margin: 0; }
+.learning-progress-hero__mark {
+  position: absolute;
+  right: 38px;
+  top: 50%;
+  display: flex;
+  width: 78px;
+  height: 78px;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  border: 1px solid #e7b59d;
+  border-radius: 20px;
+  background: rgba(255,255,255,.72);
+  color: #ea580c;
+  font-size: 42px;
+  font-weight: 800;
+  box-shadow: 0 8px 22px rgba(67,37,18,.08);
+}
+.learning-progress-page .progress-kpis {
+  gap: 16px;
+  margin: 0;
+}
+.learning-progress-page .account-kpi {
+  min-height: 128px;
+  padding: 20px;
+  border-color: #e8e5df;
+  border-radius: 18px;
+  background: #fff7e8;
+  box-shadow: 0 2px 8px rgba(43,23,15,.035);
+}
+.learning-progress-page .account-kpi span { color:#64748b; font-size:12px; font-weight:750; }
+.learning-progress-page .account-kpi strong { color:#253044; font-size:28px; }
+.learning-progress-page .progress-panels { gap:18px; }
+.learning-progress-page .progress-panels > .card {
+  border: 1px solid #e8e5df;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(43,23,15,.04);
+}
+.learning-progress-page .progress-panels h2 { color:#253044; font-weight:850; }
+.learning-progress-page .weekly-chart i { background:linear-gradient(180deg,#f97316,#ea580c); }
+
+.profile-page-header { margin-bottom: 0; }
+.profile-page .profile-hero {
+  max-width: none;
+  padding: 30px 34px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(43,23,15,.04);
+}
+.profile-page .profile-info-card,
+.profile-page .account-form { max-width:none; border-radius:22px; }
+
+/* Clear, restrained curriculum accordions: orange is an accent, not a surface. */
+.course-overview-page .module-card > .course-module-toggle,
+.course-curriculum-section .course-detail-module > button {
+  background: #fff !important;
+  color: #253044 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.course-overview-page .module-card > .course-module-toggle:hover,
+.course-curriculum-section .course-detail-module > button:hover {
+  background: #fff7e8 !important;
+  color: #253044 !important;
+}
+.course-overview-page .module-card {
+  border: 1px solid #e2e5e9 !important;
+  outline: none !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(43,23,15,.035) !important;
+}
+.course-curriculum-section .course-detail-module {
+  border: 1px solid #e2e5e9 !important;
+  outline: none !important;
+  box-shadow: 0 2px 8px rgba(37, 48, 68, .035) !important;
+}
+.course-overview-page .module-card:hover,
+.course-overview-page .module-card:focus,
+.course-overview-page .module-card:focus-within,
+.course-overview-page .module-card:has(.course-module-toggle[aria-expanded="true"]) {
+  border: 1px solid #e2e5e9 !important;
+  outline: none !important;
+}
+.course-overview-page .module-card > .course-module-toggle:focus,
+.course-overview-page .module-card > .course-module-toggle:focus-visible,
+.course-overview-page .module-card > .course-module-toggle:active,
+.course-curriculum-section .course-detail-module > button:focus,
+.course-curriculum-section .course-detail-module > button:focus-visible,
+.course-curriculum-section .course-detail-module > button:active {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.course-overview-page .module-card:has(.course-module-toggle[aria-expanded="true"]),
+.course-curriculum-section .course-detail-module:has(> button[aria-expanded="true"]) {
+  border-color: #d9dde3 !important;
+}
+
 .progress-kpis {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -921,6 +1032,95 @@
 /* ==========================================================================
    SETTINGS PAGE
    ========================================================================== */
+.settings-page {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.settings-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 32px 36px;
+  border: 1px solid #e8e5df;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #fff7e8 0%, #f7f0e3 55%, #eee3d1 100%);
+  box-shadow: 0 4px 14px rgba(43, 23, 15, 0.05);
+}
+
+.settings-hero__copy { max-width: 760px; }
+.settings-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border: 1px solid #e7b59d;
+  border-radius: 999px;
+  background: #fff;
+  color: #ea580c;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.settings-hero h1 {
+  margin: 12px 0 8px;
+  color: #253044;
+  font-size: clamp(30px, 3vw, 42px);
+  font-weight: 900;
+  letter-spacing: -.035em;
+  line-height: 1.15;
+}
+.settings-hero p {
+  max-width: 680px;
+  margin: 0;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.settings-hero__visual {
+  display: flex;
+  width: 260px;
+  height: 132px;
+  flex: 0 0 260px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255,255,255,.92);
+  border-radius: 18px;
+  background: rgba(255,255,255,.58);
+  box-shadow: 0 8px 22px rgba(67,37,18,.08);
+}
+.settings-hero__visual > div {
+  display: flex;
+  width: 72px;
+  height: 72px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e7b59d;
+  border-radius: 18px;
+  background: #fff7e8;
+  color: #ea580c;
+}
+
+.settings-page .settings-list {
+  display: grid;
+  width: 100%;
+  max-width: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.settings-page .settings-list > .settings-card:nth-of-type(3),
+.settings-page .settings-list > .settings-actions-bar {
+  grid-column: 1 / -1;
+}
+
 .settings-list {
   display: flex;
   flex-direction: column;
@@ -990,10 +1190,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 20px 22px;
-  border-radius: 16px;
-  background: var(--acc-surface, #ffffff);
-  border: 1px solid var(--acc-border, #e5e7eb);
+  min-width: 0;
+  padding: 22px 24px;
+  border-radius: 18px;
+  background: #fff7e8;
+  border: 1px solid #e8e5df;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
@@ -1248,6 +1449,13 @@ button.settings-pill-btn.primary:hover:not(:disabled) {
 
 /* Responsive */
 @media (max-width: 900px) {
+  .learning-progress-hero__mark { display:none; }
+  .learning-progress-hero,.profile-page-header { padding:26px; }
+  .settings-page .settings-list { grid-template-columns: 1fr; }
+  .settings-page .settings-list > .settings-card:nth-of-type(3),
+  .settings-page .settings-list > .settings-actions-bar { grid-column: auto; }
+  .settings-hero { padding: 26px; }
+  .settings-hero__visual { display: none; }
   .progress-kpis {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1260,6 +1468,15 @@ button.settings-pill-btn.primary:hover:not(:disabled) {
 }
 
 @media (max-width: 600px) {
+  .learning-progress-page,.profile-page { padding-inline:12px !important; }
+  .learning-progress-hero,.profile-page-header { padding:22px 18px; border-radius:20px; }
+  .settings-hero { padding: 22px 18px; border-radius: 20px; }
+  .settings-hero h1 { font-size: 29px; }
+  .settings-page .settings-list { gap: 14px; }
+  .settings-card { padding: 18px; }
+  .settings-card-header { align-items: flex-start; flex-direction: column; }
+  .settings-card-action { width: 100%; }
+  .settings-card-action .hola-select-container { width: 100%; }
   .progress-kpis {
     grid-template-columns: 1fr;
   }

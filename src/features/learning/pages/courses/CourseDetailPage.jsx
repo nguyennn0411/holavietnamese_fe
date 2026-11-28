@@ -636,7 +636,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
           )}
 
           {/* 3. Phần Danh Sách Module & Bài Học (Accordion) */}
-          <section className="bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-6">
+          <section className="course-curriculum-section bg-white rounded-3xl border border-[#E8E5DF] p-6 sm:p-8 shadow-xs space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E5DF]/40 pb-4">
               <div>
                 <div className="flex items-center gap-2">
@@ -691,7 +691,7 @@ function CourseDetailView({ course, courseId, enrollment, onReload }) {
                   return (
                     <div
                       key={moduleKey}
-                      className={`rounded-2xl border overflow-hidden transition-all shadow-xs ${
+                      className={`course-detail-module rounded-2xl border overflow-hidden transition-all shadow-xs ${
                         isExpanded
                           ? 'border-[#FED7AA] bg-white'
                           : 'border-[#E8E5DF] bg-[#FFFDF9] hover:border-[#FDBA74]'

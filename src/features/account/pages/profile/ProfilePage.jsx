@@ -157,8 +157,8 @@ export function ProfilePage() {
   ];
 
   return (
-    <div className="account-page space-y-6">
-      <div className="account-header">
+    <div className="account-page profile-page !w-full !max-w-[1560px] 2xl:!max-w-[1680px] px-4 sm:px-6 lg:px-8 xl:px-10 py-8 space-y-8">
+      <div className="account-header profile-page-header">
         <span className="account-pill"><BilingualText>{"👤 Thông tin cá nhân"}</BilingualText></span>
         <h1 className="account-title"><BilingualText>{"Hồ sơ người học"}</BilingualText></h1>
         <p className="account-desc"><BilingualText>{"Quản lý thông tin tài khoản, mục tiêu học tập và cấp độ tiếng Việt của bạn."}</BilingualText></p>
