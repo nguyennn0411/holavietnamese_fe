@@ -514,6 +514,53 @@
 .profile-page .profile-info-card,
 .profile-page .account-form { max-width:none; border-radius:22px; }
 
+/* Clear, restrained curriculum accordions: orange is an accent, not a surface. */
+.course-overview-page .module-card > .course-module-toggle,
+.course-curriculum-section .course-detail-module > button {
+  background: #fff !important;
+  color: #253044 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.course-overview-page .module-card > .course-module-toggle:hover,
+.course-curriculum-section .course-detail-module > button:hover {
+  background: #fff7e8 !important;
+  color: #253044 !important;
+}
+.course-overview-page .module-card {
+  border: 1px solid #e2e5e9 !important;
+  outline: none !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(43,23,15,.035) !important;
+}
+.course-curriculum-section .course-detail-module {
+  border: 1px solid #e2e5e9 !important;
+  outline: none !important;
+  box-shadow: 0 2px 8px rgba(37, 48, 68, .035) !important;
+}
+.course-overview-page .module-card:hover,
+.course-overview-page .module-card:focus,
+.course-overview-page .module-card:focus-within,
+.course-overview-page .module-card:has(.course-module-toggle[aria-expanded="true"]) {
+  border: 1px solid #e2e5e9 !important;
+  outline: none !important;
+}
+.course-overview-page .module-card > .course-module-toggle:focus,
+.course-overview-page .module-card > .course-module-toggle:focus-visible,
+.course-overview-page .module-card > .course-module-toggle:active,
+.course-curriculum-section .course-detail-module > button:focus,
+.course-curriculum-section .course-detail-module > button:focus-visible,
+.course-curriculum-section .course-detail-module > button:active {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.course-overview-page .module-card:has(.course-module-toggle[aria-expanded="true"]),
+.course-curriculum-section .course-detail-module:has(> button[aria-expanded="true"]) {
+  border-color: #d9dde3 !important;
+}
+
 .progress-kpis {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

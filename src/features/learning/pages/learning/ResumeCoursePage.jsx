@@ -456,7 +456,8 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                 <button
                   type="button"
                   onClick={() => toggleModule(mId)}
-                  className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer"
+                  className="course-module-toggle w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer !bg-white hover:!bg-[#FFF7E8]"
+                  aria-expanded={isExpanded}
                 >
                   <div className="flex items-center gap-3.5">
                     <span
@@ -516,7 +517,7 @@ function CourseOverviewView({ course, enrollment, lastAccessedLessonId }) {
                         <div
                           className={`flex items-center justify-between gap-4 p-3.5 rounded-xl border transition-all ${
                             isCurrent
-                              ? 'bg-amber-50/80 border-[#FFCD00] shadow-sm ring-1 ring-[#FFCD00]/50'
+                              ? 'bg-white border-[#E8E5DF] shadow-xs'
                               : isCompleted
                               ? 'bg-white border-emerald-200/80 hover:border-emerald-300'
                               : isLocked
